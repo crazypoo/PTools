@@ -13,6 +13,13 @@ import UIKit
 @objcMembers
 public class PTAlertConfig: NSObject {
     public static let shared = PTAlertConfig()
+
+    // English: Allow scene-owned alert configuration while preserving the 5.x shared default.
+    // Español: Permite una configuración de alertas propiedad de la escena y conserva el valor compartido de 5.x.
+    // 中文：支持按场景持有弹窗配置，同时保留 5.x 的 shared 默认入口。
+    public override init() {
+        super.init()
+    }
     
     public enum PTUserInterfaceStyle: Int {
         case unspecified = 0

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907",
-  "generated_at": "2026-10-02T14:08:37Z",
+  "source_revision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
+  "generated_at": "2026-10-03T05:18:13Z",
   "name": "PooTools",
   "version": "5.60.0",
   "platforms": {
@@ -596,7 +596,7 @@
         "PooToolsSource/Core/*.{h,m,swift,S}",
         "PooToolsSource/DarkMode/*.{h,m,swift}",
         "PooToolsSource/FloatPanel/*.{h,m,swift}",
-        "PooToolsSource/Font/*.{h,m,swift}",
+        "PooToolsSource/Font/**/*.{h,m,swift}",
         "PooToolsSource/Foundation/*.{h,m,swift}",
         "PooToolsSource/Language/*.{h,m,swift}",
         "PooToolsSource/Line/*.{h,m,swift}",
@@ -3172,11 +3172,11 @@
     }
   ],
   "schemaVersion": 1,
-  "generatedAt": "2026-10-02T14:08:37Z",
+  "generatedAt": "2026-10-03T05:18:13Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907",
+  "sourceRevision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
   "sourceVersion": "5.60.0",
   "generatorVersion": "Scripts/report_cocoapods_subspec_graph.rb",
-  "sourceInputsDigest": "87af7314bbf35c8c04c3e91f7a8e18b55acd7ba0262c77f66db3182dae74a6b0"
+  "sourceInputsDigest": "eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3"
 }

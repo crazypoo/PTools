@@ -47,6 +47,46 @@ scripts:
     category: gate
     owner: ci
     status: active
+  - id: ci.ptmodel_network
+    path: Scripts/validate_560_ptmodel_network.sh
+    category: gate
+    owner: ci
+    status: active
+  - id: font.catalog
+    path: Scripts/Font/validate-font-catalog.py
+    category: validation
+    owner: font
+    status: active
+  - id: font.generate
+    path: Scripts/Font/generate-font-catalog.py
+    category: generator
+    owner: font
+    status: active
+  - id: font.diff
+    path: Scripts/Font/diff-font-catalog.py
+    category: validation
+    owner: font
+    status: active
+  - id: font.collect
+    path: Scripts/Font/collect-fonts.sh
+    category: collector
+    owner: font
+    status: active
+  - id: font.update
+    path: Scripts/Font/update-font-catalog.sh
+    category: workflow
+    owner: font
+    status: active
+  - id: font.generated
+    path: Scripts/Font/verify-generated-fonts.sh
+    category: gate
+    owner: font
+    status: active
+  - id: governance.deprecated_freeze
+    path: Scripts/Governance/validate_deprecated_freeze.py
+    category: governance
+    owner: release
+    status: active
   - id: release.verify
     path: Scripts/validate_release.sh
     category: release

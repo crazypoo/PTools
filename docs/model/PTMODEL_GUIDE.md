@@ -1,5 +1,27 @@
 # PTModel 5.58.0 使用指南
 
+> 5.60 Quick Start、CocoaPods Static Schema 和 legacy 迁移示例分别见 [`PTMODEL_NETWORK_QUICKSTART_5_60.md`](PTMODEL_NETWORK_QUICKSTART_5_60.md) 与 [`PTMODEL_LEGACY_CODABLE_COCOAPODS_5_60.md`](PTMODEL_LEGACY_CODABLE_COCOAPODS_5_60.md)。
+
+## 5.60 Annotation map
+
+| 场景 | API | 说明 |
+| --- | --- | --- |
+| 普通字段 | 无 annotation | 直接使用 `Codable` 属性 |
+| key 映射 | `@PTKey` | 把 JSON key 映射到 Swift 属性 |
+| 深路径 | `@PTPath` | 从嵌套 JSON 路径读取 |
+| 必填 | `@PTRequired` | 缺失或无效时保留字段路径错误 |
+| 默认值 | `@PTDefault` | 缺失值使用明确默认值 |
+| 宽松集合 | `@PTLossy` | 忽略集合中无法解码的元素 |
+| JSON String | `@PTStringified` | 只用于字段本身是 JSON 字符串的情况 |
+| 忽略 | `@PTIgnore` | 不参与模型编码和解码 |
+| Flatten | `@PTFlat` | 将嵌套对象字段展开到父对象 |
+| Transform | `@PTTransform` | 使用显式值转换器 |
+| Validate | `@PTValidate` | 在模型完成解码后执行约束校验 |
+| 多态 | `@PTPolymorphic` | 根据 discriminator 选择具体类型 |
+| Extras | `@PTExtras` | 收集未声明字段 |
+
+普通 Nested Model、Nested Array 和 Nested Dictionary 不需要 annotation；只有 JSON 结构或兼容策略特殊时才增加 annotation。
+
 ## 目标
 
 `PToolsModelCore` 是 iOS 17+ / Swift 6 的 Foundation-only 模型边界。它不依赖

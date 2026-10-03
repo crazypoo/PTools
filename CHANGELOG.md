@@ -6,6 +6,9 @@
 
 ## 5.60.0 — 2026-10-02
 
+- 收口 5.60.0 剩余实施路线：P0 Nested Model / Network 错误语义与真实测试 Gate、P1 Learning Lab 与迁移文档、P2 模块 parity / singleton ownership / deprecated freeze / God File 拆分 / Font Catalog / Network 与 Router 分层、P3 并发例外复审均已落地。
+- 新增 `PTFont`、生成式 Font Catalog、Runtime Discovery、Simulator pending collector 与 `FontName` 5.x 兼容转发；新增 Router Legacy Compatibility 分层文件，旧服务与重定向入口保持可用。
+- `PooTools-Example` Simulator Debug 已通过；Release、SwiftPM Kakapos 解析冲突、CocoaPods lint、真实宿主、真机和 Instruments 仍需环境证据，当前不创建正式 `5.60.0` tag。
 - 新增 `PTNetworkResponseDecoder.ptModel(_:at:decoder:)`，支持显式 `$.data`、深层对象和数组路径解码；默认 `.root` 保持旧行为。
 - 新增 `Network.requestPTModel(..., modelPath:decoder:)`，不自动猜测 `data`、`result` 或 `payload`，并保留原始响应载荷和元数据。
 - 新增 `PTNetworkDecodeError.modelPathNotFound` 与 `modelPathTypeMismatch`，让响应路径错误可定位。

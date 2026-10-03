@@ -13,11 +13,17 @@ gates:
   - id: EXAMPLE
     script: Scripts/Example/validate_demo_coverage.py --check
     workflowJob: example-governance
+  - id: FONT
+    script: python3 Scripts/Font/validate-font-catalog.py && bash Scripts/Font/verify-generated-fonts.sh
+    workflowJob: font-governance
   - id: ARCHITECTURE
     script: Scripts/validate_quality_scans.sh
     workflowJob: architecture-governance
   - id: TESTS
     script: Scripts/CI/quality_gate.sh tests
+    workflowJob: unit-tests
+  - id: PTMODEL_NETWORK
+    script: Scripts/validate_560_ptmodel_network.sh
     workflowJob: unit-tests
   - id: CONCURRENCY
     script: Scripts/validate_xcode_source_warnings.sh

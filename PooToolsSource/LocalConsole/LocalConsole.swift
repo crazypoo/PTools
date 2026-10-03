@@ -635,7 +635,10 @@ public class LocalConsole: NSObject {
         }
     }
 
-    @MainActor private init(preferredWindowScene: UIWindowScene? = nil) {
+    // English: Create a console owned by an optional scene; shared remains the 5.x compatibility facade.
+    // Español: Crea una consola propiedad de una escena opcional; shared conserva la fachada compatible de 5.x.
+    // 中文：创建由指定场景持有的控制台，shared 继续作为 5.x 兼容门面。
+    public init(preferredWindowScene: UIWindowScene? = nil) {
         self.preferredWindowScene = preferredWindowScene
         super.init()
         PTDebugRuntimeAdapter.install()

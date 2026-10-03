@@ -40,7 +40,10 @@ public class PTLaunchProfiler {
     private var isFinished: Bool = false
     
     // MARK: - 初始化
-    private init() {
+    // English: Hosts may own a profiler explicitly; shared remains the process-start compatibility instance.
+    // Español: El host puede poseer un profiler explícito; shared conserva la instancia compatible de inicio de proceso.
+    // 中文：宿主可以显式持有性能分析器，shared 继续作为进程启动兼容实例。
+    public init() {
         // 单例初始化时，立即通过系统内核获取进程启动时间
         self.processStartTime = fetchProcessStartTime()
         
@@ -189,7 +192,10 @@ public final class LaunchVisualizer {
     
     public static let shared = LaunchVisualizer()
     
-    private init() {}
+    // English: A visualizer can be owned by a scene while shared remains the legacy debug entry.
+    // Español: El visualizador puede pertenecer a una escena y shared conserva la entrada de depuración heredada.
+    // 中文：看板入口可以按场景持有，shared 继续作为旧调试入口。
+    public init() {}
     
     /// 显示可视化入口（通常在首屏渲染完成后调用）
     public func showEntry() {

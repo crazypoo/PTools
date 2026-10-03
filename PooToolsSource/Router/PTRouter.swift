@@ -273,34 +273,15 @@ public class PTRouter: PTRouterParser {
                 matchUserInfo = relocationUserInfo
             }
         } else {
-            // 2. 正则引擎核心匹配逻辑
-            let isWebURL = shareInstance.routerWebUrlCheck(urlString)
-            var candidatePatterns = [PTRouterPattern]()
-            
-            if isWebURL {
-                candidatePatterns = shareInstance.patterns.filter { $0.patternString == PTRouter.shareInstance.webPath }
-                assert(PTRouter.shareInstance.webPath != nil, "h5 jump path cannot be empty")
-            } else {
-                // 粗略过滤：只保留 scheme 一致的模式，提升后续正则匹配的性能
-                candidatePatterns = shareInstance.patterns.filter { $0.patternString.hasPrefix("\(request.sheme)://") }
-            }
-            
-            // 遍历尝试正则匹配
-            for pattern in candidatePatterns {
-                if isWebURL {
-                    matched = pattern
-                    break
-                } else {
-                    // 🌟 调用我们在升级方向三中新写的正则匹配方法
-                    let result = pattern.matchResult(for: urlString)
-                    if result.matched {
-                        matched = pattern
-                        // 将正则提取出的路径参数（如 :id=123 提取出的 ["id": "123"]）合并到 queries 中
-                        queries.merge(result.queries) { current, _ in current }
-                        break
-                    }
-                }
-            }
+            // 2. 使用无副作用的匹配器完成候选筛选和动态参数提取。
+            let isWebURL = PTRouter.canOpenURLString(urlString)?.scheme.map { $0 == "http" || $0 == "https" } ?? false
+            let result = PTRouterMatcher.match(urlString: urlString,
+                                               request: request,
+                                               patterns: shareInstance.patterns,
+                                               webPath: shareInstance.webPath,
+                                               isWebURL: isWebURL)
+            matched = result.pattern
+            queries.merge(result.parameters) { current, _ in current }
         }
         
         // 3. 匹配失败处理
@@ -582,20 +563,6 @@ extension PTRouter {
         return ("", [:])
     }
 
-    private class func makeViewController(_ viewControllerType: UIViewController.Type,
-                                           queries: [String: Sendable]) throws -> UIViewController {
-        if let routableType = viewControllerType as? PTRoutableController.Type {
-            guard let viewController = routableType.init(routerParams: queries) as? UIViewController else {
-                throw PTRouterError.initializationFailed
-            }
-            return viewController
-        }
-
-        let viewController = viewControllerType.init()
-        _ = viewController.setPropertyParameter(queries)
-        return viewController
-    }
-    
 }
 
 @MainActor
@@ -682,7 +649,7 @@ public struct PTRouterInfo: Decodable {
 //MARK: extension of viewcontroller jump for PTRouter
 extension PTRouter {
 
-    private static func routeJumpType(from queries: [String: Sendable]) -> PTJumpType {
+    static func routeJumpType(from queries: [String: Sendable]) -> PTJumpType {
         guard let typeString = queries[PTJumpTypeKey] as? String,
               let jumpType = PTJumpType(rawValue: Int(typeString) ?? 1) else {
             return .push
@@ -690,19 +657,6 @@ extension PTRouter {
         return jumpType
     }
 
-    private static func resolveViewController(urlString: String,
-                                              response: RouteResponse) throws -> (UIViewController, PTJumpType, [String: Sendable]) {
-        guard let pattern = response.pattern else {
-            throw PTRouterError.notFound(url: urlString)
-        }
-        guard let viewControllerType = NSClassFromString(pattern.classString) as? UIViewController.Type else {
-            shareInstance.logcat?(urlString, .logError, "解析类名失败: \(pattern.classString)")
-            throw PTRouterError.invalidClass(className: pattern.classString)
-        }
-
-        let viewController = try makeViewController(viewControllerType, queries: response.queries)
-        return (viewController, routeJumpType(from: response.queries), response.queries)
-    }
     
     class func processParameter(_ parameter: Any) -> Int? {
         if let intValue = parameter as? Int {
@@ -727,7 +681,7 @@ extension PTRouter {
         
         // 2. 匹配 URL
         let response = await PTRouter.matchURL(urlString, userInfo: userInfo)
-        let resolved = try resolveViewController(urlString: urlString, response: response)
+        let resolved = try PTRouterResolver.resolve(urlString: urlString, response: response)
         
         jump(jumpType: resolved.1, vc: resolved.0, queries: resolved.2)
         
@@ -798,7 +752,7 @@ extension PTRouter {
         
         let response = await PTRouter.requestURL(uriTuple.0, userInfo: uriTuple.1)
         do {
-            let resolved = try resolveViewController(urlString: uriTuple.0, response: response)
+            let resolved = try PTRouterResolver.resolve(urlString: uriTuple.0, response: response)
             jump(jumpType: resolved.1, vc: resolved.0, queries: resolved.2)
             complateHandler?(resolved.2, resolved.0)
             return resolved.0
@@ -810,65 +764,7 @@ extension PTRouter {
     
     public class func jump(jumpType: PTJumpType, vc: UIViewController, queries: [String: Any]) {
         DispatchQueue.main.async {
-            if let action = shareInstance.customJumpAction {
-                action(jumpType, vc)
-            } else {
-                switch jumpType {
-                case .modal:
-                    // 1. 解析需要用到的样式
-                    let pStyle = UIModalPresentationStyle(rawValue: queries["PTRouterPStyleKey"] as? Int ?? 0) ?? .fullScreen
-                    let tStyle = UIModalTransitionStyle(rawValue: queries["PTRouterTStyleKey"] as? Int ?? 0) ?? .coverVertical
-                    
-                    // 2. 检查是否需要包 Nav
-                    let needNav = queries["PTRouterWrapInNavKey"] as? Bool ?? false
-                    
-                    if needNav {
-                        // 优先看本次跳转有没有专门重载 Nav，没有就用全局配置的 Nav
-                        let navClass = queries["PTRouterNavOverrideKey"] as? UINavigationController.Type ?? shareInstance.customNavClass
-                        
-                        // 实例化你自定义的 Nav
-                        let customNav = navClass.init(rootViewController: vc)
-                        // 完美弹出
-                        PTUtils.modal(customNav, presentationStyle: pStyle, transitionStyle: tStyle)
-                    } else {
-                        PTUtils.modal(vc, presentationStyle: pStyle, transitionStyle: tStyle)
-                    }
-                case .push:
-                    PTUtils.push(vc)
-                case .popToTaget:
-                    PTUtils.popToVC(ofType: type(of: vc))
-                case .windowNavRoot:
-                    PTUtils.pusbWindowNavRoot(vc)
-                case .modalDismissBeforePush:
-                    PTUtils.modalDismissBeforePush(vc)
-                case .showTab:
-                    showTabBar(queries: queries)
-                }
-            }
-        }
-    }
-    
-    @MainActor private class func showTabBar(queries: [String: Any]) {
-        let selectIndex: Int = processParameter(queries[PTRouterTabBarSelecIndex] ?? 0) ?? 0
-        let tabVC = AppWindows?.rootViewController
-        switch tabVC {
-        case let tab as UITabBarController:
-            let navVC: UINavigationController? = PTUtils.getTopViewController(nil)?.navigationController
-            if let navigationController = navVC {
-                navigationController.popToRootViewController(animated: false)
-                PTGCDManager.shared.delayOnMain(time: 0.05) {
-                    switch tab {
-                    case let tabCustom as PTBaseTabBarViewController:
-                        tabCustom.ptCustomBar.select(selectIndex)
-                    default:
-                        tab.selectedIndex = selectIndex
-                    }
-                    if let topViewController = PTUtils.getTopViewController(nil), let navController = topViewController.navigationController {
-                        navController.popToRootViewController(animated: false)
-                    }
-                }
-            }
-        default:break
+            PTRouterNavigator.navigate(jumpType: jumpType, viewController: vc, queries: queries)
         }
     }
     
@@ -937,120 +833,5 @@ extension PTRouter {
             param: param,
             otherParam: otherParam
         )
-    }
-}
-
-// MARK: Service
-public extension PTRouter {
-    // MARK: - Register With Service Name
-    
-    // 🌟 修复 1：把原来可能定义为别名的 PTServiceCreator 直接展开为 @Sendable 闭包，并返回 Any & Sendable
-    /// 通过服务名称(named)注册 Creator
-    class func registerService(named: String, creator: @escaping @Sendable () -> (Any & Sendable)) {
-        Task {
-            await PTRouterServiceManager.shared.registerService(named: named, creator: creator)
-        }
-    }
-    
-    // 🌟 修复 2：将 Any 升级为 Any & Sendable
-    /// 通过服务名称(named)注册一个服务实例 (存在缓存中)
-    class func registerService(named: String, instance: Any & Sendable) {
-        Task {
-            await PTRouterServiceManager.shared.registerService(named: named, instance: instance)
-        }
-    }
-    
-    /// 通过服务名称(named)注册懒加载 Creator
-    class func registerService(named: String, lazyCreator: @escaping @autoclosure @Sendable () -> (Any & Sendable)) {
-        // 🌟 修复关键 1：在进入 Task 之前，将 autoclosure 显式声明并转换为标准的 @Sendable 闭包快照
-        // 这向编译器发出了强烈的信号：这个闭包是绝对线程安全的！
-        let safeCreator: @Sendable () -> (Any & Sendable) = lazyCreator
-        
-        Task {
-            // 🌟 修复关键 2：直接调用 manager 的 creator 注册方法！
-            // 因为 safeCreator 本质就是一个闭包，这样就避免了在传递时被错误执行求值
-            await PTRouterServiceManager.shared.registerService(named: named, creator: safeCreator)
-        }
-    }
-
-    
-    // MARK: - Register With Service Type
-    
-    // 🌟 修复 3：给泛型 Service 加上 Sendable 约束
-    /// 通过服务接口注册 Creator
-    class func registerService<Service: Sendable>(_ service: Service.Type, creator: @escaping @Sendable () -> Service) {
-        Task {
-            await PTRouterServiceManager.shared.registerService(service, creator: creator)
-        }
-    }
-    
-    /// 通过服务接口注册懒加载 Creator
-    class func registerService<Service: Sendable>(_ service: Service.Type, lazyCreator: @escaping @autoclosure @Sendable () -> Service) {
-        // 🌟 同样的处理方式，显式保留 Sendable 属性
-        let safeCreator: @Sendable () -> Service = lazyCreator
-        
-        Task {
-            // 完美桥接底层的 creator 方法
-            await PTRouterServiceManager.shared.registerService(service, creator: safeCreator)
-        }
-    }
-    
-    /// 通过服务接口注册一个服务实例 (存在缓存中)
-    class func registerService<Service: Sendable>(_ service: Service.Type, instance: Service) {
-        Task {
-            await PTRouterServiceManager.shared.registerService(service, instance: instance)
-        }
-    }
-}
-
-public extension PTRouter {
-    
-    // 🌟 修复 4：解决最核心的返回值报错！将 Any? 改为 (Any & Sendable)?
-    /// 根据服务名称创建服务
-    @MainActor
-    @discardableResult
-    class func createService(named: String, shouldCache: Bool = true) async -> (Any & Sendable)? {
-        await PTRouterServiceManager.shared.createService(named: named)
-    }
-    
-    // 🌟 修复 5：同步给泛型添加约束
-    /// 根据服务接口创建服务
-    @discardableResult
-    class func createService<Service: Sendable>(_ service: Service.Type) async -> Service? {
-        return await PTRouterServiceManager.shared.getService(service)
-    }
-
-    /// 通过服务名称获取服务
-    @MainActor
-    @discardableResult
-    class func getService(named: String) async -> (Any & Sendable)? {
-        await PTRouterServiceManager.shared.getService(named: named)
-    }
-    
-    /// 通过服务接口获取服务
-    @discardableResult
-    class func getService<Service: Sendable>(_ service: Service.Type) async -> Service? {
-        return await PTRouterServiceManager.shared.getService(service)
-    }
-}
-
-public extension PTRouter {
-    class func routeJump(vcName:String,scheme:String) async {
-        let relocationMap: NSDictionary = ["routerType": 2 ,"className": vcName, "path": scheme]
-        do {
-            let data = try JSONSerialization.data(withJSONObject: relocationMap, options: [])
-            let routeReMapInfo = try JSONDecoder().decode(PTRouterInfo.self, from: data)
-            PTRouterManager.addRelocationHandle(routerMapList: [routeReMapInfo])
-        } catch {
-            PTNSLogConsole("路由重定向配置失败: \(error)", levelType: .error, loggerType: .router)
-            return
-        }
-        Task  {
-            do {
-                let _ = try await PTRouter.openURL(scheme)
-            } catch {
-                PTNSLogConsole("\(error)")
-            }
-        }
     }
 }

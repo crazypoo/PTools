@@ -39,6 +39,21 @@ jobs:
           name: quality-docs
           path: .quality-report
 
+  font-governance:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Font Catalog Governance
+        run: QUALITY_REPORT_DIR="$GITHUB_WORKSPACE/.quality-report" bash Scripts/CI/quality_gate.sh font
+      - name: Upload Font Gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-font
+          path: .quality-report
+
   architecture-governance:
     runs-on: macos-15
     steps:
@@ -134,6 +149,7 @@ jobs:
     needs:
       - version-governance
       - docs-governance
+      - font-governance
       - architecture-governance
       - unit-tests
       - strict-concurrency

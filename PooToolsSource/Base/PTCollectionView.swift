@@ -16,24 +16,6 @@ import Photos
 private let kPTCollectionIndexViewAnimationDuration: Double = 0.25
 
 
-private struct DiffThreshold {
-    static let smallItem = 200      // 完整 diff
-    static let mediumItem = 500     // 只 section diff
-    static let largeItem = 1000     // 直接 reload
-}
-
-private struct WaterfallCache {
-    var items: [NSCollectionLayoutGroupCustomItem] = []
-    var contentHeight: CGFloat = 0
-}
-
-private struct WaterfallCacheKey: Hashable {
-    let section: Int
-    let width: CGFloat
-    let version: Int
-}
-
-
 //MARK: 界面展示
 @objcMembers
 @MainActor
@@ -116,7 +98,7 @@ public class PTCollectionView: UIView {
     
     private let layoutCacheCoordinator = PTCollectionLayoutCacheCoordinator()
     private var heightCache: PTLRUCache<HeightCacheKey, NSNumber> { layoutCacheCoordinator.height }
-    private var waterfallCache: [WaterfallCacheKey: WaterfallCache] = [:]
+    private var waterfallCache: [PTCollectionWaterfallCacheKey: PTCollectionWaterfallCache] = [:]
     private var layoutCache: PTLRUCache<LayoutCacheKey, NSCollectionLayoutSection> { layoutCacheCoordinator.sections }
     // English: Centralize snapshot validation without changing PTCollectionView's public facade.
     // Español: Centraliza la validación del snapshot sin cambiar la fachada pública de PTCollectionView.
@@ -1898,7 +1880,7 @@ extension PTCollectionView {
                              version: Int,
                              itemHeight: (Int, AnyObject) -> CGFloat) -> (items: [NSCollectionLayoutGroupCustomItem], height: CGFloat) {
         
-        let key = WaterfallCacheKey(section: section, width: width, version: version)
+        let key = PTCollectionWaterfallCacheKey(section: section, width: width, version: version)
         
         if let cache = waterfallCache[key] {
             return (cache.items, cache.contentHeight)
@@ -1919,7 +1901,7 @@ extension PTCollectionView {
            let oldestKey = waterfallCache.keys.first {
             waterfallCache.removeValue(forKey: oldestKey)
         }
-        waterfallCache[key] = WaterfallCache(items: items,
+        waterfallCache[key] = PTCollectionWaterfallCache(items: items,
                                              contentHeight: result.contentHeight)
         return (items, result.contentHeight)
     }

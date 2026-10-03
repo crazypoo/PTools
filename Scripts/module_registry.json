@@ -1,154 +1,1418 @@
 {
   "schema_version": 1,
-  "required_drift_metadata": ["reason", "owner", "expiration"],
+  "required_drift_metadata": [
+    "reason",
+    "owner",
+    "expiration",
+    "classification"
+  ],
   "resolution_defaults": {
     "action": "保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。",
     "target_version": "6.0.0"
   },
   "modules": [
-    {"name":"PToolsCore","spm_product":"PToolsCore","spm_target":"PToolsCore","pod_subspec":"PToolsCore","source_path":"PooToolsSource/PToolsCore","dependencies":[],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"foundation"},
-    {"name":"PToolsUIFoundation","spm_product":"PToolsUIFoundation","spm_target":"PToolsUIFoundation","pod_subspec":"PToolsUIFoundation","source_path":"PooToolsSource/PToolsUIFoundation","dependencies":["SnapKit"],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"ui-foundation"},
-    {"name":"PToolsModelCombine","module_id":"ptools-model-combine","canonical_slug":"ptools-model-combine","aliases":["ptools-model-combine-2"],"spm_product":"PToolsModelCombine","spm_target":"PToolsModelCombine","pod_subspec":"PToolsModelCombine","source_path":"PooToolsSource/PToolsModelCombine","dependencies":["PToolsModelCore"],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"model-adapter"},
-    {"name":"PToolsModelUIKit","module_id":"ptools-model-uikit","canonical_slug":"ptools-model-uikit","aliases":["ptools-model-uikit-2"],"spm_product":"PToolsModelUIKit","spm_target":"PToolsModelUIKit","pod_subspec":"PToolsModelUIKit","source_path":"PooToolsSource/PToolsModelUIKit","dependencies":["PToolsModelCore","PToolsUIFoundation"],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"model-adapter"},
-    {"name":"Overlay","spm_product":"PToolsOverlay","spm_target":"PToolsOverlay","pod_subspec":"Overlay","source_path":"PooToolsSource/Overlay","dependencies":["PToolsCore","PToolsUIFoundation","PToolsLogging"],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"ui-foundation"},
-    {"name":"Instructions","spm_product":"PooToolsInstructions","spm_target":"PooToolsInstructions","pod_subspec":"Instructions","source_path":"PooToolsSource/Instructions","dependencies":["PToolsOverlay"],"compile_flags":["POOTOOLS_INSTRUCTIONS","InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"ui-leaf"},
-    {"name":"Banner","spm_product":"PooToolsBanner","spm_target":"PooToolsBanner","pod_subspec":"Banner","source_path":"PooToolsSource/Banner","dependencies":["PToolsOverlay","PToolsSymbols","PToolsLogging"],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"ui-leaf"},
-    {"name":"Symbols","spm_product":"PToolsSymbols","spm_target":"PToolsSymbols","pod_subspec":"Symbols","source_path":"PooToolsSource/PToolsSymbols","dependencies":[],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":["SFSymbolCatalog.json"],"category":"ui-foundation"},
-    {"name":"PToolsPermissionCore","spm_product":"PToolsPermissionCore","spm_target":"PToolsPermissionCore","pod_subspec":"PToolsPermissionCore","source_path":"PooToolsSource/PToolsPermissionCore","dependencies":[],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"permission-foundation"},
-    {"name":"PToolsPermissionUI","spm_product":"PToolsPermissionUI","spm_target":"PToolsPermissionUI","pod_subspec":"PToolsPermissionUI","source_path":"PooToolsSource/PToolsPermissionUI","dependencies":["PToolsPermissionCore","PToolsUIFoundation"],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"permission-ui"},
-    {"name":"MediaCore","spm_product":"PooToolsMediaCore","spm_target":"PooToolsMediaCore","pod_subspec":"MediaCore","source_path":"PooToolsSource/PToolsMediaCore","dependencies":[],"compile_flags":["InferSendableFromCaptures","StrictConcurrency"],"resources":[],"category":"media-foundation"},
-    {"name":"Network","spm_product":"PooToolsNetwork","spm_target":"PooToolsNetWork","pod_subspec":"Network","source_path":"PooToolsSource/NetWork","dependencies":["ptools","PToolsCore","PToolsModelCore","PooToolsLoading","Alamofire"],"compile_flags":["POOTOOLS_NETWORK"],"resources":[],"category":"network"},
-    {"name":"MediaViewer","spm_product":"PooToolsMediaViewer","spm_target":"PooToolsMediaViewer","pod_subspec":"MediaViewer","source_path":"PooToolsSource/MediaViewer","dependencies":["ptools","MediaCore","PooToolsProgressBar","PooToolsPageControl","PooToolsLivePhoto"],"compile_flags":["POOTOOLS_MEDIAVIEWER"],"resources":[],"category":"media-ui"},
-    {"name":"PhotoPicker","spm_product":"PooToolsPhotoPicker","spm_target":"PooToolsPhotoPicker","pod_subspec":"PhotoPicker","source_path":"PooToolsSource/PhotoPicker","dependencies":["ptools","MediaCore","PooToolsImagePicker","PTCameraPermission","PooToolsLoading","Kakapos"],"compile_flags":["POOTOOLS_PHOTOPICKER"],"resources":[],"category":"media-ui"},
-    {"name":"ImageEditor","spm_product":"PooToolsImageEditor","spm_target":"PooToolsImageEditor","pod_subspec":"ImageEditor","source_path":"PooToolsSource/ImageEditor","dependencies":["ptools","MediaCore","Harbeth","PooToolsHarbethKit","PooToolsPhotoPicker"],"compile_flags":["POOTOOLS_IMAGEEDITOR"],"resources":[],"category":"media-ui"},
-    {"name":"VideoEditor","spm_product":"PooToolsVideoEditor","spm_target":"PooToolsVideoEditor","pod_subspec":"VideoEditor","source_path":"PooToolsSource/VideoEditor","dependencies":["ptools","MediaCore","Harbeth","PooToolsHarbethKit","PooToolsProgressBar","PooToolsLoading"],"compile_flags":["POOTOOLS_VIDEOEDITOR"],"resources":[],"category":"media-ui"},
-    {"name":"KeyChain","spm_product":"PooToolsKeyChain","spm_target":"PooToolsKeyChain","pod_subspec":"KeyChain","source_path":"PooToolsSource/KeyChain","dependencies":[],"compile_flags":["POOTOOLS_KEYCHAIN"],"resources":[],"category":"foundation-adapter"},
-    {"name":"PhoneInfo","spm_product":"PooToolsPhoneInfo","spm_target":"PooToolsPhoneInfo","pod_subspec":"PhoneInfo","source_path":"PooToolsSource/PhoneInfo","dependencies":[],"compile_flags":["POOTOOLS_PHONEINFO"],"resources":[],"category":"foundation-adapter"},
-    {"name":"CheckBox","spm_product":"PooToolsCheckBox","spm_target":"PooToolsCheckBox","pod_subspec":"CheckBox","source_path":"PooToolsSource/CheckBox","dependencies":[],"compile_flags":["POOTOOLS_CHECKBOX"],"resources":[],"category":"ui-leaf"},
-    {"name":"RateView","spm_product":"PooToolsRateView","spm_target":"PooToolsRateView","pod_subspec":"RateView","source_path":"PooToolsSource/RateView","dependencies":["PToolsUIFoundation","SnapKit"],"compile_flags":["POOTOOLS_RATE"],"resources":[],"category":"ui-leaf"},
-    {"name":"Slider","spm_product":"PooToolsSlider","spm_target":"PooToolsSlider","pod_subspec":"Slider","source_path":"PooToolsSource/Slider","dependencies":["PToolsUIFoundation","SnapKit"],"compile_flags":["POOTOOLS_SLIDER"],"resources":[],"category":"ui-leaf"},
-    {"name":"Theme","spm_product":"PToolsTheme","spm_target":"PToolsTheme","pod_subspec":"Theme","source_path":"PooToolsSource/PToolsTheme","dependencies":["PToolsUIFoundation"],"compile_flags":[],"resources":[],"category":"ui-foundation"},
-    {"name":"Accessibility","spm_product":"PToolsAccessibility","spm_target":"PToolsAccessibility","pod_subspec":"Accessibility","source_path":"PooToolsSource/PToolsAccessibility","dependencies":["PToolsUIFoundation"],"compile_flags":[],"resources":[],"category":"ui-foundation"},
-    {"name":"ContentState","spm_product":"PToolsContentState","spm_target":"PToolsContentState","pod_subspec":"ContentState","source_path":"PooToolsSource/PToolsContentState","dependencies":["PToolsTheme","PToolsAccessibility"],"compile_flags":[],"resources":[],"category":"ui-foundation"},
-    {"name":"Form","spm_product":"PToolsForm","spm_target":"PToolsForm","pod_subspec":"Form","source_path":"PooToolsSource/PToolsForm","dependencies":["ptools","PToolsTheme","PToolsContentState","PToolsAccessibility"],"compile_flags":[],"resources":[],"category":"ui-components"},
-    {"name":"Bluetooth","spm_product":"PToolsBluetooth","spm_target":"PToolsBluetooth","pod_subspec":"Bluetooth","source_path":"PooToolsSource/PToolsBluetooth","dependencies":[],"compile_flags":[],"resources":[],"category":"system-service"},
-    {"name":"Documents","spm_product":"PToolsDocuments","spm_target":"PToolsDocuments","pod_subspec":"Documents","source_path":"PooToolsSource/PToolsDocuments","dependencies":[],"compile_flags":[],"resources":[],"category":"system-service"},
-    {"name":"SimulationCore","spm_product":"PToolsSimulationCore","spm_target":"PToolsSimulationCore","pod_subspec":"SimulationCore","source_path":"PooToolsSource/PToolsSimulationCore","dependencies":[],"compile_flags":[],"resources":[],"category":"simulation"},
-    {"name":"Simulation","spm_product":"PToolsSimulation","spm_target":"PToolsSimulation","pod_subspec":"Simulation","source_path":"PooToolsSource/PToolsSimulation","dependencies":["PToolsSimulationCore"],"compile_flags":[],"resources":[],"category":"simulation"},
-    {"name":"Configuration","spm_product":"PToolsConfiguration","spm_target":"PToolsConfiguration","pod_subspec":"Configuration","source_path":"PooToolsSource/PToolsConfiguration","dependencies":["PToolsStorage","PToolsStorageCore"],"compile_flags":[],"resources":[],"category":"p2-configuration"},
-    {"name":"Feedback","spm_product":"PToolsFeedback","spm_target":"PToolsFeedback","pod_subspec":"Feedback","source_path":"PooToolsSource/PToolsFeedback","dependencies":[],"compile_flags":[],"resources":[],"category":"p2-feedback"},
-    {"name":"Audio","spm_product":"PToolsAudio","spm_target":"PToolsAudio","pod_subspec":"Audio","source_path":"PooToolsSource/PToolsAudio","dependencies":["PTMicPermission"],"compile_flags":[],"resources":[],"category":"p2-audio"},
-    {"name":"AppIntents","spm_product":"PToolsAppIntents","spm_target":"PToolsAppIntents","pod_subspec":"AppIntents","source_path":"PooToolsSource/PToolsAppIntents","dependencies":["PToolsRouteCore"],"compile_flags":[],"resources":[],"category":"p2-extension"},
-    {"name":"WidgetCore","spm_product":"PToolsWidgetCore","spm_target":"PToolsWidgetCore","pod_subspec":"WidgetCore","source_path":"PooToolsSource/PToolsWidgetCore","dependencies":["PToolsStorage","PToolsStorageCore","PToolsRouteCore","PToolsDeepLink"],"compile_flags":[],"resources":[],"category":"p2-extension"},
-    {"name":"Activities","spm_product":"PToolsActivities","spm_target":"PToolsActivities","pod_subspec":"Activities","source_path":"PooToolsSource/PToolsActivities","dependencies":[],"compile_flags":[],"resources":[],"category":"p2-extension"}
+    {
+      "name": "PToolsCore",
+      "spm_product": "PToolsCore",
+      "spm_target": "PToolsCore",
+      "pod_subspec": "PToolsCore",
+      "source_path": "PooToolsSource/PToolsCore",
+      "dependencies": [],
+      "compile_flags": [
+        "InferSendableFromCaptures",
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "foundation"
+    },
+    {
+      "name": "PToolsUIFoundation",
+      "spm_product": "PToolsUIFoundation",
+      "spm_target": "PToolsUIFoundation",
+      "pod_subspec": "PToolsUIFoundation",
+      "source_path": "PooToolsSource/PToolsUIFoundation",
+      "dependencies": [
+        "SnapKit"
+      ],
+      "compile_flags": [
+        "InferSendableFromCaptures",
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "ui-foundation"
+    },
+    {
+      "name": "PToolsModelCombine",
+      "module_id": "ptools-model-combine",
+      "canonical_slug": "ptools-model-combine",
+      "aliases": [
+        "ptools-model-combine-2"
+      ],
+      "spm_product": "PToolsModelCombine",
+      "spm_target": "PToolsModelCombine",
+      "pod_subspec": "PToolsModelCombine",
+      "source_path": "PooToolsSource/PToolsModelCombine",
+      "dependencies": [
+        "PToolsModelCore"
+      ],
+      "compile_flags": [
+        "InferSendableFromCaptures",
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "model-adapter"
+    },
+    {
+      "name": "PToolsModelUIKit",
+      "module_id": "ptools-model-uikit",
+      "canonical_slug": "ptools-model-uikit",
+      "aliases": [
+        "ptools-model-uikit-2"
+      ],
+      "spm_product": "PToolsModelUIKit",
+      "spm_target": "PToolsModelUIKit",
+      "pod_subspec": "PToolsModelUIKit",
+      "source_path": "PooToolsSource/PToolsModelUIKit",
+      "dependencies": [
+        "PToolsModelCore",
+        "PToolsUIFoundation"
+      ],
+      "compile_flags": [
+        "InferSendableFromCaptures",
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "model-adapter"
+    },
+    {
+      "name": "Overlay",
+      "spm_product": "PToolsOverlay",
+      "spm_target": "PToolsOverlay",
+      "pod_subspec": "Overlay",
+      "source_path": "PooToolsSource/Overlay",
+      "dependencies": [
+        "PToolsCore",
+        "PToolsUIFoundation",
+        "PToolsLogging"
+      ],
+      "compile_flags": [
+        "InferSendableFromCaptures",
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "ui-foundation"
+    },
+    {
+      "name": "Instructions",
+      "spm_product": "PooToolsInstructions",
+      "spm_target": "PooToolsInstructions",
+      "pod_subspec": "Instructions",
+      "source_path": "PooToolsSource/Instructions",
+      "dependencies": [
+        "PToolsOverlay"
+      ],
+      "compile_flags": [
+        "POOTOOLS_INSTRUCTIONS",
+        "InferSendableFromCaptures",
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "ui-leaf"
+    },
+    {
+      "name": "Banner",
+      "spm_product": "PooToolsBanner",
+      "spm_target": "PooToolsBanner",
+      "pod_subspec": "Banner",
+      "source_path": "PooToolsSource/Banner",
+      "dependencies": [
+        "PToolsOverlay",
+        "PToolsSymbols",
+        "PToolsLogging"
+      ],
+      "compile_flags": [
+        "InferSendableFromCaptures",
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "ui-leaf"
+    },
+    {
+      "name": "Symbols",
+      "spm_product": "PToolsSymbols",
+      "spm_target": "PToolsSymbols",
+      "pod_subspec": "Symbols",
+      "source_path": "PooToolsSource/PToolsSymbols",
+      "dependencies": [],
+      "compile_flags": [
+        "InferSendableFromCaptures",
+        "StrictConcurrency"
+      ],
+      "resources": [
+        "SFSymbolCatalog.json"
+      ],
+      "category": "ui-foundation"
+    },
+    {
+      "name": "PToolsPermissionCore",
+      "spm_product": "PToolsPermissionCore",
+      "spm_target": "PToolsPermissionCore",
+      "pod_subspec": "PToolsPermissionCore",
+      "source_path": "PooToolsSource/PToolsPermissionCore",
+      "dependencies": [],
+      "compile_flags": [
+        "InferSendableFromCaptures",
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "permission-foundation"
+    },
+    {
+      "name": "PToolsPermissionUI",
+      "spm_product": "PToolsPermissionUI",
+      "spm_target": "PToolsPermissionUI",
+      "pod_subspec": "PToolsPermissionUI",
+      "source_path": "PooToolsSource/PToolsPermissionUI",
+      "dependencies": [
+        "PToolsPermissionCore",
+        "PToolsUIFoundation"
+      ],
+      "compile_flags": [
+        "InferSendableFromCaptures",
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "permission-ui"
+    },
+    {
+      "name": "MediaCore",
+      "spm_product": "PooToolsMediaCore",
+      "spm_target": "PooToolsMediaCore",
+      "pod_subspec": "MediaCore",
+      "source_path": "PooToolsSource/PToolsMediaCore",
+      "dependencies": [],
+      "compile_flags": [
+        "InferSendableFromCaptures",
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "media-foundation"
+    },
+    {
+      "name": "Network",
+      "spm_product": "PooToolsNetwork",
+      "spm_target": "PooToolsNetWork",
+      "pod_subspec": "Network",
+      "source_path": "PooToolsSource/NetWork",
+      "dependencies": [
+        "ptools",
+        "PToolsCore",
+        "PToolsModelCore",
+        "PooToolsLoading",
+        "Alamofire"
+      ],
+      "compile_flags": [
+        "POOTOOLS_NETWORK"
+      ],
+      "resources": [],
+      "category": "network"
+    },
+    {
+      "name": "MediaViewer",
+      "spm_product": "PooToolsMediaViewer",
+      "spm_target": "PooToolsMediaViewer",
+      "pod_subspec": "MediaViewer",
+      "source_path": "PooToolsSource/MediaViewer",
+      "dependencies": [
+        "ptools",
+        "MediaCore",
+        "PooToolsProgressBar",
+        "PooToolsPageControl",
+        "PooToolsLivePhoto"
+      ],
+      "compile_flags": [
+        "POOTOOLS_MEDIAVIEWER"
+      ],
+      "resources": [],
+      "category": "media-ui"
+    },
+    {
+      "name": "PhotoPicker",
+      "spm_product": "PooToolsPhotoPicker",
+      "spm_target": "PooToolsPhotoPicker",
+      "pod_subspec": "PhotoPicker",
+      "source_path": "PooToolsSource/PhotoPicker",
+      "dependencies": [
+        "ptools",
+        "MediaCore",
+        "PooToolsImagePicker",
+        "PTCameraPermission",
+        "PooToolsLoading",
+        "Kakapos"
+      ],
+      "compile_flags": [
+        "POOTOOLS_PHOTOPICKER"
+      ],
+      "resources": [],
+      "category": "media-ui"
+    },
+    {
+      "name": "ImageEditor",
+      "spm_product": "PooToolsImageEditor",
+      "spm_target": "PooToolsImageEditor",
+      "pod_subspec": "ImageEditor",
+      "source_path": "PooToolsSource/ImageEditor",
+      "dependencies": [
+        "ptools",
+        "MediaCore",
+        "Harbeth",
+        "PooToolsHarbethKit",
+        "PooToolsPhotoPicker"
+      ],
+      "compile_flags": [
+        "POOTOOLS_IMAGEEDITOR"
+      ],
+      "resources": [],
+      "category": "media-ui"
+    },
+    {
+      "name": "VideoEditor",
+      "spm_product": "PooToolsVideoEditor",
+      "spm_target": "PooToolsVideoEditor",
+      "pod_subspec": "VideoEditor",
+      "source_path": "PooToolsSource/VideoEditor",
+      "dependencies": [
+        "ptools",
+        "MediaCore",
+        "Harbeth",
+        "PooToolsHarbethKit",
+        "PooToolsProgressBar",
+        "PooToolsLoading"
+      ],
+      "compile_flags": [
+        "POOTOOLS_VIDEOEDITOR"
+      ],
+      "resources": [],
+      "category": "media-ui"
+    },
+    {
+      "name": "KeyChain",
+      "spm_product": "PooToolsKeyChain",
+      "spm_target": "PooToolsKeyChain",
+      "pod_subspec": "KeyChain",
+      "source_path": "PooToolsSource/KeyChain",
+      "dependencies": [],
+      "compile_flags": [
+        "POOTOOLS_KEYCHAIN"
+      ],
+      "resources": [],
+      "category": "foundation-adapter"
+    },
+    {
+      "name": "PhoneInfo",
+      "spm_product": "PooToolsPhoneInfo",
+      "spm_target": "PooToolsPhoneInfo",
+      "pod_subspec": "PhoneInfo",
+      "source_path": "PooToolsSource/PhoneInfo",
+      "dependencies": [],
+      "compile_flags": [
+        "POOTOOLS_PHONEINFO"
+      ],
+      "resources": [],
+      "category": "foundation-adapter"
+    },
+    {
+      "name": "CheckBox",
+      "spm_product": "PooToolsCheckBox",
+      "spm_target": "PooToolsCheckBox",
+      "pod_subspec": "CheckBox",
+      "source_path": "PooToolsSource/CheckBox",
+      "dependencies": [],
+      "compile_flags": [
+        "POOTOOLS_CHECKBOX"
+      ],
+      "resources": [],
+      "category": "ui-leaf"
+    },
+    {
+      "name": "RateView",
+      "spm_product": "PooToolsRateView",
+      "spm_target": "PooToolsRateView",
+      "pod_subspec": "RateView",
+      "source_path": "PooToolsSource/RateView",
+      "dependencies": [
+        "PToolsUIFoundation",
+        "SnapKit"
+      ],
+      "compile_flags": [
+        "POOTOOLS_RATE"
+      ],
+      "resources": [],
+      "category": "ui-leaf"
+    },
+    {
+      "name": "Slider",
+      "spm_product": "PooToolsSlider",
+      "spm_target": "PooToolsSlider",
+      "pod_subspec": "Slider",
+      "source_path": "PooToolsSource/Slider",
+      "dependencies": [
+        "PToolsUIFoundation",
+        "SnapKit"
+      ],
+      "compile_flags": [
+        "POOTOOLS_SLIDER"
+      ],
+      "resources": [],
+      "category": "ui-leaf"
+    },
+    {
+      "name": "Theme",
+      "spm_product": "PToolsTheme",
+      "spm_target": "PToolsTheme",
+      "pod_subspec": "Theme",
+      "source_path": "PooToolsSource/PToolsTheme",
+      "dependencies": [
+        "PToolsUIFoundation"
+      ],
+      "compile_flags": [],
+      "resources": [],
+      "category": "ui-foundation"
+    },
+    {
+      "name": "Accessibility",
+      "spm_product": "PToolsAccessibility",
+      "spm_target": "PToolsAccessibility",
+      "pod_subspec": "Accessibility",
+      "source_path": "PooToolsSource/PToolsAccessibility",
+      "dependencies": [
+        "PToolsUIFoundation"
+      ],
+      "compile_flags": [],
+      "resources": [],
+      "category": "ui-foundation"
+    },
+    {
+      "name": "ContentState",
+      "spm_product": "PToolsContentState",
+      "spm_target": "PToolsContentState",
+      "pod_subspec": "ContentState",
+      "source_path": "PooToolsSource/PToolsContentState",
+      "dependencies": [
+        "PToolsTheme",
+        "PToolsAccessibility"
+      ],
+      "compile_flags": [],
+      "resources": [],
+      "category": "ui-foundation"
+    },
+    {
+      "name": "Form",
+      "spm_product": "PToolsForm",
+      "spm_target": "PToolsForm",
+      "pod_subspec": "Form",
+      "source_path": "PooToolsSource/PToolsForm",
+      "dependencies": [
+        "ptools",
+        "PToolsTheme",
+        "PToolsContentState",
+        "PToolsAccessibility"
+      ],
+      "compile_flags": [],
+      "resources": [],
+      "category": "ui-components"
+    },
+    {
+      "name": "Bluetooth",
+      "spm_product": "PToolsBluetooth",
+      "spm_target": "PToolsBluetooth",
+      "pod_subspec": "Bluetooth",
+      "source_path": "PooToolsSource/PToolsBluetooth",
+      "dependencies": [],
+      "compile_flags": [],
+      "resources": [],
+      "category": "system-service"
+    },
+    {
+      "name": "Documents",
+      "spm_product": "PToolsDocuments",
+      "spm_target": "PToolsDocuments",
+      "pod_subspec": "Documents",
+      "source_path": "PooToolsSource/PToolsDocuments",
+      "dependencies": [],
+      "compile_flags": [],
+      "resources": [],
+      "category": "system-service"
+    },
+    {
+      "name": "SimulationCore",
+      "spm_product": "PToolsSimulationCore",
+      "spm_target": "PToolsSimulationCore",
+      "pod_subspec": "SimulationCore",
+      "source_path": "PooToolsSource/PToolsSimulationCore",
+      "dependencies": [],
+      "compile_flags": [],
+      "resources": [],
+      "category": "simulation"
+    },
+    {
+      "name": "Simulation",
+      "spm_product": "PToolsSimulation",
+      "spm_target": "PToolsSimulation",
+      "pod_subspec": "Simulation",
+      "source_path": "PooToolsSource/PToolsSimulation",
+      "dependencies": [
+        "PToolsSimulationCore"
+      ],
+      "compile_flags": [],
+      "resources": [],
+      "category": "simulation"
+    },
+    {
+      "name": "Configuration",
+      "spm_product": "PToolsConfiguration",
+      "spm_target": "PToolsConfiguration",
+      "pod_subspec": "Configuration",
+      "source_path": "PooToolsSource/PToolsConfiguration",
+      "dependencies": [
+        "PToolsStorage",
+        "PToolsStorageCore"
+      ],
+      "compile_flags": [],
+      "resources": [],
+      "category": "p2-configuration"
+    },
+    {
+      "name": "Feedback",
+      "spm_product": "PToolsFeedback",
+      "spm_target": "PToolsFeedback",
+      "pod_subspec": "Feedback",
+      "source_path": "PooToolsSource/PToolsFeedback",
+      "dependencies": [],
+      "compile_flags": [],
+      "resources": [],
+      "category": "p2-feedback"
+    },
+    {
+      "name": "Audio",
+      "spm_product": "PToolsAudio",
+      "spm_target": "PToolsAudio",
+      "pod_subspec": "Audio",
+      "source_path": "PooToolsSource/PToolsAudio",
+      "dependencies": [
+        "PTMicPermission"
+      ],
+      "compile_flags": [],
+      "resources": [],
+      "category": "p2-audio"
+    },
+    {
+      "name": "AppIntents",
+      "spm_product": "PToolsAppIntents",
+      "spm_target": "PToolsAppIntents",
+      "pod_subspec": "AppIntents",
+      "source_path": "PooToolsSource/PToolsAppIntents",
+      "dependencies": [
+        "PToolsRouteCore"
+      ],
+      "compile_flags": [],
+      "resources": [],
+      "category": "p2-extension"
+    },
+    {
+      "name": "WidgetCore",
+      "spm_product": "PToolsWidgetCore",
+      "spm_target": "PToolsWidgetCore",
+      "pod_subspec": "WidgetCore",
+      "source_path": "PooToolsSource/PToolsWidgetCore",
+      "dependencies": [
+        "PToolsStorage",
+        "PToolsStorageCore",
+        "PToolsRouteCore",
+        "PToolsDeepLink"
+      ],
+      "compile_flags": [],
+      "resources": [],
+      "category": "p2-extension"
+    },
+    {
+      "name": "Activities",
+      "spm_product": "PToolsActivities",
+      "spm_target": "PToolsActivities",
+      "pod_subspec": "Activities",
+      "source_path": "PooToolsSource/PToolsActivities",
+      "dependencies": [],
+      "compile_flags": [],
+      "resources": [],
+      "category": "p2-extension"
+    }
   ],
   "known_module_only": [
-	{"kind":"spm_only","module":"PTModelLegacyKakaJSONFixture","reason":"SwiftPM-only regression fixture for the legacy KakaJSON model adapter; it is a test product and has no shipped CocoaPods subspec.","owner":"model-core","expiration":"2027-03-31"},
-	{"kind":"spm_only","module":"PTModelLegacySmartCodableFixture","reason":"SwiftPM-only regression fixture for the legacy SmartCodable model adapter; it is a test product and has no shipped CocoaPods subspec.","owner":"model-core","expiration":"2027-03-31"},
-	{"kind":"spm_only","module":"PTModelMixedLegacyFixture","reason":"SwiftPM-only regression fixture covering mixed legacy model decoding; it is a test product and has no shipped CocoaPods subspec.","owner":"model-core","expiration":"2027-03-31"},
-	{"kind":"spm_only","module":"PTModelOnlyFixture","reason":"SwiftPM-only regression fixture for the model facade; it is a test product and has no shipped CocoaPods subspec.","owner":"model-core","expiration":"2027-03-31"},
-	{"kind":"spm_only","module":"PToolsDate","reason":"SwiftPM exposes the Foundation-only date contract under its canonical product name; CocoaPods uses the shorter Date subspec for source compatibility.","owner":"architecture","expiration":"2026-12-31"},
-	{"kind":"spm_only","module":"PToolsModelMacroPlugin","reason":"SwiftPM-only compiler plugin; CocoaPods uses the manual PTStaticModel fallback and must not compile SwiftSyntax macros inside the runtime target.","owner":"model-core","expiration":"2027-03-31"},
-	{"kind":"spm_only","module":"PTModelBenchmark","reason":"Development-only executable used for reproducible PTModel measurements; it is not a shipped CocoaPods subspec.","owner":"model-core","expiration":"2027-03-31"},
-	{"kind":"spm_only","module":"PToolsModelLegacyKakaJSON","reason":"SwiftPM exposes the explicit KakaJSON compatibility product under its long name; CocoaPods keeps the shorter ModelLegacyKakaJSON subspec for source compatibility.","owner":"model-core","expiration":"2027-03-31"},
-	{"kind":"spm_only","module":"PToolsModelLegacySmartCodable","reason":"SwiftPM exposes the explicit SmartCodable compatibility product under its long name; CocoaPods keeps the shorter ModelLegacySmartCodable subspec for source compatibility.","owner":"model-core","expiration":"2027-03-31"},
-	{"kind":"pod_only","module":"Date","reason":"CocoaPods uses the shorter Date subspec name while SwiftPM exposes the canonical PToolsDate product.","owner":"packaging","expiration":"2026-12-31"},
-	{"kind":"pod_only","module":"ModelLegacyKakaJSON","reason":"CocoaPods uses the shorter ModelLegacyKakaJSON subspec name while SwiftPM exposes the canonical PToolsModelLegacyKakaJSON product.","owner":"model-core","expiration":"2027-03-31"},
-	{"kind":"pod_only","module":"ModelLegacySmartCodable","reason":"CocoaPods uses the shorter ModelLegacySmartCodable subspec name while SwiftPM exposes the canonical PToolsModelLegacySmartCodable product.","owner":"model-core","expiration":"2027-03-31"},
-    {"kind":"pod_only","module":"Appz","reason":"CocoaPods aggregate subspec without a standalone SwiftPM target.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"pod_only","module":"FilterCamera","reason":"CocoaPods-only feature entry without a SwiftPM target.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"pod_only","module":"Flag","reason":"CocoaPods dependency-only subspec controlled by Core flags.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"pod_only","module":"GCDWebServer","reason":"CocoaPods dependency-only subspec controlled by Core flags.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"pod_only","module":"InputAll","reason":"CocoaPods aggregate subspec without a standalone SwiftPM target.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"pod_only","module":"MXMetricManagerKit","reason":"CocoaPods-only optional integration without a SwiftPM target.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"pod_only","module":"NFCKit","reason":"CocoaPods-only optional integration without a SwiftPM target.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"pod_only","module":"NotificationBanner","reason":"CocoaPods dependency-only subspec controlled by Core flags.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"pod_only","module":"PopoverKit","reason":"CocoaPods dependency-only subspec controlled by Core flags.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"pod_only","module":"SecuritySuite","reason":"CocoaPods dependency-only subspec controlled by Core flags.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"pod_only","module":"Tabbar","reason":"CocoaPods dependency-only subspec controlled by Core flags.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"pod_only","module":"VideoCache","reason":"CocoaPods dependency-only subspec controlled by Core flags.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"pod_only","module":"WebKit","reason":"CocoaPods-only optional integration without a SwiftPM target.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"pod_only","module":"ZipArchive","reason":"CocoaPods dependency-only subspec controlled by Core flags.","owner":"packaging","expiration":"2026-12-31"}
+    {
+      "kind": "spm_only",
+      "module": "PTModelLegacyKakaJSONFixture",
+      "reason": "SwiftPM-only regression fixture for the legacy KakaJSON model adapter; it is a test product and has no shipped CocoaPods subspec.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PTModelLegacySmartCodableFixture",
+      "reason": "SwiftPM-only regression fixture for the legacy SmartCodable model adapter; it is a test product and has no shipped CocoaPods subspec.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PTModelMixedLegacyFixture",
+      "reason": "SwiftPM-only regression fixture covering mixed legacy model decoding; it is a test product and has no shipped CocoaPods subspec.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PTModelOnlyFixture",
+      "reason": "SwiftPM-only regression fixture for the model facade; it is a test product and has no shipped CocoaPods subspec.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsDate",
+      "reason": "SwiftPM exposes the Foundation-only date contract under its canonical product name; CocoaPods uses the shorter Date subspec for source compatibility.",
+      "owner": "architecture",
+      "expiration": "2026-12-31",
+      "classification": "LEGACY"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsModelMacroPlugin",
+      "reason": "SwiftPM-only compiler plugin; CocoaPods uses the manual PTStaticModel fallback and must not compile SwiftSyntax macros inside the runtime target.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PTModelBenchmark",
+      "reason": "Development-only executable used for reproducible PTModel measurements; it is not a shipped CocoaPods subspec.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "LEGACY"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsModelLegacyKakaJSON",
+      "reason": "SwiftPM exposes the explicit KakaJSON compatibility product under its long name; CocoaPods keeps the shorter ModelLegacyKakaJSON subspec for source compatibility.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "LEGACY"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsModelLegacySmartCodable",
+      "reason": "SwiftPM exposes the explicit SmartCodable compatibility product under its long name; CocoaPods keeps the shorter ModelLegacySmartCodable subspec for source compatibility.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "LEGACY"
+    },
+    {
+      "kind": "pod_only",
+      "module": "Date",
+      "reason": "CocoaPods uses the shorter Date subspec name while SwiftPM exposes the canonical PToolsDate product.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "LEGACY"
+    },
+    {
+      "kind": "pod_only",
+      "module": "ModelLegacyKakaJSON",
+      "reason": "CocoaPods uses the shorter ModelLegacyKakaJSON subspec name while SwiftPM exposes the canonical PToolsModelLegacyKakaJSON product.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "LEGACY"
+    },
+    {
+      "kind": "pod_only",
+      "module": "ModelLegacySmartCodable",
+      "reason": "CocoaPods uses the shorter ModelLegacySmartCodable subspec name while SwiftPM exposes the canonical PToolsModelLegacySmartCodable product.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "LEGACY"
+    },
+    {
+      "kind": "pod_only",
+      "module": "Appz",
+      "reason": "CocoaPods aggregate subspec without a standalone SwiftPM target.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "FilterCamera",
+      "reason": "CocoaPods-only feature entry without a SwiftPM target.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "LEGACY"
+    },
+    {
+      "kind": "pod_only",
+      "module": "Flag",
+      "reason": "CocoaPods dependency-only subspec controlled by Core flags.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "GCDWebServer",
+      "reason": "CocoaPods dependency-only subspec controlled by Core flags.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "InputAll",
+      "reason": "CocoaPods aggregate subspec without a standalone SwiftPM target.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "MXMetricManagerKit",
+      "reason": "CocoaPods-only optional integration without a SwiftPM target.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "NFCKit",
+      "reason": "CocoaPods-only optional integration without a SwiftPM target.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "NotificationBanner",
+      "reason": "CocoaPods dependency-only subspec controlled by Core flags.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "PopoverKit",
+      "reason": "CocoaPods dependency-only subspec controlled by Core flags.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "SecuritySuite",
+      "reason": "CocoaPods dependency-only subspec controlled by Core flags.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "Tabbar",
+      "reason": "CocoaPods dependency-only subspec controlled by Core flags.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "VideoCache",
+      "reason": "CocoaPods dependency-only subspec controlled by Core flags.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "WebKit",
+      "reason": "CocoaPods-only optional integration without a SwiftPM target.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "ZipArchive",
+      "reason": "CocoaPods dependency-only subspec controlled by Core flags.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    }
   ],
   "known_drift": [
-    {"kind":"settings","module":"PToolsModelCombine","reason":"SwiftPM enables StrictConcurrency per target; CocoaPods inherits the aggregate PooTools Swift 6 settings for this optional Combine adapter.","owner":"model-core","expiration":"2027-03-31"},
-    {"kind":"settings","module":"PToolsModelUIKit","reason":"SwiftPM enables StrictConcurrency per target; CocoaPods inherits the aggregate PooTools Swift 6 settings for this optional UIKit adapter.","owner":"model-core","expiration":"2027-03-31"},
-    {"kind":"settings","module":"HTTPFilePortal","reason":"SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings to avoid forcing unrelated pods to Swift 6.","owner":"http-infrastructure","expiration":"2026-12-31"},
-    {"kind":"settings","module":"HTTPServer","reason":"SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings to avoid forcing unrelated pods to Swift 6.","owner":"http-infrastructure","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"BilogyID","field":"internal_dependencies","reason":"CocoaPods keeps legacy Core and KeyChain; SwiftPM uses split Core.","owner":"architecture","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"BluetoothPermission","field":"internal_dependencies","reason":"SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"CheckUpdate","field":"third_party_dependencies","reason":"Equivalent dependency uses different SPM and CocoaPods names.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"Core","field":"internal_dependencies","reason":"SwiftPM publishes split contracts; CocoaPods keeps monolithic Core.","owner":"architecture","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"Core","field":"third_party_dependencies","reason":"SPM and CocoaPods expose different direct and transitive Core dependencies.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"ImageEditor","field":"third_party_dependencies","reason":"SPM declares Harbeth; CocoaPods uses the local HarbethKit route.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"MeidaPermission","field":"internal_dependencies","reason":"SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"NetWork","field":"internal_dependencies","reason":"SPM includes extracted PToolsCore; CocoaPods keeps legacy Core.","owner":"architecture","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"PhotoPicker","field":"internal_dependencies","reason":"SPM adds standalone CameraPermission; CocoaPods keeps Core route.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"Picker","field":"third_party_dependencies","reason":"SPM declares direct utilities; CocoaPods resolves them through Core.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"SVG","field":"third_party_dependencies","reason":"SPM and CocoaPods expose different direct and transitive SVG dependencies.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"ScanQRCode","field":"internal_dependencies","reason":"SPM declares ImagePicker and PhotoPicker routes; CocoaPods uses its local graph.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"SiriPermission","field":"internal_dependencies","reason":"SwiftPM uses PToolsPermissionCore; CocoaPods keeps the legacy Core route for this permission alias.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"VideoEditor","field":"third_party_dependencies","reason":"SPM declares Harbeth; CocoaPods uses the local HarbethKit route.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"settings","module":"BluetoothPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"CalendarPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"CameraPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"ContactsPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Core","reason":"SPM carries split and optional flags plus strict concurrency features; CocoaPods is monolithic.","owner":"architecture","expiration":"2026-12-31"},
-    {"kind":"settings","module":"FaceIDPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"HealthPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"LocationPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"MeidaPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"MicPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"MotionPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"NotificationPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"RemindersPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"SiriPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"SpeechRecognizerPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"TrackingPermission","reason":"SPM selects split permission implementation; CocoaPods selects legacy implementation.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"source","module":"MeidaPermission","field":"source_directories","reason":"The 5.x CocoaPods spelling alias intentionally contains no source files and forwards to MediaPermission.","owner":"packaging","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"RateView","field":"internal_dependencies","reason":"CocoaPods exposes the shared UI foundation explicitly; the SwiftPM target still compiles through its direct UI imports.","owner":"ui-foundation","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"Slider","field":"internal_dependencies","reason":"CocoaPods exposes the shared UI foundation explicitly; the SwiftPM target still compiles through its direct UI imports.","owner":"ui-foundation","expiration":"2026-12-31"},
-    {"kind":"settings","module":"MediaCore","reason":"SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.","owner":"media","expiration":"2026-12-31"},
-    {"kind":"settings","module":"PToolsCore","reason":"SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.","owner":"architecture","expiration":"2026-12-31"},
-    {"kind":"settings","module":"PToolsPermissionCore","reason":"SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"PToolsPermissionUI","reason":"SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.","owner":"permissions","expiration":"2026-12-31"},
-    {"kind":"settings","module":"PToolsUIFoundation","reason":"SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.","owner":"ui-foundation","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Logging","reason":"SwiftPM enables strict concurrency for the standalone logging target; CocoaPods inherits the aggregate target's compiler settings.","owner":"logging","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Symbols","reason":"SwiftPM enables strict concurrency for the standalone symbol target; CocoaPods inherits the aggregate target's compiler settings.","owner":"ui-foundation","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Overlay","reason":"SwiftPM enables strict concurrency for the standalone overlay target; CocoaPods inherits the aggregate target's compiler settings.","owner":"ui-foundation","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Banner","reason":"SwiftPM enables strict concurrency for the standalone banner target; CocoaPods inherits the aggregate target's compiler settings.","owner":"ui-components","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"TipsView","field":"internal_dependencies","reason":"SwiftPM now exposes the shared Overlay target directly for anchored Tips integration; CocoaPods keeps the historical Core dependency for source compatibility.","owner":"ui-components","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"Popover","field":"internal_dependencies","reason":"SwiftPM lists the extracted PToolsCore contract explicitly for semantic overlay feedback; CocoaPods receives the same Core capability through the Overlay aggregate dependency.","owner":"ui-components","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Popover","reason":"SwiftPM enables strict concurrency and InferSendableFromCaptures for the standalone Popover target; CocoaPods receives the native source through the aggregate compiler contract.","owner":"ui-components","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"Instructions","field":"internal_dependencies","reason":"SwiftPM receives Core transitively through the shared Overlay target; CocoaPods keeps an explicit Core dependency for the 5.x subspec contract.","owner":"ui-components","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Instructions","reason":"SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings while retaining the same source contract.","owner":"ui-components","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Device","reason":"PToolsDevice enables strict concurrency as an independent SwiftPM target; CocoaPods compiles the same Foundation source under the aggregate Core compiler contract.","owner":"device-foundation","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Connectivity","reason":"SwiftPM enables strict concurrency for the standalone connectivity target; CocoaPods inherits the aggregate target compiler contract.","owner":"platform-infrastructure","expiration":"2026-12-31"},
-    {"kind":"settings","module":"StorageCore","reason":"SwiftPM enables strict concurrency for the standalone storage contract; CocoaPods inherits the aggregate target compiler contract.","owner":"platform-infrastructure","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Storage","reason":"SwiftPM enables strict concurrency for the native storage target; CocoaPods inherits the aggregate target compiler contract.","owner":"platform-infrastructure","expiration":"2026-12-31"},
-    {"kind":"settings","module":"RouteCore","reason":"SwiftPM enables strict concurrency for the Foundation-only route contract; CocoaPods inherits the aggregate target compiler contract.","owner":"platform-infrastructure","expiration":"2026-12-31"},
-    {"kind":"settings","module":"DeepLink","reason":"SwiftPM enables strict concurrency for the Foundation-only deep-link target; CocoaPods inherits the aggregate target compiler contract.","owner":"platform-infrastructure","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Notifications","reason":"SwiftPM enables strict concurrency for the notification target; CocoaPods inherits the aggregate target compiler contract.","owner":"platform-infrastructure","expiration":"2026-12-31"},
-    {"kind":"settings","module":"BackgroundTasks","reason":"SwiftPM enables strict concurrency for the background task target; CocoaPods inherits the aggregate target compiler contract.","owner":"platform-infrastructure","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Theme","reason":"SwiftPM enables strict concurrency for the standalone theme target; CocoaPods inherits the aggregate target compiler contract.","owner":"p1-ui-foundation","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Accessibility","reason":"SwiftPM enables strict concurrency for the standalone accessibility target; CocoaPods inherits the aggregate target compiler contract.","owner":"p1-accessibility","expiration":"2026-12-31"},
-    {"kind":"settings","module":"ContentState","reason":"SwiftPM enables strict concurrency for the standalone content-state target; CocoaPods inherits the aggregate target compiler contract.","owner":"p1-ui-foundation","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"Form","field":"internal_dependencies","reason":"SwiftPM uses the stable Picker, CheckBox and Slider targets and native fallbacks; CocoaPods retains legacy Input and Stepper compatibility dependencies for the 5.x subspec contract.","owner":"p1-form","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Form","reason":"SwiftPM enables strict concurrency for the standalone form target; CocoaPods inherits the aggregate target compiler contract.","owner":"p1-form","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Bluetooth","reason":"SwiftPM enables strict concurrency for the standalone Bluetooth target; CocoaPods inherits the aggregate target compiler contract.","owner":"p1-system-services","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Documents","reason":"SwiftPM enables strict concurrency for the standalone documents target; CocoaPods inherits the aggregate target compiler contract.","owner":"p1-system-services","expiration":"2026-12-31"},
-    {"kind":"settings","module":"SimulationCore","reason":"SwiftPM enables strict concurrency for the standalone simulation-core target; CocoaPods inherits the aggregate target compiler contract.","owner":"p1-simulation","expiration":"2026-12-31"},
-    {"kind":"settings","module":"Simulation","reason":"SwiftPM enables strict concurrency for the standalone simulation target; CocoaPods inherits the aggregate target compiler contract.","owner":"p1-simulation","expiration":"2026-12-31"},
-    {"kind":"dependency","module":"Configuration","field":"internal_dependencies","reason":"SwiftPM lists StorageCore explicitly for the typed storage contract; CocoaPods receives it transitively through the Storage subspec.","owner":"p2-configuration","expiration":"2027-03-31"},
-    {"kind":"dependency","module":"WidgetCore","field":"internal_dependencies","reason":"SwiftPM lists StorageCore explicitly for the typed App Group store; CocoaPods receives it transitively through the Storage subspec.","owner":"p2-extension","expiration":"2027-03-31"},
-    {"kind":"settings","module":"Configuration","reason":"SwiftPM enables strict concurrency for the typed configuration target; CocoaPods inherits the aggregate target compiler contract.","owner":"p2-configuration","expiration":"2027-03-31"},
-    {"kind":"settings","module":"Feedback","reason":"SwiftPM enables strict concurrency for the haptic feedback target; CocoaPods inherits the aggregate target compiler contract.","owner":"p2-feedback","expiration":"2027-03-31"},
-    {"kind":"settings","module":"Audio","reason":"SwiftPM enables strict concurrency for the audio target; CocoaPods inherits the aggregate target compiler contract.","owner":"p2-audio","expiration":"2027-03-31"},
-    {"kind":"settings","module":"AppIntents","reason":"SwiftPM enables strict concurrency for the App Intents route bridge; CocoaPods keeps the extension-safe subspec compiler contract.","owner":"p2-extension","expiration":"2027-03-31"},
-    {"kind":"settings","module":"WidgetCore","reason":"SwiftPM enables strict concurrency for the extension-safe WidgetKit core; CocoaPods keeps the extension-safe subspec compiler contract.","owner":"p2-extension","expiration":"2027-03-31"},
-    {"kind":"settings","module":"Activities","reason":"SwiftPM enables strict concurrency for the ActivityKit lifecycle bridge; CocoaPods keeps the extension-safe subspec compiler contract.","owner":"p2-extension","expiration":"2027-03-31"},
-    {"kind":"dependency","module":"Model","field":"internal_dependencies","reason":"SwiftPM adds the compiler-only PTModel macro plugin; CocoaPods intentionally keeps the runtime facade on the manual schema fallback.","owner":"model-core","expiration":"2027-03-31"},
-    {"kind":"settings","module":"ModelCore","reason":"SwiftPM enables strict concurrency for the Foundation-only model core; CocoaPods inherits the aggregate target compiler contract.","owner":"model-core","expiration":"2027-03-31"},
-    {"kind":"settings","module":"Model","reason":"SwiftPM enables strict concurrency for the model facade; CocoaPods inherits the aggregate target compiler contract.","owner":"model-core","expiration":"2027-03-31"}
+    {
+      "kind": "settings",
+      "module": "PToolsModelCombine",
+      "reason": "SwiftPM enables StrictConcurrency per target; CocoaPods inherits the aggregate PooTools Swift 6 settings for this optional Combine adapter.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "PToolsModelUIKit",
+      "reason": "SwiftPM enables StrictConcurrency per target; CocoaPods inherits the aggregate PooTools Swift 6 settings for this optional UIKit adapter.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "HTTPFilePortal",
+      "reason": "SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings to avoid forcing unrelated pods to Swift 6.",
+      "owner": "http-infrastructure",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "HTTPServer",
+      "reason": "SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings to avoid forcing unrelated pods to Swift 6.",
+      "owner": "http-infrastructure",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "BilogyID",
+      "field": "internal_dependencies",
+      "reason": "CocoaPods keeps legacy Core and KeyChain; SwiftPM uses split Core.",
+      "owner": "architecture",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "BluetoothPermission",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "CheckUpdate",
+      "field": "third_party_dependencies",
+      "reason": "Equivalent dependency uses different SPM and CocoaPods names.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Core",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM publishes split contracts; CocoaPods keeps monolithic Core.",
+      "owner": "architecture",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Core",
+      "field": "third_party_dependencies",
+      "reason": "SPM and CocoaPods expose different direct and transitive Core dependencies.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "ImageEditor",
+      "field": "third_party_dependencies",
+      "reason": "SPM declares Harbeth; CocoaPods uses the local HarbethKit route.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "MeidaPermission",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "NetWork",
+      "field": "internal_dependencies",
+      "reason": "SPM includes extracted PToolsCore; CocoaPods keeps legacy Core.",
+      "owner": "architecture",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "PhotoPicker",
+      "field": "internal_dependencies",
+      "reason": "SPM adds standalone CameraPermission; CocoaPods keeps Core route.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Picker",
+      "field": "third_party_dependencies",
+      "reason": "SPM declares direct utilities; CocoaPods resolves them through Core.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "SVG",
+      "field": "third_party_dependencies",
+      "reason": "SPM and CocoaPods expose different direct and transitive SVG dependencies.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "ScanQRCode",
+      "field": "internal_dependencies",
+      "reason": "SPM declares ImagePicker and PhotoPicker routes; CocoaPods uses its local graph.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "SiriPermission",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM uses PToolsPermissionCore; CocoaPods keeps the legacy Core route for this permission alias.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "VideoEditor",
+      "field": "third_party_dependencies",
+      "reason": "SPM declares Harbeth; CocoaPods uses the local HarbethKit route.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "BluetoothPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "CalendarPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "CameraPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "ContactsPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Core",
+      "reason": "SPM carries split and optional flags plus strict concurrency features; CocoaPods is monolithic.",
+      "owner": "architecture",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "FaceIDPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "HealthPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "LocationPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "MeidaPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "MicPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "MotionPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "NotificationPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "RemindersPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "SiriPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "SpeechRecognizerPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "TrackingPermission",
+      "reason": "SPM selects split permission implementation; CocoaPods selects legacy implementation.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "source",
+      "module": "MeidaPermission",
+      "field": "source_directories",
+      "reason": "The 5.x CocoaPods spelling alias intentionally contains no source files and forwards to MediaPermission.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "RateView",
+      "field": "internal_dependencies",
+      "reason": "CocoaPods exposes the shared UI foundation explicitly; the SwiftPM target still compiles through its direct UI imports.",
+      "owner": "ui-foundation",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Slider",
+      "field": "internal_dependencies",
+      "reason": "CocoaPods exposes the shared UI foundation explicitly; the SwiftPM target still compiles through its direct UI imports.",
+      "owner": "ui-foundation",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "MediaCore",
+      "reason": "SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.",
+      "owner": "media",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "PToolsCore",
+      "reason": "SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.",
+      "owner": "architecture",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "PToolsPermissionCore",
+      "reason": "SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "PToolsPermissionUI",
+      "reason": "SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.",
+      "owner": "permissions",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "PToolsUIFoundation",
+      "reason": "SwiftPM enables strict concurrency for the standalone target; CocoaPods inherits the aggregate target's compiler settings.",
+      "owner": "ui-foundation",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Logging",
+      "reason": "SwiftPM enables strict concurrency for the standalone logging target; CocoaPods inherits the aggregate target's compiler settings.",
+      "owner": "logging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Symbols",
+      "reason": "SwiftPM enables strict concurrency for the standalone symbol target; CocoaPods inherits the aggregate target's compiler settings.",
+      "owner": "ui-foundation",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Overlay",
+      "reason": "SwiftPM enables strict concurrency for the standalone overlay target; CocoaPods inherits the aggregate target's compiler settings.",
+      "owner": "ui-foundation",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Banner",
+      "reason": "SwiftPM enables strict concurrency for the standalone banner target; CocoaPods inherits the aggregate target's compiler settings.",
+      "owner": "ui-components",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "TipsView",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM now exposes the shared Overlay target directly for anchored Tips integration; CocoaPods keeps the historical Core dependency for source compatibility.",
+      "owner": "ui-components",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Popover",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM lists the extracted PToolsCore contract explicitly for semantic overlay feedback; CocoaPods receives the same Core capability through the Overlay aggregate dependency.",
+      "owner": "ui-components",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Popover",
+      "reason": "SwiftPM enables strict concurrency and InferSendableFromCaptures for the standalone Popover target; CocoaPods receives the native source through the aggregate compiler contract.",
+      "owner": "ui-components",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Instructions",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM receives Core transitively through the shared Overlay target; CocoaPods keeps an explicit Core dependency for the 5.x subspec contract.",
+      "owner": "ui-components",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Instructions",
+      "reason": "SwiftPM enables strict concurrency per target; CocoaPods inherits the aggregate target settings while retaining the same source contract.",
+      "owner": "ui-components",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Device",
+      "reason": "PToolsDevice enables strict concurrency as an independent SwiftPM target; CocoaPods compiles the same Foundation source under the aggregate Core compiler contract.",
+      "owner": "device-foundation",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Connectivity",
+      "reason": "SwiftPM enables strict concurrency for the standalone connectivity target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "platform-infrastructure",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "StorageCore",
+      "reason": "SwiftPM enables strict concurrency for the standalone storage contract; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "platform-infrastructure",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Storage",
+      "reason": "SwiftPM enables strict concurrency for the native storage target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "platform-infrastructure",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "RouteCore",
+      "reason": "SwiftPM enables strict concurrency for the Foundation-only route contract; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "platform-infrastructure",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "DeepLink",
+      "reason": "SwiftPM enables strict concurrency for the Foundation-only deep-link target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "platform-infrastructure",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Notifications",
+      "reason": "SwiftPM enables strict concurrency for the notification target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "platform-infrastructure",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "BackgroundTasks",
+      "reason": "SwiftPM enables strict concurrency for the background task target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "platform-infrastructure",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Theme",
+      "reason": "SwiftPM enables strict concurrency for the standalone theme target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "p1-ui-foundation",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Accessibility",
+      "reason": "SwiftPM enables strict concurrency for the standalone accessibility target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "p1-accessibility",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "ContentState",
+      "reason": "SwiftPM enables strict concurrency for the standalone content-state target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "p1-ui-foundation",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Form",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM uses the stable Picker, CheckBox and Slider targets and native fallbacks; CocoaPods retains legacy Input and Stepper compatibility dependencies for the 5.x subspec contract.",
+      "owner": "p1-form",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Form",
+      "reason": "SwiftPM enables strict concurrency for the standalone form target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "p1-form",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Bluetooth",
+      "reason": "SwiftPM enables strict concurrency for the standalone Bluetooth target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "p1-system-services",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Documents",
+      "reason": "SwiftPM enables strict concurrency for the standalone documents target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "p1-system-services",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "SimulationCore",
+      "reason": "SwiftPM enables strict concurrency for the standalone simulation-core target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "p1-simulation",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Simulation",
+      "reason": "SwiftPM enables strict concurrency for the standalone simulation target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "p1-simulation",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Configuration",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM lists StorageCore explicitly for the typed storage contract; CocoaPods receives it transitively through the Storage subspec.",
+      "owner": "p2-configuration",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "WidgetCore",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM lists StorageCore explicitly for the typed App Group store; CocoaPods receives it transitively through the Storage subspec.",
+      "owner": "p2-extension",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Configuration",
+      "reason": "SwiftPM enables strict concurrency for the typed configuration target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "p2-configuration",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Feedback",
+      "reason": "SwiftPM enables strict concurrency for the haptic feedback target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "p2-feedback",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Audio",
+      "reason": "SwiftPM enables strict concurrency for the audio target; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "p2-audio",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "AppIntents",
+      "reason": "SwiftPM enables strict concurrency for the App Intents route bridge; CocoaPods keeps the extension-safe subspec compiler contract.",
+      "owner": "p2-extension",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "WidgetCore",
+      "reason": "SwiftPM enables strict concurrency for the extension-safe WidgetKit core; CocoaPods keeps the extension-safe subspec compiler contract.",
+      "owner": "p2-extension",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Activities",
+      "reason": "SwiftPM enables strict concurrency for the ActivityKit lifecycle bridge; CocoaPods keeps the extension-safe subspec compiler contract.",
+      "owner": "p2-extension",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Model",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM adds the compiler-only PTModel macro plugin; CocoaPods intentionally keeps the runtime facade on the manual schema fallback.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "ModelCore",
+      "reason": "SwiftPM enables strict concurrency for the Foundation-only model core; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "Model",
+      "reason": "SwiftPM enables strict concurrency for the model facade; CocoaPods inherits the aggregate target compiler contract.",
+      "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    }
   ]
 }

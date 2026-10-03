@@ -294,7 +294,7 @@
       "removeIn": "6.0.0"
     },
     {
-      "path": "PooToolsSource/NetWork/Network.swift",
+      "path": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift",
       "symbol": "PTLegacyModelTypeBox",
       "category": "LOCK_PROTECTED",
       "systemType": "Reference type with shared transport, cache, socket or speech state",
@@ -404,7 +404,7 @@
       "removeIn": null
     },
     {
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift",
       "symbol": "PTTextMatcherCache",
       "category": "LOCK_PROTECTED",
       "systemType": "Reference type with shared transport, cache, socket or speech state",

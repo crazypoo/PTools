@@ -1,0 +1,2335 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "5.60.0",
+  "source": "PooToolsSource/Font/FontName.swift legacy compatibility inventory",
+  "fonts": [
+    {
+      "swiftName": "academyEngravedLetPlain",
+      "postScriptName": "AcademyEngravedLetPlain",
+      "familyName": "AcademyEngravedLetPlain",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "alNile",
+      "postScriptName": "AlNile",
+      "familyName": "AlNile",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "alNileBold",
+      "postScriptName": "AlNile-Bold",
+      "familyName": "AlNile",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "americanTypewriter",
+      "postScriptName": "AmericanTypewriter",
+      "familyName": "AmericanTypewriter",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "americanTypewriterBold",
+      "postScriptName": "AmericanTypewriter-Bold",
+      "familyName": "AmericanTypewriter",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "americanTypewriterCondensed",
+      "postScriptName": "AmericanTypewriter-Condensed",
+      "familyName": "AmericanTypewriter",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "americanTypewriterCondensedBold",
+      "postScriptName": "AmericanTypewriter-CondensedBold",
+      "familyName": "AmericanTypewriter",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "americanTypewriterCondensedLight",
+      "postScriptName": "AmericanTypewriter-CondensedLight",
+      "familyName": "AmericanTypewriter",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "americanTypewriterLight",
+      "postScriptName": "AmericanTypewriter-Light",
+      "familyName": "AmericanTypewriter",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "americanTypewriterSemibold",
+      "postScriptName": "AmericanTypewriter-Semibold",
+      "familyName": "AmericanTypewriter",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "appleColorEmoji",
+      "postScriptName": "AppleColorEmoji",
+      "familyName": "AppleColorEmoji",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "appleSDGothicNeoBold",
+      "postScriptName": "AppleSDGothicNeo-Bold",
+      "familyName": "AppleSDGothicNeo",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "appleSDGothicNeoLight",
+      "postScriptName": "AppleSDGothicNeo-Light",
+      "familyName": "AppleSDGothicNeo",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "appleSDGothicNeoMedium",
+      "postScriptName": "AppleSDGothicNeo-Medium",
+      "familyName": "AppleSDGothicNeo",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "appleSDGothicNeoRegular",
+      "postScriptName": "AppleSDGothicNeo-Regular",
+      "familyName": "AppleSDGothicNeo",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "appleSDGothicNeoSemiBold",
+      "postScriptName": "AppleSDGothicNeo-SemiBold",
+      "familyName": "AppleSDGothicNeo",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "appleSDGothicNeoThin",
+      "postScriptName": "AppleSDGothicNeo-Thin",
+      "familyName": "AppleSDGothicNeo",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "appleSDGothicNeoUltraLight",
+      "postScriptName": "AppleSDGothicNeo-UltraLight",
+      "familyName": "AppleSDGothicNeo",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "arialBoldItalicMT",
+      "postScriptName": "Arial-BoldItalicMT",
+      "familyName": "Arial",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "arialBoldMT",
+      "postScriptName": "Arial-BoldMT",
+      "familyName": "Arial",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "arialItalicMT",
+      "postScriptName": "Arial-ItalicMT",
+      "familyName": "Arial",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "arialHebrew",
+      "postScriptName": "ArialHebrew",
+      "familyName": "ArialHebrew",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "arialHebrewBold",
+      "postScriptName": "ArialHebrew-Bold",
+      "familyName": "ArialHebrew",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "arialHebrewLight",
+      "postScriptName": "ArialHebrew-Light",
+      "familyName": "ArialHebrew",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "arialMT",
+      "postScriptName": "ArialMT",
+      "familyName": "ArialMT",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "arialRoundedMTBold",
+      "postScriptName": "ArialRoundedMTBold",
+      "familyName": "ArialRoundedMTBold",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirBlack",
+      "postScriptName": "Avenir-Black",
+      "familyName": "Avenir",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirBlackOblique",
+      "postScriptName": "Avenir-BlackOblique",
+      "familyName": "Avenir",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirBook",
+      "postScriptName": "Avenir-Book",
+      "familyName": "Avenir",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirBookOblique",
+      "postScriptName": "Avenir-BookOblique",
+      "familyName": "Avenir",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirHeavy",
+      "postScriptName": "Avenir-Heavy",
+      "familyName": "Avenir",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirHeavyOblique",
+      "postScriptName": "Avenir-HeavyOblique",
+      "familyName": "Avenir",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirLight",
+      "postScriptName": "Avenir-Light",
+      "familyName": "Avenir",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirLightOblique",
+      "postScriptName": "Avenir-LightOblique",
+      "familyName": "Avenir",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirMedium",
+      "postScriptName": "Avenir-Medium",
+      "familyName": "Avenir",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirMediumOblique",
+      "postScriptName": "Avenir-MediumOblique",
+      "familyName": "Avenir",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirOblique",
+      "postScriptName": "Avenir-Oblique",
+      "familyName": "Avenir",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirRoman",
+      "postScriptName": "Avenir-Roman",
+      "familyName": "Avenir",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextBold",
+      "postScriptName": "AvenirNext-Bold",
+      "familyName": "AvenirNext",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextBoldItalic",
+      "postScriptName": "AvenirNext-BoldItalic",
+      "familyName": "AvenirNext",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextDemiBold",
+      "postScriptName": "AvenirNext-DemiBold",
+      "familyName": "AvenirNext",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextDemiBoldItalic",
+      "postScriptName": "AvenirNext-DemiBoldItalic",
+      "familyName": "AvenirNext",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextHeavy",
+      "postScriptName": "AvenirNext-Heavy",
+      "familyName": "AvenirNext",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextHeavyItalic",
+      "postScriptName": "AvenirNext-HeavyItalic",
+      "familyName": "AvenirNext",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextItalic",
+      "postScriptName": "AvenirNext-Italic",
+      "familyName": "AvenirNext",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextMedium",
+      "postScriptName": "AvenirNext-Medium",
+      "familyName": "AvenirNext",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextMediumItalic",
+      "postScriptName": "AvenirNext-MediumItalic",
+      "familyName": "AvenirNext",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextRegular",
+      "postScriptName": "AvenirNext-Regular",
+      "familyName": "AvenirNext",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextUltraLight",
+      "postScriptName": "AvenirNext-UltraLight",
+      "familyName": "AvenirNext",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextUltraLightItalic",
+      "postScriptName": "AvenirNext-UltraLightItalic",
+      "familyName": "AvenirNext",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextCondensedBold",
+      "postScriptName": "AvenirNextCondensed-Bold",
+      "familyName": "AvenirNextCondensed",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextCondensedBoldItalic",
+      "postScriptName": "AvenirNextCondensed-BoldItalic",
+      "familyName": "AvenirNextCondensed",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextCondensedDemiBold",
+      "postScriptName": "AvenirNextCondensed-DemiBold",
+      "familyName": "AvenirNextCondensed",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextCondensedDemiBoldItalic",
+      "postScriptName": "AvenirNextCondensed-DemiBoldItalic",
+      "familyName": "AvenirNextCondensed",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextCondensedHeavy",
+      "postScriptName": "AvenirNextCondensed-Heavy",
+      "familyName": "AvenirNextCondensed",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextCondensedHeavyItalic",
+      "postScriptName": "AvenirNextCondensed-HeavyItalic",
+      "familyName": "AvenirNextCondensed",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextCondensedItalic",
+      "postScriptName": "AvenirNextCondensed-Italic",
+      "familyName": "AvenirNextCondensed",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextCondensedMedium",
+      "postScriptName": "AvenirNextCondensed-Medium",
+      "familyName": "AvenirNextCondensed",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextCondensedMediumItalic",
+      "postScriptName": "AvenirNextCondensed-MediumItalic",
+      "familyName": "AvenirNextCondensed",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextCondensedRegular",
+      "postScriptName": "AvenirNextCondensed-Regular",
+      "familyName": "AvenirNextCondensed",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextCondensedUltraLight",
+      "postScriptName": "AvenirNextCondensed-UltraLight",
+      "familyName": "AvenirNextCondensed",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "avenirNextCondensedUltraLightItalic",
+      "postScriptName": "AvenirNextCondensed-UltraLightItalic",
+      "familyName": "AvenirNextCondensed",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "banglaSangamMN",
+      "postScriptName": "BanglaSangamMN",
+      "familyName": "BanglaSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "banglaSangamMNBold",
+      "postScriptName": "BanglaSangamMN-Bold",
+      "familyName": "BanglaSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "baskerville",
+      "postScriptName": "Baskerville",
+      "familyName": "Baskerville",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "baskervilleBold",
+      "postScriptName": "Baskerville-Bold",
+      "familyName": "Baskerville",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "baskervilleBoldItalic",
+      "postScriptName": "Baskerville-BoldItalic",
+      "familyName": "Baskerville",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "baskervilleItalic",
+      "postScriptName": "Baskerville-Italic",
+      "familyName": "Baskerville",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "baskervilleSemiBold",
+      "postScriptName": "Baskerville-SemiBold",
+      "familyName": "Baskerville",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "baskervilleSemiBoldItalic",
+      "postScriptName": "Baskerville-SemiBoldItalic",
+      "familyName": "Baskerville",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "bodoniOrnamentsITCTT",
+      "postScriptName": "BodoniOrnamentsITCTT",
+      "familyName": "BodoniOrnamentsITCTT",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "bodoniSvtyTwoITCTTBold",
+      "postScriptName": "BodoniSvtyTwoITCTT-Bold",
+      "familyName": "BodoniSvtyTwoITCTT",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "bodoniSvtyTwoITCTTBook",
+      "postScriptName": "BodoniSvtyTwoITCTT-Book",
+      "familyName": "BodoniSvtyTwoITCTT",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "bodoniSvtyTwoITCTTBookIta",
+      "postScriptName": "BodoniSvtyTwoITCTT-BookIta",
+      "familyName": "BodoniSvtyTwoITCTT",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "bodoniSvtyTwoOSITCTTBold",
+      "postScriptName": "BodoniSvtyTwoOSITCTT-Bold",
+      "familyName": "BodoniSvtyTwoOSITCTT",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "bodoniSvtyTwoOSITCTTBook",
+      "postScriptName": "BodoniSvtyTwoOSITCTT-Book",
+      "familyName": "BodoniSvtyTwoOSITCTT",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "bodoniSvtyTwoOSITCTTBookIt",
+      "postScriptName": "BodoniSvtyTwoOSITCTT-BookIt",
+      "familyName": "BodoniSvtyTwoOSITCTT",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "bodoniSvtyTwoSCITCTTBook",
+      "postScriptName": "BodoniSvtyTwoSCITCTT-Book",
+      "familyName": "BodoniSvtyTwoSCITCTT",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "bradleyHandITCTTBold",
+      "postScriptName": "BradleyHandITCTT-Bold",
+      "familyName": "BradleyHandITCTT",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "chalkboardSEBold",
+      "postScriptName": "ChalkboardSE-Bold",
+      "familyName": "ChalkboardSE",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "chalkboardSELight",
+      "postScriptName": "ChalkboardSE-Light",
+      "familyName": "ChalkboardSE",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "chalkboardSERegular",
+      "postScriptName": "ChalkboardSE-Regular",
+      "familyName": "ChalkboardSE",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "chalkduster",
+      "postScriptName": "Chalkduster",
+      "familyName": "Chalkduster",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "charterBlack",
+      "postScriptName": "Charter-Black",
+      "familyName": "Charter",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "charterBlackItalic",
+      "postScriptName": "Charter-BlackItalic",
+      "familyName": "Charter",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "charterBold",
+      "postScriptName": "Charter-Bold",
+      "familyName": "Charter",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "charterBoldItalic",
+      "postScriptName": "Charter-BoldItalic",
+      "familyName": "Charter",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "charterItalic",
+      "postScriptName": "Charter-Italic",
+      "familyName": "Charter",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "charterRoman",
+      "postScriptName": "Charter-Roman",
+      "familyName": "Charter",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "cochin",
+      "postScriptName": "Cochin",
+      "familyName": "Cochin",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "cochinBold",
+      "postScriptName": "Cochin-Bold",
+      "familyName": "Cochin",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "cochinBoldItalic",
+      "postScriptName": "Cochin-BoldItalic",
+      "familyName": "Cochin",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "cochinItalic",
+      "postScriptName": "Cochin-Italic",
+      "familyName": "Cochin",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "copperplate",
+      "postScriptName": "Copperplate",
+      "familyName": "Copperplate",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "copperplateBold",
+      "postScriptName": "Copperplate-Bold",
+      "familyName": "Copperplate",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "copperplateLight",
+      "postScriptName": "Copperplate-Light",
+      "familyName": "Copperplate",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "courier",
+      "postScriptName": "Courier",
+      "familyName": "Courier",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "courierBold",
+      "postScriptName": "Courier-Bold",
+      "familyName": "Courier",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "courierBoldOblique",
+      "postScriptName": "Courier-BoldOblique",
+      "familyName": "Courier",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "courierOblique",
+      "postScriptName": "Courier-Oblique",
+      "familyName": "Courier",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "courierNewPSBoldItalicMT",
+      "postScriptName": "CourierNewPS-BoldItalicMT",
+      "familyName": "CourierNewPS",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "courierNewPSBoldMT",
+      "postScriptName": "CourierNewPS-BoldMT",
+      "familyName": "CourierNewPS",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "courierNewPSItalicMT",
+      "postScriptName": "CourierNewPS-ItalicMT",
+      "familyName": "CourierNewPS",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "courierNewPSMT",
+      "postScriptName": "CourierNewPSMT",
+      "familyName": "CourierNewPSMT",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "dINAlternateBold",
+      "postScriptName": "DINAlternate-Bold",
+      "familyName": "DINAlternate",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "dINCondensedBold",
+      "postScriptName": "DINCondensed-Bold",
+      "familyName": "DINCondensed",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "damascus",
+      "postScriptName": "Damascus",
+      "familyName": "Damascus",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "damascusBold",
+      "postScriptName": "DamascusBold",
+      "familyName": "DamascusBold",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "damascusLight",
+      "postScriptName": "DamascusLight",
+      "familyName": "DamascusLight",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "damascusMedium",
+      "postScriptName": "DamascusMedium",
+      "familyName": "DamascusMedium",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "damascusSemiBold",
+      "postScriptName": "DamascusSemiBold",
+      "familyName": "DamascusSemiBold",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "devanagariSangamMN",
+      "postScriptName": "DevanagariSangamMN",
+      "familyName": "DevanagariSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "devanagariSangamMNBold",
+      "postScriptName": "DevanagariSangamMN-Bold",
+      "familyName": "DevanagariSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "didot",
+      "postScriptName": "Didot",
+      "familyName": "Didot",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "didotBold",
+      "postScriptName": "Didot-Bold",
+      "familyName": "Didot",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "didotItalic",
+      "postScriptName": "Didot-Italic",
+      "familyName": "Didot",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "diwanMishafi",
+      "postScriptName": "DiwanMishafi",
+      "familyName": "DiwanMishafi",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "euphemiaUCAS",
+      "postScriptName": "EuphemiaUCAS",
+      "familyName": "EuphemiaUCAS",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "euphemiaUCASBold",
+      "postScriptName": "EuphemiaUCAS-Bold",
+      "familyName": "EuphemiaUCAS",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "euphemiaUCASItalic",
+      "postScriptName": "EuphemiaUCAS-Italic",
+      "familyName": "EuphemiaUCAS",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "farah",
+      "postScriptName": "Farah",
+      "familyName": "Farah",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "futuraBold",
+      "postScriptName": "Futura-Bold",
+      "familyName": "Futura",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "futuraCondensedExtraBold",
+      "postScriptName": "Futura-CondensedExtraBold",
+      "familyName": "Futura",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "futuraCondensedMedium",
+      "postScriptName": "Futura-CondensedMedium",
+      "familyName": "Futura",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "futuraMedium",
+      "postScriptName": "Futura-Medium",
+      "familyName": "Futura",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "futuraMediumItalic",
+      "postScriptName": "Futura-MediumItalic",
+      "familyName": "Futura",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "geezaPro",
+      "postScriptName": "GeezaPro",
+      "familyName": "GeezaPro",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "geezaProBold",
+      "postScriptName": "GeezaPro-Bold",
+      "familyName": "GeezaPro",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "georgia",
+      "postScriptName": "Georgia",
+      "familyName": "Georgia",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "georgiaBold",
+      "postScriptName": "Georgia-Bold",
+      "familyName": "Georgia",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "georgiaBoldItalic",
+      "postScriptName": "Georgia-BoldItalic",
+      "familyName": "Georgia",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "georgiaItalic",
+      "postScriptName": "Georgia-Italic",
+      "familyName": "Georgia",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "gillSans",
+      "postScriptName": "GillSans",
+      "familyName": "GillSans",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "gillSansBold",
+      "postScriptName": "GillSans-Bold",
+      "familyName": "GillSans",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "gillSansBoldItalic",
+      "postScriptName": "GillSans-BoldItalic",
+      "familyName": "GillSans",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "gillSansItalic",
+      "postScriptName": "GillSans-Italic",
+      "familyName": "GillSans",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "gillSansLight",
+      "postScriptName": "GillSans-Light",
+      "familyName": "GillSans",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "gillSansLightItalic",
+      "postScriptName": "GillSans-LightItalic",
+      "familyName": "GillSans",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "gillSansSemiBold",
+      "postScriptName": "GillSans-SemiBold",
+      "familyName": "GillSans",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "gillSansSemiBoldItalic",
+      "postScriptName": "GillSans-SemiBoldItalic",
+      "familyName": "GillSans",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "gillSansUltraBold",
+      "postScriptName": "GillSans-UltraBold",
+      "familyName": "GillSans",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "gujaratiSangamMN",
+      "postScriptName": "GujaratiSangamMN",
+      "familyName": "GujaratiSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "gujaratiSangamMNBold",
+      "postScriptName": "GujaratiSangamMN-Bold",
+      "familyName": "GujaratiSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "gurmukhiMN",
+      "postScriptName": "GurmukhiMN",
+      "familyName": "GurmukhiMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "gurmukhiMNBold",
+      "postScriptName": "GurmukhiMN-Bold",
+      "familyName": "GurmukhiMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helvetica",
+      "postScriptName": "Helvetica",
+      "familyName": "Helvetica",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaBold",
+      "postScriptName": "Helvetica-Bold",
+      "familyName": "Helvetica",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaBoldOblique",
+      "postScriptName": "Helvetica-BoldOblique",
+      "familyName": "Helvetica",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaLight",
+      "postScriptName": "Helvetica-Light",
+      "familyName": "Helvetica",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaLightOblique",
+      "postScriptName": "Helvetica-LightOblique",
+      "familyName": "Helvetica",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaOblique",
+      "postScriptName": "Helvetica-Oblique",
+      "familyName": "Helvetica",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaNeue",
+      "postScriptName": "HelveticaNeue",
+      "familyName": "HelveticaNeue",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaNeueBold",
+      "postScriptName": "HelveticaNeue-Bold",
+      "familyName": "HelveticaNeue",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaNeueBoldItalic",
+      "postScriptName": "HelveticaNeue-BoldItalic",
+      "familyName": "HelveticaNeue",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaNeueCondensedBlack",
+      "postScriptName": "HelveticaNeue-CondensedBlack",
+      "familyName": "HelveticaNeue",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaNeueCondensedBold",
+      "postScriptName": "HelveticaNeue-CondensedBold",
+      "familyName": "HelveticaNeue",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaNeueItalic",
+      "postScriptName": "HelveticaNeue-Italic",
+      "familyName": "HelveticaNeue",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaNeueLight",
+      "postScriptName": "HelveticaNeue-Light",
+      "familyName": "HelveticaNeue",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaNeueLightItalic",
+      "postScriptName": "HelveticaNeue-LightItalic",
+      "familyName": "HelveticaNeue",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaNeueMedium",
+      "postScriptName": "HelveticaNeue-Medium",
+      "familyName": "HelveticaNeue",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaNeueMediumItalic",
+      "postScriptName": "HelveticaNeue-MediumItalic",
+      "familyName": "HelveticaNeue",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaNeueThin",
+      "postScriptName": "HelveticaNeue-Thin",
+      "familyName": "HelveticaNeue",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaNeueThinItalic",
+      "postScriptName": "HelveticaNeue-ThinItalic",
+      "familyName": "HelveticaNeue",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaNeueUltraLight",
+      "postScriptName": "HelveticaNeue-UltraLight",
+      "familyName": "HelveticaNeue",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "helveticaNeueUltraLightItalic",
+      "postScriptName": "HelveticaNeue-UltraLightItalic",
+      "familyName": "HelveticaNeue",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "hiraKakuProNW3",
+      "postScriptName": "HiraKakuProN-W3",
+      "familyName": "HiraKakuProN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "hiraKakuProNW6",
+      "postScriptName": "HiraKakuProN-W6",
+      "familyName": "HiraKakuProN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "hiraMaruProNW4",
+      "postScriptName": "HiraMaruProN-W4",
+      "familyName": "HiraMaruProN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "hiraMinProNW3",
+      "postScriptName": "HiraMinProN-W3",
+      "familyName": "HiraMinProN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "hiraMinProNW6",
+      "postScriptName": "HiraMinProN-W6",
+      "familyName": "HiraMinProN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "hiraginoSansW3",
+      "postScriptName": "HiraginoSans-W3",
+      "familyName": "HiraginoSans",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "hiraginoSansW6",
+      "postScriptName": "HiraginoSans-W6",
+      "familyName": "HiraginoSans",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "hoeflerTextBlack",
+      "postScriptName": "HoeflerText-Black",
+      "familyName": "HoeflerText",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "hoeflerTextBlackItalic",
+      "postScriptName": "HoeflerText-BlackItalic",
+      "familyName": "HoeflerText",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "hoeflerTextItalic",
+      "postScriptName": "HoeflerText-Italic",
+      "familyName": "HoeflerText",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "hoeflerTextRegular",
+      "postScriptName": "HoeflerText-Regular",
+      "familyName": "HoeflerText",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "iowanOldStyleBold",
+      "postScriptName": "IowanOldStyle-Bold",
+      "familyName": "IowanOldStyle",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "iowanOldStyleBoldItalic",
+      "postScriptName": "IowanOldStyle-BoldItalic",
+      "familyName": "IowanOldStyle",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "iowanOldStyleItalic",
+      "postScriptName": "IowanOldStyle-Italic",
+      "familyName": "IowanOldStyle",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "iowanOldStyleRoman",
+      "postScriptName": "IowanOldStyle-Roman",
+      "familyName": "IowanOldStyle",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kailasa",
+      "postScriptName": "Kailasa",
+      "familyName": "Kailasa",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kailasaBold",
+      "postScriptName": "Kailasa-Bold",
+      "familyName": "Kailasa",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kannadaSangamMN",
+      "postScriptName": "KannadaSangamMN",
+      "familyName": "KannadaSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kannadaSangamMNBold",
+      "postScriptName": "KannadaSangamMN-Bold",
+      "familyName": "KannadaSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kefaRegular",
+      "postScriptName": "Kefa-Regular",
+      "familyName": "Kefa",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "khmerSangamMN",
+      "postScriptName": "KhmerSangamMN",
+      "familyName": "KhmerSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kohinoorBanglaLight",
+      "postScriptName": "KohinoorBangla-Light",
+      "familyName": "KohinoorBangla",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kohinoorBanglaRegular",
+      "postScriptName": "KohinoorBangla-Regular",
+      "familyName": "KohinoorBangla",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kohinoorBanglaSemibold",
+      "postScriptName": "KohinoorBangla-Semibold",
+      "familyName": "KohinoorBangla",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kohinoorDevanagariBook",
+      "postScriptName": "KohinoorDevanagari-Book",
+      "familyName": "KohinoorDevanagari",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kohinoorDevanagariLight",
+      "postScriptName": "KohinoorDevanagari-Light",
+      "familyName": "KohinoorDevanagari",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kohinoorDevanagariMedium",
+      "postScriptName": "KohinoorDevanagari-Medium",
+      "familyName": "KohinoorDevanagari",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kohinoorDevanagariRegular",
+      "postScriptName": "KohinoorDevanagari-Regular",
+      "familyName": "KohinoorDevanagari",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kohinoorDevanagariSemibold",
+      "postScriptName": "KohinoorDevanagari-Semibold",
+      "familyName": "KohinoorDevanagari",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kohinoorTeluguLight",
+      "postScriptName": "KohinoorTelugu-Light",
+      "familyName": "KohinoorTelugu",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kohinoorTeluguMedium",
+      "postScriptName": "KohinoorTelugu-Medium",
+      "familyName": "KohinoorTelugu",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "kohinoorTeluguRegular",
+      "postScriptName": "KohinoorTelugu-Regular",
+      "familyName": "KohinoorTelugu",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "laoSangamMN",
+      "postScriptName": "LaoSangamMN",
+      "familyName": "LaoSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "malayalamSangamMN",
+      "postScriptName": "MalayalamSangamMN",
+      "familyName": "MalayalamSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "malayalamSangamMNBold",
+      "postScriptName": "MalayalamSangamMN-Bold",
+      "familyName": "MalayalamSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "marionBold",
+      "postScriptName": "Marion-Bold",
+      "familyName": "Marion",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "marionItalic",
+      "postScriptName": "Marion-Italic",
+      "familyName": "Marion",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "marionRegular",
+      "postScriptName": "Marion-Regular",
+      "familyName": "Marion",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "markerFeltThin",
+      "postScriptName": "MarkerFelt-Thin",
+      "familyName": "MarkerFelt",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "markerFeltWide",
+      "postScriptName": "MarkerFelt-Wide",
+      "familyName": "MarkerFelt",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "menloBold",
+      "postScriptName": "Menlo-Bold",
+      "familyName": "Menlo",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "menloBoldItalic",
+      "postScriptName": "Menlo-BoldItalic",
+      "familyName": "Menlo",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "menloItalic",
+      "postScriptName": "Menlo-Italic",
+      "familyName": "Menlo",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "menloRegular",
+      "postScriptName": "Menlo-Regular",
+      "familyName": "Menlo",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "myanmarSangamMN",
+      "postScriptName": "MyanmarSangamMN",
+      "familyName": "MyanmarSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "myanmarSangamMNBold",
+      "postScriptName": "MyanmarSangamMN-Bold",
+      "familyName": "MyanmarSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "noteworthyBold",
+      "postScriptName": "Noteworthy-Bold",
+      "familyName": "Noteworthy",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "noteworthyLight",
+      "postScriptName": "Noteworthy-Light",
+      "familyName": "Noteworthy",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "notoNastaliqUrdu",
+      "postScriptName": "NotoNastaliqUrdu",
+      "familyName": "NotoNastaliqUrdu",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "notoSansChakmaRegular",
+      "postScriptName": "NotoSansChakma-Regular",
+      "familyName": "NotoSansChakma",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "optimaBold",
+      "postScriptName": "Optima-Bold",
+      "familyName": "Optima",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "optimaBoldItalic",
+      "postScriptName": "Optima-BoldItalic",
+      "familyName": "Optima",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "optimaExtraBlack",
+      "postScriptName": "Optima-ExtraBlack",
+      "familyName": "Optima",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "optimaItalic",
+      "postScriptName": "Optima-Italic",
+      "familyName": "Optima",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "optimaRegular",
+      "postScriptName": "Optima-Regular",
+      "familyName": "Optima",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "oriyaSangamMN",
+      "postScriptName": "OriyaSangamMN",
+      "familyName": "OriyaSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "oriyaSangamMNBold",
+      "postScriptName": "OriyaSangamMN-Bold",
+      "familyName": "OriyaSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "palatinoBold",
+      "postScriptName": "Palatino-Bold",
+      "familyName": "Palatino",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "palatinoBoldItalic",
+      "postScriptName": "Palatino-BoldItalic",
+      "familyName": "Palatino",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "palatinoItalic",
+      "postScriptName": "Palatino-Italic",
+      "familyName": "Palatino",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "palatinoRoman",
+      "postScriptName": "Palatino-Roman",
+      "familyName": "Palatino",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "papyrus",
+      "postScriptName": "Papyrus",
+      "familyName": "Papyrus",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "papyrusCondensed",
+      "postScriptName": "Papyrus-Condensed",
+      "familyName": "Papyrus",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "partyLetPlain",
+      "postScriptName": "PartyLetPlain",
+      "familyName": "PartyLetPlain",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangHKLight",
+      "postScriptName": "PingFangHK-Light",
+      "familyName": "PingFangHK",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangHKMedium",
+      "postScriptName": "PingFangHK-Medium",
+      "familyName": "PingFangHK",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangHKRegular",
+      "postScriptName": "PingFangHK-Regular",
+      "familyName": "PingFangHK",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangHKSemibold",
+      "postScriptName": "PingFangHK-Semibold",
+      "familyName": "PingFangHK",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangHKThin",
+      "postScriptName": "PingFangHK-Thin",
+      "familyName": "PingFangHK",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangHKUltralight",
+      "postScriptName": "PingFangHK-Ultralight",
+      "familyName": "PingFangHK",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangSCLight",
+      "postScriptName": "PingFangSC-Light",
+      "familyName": "PingFangSC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangSCMedium",
+      "postScriptName": "PingFangSC-Medium",
+      "familyName": "PingFangSC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangSCRegular",
+      "postScriptName": "PingFangSC-Regular",
+      "familyName": "PingFangSC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangSCSemibold",
+      "postScriptName": "PingFangSC-Semibold",
+      "familyName": "PingFangSC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangSCThin",
+      "postScriptName": "PingFangSC-Thin",
+      "familyName": "PingFangSC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangSCUltralight",
+      "postScriptName": "PingFangSC-Ultralight",
+      "familyName": "PingFangSC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangTCLight",
+      "postScriptName": "PingFangTC-Light",
+      "familyName": "PingFangTC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangTCMedium",
+      "postScriptName": "PingFangTC-Medium",
+      "familyName": "PingFangTC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangTCRegular",
+      "postScriptName": "PingFangTC-Regular",
+      "familyName": "PingFangTC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangTCSemibold",
+      "postScriptName": "PingFangTC-Semibold",
+      "familyName": "PingFangTC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangTCThin",
+      "postScriptName": "PingFangTC-Thin",
+      "familyName": "PingFangTC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "pingFangTCUltralight",
+      "postScriptName": "PingFangTC-Ultralight",
+      "familyName": "PingFangTC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "rockwellBold",
+      "postScriptName": "Rockwell-Bold",
+      "familyName": "Rockwell",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "rockwellBoldItalic",
+      "postScriptName": "Rockwell-BoldItalic",
+      "familyName": "Rockwell",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "rockwellItalic",
+      "postScriptName": "Rockwell-Italic",
+      "familyName": "Rockwell",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "rockwellRegular",
+      "postScriptName": "Rockwell-Regular",
+      "familyName": "Rockwell",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "sTHeitiSCLight",
+      "postScriptName": "STHeitiSC-Light",
+      "familyName": "STHeitiSC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "sTHeitiSCMedium",
+      "postScriptName": "STHeitiSC-Medium",
+      "familyName": "STHeitiSC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "sTHeitiTCLight",
+      "postScriptName": "STHeitiTC-Light",
+      "familyName": "STHeitiTC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "sTHeitiTCMedium",
+      "postScriptName": "STHeitiTC-Medium",
+      "familyName": "STHeitiTC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "savoyeLetPlain",
+      "postScriptName": "SavoyeLetPlain",
+      "familyName": "SavoyeLetPlain",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "sinhalaSangamMN",
+      "postScriptName": "SinhalaSangamMN",
+      "familyName": "SinhalaSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "sinhalaSangamMNBold",
+      "postScriptName": "SinhalaSangamMN-Bold",
+      "familyName": "SinhalaSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "snellRoundhand",
+      "postScriptName": "SnellRoundhand",
+      "familyName": "SnellRoundhand",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "snellRoundhandBlack",
+      "postScriptName": "SnellRoundhand-Black",
+      "familyName": "SnellRoundhand",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "snellRoundhandBold",
+      "postScriptName": "SnellRoundhand-Bold",
+      "familyName": "SnellRoundhand",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "superclarendonBlack",
+      "postScriptName": "Superclarendon-Black",
+      "familyName": "Superclarendon",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "superclarendonBlackItalic",
+      "postScriptName": "Superclarendon-BlackItalic",
+      "familyName": "Superclarendon",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "superclarendonBold",
+      "postScriptName": "Superclarendon-Bold",
+      "familyName": "Superclarendon",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "superclarendonBoldItalic",
+      "postScriptName": "Superclarendon-BoldItalic",
+      "familyName": "Superclarendon",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "superclarendonItalic",
+      "postScriptName": "Superclarendon-Italic",
+      "familyName": "Superclarendon",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "superclarendonLight",
+      "postScriptName": "Superclarendon-Light",
+      "familyName": "Superclarendon",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "superclarendonLightItalic",
+      "postScriptName": "Superclarendon-LightItalic",
+      "familyName": "Superclarendon",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "superclarendonRegular",
+      "postScriptName": "Superclarendon-Regular",
+      "familyName": "Superclarendon",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "symbol",
+      "postScriptName": "Symbol",
+      "familyName": "Symbol",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "tamilSangamMN",
+      "postScriptName": "TamilSangamMN",
+      "familyName": "TamilSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "tamilSangamMNBold",
+      "postScriptName": "TamilSangamMN-Bold",
+      "familyName": "TamilSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "teluguSangamMN",
+      "postScriptName": "TeluguSangamMN",
+      "familyName": "TeluguSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "teluguSangamMNBold",
+      "postScriptName": "TeluguSangamMN-Bold",
+      "familyName": "TeluguSangamMN",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "thonburi",
+      "postScriptName": "Thonburi",
+      "familyName": "Thonburi",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "thonburiBold",
+      "postScriptName": "Thonburi-Bold",
+      "familyName": "Thonburi",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "thonburiLight",
+      "postScriptName": "Thonburi-Light",
+      "familyName": "Thonburi",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "timesNewRomanPSBoldItalicMT",
+      "postScriptName": "TimesNewRomanPS-BoldItalicMT",
+      "familyName": "TimesNewRomanPS",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "timesNewRomanPSBoldMT",
+      "postScriptName": "TimesNewRomanPS-BoldMT",
+      "familyName": "TimesNewRomanPS",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "timesNewRomanPSItalicMT",
+      "postScriptName": "TimesNewRomanPS-ItalicMT",
+      "familyName": "TimesNewRomanPS",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "timesNewRomanPSMT",
+      "postScriptName": "TimesNewRomanPSMT",
+      "familyName": "TimesNewRomanPSMT",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "trebuchetBoldItalic",
+      "postScriptName": "Trebuchet-BoldItalic",
+      "familyName": "Trebuchet",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "trebuchetMS",
+      "postScriptName": "TrebuchetMS",
+      "familyName": "TrebuchetMS",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "trebuchetMSBold",
+      "postScriptName": "TrebuchetMS-Bold",
+      "familyName": "TrebuchetMS",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "trebuchetMSItalic",
+      "postScriptName": "TrebuchetMS-Italic",
+      "familyName": "TrebuchetMS",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "verdana",
+      "postScriptName": "Verdana",
+      "familyName": "Verdana",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "verdanaBold",
+      "postScriptName": "Verdana-Bold",
+      "familyName": "Verdana",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "verdanaBoldItalic",
+      "postScriptName": "Verdana-BoldItalic",
+      "familyName": "Verdana",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "verdanaItalic",
+      "postScriptName": "Verdana-Italic",
+      "familyName": "Verdana",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "zapfDingbatsITC",
+      "postScriptName": "ZapfDingbatsITC",
+      "familyName": "ZapfDingbatsITC",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    },
+    {
+      "swiftName": "zapfino",
+      "postScriptName": "Zapfino",
+      "familyName": "Zapfino",
+      "introducedIOS": "17.0",
+      "deprecatedIOS": null,
+      "aliases": []
+    }
+  ]
+}

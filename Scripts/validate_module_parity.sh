@@ -215,7 +215,7 @@ unless File.file?(registry_path)
   exit 1
 end
 registry = JSON.parse(File.read(registry_path))
-expected_metadata = %w[reason owner expiration]
+expected_metadata = %w[reason owner expiration classification]
 unless registry.fetch("required_drift_metadata", []) == expected_metadata
   warn "FAIL: module registry required_drift_metadata must be #{expected_metadata.inspect}"
   exit 1
@@ -227,6 +227,21 @@ resolution_defaults = registry.fetch("resolution_defaults")
     warn "FAIL: module registry resolution_defaults is missing non-empty #{key}"
     exit 1
   end
+end
+
+valid_classifications = %w[INTENTIONAL LEGACY FIX_REQUIRED]
+all_registered_classifications = registry.fetch("known_module_only", []) + registry.fetch("known_drift", [])
+all_registered_classifications.each do |entry|
+  classification = entry["classification"].to_s
+  unless valid_classifications.include?(classification)
+    warn "FAIL: invalid parity classification for #{entry["kind"]}/#{entry["module"]}: #{classification.inspect}"
+    exit 1
+  end
+end
+fix_required = all_registered_classifications.select { |entry| entry["classification"] == "FIX_REQUIRED" }
+unless fix_required.empty?
+  warn "FAIL: FIX_REQUIRED parity entries remain: #{fix_required.map { |entry| "#{entry["kind"]}/#{entry["module"]}" }.join(", ")}"
+  exit 1
 end
 
 current_entries = []
@@ -404,10 +419,10 @@ resolution << "# Module Parity Resolution"
 resolution << ""
 resolution << "- Registry: `Scripts/module_registry.json`"
 resolution << "- Current exceptions: `#{current_entries.length}`"
-resolution << "- Policy: new or changed parity exceptions must be registered with reason, owner, and expiration; action and target version use reviewed registry defaults unless a more specific entry is added."
+resolution << "- Policy: every parity exception is classified as INTENTIONAL, LEGACY, or FIX_REQUIRED; FIX_REQUIRED must be zero before release."
 resolution << ""
-resolution << "| Module | SPM dependency / value | Pod dependency / value | Reason | Action | Owner | Target version | Expiration |"
-resolution << "| --- | --- | --- | --- | --- | --- | --- | --- |"
+resolution << "| Module | Class | SPM dependency / value | Pod dependency / value | Reason | Action | Owner | Target version | Expiration |"
+resolution << "| --- | --- | --- | --- | --- | --- | --- | --- | --- |"
 registry_by_identity = (registry.fetch("known_module_only", []) + registry.fetch("known_drift", [])).each_with_object({}) do |entry, result|
   result[[entry["kind"], entry["module"], entry["field"].to_s]] = entry
 end
@@ -417,6 +432,7 @@ current_entries.sort_by { |entry| [entry["kind"], entry["module"], entry["field"
   pod_value = entry.key?("cocoapods") ? entry["cocoapods"] : "—"
   values = [
     entry["module"],
+    metadata["classification"],
     spm_value,
     pod_value,
     metadata["reason"],

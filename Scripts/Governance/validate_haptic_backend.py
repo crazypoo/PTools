@@ -13,7 +13,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_ROOT = ROOT / "PooToolsSource"
-ALLOWED = {"PooToolsSource/PToolsFeedback/PTFeedback.swift"}
+# English: Standalone Slider and CheckBox targets intentionally keep their local wrapper because their SwiftPM targets do not depend on PToolsFeedback.
+# Español: Los destinos independientes Slider y CheckBox conservan intencionalmente su wrapper local porque sus destinos SwiftPM no dependen de PToolsFeedback.
+# 中文：独立 Slider 和 CheckBox target 有意保留本地包装器，因为它们的 SwiftPM target 不依赖 PToolsFeedback。
+ALLOWED = {
+    "PooToolsSource/PToolsFeedback/PTFeedback.swift",
+    "PooToolsSource/Slider/PTRangeSeekSlider.swift",
+    "PooToolsSource/Slider/PTSlider.swift",
+    "PooToolsSource/CheckBox/PTCheckBox.swift",
+}
 PATTERN = re.compile(r"\bUI(?:Impact|Selection|Notification)FeedbackGenerator\s*\(")
 
 

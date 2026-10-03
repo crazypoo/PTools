@@ -431,40 +431,6 @@ open class PTBaseCollectionView: UICollectionView {
     }
 }
 
-// English: Own refresh-control construction so PTCollectionView stays focused on the public list facade.
-// Español: Centraliza la construcción de los controles de refresco para que PTCollectionView conserve una fachada pequeña.
-// 中文：集中管理刷新控件的创建，让 PTCollectionView 保持为轻量公开列表门面。
-@MainActor
-final class PTCollectionRefreshCoordinator {
-    func configure(_ collectionView: PTBaseCollectionView,
-                   config: PTCollectionViewConfig,
-                   onHeader: @escaping PTActionTask,
-                   onFooter: @escaping PTActionTask) {
-        var mutableCollectionView = collectionView
-        if config.topRefresh {
-            mutableCollectionView.pt.header = PTRefreshHeader {
-                onHeader()
-            }
-        }
-
-        guard config.footerRefresh else { return }
-        let footer = PTRefreshAutoFooter {
-            onFooter()
-        }
-        footer.setTitle(config.footerRefreshIdle, for: .idle)
-        footer.setTitle(config.footerRefreshPulling, for: .pulling)
-        footer.setTitle(config.footerRefreshRefreshing, for: .refreshing)
-        footer.setTitle(config.footerRefreshWillRefresh, for: .willRefresh)
-        footer.setTitle(config.footerRefreshNoMoreData, for: .noMoreData)
-        footer.setFont(config.footerRefreshTextFont)
-        footer.setTextColor(config.footerRefreshTextColor)
-        footer.triggerAutomaticallyRefreshPercent = config.triggerAutomaticallyRefreshPercent
-        footer.setAutomaticallyHidden(config.isAutomaticallyRefresh)
-        footer.ignoredContentInsetBottom = config.ignoredScrollViewContentInsetBottom
-        mutableCollectionView.pt.autoFooter = footer
-    }
-}
-
 final class PTIndexItemView: UILabel {
 
     var index: Int = 0

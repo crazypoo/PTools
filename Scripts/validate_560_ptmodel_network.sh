@@ -20,7 +20,7 @@ require_text() {
 }
 
 [[ "$(tr -d '[:space:]' < VERSION)" == "5.60.0" ]] || fail "VERSION must be 5.60.0"
-require_text "modelPath: PTJSONPath = .root" PooToolsSource/NetWork/Network.swift
+require_text "modelPath: PTJSONPath = .root" PooToolsSource/NetWork/Network+TypedRequest.swift
 require_text "at path: PTJSONPath = .root" PooToolsSource/NetWork/PTNetworkModelBridge.swift
 require_text "modelPathNotFound" PooToolsSource/NetWork/PTNetworkModelBridge.swift
 require_text "modelPathTypeMismatch" PooToolsSource/NetWork/PTNetworkModelBridge.swift
@@ -33,4 +33,15 @@ require_text "network.ptmodel-lab" Data/demo-registry.yml
 [[ -f docs/model/PTMODEL_NETWORK_QUICKSTART_5_60.md ]] || fail "quick start is missing"
 [[ -f docs/model/PTMODEL_NETWORK_NESTED_JSON_5_60.md ]] || fail "nested JSON guide is missing"
 
-printf 'PASS [PTMODEL_NETWORK_560] explicit modelPath, nested-model tests, deterministic demo, docs\n'
+# English: Execute the two regression products so this gate cannot pass on file presence alone.
+# Español: Ejecuta los dos productos de regresión para que esta puerta no pase solo por la presencia de archivos.
+# 中文：实际执行两个回归测试产品，避免该门禁只检查文件是否存在。
+for test_product in PToolsModelTests PToolsNetworkTests; do
+  swift test \
+    --test-product "$test_product" \
+    --enable-xctest \
+    --disable-swift-testing \
+    --no-parallel
+done
+
+printf 'PASS [PTMODEL_NETWORK_560] explicit modelPath, nested-model tests, deterministic demo, docs, XCTest\n'

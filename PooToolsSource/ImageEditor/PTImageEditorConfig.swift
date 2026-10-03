@@ -35,6 +35,13 @@ public enum PTImageEditorOutputPolicy: Sendable, Equatable {
 public class PTImageEditorConfig: NSObject {
     public static let share = PTImageEditorConfig()
 
+    // English: Editing sessions can own a configuration snapshot without mutating the global default.
+    // Español: Las sesiones de edición pueden poseer una configuración sin mutar el valor global.
+    // 中文：编辑会话可以持有独立配置，不再依赖修改全局默认值。
+    public override init() {
+        super.init()
+    }
+
     // English: Safe output is the default to prevent memory spikes when exporting large images.
     // Español: La salida segura es el valor predeterminado para evitar picos de memoria al exportar imágenes grandes.
     // 中文：默认使用安全输出，避免导出超大图片时出现内存峰值。

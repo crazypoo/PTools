@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 1,
+  "targetVersion": "5.60.0",
+  "compatibilityRemoval": "6.0.0",
+  "entries": [
+    {
+      "symbol": "PTAlertConfig.shared",
+      "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
+      "ownership": "instance-capable",
+      "instanceEntryPoint": "PTAlertConfig()",
+      "sharedCompatibility": "保留 shared 作为 5.x 默认配置入口；新页面注入实例。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTAlertManager.shared",
+      "path": "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift",
+      "ownership": "instance-capable",
+      "instanceEntryPoint": "PTAlertManager(sceneContextProvider:)",
+      "sharedCompatibility": "保留 shared 作为 5.x 默认弹窗服务；多 Scene 页面注入实例。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTLaunchAdMonitor.share",
+      "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
+      "ownership": "instance-capable",
+      "instanceEntryPoint": "PTLaunchAdMonitor()",
+      "sharedCompatibility": "保留 share 作为旧启动广告入口；宿主可按生命周期持有实例。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTAppBaseConfig.share",
+      "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
+      "ownership": "instance-capable",
+      "instanceEntryPoint": "PTAppBaseConfig()",
+      "sharedCompatibility": "保留 share 作为 5.x 全局默认配置；新宿主按 App/Scene 注入。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTNavigationBarManager.shared",
+      "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
+      "ownership": "scene-scoped",
+      "instanceEntryPoint": "PTNavigationBarManager()",
+      "sharedCompatibility": "保留 shared 作为默认导航管理器；新导航栈按 Scene 持有实例。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "C7CameraConfig.share",
+      "path": "PooToolsSource/C7Collector/C7CameraConfig.swift",
+      "ownership": "instance-capable",
+      "instanceEntryPoint": "C7CameraConfig()",
+      "sharedCompatibility": "保留 share 作为旧相机默认配置；相机流程可注入实例。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTCameraFilterConfig.share",
+      "path": "PooToolsSource/C7Collector/PTCameraFilterConfig.swift",
+      "ownership": "instance-capable",
+      "instanceEntryPoint": "PTCameraFilterConfig()",
+      "sharedCompatibility": "保留 share 作为旧滤镜默认配置；新采集器注入实例。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTDarkModeScheduleMonitor.shared",
+      "path": "PooToolsSource/DarkMode/PTDrakModeOption.swift",
+      "ownership": "process-scoped",
+      "instanceEntryPoint": "内部 MainActor 服务，不对外暴露实例",
+      "sharedCompatibility": "这是系统环境通知与时间边界的进程级单一监听器，保留内部 shared 避免重复注册。",
+      "migrationStatus": "DOCUMENTED"
+    },
+    {
+      "symbol": "LegacyThemeProvider.shared",
+      "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
+      "ownership": "instance-capable",
+      "instanceEntryPoint": "LegacyThemeProvider()",
+      "sharedCompatibility": "保留 shared 作为 PTThemeable 默认提供者；新页面可注入主题提供者。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTColorPickPlugin.share",
+      "path": "PooToolsSource/DebugColor/PTColorPickPlugin.swift",
+      "ownership": "scene-scoped",
+      "instanceEntryPoint": "PTColorPickPlugin()",
+      "sharedCompatibility": "保留 share 作为调试入口；多 Scene 调试页面使用实例。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTColorPickWindow.share",
+      "path": "PooToolsSource/DebugColor/PTColorPickPlugin.swift",
+      "ownership": "scene-scoped",
+      "instanceEntryPoint": "PTColorPickWindow()",
+      "sharedCompatibility": "保留内部 share 作为旧插件窗口；窗口绑定由 PTColorPickPlugin 的 Scene API 管理。",
+      "migrationStatus": "DOCUMENTED"
+    },
+    {
+      "symbol": "PTViewRulerPlugin.share",
+      "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
+      "ownership": "scene-scoped",
+      "instanceEntryPoint": "PTViewRulerPlugin()",
+      "sharedCompatibility": "保留 share 作为调试入口；新页面按 Scene 创建插件实例。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTImageEditorConfig.share",
+      "path": "PooToolsSource/ImageEditor/PTImageEditorConfig.swift",
+      "ownership": "instance-capable",
+      "instanceEntryPoint": "PTImageEditorConfig()",
+      "sharedCompatibility": "保留 share 作为旧编辑器默认配置；编辑会话可注入实例。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTLaunchProfiler.shared",
+      "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
+      "ownership": "process-scoped",
+      "instanceEntryPoint": "PTLaunchProfiler()",
+      "sharedCompatibility": "保留 shared 作为冷启动默认记录器；一个进程的启动时间线仍建议只使用一个实例。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "LaunchVisualizer.shared",
+      "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
+      "ownership": "scene-scoped",
+      "instanceEntryPoint": "LaunchVisualizer()",
+      "sharedCompatibility": "保留 shared 作为 5.x 调试入口；看板实例按 Scene 绑定。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "EntryWindow.share",
+      "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
+      "ownership": "scene-scoped",
+      "instanceEntryPoint": "内部窗口，不对外暴露",
+      "sharedCompatibility": "保留内部 share，避免调试悬浮入口重复创建；由 LaunchVisualizer 选择 Scene。",
+      "migrationStatus": "DOCUMENTED"
+    },
+    {
+      "symbol": "PTHudConfig.share",
+      "path": "PooToolsSource/Loading/PTHudView.swift",
+      "ownership": "instance-capable",
+      "instanceEntryPoint": "PTHudConfig()",
+      "sharedCompatibility": "保留 share 作为旧 HUD 默认配置；新 HUD 可注入配置实例。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "LocalConsole.shared",
+      "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
+      "ownership": "scene-scoped",
+      "instanceEntryPoint": "LocalConsole(preferredWindowScene:)",
+      "sharedCompatibility": "保留 shared 作为旧调试入口；推荐使用 console(for:) 获得 Scene 实例。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTConsoleWindow.shared",
+      "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
+      "ownership": "scene-scoped",
+      "instanceEntryPoint": "内部窗口，不对外暴露",
+      "sharedCompatibility": "保留内部 shared 作为控制台窗口工厂，具体窗口由 LocalConsole 实例按 Scene 持有。",
+      "migrationStatus": "DOCUMENTED"
+    },
+    {
+      "symbol": "ResizeController.shared",
+      "path": "PooToolsSource/LocalConsole/ResizeController.swift",
+      "ownership": "scene-scoped",
+      "instanceEntryPoint": "内部调试实例，不对外暴露",
+      "sharedCompatibility": "保留内部 shared 供 LocalConsole 使用，避免跨 Scene 共享布局对象。",
+      "migrationStatus": "DOCUMENTED"
+    },
+    {
+      "symbol": "SystemReport.shared",
+      "path": "PooToolsSource/LocalConsole/SystemReport.swift",
+      "ownership": "instance-capable",
+      "instanceEntryPoint": "SystemReport()",
+      "sharedCompatibility": "保留 shared 作为只读诊断默认入口；报告实例可按采样会话创建。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTMediaLibConfig.share",
+      "path": "PooToolsSource/PhotoPicker/PTMediaLibConfig.swift",
+      "ownership": "instance-capable",
+      "instanceEntryPoint": "PTMediaLibConfig()",
+      "sharedCompatibility": "保留 share 作为旧相册默认配置；新 PTMediaLibViewController 使用选择器实例配置。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTMediaLibUIConfig.share",
+      "path": "PooToolsSource/PhotoPicker/PTMediaLibConfig.swift",
+      "ownership": "instance-capable",
+      "instanceEntryPoint": "PTMediaLibUIConfig()",
+      "sharedCompatibility": "保留 share 作为旧相册 UI 默认配置；新页面按实例注入。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTPickerStyle.shared",
+      "path": "PooToolsSource/Picker/PTBasePickerView.swift",
+      "ownership": "instance-capable",
+      "instanceEntryPoint": "PTPickerStyle()",
+      "sharedCompatibility": "保留 shared 作为旧 Picker 默认样式；新 Picker 传入值类型样式。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTRotationManager.shared",
+      "path": "PooToolsSource/Rotation/PTRotationManager.swift",
+      "ownership": "scene-scoped",
+      "instanceEntryPoint": "PTRotationManager()",
+      "sharedCompatibility": "保留 shared 作为旧方向入口；多 Scene 宿主按导航栈持有实例。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "PTBannerScheduler.shared",
+      "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
+      "ownership": "instance-capable",
+      "instanceEntryPoint": "PTBannerScheduler()",
+      "sharedCompatibility": "保留 shared 作为旧 Banner 调度器；独立页面可创建自己的调度器。",
+      "migrationStatus": "READY"
+    },
+    {
+      "symbol": "StatusBarManager.shared",
+      "path": "PooToolsSource/StatusBar/StatusBarManager.swift",
+      "ownership": "scene-scoped",
+      "instanceEntryPoint": "StatusBarManager()",
+      "sharedCompatibility": "保留 shared 作为 5.x 默认状态栏树；多 Scene 应由宿主持有实例。",
+      "migrationStatus": "READY"
+    }
+  ]
+}

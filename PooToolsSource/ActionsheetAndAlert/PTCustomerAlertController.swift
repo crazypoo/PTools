@@ -12,53 +12,10 @@ import SnapKit
 import PToolsCore
 #endif
 
-public typealias PTCustomerCustomerBlock = (_ alertCustomerView: UIView) -> Void
-
-@objc public enum PTAlertAnimationType: Int {
-    case Top
-    case Bottom
-    case Left
-    case Right
-    case Normal
-}
-
-@objcMembers
-public class PTCustomBottomButtonModel: NSObject {
-    public var titleName: String? = ""
-    public var titleColor: UIColor? = .systemBlue
-}
-
 // MARK: - PTCustomerAlertController
 
 @MainActor
 public class PTCustomerAlertController: PTAlertController {
-
-    // MARK: Layout Mode
-
-    private enum ActionLayoutMode: Equatable {
-        /// 所有内容都可以完整显示
-        case fitted
-        /// Body 固定，按钮区域滚动
-        case scrollingActions
-        /// 整体 Body 滚动
-        case scrollingAll
-    }
-
-    private enum CompactActionLayout: Equatable {
-        /// 1~2 个按钮横向
-        case horizontal
-        /// Dynamic Type / 标题过长时，2 个按钮纵向
-        case vertical
-    }
-
-    private struct AlertLayoutSignature: Equatable {
-        let width: CGFloat
-        let safeHeight: CGFloat
-        let bodyHeight: CGFloat
-        let buttonCount: Int
-        let rowHeight: CGFloat
-        let compactLayout: CompactActionLayout
-    }
 
     // MARK: Public
 
@@ -210,10 +167,10 @@ public class PTCustomerAlertController: PTAlertController {
     private var compactActionHeightConstraint: Constraint?
     private var actionViewportHeightConstraint: Constraint?
 
-    private var layoutSignature: AlertLayoutSignature?
-    private var actionLayoutMode: ActionLayoutMode = .fitted
-    private var compactActionLayout: CompactActionLayout = .horizontal
-    private var isHandlingAction = false
+    private var layoutSignature: PTCustomerAlertLayoutSignature?
+    private var actionLayoutMode: PTCustomerAlertActionLayoutMode = .fitted
+    private var compactActionLayout: PTCustomerAlertCompactActionLayout = .horizontal
+    private let actionCoordinator = PTCustomerAlertActionCoordinator()
 
     private var traitChangeRegistration: (any UITraitChangeRegistration)?
 
@@ -830,10 +787,7 @@ public class PTCustomerAlertController: PTAlertController {
     }
 
     private func handleAction(title: String, index: Int) {
-        guard !isHandlingAction else { return }
-
-        isHandlingAction = true
-        actionButtons.forEach { $0.isEnabled = false }
+        guard actionCoordinator.begin(actionButtons) else { return }
         PTFeedbackCenter.shared.emit(.actionConfirmed)
 
         dismissSelf { [weak self] in
@@ -841,6 +795,7 @@ public class PTCustomerAlertController: PTAlertController {
                 guard let self else { return }
                 self.bottomButtonTapCallback?(title, index)
                 self.bottomButtonTapCallback = nil
+                self.actionCoordinator.reset()
             }
         }
     }
@@ -884,81 +839,9 @@ public class PTCustomerAlertController: PTAlertController {
 
     // MARK: Button Height
 
-    private func resolvedButtonRowHeight(
-        for width: CGFloat,
-        layout: CompactActionLayout
-    ) -> CGFloat {
-        let actualFont = actionButtons.first?.titleLabel?.font ?? buttonsFont
-        let buttonWidth = layout == .horizontal && buttons.count == 2
-            ? max(1, (width - separatorThickness) / 2)
-            : max(1, width)
-        let availableTitleWidth = max(1, buttonWidth - 24)
-        let maximumTitleHeight = buttons.map { title in
-            let measuredSize = (title as NSString).boundingRect(
-                with: CGSize(width: availableTitleWidth, height: .greatestFiniteMagnitude),
-                options: [.usesLineFragmentOrigin, .usesFontLeading],
-                attributes: [.font: actualFont],
-                context: nil
-            )
-            return measuredSize.height
-        }.max() ?? actualFont.lineHeight
-
-        guard maximumTitleHeight.isFinite else {
-            return minimumButtonRowHeight
-        }
-
-        return max(minimumButtonRowHeight, ceil(maximumTitleHeight + 20))
-    }
-
-    private func resolvedCompactActionLayout(for width: CGFloat) -> CompactActionLayout {
-        guard buttons.count == 2 else { return .horizontal }
-
-        if traitCollection.preferredContentSizeCategory.isAccessibilityCategory {
-            return .vertical
-        }
-
-        let buttonWidth = max(1, (width - separatorThickness) / 2)
-        let availableTitleWidth = max(1, buttonWidth - 24)
-        let actualFont = actionButtons.first?.titleLabel?.font ?? buttonsFont
-
-        let titlesFit = buttons.allSatisfy { title in
-            let measuredSize = (title as NSString).size(
-                withAttributes: [.font: actualFont]
-            )
-            return measuredSize.width <= availableTitleWidth
-        }
-
-        return titlesFit ? .horizontal : .vertical
-    }
-
-    /// 横排的 1~2 个按钮都只占一行。
-    /// 这是上一版已经修复的重点，继续保留。
-    private func compactActionHeight(
-        for layout: CompactActionLayout,
-        rowHeight: CGFloat
-    ) -> CGFloat {
-        guard !buttons.isEmpty else { return 0 }
-
-        switch layout {
-        case .horizontal:
-            return separatorThickness + rowHeight
-
-        case .vertical:
-            let rowsHeight = CGFloat(buttons.count) * rowHeight
-            let internalSeparatorsHeight = CGFloat(max(0, buttons.count - 1)) * separatorThickness
-            return separatorThickness + rowsHeight + internalSeparatorsHeight
-        }
-    }
-
-    private func actionsContentHeight(rowHeight: CGFloat) -> CGFloat {
-        let rowsHeight = CGFloat(buttons.count) * rowHeight
-        let separatorsHeight = CGFloat(max(0, buttons.count - 1)) * separatorThickness
-        return rowsHeight + separatorsHeight
-    }
-
     // MARK: Compact Layout
 
-    private func applyCompactActionLayout(_ layout: CompactActionLayout) {
+    private func applyCompactActionLayout(_ layout: PTCustomerAlertCompactActionLayout) {
         guard buttons.count == 2 else {
             compactActionStackView.axis = .horizontal
             compactActionStackView.spacing = 0
@@ -1025,18 +908,35 @@ public class PTCustomerAlertController: PTAlertController {
         // 2. 单内容 / 双内容的最小视觉高度；
         // 3. 上下最小 padding。
         let bodyHeight = resolvedBodyHeight(for: width)
-        let compactLayout = resolvedCompactActionLayout(for: width)
-        let rowHeight = resolvedButtonRowHeight(
-            for: width,
-            layout: buttons.count > 2 ? .vertical : compactLayout
+        let actualFont = actionButtons.first?.titleLabel?.font ?? buttonsFont
+        let compactLayout = PTCustomerAlertMeasurement.compactActionLayout(
+            buttons: buttons,
+            width: width,
+            separatorThickness: separatorThickness,
+            font: actualFont,
+            isAccessibilityCategory: traitCollection.preferredContentSizeCategory.isAccessibilityCategory
         )
-        let verticalButtonsHeight = actionsContentHeight(rowHeight: rowHeight)
-        let compactButtonsHeight = compactActionHeight(
-            for: compactLayout,
-            rowHeight: rowHeight
+        let rowHeight = PTCustomerAlertMeasurement.buttonRowHeight(
+            buttons: buttons,
+            width: width,
+            layout: buttons.count > 2 ? .vertical : compactLayout,
+            separatorThickness: separatorThickness,
+            minimumButtonRowHeight: minimumButtonRowHeight,
+            font: actualFont
+        )
+        let verticalButtonsHeight = PTCustomerAlertMeasurement.actionsContentHeight(
+            buttonCount: buttons.count,
+            rowHeight: rowHeight,
+            separatorThickness: separatorThickness
+        )
+        let compactButtonsHeight = PTCustomerAlertMeasurement.compactActionHeight(
+            buttonCount: buttons.count,
+            layout: compactLayout,
+            rowHeight: rowHeight,
+            separatorThickness: separatorThickness
         )
 
-        let mode: ActionLayoutMode
+        let mode: PTCustomerAlertActionLayoutMode
         let contentHeight: CGFloat
         let actionViewportHeight: CGFloat
 
@@ -1073,7 +973,7 @@ public class PTCustomerAlertController: PTAlertController {
             actionViewportHeight = 0
         }
 
-        let signature = AlertLayoutSignature(
+        let signature = PTCustomerAlertLayoutSignature(
             width: width,
             safeHeight: safeHeight,
             bodyHeight: bodyHeight,

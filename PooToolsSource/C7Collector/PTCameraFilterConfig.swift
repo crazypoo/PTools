@@ -36,6 +36,13 @@ public class PTCameraFilterConfig: NSObject {
     
     public static let share = PTCameraFilterConfig()
 
+    // English: A filter session may inject its own mutable settings; share remains the 5.x compatibility entry.
+    // Español: Una sesión de filtros puede inyectar sus propios ajustes mutables; share conserva la compatibilidad 5.x.
+    // 中文：滤镜会话可以注入独立可变配置，share 继续作为 5.x 兼容入口。
+    public override init() {
+        super.init()
+    }
+
     public typealias Second = Int
 
     private var pri_minRecordDuration: PTCameraFilterConfig.Second = 1

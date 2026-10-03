@@ -39,6 +39,13 @@ let loadingHudSpace: CGFloat = 5
 @objcMembers
 public class PTHudConfig: NSObject {
     public static let share = PTHudConfig()
+
+    // English: HUD instances may use an independent configuration while share remains the legacy default.
+    // Español: Cada HUD puede usar una configuración independiente y share conserva el valor heredado.
+    // 中文：每个 HUD 可以使用独立配置，share 继续作为旧版默认入口。
+    public override init() {
+        super.init()
+    }
     
     open var lineWidth: CGFloat = 2
     open var length: CGFloat = maxLength

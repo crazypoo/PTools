@@ -231,27 +231,43 @@ private struct PTTreeKeyedDecodingContainer<Key: CodingKey>: KeyedDecodingContai
     }
 
     func decode<T>(_ type: T.Type, forKey key: Key) throws -> T where T: Decodable {
+        let childPath = decoder.codingPath + [key]
+        let diagnosticPath = ptJSONPathDescription(childPath)
         guard case .object(let object) = decoder.value,
               let value = object[key.stringValue] else {
-            throw PTModelError.missingValue(String(describing: decoder.codingPath + [key]))
+            throw PTModelError.underlying("\(diagnosticPath): \(PTModelError.missingValue(key.stringValue).localizedDescription ?? "Missing value")")
         }
         if value == .null {
-            throw PTModelError.nullValue(String(describing: decoder.codingPath + [key]))
+            throw PTModelError.underlying("\(diagnosticPath): \(PTModelError.nullValue(key.stringValue).localizedDescription ?? "Null value")")
         }
-        return try PTModelTreeDecoder(value: value,
-                                      options: decoder.options,
-                                      codingPath: decoder.codingPath + [key],
-                                      userInfo: decoder.userInfo).decode(type)
+        do {
+            return try PTModelTreeDecoder(value: value,
+                                          options: decoder.options,
+                                          codingPath: childPath,
+                                          userInfo: decoder.userInfo).decode(type)
+        } catch let error as PTModelError {
+            throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription ?? "Model decoding failed")")
+        } catch {
+            throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription)")
+        }
     }
 
     func decodeIfPresent<T>(_ type: T.Type, forKey key: Key) throws -> T? where T: Decodable {
         guard case .object(let object) = decoder.value,
               let value = object[key.stringValue],
               value != .null else { return nil }
-        return try PTModelTreeDecoder(value: value,
-                                      options: decoder.options,
-                                      codingPath: decoder.codingPath + [key],
-                                      userInfo: decoder.userInfo).decode(type)
+        let childPath = decoder.codingPath + [key]
+        let diagnosticPath = ptJSONPathDescription(childPath)
+        do {
+            return try PTModelTreeDecoder(value: value,
+                                          options: decoder.options,
+                                          codingPath: childPath,
+                                          userInfo: decoder.userInfo).decode(type)
+        } catch let error as PTModelError {
+            throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription ?? "Model decoding failed")")
+        } catch {
+            throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription)")
+        }
     }
 
     func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type,
@@ -310,10 +326,18 @@ private struct PTTreeUnkeyedDecodingContainer: UnkeyedDecodingContainer {
         guard !isAtEnd else { throw PTModelError.missingValue("[\(currentIndex)]") }
         let index = currentIndex
         currentIndex += 1
-        return try PTModelTreeDecoder(value: values[index],
-                                      options: decoder.options,
-                                      codingPath: decoder.codingPath + [PTTreeIndexKey(intValue: index)],
-                                      userInfo: decoder.userInfo).decode(type)
+        let childPath = decoder.codingPath + [PTTreeIndexKey(intValue: index)]
+        let diagnosticPath = ptJSONPathDescription(childPath)
+        do {
+            return try PTModelTreeDecoder(value: values[index],
+                                          options: decoder.options,
+                                          codingPath: childPath,
+                                          userInfo: decoder.userInfo).decode(type)
+        } catch let error as PTModelError {
+            throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription ?? "Model decoding failed")")
+        } catch {
+            throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription)")
+        }
     }
 
     mutating func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type) throws -> KeyedDecodingContainer<NestedKey>
@@ -398,6 +422,18 @@ fileprivate extension PTJSONValue {
                                options: options,
                                codingPath: codingPath,
                                userInfo: userInfo).container(keyedBy: keyType)
+    }
+}
+
+// English: Convert Codable's coding path into the stable JSON path used by Network diagnostics.
+// Español: Convierte la ruta de Codable en la ruta JSON estable que usan los diagnósticos de Network.
+// 中文：将 Codable coding path 转成 Network 诊断使用的稳定 JSON 路径。
+private func ptJSONPathDescription(_ codingPath: [any CodingKey]) -> String {
+    codingPath.reduce("$") { result, key in
+        if let index = key.intValue {
+            return result + "[\(index)]"
+        }
+        return result + "." + key.stringValue
     }
 }
 

@@ -204,6 +204,13 @@ public struct PTMediaLibSelectionOptions: Sendable, Equatable {
 @objcMembers
 public class PTMediaLibConfig:NSObject {
     public static let share = PTMediaLibConfig()
+
+    // English: A picker can own this mutable configuration; share remains the legacy default.
+    // Español: Un selector puede poseer esta configuración mutable; share conserva el valor heredado.
+    // 中文：每个 Picker 可以持有独立可变配置，share 继续作为旧版默认入口。
+    public override init() {
+        super.init()
+    }
         
     public typealias KBUnit = CGFloat
     
@@ -363,6 +370,13 @@ public class PTMediaLibConfig:NSObject {
 @MainActor
 public class PTMediaLibUIConfig:NSObject {
     public static let share = PTMediaLibUIConfig()
+
+    // English: UI settings can be scoped to one picker instance while retaining shared compatibility.
+    // Español: Los ajustes de UI pueden limitarse a una instancia del selector y mantener la compatibilidad compartida.
+    // 中文：UI 配置可以按 Picker 实例隔离，同时保留 shared 兼容入口。
+    public override init() {
+        super.init()
+    }
     
     public var sortAscending = false
     public var style: PTPhotoBrowserStyle = .embedAlbumList

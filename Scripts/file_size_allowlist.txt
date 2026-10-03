@@ -4,3 +4,4 @@
 PooToolsSource/Debug/CwlDemangle.swift|DEBUG-588-03|third-party demangler compatibility surface; isolate with diagnostics target after the 5.8 line
 PooToolsSource/Inspector/IconKit.swift|DEBUG-588-03|third-party icon compatibility surface; isolate with diagnostics target after the 5.8 line
 PooToolsSource/Base/PTCollectionView.swift|LIST-584-10|legacy facade; coordinator extraction is incremental and must preserve the public API
+PooToolsSource/Font/Generated/PTFontCatalog.generated.swift|FONT-560-02|generated catalog intentionally contains one strongly typed constant per approved system font; regenerate from the catalog instead of hand-editing

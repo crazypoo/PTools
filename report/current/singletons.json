@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons.rb",
-  "source_revision": "260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907",
-  "generated_at": "2026-10-02T14:08:37Z",
-  "shared_call_count": 1645,
+  "source_revision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
+  "generated_at": "2026-10-03T05:18:13Z",
+  "shared_call_count": 1646,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -583,7 +583,7 @@
     },
     {
       "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
-      "line": 190,
+      "line": 193,
       "declaration": "public static let shared = LaunchVisualizer()",
       "name": "shared",
       "category": "D",
@@ -592,7 +592,7 @@
     },
     {
       "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
-      "line": 254,
+      "line": 260,
       "declaration": "static let share = EntryWindow()",
       "name": "share",
       "category": "D",
@@ -970,7 +970,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibConfig.swift",
-      "line": 365,
+      "line": 372,
       "declaration": "public static let share = PTMediaLibUIConfig()",
       "name": "share",
       "category": "D",
@@ -1177,11 +1177,11 @@
     }
   ],
   "schemaVersion": 2,
-  "generatedAt": "2026-10-02T14:08:37Z",
+  "generatedAt": "2026-10-03T05:18:13Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907",
+  "sourceRevision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
   "sourceVersion": "5.60.0",
   "generatorVersion": "Scripts/report_singletons.rb",
-  "sourceInputsDigest": "87af7314bbf35c8c04c3e91f7a8e18b55acd7ba0262c77f66db3182dae74a6b0"
+  "sourceInputsDigest": "eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3"
 }

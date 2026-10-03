@@ -129,15 +129,66 @@ Stringified JSON：
 let profile: Profile?
 ```
 
-## 7. SwiftPM 与 CocoaPods
+## 7. Annotation 速查
+
+| 场景 | SwiftPM API | 说明 |
+| --- | --- | --- |
+| 普通字段 | 无 annotation | 字段名与 JSON key 相同即可 |
+| key 映射 | `@PTKey` | 外部 key 与 Swift 属性名不同 |
+| 深路径 | `@PTPath` | 属性来自嵌套 JSON 路径 |
+| 必填 | `@PTRequired` | 缺失或无效时保留明确错误 |
+| 默认值 | `@PTDefault` | 缺失时使用声明的默认策略 |
+| 宽松集合 | `@PTLossy` | 集合元素失败时按策略跳过或保留 nil |
+| JSON String | `@PTStringified` | 仅用于“字段值本身是 JSON 字符串” |
+| 忽略字段 | `@PTIgnored` | 计划中的旧名称 `@PTIgnore` 不是当前 canonical spelling |
+| Flatten | `@PTFlat` | 把嵌套对象字段平铺到当前对象 |
+| 转换 | `@PTTransform` | 使用明确的值转换器 |
+| 校验 | `@PTValidate` | 在模型边界执行字段校验 |
+| 多态 | `@PTPolymorphic` | 按 discriminator 选择具体模型 |
+| Extras | `@PTExtras` | 保存未声明的 JSON 字段 |
+
+普通 Nested Model 不需要 annotation：只有外部 key、路径、字符串化格式或特殊容错策略与默认 Codable 语义不同，才增加对应 annotation。
+
+## 8. SwiftPM 与 CocoaPods
 
 - SwiftPM：可使用 `PToolsModel` 的 `@PTModel` / `@PTSubclass` 宏。
 - CocoaPods：`ModelCore` / `Model` 保持 Foundation-only fallback；使用普通 `Codable`、`PTModelDecoder` 或手写 `PTStaticModel` Schema。
 - `Network.requestPTModel` 的 `modelPath` 在两种集成方式中都保持显式、默认 `.root` 的契约。
 
-## 8. 错误诊断
+CocoaPods 不能使用 Swift Macro。请使用普通 `Codable`、`PTModelDecoder`，或参考 [CocoaPods / Legacy Model 教程](PTMODEL_LEGACY_CODABLE_COCOAPODS_5_60.md) 手写 `PTStaticModel` / `PTModelSchema`。
 
-路径不存在会抛出 `PTNetworkDecodeError.modelPathNotFound`；选中的值无法解码会抛出 `modelPathTypeMismatch`，错误信息包含完整路径，例如 `$.data.list`。
+## 9. 错误诊断
+
+路径不存在会抛出 `PTNetworkDecodeError.modelPathNotFound`；路径遍历过程中遇到错误容器类型才会抛出 `modelPathTypeMismatch`。路径已经选中、但目标 Model 或字段解码失败时会抛出 `modelDecodeFailed`，并保留完整诊断路径，例如 `$.data.id`。因此字段类型错误、缺失字段、`@PTRequired`、数值溢出和 nested field error 不会再被伪装成 path mismatch。
+
+典型输出应至少包含：
+
+```text
+modelPath: $.data
+field: $.data.id
+expected: Int
+actual: String
+```
+
+## 10. 网络执行与取消
+
+```swift
+let request = PTNetworkRequest(url: endpoint)
+let (_, user) = try await PTNetworkExecutor.shared.execute(
+    request,
+    decoder: .ptModel(User.self, at: "$.data")
+)
+```
+
+`PTNetworkResponsePayload` 负责保存不可变的 `Data`、URL 和响应元数据；旧 callback、SmartCodable 和 KakaJSON 入口仍是兼容层，不进入新的并发 transport 核心。
+
+## 11. 常见错误
+
+- 普通 object 写成 `@PTStringified`：会把 object 当作字符串解码，应该删除 annotation。
+- 响应包裹却省略 `modelPath`：不会自动猜测 `data`、`result` 或 `payload`。
+- CocoaPods 示例直接使用 `@PTModel`：请改用普通 Codable 或静态 Schema。
+- 用动态 `Any` 把响应跨 actor 传递：在边界转换为 `PTJSONValue` 或明确的 `Sendable` 模型。
+- 把 `modelPathTypeMismatch` 当成字段类型错误：字段解码错误应检查 `modelDecodeFailed` 的完整路径。
 
 ---
 

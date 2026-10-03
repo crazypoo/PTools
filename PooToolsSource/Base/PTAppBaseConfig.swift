@@ -16,6 +16,13 @@ import PToolsSymbols
 @objcMembers
 public class PTAppBaseConfig: NSObject {
     public static let share = PTAppBaseConfig()
+
+    // English: App-level defaults may be scoped to a host or scene; share remains source-compatible.
+    // Español: Los valores predeterminados pueden limitarse a un host o escena; share mantiene la compatibilidad.
+    // 中文：应用默认配置可以按宿主或场景隔离，share 保持源码兼容。
+    public override init() {
+        super.init()
+    }
     
     //MARK: App的全局加載圖片的底圖
     ///App的全局加載圖片的底圖

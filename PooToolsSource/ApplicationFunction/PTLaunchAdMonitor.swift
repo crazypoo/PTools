@@ -87,6 +87,13 @@ public struct CountdownItem<T: Sendable> : Sendable{
 @objcMembers
 public class PTLaunchAdMonitor: NSObject {
     public static let share = PTLaunchAdMonitor()
+
+    // English: A launch-ad monitor can be owned by the host lifecycle; share remains the legacy default.
+    // Español: El monitor de anuncios puede pertenecer al ciclo de vida del host; share conserva el valor heredado.
+    // 中文：启动广告监视器可以由宿主生命周期持有，share 继续作为旧版默认入口。
+    public override init() {
+        super.init()
+    }
     
     public var imageContentMode: UIView.ContentMode = .scaleAspectFill
     public var adShowed: Bool = false

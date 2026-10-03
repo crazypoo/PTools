@@ -954,6 +954,14 @@ let package = Package(
             dependencies: ["ptools"],
             path: "Tests/PToolsListTests"
         ),
+        // English: Verify generated font metadata, runtime discovery, and FontName forwarding on iOS hosts.
+        // Español: Verifica los metadatos de fuentes generados, el descubrimiento en runtime y el reenvío FontName en hosts iOS.
+        // 中文：在 iOS 宿主中验证生成字体元数据、Runtime 发现和 FontName 转发。
+        .testTarget(
+            name: "PToolsFontTests",
+            dependencies: ["ptools"],
+            path: "Tests/PToolsFontTests"
+        ),
         .testTarget(
             name: "PToolsNavigationTests",
             dependencies: ["ptools"],

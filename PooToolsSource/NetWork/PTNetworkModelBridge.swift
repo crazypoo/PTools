@@ -65,6 +65,7 @@ public enum PTNetworkDecodeError: Error, LocalizedError, Sendable, Equatable {
     case unsupportedDecoder(PTNetworkDecoderKind)
     case modelPathNotFound(PTJSONPath)
     case modelPathTypeMismatch(path: PTJSONPath, expected: String, actual: String)
+    case modelDecodeFailed(path: PTJSONPath, message: String)
     case underlying(String)
 
     public var errorDescription: String? {
@@ -75,6 +76,8 @@ public enum PTNetworkDecodeError: Error, LocalizedError, Sendable, Equatable {
         case .modelPathNotFound(let path): return "No JSON value exists at \(path.description)."
         case .modelPathTypeMismatch(let path, let expected, let actual):
             return "Cannot decode \(path.description) as \(expected); received \(actual)."
+        case .modelDecodeFailed(let path, let message):
+            return "Model decode failed at \(path.description): \(message)"
         case .underlying(let message): return message
         }
     }
@@ -120,28 +123,18 @@ public struct PTNetworkResponseDecoder<Output: Sendable>: Sendable {
             }
 
             let root = try decoder.jsonValue(from: payload.data)
-            let selected: PTJSONValue
-            do {
-                selected = try root.requiredValue(at: path)
-            } catch let error as PTModelError {
-                switch error {
-                case .requiredValue:
-                    throw PTNetworkDecodeError.modelPathNotFound(path)
-                case .pathTypeMismatch:
-                    throw PTNetworkDecodeError.modelPathTypeMismatch(path: path,
-                                                                       expected: "JSON value",
-                                                                       actual: "incompatible path component")
-                default:
-                    throw error
-                }
-            }
+            let selected = try PTNetworkResponseSelection.select(root: root, path: path).value
 
             do {
                 return try decoder.decodeValue(type, from: selected, path: path)
+            } catch let error as PTNetworkDecodeError {
+                throw error
+            } catch let error as PTModelError {
+                throw PTNetworkDecodeError.modelDecodeFailed(path: path,
+                                                              message: error.localizedDescription)
             } catch {
-                throw PTNetworkDecodeError.modelPathTypeMismatch(path: path,
-                                                                   expected: String(reflecting: type),
-                                                                   actual: selected.ptNetworkTypeName)
+                throw PTNetworkDecodeError.modelDecodeFailed(path: path,
+                                                              message: error.localizedDescription)
             }
         }
     }
@@ -185,22 +178,6 @@ public struct PTNetworkResponseDecoder<Output: Sendable>: Sendable {
 
     public static func kakaJSON<T: Sendable>(_ type: T.Type) -> PTNetworkResponseDecoder<T> {
         legacy(type, kind: .kakaJSON)
-    }
-}
-
-private extension PTJSONValue {
-    // English: Keep diagnostics value-typed so path failures never expose Foundation's dynamic JSON objects.
-    // Español: Mantiene los diagnósticos tipados para que los fallos de ruta nunca expongan objetos JSON dinámicos de Foundation.
-    // 中文：诊断信息保持值类型，路径失败不会暴露 Foundation 动态 JSON 对象。
-    var ptNetworkTypeName: String {
-        switch self {
-        case .null: return "null"
-        case .bool: return "Boolean"
-        case .number: return "Number"
-        case .string: return "String"
-        case .array: return "Array"
-        case .object: return "Object"
-        }
     }
 }
 

@@ -12,6 +12,13 @@ import AVFoundation
 @MainActor
 public class C7CameraConfig: NSObject {
     public static let share = C7CameraConfig()
+
+    // English: Camera flows can own an independent configuration instead of mutating the shared default.
+    // Español: Los flujos de cámara pueden poseer una configuración independiente sin mutar el valor compartido.
+    // 中文：相机流程可以持有独立配置，不再必须修改 shared 默认值。
+    public override init() {
+        super.init()
+    }
     /// The default camera position after entering the camera. Defaults to back.
     public var devicePosition: C7CameraConfig.DevicePosition = .back
     @objc public enum DevicePosition: Int {

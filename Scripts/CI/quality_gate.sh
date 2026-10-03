@@ -123,13 +123,19 @@ run_named_gate() {
     example)
       run_gate EXAMPLE python3 Scripts/Example/validate_demo_coverage.py --check
       ;;
+    font)
+      run_gate FONT bash -c 'python3 Scripts/Font/validate-font-catalog.py && bash Scripts/Font/verify-generated-fonts.sh'
+      ;;
     architecture)
       run_gate ARCHITECTURE bash -c 'bash Scripts/validate_build_entries.sh && bash Scripts/validate_quality_scans.sh && git diff --check'
       ;;
     tests)
       run_gate TESTS bash -c '
         set -euo pipefail
-        for test_product in PToolsPlatformTests PToolsAdvancedTests; do
+        # English: Run the PTModel and typed Network products as mandatory XCTest products.
+        # Español: Ejecuta los productos PTModel y Network tipado como productos XCTest obligatorios.
+        # 中文：将 PTModel 和类型化 Network 测试产品纳入强制 XCTest 门禁。
+        for test_product in PToolsPlatformTests PToolsAdvancedTests PToolsModelTests PToolsNetworkTests PToolsFontTests; do
           swift test \
             --test-product "$test_product" \
             --enable-xctest \
@@ -156,10 +162,13 @@ run_named_gate() {
         python3 Scripts/Governance/validate_module_freeze.py
         python3 Scripts/Governance/validate_public_api_freeze.py
         python3 Scripts/Governance/validate_deprecated_manifest.py
+        python3 Scripts/Governance/validate_deprecated_freeze.py
+        python3 Scripts/Governance/validate_ui_singleton_ownership.py
         python3 Scripts/Governance/validate_cache_governance.py
         python3 Scripts/Governance/validate_lifecycle_resources.py
         python3 Scripts/Governance/validate_haptic_backend.py
         bash Scripts/validate_559_debugnetwork.sh
+        bash Scripts/validate_560_ptmodel_network.sh
       '
       ;;
     pods)
@@ -212,7 +221,7 @@ require "fileutils"
 # 中文：汇总独立任务结果，不重复执行检查。
 
 report_dir, version_path = ARGV
-required = %w[VERSION DOCS EXAMPLE ARCHITECTURE TESTS CONCURRENCY GOVERNANCE PODS XCODE RELEASE]
+required = %w[VERSION DOCS EXAMPLE FONT ARCHITECTURE TESTS CONCURRENCY GOVERNANCE PODS XCODE RELEASE]
 results = Dir.glob(File.join(report_dir, "**", "*.json")).filter_map do |path|
   next if File.basename(path) == "quality-report.json"
   JSON.parse(File.read(path))
@@ -255,7 +264,7 @@ case "$gate" in
   all)
     export QUALITY_REPORT_DIR="$report_dir"
     overall_status=0
-    for gate_name in version docs example architecture tests concurrency governance pods xcode release; do
+    for gate_name in version docs example font architecture tests concurrency governance pods xcode release; do
       if ! "$0" "$gate_name"; then
         overall_status=1
       fi
@@ -276,11 +285,11 @@ case "$gate" in
       exit 1
     fi
     ;;
-  version|docs|example|architecture|tests|concurrency|governance|pods|xcode|release)
+  version|docs|example|font|architecture|tests|concurrency|governance|pods|xcode|release)
     run_named_gate "$gate"
     ;;
   *)
-    printf 'Usage: Scripts/CI/quality_gate.sh [version|docs|example|architecture|tests|concurrency|governance|pods|xcode|release|all|summary]\n' >&2
+    printf 'Usage: Scripts/CI/quality_gate.sh [version|docs|example|font|architecture|tests|concurrency|governance|pods|xcode|release|all|summary]\n' >&2
     exit 64
     ;;
 esac

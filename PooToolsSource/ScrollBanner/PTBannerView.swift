@@ -17,6 +17,11 @@ import PToolsUIFoundation
 public final class PTBannerScheduler {
 
     public static let shared = PTBannerScheduler()
+
+    // English: Independent schedulers avoid coupling banners from different scenes.
+    // Español: Los planificadores independientes evitan acoplar banners de escenas distintas.
+    // 中文：独立调度器避免不同 Scene 的 Banner 互相耦合。
+    public init() {}
     public var autoScrollInterval: TimeInterval = 2 {
         didSet {
             restartTimerIfNeeded()

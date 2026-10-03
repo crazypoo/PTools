@@ -19,7 +19,7 @@ public extension InspectorElementProperty {
 }
 
 public extension InspectorElementProperty {
-    static func fontNamePicker(
+    @MainActor static func fontNamePicker(
         title: String,
         emptyTitle: String = .systemFontFamilyName,
         fontProvider: @escaping FontProvider,

@@ -6,7 +6,11 @@
 
 import UIKit
 
-struct FontReference: Hashable, CustomStringConvertible, CaseIterable {
+// English: Inspector font choices reuse the canonical PTFontRuntime discovery source.
+// Español: Las opciones de fuente del Inspector reutilizan la fuente canónica PTFontRuntime.
+// 中文：Inspector 字体选择复用统一的 PTFontRuntime 发现来源。
+@MainActor
+struct FontReference: Hashable, CustomStringConvertible {
     let rawValue: String
 
     let description: String
@@ -55,25 +59,19 @@ struct FontReference: Hashable, CustomStringConvertible, CaseIterable {
         FontReference.allCases.firstIndex { $0.rawValue == fontName } ?? FontReference.allCases.firstIndex(of: .systemFontReference)
     }
 
-    static let allCases: [FontReference] = {
+    static var allCases: [FontReference] {
         var references: [FontReference] = [.systemFontReference]
-
-        for family in UIFont.familyNames.sorted() where family != .systemFontFamilyName {
-            for fontName in UIFont.fontNames(forFamilyName: family) {
-                let variation = variation(with: fontName)
-
-                let description: String = [family, variation]
+        references += PTFontRuntime.installedFonts
+            .filter { $0.familyName != .systemFontFamilyName }
+            .map { descriptor in
+                let variation = variation(with: descriptor.postScriptName)
+                let description = [descriptor.familyName, variation]
                     .compactMap { $0 }
                     .joined(separator: " ")
-
-                let reference = FontReference(rawValue: fontName, description: description)
-
-                references.append(reference)
+                return FontReference(rawValue: descriptor.postScriptName, description: description)
             }
-        }
-
         return references
-    }()
+    }
 
     private static func variation(with fontName: String) -> String? {
         let components = fontName.split(separator: "-")

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907",
-  "generated_at": "2026-10-02T14:08:37Z",
+  "source_revision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
+  "generated_at": "2026-10-03T05:18:13Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -13,13 +13,14 @@
     "PooToolsSource/Motion/PTMotion.swift",
     "PooToolsSource/NFC/PTNFCToolKit.swift",
     "PooToolsSource/NetWork/Network.swift",
+    "PooToolsSource/NetWork/Network+LegacyCompatibility.swift",
     "PooToolsSource/NetWork/NetworkSupport.swift",
     "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
     "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
     "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
     "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
     "PooToolsSource/PToolsActivities/PTActivities.swift",
-    "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift",
     "PooToolsSource/VideoEditor/CompositionInstruction.swift",
     "PooToolsSource/VideoEditor/Compositor.swift",
     "PooToolsSource/VideoEditor/Exporter.swift",
@@ -172,15 +173,15 @@
       "allowlisted": true
     },
     {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 150,
-      "declaration": "public final class Network: @unchecked Sendable {",
+      "path": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift",
+      "line": 13,
+      "declaration": "private struct PTLegacyModelTypeBox: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 924,
-      "declaration": "private struct PTLegacyModelTypeBox: @unchecked Sendable {",
+      "line": 150,
+      "declaration": "public final class Network: @unchecked Sendable {",
       "allowlisted": true
     },
     {
@@ -238,9 +239,9 @@
       "allowlisted": true
     },
     {
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 409,
-      "declaration": "private final class PTTextMatcherCache: @unchecked Sendable {",
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift",
+      "line": 12,
+      "declaration": "final class PTTextMatcherCache: @unchecked Sendable {",
       "allowlisted": true
     },
     {
@@ -311,11 +312,11 @@
     }
   ],
   "schemaVersion": 1,
-  "generatedAt": "2026-10-02T14:08:37Z",
+  "generatedAt": "2026-10-03T05:18:13Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907",
+  "sourceRevision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
   "sourceVersion": "5.60.0",
   "generatorVersion": "Scripts/report_sendable_exceptions.rb",
-  "sourceInputsDigest": "87af7314bbf35c8c04c3e91f7a8e18b55acd7ba0262c77f66db3182dae74a6b0"
+  "sourceInputsDigest": "eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3"
 }

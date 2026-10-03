@@ -3,19 +3,19 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: 260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907
+Source revision: b6875bfcbb5b503f145e05d8bcc101c196cc316e
 Source version: 5.60.0
-Source inputs digest: 87af7314bbf35c8c04c3e91f7a8e18b55acd7ba0262c77f66db3182dae74a6b0
+Source inputs digest: eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3
 Generator version: 1
 Generator: Scripts/report_current_summaries.rb
-Generated at: 2026-10-02T14:08:37Z
+Generated at: 2026-10-03T05:18:13Z
 -->
 
 # PTools 当前依赖图
 
 本报告合并当前 SwiftPM target 图和 CocoaPods subspec 图；详细机器数据保留在同目录的 JSON 报告。
 
-- SwiftPM target 数量：`151`
+- SwiftPM target 数量：`152`
 - SwiftPM product 数量：`132`
 - CocoaPods subspec 数量：`142`
 - CocoaPods 默认 subspec：`Core`

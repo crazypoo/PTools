@@ -39,7 +39,10 @@ public class StatusBarManager {
     fileprivate var stateKeys = [String: StatusBarState]()
     fileprivate var duration: TimeInterval = 0.1
     
-    private init() {
+    // English: Hosts may own a status-bar state tree per scene; shared remains the 5.x compatibility tree.
+    // Español: El host puede poseer un árbol de estado por escena; shared conserva el árbol compatible de 5.x.
+    // 中文：宿主可以按场景持有状态栏树，shared 继续作为 5.x 兼容状态树。
+    public init() {
         // 初始化 rootState 和 currentState
         let initialState = StatusBarState()
         rootState = initialState

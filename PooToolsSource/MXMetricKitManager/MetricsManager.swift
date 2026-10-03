@@ -13,8 +13,19 @@ import MetricKit
 public final class MetricsManager: NSObject, MXMetricManagerSubscriber, @unchecked Sendable {
     
     public static let shared = MetricsManager()
-    private var isRegistered = false
-    private var isInvalidated = false
+    // English: MetricKit may call subscribers from a framework queue, so lifecycle state is lock-protected.
+    // Español: MetricKit puede llamar al suscriptor desde una cola del framework; el estado queda protegido por lock.
+    // 中文：MetricKit 可能从框架队列回调订阅者，因此生命周期状态使用锁保护。
+    private let stateLock = NSLock()
+    private var registered = false
+    private var invalidated = false
+
+    // English: Expose a lock-protected snapshot so callers and diagnostics can verify registration without touching mutable state.
+    // Español: Expone una instantánea protegida por lock para que los llamadores y diagnósticos verifiquen el registro sin tocar estado mutable.
+    // 中文：提供受锁保护的快照，让调用方和诊断逻辑可以确认订阅状态，而不直接访问可变状态。
+    public var isRegistered: Bool {
+        stateLock.withLock { registered }
+    }
     
     // 私有化 init，保证单例唯一性
     private override init() {
@@ -23,7 +34,10 @@ public final class MetricsManager: NSObject, MXMetricManagerSubscriber, @uncheck
     }
     
     deinit {
-        if isRegistered {
+        let shouldRemove = stateLock.withLock {
+            registered
+        }
+        if shouldRemove {
             MXMetricManager.shared.remove(self)
         }
     }
@@ -32,21 +46,40 @@ public final class MetricsManager: NSObject, MXMetricManagerSubscriber, @uncheck
     // Estos métodos de ciclo de vida evitan suscripciones duplicadas a MetricKit.
     // 生命周期方法用于避免 MetricKit 重复订阅。
     public func start() {
-        guard !isInvalidated, !isRegistered else { return }
+        let shouldRegister = stateLock.withLock { () -> Bool in
+            guard !invalidated, !registered else { return false }
+            registered = true
+            return true
+        }
+        guard shouldRegister else { return }
         MXMetricManager.shared.add(self)
-        isRegistered = true
     }
 
     public func stop() {
-        guard isRegistered else { return }
+        let shouldRemove = stateLock.withLock { () -> Bool in
+            guard registered else { return false }
+            registered = false
+            return true
+        }
+        guard shouldRemove else { return }
         MXMetricManager.shared.remove(self)
-        isRegistered = false
     }
 
     public func invalidate() {
-        guard !isInvalidated else { return }
-        isInvalidated = true
-        stop()
+        let shouldRemove = stateLock.withLock { () -> Bool in
+            guard !invalidated else { return false }
+            invalidated = true
+            let wasRegistered = registered
+            registered = false
+            return wasRegistered
+        }
+        if shouldRemove {
+            MXMetricManager.shared.remove(self)
+        }
+    }
+
+    private var isInvalidated: Bool {
+        stateLock.withLock { invalidated }
     }
 
     // MARK: - MetricKit 代理方法

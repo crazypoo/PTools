@@ -10,7 +10,9 @@
 - ✅ 新增 Network 显式 `modelPath`：根模型、`$.data`、深层路径和数组路径统一由 `PTJSONPath` 选择。
 - ✅ 新增路径缺失与路径类型不匹配的类型化错误；默认 root 行为保持兼容，不自动猜测响应包裹字段。
 - ✅ 增加 `network.ptmodel-lab` 确定性 Demo、5.60.0 Quick Start 和 Nested JSON 语义文档。
-- [ ] SwiftPM / CocoaPods 全量 parity、God File 物理拆分、Scene UI Singleton 去全局和真实宿主/真机回归继续按 5.60.0 收口门禁执行；未完成前不创建正式 `5.60.0` tag。
+- ✅ P0/P1：Nested Model、Network decode error、真实 Model/Network tests Gate、Learning Lab、Quick Start、CocoaPods/Legacy migration 文档已完成。
+- ✅ P2/P3：parity 分类、27 个 UI/Scene singleton ownership、deprecated freeze、PTPaging/PTRichText/PTCustomerAlert/PTTabBar/PTCollection 拆分、Font Catalog/Runtime、Network/Router 分层和并发例外登记已完成。
+- [ ] P4：Release、SwiftPM 外部 Kakapos 解析阻断、CocoaPods lint、真实宿主/真机、长会话和 Instruments 证据仍待环境完成；未完成前不创建正式 `5.60.0` tag。
 
 ## 5.59.0 5.x Finalization Governance 2.0 / DebugNetwork 2.0
 

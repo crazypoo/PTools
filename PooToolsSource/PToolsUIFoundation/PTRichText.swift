@@ -406,48 +406,6 @@ public struct PTTextFragment: Sendable {
 // English: This compatibility boundary is only for immutable matcher reuse; every cache access is serialized by the lock.
 // Español: Este límite de compatibilidad solo reutiliza matchers inmutables; cada acceso a la caché se serializa con el bloqueo.
 // 中文：这个兼容边界仅用于复用不可变匹配器；所有缓存访问都通过锁串行化。
-private final class PTTextMatcherCache: @unchecked Sendable {
-    private let lock = NSLock()
-    private let regexCache = NSCache<NSString, NSRegularExpression>()
-    private let detectorCache = NSCache<NSNumber, NSDataDetector>()
-
-    init() {
-        regexCache.countLimit = 64
-        detectorCache.countLimit = 16
-    }
-
-    func regex(pattern: String, options: UInt32) -> NSRegularExpression? {
-        let key = "\(options):\(pattern)" as NSString
-        lock.lock()
-        defer { lock.unlock() }
-
-        if let cached = regexCache.object(forKey: key) {
-            return cached
-        }
-        guard let compiled = try? NSRegularExpression(pattern: pattern,
-                                                       options: NSRegularExpression.Options(rawValue: UInt(options))) else {
-            return nil
-        }
-        regexCache.setObject(compiled, forKey: key)
-        return compiled
-    }
-
-    func detector(for types: NSTextCheckingResult.CheckingType) -> NSDataDetector? {
-        let key = NSNumber(value: types.rawValue)
-        lock.lock()
-        defer { lock.unlock() }
-
-        if let cached = detectorCache.object(forKey: key) {
-            return cached
-        }
-        guard let created = try? NSDataDetector(types: types.rawValue) else {
-            return nil
-        }
-        detectorCache.setObject(created, forKey: key)
-        return created
-    }
-}
-
 @resultBuilder
 public enum PTRichTextBuilder {
     public static func buildBlock(_ components: PTRichText...) -> PTRichText {

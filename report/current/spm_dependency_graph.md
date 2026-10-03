@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: 260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907
+Source revision: b6875bfcbb5b503f145e05d8bcc101c196cc316e
 Source version: 5.60.0
-Source inputs digest: 87af7314bbf35c8c04c3e91f7a8e18b55acd7ba0262c77f66db3182dae74a6b0
+Source inputs digest: eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3
 Generator version: 1
 Generator: Scripts/report_spm_dependency_graph.rb
-Generated at: 2026-10-02T14:08:37Z
+Generated at: 2026-10-03T05:18:13Z
 -->
 
 # SwiftPM Dependency Graph
@@ -17,7 +17,7 @@ Generated at: 2026-10-02T14:08:37Z
 - Package: `ptools`
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
-- Target count: `151`
+- Target count: `152`
 - Core direct third-party dependencies: `4` (baseline `18`)
 
 ## Products
@@ -202,6 +202,7 @@ Generated at: 2026-10-02T14:08:37Z
 | `PToolsDeviceTests` | `Tests/PToolsDeviceTests` | PToolsDevice | — | 0 source entries / 0 resources |
 | `PToolsDocuments` | `PooToolsSource/PToolsDocuments` | PooToolsPDF | — | 0 source entries / 0 resources |
 | `PToolsFeedback` | `PooToolsSource/PToolsFeedback` | PToolsCore | — | 0 source entries / 0 resources |
+| `PToolsFontTests` | `Tests/PToolsFontTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsForm` | `PooToolsSource/PToolsForm` | PToolsAccessibility, PToolsContentState, PToolsCore, PToolsTheme, PooToolsCheckBox, PooToolsPicker, PooToolsSlider, ptools | — | 0 source entries / 0 resources |
 | `PToolsHTTPFilePortal` | `PooToolsSource/PToolsHTTPFilePortal` | PToolsHTTPServer | — | 0 source entries / 1 resources |
 | `PToolsHTTPServer` | `PooToolsSource/PToolsHTTPServer` | — | — | 0 source entries / 0 resources |

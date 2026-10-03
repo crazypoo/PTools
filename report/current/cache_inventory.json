@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907",
-  "generated_at": "2026-10-02T14:08:37Z",
+  "source_revision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
+  "generated_at": "2026-10-03T05:18:13Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -60,39 +60,45 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1218,
+      "line": 1200,
       "kind": "disk or custom cache",
       "text": "if let cache = heightCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1219,
+      "line": 1201,
       "kind": "disk or custom cache",
       "text": "return cache.doubleValue"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1809,
+      "line": 1791,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1810,
+      "line": 1792,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1903,
+      "line": 1885,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1904,
+      "line": 1886,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
+    },
+    {
+      "path": "PooToolsSource/Base/PTCollectionViewLayoutSupport.swift",
+      "line": 5,
+      "kind": "disk or custom cache",
+      "text": "//  English: Keep pure layout cache keys outside the collection-view facade."
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
@@ -138,7 +144,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "line": 489,
+      "line": 455,
       "kind": "disk or custom cache",
       "text": "// English: Own list layout caches outside PTCollectionView so cache policy can evolve independently."
     },
@@ -851,14 +857,14 @@
       "text": "// English: This compatibility boundary is only for immutable matcher reuse; every cache access is serialized by the lock."
     },
     {
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 411,
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift",
+      "line": 14,
       "kind": "NSCache",
       "text": "private let regexCache = NSCache<NSString, NSRegularExpression>()"
     },
     {
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "line": 412,
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift",
+      "line": 15,
       "kind": "NSCache",
       "text": "private let detectorCache = NSCache<NSNumber, NSDataDetector>()"
     },
@@ -991,11 +997,11 @@
   ],
   "bounded_memory_caches": 25,
   "schemaVersion": 1,
-  "generatedAt": "2026-10-02T14:08:37Z",
+  "generatedAt": "2026-10-03T05:18:13Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907",
+  "sourceRevision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
   "sourceVersion": "5.60.0",
   "generatorVersion": "Scripts/report_cache_inventory.rb",
-  "sourceInputsDigest": "87af7314bbf35c8c04c3e91f7a8e18b55acd7ba0262c77f66db3182dae74a6b0"
+  "sourceInputsDigest": "eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3"
 }

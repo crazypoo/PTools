@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907",
-  "generated_at": "2026-10-02T14:08:37Z",
+  "source_revision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
+  "generated_at": "2026-10-03T05:18:13Z",
   "counts": {
     "reduce_motion": 60,
     "accessibility": 268,
@@ -53,82 +53,82 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 94
+      "line": 51
     },
     {
       "rule": "dynamic_type",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 287
+      "line": 244
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 288
+      "line": 245
     },
     {
       "rule": "dynamic_type",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 813
+      "line": 770
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 816
+      "line": 773
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 818
+      "line": 775
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1174
+      "line": 1074
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1181
+      "line": 1081
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1188
+      "line": 1088
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1213
+      "line": 1113
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1234
+      "line": 1134
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1237
+      "line": 1137
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1239
+      "line": 1139
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1242
+      "line": 1142
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1245
+      "line": 1145
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1282
+      "line": 1182
     },
     {
       "rule": "reduce_motion",
@@ -331,64 +331,64 @@
       "line": 166
     },
     {
-      "rule": "reduce_motion",
-      "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 166
+      "rule": "accessibility",
+      "path": "PooToolsSource/Base/PTTabBarItemView.swift",
+      "line": 55
     },
     {
       "rule": "accessibility",
-      "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 223
+      "path": "PooToolsSource/Base/PTTabBarItemView.swift",
+      "line": 56
     },
     {
       "rule": "accessibility",
-      "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 224
+      "path": "PooToolsSource/Base/PTTabBarItemView.swift",
+      "line": 101
     },
     {
       "rule": "accessibility",
-      "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 269
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 270
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 482
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 487
+      "path": "PooToolsSource/Base/PTTabBarItemView.swift",
+      "line": 102
     },
     {
       "rule": "reduce_motion",
-      "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 872
+      "path": "PooToolsSource/Base/PTTabBarMediaContent.swift",
+      "line": 136
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1109
+      "line": 174
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1245
+      "line": 179
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1256
+      "line": 564
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1308
+      "line": 790
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Base/PTTabBarView.swift",
+      "line": 926
+    },
+    {
+      "rule": "reduce_motion",
+      "path": "PooToolsSource/Base/PTTabBarView.swift",
+      "line": 937
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Base/PTTabBarView.swift",
+      "line": 989
     },
     {
       "rule": "accessibility",
@@ -1458,22 +1458,22 @@
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 365
+      "line": 370
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 402
+      "line": 407
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 406
+      "line": 411
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 686
+      "line": 691
     },
     {
       "rule": "accessibility",
@@ -1817,11 +1817,11 @@
     }
   ],
   "schemaVersion": 1,
-  "generatedAt": "2026-10-02T14:08:37Z",
+  "generatedAt": "2026-10-03T05:18:13Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907",
+  "sourceRevision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
   "sourceVersion": "5.60.0",
   "generatorVersion": "Scripts/report_accessibility.rb",
-  "sourceInputsDigest": "87af7314bbf35c8c04c3e91f7a8e18b55acd7ba0262c77f66db3182dae74a6b0"
+  "sourceInputsDigest": "eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3"
 }
