@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: e9ae991e3411ea728be377c2e82b1635af069c05
-Generated at: 2026-10-03T14:20:49Z
+Source revision: 70dde0456c0525709ed3de840428c60ac66b8427
+Generated at: 2026-10-03T15:22:33Z
 -->
 
 # Module Parity Resolution

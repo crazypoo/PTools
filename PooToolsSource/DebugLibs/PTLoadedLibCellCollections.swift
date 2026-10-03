@@ -77,54 +77,43 @@ class PTloadedLibHeader : PTBaseCollectionReusableView {
     }
     
     @MainActor required public init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
     }
     
+    @MainActor
     func configure(with library: PTLoadedLibrary) {
-        PTGCDManager.shared.runOnMain {
-            // Extract a cleaner name from the path if needed
-            let displayName: String
-            if library.name.hasSuffix(".app") || library.name.hasSuffix(".framework") || library.name.hasSuffix(".dylib") {
-                displayName = library.name
-            } else if library.path.contains(".app/") {
-                // For app executables, show the app name
-                let components = library.path.components(separatedBy: ".app/")
-                if components.count > 1 {
-                    let appPath = components[0] + ".app"
-                    displayName = (appPath as NSString).lastPathComponent
-                } else {
-                    displayName = library.name
-                }
-            } else {
-                displayName = library.name
-            }
-            
-            let desc = library.path + "\nSize: " + library.size + " Address: " + library.address
-            let att:PTRichText = """
+        let displayName: String
+        if library.name.hasSuffix(".app") || library.name.hasSuffix(".framework") || library.name.hasSuffix(".dylib") {
+            displayName = library.name
+        } else if let appPath = library.path.components(separatedBy: ".app/").first,
+                  library.path.contains(".app/") {
+            displayName = ((appPath + ".app") as NSString).lastPathComponent
+        } else {
+            displayName = library.name
+        }
+
+        let att: PTRichText = """
         \(wrap: .embedding("""
         \(displayName,.foreground(.lightGray),.font(.appfont(size: 18)),.paragraph(.alignment(.left),.lineSpacing(2.5)))
-        \(desc,.foreground(.lightGray),.font(.appfont(size: 14)),.paragraph(.alignment(.left),.lineSpacing(2.5)))
+        \(library.summaryDescription,.foreground(.lightGray),.font(.appfont(size: 14)),.paragraph(.alignment(.left),.lineSpacing(2.5)))
         """))
         """
-            Task { @MainActor in
-                self.libName.attributedText = att.value
-                
-                self.statusLabel.text = library.isPrivate ? "Private" : "Public"
-                self.statusLabel.textColor = library.isPrivate ? .systemRed : .systemGreen
-                self.statusLabel.backgroundColor = self.statusLabel.textColor.withAlphaComponent(0.5)
-                self.statusLabel.snp.updateConstraints { make in
-                    make.width.equalTo(self.statusLabel.sizeFor().width + 16)
-                }
+        libName.attributedText = att.value
 
-                // Configure expand indicator and loading state
-                if library.isLoading {
-                    self.arrowImage.isHidden = true
-                    self.loadingIndicator.startAnimating()
-                } else {
-                    self.arrowImage.isHidden = false
-                    self.loadingIndicator.stopAnimating()
-                }
-            }
+        statusLabel.text = library.isPrivate ? "Private" : "Public"
+        statusLabel.textColor = library.isPrivate ? .systemRed : .systemGreen
+        statusLabel.backgroundColor = statusLabel.textColor.withAlphaComponent(0.5)
+        statusLabel.snp.updateConstraints { make in
+            make.width.equalTo(statusLabel.sizeFor().width + 16)
+        }
+
+        let isExpanded = library.isExpanded
+        arrowImage.isHidden = library.isLoading
+        arrowImage.transform = isExpanded ? CGAffineTransform(rotationAngle: .pi / 2) : .identity
+        if library.isLoading {
+            loadingIndicator.startAnimating()
+        } else {
+            loadingIndicator.stopAnimating()
         }
     }
 }

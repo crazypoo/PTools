@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory.rb
-Source revision: e9ae991e3411ea728be377c2e82b1635af069c05
-Generated at: 2026-10-03T13:42:42Z
+Source revision: 70dde0456c0525709ed3de840428c60ac66b8427
+Generated at: 2026-10-03T15:23:01Z
 -->
 
 # PTools 当前缓存盘点
@@ -103,6 +103,8 @@ Generated at: 2026-10-03T13:42:42Z
 | PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift:66 | disk or custom cache | guard let cache = self.cachedResponse(for: request), |
 | PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift:67 | disk or custom cache | let info = cache.userInfo, |
 | PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift:74 | disk or custom cache | return cache |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:29 | disk or custom cache | return "Shared Cache / System Image" |
+| PooToolsSource/DebugLibs/PTLoadedLibrariesViewModel.swift:117 | disk or custom cache | report += "- Shared Cache Candidates: \(diagnostics.sharedCacheCandidateCount)\n" |
 | PooToolsSource/DebugNetwork/PTNetworkExporters.swift:88 | disk or custom cache | "cache": [:], |
 | PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1417 | disk or custom cache | // English: Filter previews use an explicit bounded cache policy. |
 | PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1423 | NSCache | private lazy var filterCache: NSCache<NSString, UIImage> = { |

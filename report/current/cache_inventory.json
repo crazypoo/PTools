@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "e9ae991e3411ea728be377c2e82b1635af069c05",
-  "generated_at": "2026-10-03T13:42:42Z",
+  "source_revision": "70dde0456c0525709ed3de840428c60ac66b8427",
+  "generated_at": "2026-10-03T15:23:01Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -543,6 +543,18 @@
       "line": 74,
       "kind": "disk or custom cache",
       "text": "return cache"
+    },
+    {
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 29,
+      "kind": "disk or custom cache",
+      "text": "return \"Shared Cache / System Image\""
+    },
+    {
+      "path": "PooToolsSource/DebugLibs/PTLoadedLibrariesViewModel.swift",
+      "line": 117,
+      "kind": "disk or custom cache",
+      "text": "report += \"- Shared Cache Candidates: \\(diagnostics.sharedCacheCandidateCount)\\n\""
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTNetworkExporters.swift",

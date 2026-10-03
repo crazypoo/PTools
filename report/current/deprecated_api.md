@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: e9ae991e3411ea728be377c2e82b1635af069c05
-Generated at: 2026-10-03T13:42:23Z
+Source revision: 70dde0456c0525709ed3de840428c60ac66b8427
+Generated at: 2026-10-03T15:22:43Z
 -->
 
 # PTools 当前弃用入口清单
@@ -54,6 +54,7 @@ Generated at: 2026-10-03T13:42:23Z
 | `PooToolsSource/Debug/PTDebugFunction.swift:69` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Debug/PTDevFunction.swift:33` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Debug/PTDevFunction.swift:34` | `gobalWebImageLoadOption` | `webImageLoadOptions` |
+| `PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift:12` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/DebugNetwork/PTHttpModel.swift:29` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/DebugNetwork/PTNetworkWatcherCell.swift:69` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/FloatPanel/PTSheetEXCombos.swift:15` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
@@ -423,4 +424,4 @@ Generated at: 2026-10-03T13:42:23Z
 | `PooToolsSource/SegmentControl/PTSegmentedTypes.swift:203` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/SegmentControl/PTSegmentedTypes.swift:214` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 
-扫描数量：`409`。该数量用于发现漂移，不代表可以自动删除公开 API。
+扫描数量：`410`。该数量用于发现漂移，不代表可以自动删除公开 API。

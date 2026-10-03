@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons.rb",
-  "source_revision": "e9ae991e3411ea728be377c2e82b1635af069c05",
-  "generated_at": "2026-10-03T13:41:40Z",
-  "shared_call_count": 1646,
+  "source_revision": "70dde0456c0525709ed3de840428c60ac66b8427",
+  "generated_at": "2026-10-03T15:22:02Z",
+  "shared_call_count": 1645,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -394,7 +394,7 @@
     },
     {
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 206,
+      "line": 201,
       "declaration": "@MainActor public static let shared = PTCrashHandler()",
       "name": "shared",
       "category": "C",

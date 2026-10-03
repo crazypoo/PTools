@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_sendable_exceptions.rb
-Source revision: e9ae991e3411ea728be377c2e82b1635af069c05
-Generated at: 2026-10-03T13:41:40Z
+Source revision: 70dde0456c0525709ed3de840428c60ac66b8427
+Generated at: 2026-10-03T15:22:02Z
 -->
 
 # Swift 6 Sendable 例外清单
@@ -22,8 +22,8 @@ Generated at: 2026-10-03T13:41:40Z
 | `PooToolsSource/Category/PHAsset+PTEX.swift` | 45 | `private struct PTSendableExportSession: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Category/PTVideoThumbnailService.swift` | 37 | `private struct PTVideoAssetSendableBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Core/OSSVoice.swift` | 162 | `public class OSSVoice: AVSpeechSynthesisVoice, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/DebugCrash/PTCrashHandler.swift` | 14 | `private struct PTSafeExceptionBox: @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
-| `PooToolsSource/DebugCrash/PTCrashHandler.swift` | 18 | `private struct PTSafeSignalPointerBox: @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
+| `PooToolsSource/DebugCrash/PTCrashHandler.swift` | 13 | `private struct PTSafeExceptionBox: @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
+| `PooToolsSource/DebugCrash/PTCrashHandler.swift` | 17 | `private struct PTSafeSignalPointerBox: @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
 | `PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift` | 26 | `final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
 | `PooToolsSource/Inspector/MainThreadAsyncOperation.swift` | 12 | `final class MainThreadAsyncOperation: MainThreadOperation, @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
 | `PooToolsSource/Inspector/MainThreadOperation.swift` | 12 | `class MainThreadOperation: Operation, @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |

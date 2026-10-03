@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "e9ae991e3411ea728be377c2e82b1635af069c05",
-  "generated_at": "2026-10-03T13:42:42Z",
+  "source_revision": "70dde0456c0525709ed3de840428c60ac66b8427",
+  "generated_at": "2026-10-03T15:23:01Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -1606,7 +1606,7 @@
     },
     {
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "lines": 248,
+      "lines": 243,
       "classification": "ok"
     },
     {
@@ -1660,18 +1660,68 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/DebugLibs/PTClassExplorerViewModel.swift",
+      "lines": 247,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageRegistry.swift",
+      "lines": 193,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "lines": 422,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/DebugLibs/PTLoadedLibCellCollections.swift",
-      "lines": 130,
+      "lines": 119,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/DebugLibs/PTLoadedLibrariesViewModel.swift",
+      "lines": 282,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/DebugLibs/PTLoadedLibraryClassifier.swift",
+      "lines": 55,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/DebugLibs/PTLoadedLibraryInspectionCache.swift",
+      "lines": 77,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/DebugLibs/PTLoadedLibraryInspector.swift",
+      "lines": 90,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift",
-      "lines": 701,
+      "lines": 20,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/DebugLibs/PTLoadedLibsViewController.swift",
-      "lines": 432,
+      "lines": 442,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/DebugLibs/PTMachOImageInspector.swift",
+      "lines": 305,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/DebugLibs/PTObjCRuntimeImageInspector.swift",
+      "lines": 35,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/DebugLibs/PTSwiftMetadataInspector.swift",
+      "lines": 39,
       "classification": "ok"
     },
     {

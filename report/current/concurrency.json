@@ -2,11 +2,11 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "e9ae991e3411ea728be377c2e82b1635af069c05",
-  "generated_at": "2026-10-03T13:41:39Z",
+  "source_revision": "70dde0456c0525709ed3de840428c60ac66b8427",
+  "generated_at": "2026-10-03T15:22:01Z",
   "counts": {
     "main_queue_async": 26,
-    "task_detached": 30,
+    "task_detached": 31,
     "unchecked_sendable": 45,
     "as_bang": 4
   },
@@ -206,13 +206,13 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 14,
+      "line": 13,
       "text": "private struct PTSafeExceptionBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 18,
+      "line": 17,
       "text": "private struct PTSafeSignalPointerBox: @unchecked Sendable {"
     },
     {
@@ -229,9 +229,15 @@
     },
     {
       "rule": "task_detached",
-      "path": "PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift",
-      "line": 77,
-      "text": "let classes = await Task.detached(priority: .userInitiated) {"
+      "path": "PooToolsSource/DebugLibs/PTLoadedLibrariesViewModel.swift",
+      "line": 91,
+      "text": "let result = await Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/DebugLibs/PTLoadedLibrariesViewModel.swift",
+      "line": 220,
+      "text": "let metadata = await Task.detached(priority: .utility) {"
     },
     {
       "rule": "unchecked_sendable",

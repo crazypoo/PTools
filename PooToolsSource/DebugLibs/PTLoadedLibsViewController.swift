@@ -55,14 +55,14 @@ class PTLoadedLibsViewController: PTBaseViewController {
             if let headerID = model.headerReuseID, !headerID.stringIsEmpty(),
                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: index) as? PTloadedLibHeader {
                 
-                // 修复 1：使用 viewModel.filteredLibraries 作为数据源
+                guard self.viewModel.filteredLibraries.indices.contains(index.section) else { return nil }
                 let headerModel = self.viewModel.filteredLibraries[index.section]
                 header.configure(with: headerModel)
+                let headerID = headerModel.id
                 header.onToggle = { [weak self] in
-                    Task { @MainActor in
-                        self?.viewModel.toggleLibraryExpansion(at: index.section)
-                        // 展开/收起由于没有异步网络请求，本地直接刷新即可
-                        self?.setDataList()
+                    Task { @MainActor [weak self] in
+                        guard let self else { return }
+                        self.viewModel.toggleLibraryExpansion(id: headerID)
                     }
                 }
                 return header
@@ -85,8 +85,9 @@ class PTLoadedLibsViewController: PTBaseViewController {
         }
         view.collectionDidSelect = { [weak self] collection, itemSection, indexPath in
             guard let self = self else { return }
-            // 修复 1：使用 viewModel.filteredLibraries 作为数据源
+            guard self.viewModel.filteredLibraries.indices.contains(indexPath.section) else { return }
             let library = self.viewModel.filteredLibraries[indexPath.section]
+            guard library.classes.indices.contains(indexPath.row) else { return }
             let className = library.classes[indexPath.row]
             
             let classExplorer = PTClassExplorerViewController(libraryName: library.name, className: className)
@@ -106,12 +107,9 @@ class PTLoadedLibsViewController: PTBaseViewController {
     private lazy var titleViewContailer: PTNavTitleContainer = {
         let view = PTNavTitleContainer()
         view.addSubviews([searchBar])
+        view.bounds = .init(origin: .zero, size: .init(width: (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 88), height: 32))
         searchBar.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-        }
-        view.snp.makeConstraints { make in
-            make.width.equalTo(CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 88)
-            make.height.equalTo(32)
         }
         return view
     }()
@@ -139,8 +137,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
     }()
 
     private let viewModel = PTLoadedLibrariesViewModel()
-    
-    // 修复 1：删除了多余的 private var libraries: [PTLoadedLibrary] = []
+    private var hasAppeared = false
     
     open override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
         return .solid(.clear)
@@ -148,10 +145,14 @@ class PTLoadedLibsViewController: PTBaseViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if hasAppeared {
+            viewModel.refreshLibraries()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        hasAppeared = true
         setCustomBackButtonView(backButton)
         setCustomTitleView(titleViewContailer)
         setCustomRightButtons(buttons: [exportButton])
@@ -173,13 +174,11 @@ class PTLoadedLibsViewController: PTBaseViewController {
         
         bindViewModel()
         
-        // 修复 2：加载库后，必须调用一次 setDataList 以渲染初始 UI
         viewModel.loadLibraries()
         setDataList()
     }
     
     private func bindViewModel() {
-        // 清理了无用的注释代码，保留必要的异步加载回调
         viewModel.onLoadingStateChanged = { [weak self] index in
             guard let self = self else { return }
             self.setDataList()
@@ -225,7 +224,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
             }
             
             let nameHeight = UIView.sizeFor(string: value.name, font: .appfont(size: 18), width: screenWidth).height
-            let descString = value.path + "\nSize: " + value.size + " Address: " + value.address
+            let descString = value.summaryDescription
             let descHeight = UIView.sizeFor(string: descString, font: .appfont(size: 14), width: screenWidth).height
             let totalHeight = nameHeight + descHeight + 17
 
@@ -246,7 +245,9 @@ extension PTLoadedLibsViewController: UISearchBarDelegate {
         }
     }
     
-    // 优化 4：实现边打字边过滤的实时搜索体验
+    // English: Apply the filter while the user is typing for immediate feedback.
+    // Español: Aplica el filtro mientras el usuario escribe para ofrecer respuesta inmediata.
+    // 中文：输入过程中实时应用筛选，及时反馈搜索结果。
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.viewModel.searchLibraries(with: searchText)
         newCollectionView.clearAllData { [weak self] cView in
@@ -263,7 +264,10 @@ class PTClassExplorerViewController: PTBaseViewController {
     var classNames: String = ""
     var viewModel: PTClassExplorerViewModel
     
-    private let cellIdentifier = "ClassExplorerCell" // 优化 5：规范化重用标识符
+    // English: Keep one stable reuse identifier for every class detail row.
+    // Español: Mantiene un identificador de reutilización estable para cada fila de detalle de clase.
+    // 中文：为所有类详情行使用稳定的复用标识符。
+    private let cellIdentifier = "ClassExplorerCell"
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -303,7 +307,10 @@ class PTClassExplorerViewController: PTBaseViewController {
     }
     
     @MainActor required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        self.libraryName = ""
+        self.classNames = ""
+        self.viewModel = PTClassExplorerViewModel(className: "")
+        super.init(coder: coder)
     }
     
     // MARK: - Lifecycle
@@ -323,7 +330,7 @@ class PTClassExplorerViewController: PTBaseViewController {
         super.viewDidLoad()
         setup()
         viewModel.loadClassInfo()
-        tableView.reloadData() // 确保数据加载后刷新表格
+        tableView.reloadData()
     }
     
     // MARK: - Setup

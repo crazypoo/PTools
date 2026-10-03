@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "e9ae991e3411ea728be377c2e82b1635af069c05",
-  "generated_at": "2026-10-03T13:41:39Z",
+  "source_revision": "70dde0456c0525709ed3de840428c60ac66b8427",
+  "generated_at": "2026-10-03T15:22:01Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -21194,7 +21194,7 @@
     {
       "key": "PooToolsSource/DebugCrash/PTCrashHandler.swift|public|class|public class CrashUncaughtExceptionHandler",
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 47,
+      "line": 42,
       "access": "public",
       "kind": "class",
       "declaration": "public class CrashUncaughtExceptionHandler {"
@@ -21202,7 +21202,7 @@
     {
       "key": "PooToolsSource/DebugCrash/PTCrashHandler.swift|public|func|@MainActor public func prepare()",
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 52,
+      "line": 47,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func prepare() {"
@@ -21210,7 +21210,7 @@
     {
       "key": "PooToolsSource/DebugCrash/PTCrashHandler.swift|public|class|public class CrashSignalExceptionHandler",
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 99,
+      "line": 94,
       "access": "public",
       "kind": "class",
       "declaration": "public class CrashSignalExceptionHandler {"
@@ -21218,7 +21218,7 @@
     {
       "key": "PooToolsSource/DebugCrash/PTCrashHandler.swift|public|func|@MainActor public func prepare()",
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 104,
+      "line": 99,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func prepare() {"
@@ -21226,7 +21226,7 @@
     {
       "key": "PooToolsSource/DebugCrash/PTCrashHandler.swift|public|class|public class PTCrashHandler",
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 199,
+      "line": 194,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTCrashHandler {"
@@ -21234,7 +21234,7 @@
     {
       "key": "PooToolsSource/DebugCrash/PTCrashHandler.swift|public|var|public var exceptionReceiveClosure: ((Int32?, NSException?, String) -> Void)?",
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 201,
+      "line": 196,
       "access": "public",
       "kind": "var",
       "declaration": "public var exceptionReceiveClosure: ((Int32?, NSException?, String) -> Void)?"
@@ -21242,7 +21242,7 @@
     {
       "key": "PooToolsSource/DebugCrash/PTCrashHandler.swift|public|var|@MainActor public var capturesSignals = false",
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 204,
+      "line": 199,
       "access": "public",
       "kind": "var",
       "declaration": "@MainActor public var capturesSignals = false"
@@ -21250,7 +21250,7 @@
     {
       "key": "PooToolsSource/DebugCrash/PTCrashHandler.swift|public|func|@MainActor public func prepare()",
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 240,
+      "line": 235,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func prepare() {"
@@ -21318,6 +21318,166 @@
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTFileType: String {"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|struct|public struct PTLoadedLibsConfiguration: Sendable, Hashable",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 364,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLoadedLibsConfiguration: Sendable, Hashable {"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|var|public var enablesSwiftMetadataInspection: Bool",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 365,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var enablesSwiftMetadataInspection: Bool"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|var|public var enablesObjectiveCRuntimeInspection: Bool",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 366,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var enablesObjectiveCRuntimeInspection: Bool"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|var|public var enablesFileMetadataInspection: Bool",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 367,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var enablesFileMetadataInspection: Bool"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|var|public var enablesVerboseLogging: Bool",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 368,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var enablesVerboseLogging: Bool"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|var|public var runtimeClassSearchEnabled: Bool",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 369,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var runtimeClassSearchEnabled: Bool"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|init|public init(enablesSwiftMetadataInspection: Bool = true,",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 371,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(enablesSwiftMetadataInspection: Bool = true,"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|struct|public struct PTLoadedLibsDiagnostics: Sendable, Hashable",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 386,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLoadedLibsDiagnostics: Sendable, Hashable {"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|let|public let imageCount: Int",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 387,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let imageCount: Int"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|let|public let registryCount: Int",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 388,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let registryCount: Int"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|let|public let callbackAddCount: Int",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 389,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let callbackAddCount: Int"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|let|public let callbackRemoveCount: Int",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 390,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let callbackRemoveCount: Int"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|let|public let unresolvedPathCount: Int",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 391,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let unresolvedPathCount: Int"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|let|public let fileUnavailableCount: Int",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 392,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let fileUnavailableCount: Int"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|let|public let machOFailureCount: Int",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 393,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let machOFailureCount: Int"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|let|public let objcRuntimeFailureCount: Int",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 394,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let objcRuntimeFailureCount: Int"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|let|public let appImageCount: Int",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 395,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let appImageCount: Int"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|let|public let systemImageCount: Int",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 396,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let systemImageCount: Int"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|let|public let sharedCacheCandidateCount: Int",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 397,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let sharedCacheCandidateCount: Int"
+    },
+    {
+      "key": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift|public|init|public init(imageCount: Int,",
+      "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
+      "line": 399,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(imageCount: Int,"
     },
     {
       "key": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift|public|actor|public actor PTNetworkSpeedMonitor",

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import MachO.dyld
 
 // MARK: - 辅助工具
 
@@ -24,14 +23,10 @@ private struct PTSafeSignalPointerBox: @unchecked Sendable {
  用于在符号化崩溃堆栈时计算真实的内存地址
  */
 func calculate() -> Int {
-    let imageCount = _dyld_image_count()
-    for i in 0..<imageCount {
-        // 找到第一个类型为可执行文件 (MH_EXECUTE) 的 image，通常就是我们的主 App
-        if let header = _dyld_get_image_header(i), header.pointee.filetype == MH_EXECUTE {
-            return _dyld_get_image_vmaddr_slide(i)
-        }
-    }
-    return 0
+    // English: Reuse the lock-protected image registry instead of walking a mutable dyld index.
+    // Español: Reutiliza el registro protegido por bloqueo en lugar de recorrer un índice mutable de dyld.
+    // 中文：复用受锁保护的镜像 Registry，不再遍历可变的 dyld 索引。
+    return PTLoadedImageRegistry.mainExecutableSlide() ?? 0
 }
 
 // 定义需要捕获的严重 Unix 崩溃信号

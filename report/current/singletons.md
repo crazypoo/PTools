@@ -3,15 +3,15 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_singletons.rb
-Source revision: e9ae991e3411ea728be377c2e82b1635af069c05
-Generated at: 2026-10-03T13:41:40Z
+Source revision: 70dde0456c0525709ed3de840428c60ac66b8427
+Generated at: 2026-10-03T15:22:02Z
 -->
 
 # PTools 当前单例范围盘点
 
 本报告用于后续 DI 迁移；它不会自动改变现有单例生命周期。
 
-- .shared / .share 调用文本计数：**1646**
+- .shared / .share 调用文本计数：**1645**
 - 单例声明计数：**130**
 
 | 位置 | 名称 | 分类 | 声明 | 迁移建议 |
@@ -59,7 +59,7 @@ Generated at: 2026-10-03T13:41:40Z
 | PooToolsSource/Debug/StdoutCapture.swift:14 | shared | C Shared mutable service | private static let shared = StdoutCapture() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DebugColor/PTColorPickPlugin.swift:25 | share | D Shared mutable UI or scene state | public static let share = PTColorPickPlugin() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/DebugColor/PTColorPickPlugin.swift:274 | share | D Shared mutable UI or scene state | static let share = PTColorPickWindow() | 按 Scene 或控制器实例保存；保留兼容入口 |
-| PooToolsSource/DebugCrash/PTCrashHandler.swift:206 | shared | C Shared mutable service | @MainActor public static let shared = PTCrashHandler() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/DebugCrash/PTCrashHandler.swift:201 | shared | C Shared mutable service | @MainActor public static let shared = PTCrashHandler() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DebugFile/PTFileBrowser.swift:15 | shared | A Stateless convenience or immutable utility | public static let shared = PTFileBrowser() | 优先保留；有可变状态时迁移为实例配置 |
 | PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:241 | shared | C Shared mutable service | public static let shared = PTNetworkSpeedMonitor() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DebugNetwork/PTHttpDatasource.swift:13 | shared | C Shared mutable service | static let shared = PTHttpDatasource() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |

@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: e9ae991e3411ea728be377c2e82b1635af069c05
-Generated at: 2026-10-03T13:41:39Z
+Source revision: 70dde0456c0525709ed3de840428c60ac66b8427
+Generated at: 2026-10-03T15:22:01Z
 -->
 
 # PTools 当前公开 API 清单
@@ -2661,14 +2661,14 @@ Generated at: 2026-10-03T13:41:39Z
 | PooToolsSource/DebugColor/PTColorPickPlugin.swift:192 | var | public | public var currentColor: String? { |
 | PooToolsSource/DebugColor/PTColorPickPlugin.swift:273 | class | public | public class PTColorPickWindow: UIWindow { |
 | PooToolsSource/DebugColor/PTColorPickPlugin.swift:287 | var | public | public var currentColor: String? { |
-| PooToolsSource/DebugCrash/PTCrashHandler.swift:47 | class | public | public class CrashUncaughtExceptionHandler { |
-| PooToolsSource/DebugCrash/PTCrashHandler.swift:52 | func | public | @MainActor public func prepare() { |
-| PooToolsSource/DebugCrash/PTCrashHandler.swift:99 | class | public | public class CrashSignalExceptionHandler { |
-| PooToolsSource/DebugCrash/PTCrashHandler.swift:104 | func | public | @MainActor public func prepare() { |
-| PooToolsSource/DebugCrash/PTCrashHandler.swift:199 | class | public | public class PTCrashHandler { |
-| PooToolsSource/DebugCrash/PTCrashHandler.swift:201 | var | public | public var exceptionReceiveClosure: ((Int32?, NSException?, String) -> Void)? |
-| PooToolsSource/DebugCrash/PTCrashHandler.swift:204 | var | public | @MainActor public var capturesSignals = false |
-| PooToolsSource/DebugCrash/PTCrashHandler.swift:240 | func | public | @MainActor public func prepare() { |
+| PooToolsSource/DebugCrash/PTCrashHandler.swift:42 | class | public | public class CrashUncaughtExceptionHandler { |
+| PooToolsSource/DebugCrash/PTCrashHandler.swift:47 | func | public | @MainActor public func prepare() { |
+| PooToolsSource/DebugCrash/PTCrashHandler.swift:94 | class | public | public class CrashSignalExceptionHandler { |
+| PooToolsSource/DebugCrash/PTCrashHandler.swift:99 | func | public | @MainActor public func prepare() { |
+| PooToolsSource/DebugCrash/PTCrashHandler.swift:194 | class | public | public class PTCrashHandler { |
+| PooToolsSource/DebugCrash/PTCrashHandler.swift:196 | var | public | public var exceptionReceiveClosure: ((Int32?, NSException?, String) -> Void)? |
+| PooToolsSource/DebugCrash/PTCrashHandler.swift:199 | var | public | @MainActor public var capturesSignals = false |
+| PooToolsSource/DebugCrash/PTCrashHandler.swift:235 | func | public | @MainActor public func prepare() { |
 | PooToolsSource/DebugCrash/Thread+PTDebugEx.swift:18 | class | public | public class func simpleCallStackSymbols(_ stack: [String] = Thread.callStackSymbols) -> [String] { |
 | PooToolsSource/DebugCrash/Thread+PTDebugEx.swift:69 | class | public | public class var simpleCallStackString: String { |
 | PooToolsSource/DebugFile/PTFileBrowser.swift:13 | class | public | public class PTFileBrowser: NSObject { |
@@ -2677,6 +2677,26 @@ Generated at: 2026-10-03T13:41:39Z
 | PooToolsSource/DebugFile/PTFileBrowserViewController.swift:308 | func | public | public func numberOfPreviewItems(in controller: QLPreviewController) -> Int { |
 | PooToolsSource/DebugFile/PTFileBrowserViewController.swift:312 | func | public | public func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem { |
 | PooToolsSource/DebugFile/PTFileModel.swift:12 | enum | public | public enum PTFileType: String { |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:364 | struct | public | public struct PTLoadedLibsConfiguration: Sendable, Hashable { |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:365 | var | public | public var enablesSwiftMetadataInspection: Bool |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:366 | var | public | public var enablesObjectiveCRuntimeInspection: Bool |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:367 | var | public | public var enablesFileMetadataInspection: Bool |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:368 | var | public | public var enablesVerboseLogging: Bool |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:369 | var | public | public var runtimeClassSearchEnabled: Bool |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:371 | init | public | public init(enablesSwiftMetadataInspection: Bool = true, |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:386 | struct | public | public struct PTLoadedLibsDiagnostics: Sendable, Hashable { |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:387 | let | public | public let imageCount: Int |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:388 | let | public | public let registryCount: Int |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:389 | let | public | public let callbackAddCount: Int |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:390 | let | public | public let callbackRemoveCount: Int |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:391 | let | public | public let unresolvedPathCount: Int |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:392 | let | public | public let fileUnavailableCount: Int |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:393 | let | public | public let machOFailureCount: Int |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:394 | let | public | public let objcRuntimeFailureCount: Int |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:395 | let | public | public let appImageCount: Int |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:396 | let | public | public let systemImageCount: Int |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:397 | let | public | public let sharedCacheCandidateCount: Int |
+| PooToolsSource/DebugLibs/PTLoadedImageTypes.swift:399 | init | public | public init(imageCount: Int, |
 | PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:240 | actor | public | public actor PTNetworkSpeedMonitor { |
 | PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:248 | func | public | public func getDownloadSpeeds() -> [Double] { downloadSpeeds } |
 | PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift:249 | func | public | public func getUploadSpeeds() -> [Double] { uploadSpeeds } |
