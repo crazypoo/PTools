@@ -12,7 +12,7 @@ import UIKit
 ///
 /// Basically which screen should be shown, what screen should be shown next, etc.
 @MainActor
-open class Coordinator<Dependencies, Presenter, Content>: @preconcurrency CoordinatorProtocol, @preconcurrency Dismissable, @preconcurrency Startable {
+open class Coordinator<Dependencies, Presenter, Content> {
     public typealias _Self = Coordinator<Dependencies, Presenter, Content>
 
     /// The dependencies neeeded for this part of the navigation flow.
@@ -208,11 +208,15 @@ public extension Coordinator where Presenter == Weak<UIViewController> {
 
 // MARK: - Hashable
 
-extension Coordinator: @preconcurrency Hashable {
+extension Coordinator: @MainActor CoordinatorProtocol, @MainActor Dismissable, @MainActor Startable {}
+
+extension Coordinator: Hashable {
+    nonisolated
     public static func == (lhs: Coordinator<Dependencies, Presenter, StartResult>, rhs: Coordinator<Dependencies, Presenter, StartResult>) -> Bool {
         ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
     }
 
+    nonisolated
     public func hash(into hasher: inout Hasher) {
         hasher.combine(ObjectIdentifier(self))
     }

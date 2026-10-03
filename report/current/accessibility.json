@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "df42327494874fb628d8be8ca9428a01ec818ae6",
-  "generated_at": "2026-10-03T10:20:09Z",
+  "source_revision": "e9ae991e3411ea728be377c2e82b1635af069c05",
+  "generated_at": "2026-10-03T13:41:41Z",
   "counts": {
     "reduce_motion": 60,
     "accessibility": 269,
@@ -893,27 +893,27 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyElement.swift",
-      "line": 339
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Inspector/ViewHierarchyElement.swift",
       "line": 341
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyElement.swift",
-      "line": 344
+      "line": 343
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyElement.swift",
-      "line": 348
+      "line": 346
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Inspector/ViewHierarchyElement.swift",
+      "line": 350
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyElementController.swift",
-      "line": 312
+      "line": 314
     },
     {
       "rule": "accessibility",

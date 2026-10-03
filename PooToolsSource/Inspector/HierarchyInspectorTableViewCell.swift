@@ -6,7 +6,7 @@
 
 import UIKit
 
-class HierarchyInspectorTableViewCell: UITableViewCell, @preconcurrency ElementInspectorAppearanceProviding {
+class HierarchyInspectorTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
 
@@ -49,3 +49,5 @@ class HierarchyInspectorTableViewCell: UITableViewCell, @preconcurrency ElementI
         layer.mask = nil
     }
 }
+
+extension HierarchyInspectorTableViewCell: @MainActor ElementInspectorAppearanceProviding {}

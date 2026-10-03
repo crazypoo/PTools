@@ -4765,9 +4765,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift:58:@available deprecated",
+      "id": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift:63:@available deprecated",
       "path": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift",
-      "line": 58,
+      "line": 63,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",
@@ -4778,9 +4778,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift:69:@available deprecated",
+      "id": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift:74:@available deprecated",
       "path": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift",
-      "line": 69,
+      "line": 74,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",
@@ -4791,9 +4791,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift:83:@available deprecated",
+      "id": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift:88:@available deprecated",
       "path": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift",
-      "line": 83,
+      "line": 88,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",
@@ -4804,9 +4804,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift:96:@available deprecated",
+      "id": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift:101:@available deprecated",
       "path": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift",
-      "line": 96,
+      "line": 101,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",
@@ -4817,9 +4817,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/Network.swift:300:@available deprecated",
+      "id": "PooToolsSource/NetWork/Network.swift:303:@available deprecated",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 300,
+      "line": 303,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",
@@ -4830,9 +4830,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/Network.swift:309:@available deprecated",
+      "id": "PooToolsSource/NetWork/Network.swift:312:@available deprecated",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 309,
+      "line": 312,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",
@@ -4843,9 +4843,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/Network.swift:320:@available deprecated",
+      "id": "PooToolsSource/NetWork/Network.swift:323:@available deprecated",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 320,
+      "line": 323,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",
@@ -4856,9 +4856,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/Network.swift:370:@available deprecated",
+      "id": "PooToolsSource/NetWork/Network.swift:373:@available deprecated",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 370,
+      "line": 373,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",
@@ -4869,9 +4869,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/Network.swift:375:@available deprecated",
+      "id": "PooToolsSource/NetWork/Network.swift:378:@available deprecated",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 375,
+      "line": 378,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",
@@ -4882,9 +4882,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/NetworkTypes.swift:219:@available deprecated",
+      "id": "PooToolsSource/NetWork/NetworkTypes.swift:222:@available deprecated",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 219,
+      "line": 222,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",
@@ -4895,9 +4895,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/NetworkTypes.swift:220:netRequsetTime",
+      "id": "PooToolsSource/NetWork/NetworkTypes.swift:223:netRequsetTime",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 220,
+      "line": 223,
       "symbol": "netRequsetTime",
       "replacement": "requestTimeout",
       "classification": "ALIAS",
@@ -4908,9 +4908,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/NetworkTypes.swift:225:@available deprecated",
+      "id": "PooToolsSource/NetWork/NetworkTypes.swift:228:@available deprecated",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 225,
+      "line": 228,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",
@@ -4921,9 +4921,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/NetworkTypes.swift:226:downloadRequsetTime",
+      "id": "PooToolsSource/NetWork/NetworkTypes.swift:229:downloadRequsetTime",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 226,
+      "line": 229,
       "symbol": "downloadRequsetTime",
       "replacement": "downloadRequestTimeout",
       "classification": "ALIAS",
@@ -4934,9 +4934,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/NetworkTypes.swift:231:@available deprecated",
+      "id": "PooToolsSource/NetWork/NetworkTypes.swift:234:@available deprecated",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 231,
+      "line": 234,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",
@@ -4947,9 +4947,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/NetworkTypes.swift:237:@available deprecated",
+      "id": "PooToolsSource/NetWork/NetworkTypes.swift:240:@available deprecated",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 237,
+      "line": 240,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",
@@ -4960,9 +4960,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/NetworkTypes.swift:243:@available deprecated",
+      "id": "PooToolsSource/NetWork/NetworkTypes.swift:246:@available deprecated",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 243,
+      "line": 246,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",
@@ -4973,9 +4973,9 @@
       "migrationEvidence": "docs/migration/MIGRATION_6.md"
     },
     {
-      "id": "PooToolsSource/NetWork/NetworkTypes.swift:71:@available deprecated",
+      "id": "PooToolsSource/NetWork/NetworkTypes.swift:80:@available deprecated",
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 71,
+      "line": 80,
       "symbol": "@available deprecated",
       "replacement": "docs/migration/MIGRATION_6.md",
       "classification": "DEPRECATED_API",

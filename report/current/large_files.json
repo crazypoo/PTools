@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "df42327494874fb628d8be8ca9428a01ec818ae6",
-  "generated_at": "2026-10-03T10:21:08Z",
+  "source_revision": "e9ae991e3411ea728be377c2e82b1635af069c05",
+  "generated_at": "2026-10-03T13:42:42Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -2231,7 +2231,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/BaseControl.swift",
-      "lines": 184,
+      "lines": 186,
       "classification": "ok"
     },
     {
@@ -2286,7 +2286,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/CellViewModel.swift",
-      "lines": 158,
+      "lines": 163,
       "classification": "ok"
     },
     {
@@ -2336,7 +2336,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/Coordinator.swift",
-      "lines": 223,
+      "lines": 227,
       "classification": "ok"
     },
     {
@@ -2371,17 +2371,17 @@
     },
     {
       "path": "PooToolsSource/Inspector/DefaultElementAttributesLibrary.swift",
-      "lines": 172,
+      "lines": 174,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Inspector/DefaultElementIdentityLibrary.swift",
-      "lines": 43,
+      "lines": 45,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Inspector/DefaultElementSizeLibrary.swift",
-      "lines": 101,
+      "lines": 103,
       "classification": "ok"
     },
     {
@@ -2471,7 +2471,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/ElementChildrenPanelViewModel.swift",
-      "lines": 153,
+      "lines": 154,
       "classification": "ok"
     },
     {
@@ -2531,7 +2531,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/ElementInspectorNavigationController.swift",
-      "lines": 79,
+      "lines": 81,
       "classification": "ok"
     },
     {
@@ -2551,7 +2551,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/ElementInspectorPanelViewController.swift",
-      "lines": 85,
+      "lines": 87,
       "classification": "ok"
     },
     {
@@ -2561,7 +2561,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/ElementInspectorSlidingPanelAnimator.swift",
-      "lines": 161,
+      "lines": 163,
       "classification": "ok"
     },
     {
@@ -2636,12 +2636,12 @@
     },
     {
       "path": "PooToolsSource/Inspector/HierarchyInspectorTableViewCell.swift",
-      "lines": 51,
+      "lines": 53,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Inspector/HierarchyInspectorTableViewHeaderView.swift",
-      "lines": 60,
+      "lines": 62,
       "classification": "ok"
     },
     {
@@ -2651,7 +2651,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/HierarchyInspectorViewModel.swift",
-      "lines": 156,
+      "lines": 158,
       "classification": "ok"
     },
     {
@@ -2671,7 +2671,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/IconButton.swift",
-      "lines": 112,
+      "lines": 114,
       "classification": "ok"
     },
     {
@@ -2791,7 +2791,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/InspectorElementSectionViewController.swift",
-      "lines": 513,
+      "lines": 515,
       "classification": "ok"
     },
     {
@@ -2986,7 +2986,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/MenuContentProtocol.swift",
-      "lines": 14,
+      "lines": 15,
       "classification": "ok"
     },
     {
@@ -3576,12 +3576,12 @@
     },
     {
       "path": "PooToolsSource/Inspector/ViewHierarchyCoordinatorFactory.swift",
-      "lines": 100,
+      "lines": 102,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Inspector/ViewHierarchyElement.swift",
-      "lines": 446,
+      "lines": 448,
       "classification": "ok"
     },
     {
@@ -3596,12 +3596,12 @@
     },
     {
       "path": "PooToolsSource/Inspector/ViewHierarchyElementController.swift",
-      "lines": 779,
+      "lines": 781,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Inspector/ViewHierarchyElementDescriptionView.swift",
-      "lines": 166,
+      "lines": 168,
       "classification": "ok"
     },
     {

@@ -7,7 +7,7 @@
 import UIKit
 
 @MainActor
-extension Manager: @preconcurrency ViewHierarchyLayerManagerProtocol {
+extension Manager: @MainActor ViewHierarchyLayerManagerProtocol {
     var isShowingLayers: Bool {
         viewHierarchyCoordinator.isShowingLayers == true
     }

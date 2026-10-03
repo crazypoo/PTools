@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementIdentityLibrary {
-    final class HighlightViewSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class HighlightViewSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title: String = Texts.highlight("View")

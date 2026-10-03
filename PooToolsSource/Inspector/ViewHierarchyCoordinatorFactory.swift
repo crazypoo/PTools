@@ -13,7 +13,7 @@ protocol ViewHierarchyCoordinatorFactoryProtocol {
                                 defaultLayers: [Inspector.ViewHierarchyLayer]) -> ViewHierarchyCoordinator
 }
 
-enum ViewHierarchyCoordinatorFactory: @preconcurrency ViewHierarchyCoordinatorFactoryProtocol {
+enum ViewHierarchyCoordinatorFactory {
     @MainActor static func makeCoordinator(with windows: [UIWindow],
                                 operationQueue: OperationQueue,
                                 customization: InspectorCustomizationProviding?,
@@ -87,6 +87,8 @@ enum ViewHierarchyCoordinatorFactory: @preconcurrency ViewHierarchyCoordinatorFa
         return coordinator
     }
 }
+
+extension ViewHierarchyCoordinatorFactory: @MainActor ViewHierarchyCoordinatorFactoryProtocol {}
 
 private extension ElementInspectorPanel {
     var defaultLibraries: [InspectorElementLibraryProtocol] {

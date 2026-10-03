@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "df42327494874fb628d8be8ca9428a01ec818ae6",
-  "generated_at": "2026-10-03T10:17:58Z",
+  "source_revision": "e9ae991e3411ea728be377c2e82b1635af069c05",
+  "generated_at": "2026-10-03T12:21:13Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -1561,5 +1561,13 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "8949eb821c6af02437c5ee52d08690759382e36ba79e536227f97974ee6def80"
+  "fingerprint": "8949eb821c6af02437c5ee52d08690759382e36ba79e536227f97974ee6def80",
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-03T12:21:13Z",
+  "repository": "crazypoo/PTools",
+  "branch": "master",
+  "sourceRevision": "e9ae991e3411ea728be377c2e82b1635af069c05",
+  "sourceVersion": "5.60.0",
+  "generatorVersion": "Scripts/validate_module_parity.sh",
+  "sourceInputsDigest": "51cdd4d720ea7bc9b8f86737ccd98a49ddcefa19dddcdcde04ad78c0e9d9a3be"
 }

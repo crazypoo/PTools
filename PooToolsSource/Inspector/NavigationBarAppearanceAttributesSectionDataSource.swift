@@ -8,7 +8,7 @@ import SwiftUI
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class NavigationBarAppearanceAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class NavigationBarAppearanceAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let kind: Kind

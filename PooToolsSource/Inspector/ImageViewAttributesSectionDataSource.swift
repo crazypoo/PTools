@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class ImageViewAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class ImageViewAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Image"

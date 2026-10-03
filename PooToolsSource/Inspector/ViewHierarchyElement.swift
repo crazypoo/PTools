@@ -78,7 +78,7 @@ extension ViewHierarchyElement {
 }
 
 @MainActor
-final class ViewHierarchyElement: @preconcurrency CustomDebugStringConvertible {
+final class ViewHierarchyElement {
     var debugDescription: String {
         String(describing: store.latest)
     }
@@ -160,7 +160,9 @@ final class ViewHierarchyElement: @preconcurrency CustomDebugStringConvertible {
 
 // MARK: - ViewHierarchyElementReference {
 
-extension ViewHierarchyElement: @preconcurrency ViewHierarchyElementReference {
+extension ViewHierarchyElement: @MainActor CustomDebugStringConvertible {}
+
+extension ViewHierarchyElement: @MainActor ViewHierarchyElementReference {
     var canHostContextMenuInteraction: Bool {
         store.latest.canHostContextMenuInteraction
     }
@@ -427,7 +429,7 @@ extension ViewHierarchyElement: @preconcurrency ViewHierarchyElementReference {
 
 // MARK: - Hashable
 
-extension ViewHierarchyElement: @preconcurrency Hashable {
+extension ViewHierarchyElement: @MainActor Hashable {
     static func == (lhs: ViewHierarchyElement, rhs: ViewHierarchyElement) -> Bool {
         lhs.objectIdentifier == rhs.objectIdentifier
     }

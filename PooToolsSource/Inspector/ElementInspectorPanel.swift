@@ -6,7 +6,7 @@
 
 import UIKit
 
-enum ElementInspectorPanel: Hashable, Swift.CaseIterable, @MainActor MenuContentProtocol {
+enum ElementInspectorPanel: Hashable, Swift.CaseIterable, MenuContentProtocol {
     case identity
     case attributes
     case size
@@ -14,7 +14,7 @@ enum ElementInspectorPanel: Hashable, Swift.CaseIterable, @MainActor MenuContent
 
     @MainActor static var `default`: ElementInspectorPanel { Inspector.sharedInstance.configuration.elementInspectorConfiguration.defaultPanel }
 
-    var title: String {
+    @MainActor var title: String {
         switch self {
         case .identity:
             return Texts.inspect("Identity")
@@ -44,7 +44,7 @@ enum ElementInspectorPanel: Hashable, Swift.CaseIterable, @MainActor MenuContent
         self == .default
     }
 
-    static func allCases(for element: ViewHierarchyElementReference) -> [ElementInspectorPanel] {
+    @MainActor static func allCases(for element: ViewHierarchyElementReference) -> [ElementInspectorPanel] {
         allCases.filter { panel in
             switch panel {
             case .children:

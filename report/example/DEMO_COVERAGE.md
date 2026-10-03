@@ -1,7 +1,7 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Example/validate_demo_coverage.py
-Source revision: b6875bfcbb5b503f145e05d8bcc101c196cc316e
-Generated at: 2026-10-03T00:08:04+08:00 -->
+Source revision: e9ae991e3411ea728be377c2e82b1635af069c05
+Generated at: 2026-10-03T18:26:55+08:00 -->
 # PTools Demo Coverage
 
 - Version: `5.60.0`

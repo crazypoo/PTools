@@ -15,7 +15,8 @@ protocol ElementChildrenPanelItemViewModelProtocol: AnyObject {
 }
 
 extension ElementChildrenPanelViewModel {
-    final class CellViewModel: @preconcurrency ElementInspectorAppearanceProviding {
+    @MainActor
+    final class CellViewModel {
         weak var parent: Parent?
 
         private var _isCollapsed: Bool {
@@ -33,6 +34,7 @@ extension ElementChildrenPanelViewModel {
         // MARK: - Properties
 
         let element: ViewHierarchyElementReference
+        nonisolated let identity: ObjectIdentifier
 
         lazy var animatedDisplay: Bool = relativeDepth > .zero
 
@@ -45,6 +47,7 @@ extension ElementChildrenPanelViewModel {
         ) {
             self.parent = parent
             self.element = element
+            identity = element.objectIdentifier
             self.rootDepth = rootDepth
             iconImage = thumbnailImage
             _isCollapsed = isCollapsed
@@ -54,7 +57,9 @@ extension ElementChildrenPanelViewModel {
 
 // MARK: - ElementChildrenPanelTableViewCellViewModelProtocol
 
-extension ElementChildrenPanelViewModel.CellViewModel: @preconcurrency ElementChildrenPanelTableViewCellViewModelProtocol {
+extension ElementChildrenPanelViewModel.CellViewModel: @MainActor ElementInspectorAppearanceProviding {}
+
+extension ElementChildrenPanelViewModel.CellViewModel: @MainActor ElementChildrenPanelTableViewCellViewModelProtocol {
     @MainActor
     var summaryInfo: ViewHierarchyElementSummary {
         ViewHierarchyElementSummary(
@@ -73,7 +78,7 @@ extension ElementChildrenPanelViewModel.CellViewModel: @preconcurrency ElementCh
         )
     }
 
-    var availablePanels: [ElementInspectorPanel] {
+    @MainActor var availablePanels: [ElementInspectorPanel] {
         ElementInspectorPanel.allCases(for: element)
     }
 
@@ -130,12 +135,12 @@ extension ElementChildrenPanelViewModel.CellViewModel: @preconcurrency ElementCh
 // MARK: - Hashable
 
 extension ElementChildrenPanelViewModel.CellViewModel: Hashable {
-    static func == (lhs: ElementChildrenPanelViewModel.CellViewModel, rhs: ElementChildrenPanelViewModel.CellViewModel) -> Bool {
-        lhs.element.objectIdentifier == rhs.element.objectIdentifier
+    nonisolated static func == (lhs: ElementChildrenPanelViewModel.CellViewModel, rhs: ElementChildrenPanelViewModel.CellViewModel) -> Bool {
+        lhs.identity == rhs.identity
     }
 
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(element.objectIdentifier)
+    nonisolated func hash(into hasher: inout Hasher) {
+        hasher.combine(identity)
     }
 }
 

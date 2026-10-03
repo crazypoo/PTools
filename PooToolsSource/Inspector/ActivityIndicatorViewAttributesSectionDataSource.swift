@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class ActivityIndicatorViewAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class ActivityIndicatorViewAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Activity Indicator"

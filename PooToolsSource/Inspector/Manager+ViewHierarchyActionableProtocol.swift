@@ -6,7 +6,7 @@
 
 import UIKit
 
-extension Manager: @preconcurrency ViewHierarchyActionableProtocol {
+extension Manager: @MainActor ViewHierarchyActionableProtocol {
     @MainActor func perform(action: ViewHierarchyElementAction, with element: ViewHierarchyElementReference, from sourceView: UIView) {
         guard canPerform(action: action) else {
             assertionFailure("Should not happen")

@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementSizeLibrary {
-    final class ScrollViewSizeSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class ScrollViewSizeSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title: String = "Scroll View"

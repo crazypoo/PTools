@@ -7,7 +7,7 @@
 import UIKit
 
 extension HierarchyInspectorViewModel {
-    final class CommandGroupsViewModel: @preconcurrency HierarchyInspectorSectionViewModelProtocol {
+    final class CommandGroupsViewModel: HierarchyInspectorSectionViewModelProtocol {
         let shouldAnimateKeyboard: Bool = true
 
         struct Details: HierarchyInspectorActionTableViewCellViewModelProtocol {

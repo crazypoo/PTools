@@ -6,7 +6,7 @@
 
 import Foundation
 
-extension ElementInspectorCoordinator: @preconcurrency OperationQueueManagerProtocol {
+extension ElementInspectorCoordinator: @MainActor OperationQueueManagerProtocol {
     func cancelAllOperations() {
         operationQueue.cancelAllOperations()
     }

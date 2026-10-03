@@ -6,7 +6,7 @@
 
 import UIKit
 
-enum ViewHierarchyLayerAction: Swift.CaseIterable, @preconcurrency MenuContentProtocol {
+enum ViewHierarchyLayerAction: Swift.CaseIterable, MenuContentProtocol {
     case hideHighlight, showHighlight
 
     @MainActor
@@ -22,7 +22,7 @@ enum ViewHierarchyLayerAction: Swift.CaseIterable, @preconcurrency MenuContentPr
         }
     }
 
-    var title: String {
+    @MainActor var title: String {
         switch self {
         case .showHighlight:
             return Texts.highlight("Views")
@@ -31,7 +31,7 @@ enum ViewHierarchyLayerAction: Swift.CaseIterable, @preconcurrency MenuContentPr
         }
     }
 
-    var image: UIImage? {
+    @MainActor var image: UIImage? {
         .layerAction
     }
 }

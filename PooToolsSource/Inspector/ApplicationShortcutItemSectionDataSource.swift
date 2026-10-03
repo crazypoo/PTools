@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class ApplicationShortcutItemSectionDataSource: InspectorElementSectionDataSource {
+    @MainActor final class ApplicationShortcutItemSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         var title: String { shortcutItem.localizedTitle }

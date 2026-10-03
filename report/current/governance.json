@@ -1,15 +1,15 @@
 {
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
+  "sourceRevision": "e9ae991e3411ea728be377c2e82b1635af069c05",
   "sourceVersion": "5.60.0",
   "generatorVersion": "Scripts/governance/generate_current_reports.rb",
-  "sourceInputsDigest": "eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3",
+  "sourceInputsDigest": "51cdd4d720ea7bc9b8f86737ccd98a49ddcefa19dddcdcde04ad78c0e9d9a3be",
   "generator": "Scripts/governance/generate_current_reports.rb",
   "schemaVersion": 1,
-  "generatedAt": "2026-10-03T05:18:13Z",
-  "source_revision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "generated_at": "2026-10-03T05:18:13Z",
+  "generatedAt": "2026-10-03T12:21:13Z",
+  "source_revision": "e9ae991e3411ea728be377c2e82b1635af069c05",
+  "generated_at": "2026-10-03T12:21:13Z",
   "reportDirectory": "report/current",
   "historicalDirectory": "report/baselines/<version>"
 }

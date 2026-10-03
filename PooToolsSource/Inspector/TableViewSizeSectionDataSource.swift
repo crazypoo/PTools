@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementSizeLibrary {
-    final class TableViewSizeSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class TableViewSizeSectionDataSource: InspectorElementSectionDataSource {
         let title: String = "Table View"
 
         var state: InspectorElementSectionState = .collapsed

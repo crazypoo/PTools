@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class StackViewAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class StackViewAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Stack View"

@@ -9,7 +9,7 @@ import UIKit
 final class IconButton: BaseControl {
     typealias Action = PTActionTask
 
-    enum Style: @preconcurrency ElementInspectorAppearanceProviding {
+    enum Style {
         case rounded
         case plain
 
@@ -22,7 +22,7 @@ final class IconButton: BaseControl {
             }
         }
 
-        fileprivate var layoutMargins: NSDirectionalEdgeInsets {
+        @MainActor fileprivate var layoutMargins: NSDirectionalEdgeInsets {
             .init(insets: elementInspectorAppearance.verticalMargins / 3)
         }
     }
@@ -110,3 +110,5 @@ final class IconButton: BaseControl {
         animate(.out)
     }
 }
+
+extension IconButton.Style: @MainActor ElementInspectorAppearanceProviding {}

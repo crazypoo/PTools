@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class TableViewAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class TableViewAttributesSectionDataSource: InspectorElementSectionDataSource {
         let title: String = "Table View"
 
         var state: InspectorElementSectionState = .collapsed

@@ -6,9 +6,10 @@
 
 import UIKit
 
+@MainActor
 protocol MenuContentProtocol: Hashable {
-    var title: String { get }
-    var image: UIImage? { get }
+    @MainActor var title: String { get }
+    @MainActor var image: UIImage? { get }
 
-    static func allCases(for element: ViewHierarchyElementReference) -> [Self]
+    @MainActor static func allCases(for element: ViewHierarchyElementReference) -> [Self]
 }

@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementSizeLibrary {
-    final class ContentLayoutPrioritySizeSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class ContentLayoutPrioritySizeSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title: String = "Content Layout Priority"

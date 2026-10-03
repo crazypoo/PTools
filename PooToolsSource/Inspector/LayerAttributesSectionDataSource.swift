@@ -8,7 +8,7 @@ import QuartzCore
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class LayerAttributesSectionDataSource: InspectorElementSectionDataSource {
+    @MainActor final class LayerAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title: String

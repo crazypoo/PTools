@@ -6,10 +6,10 @@
 
 import UIKit
 
-enum ElementInspectorPanelListState: Swift.CaseIterable, @MainActor MenuContentProtocol {
+enum ElementInspectorPanelListState: Swift.CaseIterable, MenuContentProtocol {
     case allCollapsed, firstExpanded, mixed, allExpanded
 
-    func next() -> Self? {
+    @MainActor func next() -> Self? {
         switch self {
         case .allCollapsed:
             return .firstExpanded
@@ -20,7 +20,7 @@ enum ElementInspectorPanelListState: Swift.CaseIterable, @MainActor MenuContentP
         }
     }
 
-    func previous() -> Self? {
+    @MainActor func previous() -> Self? {
         switch self {
         case .allCollapsed:
             return .none
@@ -35,9 +35,9 @@ enum ElementInspectorPanelListState: Swift.CaseIterable, @MainActor MenuContentP
 
     // MARK: - MenuContentProtocol
 
-    static func allCases(for element: ViewHierarchyElementReference) -> [ElementInspectorPanelListState] { [] }
+    @MainActor static func allCases(for element: ViewHierarchyElementReference) -> [ElementInspectorPanelListState] { [] }
 
-    var title: String {
+    @MainActor var title: String {
         switch self {
         case .allCollapsed:
             return "Collapse All"

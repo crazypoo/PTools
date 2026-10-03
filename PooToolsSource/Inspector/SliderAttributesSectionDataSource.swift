@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class SliderAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class SliderAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Slider"

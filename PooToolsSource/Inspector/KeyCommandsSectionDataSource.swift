@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class KeyCommandsSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class KeyCommandsSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .expanded
 
         let title: String

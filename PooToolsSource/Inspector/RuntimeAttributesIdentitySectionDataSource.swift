@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementIdentityLibrary {
-    final class RuntimeAttributesIdentitySectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class RuntimeAttributesIdentitySectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Runtime Attributes"

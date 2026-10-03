@@ -8,7 +8,7 @@ import MapKit
 import UIKit
 import WebKit
 
-enum DefaultElementAttributesLibrary: Swift.CaseIterable, @preconcurrency InspectorElementLibraryProtocol {
+enum DefaultElementAttributesLibrary: Swift.CaseIterable {
     case activityIndicator
     case application
     case button
@@ -170,3 +170,5 @@ enum DefaultElementAttributesLibrary: Swift.CaseIterable, @preconcurrency Inspec
         }
     }
 }
+
+extension DefaultElementAttributesLibrary: @MainActor InspectorElementLibraryProtocol {}

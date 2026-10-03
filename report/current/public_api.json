@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "df42327494874fb628d8be8ca9428a01ec818ae6",
-  "generated_at": "2026-10-03T10:20:08Z",
+  "source_revision": "e9ae991e3411ea728be377c2e82b1635af069c05",
+  "generated_at": "2026-10-03T13:41:39Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -28720,12 +28720,12 @@
       "declaration": "public var commands: [Command]"
     },
     {
-      "key": "PooToolsSource/Inspector/Coordinator.swift|open|class|open class Coordinator<Dependencies, Presenter, Content>: @preconcurrency CoordinatorProtocol, @preconcurrency Dismissable, @preconcurrency Startable",
+      "key": "PooToolsSource/Inspector/Coordinator.swift|open|class|open class Coordinator<Dependencies, Presenter, Content>",
       "path": "PooToolsSource/Inspector/Coordinator.swift",
       "line": 15,
       "access": "open",
       "kind": "class",
-      "declaration": "open class Coordinator<Dependencies, Presenter, Content>: @preconcurrency CoordinatorProtocol, @preconcurrency Dismissable, @preconcurrency Startable {"
+      "declaration": "open class Coordinator<Dependencies, Presenter, Content> {"
     },
     {
       "key": "PooToolsSource/Inspector/Coordinator.swift|public|typealias|public typealias _Self = Coordinator<Dependencies, Presenter, Content>",
@@ -28826,7 +28826,7 @@
     {
       "key": "PooToolsSource/Inspector/Coordinator.swift|public|func|public func hash(into hasher: inout Hasher)",
       "path": "PooToolsSource/Inspector/Coordinator.swift",
-      "line": 216,
+      "line": 220,
       "access": "public",
       "kind": "func",
       "declaration": "public func hash(into hasher: inout Hasher) {"

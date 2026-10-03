@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class TabBarItemAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class TabBarItemAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Tab Bar Item"

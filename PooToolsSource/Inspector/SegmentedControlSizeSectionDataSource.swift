@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementSizeLibrary {
-    final class SegmentedControlSizeSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class SegmentedControlSizeSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title: String = "Segmented Control"

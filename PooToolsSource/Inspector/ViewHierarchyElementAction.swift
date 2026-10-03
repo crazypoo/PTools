@@ -6,12 +6,12 @@
 
 import UIKit
 
-enum ViewHierarchyElementAction: @preconcurrency MenuContentProtocol {
+enum ViewHierarchyElementAction: MenuContentProtocol {
     case layer(action: ViewHierarchyLayerAction)
     case inspect(preferredPanel: ElementInspectorPanel)
     case copy(info: ViewHierarchyInformation)
 
-    var title: String {
+    @MainActor var title: String {
         switch self {
         case let .layer(action):
             return action.title

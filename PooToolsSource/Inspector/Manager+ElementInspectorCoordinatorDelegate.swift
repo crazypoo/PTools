@@ -6,7 +6,7 @@
 
 import UIKit
 
-extension Manager: @preconcurrency ElementInspectorCoordinatorDelegate {
+extension Manager: @MainActor ElementInspectorCoordinatorDelegate {
     @MainActor func elementInspectorCoordinator(_ coordinator: ElementInspectorCoordinator,
                                      didFinishInspecting element: ViewHierarchyElementReference,
                                      with reason: ElementInspectorDismissReason)

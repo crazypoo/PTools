@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: df42327494874fb628d8be8ca9428a01ec818ae6
-Generated at: 2026-10-03T10:20:08Z
+Source revision: e9ae991e3411ea728be377c2e82b1635af069c05
+Generated at: 2026-10-03T13:41:39Z
 -->
 
 # PTools 当前公开 API 清单
@@ -3602,7 +3602,7 @@ Generated at: 2026-10-03T10:20:08Z
 | PooToolsSource/Inspector/Command.swift:32 | init | public | public init( |
 | PooToolsSource/Inspector/CommandsGroup.swift:15 | var | public | public var title: String? |
 | PooToolsSource/Inspector/CommandsGroup.swift:16 | var | public | public var commands: [Command] |
-| PooToolsSource/Inspector/Coordinator.swift:15 | class | open | open class Coordinator<Dependencies, Presenter, Content>: @preconcurrency CoordinatorProtocol, @preconcurrency Dismissable, @preconcurrency Startable { |
+| PooToolsSource/Inspector/Coordinator.swift:15 | class | open | open class Coordinator<Dependencies, Presenter, Content> { |
 | PooToolsSource/Inspector/Coordinator.swift:16 | typealias | public | public typealias _Self = Coordinator<Dependencies, Presenter, Content> |
 | PooToolsSource/Inspector/Coordinator.swift:19 | let | public | public let dependencies: Dependencies |
 | PooToolsSource/Inspector/Coordinator.swift:22 | let | public | public let presenter: Presenter |
@@ -3615,7 +3615,7 @@ Generated at: 2026-10-03T10:20:08Z
 | PooToolsSource/Inspector/Coordinator.swift:106 | func | open | open func addChild(_ coordinator: CoordinatorProtocol) { |
 | PooToolsSource/Inspector/Coordinator.swift:123 | func | open | open func removeChild(_ coordinator: CoordinatorProtocol) { |
 | PooToolsSource/Inspector/Coordinator.swift:139 | func | open | open func removeAllChildren() { |
-| PooToolsSource/Inspector/Coordinator.swift:216 | func | public | public func hash(into hasher: inout Hasher) { |
+| PooToolsSource/Inspector/Coordinator.swift:220 | func | public | public func hash(into hasher: inout Hasher) { |
 | PooToolsSource/Inspector/CoordinatorProtocol.swift:12 | typealias | public | public typealias CoordinatorStartable = CoordinatorProtocol & Startable |
 | PooToolsSource/Inspector/CoordinatorProtocol.swift:14 | protocol | public | public protocol CoordinatorProtocol: AnyObject { |
 | PooToolsSource/Inspector/Dismissable.swift:11 | protocol | public | public protocol Dismissable: AnyObject { |

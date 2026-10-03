@@ -6,7 +6,7 @@
 
 import UIKit
 
-extension ElementInspectorCoordinator: @preconcurrency ElementInspectorViewControllerDelegate {
+extension ElementInspectorCoordinator: @MainActor ElementInspectorViewControllerDelegate {
     @MainActor func elementInspectorViewController(_ viewController: ElementInspectorViewController,
                                         didSelect element: ViewHierarchyElementReference,
                                         with action: ViewHierarchyElementAction,

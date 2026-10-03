@@ -7,7 +7,7 @@
 import UIKit
 
 @MainActor
-struct ViewHierarchyElementSummary: @preconcurrency ElementInspectorAppearanceProviding {
+struct ViewHierarchyElementSummary {
     var automaticallyAdjustIndentation: Bool = false
     var hideCollapseButton: Bool = true
     var iconImage: UIImage?
@@ -21,6 +21,8 @@ struct ViewHierarchyElementSummary: @preconcurrency ElementInspectorAppearancePr
     var title: String?
     var titleFont: UIFont = Inspector.sharedInstance.appearance.elementInspector.titleFont(forRelativeDepth: .zero)
 }
+
+extension ViewHierarchyElementSummary: @MainActor ElementInspectorAppearanceProviding {}
 
 final class ViewHierarchyElementDescriptionView: BaseView, DataReloadingProtocol {
     var summaryInfo: ViewHierarchyElementSummary? {

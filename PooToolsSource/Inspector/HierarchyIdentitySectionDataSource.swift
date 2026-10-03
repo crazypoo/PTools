@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementIdentityLibrary {
-    final class HierarchyIdentitySectionDataSource: InspectorElementSectionDataSource {
+    @MainActor final class HierarchyIdentitySectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .expanded
 
         let title = "Hierarchy"

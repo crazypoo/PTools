@@ -11,11 +11,11 @@ enum ViewHierarchyInformation: Swift.CaseIterable, MenuContentProtocol {
     case description
     case report
 
-    static func allCases(for element: ViewHierarchyElementReference) -> [ViewHierarchyInformation] {
+    @MainActor static func allCases(for element: ViewHierarchyElementReference) -> [ViewHierarchyInformation] {
         allCases
     }
 
-    var title: String {
+    @MainActor var title: String {
         switch self {
         case .className:
             return Texts.copy("Class Name")
@@ -26,5 +26,5 @@ enum ViewHierarchyInformation: Swift.CaseIterable, MenuContentProtocol {
         }
     }
 
-    var image: UIImage? { .copySymbol }
+    @MainActor var image: UIImage? { .copySymbol }
 }

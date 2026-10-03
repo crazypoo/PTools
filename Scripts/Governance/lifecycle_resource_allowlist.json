@@ -5,6 +5,7 @@
     "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift": "Alert manager owns scene notification lifetime.",
     "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertBackgroundView.swift": "Alert background view owns trait notification lifetime.",
     "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift": "Alert controller owns view lifecycle notifications.",
+    "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertPresentationCoordinator.swift": "Alert controller extension owns trait and accessibility notification lifetime.",
     "PooToolsSource/Animation/PTWaterWaveView.swift": "Animation view owns display-link and notification lifecycle.",
     "PooToolsSource/Badge/UIView+BadgeEX.swift": "Badge association owns its notification observer.",
     "PooToolsSource/Base/PTBaseTabBarViewController.swift": "Base tab controller compatibility observer.",

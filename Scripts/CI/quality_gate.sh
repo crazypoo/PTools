@@ -132,10 +132,17 @@ run_named_gate() {
     tests)
       run_gate TESTS bash -c '
         set -euo pipefail
-        # English: Run the PTModel and typed Network products as mandatory XCTest products.
-        # Español: Ejecuta los productos PTModel y Network tipado como productos XCTest obligatorios.
-        # 中文：将 PTModel 和类型化 Network 测试产品纳入强制 XCTest 门禁。
-        for test_product in PToolsPlatformTests PToolsAdvancedTests PToolsModelTests PToolsNetworkTests PToolsFontTests; do
+        # English: SwiftPM synthesizes one XCTest product for each declared XCTest target; select products explicitly.
+        # Español: SwiftPM sintetiza un producto XCTest por cada objetivo XCTest declarado; selecciona los productos explícitamente.
+        # 中文：SwiftPM 会为每个声明的 XCTest target 生成对应产品，因此显式选择测试产品。
+        foundation_test_products=(
+          PToolsPlatformTests
+          PToolsAdvancedTests
+          PToolsModelTests
+          PToolsNetworkTests
+          PToolsFontTests
+        )
+        for test_product in "${foundation_test_products[@]}"; do
           swift test \
             --test-product "$test_product" \
             --enable-xctest \
@@ -197,6 +204,7 @@ run_named_gate() {
             CODE_SIGNING_ALLOWED=NO \
             ARCHS=arm64 \
             ONLY_ACTIVE_ARCH=YES \
+            COMPILER_INDEX_STORE_ENABLE=NO \
             build
         done
         bash Scripts/CI/check_p2_modern_modules.sh

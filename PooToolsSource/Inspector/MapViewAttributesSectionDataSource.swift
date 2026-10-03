@@ -8,7 +8,7 @@
 
 extension DefaultElementAttributesLibrary {
     @MainActor
-    final class MapViewAttributesSectionDataSource: @preconcurrency InspectorElementSectionDataSource {
+    final class MapViewAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Map View"

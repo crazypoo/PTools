@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class NavigationItemAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class NavigationItemAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Navigation Item"

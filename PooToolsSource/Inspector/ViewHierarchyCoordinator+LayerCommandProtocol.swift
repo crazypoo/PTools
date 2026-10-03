@@ -6,7 +6,7 @@
 
 import UIKit
 
-extension ViewHierarchyCoordinator: @preconcurrency LayerCommandProtocol {
+extension ViewHierarchyCoordinator: @MainActor LayerCommandProtocol {
     private var keyCommandSettings: InspectorConfiguration.KeyCommandSettings {
         Inspector.sharedInstance.configuration.keyCommands
     }

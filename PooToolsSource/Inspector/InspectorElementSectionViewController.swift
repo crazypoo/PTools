@@ -34,7 +34,7 @@ protocol InspectorElementSectionViewControllerDelegate: OperationQueueManagerPro
     )
 }
 
-final class InspectorElementSectionViewController: UIViewController, DataReloadingProtocol, @preconcurrency ElementInspectorAppearanceProviding {
+final class InspectorElementSectionViewController: UIViewController, DataReloadingProtocol {
     weak var delegate: InspectorElementSectionViewControllerDelegate?
 
     let viewCode: InspectorElementSectionView
@@ -285,6 +285,8 @@ final class InspectorElementSectionViewController: UIViewController, DataReloadi
         }
     }
 }
+
+extension InspectorElementSectionViewController: @MainActor ElementInspectorAppearanceProviding {}
 
 // MARK: - Actions
 

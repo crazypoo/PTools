@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementSizeLibrary {
-    final class ViewFrameSizeSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class ViewFrameSizeSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title: String = "View"

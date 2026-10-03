@@ -25,7 +25,7 @@ final class ElementNameView: LayerViewComponent {
     enum DisplayMode: Swift.CaseIterable, MenuContentProtocol {
         case auto, iconAndText, text, icon
 
-        var title: String {
+        @MainActor var title: String {
             switch self {
             case .auto: return "Automatic"
             case .iconAndText: return "Icon And Text"
@@ -34,9 +34,9 @@ final class ElementNameView: LayerViewComponent {
             }
         }
 
-        var image: UIImage? { .none }
+        @MainActor var image: UIImage? { .none }
 
-        static func allCases(for element: ViewHierarchyElementReference) -> [DisplayMode] { allCases }
+        @MainActor static func allCases(for element: ViewHierarchyElementReference) -> [DisplayMode] { allCases }
     }
 
     override var tintColor: UIColor! {

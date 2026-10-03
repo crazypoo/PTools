@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class WindowAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class WindowAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Window"

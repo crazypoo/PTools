@@ -12,11 +12,11 @@
     "unresolved": []
   },
   "failures": [],
-  "generated_at": "2026-10-03T00:08:04+08:00",
+  "generated_at": "2026-10-03T18:26:55+08:00",
   "generator": "Scripts/Example/validate_demo_coverage.py",
   "missing": [],
   "moduleCount": 237,
   "schemaVersion": 1,
-  "source_revision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
+  "source_revision": "e9ae991e3411ea728be377c2e82b1635af069c05",
   "version": "5.60.0"
 }

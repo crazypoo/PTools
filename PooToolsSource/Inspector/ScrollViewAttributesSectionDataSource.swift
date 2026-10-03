@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class ScrollViewAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class ScrollViewAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Scroll View"

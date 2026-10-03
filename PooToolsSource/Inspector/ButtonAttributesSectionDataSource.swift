@@ -10,7 +10,7 @@ extension DefaultElementAttributesLibrary {
     
     // 1. 添加 @MainActor：确保整个 UI 数据源在 Swift 6 下是严格主线程安全的
     @MainActor
-    final class ButtonAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class ButtonAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Button"

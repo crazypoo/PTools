@@ -25,6 +25,7 @@ protocol ElementChildrenPanelViewModelProtocol {
     func indexPath(for item: ElementChildrenPanelItemViewModelProtocol?) -> IndexPath?
 }
 
+@MainActor
 final class ElementChildrenPanelViewModel: NSObject {
     let rootElement: ViewHierarchyElementReference
 

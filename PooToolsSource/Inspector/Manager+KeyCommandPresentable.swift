@@ -9,7 +9,7 @@ import UIKit
 import PToolsSymbols
 #endif
 
-extension Manager: @preconcurrency KeyCommandPresentable {
+extension Manager: @MainActor KeyCommandPresentable {
     @MainActor var keyCommands: [UIKeyCommand] {
         if let cachedKeyCommands = keyCommandsStore.wrappedValue {
             return cachedKeyCommands

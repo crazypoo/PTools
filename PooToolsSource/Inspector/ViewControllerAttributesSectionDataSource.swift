@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    @MainActor final class ViewControllerAttributesSectionDataSource: @preconcurrency InspectorElementSectionDataSource {
+    @MainActor final class ViewControllerAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "View Controller"

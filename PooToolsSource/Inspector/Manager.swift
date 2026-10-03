@@ -88,7 +88,7 @@ final class Manager: Coordinator<ManagerDependencies, OperationQueue, Void> {
 
 // MARK: - AsyncOperationProtocol
 
-extension Manager: @preconcurrency AsyncOperationProtocol {
+extension Manager: @MainActor AsyncOperationProtocol {
     func asyncOperation(name: String = #function, execute closure: @escaping Closure) {
         operationQueue.addOperation(
             MainThreadAsyncOperation(name: name, closure: closure)

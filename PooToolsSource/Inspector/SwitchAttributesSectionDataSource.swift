@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class SwitchAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class SwitchAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Switch"

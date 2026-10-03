@@ -33,10 +33,11 @@ require_text "network.ptmodel-lab" Data/demo-registry.yml
 [[ -f docs/model/PTMODEL_NETWORK_QUICKSTART_5_60.md ]] || fail "quick start is missing"
 [[ -f docs/model/PTMODEL_NETWORK_NESTED_JSON_5_60.md ]] || fail "nested JSON guide is missing"
 
-# English: Execute the two regression products so this gate cannot pass on file presence alone.
-# Español: Ejecuta los dos productos de regresión para que esta puerta no pase solo por la presencia de archivos.
-# 中文：实际执行两个回归测试产品，避免该门禁只检查文件是否存在。
-for test_product in PToolsModelTests PToolsNetworkTests; do
+# English: Execute the Foundation-compatible regression products so this gate cannot pass on file presence alone.
+# Español: Ejecuta los productos de regresión compatibles con Foundation para que esta puerta no pase solo por la presencia de archivos.
+# 中文：实际执行兼容 Foundation 的回归测试产品，避免该门禁只检查文件是否存在。
+foundation_test_products=(PToolsModelTests PToolsNetworkTests PToolsFontTests)
+for test_product in "${foundation_test_products[@]}"; do
   swift test \
     --test-product "$test_product" \
     --enable-xctest \

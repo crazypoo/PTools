@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    @MainActor final class SegmentedControlAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    @MainActor final class SegmentedControlAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Segmented Control"

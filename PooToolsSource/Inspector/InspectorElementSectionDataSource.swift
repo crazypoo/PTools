@@ -12,23 +12,23 @@ public typealias InspectorElementViewModelProtocol = InspectorElementSectionData
 /// An object that provides the information necessary to represent an Element Inspector section.
 public protocol InspectorElementSectionDataSource: AnyObject {
     /// An optional subtitle that can be shown below the title.
-    var title: String { get }
+    @MainActor var title: String { get }
     /// An optional subtitle that can be shown below the title.
-    var subtitle: String? { get }
+    @MainActor var subtitle: String? { get }
     /// A list of properties to be displayed.
-    var properties: [InspectorElementProperty] { get }
+    @MainActor var properties: [InspectorElementProperty] { get }
     /// To customize how your sections look provide a type that conforms to `InspectorElementFormSectionView`.
-    var customClass: InspectorElementSectionView.Type? { get }
+    @MainActor var customClass: InspectorElementSectionView.Type? { get }
     /// Constant describing the currentstate of the section.
-    var state: InspectorElementSectionState { get set }
+    @MainActor var state: InspectorElementSectionState { get set }
     /// An optional property to be displayed next to the title.
-    var titleAccessoryProperty: InspectorElementProperty? { get }
+    @MainActor var titleAccessoryProperty: InspectorElementProperty? { get }
 }
 
 public extension InspectorElementSectionDataSource {
-    var subtitle: String? { nil }
-    var customClass: InspectorElementSectionView.Type? { nil }
-    var titleAccessoryProperty: InspectorElementProperty? { nil }
+    @MainActor var subtitle: String? { nil }
+    @MainActor var customClass: InspectorElementSectionView.Type? { nil }
+    @MainActor var titleAccessoryProperty: InspectorElementProperty? { nil }
 }
 
 extension InspectorElementSectionDataSource {

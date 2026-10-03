@@ -128,7 +128,7 @@ extension ViewHierarchyElementController {
 }
 
 @MainActor
-final class ViewHierarchyElementController: @preconcurrency CustomDebugStringConvertible {
+final class ViewHierarchyElementController {
     var debugDescription: String {
         String(describing: store.latest)
     }
@@ -255,7 +255,9 @@ final class ViewHierarchyElementController: @preconcurrency CustomDebugStringCon
     }
 }
 
-extension ViewHierarchyElementController: @preconcurrency ViewHierarchyElementReference {
+extension ViewHierarchyElementController: @MainActor CustomDebugStringConvertible {}
+
+extension ViewHierarchyElementController: @MainActor ViewHierarchyElementReference {
     var canHostContextMenuInteraction: Bool {
         rootElement.canHostContextMenuInteraction
     }
@@ -368,7 +370,7 @@ extension ViewHierarchyElementController: @preconcurrency ViewHierarchyElementRe
     }
 }
 
-extension ViewHierarchyElementController: @preconcurrency ViewHierarchyControllerProtocol {
+extension ViewHierarchyElementController: @MainActor ViewHierarchyControllerProtocol {
     var className: String {
         store.first.className
     }

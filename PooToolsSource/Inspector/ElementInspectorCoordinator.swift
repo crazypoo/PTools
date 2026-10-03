@@ -212,7 +212,7 @@ final class ElementInspectorCoordinator: Coordinator<ElementInspectorDependencie
 
 // MARK: - ViewHierarchyActionableProtocol
 
-extension ElementInspectorCoordinator: @preconcurrency ViewHierarchyActionableProtocol {
+extension ElementInspectorCoordinator: @MainActor ViewHierarchyActionableProtocol {
     func canPerform(action: ViewHierarchyElementAction) -> Bool {
         switch action {
         case .inspect:
@@ -260,7 +260,7 @@ extension ElementInspectorCoordinator: @preconcurrency ViewHierarchyActionablePr
 
 // MARK: - DismissablePresentationProtocol
 
-extension ElementInspectorCoordinator: @preconcurrency DismissablePresentationProtocol {
+extension ElementInspectorCoordinator: @MainActor DismissablePresentationProtocol {
     @MainActor func dismissPresentation(animated: Bool) {
         if let presentingViewController = navigationController.presentingViewController {
             presentingViewController.dismiss(animated: animated, completion: nil)
@@ -321,7 +321,7 @@ private extension ElementInspectorCoordinator {
     }
 }
 
-extension ElementInspectorCoordinator: @preconcurrency UIViewControllerTransitionPresenterDelegate {
+extension ElementInspectorCoordinator: @MainActor UIViewControllerTransitionPresenterDelegate {
     @MainActor func animationController(forPresented presented: UIViewController,
                              presenting: UIViewController,
                              source: UIViewController) -> UIViewControllerAnimatedTransitioning?

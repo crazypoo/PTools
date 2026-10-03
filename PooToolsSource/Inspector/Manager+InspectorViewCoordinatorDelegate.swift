@@ -6,7 +6,7 @@
 
 import UIKit
 
-extension Manager: @preconcurrency InspectorViewCoordinatorDelegate {
+extension Manager: @MainActor InspectorViewCoordinatorDelegate {
     func inspectorViewCoordinator(_ coordinator: InspectorViewCoordinator, execute command: InspectorCommand?) {
         coordinator.start().dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
@@ -15,7 +15,7 @@ extension Manager: @preconcurrency InspectorViewCoordinatorDelegate {
     }
 }
 
-extension Manager: @preconcurrency InspectorViewCoordinatorSwiftUIDelegate {
+extension Manager: @MainActor InspectorViewCoordinatorSwiftUIDelegate {
     func inspectorViewCoordinator(_ coordinator: InspectorViewCoordinator,
                                   willFinishWith command: InspectorCommand?)
     {

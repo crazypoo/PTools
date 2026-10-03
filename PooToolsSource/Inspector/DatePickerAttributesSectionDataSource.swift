@@ -7,7 +7,7 @@
 import UIKit
 
 extension DefaultElementAttributesLibrary {
-    final class DatePickerAttributesSectionDataSource: @MainActor InspectorElementSectionDataSource {
+    final class DatePickerAttributesSectionDataSource: InspectorElementSectionDataSource {
         var state: InspectorElementSectionState = .collapsed
 
         let title = "Date Picker"

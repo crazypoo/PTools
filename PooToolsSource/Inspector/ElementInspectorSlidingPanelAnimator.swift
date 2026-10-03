@@ -35,7 +35,7 @@ private extension ElementInspectorSlidingPanelAnimator {
     }
 }
 
-final class ElementInspectorSlidingPanelAnimator: NSObject, @preconcurrency ElementInspectorAppearanceProviding, UIViewControllerAnimatedTransitioning {
+final class ElementInspectorSlidingPanelAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     let duration: TimeInterval = .veryLong
 
     var isPresenting: Bool = true
@@ -155,6 +155,8 @@ final class ElementInspectorSlidingPanelAnimator: NSObject, @preconcurrency Elem
         }
     }
 }
+
+extension ElementInspectorSlidingPanelAnimator: @MainActor ElementInspectorAppearanceProviding {}
 
 private extension String {
     static let bounds = "bounds"

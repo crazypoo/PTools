@@ -7,7 +7,7 @@
 import MobileCoreServices
 import UIKit
 
-extension ElementInspectorCoordinator: @preconcurrency ElementInspectorFormPanelDelegate {
+extension ElementInspectorCoordinator: @MainActor ElementInspectorFormPanelDelegate {
     func elementInspectorFormPanel(_ formPanelViewController: ElementInspectorFormPanelViewController,
                                    didUpdateProperty property: InspectorElementProperty,
                                    in section: InspectorElementSection)
