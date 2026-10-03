@@ -24,6 +24,9 @@ import PToolsCore
 import PToolsModelCore
 #endif
 #if SWIFT_PACKAGE
+import PToolsNetworkModelCore
+#endif
+#if SWIFT_PACKAGE
 import PToolsModelLegacyKakaJSON
 #endif
 private let PTNetworkLocalizationBundle: Bundle = {
@@ -168,9 +171,9 @@ public final class Network: @unchecked Sendable {
     // English: Providers supply per-request values while the session configuration remains immutable.
     // Español: Los proveedores suministran valores por solicitud mientras la configuración de sesión permanece inmutable.
     // 中文：Provider 提供每次请求的动态值，同时保持 Session 配置不可变。
-    private let credentialProvider: (any PTCredentialProvider)?
-    private let headerProvider: (any PTRequestHeaderProvider)?
-    private let endpointResolver: (any PTEndpointResolver)?
+    let credentialProvider: (any PTCredentialProvider)?
+    let headerProvider: (any PTRequestHeaderProvider)?
+    let endpointResolver: (any PTEndpointResolver)?
     private let authRefreshProvider: (any PTNetworkAuthRefreshProvider)?
     private let authRefreshCoordinator = PTNetworkAuthRefreshCoordinator()
 
@@ -496,97 +499,13 @@ public final class Network: @unchecked Sendable {
         return globalURL + original
     }
 
-    /// Shared value for all request-shaped entry points. The legacy KakaJSON
-    /// parser still lives at the boundary, but URL/header construction no
-    /// longer has separate implementations for modern and legacy requests.
-    internal struct PTNetworkRequestContext {
-        let url: String
-        let method: HTTPMethod
-        let headers: HTTPHeaders
-    }
-
-    private class func makeRequestContext(urlStr: URLConvertible,
-                                          needGobal: Bool,
-                                          method: HTTPMethod,
-                                          header: HTTPHeaders?,
-                                          jsonRequest: Bool,
-                                          cachePolicy: PTNetworkCachePolicy?) async throws -> PTNetworkRequestContext {
-        let url = try await createURLRequest(urlStr: urlStr, needGobal: needGobal)
-        let headers = prepareRequestHeaders(header: header,
-                                            jsonRequest: jsonRequest,
-                                            cachePolicy: cachePolicy)
-        return PTNetworkRequestContext(url: url, method: method, headers: headers)
-    }
-
-    // English: Build a context from the instance snapshot so custom Network objects do not fall back to the singleton.
-    // Español: Construye el contexto desde la instantánea de la instancia para que las redes personalizadas no vuelvan al singleton.
-    // 中文：使用实例快照构建请求上下文，避免自定义 Network 实例回退到单例。
-    internal func makeInstanceRequestContext(urlStr: URLConvertible,
-                                             needGobal: Bool,
-                                             method: HTTPMethod,
-                                             header: HTTPHeaders?,
-                                             jsonRequest: Bool,
-                                             cachePolicy: PTNetworkCachePolicy?) async throws -> PTNetworkRequestContext {
-        let originalURL = try urlStr.asURL().absoluteString
-        let configuration = config
-        let environment = PTNetworkRequestEnvironment(configuration: configuration)
-        let url: String
-        if let endpointResolver {
-            url = try await endpointResolver.resolve(endpoint: originalURL, environment: environment).absoluteString
-        } else if originalURL.hasPrefix("http") || !needGobal {
-            url = originalURL
-        } else {
-            url = environment.serverAddress + originalURL
-        }
-        var headers = Self.prepareRequestHeaders(header: header,
-                                                  jsonRequest: jsonRequest,
-                                                  cachePolicy: cachePolicy,
-                                                  configuration: configuration)
-        if let headerProvider {
-            let dynamicHeaders = await headerProvider.headers()
-            for (key, value) in dynamicHeaders where headers[key] == nil {
-                headers[key] = value
-            }
-        }
-        if let credentialProvider,
-           headers["token"] == nil,
-           let credential = await credentialProvider.credential(),
-           !credential.isEmpty {
-            headers["token"] = credential
-            headers["device"] = "iOS"
-        }
-        return PTNetworkRequestContext(url: url, method: method, headers: headers)
-    }
-
-    /// 统一编码 Parameters，避免请求头声明为 JSON 时仍使用默认表单编码。
-    // English: Keep one internal parameter encoder so legacy request fixtures can inspect the actual wire request.
-    // Español: Mantiene un único codificador interno para que los fixtures heredados inspeccionen la solicitud real.
-    // 中文：保留唯一的 internal 参数编码器，让旧请求夹具可以检查真实线路请求。
-    internal class func encodeParameters(_ parameters: Parameters?,
-                                         into request: URLRequest,
-                                         encoder: ParameterEncoding,
-                                         jsonRequest: Bool) throws -> URLRequest {
-        guard let parameters, !parameters.isEmpty else { return request }
-
-        // 显式 JSON 标记或 JSON Content-Type 都表示参数必须进入 JSON body。
-        let contentType = request.value(forHTTPHeaderField: "Content-Type")?.lowercased() ?? ""
-        let shouldEncodeAsJSON = jsonRequest || contentType.contains("application/json")
-        let effectiveEncoder: ParameterEncoding = shouldEncodeAsJSON
-            ? JSONEncoding.default
-            : encoder
-        return try effectiveEncoder.encode(request, with: parameters)
-    }
-    
-    private typealias ResponseParser<T> = @Sendable (_ url: String, _ response: HTTPURLResponse?, _ data: Data?) throws -> PTBaseStructModel<T>
-    public typealias UploadResponseParser<T> = @Sendable (String, HTTPURLResponse?, Data?) throws -> PTBaseStructModel<T>
-    
     // MARK: - ================= 5. 底层核心执行引擎 =================
 
     /// 所有非上传请求共用的执行边界：插件、mock、取消、去重和错误日志
     /// 在这里完成，避免 URL 参数请求和 Body 请求各自维护一套生命周期。
-    private class func execute(url: String,
-                               request: URLRequest,
-                               uploadBody: Data? = nil) async throws -> PTNetworkResponseSnapshot {
+    internal class func execute(url: String,
+                                request: URLRequest,
+                                uploadBody: Data? = nil) async throws -> PTNetworkResponseSnapshot {
         try await Network.share.executeRequest(url: url, request: request, uploadBody: uploadBody)
     }
 
@@ -717,9 +636,9 @@ public final class Network: @unchecked Sendable {
     /// Compatibility executor for the old KakaJSON/Any APIs. It deliberately
     /// does not enter the Sendable deduplication pool; raw `Any` stays inside
     /// this legacy boundary and cannot leak into the modern executor.
-    private class func executeLegacy(url: String,
-                                     request: URLRequest,
-                                     uploadBody: Data? = nil) async throws -> PTNetworkResponseSnapshot {
+    internal class func executeLegacy(url: String,
+                                      request: URLRequest,
+                                      uploadBody: Data? = nil) async throws -> PTNetworkResponseSnapshot {
         try await Network.share.executeLegacyRequest(url: url, request: request, uploadBody: uploadBody)
     }
 
@@ -765,99 +684,6 @@ public final class Network: @unchecked Sendable {
             Network.logRequestFailure(url: url, error: error)
             throw error
         }
-    }
-
-    internal class func _internalRequestApi(needGobal: Bool,
-                                           urlStr: URLConvertible,
-                                           method: HTTPMethod,
-                                           header: HTTPHeaders?,
-                                           parameters: Parameters?,
-                                           cachePolicy: PTNetworkCachePolicy?,
-                                           encoder: ParameterEncoding,
-                                           jsonRequest: Bool) async throws -> PTNetworkResponseSnapshot {
-        let context = try await makeRequestContext(urlStr: urlStr,
-                                                   needGobal: needGobal,
-                                                   method: method,
-                                                   header: header,
-                                                   jsonRequest: jsonRequest,
-                                                   cachePolicy: cachePolicy)
-        logRequestStart(url: context.url, parameters: parameters, headers: context.headers, method: context.method)
-
-        var urlRequest = try URLRequest(url: context.url, method: context.method, headers: context.headers)
-        urlRequest = try encodeParameters(parameters,
-                                          into: urlRequest,
-                                          encoder: encoder,
-                                          jsonRequest: jsonRequest)
-        return try await execute(url: context.url, request: urlRequest)
-    }
-    
-    internal class func _internalRequestBodyAPI(needGobal: Bool,
-                                               urlStr: String,
-                                               body: Data,
-                                               header: HTTPHeaders?,
-                                               method: HTTPMethod,
-                                               cachePolicy: PTNetworkCachePolicy?) async throws -> PTNetworkResponseSnapshot {
-        let context = try await makeRequestContext(urlStr: urlStr,
-                                                   needGobal: needGobal,
-                                                   method: method,
-                                                   header: header,
-                                                   jsonRequest: false,
-                                                   cachePolicy: cachePolicy)
-        var newHeader = context.headers
-        if newHeader["Content-Type"] == nil { newHeader["Content-Type"] = "text/plain" }
-        
-        var dic: [String: any Any & Sendable] = [:]
-        if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }
-        logRequestStart(url: context.url, parameters: dic, headers: newHeader, method: context.method)
-        
-        var urlRequest = try URLRequest(url: context.url, method: context.method, headers: newHeader)
-        urlRequest.httpBody = body
-        return try await execute(url: context.url, request: urlRequest, uploadBody: body)
-    }
-
-    internal class func _internalLegacyRequestApi(needGobal: Bool,
-                                                 urlStr: URLConvertible,
-                                                 method: HTTPMethod,
-                                                 header: HTTPHeaders?,
-                                                 parameters: Parameters?,
-                                                 cachePolicy: PTNetworkCachePolicy?,
-                                                 encoder: ParameterEncoding,
-                                                 jsonRequest: Bool) async throws -> PTNetworkResponseSnapshot {
-        let context = try await makeRequestContext(urlStr: urlStr,
-                                                   needGobal: needGobal,
-                                                   method: method,
-                                                   header: header,
-                                                   jsonRequest: jsonRequest,
-                                                   cachePolicy: cachePolicy)
-        logRequestStart(url: context.url, parameters: parameters, headers: context.headers, method: context.method)
-        var urlRequest = try URLRequest(url: context.url, method: context.method, headers: context.headers)
-        urlRequest = try encodeParameters(parameters,
-                                          into: urlRequest,
-                                          encoder: encoder,
-                                          jsonRequest: jsonRequest)
-        return try await executeLegacy(url: context.url, request: urlRequest)
-    }
-
-    internal class func _internalLegacyRequestBodyAPI(needGobal: Bool,
-                                                     urlStr: String,
-                                                     body: Data,
-                                                     header: HTTPHeaders?,
-                                                     method: HTTPMethod,
-                                                     cachePolicy: PTNetworkCachePolicy?) async throws -> PTNetworkResponseSnapshot {
-        let context = try await makeRequestContext(urlStr: urlStr,
-                                                   needGobal: needGobal,
-                                                   method: method,
-                                                   header: header,
-                                                   jsonRequest: false,
-                                                   cachePolicy: cachePolicy)
-        var newHeader = context.headers
-        if newHeader["Content-Type"] == nil { newHeader["Content-Type"] = "text/plain" }
-        var dic: [String: any Any & Sendable] = [:]
-        if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }
-        logRequestStart(url: context.url, parameters: dic, headers: newHeader, method: context.method)
-        var urlRequest = try URLRequest(url: context.url, method: context.method, headers: newHeader)
-        urlRequest.httpBody = body
-        return try await executeLegacy(url: context.url, request: urlRequest, uploadBody: body)
     }
 
 }

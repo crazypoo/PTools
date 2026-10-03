@@ -6,6 +6,9 @@ import Foundation
 #if SWIFT_PACKAGE
 import PToolsCore
 #endif
+#if SWIFT_PACKAGE
+import PToolsNetworkModelCore
+#endif
 
 // English: Session values are captured once; changing Network.config does not rebuild an existing session.
 // Español: Los valores de sesión se capturan una vez; cambiar Network.config no reconstruye una sesión existente.

@@ -3,7 +3,7 @@
 // 中文：在新代码使用 PTFontCatalog 的同时，固定 5.x FontName 转发契约。
 
 import XCTest
-@testable import ptools
+@testable import PToolsFontCatalogCore
 
 @MainActor
 final class PTFontCompatibilityTests: XCTestCase {

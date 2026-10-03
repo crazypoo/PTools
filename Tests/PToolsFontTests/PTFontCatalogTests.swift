@@ -3,15 +3,15 @@
 // 中文：验证生成字体目录及其 5.x 兼容入口。
 
 import XCTest
-@testable import ptools
+@testable import PToolsFontCatalogCore
 
 @MainActor
 final class PTFontCatalogTests: XCTestCase {
     func testCatalogHasUniqueNames() {
         let fonts = PTFontCatalog.allFonts
         XCTAssertFalse(fonts.isEmpty)
-        XCTAssertEqual(Set(fonts.map(\.postScriptName).count), fonts.count)
-        XCTAssertEqual(Set(fonts.map(\.swiftName).count), fonts.count)
+        XCTAssertEqual(Set(fonts.map(\.postScriptName)).count, fonts.count)
+        XCTAssertTrue(fonts.allSatisfy { !$0.familyName.isEmpty })
     }
 
     func testFamilyAndPostScriptLookupUseTheSameCatalog() {

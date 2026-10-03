@@ -15,6 +15,9 @@ import ptools
 #if SWIFT_PACKAGE
 import PToolsCore
 #endif
+#if SWIFT_PACKAGE
+import PToolsNetworkModelCore
+#endif
 @preconcurrency import Alamofire
 #if canImport(PToolsLogging)
 import PToolsLogging

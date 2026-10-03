@@ -25,17 +25,17 @@ public class PTCollectionView: UIView {
     // 声明一个节流任务
     private var scrollDebounceTask: Task<Void, Never>?
     /// 原生 Diffable 数据源
-    private var diffableDataSource: PTDataSource!
+    var diffableDataSource: PTDataSource!
     ///Photos
-    private let photoPrefetchCoordinator = PTCollectionPhotoPrefetchCoordinator()
+    let photoPrefetchCoordinator = PTCollectionPhotoPrefetchCoordinator()
     var photoAssets: [PHAsset] = []
 
-    private lazy var skeletonOverlayView = PTSkeletonOverlayView()
-    private var activeSkeletonItemCount: Int?
-    public private(set) var isSkeletonVisible = false
+    lazy var skeletonOverlayView = PTSkeletonOverlayView()
+    var activeSkeletonItemCount: Int?
+    public internal(set) var isSkeletonVisible = false
     
     ///索引
-    fileprivate lazy var indicator: UIView = {
+    lazy var indicator: UIView = {
         let indicatorRadius = viewConfig.indexConfig?.indicatorRadius ?? 0
         let indicator = UIView()
         indicator.frame = CGRect(x: 0, y: 0, width: indicatorRadius * 3, height: indicatorRadius * 2)
@@ -58,7 +58,7 @@ public class PTCollectionView: UIView {
     }()
     
     /// CATextLayer的内容默认是上对齐的，不如用label方便
-    fileprivate lazy var bigTextLabel: UILabel = {
+    lazy var bigTextLabel: UILabel = {
         let indicatorRadius = viewConfig.indexConfig?.indicatorRadius ?? 0
         let label = UILabel()
         label.frame = CGRect(x: 0, y: 0, width: indicatorRadius * 2, height: indicatorRadius * 2)
@@ -73,15 +73,15 @@ public class PTCollectionView: UIView {
         return label
     }()
     
-    fileprivate var layerTopSpacing: CGFloat {
+    var layerTopSpacing: CGFloat {
         let count = CGFloat(viewConfig.sideIndexTitles?.count ?? 0)
         let floorValue = bounds.height - count * (viewConfig.indexConfig?.itemSize.height ?? 0) - (viewConfig.indexConfig?.itemSpacing ?? 0) * (count - 1)
         return max(0, floor(floorValue) / 2)
     }
     
-    fileprivate var isTouched: Bool = false
+    var isTouched: Bool = false
     
-    fileprivate var touchedIndex: Int = 0 {
+    var touchedIndex: Int = 0 {
         didSet {
             if touchedIndex != oldValue {
                 PTFeedbackCenter.shared.emit(.selectionChanged)
@@ -92,23 +92,23 @@ public class PTCollectionView: UIView {
     // 使用 NSKeyValueObservation 替代手动 KVO
     private var lastUpdateTime: CFTimeInterval = 0
     private let scrollThrottleInterval: CFTimeInterval = 0.1 // 10fps
-    private var lastPrefetchItemCount: Int?
-    private var indexPanGesture: UIPanGestureRecognizer?
+    var lastPrefetchItemCount: Int?
+    var indexPanGesture: UIPanGestureRecognizer?
     private var lastLayoutBoundsSize: CGSize = .zero
     
-    private let layoutCacheCoordinator = PTCollectionLayoutCacheCoordinator()
-    private var heightCache: PTLRUCache<HeightCacheKey, NSNumber> { layoutCacheCoordinator.height }
-    private var waterfallCache: [PTCollectionWaterfallCacheKey: PTCollectionWaterfallCache] = [:]
-    private var layoutCache: PTLRUCache<LayoutCacheKey, NSCollectionLayoutSection> { layoutCacheCoordinator.sections }
+    let layoutCacheCoordinator = PTCollectionLayoutCacheCoordinator()
+    var heightCache: PTLRUCache<HeightCacheKey, NSNumber> { layoutCacheCoordinator.height }
+    var waterfallCache: [PTCollectionWaterfallCacheKey: PTCollectionWaterfallCache] = [:]
+    var layoutCache: PTLRUCache<LayoutCacheKey, NSCollectionLayoutSection> { layoutCacheCoordinator.sections }
     // English: Centralize snapshot validation without changing PTCollectionView's public facade.
     // Español: Centraliza la validación del snapshot sin cambiar la fachada pública de PTCollectionView.
     // 中文：集中快照校验，同时不改变 PTCollectionView 的公开门面。
-    private let dataCoordinator = PTCollectionDataCoordinator()
+    let dataCoordinator = PTCollectionDataCoordinator()
     // English: Serialize Diffable snapshot applications to prevent nested update assertions.
     // Español: Serializa las aplicaciones de snapshots Diffable para evitar aserciones anidadas.
     // 中文：串行化 Diffable 快照提交，避免嵌套更新触发系统断言。
     private var snapshotApplyInFlight = false
-    private let scrollObserverMultiplexer = PTCollectionScrollObserverMultiplexer()
+    let scrollObserverMultiplexer = PTCollectionScrollObserverMultiplexer()
     
     private var fallbackLayouts: [Int: NSCollectionLayoutSection] = [:]
     private var didReportFallbackLayout = false
@@ -116,7 +116,7 @@ public class PTCollectionView: UIView {
     private let waterfallCacheLimit = 50
     private let refreshCoordinator = PTCollectionRefreshCoordinator()
     
-    fileprivate lazy var collectionView : PTBaseCollectionView = {
+    lazy var collectionView : PTBaseCollectionView = {
         var view = PTBaseCollectionView(frame: .zero, collectionViewLayout: self.comboLayout())
         view.backgroundColor = .clear
         view.delegate = self
@@ -163,7 +163,7 @@ public class PTCollectionView: UIView {
         return view
     }()
     
-    fileprivate lazy var indexContainerView: UIView = {
+    lazy var indexContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = viewConfig.indexConfig?.indexViewBackgroundColor
         return view
@@ -172,7 +172,7 @@ public class PTCollectionView: UIView {
     let topSpacer = UIView()
     let bottomSpacer = UIView()
 
-    fileprivate lazy var stackView: UIStackView = {
+    lazy var stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.alignment = .center
@@ -307,8 +307,8 @@ public class PTCollectionView: UIView {
         }
     }
     
-    private var registeredCells: Set<String> = []
-    private var registeredSupplementary: Set<String> = []
+    var registeredCells: Set<String> = []
+    var registeredSupplementary: Set<String> = []
     
     //MARK: 界面展示
     public init(viewConfig: PTCollectionViewConfig!) {
@@ -402,25 +402,7 @@ public class PTCollectionView: UIView {
         updateSkeletonLayout()
     }
 
-    /// 显示独立的骨架覆盖层，不改变当前 Diffable snapshot。
-    public func showSkeleton(itemCount: Int? = nil) {
-        let requestedCount = itemCount ?? viewConfig.skeletonItemCount
-        activeSkeletonItemCount = min(max(requestedCount, 1), 50)
-        isSkeletonVisible = true
-        skeletonOverlayView.isHidden = false
-        bringSubviewToFront(skeletonOverlayView)
-        updateSkeletonLayout()
-        skeletonOverlayView.startShimmerIfNeeded()
-    }
 
-    /// 隐藏骨架覆盖层，不改变当前空状态或内容状态。
-    public func hideSkeleton() {
-        guard isSkeletonVisible || !skeletonOverlayView.isHidden else { return }
-        isSkeletonVisible = false
-        activeSkeletonItemCount = nil
-        skeletonOverlayView.stopShimmer()
-        skeletonOverlayView.isHidden = true
-    }
 }
 
 private extension PTCollectionView {
@@ -444,12 +426,15 @@ private extension PTCollectionView {
         return true
     }
 
+}
+
+extension PTCollectionView {
     // English: Apply one snapshot at a time and report overlapping callers instead of crashing.
     // Español: Aplica un snapshot a la vez e informa de llamadas solapadas en lugar de bloquearse.
     // 中文：一次只提交一个快照，遇到重叠调用时返回错误而不是触发崩溃。
-    func applySnapshot(_ snapshot: PTSnapshot,
-                       animatingDifferences: Bool,
-                       completion: (() -> Void)? = nil) {
+    internal func applySnapshot(_ snapshot: PTSnapshot,
+                                animatingDifferences: Bool,
+                                completion: (() -> Void)? = nil) {
         guard !snapshotApplyInFlight else {
             reportUpdateError(.snapshotApplyInProgress)
             completion?()
@@ -467,212 +452,6 @@ private extension PTCollectionView {
         }
     }
 
-    func updateSkeletonLayout() {
-        guard isSkeletonVisible else { return }
-        bringSubviewToFront(skeletonOverlayView)
-        let count = activeSkeletonItemCount ?? viewConfig.skeletonItemCount
-        skeletonOverlayView.update(rects: skeletonFrames(itemCount: count), cornerRadius: viewConfig.skeletonCornerRadius)
-    }
-
-    func skeletonFrames(itemCount: Int) -> [CGRect] {
-        let count = min(max(itemCount, 1), 50)
-        guard let config = viewConfig else { return [] }
-        let bounds = skeletonOverlayView.bounds
-        guard bounds.width > 0, bounds.height > 0 else { return [] }
-
-        let leading = max(0, config.itemOriginalX)
-        let trailing = max(0, config.itemOriginalX)
-        let verticalSpacing = max(0, config.cellTrailingSpace)
-        let contentTop = max(0, config.contentTopSpace)
-        let contentBottom = max(0, config.contentBottomSpace)
-        let contentWidth = max(1, bounds.width - leading - trailing)
-        let baseHeight = max(1, config.itemHeight)
-        let columnCount = max(1, config.rowCount)
-        let columnSpacing = max(0, config.cellLeadingSpace)
-        let availableColumnWidth = max(1, (contentWidth - CGFloat(columnCount - 1) * columnSpacing) / CGFloat(columnCount))
-
-        func photoHeight(for width: CGFloat, fallback: CGFloat) -> CGFloat {
-            guard config.viewForPhoto,
-                  config.previewImageSize.width > 0,
-                  config.previewImageSize.height > 0 else {
-                return fallback
-            }
-            return max(1, width * config.previewImageSize.height / config.previewImageSize.width)
-        }
-
-        switch config.viewType {
-        case .Normal, .Custom:
-            let width = max(1, bounds.width - leading - trailing)
-            let height = photoHeight(for: width, fallback: baseHeight)
-            return (0..<count).map { index in
-                CGRect(x: leading,
-                       y: contentTop + CGFloat(index) * (height + verticalSpacing),
-                       width: width,
-                       height: height)
-            }
-
-        case .Gird, .Tag:
-            let height = photoHeight(for: availableColumnWidth, fallback: baseHeight)
-            return (0..<count).map { index in
-                let row = index / columnCount
-                let column = index % columnCount
-                return CGRect(x: leading + CGFloat(column) * (availableColumnWidth + columnSpacing),
-                              y: contentTop + CGFloat(row) * (height + verticalSpacing),
-                              width: availableColumnWidth,
-                              height: height)
-            }
-
-        case .WaterFall:
-            var columnHeights = Array(repeating: contentTop, count: columnCount)
-            let heightMultipliers: [CGFloat] = [0.82, 1.0, 1.18]
-            return (0..<count).map { index in
-                let column = index % columnCount
-                let width = availableColumnWidth
-                let height = photoHeight(for: width, fallback: baseHeight) * heightMultipliers[index % heightMultipliers.count]
-                let frame = CGRect(x: leading + CGFloat(column) * (width + columnSpacing),
-                                   y: columnHeights[column],
-                                   width: width,
-                                   height: max(1, height))
-                columnHeights[column] = frame.maxY + verticalSpacing
-                return frame
-            }
-
-        case .Horizontal, .HorizontalLayoutSystem:
-            let width = max(1, config.itemWidth)
-            let height = min(baseHeight, max(1, bounds.height - contentTop - contentBottom))
-            let y = max(contentTop, (bounds.height - height) / 2)
-            return (0..<count).map { index in
-                CGRect(x: leading + CGFloat(index) * (width + columnSpacing),
-                       y: y,
-                       width: width,
-                       height: height)
-            }
-        }
-    }
-}
-
-extension PTCollectionView {
-    
-    private func setupDiffableDataSource() {
-        // 1. 配置 Cell
-        diffableDataSource = PTDataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, rowModel) -> UICollectionViewCell? in
-            guard let self = self else { return nil }
-            
-            let snapshot = self.diffableDataSource.snapshot()
-            
-            guard indexPath.section < snapshot.sectionIdentifiers.count else {
-                return collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
-            }
-
-            let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
-            
-            let cell: UICollectionViewCell
-            if let configuredCell = self.cellInCollection?(collectionView, sectionModel, indexPath) {
-                cell = configuredCell
-            } else if let cellClass = rowModel.cellClass,
-                      !rowModel.reuseID.isEmpty {
-                self.registerCellIfNeeded(cellClass, reuseID: rowModel.reuseID)
-                cell = collectionView.dequeueReusableCell(withReuseIdentifier: rowModel.reuseID, for: indexPath)
-
-                if let fusionCell = cell as? PTFusionCellProtocol,
-                   let fusionModel = rowModel.dataModel as? PTFusionCellModel {
-                    fusionCell.cellModel = fusionModel
-                } else if let bindableCell = cell as? PTAnyCellBindable,
-                          let dataModel = rowModel.dataModel {
-                    bindableCell.pt_bindAny(dataModel)
-                }
-            } else {
-                cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
-            }
-
-            self.configureSwipeCell(cell,
-                                    collectionView: collectionView,
-                                    sectionModel: sectionModel,
-                                    indexPath: indexPath)
-            return cell
-        }
-        
-        // 2. 配置 Header 和 Footer
-        diffableDataSource.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
-            guard let self = self else { return nil }
-            
-            let snapshot = self.diffableDataSource.snapshot()
-            
-            guard indexPath.section < snapshot.sectionIdentifiers.count else {
-                return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self), for: indexPath)
-            }
-            let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
-            
-            if kind == UICollectionView.elementKindSectionHeader,
-               !(sectionModel.headerReuseID ?? "").stringIsEmpty(),
-               let headerHeight = sectionModel.headerHeight,
-               headerHeight != CGFloat.leastNormalMagnitude,
-               let headerReusableView = headerInCollection?(kind,collectionView,sectionModel,indexPath) {
-                return headerReusableView
-            } else if kind == UICollectionView.elementKindSectionFooter,
-                      !(sectionModel.footerReuseID ?? "").stringIsEmpty(),
-                      let footerHeight = sectionModel.footerHeight,
-                      footerHeight != CGFloat.leastNormalMagnitude,
-                      let footerReusableView = footerInCollection?(kind,collectionView,sectionModel,indexPath) {
-                return footerReusableView
-            }
-            
-            return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self), for: indexPath)
-        }
-        
-        let initialSnapshot = PTSnapshot()
-        diffableDataSource.apply(initialSnapshot, animatingDifferences: false)
-    }
-
-    private func configureSwipeCell(_ cell: UICollectionViewCell,
-                                    collectionView: UICollectionView,
-                                    sectionModel: PTSection,
-                                    indexPath: IndexPath) {
-        guard let swipeCell = cell as? PTBaseSwipeCell else { return }
-
-        let canSwipe = indexPathSwipe?(sectionModel, indexPath) ?? false
-        swipeCell.cellCanSwipe = canSwipe
-        swipeCell.resetSwipeActions()
-        guard canSwipe else { return }
-
-        if let actions = swipeRightHandler?(collectionView, sectionModel, indexPath) {
-            swipeCell.configureRightActions(actions)
-        }
-        if let actions = swipeLeftHandler?(collectionView, sectionModel, indexPath) {
-            swipeCell.configureLeftActions(actions)
-        }
-    }
-}
-
-//MARK: Get something
-extension PTCollectionView {
-#if POOTOOLS_PAGINGCONTROL
-    public func segmentScrolView() -> UIScrollView {
-        collectionView
-    }
-#endif
-    
-    public func visibleCells() -> [UICollectionViewCell] {
-        collectionView.visibleCells
-    }
-}
-
-//MARK: MoveItem
-extension PTCollectionView {
-    public func scrolToItem(indexPath:IndexPath,position:UICollectionView.ScrollPosition) {
-        collectionView.scrollToItem(at: indexPath,
-                                    at: position,
-                                    animated: !PTUIAccessibility.reduceMotionEnabled)
-    }
-    
-    public func mtSelectItem(indexPath:IndexPath,animated:Bool,scrollPosition:UICollectionView.ScrollPosition) {
-        collectionView.selectItem(at: indexPath,
-                                  animated: animated && !PTUIAccessibility.reduceMotionEnabled,
-                                  scrollPosition: scrollPosition)
-    }
-}
-
-extension PTCollectionView {
     public func cornerPosition(row: Int, count: Int) -> CornerPosition {
         if count == 1 { return .single }
         if row == 0 { return .top }
@@ -691,438 +470,6 @@ extension PTCollectionView {
         self.heightCache.removeAll()
         self.waterfallCache.removeAll()
         self.fallbackLayouts.removeAll()
-    }
-}
-
-//MARK: UICollectionViewDelegate
-extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
-    private func getSafeSectionModel(at index: Int) -> PTSection? {
-        let snapshot = self.diffableDataSource.snapshot()
-        return dataCoordinator.section(at: index, in: snapshot)
-    }
-
-    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let itemSec = getSafeSectionModel(at: indexPath.section) else { return }
-        collectionDidSelect?(collectionView,itemSec,indexPath)
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let itemSec = getSafeSectionModel(at: indexPath.section) else { return }
-        collectionDidEndDisplay?(collectionView, cell, itemSec, indexPath)
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let itemSec = getSafeSectionModel(at: indexPath.section) else { return }
-        
-        // 1. 抛出原有的正常展示回调
-        collectionWillDisplay?(collectionView, cell, itemSec, indexPath)
-        
-        // 🌟 修复注入：无感知触底预加载验证逻辑
-        if viewConfig.enableSmartPrefetch, let collectionWillReachBottomTask = collectionWillReachBottomTask {
-            let snapshot = diffableDataSource.snapshot()
-            let totalItems = snapshot.numberOfItems
-            let threshold = max(0, viewConfig.prefetchThreshold)
-            
-            guard totalItems > threshold else { return }
-
-            if let currentItem = diffableDataSource.itemIdentifier(for: indexPath),
-               let currentIndex = snapshot.indexOfItem(currentItem) {
-                if (totalItems - 1) - currentIndex <= threshold {
-                    guard lastPrefetchItemCount != totalItems else { return }
-                    lastPrefetchItemCount = totalItems
-                    collectionWillReachBottomTask()
-                }
-            }
-        }
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
-        guard let itemSec = getSafeSectionModel(at: indexPath.section) else { return }
-        switch viewConfig.decorationItemsType {
-        case .Custom:
-            decorationViewReset?(collectionView,view,elementKind,indexPath,itemSec)
-        case .Normal,.Corner:
-            if let decorationView = view as? PTBaseDecorationView {
-                decorationView.configure(
-                    backgroundColor: itemSec.decorationBackgroundColor ?? PTAppBaseConfig.share.decorationBackgroundColor,
-                    cornerRadius: viewConfig.decorationItemsType == .Normal ? 0 : itemSec.decorationCornerRadius,
-                    shadowOpacity: itemSec.decorationShadowOpacity,
-                    backgroundImage: itemSec.decorationBackgroundImage
-                )
-            }
-        default:break
-        }
-    }
-        
-    // MARK: 移动cell结束
-    public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        itemMoveTo?(collectionView,sourceIndexPath,destinationIndexPath)
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        guard let itemSec = getSafeSectionModel(at: indexPath.section) else { return nil }
-        if let preView = self.forceController?(collectionView,indexPath,itemSec),let actions = self.forceActions?(collectionView,indexPath,itemSec) {
-            return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: {
-                return preView
-            }, actionProvider: { suggestedActions in
-                return UIMenu(title: "", children: actions)
-            })
-        } else {
-            return nil
-        }
-    }
-            
-    public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        guard let cv = scrollView as? UICollectionView else { return }
-        collectionWillBeginDecelerating?(cv)
-    }
-    
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let cv = scrollView as? UICollectionView else { return }
-        scrollObserverMultiplexer.notify(cv)
-        throttleScrollUpdate()
-    }
-    
-    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        guard let cv = scrollView as? UICollectionView else { return }
-        collectionWillBeginDragging?(cv)
-    }
-    
-    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard let cv = scrollView as? UICollectionView else { return }
-        listControllerDidEndDragging?(cv, decelerate)
-        collectionDidEndDragging?(cv,decelerate)
-    }
-    
-    public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        guard let cv = scrollView as? UICollectionView else { return }
-        collectionWillEndDraging?(cv,velocity,targetContentOffset)
-    }
-    
-    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        guard let cv = scrollView as? UICollectionView else { return }
-        collectionDidEndDecelerating?(cv)
-        hideIndicator()
-    }
-    
-    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        guard let cv = scrollView as? UICollectionView else { return }
-        collectionDidEndScrollingAnimation?(cv)
-    }
-    
-    public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-        guard let cv = scrollView as? UICollectionView else { return }
-        collectionDidScrolltoTop?(cv)
-    }
-}
-
-// 2. 实现 Drag 和 Drop 协议
-extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
-    
-    // MARK: - Drag Delegate
-    public func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        guard viewConfig.canMoveItem else { return [] }
-        
-        let snapshot = diffableDataSource.snapshot()
-        guard indexPath.section < snapshot.sectionIdentifiers.count else { return [] }
-        let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
-        
-        guard let rows = sectionModel.rows, indexPath.item < rows.count else { return [] }
-        let rowModel = rows[indexPath.item]
-        
-        let itemProvider = NSItemProvider(object: rowModel.diffId as NSString)
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = rowModel
-        
-        return [dragItem]
-    }
-    
-    // MARK: - Drop Delegate
-    public func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-        guard viewConfig.canMoveItem else {
-            return UICollectionViewDropProposal(operation: .forbidden)
-        }
-        if collectionView.hasActiveDrag {
-            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-        }
-        return UICollectionViewDropProposal(operation: .forbidden)
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        guard viewConfig.canMoveItem,
-              let item = coordinator.items.first,
-              let sourceIndexPath = item.sourceIndexPath else { return }
-
-        var snapshot = diffableDataSource.snapshot()
-        guard sourceIndexPath.section >= 0,
-              sourceIndexPath.section < snapshot.sectionIdentifiers.count,
-              let sourceItem = diffableDataSource.itemIdentifier(for: sourceIndexPath) else { return }
-
-        let destinationSectionIndex = coordinator.destinationIndexPath?.section ?? sourceIndexPath.section
-        guard destinationSectionIndex >= 0,
-              destinationSectionIndex < snapshot.sectionIdentifiers.count else { return }
-
-        let sourceSection = snapshot.sectionIdentifiers[sourceIndexPath.section]
-        let destinationSection = snapshot.sectionIdentifiers[destinationSectionIndex]
-        let sourceItems = snapshot.itemIdentifiers(inSection: sourceSection)
-        var destinationItems = snapshot.itemIdentifiers(inSection: destinationSection)
-        guard let sourceItemIndex = sourceItems.firstIndex(of: sourceItem) else { return }
-
-        let requestedDestinationIndex = coordinator.destinationIndexPath?.item ?? destinationItems.count
-        let destinationIndex = min(max(requestedDestinationIndex, 0), destinationItems.count)
-        let isSameSection = sourceSection.identifier == destinationSection.identifier
-        var insertionIndex = destinationIndex
-
-        if isSameSection {
-            destinationItems.remove(at: sourceItemIndex)
-            let adjustedIndex = min(max(destinationIndex - (sourceItemIndex < destinationIndex ? 1 : 0), 0), destinationItems.count)
-            guard adjustedIndex != sourceItemIndex else {
-                coordinator.drop(item.dragItem, toItemAt: sourceIndexPath)
-                return
-            }
-            insertionIndex = adjustedIndex
-
-            var updatedRows = sourceSection.rows ?? []
-            updatedRows.removeAll { $0.diffId == sourceItem.diffId }
-            updatedRows.insert(sourceItem, at: min(adjustedIndex, updatedRows.count))
-            sourceSection.rows = updatedRows
-        } else {
-            var sourceRows = sourceSection.rows ?? []
-            sourceRows.removeAll { $0.diffId == sourceItem.diffId }
-            sourceSection.rows = sourceRows
-
-            var destinationRows = destinationSection.rows ?? []
-            destinationRows.insert(sourceItem, at: min(destinationIndex, destinationRows.count))
-            destinationSection.rows = destinationRows
-        }
-
-        snapshot.deleteItems([sourceItem])
-        let remainingItems = destinationItems
-        if let anchorItem = remainingItems[safe: insertionIndex] {
-            snapshot.insertItems([sourceItem], beforeItem: anchorItem)
-        } else {
-            snapshot.appendItems([sourceItem], toSection: destinationSection)
-        }
-
-        layoutCache.removeAll()
-        heightCache.remove(forKey: HeightCacheKey(id: sourceItem.diffId, width: collectionView.bounds.width))
-        sourceSection.layoutVersion += 1
-        if !isSameSection {
-            destinationSection.layoutVersion += 1
-        }
-
-        if viewConfig.viewType == .WaterFall, waterFallLayout != nil {
-            clearWaterfallCache(section: sourceIndexPath.section)
-            clearWaterfallCache(section: destinationSectionIndex)
-        }
-
-        let finalIndexPath = coordinator.destinationIndexPath ?? IndexPath(item: destinationIndex, section: destinationSectionIndex)
-        let animated = !viewConfig.refreshWithoutAnimation
-        applySnapshot(snapshot, animatingDifferences: animated) { [weak self] in
-            guard let self else { return }
-            self.itemMoveTo?(collectionView, sourceIndexPath, finalIndexPath)
-        }
-
-        coordinator.drop(item.dragItem, toItemAt: finalIndexPath)
-    }
-}
-
-//MARK: For Photos
-extension PTCollectionView:UICollectionViewDataSourcePrefetching {
-    public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        let assets = photoAssets(for: indexPaths)
-        if !assets.isEmpty {
-            photoPrefetchCoordinator.prefetch(assets: assets,
-                                              targetSize: viewConfig.previewImageSize)
-        }
-    }
-        
-    public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
-        let assets = photoAssets(for: indexPaths)
-        if !assets.isEmpty {
-            photoPrefetchCoordinator.cancel(assets: assets,
-                                             targetSize: viewConfig.previewImageSize)
-        }
-    }
-}
-
-private extension PTCollectionView {
-    func photoAssets(for indexPaths: [IndexPath]) -> [PHAsset] {
-        guard let config = viewConfig,
-              config.viewForPhoto,
-              !photoAssets.isEmpty else { return [] }
-
-        let dataSource = diffableDataSource
-        let snapshot = dataSource?.snapshot()
-        var identifiers = Set<String>()
-
-        return indexPaths.compactMap { indexPath in
-            let fallbackIndex = indexPath.item
-            let snapshotIndex: Int?
-            if let dataSource,
-               let row = dataSource.itemIdentifier(for: indexPath) {
-                snapshotIndex = snapshot?.indexOfItem(row)
-            } else {
-                snapshotIndex = nil
-            }
-
-            let assetIndex = snapshotIndex ?? fallbackIndex
-            guard photoAssets.indices.contains(assetIndex) else { return nil }
-
-            let asset = photoAssets[assetIndex]
-            guard identifiers.insert(asset.localIdentifier).inserted else { return nil }
-            return asset
-        }
-    }
-}
-
-//MARK: 索引设置
-private extension PTCollectionView {
-    func setIndexViews() {
-        if let indexPanGesture {
-            indexContainerView.removeGestureRecognizer(indexPanGesture)
-            self.indexPanGesture = nil
-        }
-        stackView.arrangedSubviews.forEach { view in
-            stackView.removeArrangedSubview(view)
-            view.removeFromSuperview()
-        }
-        indicator.removeFromSuperview()
-        indexContainerView.removeFromSuperview()
-        guard viewConfig.sideIndexTitles?.isEmpty == false,
-              viewConfig.indexConfig != nil else { return }
-        
-        addSubviews([indexContainerView,indicator])
-        
-        indexContainerView.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(viewConfig.indexConfig?.indexContainerRightOffset ?? 0)
-            make.top.equalToSuperview().inset(viewConfig.indexConfig?.containerTopOffset ?? 0)
-            make.bottom.equalToSuperview().inset(viewConfig.indexConfig?.containerBottomOffset ?? 0)
-            make.width.equalTo(viewConfig.indexConfig?.itemSize.width ?? 20)
-        }
-        
-        setupIndexUI()
-        addIndexGesture()
-    }
-
-    private func addIndexGesture() {
-        let pan = UIPanGestureRecognizer { [weak self] sender in
-            guard let self = self, let gesture = sender as? UIPanGestureRecognizer else { return }
-            let point = gesture.location(in: self.stackView)
-            
-            for case let view as PTIndexItemView in self.stackView.arrangedSubviews {
-                if view.frame.contains(point) {
-                    self.selectIndex(view.index)
-                    break
-                }
-            }
-            
-            if gesture.state == .ended || gesture.state == .cancelled {
-                self.hideIndicator()
-            }
-        }
-        indexPanGesture = pan
-        indexContainerView.addGestureRecognizer(pan)
-    }
-        
-    private func selectIndex(_ index: Int) {
-        guard let config = viewConfig.indexConfig else { return }
-        
-        for case let view as PTIndexItemView in stackView.arrangedSubviews {
-            view.update(selected: view.index == index, config: config)
-        }
-        
-        showIndicator(at: index)
-        scrollToSection(index)
-    }
-    
-    private func scrollToSection(_ section: Int) {
-        let snapshot = diffableDataSource.snapshot()
-        guard section >= 0, section < snapshot.sectionIdentifiers.count else { return }
-        let sectionModel = snapshot.sectionIdentifiers[section]
-        guard !snapshot.itemIdentifiers(inSection: sectionModel).isEmpty else {
-            isTouched = false
-            return
-        }
-        let indexPath = IndexPath(item: 0, section: section)
-        collectionView.scrollToItem(at: indexPath, at: .top, animated: false)
-        isTouched = false
-    }
-    
-    private func showIndicator(at index: Int) {
-        guard let titles = viewConfig.sideIndexTitles,
-              index < titles.count,
-              let config = viewConfig.indexConfig else { return }
-        
-        bigTextLabel.text = titles[index]
-        setIndicatorCenter(t: index, config: config)
-    }
-
-    func setIndicatorCenter(t index: Int,config:PTCollectionIndexViewConfiguration,alpha:CGFloat = 1) {
-        for case let targetView as PTIndexItemView in stackView.arrangedSubviews {
-            if targetView.index == index {
-                let targetFrame = targetView.convert(targetView.bounds, to: self)
-                let centerY = targetFrame.midY
-                let indicatorX = bounds.width - indicator.bounds.width / 2 - (config.itemSize.width)
-                
-                UIView.animate(withDuration: PTUIAccessibility.animationDuration(0.15)) {
-                    self.indicator.center = CGPoint(x: indicatorX, y: centerY)
-                }
-                
-                indicator.alpha = alpha
-                break
-            }
-        }
-    }
-    
-    private func setupIndexUI() {
-        guard let titles = viewConfig.sideIndexTitles,
-              let config = viewConfig.indexConfig else { return }
-        
-        indexContainerView.addSubview(stackView)
-        
-        stackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        stackView.spacing = config.itemSpacing
-        
-        topSpacer.backgroundColor = .clear
-        bottomSpacer.backgroundColor = .clear
-
-        topSpacer.setContentHuggingPriority(.defaultLow, for: .vertical)
-        bottomSpacer.setContentHuggingPriority(.defaultLow, for: .vertical)
-
-        topSpacer.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-        bottomSpacer.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-        
-        stackView.addArrangedSubview(topSpacer)
-
-        for (i, title) in titles.enumerated() {
-            let label = PTIndexItemView()
-            label.index = i
-            label.text = title
-            label.textAlignment = .center
-            PTUIAccessibility.applyDynamicType(to: label, font: config.indexViewFont)
-            label.layer.cornerRadius = config.itemSize.height / 2
-            label.clipsToBounds = true
-            label.isUserInteractionEnabled = true
-            label.snp.makeConstraints { make in
-                make.size.equalTo(config.itemSize)
-            }
-            
-            let tap = UITapGestureRecognizer { [weak self] sender in
-                guard let self = self else { return }
-                self.isTouched = true
-                self.selectIndex(label.index)
-            }
-            label.addGestureRecognizer(tap)
-            stackView.addArrangedSubview(label)
-        }
-        
-        stackView.addArrangedSubview(bottomSpacer)
-
-        setIndicatorCenter(t: 0, config: config,alpha: 0)
     }
 }
 
@@ -1166,7 +513,7 @@ extension PTCollectionView {
         return indexPaths.min()?.section
     }
     
-    private func throttleScrollUpdate() {
+    func throttleScrollUpdate() {
         guard isTouched == false else { return }
         
         // 取消之前的任务
@@ -1204,47 +551,6 @@ extension PTCollectionView {
         let height = calculator(indexPath.section, model)
         heightCache.set(NSNumber(floatLiteral: height), forKey: key)
         return height
-    }
-}
-
-//MARK: Cell 相关
-extension PTCollectionView  {
-    private func autoRegisterIfNeeded(sections: [PTSection]) {
-        for section in sections {
-            if let headerClass = section.headerClass as? PTSupplementaryRegisterable.Type {
-                registerSupplementaryIfNeeded(headerClass, reuseID: section.headerReuseID)
-            }
-            if let footerClass = section.footerClass as? PTSupplementaryRegisterable.Type {
-                registerSupplementaryIfNeeded(footerClass, reuseID: section.footerReuseID)
-            }
-            section.rows?.forEach { row in
-                if let cellClass = row.cellClass, !row.reuseID.isEmpty {
-                    registerCellIfNeeded(cellClass, reuseID: row.reuseID)
-                }
-            }
-        }
-    }
-    
-    private func registerCellIfNeeded(_ cellClass: UICollectionViewCell.Type, reuseID: String) {
-        guard !reuseID.isEmpty else { return }
-        guard !registeredCells.contains(reuseID) else { return }
-        collectionView.register(cellClass, forCellWithReuseIdentifier: reuseID)
-        registeredCells.insert(reuseID)
-    }
-    
-    // English: Register the section's effective identifier so custom header and footer IDs can be dequeued safely.
-    // Español: Registra el identificador efectivo de cada sección para poder reutilizar de forma segura headers y footers personalizados.
-    // 中文：使用 Section 的实际复用标识注册视图，确保自定义 header/footer ID 能够安全出队。
-    private func registerSupplementaryIfNeeded(_ viewClass: PTSupplementaryRegisterable.Type,
-                                               reuseID: String? = nil) {
-        let resolvedReuseID = (reuseID?.isEmpty == false ? reuseID : nil) ?? viewClass.reuseID
-        let registrationKey = "\(viewClass.kind)|\(resolvedReuseID)"
-        guard !resolvedReuseID.isEmpty, !registeredSupplementary.contains(registrationKey),
-              let reusableViewClass = viewClass as? UICollectionReusableView.Type else { return }
-        collectionView.register(reusableViewClass,
-                                forSupplementaryViewOfKind: viewClass.kind,
-                                withReuseIdentifier: resolvedReuseID)
-        registeredSupplementary.insert(registrationKey)
     }
 }
 
@@ -1906,7 +1212,7 @@ extension PTCollectionView {
         return (items, result.contentHeight)
     }
     
-    private func clearWaterfallCache(section: Int) {
+    func clearWaterfallCache(section: Int) {
         // 🌟 修复提升：原地过滤移除优化
         waterfallCache = waterfallCache.filter { $0.key.section != section }
     }

@@ -167,9 +167,16 @@ public enum PTModelFoundationCodec {
         // English: Prefer the static schema for nested PTModel values so aliases and annotations survive stringification.
         // Español: Prioriza el esquema estático para valores PTModel anidados y conserva alias y anotaciones.
         // 中文：字符串化的嵌套 PTModel 优先使用静态 Schema，确保别名和注解不会丢失。
-        if let staticType = type as? any PTStaticDecodableType.Type,
-           let decoded = try staticType.ptDecodeErased(from: Data(string.utf8), using: decoder) as? T {
-            return decoded
+        if let staticType = type as? any PTStaticDecodableType.Type {
+            do {
+                if let decoded = try staticType.ptDecodeErased(from: Data(string.utf8), using: decoder) as? T {
+                    return decoded
+                }
+            } catch {
+                // English: Fall back to the regular decoder when a type-erased static schema cannot decode the value.
+                // Español: Usa el decoder normal cuando el esquema estático borrado no puede decodificar el valor.
+                // 中文：类型擦除的静态 Schema 无法解码时，回退到普通 decoder。
+            }
         }
         return try decoder.decode(type, from: string)
     }

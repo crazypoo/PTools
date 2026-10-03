@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "generated_at": "2026-10-03T05:18:13Z",
+  "source_revision": "df42327494874fb628d8be8ca9428a01ec818ae6",
+  "generated_at": "2026-10-03T10:20:41Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -1695,11 +1695,8 @@
           },
           "productFilter": null,
           "requirement": {
-            "range": [
-              {
-                "lowerBound": "3.0.1",
-                "upperBound": "4.0.0"
-              }
+            "exact": [
+              "3.0.0"
             ]
           },
           "traits": [
@@ -1773,8 +1770,8 @@
           },
           "productFilter": null,
           "requirement": {
-            "exact": [
-              "1.1.0"
+            "revision": [
+              "64ef17d978700cbe5d1168be7e57561a4459feee"
             ]
           },
           "traits": [
@@ -3570,12 +3567,42 @@
       ]
     },
     {
-      "name": "PToolsFontTests",
+      "name": "PToolsFontCatalogCore",
+      "type": "regular",
+      "path": "PooToolsSource",
+      "sources": [
+        "Font/FontName.swift",
+        "Font/Generated/PTFontCatalog.generated.swift",
+        "Font/Generated/PTFontCompatibility.generated.swift",
+        "Font/PTFontCatalog.swift",
+        "PToolsFontCore/PTFontMetadata.swift"
+      ],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
+      "name": "PToolsFontRuntimeTests",
       "type": "test",
       "path": "Tests/PToolsFontTests",
-      "sources": [],
+      "sources": [
+        "PTFontRuntimeTests.swift"
+      ],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsFontCatalogCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsFontCatalogCore",
+              null
+            ]
+          }
+        },
         {
           "name": "ptools",
           "kind": "internal",
@@ -3583,6 +3610,33 @@
           "declaration": {
             "byName": [
               "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
+      "name": "PToolsFontTests",
+      "type": "test",
+      "path": "Tests/PToolsFontTests",
+      "sources": [
+        "PTFontCatalogTests.swift",
+        "PTFontCompatibilityTests.swift",
+        "PTFontGeneratedConsistencyTests.swift"
+      ],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsFontCatalogCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsFontCatalogCore",
               null
             ]
           }
@@ -4228,10 +4282,72 @@
       "swift_settings": []
     },
     {
-      "name": "PToolsNetworkTests",
+      "name": "PToolsNetworkModelCore",
+      "type": "regular",
+      "path": "PooToolsSource",
+      "sources": [
+        "NetWork/PTNetworkModelBridge.swift",
+        "NetWork/PTNetworkResponseSelection.swift",
+        "NetWorkModelCore/PTNetworkResponseSnapshot.swift"
+      ],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsModelCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsModelCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsModelLegacyKakaJSON",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsModelLegacyKakaJSON",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsModelLegacySmartCodable",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsModelLegacySmartCodable",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
+      "name": "PToolsNetworkRuntimeTests",
       "type": "test",
       "path": "Tests/PToolsNetworkTests",
-      "sources": [],
+      "sources": [
+        "PTNetworkQualityTests.swift"
+      ],
       "resources": [],
       "internal_dependencies": [
         {
@@ -4270,6 +4386,42 @@
           }
         }
       ],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
+      "name": "PToolsNetworkTests",
+      "type": "test",
+      "path": "Tests/PToolsNetworkTests",
+      "sources": [
+        "PTNetworkModelPathTests.swift"
+      ],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsModelCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsModelCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsNetworkModelCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsNetworkModelCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": []
     },
@@ -7154,7 +7306,19 @@
       "name": "PooToolsNetWork",
       "type": "regular",
       "path": "PooToolsSource/NetWork",
-      "sources": [],
+      "sources": [
+        "Network+Download.swift",
+        "Network+LegacyCompatibility.swift",
+        "Network+Logging.swift",
+        "Network+RequestPipeline.swift",
+        "Network+TypedRequest.swift",
+        "Network.swift",
+        "NetworkMetrics.swift",
+        "NetworkSupport.swift",
+        "NetworkTypes.swift",
+        "NetworkUploads.swift",
+        "PTNetworkArchitecture.swift"
+      ],
       "resources": [],
       "internal_dependencies": [
         {
@@ -7197,6 +7361,17 @@
           "declaration": {
             "byName": [
               "PToolsModelLegacySmartCodable",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsNetworkModelCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsNetworkModelCore",
               null
             ]
           }
@@ -8906,7 +9081,9 @@
         "Core",
         "DarkMode",
         "FloatPanel",
-        "Font",
+        "Font/PTFont.swift",
+        "Font/PTFontDescriptor.swift",
+        "Font/PTFontRuntime.swift",
         "Foundation",
         "Language",
         "Line",
@@ -8958,6 +9135,17 @@
           "declaration": {
             "byName": [
               "PToolsDevice",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsFontCatalogCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsFontCatalogCore",
               null
             ]
           }
@@ -9141,13 +9329,5 @@
         }
       ]
     }
-  ],
-  "schemaVersion": 1,
-  "generatedAt": "2026-10-03T05:18:13Z",
-  "repository": "crazypoo/PTools",
-  "branch": "master",
-  "sourceRevision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "sourceVersion": "5.60.0",
-  "generatorVersion": "Scripts/report_spm_dependency_graph.rb",
-  "sourceInputsDigest": "eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3"
+  ]
 }

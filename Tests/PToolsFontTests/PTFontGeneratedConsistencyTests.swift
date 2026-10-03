@@ -3,7 +3,7 @@
 // 中文：将生成目录不变量与 Runtime 可用性测试分离。
 
 import XCTest
-@testable import ptools
+@testable import PToolsFontCatalogCore
 
 @MainActor
 final class PTFontGeneratedConsistencyTests: XCTestCase {

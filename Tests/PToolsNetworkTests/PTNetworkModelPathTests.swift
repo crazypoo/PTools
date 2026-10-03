@@ -7,7 +7,7 @@
 import Foundation
 import XCTest
 import PToolsModelCore
-@testable import PooToolsNetWork
+import PToolsNetworkModelCore
 
 private struct PTNetworkPathUserFixture: Codable, Sendable, Equatable {
     let id: Int

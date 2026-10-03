@@ -1,14 +1,10 @@
 <!--
-Current report metadata.
 AUTO-GENERATED FILE.
-Repository: crazypoo/PTools
-Branch: master
-Source revision: b6875bfcbb5b503f145e05d8bcc101c196cc316e
-Source version: 5.60.0
-Source inputs digest: eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3
-Generator version: 1
+DO NOT EDIT MANUALLY.
+
 Generator: Scripts/report_cache_inventory.rb
-Generated at: 2026-10-03T05:18:13Z
+Source revision: df42327494874fb628d8be8ca9428a01ec818ae6
+Generated at: 2026-10-03T10:21:08Z
 -->
 
 # PTools 当前缓存盘点
@@ -26,21 +22,21 @@ Generated at: 2026-10-03T05:18:13Z
 | PooToolsSource/Base/PTAudioCache.swift:260 | disk or custom cache | /// 获取音频时长（一定基于 cache 文件） |
 | PooToolsSource/Base/PTAudioCache.swift:300 | disk or custom cache | /// 创建播放用 PlayerItem（只用 cache 文件） |
 | PooToolsSource/Base/PTBaseDecorationFunction.swift:16 | disk or custom cache | // English: Cache the shadow geometry to avoid rebuilding the path on every layout pass. |
-| PooToolsSource/Base/PTCollectionView.swift:1200 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
-| PooToolsSource/Base/PTCollectionView.swift:1201 | disk or custom cache | return cache.doubleValue |
-| PooToolsSource/Base/PTCollectionView.swift:1791 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
-| PooToolsSource/Base/PTCollectionView.swift:1792 | disk or custom cache | return cache |
-| PooToolsSource/Base/PTCollectionView.swift:1885 | disk or custom cache | if let cache = waterfallCache[key] { |
-| PooToolsSource/Base/PTCollectionView.swift:1886 | disk or custom cache | return (cache.items, cache.contentHeight) |
+| PooToolsSource/Base/PTCollectionView.swift:547 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
+| PooToolsSource/Base/PTCollectionView.swift:548 | disk or custom cache | return cache.doubleValue |
+| PooToolsSource/Base/PTCollectionView.swift:1097 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
+| PooToolsSource/Base/PTCollectionView.swift:1098 | disk or custom cache | return cache |
+| PooToolsSource/Base/PTCollectionView.swift:1191 | disk or custom cache | if let cache = waterfallCache[key] { |
+| PooToolsSource/Base/PTCollectionView.swift:1192 | disk or custom cache | return (cache.items, cache.contentHeight) |
 | PooToolsSource/Base/PTCollectionViewLayoutSupport.swift:5 | disk or custom cache | //  English: Keep pure layout cache keys outside the collection-view facade. |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:11 | disk or custom cache | // English: Keep the reusable cache type separate from PTCollectionView's facade and layout code. |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:16 | NSCache | private let cache = NSCache<WrappedKey, Value>() |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:19 | disk or custom cache | cache.countLimit = max(0, countLimit) |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:23 | disk or custom cache | cache.setObject(value, forKey: WrappedKey(key)) |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:27 | disk or custom cache | cache.object(forKey: WrappedKey(key)) |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:31 | disk or custom cache | cache.removeObject(forKey: WrappedKey(key)) |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:35 | disk or custom cache | cache.removeAllObjects() |
-| PooToolsSource/Base/PTCollectionViewTypes.swift:455 | disk or custom cache | // English: Own list layout caches outside PTCollectionView so cache policy can evolve independently. |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:10 | disk or custom cache | // English: Keep the reusable cache type separate from PTCollectionView's facade and layout code. |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:15 | NSCache | private let cache = NSCache<WrappedKey, Value>() |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:18 | disk or custom cache | cache.countLimit = max(0, countLimit) |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:22 | disk or custom cache | cache.setObject(value, forKey: WrappedKey(key)) |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:26 | disk or custom cache | cache.object(forKey: WrappedKey(key)) |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:30 | disk or custom cache | cache.removeObject(forKey: WrappedKey(key)) |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:34 | disk or custom cache | cache.removeAllObjects() |
+| PooToolsSource/Base/PTCollectionViewTypes.swift:308 | disk or custom cache | // English: Own list layout caches outside PTCollectionView so cache policy can evolve independently. |
 | PooToolsSource/Base/PTVideoCoverCache.swift:111 | disk or custom cache | // English: A shared actor prevents concurrent callers from writing the same video cache file. |
 | PooToolsSource/Base/PTVideoCoverCache.swift:177 | disk or custom cache | /// Video file cache manager. |
 | PooToolsSource/Base/PTVideoCoverCache.swift:260 | disk or custom cache | /// Video cover cache and thumbnail request coordinator. |
@@ -115,29 +111,29 @@ Generated at: 2026-10-03T05:18:13Z
 | PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1426 | disk or custom cache | cache.totalCostLimit = filterCachePolicy.costLimit |
 | PooToolsSource/ImageEditor/PTEditImageToolEngine.swift:1427 | disk or custom cache | return cache |
 | PooToolsSource/KingfisherSVG/Kingfisher+SVG.swift:17 | disk or custom cache | // It will be used when storing and retrieving the image to/from cache. |
-| PooToolsSource/NetWork/Network.swift:62 | disk or custom cache | case cache(String) |
-| PooToolsSource/NetWork/Network.swift:90 | disk or custom cache | case .cache(let message): return "PT Network cache failed: \(message)" |
-| PooToolsSource/NetWork/Network.swift:117 | disk or custom cache | case .cache: return 9999999912 |
-| PooToolsSource/NetWork/Network.swift:282 | URLCache | urlConfiguration.urlCache = URLCache(memoryCapacity: configurationSnapshot.memoryCapacity, |
-| PooToolsSource/NetWork/Network.swift:604 | disk or custom cache | throw PTNetworkError.cache("cacheOnly 没有可用缓存 / cacheOnly has no usable entry / cacheOnly no tiene una entrada utilizable") |
+| PooToolsSource/NetWork/Network.swift:65 | disk or custom cache | case cache(String) |
+| PooToolsSource/NetWork/Network.swift:93 | disk or custom cache | case .cache(let message): return "PT Network cache failed: \(message)" |
+| PooToolsSource/NetWork/Network.swift:120 | disk or custom cache | case .cache: return 9999999912 |
+| PooToolsSource/NetWork/Network.swift:285 | URLCache | urlConfiguration.urlCache = URLCache(memoryCapacity: configurationSnapshot.memoryCapacity, |
+| PooToolsSource/NetWork/Network.swift:523 | disk or custom cache | throw PTNetworkError.cache("cacheOnly 没有可用缓存 / cacheOnly has no usable entry / cacheOnly no tiene una entrada utilizable") |
 | PooToolsSource/NetWork/NetworkSupport.swift:1 | disk or custom cache | // English: Keep retry, cache, reachability, and upload support outside the Network facade. |
-| PooToolsSource/NetWork/NetworkSupport.swift:242 | disk or custom cache | // English: A cache entry carries validators and freshness without exposing URLSession objects. |
-| PooToolsSource/NetWork/NetworkSupport.swift:262 | NSCache | private let memoryCache = NSCache<NSString, NSData>() |
-| PooToolsSource/NetWork/NetworkSupport.swift:271 | disk or custom cache | // English: Bound the in-memory cache so a large response cannot grow without limit. |
-| PooToolsSource/NetWork/NetworkSupport.swift:291 | disk or custom cache | "pt-cache-miss", |
-| PooToolsSource/NetWork/NetworkSupport.swift:301 | disk or custom cache | // English: Cache-control and revalidation headers must not change the resource identity. |
-| PooToolsSource/NetWork/NetworkSupport.swift:394 | disk or custom cache | // English: Accept a caller-owned configuration so cache maintenance does not read Network.share. |
-| PooToolsSource/NetWork/NetworkSupport.swift:441 | disk or custom cache | // English: Keep JSON and file operations off the cache actor while the actor owns only cache state. |
-| PooToolsSource/NetWork/NetworkSupport.swift:450 | disk or custom cache | // English: Decode cache metadata on a utility executor before updating actor-owned memory state. |
-| PooToolsSource/NetWork/NetworkSupport.swift:459 | disk or custom cache | // English: Read cache files without occupying the actor executor with synchronous file I/O. |
-| PooToolsSource/NetWork/NetworkSupport.swift:468 | disk or custom cache | // English: Persist cache data on a background executor and keep the actor responsive. |
-| PooToolsSource/NetWork/NetworkSupport.swift:503 | disk or custom cache | get { value(forHTTPHeaderField: "PT-Cache-Miss") == "true" } |
-| PooToolsSource/NetWork/NetworkSupport.swift:504 | disk or custom cache | set { setValue(newValue ? "true" : "false", forHTTPHeaderField: "PT-Cache-Miss") } |
-| PooToolsSource/NetWork/NetworkSupport.swift:525 | disk or custom cache | // English: Expose the default cache adapter so the public Network initializer can use it safely. |
-| PooToolsSource/NetWork/NetworkSupport.swift:551 | disk or custom cache | if request.cachePolicyType == .networkElseCache, let cache = await NetworkCache.shared.read(request: request) { |
-| PooToolsSource/NetWork/NetworkSupport.swift:552 | disk or custom cache | NotificationCenter.default.post(name: NSNotification.Name("PTNetworkCacheFallback"), object: cache) |
-| PooToolsSource/NetWork/NetworkSupport.swift:558 | disk or custom cache | if response?.value(forHTTPHeaderField: "Cache-Control")?.lowercased().contains("no-store") == true { return } |
-| PooToolsSource/NetWork/NetworkSupport.swift:584 | disk or custom cache | guard let cacheControl = response?.value(forHTTPHeaderField: "Cache-Control") else { return fallback } |
+| PooToolsSource/NetWork/NetworkSupport.swift:245 | disk or custom cache | // English: A cache entry carries validators and freshness without exposing URLSession objects. |
+| PooToolsSource/NetWork/NetworkSupport.swift:265 | NSCache | private let memoryCache = NSCache<NSString, NSData>() |
+| PooToolsSource/NetWork/NetworkSupport.swift:274 | disk or custom cache | // English: Bound the in-memory cache so a large response cannot grow without limit. |
+| PooToolsSource/NetWork/NetworkSupport.swift:294 | disk or custom cache | "pt-cache-miss", |
+| PooToolsSource/NetWork/NetworkSupport.swift:304 | disk or custom cache | // English: Cache-control and revalidation headers must not change the resource identity. |
+| PooToolsSource/NetWork/NetworkSupport.swift:397 | disk or custom cache | // English: Accept a caller-owned configuration so cache maintenance does not read Network.share. |
+| PooToolsSource/NetWork/NetworkSupport.swift:444 | disk or custom cache | // English: Keep JSON and file operations off the cache actor while the actor owns only cache state. |
+| PooToolsSource/NetWork/NetworkSupport.swift:453 | disk or custom cache | // English: Decode cache metadata on a utility executor before updating actor-owned memory state. |
+| PooToolsSource/NetWork/NetworkSupport.swift:462 | disk or custom cache | // English: Read cache files without occupying the actor executor with synchronous file I/O. |
+| PooToolsSource/NetWork/NetworkSupport.swift:471 | disk or custom cache | // English: Persist cache data on a background executor and keep the actor responsive. |
+| PooToolsSource/NetWork/NetworkSupport.swift:506 | disk or custom cache | get { value(forHTTPHeaderField: "PT-Cache-Miss") == "true" } |
+| PooToolsSource/NetWork/NetworkSupport.swift:507 | disk or custom cache | set { setValue(newValue ? "true" : "false", forHTTPHeaderField: "PT-Cache-Miss") } |
+| PooToolsSource/NetWork/NetworkSupport.swift:528 | disk or custom cache | // English: Expose the default cache adapter so the public Network initializer can use it safely. |
+| PooToolsSource/NetWork/NetworkSupport.swift:554 | disk or custom cache | if request.cachePolicyType == .networkElseCache, let cache = await NetworkCache.shared.read(request: request) { |
+| PooToolsSource/NetWork/NetworkSupport.swift:555 | disk or custom cache | NotificationCenter.default.post(name: NSNotification.Name("PTNetworkCacheFallback"), object: cache) |
+| PooToolsSource/NetWork/NetworkSupport.swift:561 | disk or custom cache | if response?.value(forHTTPHeaderField: "Cache-Control")?.lowercased().contains("no-store") == true { return } |
+| PooToolsSource/NetWork/NetworkSupport.swift:587 | disk or custom cache | guard let cacheControl = response?.value(forHTTPHeaderField: "Cache-Control") else { return fallback } |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:158 | disk or custom cache | // MARK: - Cache Public |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:164 | disk or custom cache | // English: PDF rendering cache limits follow the repository cache contract. |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:216 | disk or custom cache | // MARK: - Cache Private |
@@ -158,9 +154,11 @@ Generated at: 2026-10-03T05:18:13Z
 | PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:45 | disk or custom cache | if let logger = cache[key] { |
 | PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift:49 | disk or custom cache | cache[key] = logger |
 | PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift:187 | disk or custom cache | // English: Cache access is asynchronous and value-based, preventing feature modules from sharing mutable caches. |
-| PooToolsSource/PToolsUIFoundation/PTRichText.swift:406 | disk or custom cache | // English: This compatibility boundary is only for immutable matcher reuse; every cache access is serialized by the lock. |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift:14 | NSCache | private let regexCache = NSCache<NSString, NSRegularExpression>() |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift:15 | NSCache | private let detectorCache = NSCache<NSNumber, NSDataDetector>() |
+| PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift:21 | disk or custom cache | // English: This compatibility boundary is only for immutable matcher reuse; every cache access is serialized by the lock. |
+| PooToolsSource/PToolsUIFoundation/PTRichTextCache.swift:1 | disk or custom cache | // English: Lock-protected Foundation matcher cache shared by rich-text value operations. |
+| PooToolsSource/PToolsUIFoundation/PTRichTextCache.swift:9 | NSCache | private let regexCache = NSCache<NSString, NSRegularExpression>() |
+| PooToolsSource/PToolsUIFoundation/PTRichTextCache.swift:10 | NSCache | private let detectorCache = NSCache<NSNumber, NSDataDetector>() |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift:1 | disk or custom cache | // English: Rich-text match rules and conflict policies remain value-only and independent from caching. |
 | PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:691 | NSCache | private let imageCache = NSCache<NSString, UIImage>() |
 | PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:692 | NSCache | private let posterCache = NSCache<NSString, UIImage>() |
 | PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:869 | disk or custom cache | // English: The poster renderer uses the bounded rich-text cache contract. |
@@ -177,8 +175,9 @@ Generated at: 2026-10-03T05:18:13Z
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:682 | disk or custom cache | PTNSLogConsole("Video cache export failed: \(String(describing: error))") |
 | PooToolsSource/Router/PTRouterServiceManager.swift:159 | disk or custom cache | // MARK: - Service Clean Cache |
 | PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift:63 | disk or custom cache | /// English: Refreshes the native item cache; old callers can then call apply(to:). |
-| PooToolsSource/SegmentControl/PTPaging.swift:50 | disk or custom cache | /// English: A lazy, stable-ID horizontal page container that owns page lifecycle and cache policy. |
-| PooToolsSource/SegmentControl/PTPaging.swift:250 | disk or custom cache | /// English: Returns whether a page is currently held by the container cache. |
+| PooToolsSource/SegmentControl/PTPageContainer.swift:1 | disk or custom cache | // English: Owns loaded page views, lifecycle callbacks and stable-ID cache policy. |
+| PooToolsSource/SegmentControl/PTPageContainer.swift:19 | disk or custom cache | /// English: A lazy, stable-ID horizontal page container that owns page lifecycle and cache policy. |
+| PooToolsSource/SegmentControl/PTPageContainer.swift:219 | disk or custom cache | /// English: Returns whether a page is currently held by the container cache. |
 | PooToolsSource/SegmentControl/PTSegmentedTypes.swift:606 | disk or custom cache | /// English: Cache policy for lazy pages. |
 | PooToolsSource/SideMenuControl/PTSideMenuControl.swift:758 | disk or custom cache | open func cache(viewControllerGenerator: @escaping () -> UIViewController?, with identifier: String) { |
 | PooToolsSource/SideMenuControl/PTSideMenuControl.swift:762 | disk or custom cache | open func cache(viewController: UIViewController, with identifier: String) { |

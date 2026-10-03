@@ -1,26 +1,16 @@
 //
 //  PTFont.swift
 //
-// English: Immutable font metadata stays Sendable; UIKit construction remains on MainActor.
-// Español: Los metadatos inmutables de fuente son Sendable; la construcción UIKit queda en MainActor.
-// 中文：不可变字体元数据保持 Sendable，UIKit 字体构造固定在 MainActor。
+// English: UIKit construction remains on MainActor; immutable metadata lives in the Foundation-only font target.
+// Español: La construcción UIKit permanece en MainActor; los metadatos inmutables viven en el target de fuentes basado en Foundation.
+// 中文：UIKit 字体构造固定在 MainActor，不可变元数据由 Foundation-only 字体 target 提供。
 //
 
 import UIKit
 
-public struct PTFont: Hashable, Sendable, Codable {
-    public let postScriptName: String
-    public let familyName: String
-    public let introducedIOS: String?
-
-    public init(postScriptName: String,
-                familyName: String,
-                introducedIOS: String? = nil) {
-        self.postScriptName = postScriptName
-        self.familyName = familyName
-        self.introducedIOS = introducedIOS
-    }
-}
+#if SWIFT_PACKAGE
+import PToolsFontCatalogCore
+#endif
 
 public extension PTFont {
     @MainActor
@@ -33,4 +23,3 @@ public extension PTFont {
         uiFont(size: size) != nil
     }
 }
-

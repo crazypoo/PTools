@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_mainactor_heavy_work.rb",
-  "source_revision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "generated_at": "2026-10-03T05:18:13Z",
+  "source_revision": "df42327494874fb628d8be8ca9428a01ec818ae6",
+  "generated_at": "2026-10-03T10:21:08Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
@@ -167,111 +167,89 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 448,
+      "line": 451,
       "operation": "JSONDecoder",
       "classification": "INTENTIONAL",
       "text": "if let statusModel = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) {"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 707,
+      "line": 626,
       "operation": "JSONDecoder",
       "classification": "INTENTIONAL",
       "text": "let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {"
     },
     {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 810,
-      "operation": "JSONSerialization",
-      "classification": "INTENTIONAL",
-      "text": "if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }"
-    },
-    {
-      "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 856,
-      "operation": "JSONSerialization",
-      "classification": "INTENTIONAL",
-      "text": "if let jsonObject = try? JSONSerialization.jsonObject(with: body, options: []), let dictionary = jsonObject as? [String: any Any & Sendable] { dic = dictionary }"
-    },
-    {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 268,
+      "line": 271,
       "operation": "FileManager.default",
       "classification": "MIGRATED",
       "text": "?? FileManager.default.temporaryDirectory.path"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 270,
+      "line": 273,
       "operation": "FileManager.default",
       "classification": "MIGRATED",
       "text": "try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 376,
+      "line": 379,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "try? FileManager.default.removeItem(atPath: path)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 383,
+      "line": 386,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "try? FileManager.default.removeItem(atPath: diskPath)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 384,
+      "line": 387,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 414,
+      "line": 417,
       "operation": "FileManager.default",
       "classification": "MIGRATED",
       "text": "let fm = FileManager.default"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 446,
+      "line": 449,
       "operation": "JSONEncoder",
       "classification": "MIGRATED",
       "text": "try? JSONEncoder().encode(object)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 455,
+      "line": 458,
       "operation": "JSONDecoder",
       "classification": "MIGRATED",
       "text": "try? JSONDecoder().decode(CacheObject.self, from: data)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 464,
+      "line": 467,
       "operation": "Data\\(contentsOf:",
       "classification": "MIGRATED",
       "text": "try? Data(contentsOf: URL(fileURLWithPath: path))"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 474,
+      "line": 477,
       "operation": "FileManager.default",
       "classification": "MIGRATED",
       "text": "try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)"
     }
   ],
   "review_required_count": 0,
-  "background_or_actor_count": 11,
-  "schemaVersion": 1,
-  "generatedAt": "2026-10-03T05:18:13Z",
-  "repository": "crazypoo/PTools",
-  "branch": "master",
-  "sourceRevision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "sourceVersion": "5.60.0",
-  "generatorVersion": "Scripts/report_mainactor_heavy_work.rb",
-  "sourceInputsDigest": "eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3"
+  "background_or_actor_count": 11
 }

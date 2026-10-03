@@ -5,6 +5,11 @@
 
 import UIKit
 @preconcurrency import Alamofire
+#if SWIFT_PACKAGE
+import PToolsCore
+import PToolsModelLegacyKakaJSON
+import PToolsNetworkModelCore
+#endif
 
 extension Network {
     // KakaJSON metatypes are immutable lookup tokens kept only by the legacy adapter.

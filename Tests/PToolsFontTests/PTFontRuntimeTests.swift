@@ -4,6 +4,7 @@
 
 import XCTest
 @testable import ptools
+@testable import PToolsFontCatalogCore
 
 @MainActor
 final class PTFontRuntimeTests: XCTestCase {

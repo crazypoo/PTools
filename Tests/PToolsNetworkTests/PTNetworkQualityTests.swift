@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 import Alamofire
 import PToolsCore
+import PToolsNetworkModelCore
 @testable import PooToolsNetWork
 
 // English: This test-only URLProtocol wrapper crosses GCD's callback boundary and owns no production state.

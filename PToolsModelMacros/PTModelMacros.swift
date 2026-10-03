@@ -367,7 +367,7 @@ enum PTMacroSourceBuilder {
             } else if field.required || !isOptional {
                 decodedValue = "try decoder.decodeRaw(\(decodeTypeName).self, from: raw)"
             } else {
-                decodedValue = "try decoder.decodeRaw(\(decodeTypeName).self, from: raw)"
+                decodedValue = "try decoder.decodeRawOptional(\(decodeTypeName).self, from: raw)"
             }
             if let defaultExpression = field.defaultExpression {
                 return "let \(field.name): \(field.typeName) = if let raw = \(source) { \(decodedValue) } else { \(defaultExpression) }"
@@ -442,6 +442,8 @@ enum PTMacroSourceBuilder {
         """ : ""
         return DeclSyntax(stringLiteral: """
         \(directPathFlag)
+
+        \(accessPrefix)static var ptDecodeUsesStaticPath: Bool { true }
 
         \(accessPrefix)static var ptSchemaPrecedence: PTStaticSchemaPrecedence { .staticBeforeCodable }
 

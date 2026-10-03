@@ -404,17 +404,6 @@
       "removeIn": null
     },
     {
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift",
-      "symbol": "PTTextMatcherCache",
-      "category": "LOCK_PROTECTED",
-      "systemType": "Reference type with shared transport, cache, socket or speech state",
-      "reason": "Audited compatibility boundary for PTTextMatcherCache; mutable state is not treated as implicitly safe.",
-      "protection": "Every mutable field crossing an isolation boundary is accessed through the type's lock or serial queue.",
-      "owner": "PToolsUIFoundation",
-      "replacementPlan": "Move shared state to an actor or an immutable instance configuration during the 5.x migration window.",
-      "removeIn": "6.0.0"
-    },
-    {
       "path": "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
       "symbol": "PTFetchImageOperation",
       "category": "SYSTEM_WRAPPER",
@@ -523,6 +512,17 @@
       "owner": "VideoEditor",
       "replacementPlan": "Replace the wrapper with a framework snapshot or actor-backed adapter when the minimum deployment and SDK APIs allow it.",
       "removeIn": null
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextCache.swift",
+      "symbol": "PTTextMatcherCache",
+      "category": "LOCK_PROTECTED",
+      "systemType": "Reference type with shared transport, cache, socket or speech state",
+      "reason": "The Foundation matcher cache is shared by Sendable PTRichText values; NSLock protects both NSCache instances and keeps access synchronous for the existing value API.",
+      "protection": "Every cache read, compilation and insertion occurs while the single NSLock is held; the cache contains immutable matcher objects after construction.",
+      "owner": "PToolsUIFoundation",
+      "replacementPlan": "Replace the synchronous lock-protected cache with an actor-backed or framework-safe snapshot cache when PTRichText matching APIs can become asynchronous.",
+      "removeIn": "6.0.0"
     },
     {
       "path": "PooToolsSource/Vision/PTVision.swift",

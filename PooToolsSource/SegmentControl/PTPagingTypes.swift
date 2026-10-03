@@ -48,30 +48,6 @@ public struct PTPagingPinnedHeader {
     }
 }
 
-/// English: Single layout calculation point for safe-area-aware paging geometry.
-/// Español: Punto único de cálculo para la geometría de paginación consciente del área segura.
-/// 中文：集中计算安全区相关分页几何尺寸。
-@MainActor
-public struct PTPagingLayoutEngine {
-    public var safeAreaTop: CGFloat
-    public var headerHeight: CGFloat
-    public var pinnedHeight: CGFloat
-    public var pageHeight: CGFloat
-
-    public init(safeAreaTop: CGFloat = 0,
-                headerHeight: CGFloat = 0,
-                pinnedHeight: CGFloat = 0,
-                pageHeight: CGFloat = 0) {
-        self.safeAreaTop = safeAreaTop
-        self.headerHeight = headerHeight
-        self.pinnedHeight = pinnedHeight
-        self.pageHeight = pageHeight
-    }
-
-    public var contentHeight: CGFloat { headerHeight + pinnedHeight + pageHeight }
-    public var collapseLimit: CGFloat { max(0, headerHeight) }
-}
-
 /// English: Scroll ownership states used to prevent outer and inner scroll views fighting each other.
 /// Español: Estados de propiedad usados para evitar conflictos entre scroll externo e interno.
 /// 中文：防止外层和内层滚动互相抢占的滚动所有权状态。

@@ -162,7 +162,7 @@ public class PTCustomerAlertController: PTAlertController {
 
     /// Body 的最小视觉高度。
     /// 注意这不是“文字高度”，只是 Alert 的视觉底座。
-    private var bodyHeaderMinimumHeightConstraint: Constraint?
+    var bodyHeaderMinimumHeightConstraint: Constraint?
 
     private var compactActionHeightConstraint: Constraint?
     private var actionViewportHeightConstraint: Constraint?
@@ -172,7 +172,7 @@ public class PTCustomerAlertController: PTAlertController {
     private var compactActionLayout: PTCustomerAlertCompactActionLayout = .horizontal
     private let actionCoordinator = PTCustomerAlertActionCoordinator()
 
-    private var traitChangeRegistration: (any UITraitChangeRegistration)?
+    var traitChangeRegistration: (any UITraitChangeRegistration)?
 
     // MARK: Content Views
 
@@ -215,7 +215,7 @@ public class PTCustomerAlertController: PTAlertController {
     /// 这里负责两件事：
     /// 1. 自适应真实内容高度；
     /// 2. 内容过短时提供最小视觉高度。
-    private let bodyHeaderView: UIView = {
+    let bodyHeaderView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         return view
@@ -309,15 +309,15 @@ public class PTCustomerAlertController: PTAlertController {
 
     // MARK: Computed
 
-    private var hasTitle: Bool {
+    var hasTitle: Bool {
         !alertTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
-    private var hasCustomContent: Bool {
+    var hasCustomContent: Bool {
         customerViewCallback != nil
     }
 
-    private var minimumBodyHeight: CGFloat {
+    var minimumBodyHeight: CGFloat {
         switch (hasTitle, hasCustomContent) {
         case (true, true):
             return minimumCombinedBodyHeight
@@ -802,41 +802,6 @@ public class PTCustomerAlertController: PTAlertController {
 
     // MARK: Body Height
 
-    /// 获取 Auto Layout 的真实 Body 高度。
-    ///
-    /// 与旧方案不同：
-    /// - 不再手工计算 title 高度；
-    /// - 不再把最小高度加到 UILabel 本身；
-    /// - 最小视觉高度由 bodyHeaderView 的约束承担；
-    /// - headerContentView 垂直居中，因此短内容的留白上下对称。
-    private func resolvedBodyHeight(for width: CGFloat) -> CGFloat {
-        guard hasTitle || hasCustomContent else { return 0 }
-
-        bodyHeaderMinimumHeightConstraint?.update(offset: minimumBodyHeight)
-
-        let safeWidth = max(1, width)
-        bodyHeaderView.bounds.size.width = safeWidth
-        bodyHeaderView.setNeedsLayout()
-        bodyHeaderView.layoutIfNeeded()
-
-        let fittingSize = CGSize(
-            width: safeWidth,
-            height: UIView.layoutFittingCompressedSize.height
-        )
-
-        let size = bodyHeaderView.systemLayoutSizeFitting(
-            fittingSize,
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
-
-        guard size.height.isFinite else {
-            return minimumBodyHeight
-        }
-
-        return ceil(max(minimumBodyHeight, size.height))
-    }
-
     // MARK: Button Height
 
     // MARK: Compact Layout
@@ -1042,7 +1007,7 @@ public class PTCustomerAlertController: PTAlertController {
         updateSurfaceAppearance()
     }
 
-    private func updateSurfaceAppearance() {
+    func updateSurfaceAppearance() {
         guard isViewLoaded else { return }
         surfaceBackgroundView.appearance = appearance
         surfaceBackgroundView.legacyVisualStyle = visualStyle
@@ -1059,36 +1024,7 @@ public class PTCustomerAlertController: PTAlertController {
         actionSeparatorViews.forEach { $0.backgroundColor = separatorColor }
     }
 
-    private func installSurfaceAppearanceObservers() {
-        traitChangeRegistration = registerForTraitChanges([
-            UITraitUserInterfaceStyle.self,
-            UITraitAccessibilityContrast.self
-        ]) { [weak self] (_: PTCustomerAlertController, _: UITraitCollection) in
-            guard let self else { return }
-            self.updateSurfaceAppearance()
-            self.invalidateContentLayout()
-        }
 
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(accessibilityAppearanceDidChange),
-            name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
-            object: nil
-        )
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(accessibilityAppearanceDidChange),
-            name: UIContentSizeCategory.didChangeNotification,
-            object: nil
-        )
-    }
-
-    @objc
-    private func accessibilityAppearanceDidChange() {
-        updateSurfaceAppearance()
-        invalidateContentLayout()
-    }
 }
 
 // MARK: - UIGestureRecognizerDelegate

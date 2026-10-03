@@ -289,8 +289,11 @@ let package = Package(
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.8.0"),
         .package(url: "https://github.com/amirdew/CollectionViewPagingLayout.git", exact: "1.1.0"),
         .package(url: "https://github.com/PhoneNumberKit/PhoneNumberKit.git", from: "5.0.0"),
-        .package(url: "https://github.com/yangKJ/Harbeth.git", from: "3.0.1"),
-        .package(url: "https://github.com/yangKJ/Kakapos.git", exact: "1.1.0"),
+        .package(url: "https://github.com/yangKJ/Harbeth.git", exact: "3.0.0"),
+        // English: Pin the known 1.1.0 tag commit because the upstream annotated tag has changed across SwiftPM caches.
+        // Español: Fija el commit conocido de la etiqueta 1.1.0 porque la etiqueta anotada upstream cambia entre cachés de SwiftPM.
+        // 中文：固定已验证的 1.1.0 标签提交，避免上游带注释标签在不同 SwiftPM 缓存中产生冲突。
+        .package(url: "https://github.com/yangKJ/Kakapos.git", revision: "64ef17d978700cbe5d1168be7e57561a4459feee"),
         .package(url: "https://github.com/pocketsvg/PocketSVG.git", from: "2.7.0"),
         .package(url: "https://github.com/apple/swift-protobuf.git", exact: "1.37.0"),
         .package(url: "https://github.com/Kitura/Swift-JWT.git", exact: "4.0.0"),
@@ -713,6 +716,20 @@ let package = Package(
         // ==========================================
         // 核心基座模块 (Core)
         // ==========================================
+        // English: Keep the catalog, generated compatibility names, and immutable metadata Foundation-only.
+        // Español: Mantiene el catálogo, los nombres de compatibilidad generados y los metadatos inmutables basados solo en Foundation.
+        // 中文：将字体目录、生成的兼容名称和不可变元数据保持在 Foundation-only target 中。
+        .target(
+            name: "PToolsFontCatalogCore",
+            path: "PooToolsSource",
+            sources: [
+                "PToolsFontCore/PTFontMetadata.swift",
+                "Font/FontName.swift",
+                "Font/PTFontCatalog.swift",
+                "Font/Generated/PTFontCatalog.generated.swift",
+                "Font/Generated/PTFontCompatibility.generated.swift"
+            ]
+        ),
         .target(
             name: "ptools",
             dependencies: [
@@ -722,6 +739,7 @@ let package = Package(
                 "PToolsUIFoundation",
                 "PToolsPermissionCore",
                 "PToolsDevice",
+                "PToolsFontCatalogCore",
                 "SnapKit",
                 .product(name: "IQKeyboardManagerSwift", package: "IQKeyboardManager"),
                 "Kingfisher",
@@ -736,7 +754,8 @@ let package = Package(
                 "Log", "StatusBar", "Protocol", "Animation", "PermissionCore",
                 "PhotoLibraryPermission", "AppDelegate", "Foundation",
                 "Language", "DarkMode", "Line", "Badge", "Rotation", "Switch",
-                "Colors", "Font", "FloatPanel", "SideMenuControl", "iCloud"
+                "Colors", "Font/PTFont.swift", "Font/PTFontDescriptor.swift", "Font/PTFontRuntime.swift",
+                "FloatPanel", "SideMenuControl", "iCloud"
             ],
             resources: [
                 .process("Resource")
@@ -789,7 +808,27 @@ let package = Package(
         // ==========================================
         // 核心中上层依赖模块
         // ==========================================
-        .target(name: "PooToolsNetWork", dependencies: ["ptools", "PToolsCore", "PToolsModelCore", "PToolsModelLegacySmartCodable", "PToolsModelLegacyKakaJSON", "PooToolsLoading", "Alamofire"], path: "PooToolsSource/NetWork", swiftSettings: [.define("POOTOOLS_NETWORK"), .define("POOTOOLS_COCOAPODS")]),
+        // English: Keep typed response-path decoding Foundation-only so its XCTest product can run on macOS.
+        // Español: Mantiene la decodificación tipada de rutas basada solo en Foundation para ejecutar su producto XCTest en macOS.
+        // 中文：将类型化响应路径解码保持为 Foundation-only，让对应 XCTest 产品可以在 macOS 执行。
+        .target(
+            name: "PToolsNetworkModelCore",
+            dependencies: ["PToolsCore", "PToolsModelCore", "PToolsModelLegacySmartCodable", "PToolsModelLegacyKakaJSON"],
+            path: "PooToolsSource",
+            sources: ["NetWork/PTNetworkModelBridge.swift", "NetWork/PTNetworkResponseSelection.swift", "NetWorkModelCore/PTNetworkResponseSnapshot.swift"]
+        ),
+        .target(
+            name: "PooToolsNetWork",
+            dependencies: ["ptools", "PToolsCore", "PToolsModelCore", "PToolsModelLegacySmartCodable", "PToolsModelLegacyKakaJSON", "PToolsNetworkModelCore", "PooToolsLoading", "Alamofire"],
+            path: "PooToolsSource/NetWork",
+            sources: [
+                "Network+Download.swift", "Network+LegacyCompatibility.swift", "Network+Logging.swift",
+                "Network+RequestPipeline.swift", "Network+TypedRequest.swift", "Network.swift",
+                "NetworkMetrics.swift", "NetworkSupport.swift", "NetworkTypes.swift",
+                "NetworkUploads.swift", "PTNetworkArchitecture.swift"
+            ],
+            swiftSettings: [.define("POOTOOLS_NETWORK"), .define("POOTOOLS_COCOAPODS")]
+        ),
         .target(name: "PooToolsDataEncrypt", dependencies: ["ptools", "CryptoSwift"], path: "PooToolsSource/AESAndDES", swiftSettings: [.define("POOTOOLS_DATAENCRYPT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSecurity", dependencies: [], path: "PooToolsSource/Security", swiftSettings: [.define("POOTOOLS_SECURITY"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSearchBar", dependencies: ["ptools"], path: "PooToolsSource/SearchBar", swiftSettings: [.define("POOTOOLS_SEARCHBAR"), .define("POOTOOLS_COCOAPODS")]),
@@ -946,8 +985,18 @@ let package = Package(
         ),
         .testTarget(
             name: "PToolsNetworkTests",
+            dependencies: ["PToolsNetworkModelCore", "PToolsModelCore"],
+            path: "Tests/PToolsNetworkTests",
+            sources: ["PTNetworkModelPathTests.swift"]
+        ),
+        // English: Keep transport and cancellation tests in an iOS-only product instead of blocking Foundation XCTest.
+        // Español: Mantiene las pruebas de transporte y cancelación en un producto exclusivo de iOS sin bloquear XCTest de Foundation.
+        // 中文：将传输和取消测试放入仅 iOS 的产品，避免阻断 Foundation XCTest。
+        .testTarget(
+            name: "PToolsNetworkRuntimeTests",
             dependencies: ["PooToolsNetWork", "PToolsModelCore", "Alamofire"],
-            path: "Tests/PToolsNetworkTests"
+            path: "Tests/PToolsNetworkTests",
+            sources: ["PTNetworkQualityTests.swift"]
         ),
         .testTarget(
             name: "PToolsListTests",
@@ -959,8 +1008,18 @@ let package = Package(
         // 中文：在 iOS 宿主中验证生成字体元数据、Runtime 发现和 FontName 转发。
         .testTarget(
             name: "PToolsFontTests",
-            dependencies: ["ptools"],
-            path: "Tests/PToolsFontTests"
+            dependencies: ["PToolsFontCatalogCore"],
+            path: "Tests/PToolsFontTests",
+            sources: ["PTFontCatalogTests.swift", "PTFontCompatibilityTests.swift", "PTFontGeneratedConsistencyTests.swift"]
+        ),
+        // English: Keep UIKit runtime font discovery in an iOS-only XCTest product.
+        // Español: Mantiene el descubrimiento de fuentes en runtime UIKit dentro de un producto XCTest exclusivo de iOS.
+        // 中文：将 UIKit Runtime 字体发现放入仅 iOS 的 XCTest 产品。
+        .testTarget(
+            name: "PToolsFontRuntimeTests",
+            dependencies: ["ptools", "PToolsFontCatalogCore"],
+            path: "Tests/PToolsFontTests",
+            sources: ["PTFontRuntimeTests.swift"]
         ),
         .testTarget(
             name: "PToolsNavigationTests",

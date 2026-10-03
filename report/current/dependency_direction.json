@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "generated_at": "2026-10-03T05:18:13Z",
+  "source_revision": "df42327494874fb628d8be8ca9428a01ec818ae6",
+  "generated_at": "2026-10-03T10:20:42Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
-    "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, and PToolsDevice",
+    "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, PToolsDevice, and PToolsFontCatalogCore",
     "PT*Permission -> non-ptools target is forbidden except PToolsPermissionCore",
     "MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires",
     "Navigation/Router -> PhotoPicker is forbidden"
@@ -190,6 +190,22 @@
     {
       "source": "PToolsModelUIKit",
       "destination": "PToolsModelCore"
+    },
+    {
+      "source": "PToolsNetworkModelCore",
+      "destination": "PToolsCore"
+    },
+    {
+      "source": "PToolsNetworkModelCore",
+      "destination": "PToolsModelCore"
+    },
+    {
+      "source": "PToolsNetworkModelCore",
+      "destination": "PToolsModelLegacyKakaJSON"
+    },
+    {
+      "source": "PToolsNetworkModelCore",
+      "destination": "PToolsModelLegacySmartCodable"
     },
     {
       "source": "PToolsNotifications",
@@ -577,6 +593,10 @@
     },
     {
       "source": "PooToolsNetWork",
+      "destination": "PToolsNetworkModelCore"
+    },
+    {
+      "source": "PooToolsNetWork",
       "destination": "PooToolsLoading"
     },
     {
@@ -809,6 +829,10 @@
     },
     {
       "source": "ptools",
+      "destination": "PToolsFontCatalogCore"
+    },
+    {
+      "source": "ptools",
       "destination": "PToolsLogging"
     },
     {
@@ -825,13 +849,5 @@
     }
   ],
   "allowed_legacy_edges": [],
-  "violations": [],
-  "schemaVersion": 1,
-  "generatedAt": "2026-10-03T05:18:13Z",
-  "repository": "crazypoo/PTools",
-  "branch": "master",
-  "sourceRevision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "sourceVersion": "5.60.0",
-  "generatorVersion": "Scripts/validate_dependency_direction.sh",
-  "sourceInputsDigest": "eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3"
+  "violations": []
 }

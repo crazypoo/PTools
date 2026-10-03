@@ -1,20 +1,16 @@
 <!--
-Current report metadata.
 AUTO-GENERATED FILE.
-Repository: crazypoo/PTools
-Branch: master
-Source revision: b6875bfcbb5b503f145e05d8bcc101c196cc316e
-Source version: 5.60.0
-Source inputs digest: eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3
-Generator version: 1
+DO NOT EDIT MANUALLY.
+
 Generator: Scripts/validate_module_parity.sh
-Generated at: 2026-10-03T05:18:13Z
+Source revision: df42327494874fb628d8be8ca9428a01ec818ae6
+Generated at: 2026-10-03T10:20:41Z
 -->
 
 # Module Parity Resolution
 
 - Registry: `Scripts/module_registry.json`
-- Current exceptions: `105`
+- Current exceptions: `109`
 - Policy: every parity exception is classified as INTENTIONAL, LEGACY, or FIX_REQUIRED; FIX_REQUIRED must be zero before release.
 
 | Module | Class | SPM dependency / value | Pod dependency / value | Reason | Action | Owner | Target version | Expiration |
@@ -23,14 +19,14 @@ Generated at: 2026-10-03T05:18:13Z
 | BluetoothPermission | INTENTIONAL | ["PToolsPermissionCore"] | ["Core"] | SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | CheckUpdate | INTENTIONAL | ["Swift-JWT"] | ["SwiftJWT"] | Equivalent dependency uses different SPM and CocoaPods names. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Configuration | INTENTIONAL | ["Storage","StorageCore"] | ["Storage"] | SwiftPM lists StorageCore explicitly for the typed storage contract; CocoaPods receives it transitively through the Storage subspec. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | p2-configuration | 6.0.0 | 2027-03-31 |
-| Core | INTENTIONAL | ["Device","Logging","PToolsCore","PToolsDate","PToolsPermissionCore","PToolsUIFoundation","Symbols"] | ["Date","Device","Logging","PToolsCore","PToolsUIFoundation","Symbols"] | SwiftPM publishes split contracts; CocoaPods keeps monolithic Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
+| Core | INTENTIONAL | ["Device","Logging","PToolsCore","PToolsDate","PToolsFontCatalogCore","PToolsPermissionCore","PToolsUIFoundation","Symbols"] | ["Date","Device","Logging","PToolsCore","PToolsUIFoundation","Symbols"] | SwiftPM publishes split contracts; CocoaPods keeps monolithic Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
 | Core | INTENTIONAL | ["IQKeyboardManager","Kingfisher","SnapKit","lottie-ios"] | ["IQKeyboardManagerSwift","IQKeyboardToolbarManager","Kingfisher","SnapKit","lottie-ios"] | SPM and CocoaPods expose different direct and transitive Core dependencies. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Form | INTENTIONAL | ["Accessibility","CheckBox","ContentState","Core","PToolsCore","Picker","Slider","Theme"] | ["Accessibility","CheckBox","ContentState","Core","Input","PToolsCore","Picker","Slider","Stepper","Theme"] | SwiftPM uses the stable Picker, CheckBox and Slider targets and native fallbacks; CocoaPods retains legacy Input and Stepper compatibility dependencies for the 5.x subspec contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | p1-form | 6.0.0 | 2026-12-31 |
 | ImageEditor | INTENTIONAL | ["Harbeth"] | [] | SPM declares Harbeth; CocoaPods uses the local HarbethKit route. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Instructions | INTENTIONAL | ["Overlay"] | ["Core","Overlay"] | SwiftPM receives Core transitively through the shared Overlay target; CocoaPods keeps an explicit Core dependency for the 5.x subspec contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | ui-components | 6.0.0 | 2026-12-31 |
 | MeidaPermission | INTENTIONAL | ["PToolsPermissionCore"] | ["MeidaPermission"] | SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | Model | INTENTIONAL | ["ModelCore","PToolsModelMacroPlugin"] | ["ModelCore"] | SwiftPM adds the compiler-only PTModel macro plugin; CocoaPods intentionally keeps the runtime facade on the manual schema fallback. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
-| NetWork | INTENTIONAL | ["Core","Loading","ModelCore","PToolsCore","PToolsModelLegacyKakaJSON","PToolsModelLegacySmartCodable"] | ["Core","Loading","ModelCore","ModelLegacyKakaJSON","ModelLegacySmartCodable"] | SPM includes extracted PToolsCore; CocoaPods keeps legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
+| NetWork | INTENTIONAL | ["Core","Loading","ModelCore","PToolsCore","PToolsModelLegacyKakaJSON","PToolsModelLegacySmartCodable","PToolsNetworkModelCore"] | ["Core","Loading","ModelCore","ModelLegacyKakaJSON","ModelLegacySmartCodable"] | SPM includes extracted PToolsCore; CocoaPods keeps legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
 | PhotoPicker | INTENTIONAL | ["CameraPermission","Core","ImagePicker","Loading","MediaCore","Symbols"] | ["Core","ImagePicker","Loading","MediaCore","Symbols"] | SPM adds standalone CameraPermission; CocoaPods keeps Core route. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | Picker | INTENTIONAL | ["SnapKit"] | [] | SPM declares direct utilities; CocoaPods resolves them through Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Popover | INTENTIONAL | ["Overlay","PToolsCore","Symbols"] | ["Overlay","Symbols"] | SwiftPM lists the extracted PToolsCore contract explicitly for semantic overlay feedback; CocoaPods receives the same Core capability through the Overlay aggregate dependency. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | ui-components | 6.0.0 | 2026-12-31 |
@@ -114,13 +110,17 @@ Generated at: 2026-10-03T05:18:13Z
 | Theme | INTENTIONAL | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency for the standalone theme target; CocoaPods inherits the aggregate target compiler contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | p1-ui-foundation | 6.0.0 | 2026-12-31 |
 | TrackingPermission | INTENTIONAL | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_TRACKING","POOTOOLS_SPLIT_PERMISSION_CORE"],"upcoming_features":[]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_PERMISSION_TRACKING"],"upcoming_features":[]} | SPM selects split permission implementation; CocoaPods selects legacy implementation. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
 | WidgetCore | INTENTIONAL | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":["POOTOOLS_COCOAPODS","POOTOOLS_WIDGET_CORE"],"upcoming_features":[]} | SwiftPM enables strict concurrency for the extension-safe WidgetKit core; CocoaPods keeps the extension-safe subspec compiler contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | p2-extension | 6.0.0 | 2027-03-31 |
+| Core | INTENTIONAL | ["ActionsheetAndAlert","Animation","AppDelegate","AppStore","ApplicationFunction","Badge","Base","BlackMagic","Blur","Button","Category","Colors","Core","DarkMode","FloatPanel","Font/PTFont.swift","Font/PTFontDescriptor.swift","Font/PTFontRuntime.swift","Foundation","Language","Line","Log","PermissionCore","PhotoLibraryPermission","Protocol","Rotation","SideMenuControl","StatusBar","Switch","iCloud"] | ["ActionsheetAndAlert","Animation","AppDelegate","AppStore","ApplicationFunction","Badge","Base","BlackMagic","Blur","Button","Category","Colors","Core","DarkMode","FloatPanel","Font","Foundation","Language","Line","Log","PToolsFontCore","PermissionCore","PhotoLibraryPermission","Protocol","Rotation","SideMenuControl","StatusBar","Switch","iCloud"] | SwiftPM physically splits Font runtime files while CocoaPods keeps the Font directory under the monolithic Core subspec for 5.x source compatibility. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2027-03-31 |
 | MeidaPermission | INTENTIONAL | ["MeidaLibraryPermission"] | [] | The 5.x CocoaPods spelling alias intentionally contains no source files and forwards to MediaPermission. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
+| NetWork | INTENTIONAL | ["NetWork"] | ["NetWork","NetWorkModelCore"] | SwiftPM extracts Network model snapshots into PToolsNetworkModelCore while CocoaPods compiles the Foundation-only snapshot inside the Network subspec to preserve the 5.x CocoaPods module contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | network | 6.0.0 | 2027-03-31 |
 | PTModelBenchmark | LEGACY | — | — | Development-only executable used for reproducible PTModel measurements; it is not a shipped CocoaPods subspec. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
 | PTModelLegacyKakaJSONFixture | INTENTIONAL | — | — | SwiftPM-only regression fixture for the legacy KakaJSON model adapter; it is a test product and has no shipped CocoaPods subspec. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
 | PTModelLegacySmartCodableFixture | INTENTIONAL | — | — | SwiftPM-only regression fixture for the legacy SmartCodable model adapter; it is a test product and has no shipped CocoaPods subspec. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
 | PTModelMixedLegacyFixture | INTENTIONAL | — | — | SwiftPM-only regression fixture covering mixed legacy model decoding; it is a test product and has no shipped CocoaPods subspec. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
 | PTModelOnlyFixture | INTENTIONAL | — | — | SwiftPM-only regression fixture for the model facade; it is a test product and has no shipped CocoaPods subspec. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
 | PToolsDate | LEGACY | — | — | SwiftPM exposes the Foundation-only date contract under its canonical product name; CocoaPods uses the shorter Date subspec for source compatibility. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
+| PToolsFontCatalogCore | INTENTIONAL | — | — | SwiftPM-only Foundation font catalog target introduced by the physical Font runtime split; CocoaPods keeps the compatible Core source contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | font-core | 6.0.0 | 2027-03-31 |
 | PToolsModelLegacyKakaJSON | LEGACY | — | — | SwiftPM exposes the explicit KakaJSON compatibility product under its long name; CocoaPods keeps the shorter ModelLegacyKakaJSON subspec for source compatibility. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
 | PToolsModelLegacySmartCodable | LEGACY | — | — | SwiftPM exposes the explicit SmartCodable compatibility product under its long name; CocoaPods keeps the shorter ModelLegacySmartCodable subspec for source compatibility. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
 | PToolsModelMacroPlugin | INTENTIONAL | — | — | SwiftPM-only compiler plugin; CocoaPods uses the manual PTStaticModel fallback and must not compile SwiftSyntax macros inside the runtime target. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | model-core | 6.0.0 | 2027-03-31 |
+| PToolsNetworkModelCore | INTENTIONAL | — | — | SwiftPM-only typed Network response bridge target introduced by the physical Network split; CocoaPods keeps the compatible Network source contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | network | 6.0.0 | 2027-03-31 |

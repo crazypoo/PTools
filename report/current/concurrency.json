@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "generated_at": "2026-10-03T05:18:13Z",
+  "source_revision": "df42327494874fb628d8be8ca9428a01ec818ae6",
+  "generated_at": "2026-10-03T10:20:07Z",
   "counts": {
     "main_queue_async": 26,
     "task_detached": 30,
@@ -44,7 +44,7 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 753,
+      "line": 629,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -386,55 +386,55 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift",
-      "line": 13,
+      "line": 18,
       "text": "private struct PTLegacyModelTypeBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 150,
+      "line": 153,
       "text": "public final class Network: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 18,
+      "line": 21,
       "text": "public final class NetworkReachability: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 66,
+      "line": 69,
       "text": "public final class PTNetWorkStatus: @unchecked Sendable {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 404,
+      "line": 407,
       "text": "Task.detached(priority: .background) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 445,
+      "line": 448,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 454,
+      "line": 457,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 463,
+      "line": 466,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 472,
+      "line": 475,
       "text": "Task.detached(priority: .background) {"
     },
     {
@@ -511,8 +511,8 @@
     },
     {
       "rule": "unchecked_sendable",
-      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift",
-      "line": 12,
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextCache.swift",
+      "line": 7,
       "text": "final class PTTextMatcherCache: @unchecked Sendable {"
     },
     {
@@ -641,13 +641,5 @@
       "line": 116,
       "text": "Task.detached(priority: .userInitiated) {"
     }
-  ],
-  "schemaVersion": 1,
-  "generatedAt": "2026-10-03T05:18:13Z",
-  "repository": "crazypoo/PTools",
-  "branch": "master",
-  "sourceRevision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "sourceVersion": "5.60.0",
-  "generatorVersion": "Scripts/report_concurrency.rb",
-  "sourceInputsDigest": "eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3"
+  ]
 }

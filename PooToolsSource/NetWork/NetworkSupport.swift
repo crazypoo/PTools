@@ -9,6 +9,9 @@ import ptools
 #if SWIFT_PACKAGE
 import PToolsCore
 #endif
+#if SWIFT_PACKAGE
+import PToolsNetworkModelCore
+#endif
 @preconcurrency import Alamofire
 import Network
 import CoreTelephony
@@ -602,15 +605,6 @@ struct PreparedImageResult: Sendable {
     let fileName: String
     let mimeType: String
     let data: Data
-}
-
-// A response snapshot keeps only Sendable values after Alamofire's callback returns.
-// Una instantánea conserva únicamente valores Sendable después del callback de Alamofire.
-// 响应快照只在 Alamofire 回调结束后保留 Sendable 值。
-struct PTNetworkResponseSnapshot: Sendable {
-    let url: String
-    let data: Data?
-    let metadata: PTResponseMetadata
 }
 
 // Upload events cross the stream as immutable snapshots instead of Progress or UIKit objects.

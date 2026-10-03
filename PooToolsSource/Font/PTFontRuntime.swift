@@ -8,6 +8,9 @@
 
 import Foundation
 import UIKit
+#if SWIFT_PACKAGE
+import PToolsFontCatalogCore
+#endif
 
 public struct PTFontRuntimeSnapshot: Codable, Sendable {
     public let runtime: String

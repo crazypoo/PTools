@@ -52,9 +52,12 @@ edges.each do |edge|
   forbidden = false
   rule = nil
 
-  if source == "ptools" && !%w[PToolsCore PToolsDate PToolsUIFoundation PToolsPermissionCore PToolsLogging PToolsSymbols PToolsDevice].include?(destination)
+  # English: The Foundation-only font catalog is a local Core layer, so the umbrella target may depend on it.
+  # Español: El catálogo de fuentes basado solo en Foundation es una capa Core local permitida para el target paraguas.
+  # 中文：Foundation-only 字体目录属于允许的本地 Core 层，因此总 Core target 可以依赖它。
+  if source == "ptools" && !%w[PToolsCore PToolsDate PToolsUIFoundation PToolsPermissionCore PToolsLogging PToolsSymbols PToolsDevice PToolsFontCatalogCore].include?(destination)
     forbidden = true
-    rule = "Core target may depend only on PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, and PToolsDevice local layers"
+    rule = "Core target may depend only on PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, PToolsDevice, and PToolsFontCatalogCore local layers"
   elsif source.match?(/^PT.*Permission$/) && !%w[ptools PToolsPermissionCore].include?(destination)
     forbidden = true
     rule = "Permission target may depend only on ptools or PToolsPermissionCore"
@@ -82,7 +85,7 @@ result = {
   "generated_at" => Time.now.utc.iso8601,
   "status" => violations.empty? ? "pass_with_legacy_allowlist" : "fail",
   "rules" => [
-    "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, and PToolsDevice",
+    "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, PToolsDevice, and PToolsFontCatalogCore",
     "PT*Permission -> non-ptools target is forbidden except PToolsPermissionCore",
     "MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires",
     "Navigation/Router -> PhotoPicker is forbidden"

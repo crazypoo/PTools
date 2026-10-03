@@ -550,6 +550,22 @@
   "known_module_only": [
     {
       "kind": "spm_only",
+      "module": "PToolsFontCatalogCore",
+      "reason": "SwiftPM-only Foundation font catalog target introduced by the physical Font runtime split; CocoaPods keeps the compatible Core source contract.",
+      "owner": "font-core",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsNetworkModelCore",
+      "reason": "SwiftPM-only typed Network response bridge target introduced by the physical Network split; CocoaPods keeps the compatible Network source contract.",
+      "owner": "network",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
       "module": "PTModelLegacyKakaJSONFixture",
       "reason": "SwiftPM-only regression fixture for the legacy KakaJSON model adapter; it is a test product and has no shipped CocoaPods subspec.",
       "owner": "model-core",
@@ -1411,6 +1427,24 @@
       "module": "Model",
       "reason": "SwiftPM enables strict concurrency for the model facade; CocoaPods inherits the aggregate target compiler contract.",
       "owner": "model-core",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "source",
+      "module": "Core",
+      "field": "source_directories",
+      "reason": "SwiftPM physically splits Font runtime files while CocoaPods keeps the Font directory under the monolithic Core subspec for 5.x source compatibility.",
+      "owner": "architecture",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "source",
+      "module": "NetWork",
+      "field": "source_directories",
+      "reason": "SwiftPM extracts Network model snapshots into PToolsNetworkModelCore while CocoaPods compiles the Foundation-only snapshot inside the Network subspec to preserve the 5.x CocoaPods module contract.",
+      "owner": "network",
       "expiration": "2027-03-31",
       "classification": "INTENTIONAL"
     }

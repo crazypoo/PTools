@@ -142,7 +142,7 @@ run_named_gate() {
             --disable-swift-testing \
             --no-parallel
         done
-        for test_target in PToolsP2Tests PToolsMediaTests; do
+        for test_target in PToolsP2Tests PToolsMediaTests PToolsNetworkRuntimeTests PToolsFontRuntimeTests; do
           swift build \
             --triple arm64-apple-ios17.0-simulator \
             --target "$test_target"

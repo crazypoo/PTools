@@ -1,5 +1,5 @@
 {
-  "originHash" : "b08bf8ca46785125487b7b4c424fc0093fdb290c010a68b827d833fbc98af2f3",
+  "originHash" : "59e951d75e8a076e6dd61cbfd8a7011fd11bc2b2e4f69589d2ce21c4956e50dc",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/yangKJ/Harbeth.git",
       "state" : {
-        "revision" : "b2e6ce60ee63bc611e484b36a14b15b969a0e8f2",
-        "version" : "3.0.1"
+        "revision" : "a084e4d76381f82b5508434d86bd9f34b8b9d91a",
+        "version" : "3.0.0"
       }
     },
     {
@@ -150,8 +150,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/yangKJ/Kakapos.git",
       "state" : {
-        "revision" : "fe1e46ce27546d9436d5a1cc4ba68342eee29c0f",
-        "version" : "1.1.0"
+        "revision" : "64ef17d978700cbe5d1168be7e57561a4459feee"
       }
     },
     {

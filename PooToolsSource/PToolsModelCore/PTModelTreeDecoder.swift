@@ -235,10 +235,10 @@ private struct PTTreeKeyedDecodingContainer<Key: CodingKey>: KeyedDecodingContai
         let diagnosticPath = ptJSONPathDescription(childPath)
         guard case .object(let object) = decoder.value,
               let value = object[key.stringValue] else {
-            throw PTModelError.underlying("\(diagnosticPath): \(PTModelError.missingValue(key.stringValue).localizedDescription ?? "Missing value")")
+            throw PTModelError.underlying("\(diagnosticPath): \(PTModelError.missingValue(key.stringValue).localizedDescription)")
         }
         if value == .null {
-            throw PTModelError.underlying("\(diagnosticPath): \(PTModelError.nullValue(key.stringValue).localizedDescription ?? "Null value")")
+            throw PTModelError.underlying("\(diagnosticPath): \(PTModelError.nullValue(key.stringValue).localizedDescription)")
         }
         do {
             return try PTModelTreeDecoder(value: value,
@@ -246,7 +246,7 @@ private struct PTTreeKeyedDecodingContainer<Key: CodingKey>: KeyedDecodingContai
                                           codingPath: childPath,
                                           userInfo: decoder.userInfo).decode(type)
         } catch let error as PTModelError {
-            throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription ?? "Model decoding failed")")
+            throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription)")
         } catch {
             throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription)")
         }
@@ -264,7 +264,7 @@ private struct PTTreeKeyedDecodingContainer<Key: CodingKey>: KeyedDecodingContai
                                           codingPath: childPath,
                                           userInfo: decoder.userInfo).decode(type)
         } catch let error as PTModelError {
-            throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription ?? "Model decoding failed")")
+            throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription)")
         } catch {
             throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription)")
         }
@@ -334,7 +334,7 @@ private struct PTTreeUnkeyedDecodingContainer: UnkeyedDecodingContainer {
                                           codingPath: childPath,
                                           userInfo: decoder.userInfo).decode(type)
         } catch let error as PTModelError {
-            throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription ?? "Model decoding failed")")
+            throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription)")
         } catch {
             throw PTModelError.underlying("\(diagnosticPath): \(error.localizedDescription)")
         }

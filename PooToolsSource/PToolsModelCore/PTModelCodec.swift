@@ -22,6 +22,7 @@ public struct PTModelDecoder: Sendable {
     public let numericOverflowPolicy: PTNumericOverflowPolicy
     public let keyPolicy: PTModelKeyPolicy
     public let session: PTModelCodingSession
+    private let staticDispatchExclusions: Set<String>
 
     public init(policy: PTDecodePolicy = .compatible,
                 duplicateKeyPolicy: PTDuplicateKeyPolicy = .keepLast,
@@ -49,6 +50,40 @@ public struct PTModelDecoder: Sendable {
         self.numericOverflowPolicy = numericOverflowPolicy
         self.keyPolicy = keyPolicy
         self.session = session
+        self.staticDispatchExclusions = []
+    }
+
+    // English: Prevent one schema from re-entering its own static dispatch while keeping nested model dispatch available.
+    // Español: Evita que un esquema vuelva a entrar en su propio dispatch estático y conserva el dispatch de modelos anidados.
+    // 中文：阻止 Schema 重新进入自身的静态分发，同时保留嵌套模型的静态分发能力。
+    private init(policy: PTDecodePolicy,
+                 duplicateKeyPolicy: PTDuplicateKeyPolicy,
+                 limits: PTModelLimits,
+                 dateStrategy: PTDateDecodingStrategy,
+                 dataStrategy: PTDataDecodingStrategy,
+                 floatingPointStrategy: PTFloatingPointStrategy,
+                 urlStrategy: PTURLCodingStrategy,
+                 context: PTModelContext,
+                 dictionaryKeyStrategy: PTDictionaryKeyStrategy,
+                 coercionPolicy: PTValueCoercionPolicy,
+                 numericOverflowPolicy: PTNumericOverflowPolicy,
+                 keyPolicy: PTModelKeyPolicy,
+                 session: PTModelCodingSession,
+                 staticDispatchExclusions: Set<String>) {
+        self.policy = policy
+        self.duplicateKeyPolicy = duplicateKeyPolicy
+        self.limits = limits
+        self.dateStrategy = dateStrategy
+        self.dataStrategy = dataStrategy
+        self.floatingPointStrategy = floatingPointStrategy
+        self.urlStrategy = urlStrategy
+        self.context = context
+        self.dictionaryKeyStrategy = dictionaryKeyStrategy
+        self.coercionPolicy = coercionPolicy
+        self.numericOverflowPolicy = numericOverflowPolicy
+        self.keyPolicy = keyPolicy
+        self.session = session
+        self.staticDispatchExclusions = staticDispatchExclusions
     }
 
     // English: Each public decode starts with an isolated value session; nested calls receive scoped copies.
@@ -69,7 +104,30 @@ public struct PTModelDecoder: Sendable {
                                coercionPolicy: coercionPolicy,
                                numericOverflowPolicy: numericOverflowPolicy,
                                keyPolicy: keyPolicy,
-                               session: scopedSession)
+                               session: scopedSession,
+                               staticDispatchExclusions: staticDispatchExclusions)
+    }
+
+    // English: Exclude only the active schema type; nested schemas may still use the optimized static path.
+    // Español: Excluye únicamente el tipo del esquema activo; los esquemas anidados aún pueden usar la ruta estática optimizada.
+    // 中文：只排除当前 Schema 类型，嵌套 Schema 仍然可以使用优化后的静态路径。
+    func excludingStaticDispatch<Model: PTStaticModel>(for type: Model.Type) -> PTModelDecoder {
+        var exclusions = staticDispatchExclusions
+        exclusions.insert(String(reflecting: type))
+        return PTModelDecoder(policy: policy,
+                              duplicateKeyPolicy: duplicateKeyPolicy,
+                              limits: limits,
+                              dateStrategy: dateStrategy,
+                              dataStrategy: dataStrategy,
+                              floatingPointStrategy: floatingPointStrategy,
+                              urlStrategy: urlStrategy,
+                              context: context,
+                              dictionaryKeyStrategy: dictionaryKeyStrategy,
+                              coercionPolicy: coercionPolicy,
+                              numericOverflowPolicy: numericOverflowPolicy,
+                              keyPolicy: keyPolicy,
+                              session: session,
+                              staticDispatchExclusions: exclusions)
     }
 
     public func jsonValue<Source: PTModelSource>(from source: Source) throws -> PTJSONValue {
@@ -85,6 +143,15 @@ public struct PTModelDecoder: Sendable {
         let data = try PTModelSourceBridge.data(from: source,
                                                 duplicateKeyPolicy: duplicateKeyPolicy,
                                                 limits: limits)
+        // English: Route generated direct models through their static schema so field annotations remain effective in ordinary decoder calls.
+        // Español: Dirige los modelos directos generados por su esquema estático para conservar las anotaciones en llamadas normales al decoder.
+        // 中文：普通 decoder 调用也优先进入生成模型的静态 Schema，确保字段注解继续生效。
+        if let staticType = T.self as? any PTStaticModel.Type,
+           !staticDispatchExclusions.contains(String(reflecting: T.self)),
+           staticType.ptDecodeUsesStaticPath,
+           let decoded = try staticType.ptDecodeErased(from: data, using: self) as? T {
+            return decoded
+        }
         // English: Parse once to enforce duplicate-key and resource limits before JSONDecoder sees the payload.
         // Español: Analiza una vez para aplicar duplicados y límites antes de entregar el payload a JSONDecoder.
         // 中文：先解析一次，在交给 JSONDecoder 前统一执行重复键和资源限制。
@@ -193,18 +260,40 @@ public struct PTModelDecoder: Sendable {
         }
     }
 
+    // English: Handle a JSON null slice before dispatching to a nested static model decoder.
+    // Español: Trata un slice JSON nulo antes de enviarlo al decoder estático de un modelo anidado.
+    // 中文：在进入嵌套静态模型 decoder 前，先处理 JSON null 切片。
+    public func decodeRawOptional<T: Decodable>(_ type: T.Type, from data: Data) throws -> T? {
+        let value = try PTJSONValue(data: data,
+                                    duplicateKeyPolicy: duplicateKeyPolicy,
+                                    limits: limits)
+        if case .null = value { return nil }
+        return try decodeRaw(type, from: data)
+    }
+
     public func decodeValue<T: Decodable>(_ type: T.Type,
                                           from value: PTJSONValue,
                                           path: PTJSONPath = .root) throws -> T {
+        // English: Decode selected response slices directly so field diagnostics are not erased by JSONDecoder fallback.
+        // Español: Decodifica directamente los slices seleccionados para que el fallback de JSONDecoder no borre los diagnósticos de campos.
+        // 中文：直接解码已选中的响应切片，避免 JSONDecoder 回退抹掉字段诊断路径。
+        if let staticType = T.self as? any PTStaticModel.Type,
+           !staticDispatchExclusions.contains(String(reflecting: T.self)),
+           staticType.ptDecodeUsesStaticPath,
+           let decoded = try staticType.ptDecodeErased(from: try value.jsonData(sortedKeys: false), using: self) as? T {
+            return decoded
+        }
         do {
-            return try decode(type, from: value)
+            return try treeDecode(type, from: value)
+        } catch let error as PTModelError {
+            if case .numericOverflow = error {
+                throw error
+            }
+            throw error
         } catch {
             // English: Keep numeric overflow visible to field recovery instead of hiding it as a generic conversion error.
             // Español: Conserva el desbordamiento numérico visible para la recuperación del campo en lugar de ocultarlo como conversión genérica.
             // 中文：保留数值溢出信息供字段恢复使用，不把它隐藏成普通转换错误。
-            if case PTModelError.numericOverflow = error {
-                throw error
-            }
             guard policy != .strict,
                   let fallback = try PTPrimitiveFallback.decode(type, value: value, coercion: coercionPolicy) else {
                 throw PTModelError.underlying("\(path.description): \(String(reflecting: error))")

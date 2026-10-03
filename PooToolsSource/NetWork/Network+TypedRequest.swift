@@ -5,6 +5,12 @@
 
 import UIKit
 @preconcurrency import Alamofire
+#if SWIFT_PACKAGE
+import ptools
+import PToolsCore
+import PToolsModelCore
+import PToolsNetworkModelCore
+#endif
 
 extension Network {
     // English: Canonical instance request entry point using the instance's configuration, session, and plugins.

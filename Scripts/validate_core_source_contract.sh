@@ -58,7 +58,14 @@ pod_dirs = pod_source_line ? pod_source_line.scan(%r{PooToolsSource/([^/]+)/(?:\
 
 package = File.read(File.join(repo_root, "Package.swift"))
 package_target = package.match(/\.target\(\s*name: "ptools".*?sources: \s*\[(.*?)\]/m)
-package_dirs = package_target ? package_target[1].scan(/"([^"]+)"/).flatten.to_set : Set.new
+# English: Normalize explicit file entries back to their Core directory so a physical split does not look like drift.
+# Español: Normaliza las entradas de archivos explícitas a su directorio Core para que una división física no parezca una desviación.
+# 中文：将显式文件入口归一化回 Core 目录，避免文件拆分被误判为目录契约漂移。
+package_dirs = if package_target
+  package_target[1].scan(/"([^"]+)"/).flatten.map { |entry| entry.split("/").first }.to_set
+else
+  Set.new
+end
 
 # English: Verify the new SwiftPM layer targets without forcing legacy Xcode/CocoaPods sources to import them.
 # Español: Verifica los nuevos targets de capa SwiftPM sin obligar a las fuentes heredadas de Xcode/CocoaPods a importarlos.
@@ -110,10 +117,15 @@ end
 end
 
 expected_dirs = core_dirs.to_set
-unless pod_dirs == expected_dirs
-  missing = (expected_dirs - pod_dirs).to_a.sort
-  extra = (pod_dirs - expected_dirs).to_a.sort
-  failures << "CocoaPods Core directories drifted; missing=#{missing.join(",")} extra=#{extra.join(",")}"
+# English: CocoaPods keeps the Foundation-only font metadata beside the monolithic Core sources so the 5.x pod can compile the split runtime files.
+# Español: CocoaPods conserva los metadatos de fuentes Foundation-only junto al Core monolítico para que el pod 5.x compile los archivos de runtime divididos.
+# 中文：CocoaPods 将 Foundation-only 字体元数据放在单体 Core 源码旁，以保证 5.x pod 能编译拆分后的运行时文件。
+pod_compatibility_split_dirs = Set.new(%w[PToolsFontCore])
+missing = (expected_dirs - pod_dirs).to_a.sort
+missing_compatibility = (pod_compatibility_split_dirs - pod_dirs).to_a.sort
+extra = ((pod_dirs - expected_dirs) - pod_compatibility_split_dirs).to_a.sort
+unless missing.empty? && missing_compatibility.empty? && extra.empty?
+  failures << "CocoaPods Core directories drifted; missing=#{missing.join(",")} missing_compatibility=#{missing_compatibility.join(",")} extra=#{extra.join(",")}"
 else
   puts "PASS: CocoaPods Core directories"
 end

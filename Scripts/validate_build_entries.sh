@@ -4,6 +4,15 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+# English: Use ripgrep when available and fall back to POSIX grep on minimal runners.
+# Español: Usa ripgrep cuando está disponible y recurre a grep POSIX en runners mínimos.
+# 中文：优先使用 ripgrep，在精简 Runner 上回退到 POSIX grep。
+if command -v rg >/dev/null 2>&1; then
+  search_fixed() { rg -q --fixed-strings "$1" "$2"; }
+else
+  search_fixed() { grep -Fq -- "$1" "$2"; }
+fi
+
 version="$(tr -d '[:space:]' < "$repo_root/VERSION")"
 [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
   printf 'FAIL: VERSION is not semantic\n' >&2
@@ -15,7 +24,7 @@ require_pattern() {
   local pattern="$2"
   local description="$3"
 
-  if ! rg -q --fixed-strings "$pattern" "$repo_root/$file"; then
+  if ! search_fixed "$pattern" "$repo_root/$file"; then
     printf 'FAIL: %s (%s)\n' "$description" "$file" >&2
     exit 1
   fi
@@ -80,13 +89,13 @@ ruby "$repo_root/Scripts/CI/check_example_source_ownership.rb"
 printf 'PASS: Example source ownership and module identity are valid\n'
 
 xcode_settings="$(xcodebuild -workspace "$repo_root/PooTools.xcworkspace" -scheme PooTools-Example -showBuildSettings 2>/dev/null)"
-if ! rg -q --fixed-strings "IPHONEOS_DEPLOYMENT_TARGET = 17.0" <<< "$xcode_settings"; then
+if ! grep -Fq -- "IPHONEOS_DEPLOYMENT_TARGET = 17.0" <<< "$xcode_settings"; then
   printf 'FAIL: Xcode scheme resolves to iOS 17\n' >&2
   exit 1
 fi
 printf 'PASS: Xcode scheme resolves to iOS 17\n'
 
-if ! rg -q --fixed-strings "SWIFT_VERSION = 6.0" <<< "$xcode_settings"; then
+if ! grep -Fq -- "SWIFT_VERSION = 6.0" <<< "$xcode_settings"; then
   printf 'FAIL: Xcode scheme resolves to Swift 6.0\n' >&2
   exit 1
 fi

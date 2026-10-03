@@ -58,6 +58,32 @@ enum RequestManager {
     }
 }
 
+// English: Keep the font collector hidden behind launch arguments so normal example launches are unchanged.
+// Español: Mantiene el recolector de fuentes oculto mediante argumentos de lanzamiento para no cambiar el arranque normal.
+// 中文：通过启动参数隐藏字体采集器，保证普通示例启动流程不变。
+private struct PTFontCollectorRequest {
+    let outputFileName: String
+    let runtime: String
+
+    init?(arguments: [String]) {
+        guard arguments.contains("--pt-font-collector"),
+              let outputArgument = arguments.first(where: { $0.hasPrefix("--pt-font-collector-output=") }) else {
+            return nil
+        }
+
+        let rawOutput = String(outputArgument.dropFirst("--pt-font-collector-output=".count))
+        let fileName = URL(fileURLWithPath: rawOutput).lastPathComponent
+        guard !fileName.isEmpty, fileName != ".", fileName != ".." else { return nil }
+
+        let runtimeArgument = arguments.first(where: { $0.hasPrefix("--pt-font-collector-runtime=") })
+        let runtime = runtimeArgument.map {
+            String($0.dropFirst("--pt-font-collector-runtime=".count))
+        } ?? ProcessInfo.processInfo.operatingSystemVersionString
+        self.outputFileName = fileName
+        self.runtime = runtime.isEmpty ? ProcessInfo.processInfo.operatingSystemVersionString : runtime
+    }
+}
+
 @main
 class AppDelegate: PTAppWindowsDelegate {
     
@@ -67,8 +93,32 @@ class AppDelegate: PTAppWindowsDelegate {
     }
     
     var permissionStatic = PTPermissionStatic.share
+
+    // English: Write the runtime snapshot only to the app container; reviewed FontCatalog files remain untouched.
+    // Español: Escribe la instantánea solo en el contenedor de la aplicación; los catálogos revisados no se modifican.
+    // 中文：只把 Runtime 快照写入应用容器，不修改人工审核的正式字体目录。
+    private func runFontCollectorIfRequested() {
+        guard let request = PTFontCollectorRequest(arguments: CommandLine.arguments) else { return }
+
+        Task { @MainActor in
+            do {
+                let data = try PTFontRuntime.snapshotJSON(runtime: request.runtime)
+                guard let documentsURL = FileManager.default.urls(for: .documentDirectory,
+                                                                  in: .userDomainMask).first else {
+                    return
+                }
+                let outputURL = documentsURL.appendingPathComponent(request.outputFileName,
+                                                                     isDirectory: false)
+                try data.write(to: outputURL, options: .atomic)
+                PTNSLogConsole("PTFontCollector snapshot written: \(outputURL.lastPathComponent)")
+            } catch {
+                PTNSLogConsole("PTFontCollector failed: \(error.localizedDescription)")
+            }
+        }
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        runFontCollectorIfRequested()
         
         PTFullscreenPopGesture.configure()
         

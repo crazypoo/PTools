@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons.rb",
-  "source_revision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "generated_at": "2026-10-03T05:18:13Z",
+  "source_revision": "df42327494874fb628d8be8ca9428a01ec818ae6",
+  "generated_at": "2026-10-03T10:20:09Z",
   "shared_call_count": 1646,
   "declarations": [
     {
@@ -736,7 +736,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 20,
+      "line": 23,
       "declaration": "public static let shared = NetworkReachability()",
       "name": "shared",
       "category": "C",
@@ -745,7 +745,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 67,
+      "line": 70,
       "declaration": "public static let shared = PTNetWorkStatus()",
       "name": "shared",
       "category": "C",
@@ -754,7 +754,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 261,
+      "line": 264,
       "declaration": "static let shared = NetworkCache()",
       "name": "shared",
       "category": "B",
@@ -763,7 +763,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "line": 292,
+      "line": 295,
       "declaration": "public static let shared = RequestDeduplicator()",
       "name": "shared",
       "category": "C",
@@ -772,7 +772,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/PTNetworkArchitecture.swift",
-      "line": 178,
+      "line": 181,
       "declaration": "public static let shared = PTNetworkExecutor(network: .share)",
       "name": "shared",
       "category": "C",
@@ -1175,13 +1175,5 @@
       "scope": "Shared mutable service",
       "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     }
-  ],
-  "schemaVersion": 2,
-  "generatedAt": "2026-10-03T05:18:13Z",
-  "repository": "crazypoo/PTools",
-  "branch": "master",
-  "sourceRevision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "sourceVersion": "5.60.0",
-  "generatorVersion": "Scripts/report_singletons.rb",
-  "sourceInputsDigest": "eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3"
+  ]
 }

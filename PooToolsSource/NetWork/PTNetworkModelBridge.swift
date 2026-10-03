@@ -127,11 +127,17 @@ public struct PTNetworkResponseDecoder<Output: Sendable>: Sendable {
 
             do {
                 return try decoder.decodeValue(type, from: selected, path: path)
-            } catch let error as PTNetworkDecodeError {
-                throw error
             } catch let error as PTModelError {
+                if case .typeMismatch(_, let actual) = error,
+                   actual == "array" || actual == "object" {
+                    throw PTNetworkDecodeError.modelPathTypeMismatch(path: path,
+                                                                      expected: "Object",
+                                                                      actual: actual.capitalized)
+                }
                 throw PTNetworkDecodeError.modelDecodeFailed(path: path,
                                                               message: error.localizedDescription)
+            } catch let error as PTNetworkDecodeError {
+                throw error
             } catch {
                 throw PTNetworkDecodeError.modelDecodeFailed(path: path,
                                                               message: error.localizedDescription)
@@ -230,7 +236,10 @@ public struct PTNetworkLegacyResponseDecoder<Output> {
     }
 }
 
-extension PTNetworkResponsePayload {
+public extension PTNetworkResponsePayload {
+    // English: Expose the module bridge so the Network facade can consume the immutable transport snapshot.
+    // Español: Expone el puente entre módulos para que la fachada Network consuma la instantánea inmutable del transporte.
+    // 中文：公开模块桥接初始化方法，让 Network 门面能够消费不可变的传输快照。
     init(snapshot: PTNetworkResponseSnapshot) {
         self.init(url: URL(string: snapshot.url),
                   data: snapshot.data ?? Data(),

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "generated_at": "2026-10-03T05:18:13Z",
+  "source_revision": "df42327494874fb628d8be8ca9428a01ec818ae6",
+  "generated_at": "2026-10-03T10:21:08Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -81,12 +81,22 @@
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "lines": 1209,
+      "lines": 1145,
       "classification": "warning"
     },
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertLayoutEngine.swift",
       "lines": 100,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertMeasurement.swift",
+      "lines": 45,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertPresentationCoordinator.swift",
+      "lines": 40,
       "classification": "ok"
     },
     {
@@ -320,14 +330,39 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/Base/PTCollectionDataCoordinator.swift",
+      "lines": 197,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Base/PTCollectionIndexCoordinator.swift",
+      "lines": 161,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Base/PTCollectionInteractionCoordinator.swift",
+      "lines": 244,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Base/PTCollectionPrefetchCoordinator.swift",
+      "lines": 146,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/Base/PTCollectionRefreshCoordinator.swift",
       "lines": 44,
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
+      "lines": 145,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "lines": 2243,
-      "classification": "hard_limit_allowlisted"
+      "lines": 1549,
+      "classification": "architecture_exception"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewLayoutSupport.swift",
@@ -341,7 +376,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "lines": 507,
+      "lines": 360,
       "classification": "ok"
     },
     {
@@ -450,8 +485,18 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/Base/PTTabBarSelectionCoordinator.swift",
+      "lines": 142,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Base/PTTabBarState.swift",
+      "lines": 11,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "lines": 991,
+      "lines": 867,
       "classification": "ok"
     },
     {
@@ -1876,7 +1921,7 @@
     },
     {
       "path": "PooToolsSource/Font/PTFont.swift",
-      "lines": 36,
+      "lines": 25,
       "classification": "ok"
     },
     {
@@ -1891,7 +1936,7 @@
     },
     {
       "path": "PooToolsSource/Font/PTFontRuntime.swift",
-      "lines": 80,
+      "lines": 83,
       "classification": "ok"
     },
     {
@@ -3981,22 +4026,27 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift",
-      "lines": 109,
+      "lines": 114,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/NetWork/Network+Logging.swift",
-      "lines": 128,
+      "lines": 131,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network+RequestPipeline.swift",
+      "lines": 195,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/NetWork/Network+TypedRequest.swift",
-      "lines": 193,
+      "lines": 199,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "lines": 863,
+      "lines": 689,
       "classification": "ok"
     },
     {
@@ -4006,12 +4056,12 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "lines": 622,
+      "lines": 616,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkTypes.swift",
-      "lines": 559,
+      "lines": 562,
       "classification": "ok"
     },
     {
@@ -4021,17 +4071,22 @@
     },
     {
       "path": "PooToolsSource/NetWork/PTNetworkArchitecture.swift",
-      "lines": 222,
+      "lines": 225,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/NetWork/PTNetworkModelBridge.swift",
-      "lines": 239,
+      "lines": 248,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/NetWork/PTNetworkResponseSelection.swift",
       "lines": 53,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/NetWorkModelCore/PTNetworkResponseSnapshot.swift",
+      "lines": 27,
       "classification": "ok"
     },
     {
@@ -4310,6 +4365,11 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsFontCore/PTFontMetadata.swift",
+      "lines": 23,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsForm/PTForm.swift",
       "lines": 1174,
       "classification": "warning"
@@ -4451,8 +4511,8 @@
     },
     {
       "path": "PooToolsSource/PToolsModelCore/PTModelCodec.swift",
-      "lines": 938,
-      "classification": "ok"
+      "lines": 1027,
+      "classification": "warning"
     },
     {
       "path": "PooToolsSource/PToolsModelCore/PTModelFeatures.swift",
@@ -4461,7 +4521,7 @@
     },
     {
       "path": "PooToolsSource/PToolsModelCore/PTModelFoundationCodecs.swift",
-      "lines": 203,
+      "lines": 210,
       "classification": "ok"
     },
     {
@@ -4476,7 +4536,7 @@
     },
     {
       "path": "PooToolsSource/PToolsModelCore/PTModelSchema.swift",
-      "lines": 870,
+      "lines": 880,
       "classification": "ok"
     },
     {
@@ -4631,12 +4691,32 @@
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
-      "lines": 1556,
-      "classification": "architecture_exception"
+      "lines": 599,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextAttributes.swift",
+      "lines": 343,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+      "lines": 62,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextCache.swift",
+      "lines": 47,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
+      "lines": 527,
+      "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift",
-      "lines": 53,
+      "lines": 47,
       "classification": "ok"
     },
     {
@@ -5150,13 +5230,23 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/SegmentControl/PTPageContainer.swift",
+      "lines": 445,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/SegmentControl/PTPaging.swift",
-      "lines": 872,
+      "lines": 432,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/SegmentControl/PTPagingLayoutEngine.swift",
+      "lines": 29,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/SegmentControl/PTPagingTypes.swift",
-      "lines": 121,
+      "lines": 97,
       "classification": "ok"
     },
     {
@@ -5560,15 +5650,7 @@
       "classification": "ok"
     }
   ],
-  "warning_count": 13,
-  "architecture_exception_count": 11,
-  "hard_limit_allowlisted_count": 4,
-  "schemaVersion": 1,
-  "generatedAt": "2026-10-03T05:18:13Z",
-  "repository": "crazypoo/PTools",
-  "branch": "master",
-  "sourceRevision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "sourceVersion": "5.60.0",
-  "generatorVersion": "Scripts/validate_file_size_gate.sh",
-  "sourceInputsDigest": "eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3"
+  "warning_count": 14,
+  "architecture_exception_count": 10,
+  "hard_limit_allowlisted_count": 3
 }

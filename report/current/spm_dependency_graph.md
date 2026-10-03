@@ -1,14 +1,10 @@
 <!--
-Current report metadata.
 AUTO-GENERATED FILE.
-Repository: crazypoo/PTools
-Branch: master
-Source revision: b6875bfcbb5b503f145e05d8bcc101c196cc316e
-Source version: 5.60.0
-Source inputs digest: eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3
-Generator version: 1
+DO NOT EDIT MANUALLY.
+
 Generator: Scripts/report_spm_dependency_graph.rb
-Generated at: 2026-10-03T05:18:13Z
+Source revision: df42327494874fb628d8be8ca9428a01ec818ae6
+Generated at: 2026-10-03T10:20:41Z
 -->
 
 # SwiftPM Dependency Graph
@@ -17,7 +13,7 @@ Generated at: 2026-10-03T05:18:13Z
 - Package: `ptools`
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
-- Target count: `152`
+- Target count: `156`
 - Core direct third-party dependencies: `4` (baseline `18`)
 
 ## Products
@@ -202,7 +198,9 @@ Generated at: 2026-10-03T05:18:13Z
 | `PToolsDeviceTests` | `Tests/PToolsDeviceTests` | PToolsDevice | — | 0 source entries / 0 resources |
 | `PToolsDocuments` | `PooToolsSource/PToolsDocuments` | PooToolsPDF | — | 0 source entries / 0 resources |
 | `PToolsFeedback` | `PooToolsSource/PToolsFeedback` | PToolsCore | — | 0 source entries / 0 resources |
-| `PToolsFontTests` | `Tests/PToolsFontTests` | ptools | — | 0 source entries / 0 resources |
+| `PToolsFontCatalogCore` | `PooToolsSource` | — | — | 5 source entries / 0 resources |
+| `PToolsFontRuntimeTests` | `Tests/PToolsFontTests` | PToolsFontCatalogCore, ptools | — | 1 source entries / 0 resources |
+| `PToolsFontTests` | `Tests/PToolsFontTests` | PToolsFontCatalogCore | — | 3 source entries / 0 resources |
 | `PToolsForm` | `PooToolsSource/PToolsForm` | PToolsAccessibility, PToolsContentState, PToolsCore, PToolsTheme, PooToolsCheckBox, PooToolsPicker, PooToolsSlider, ptools | — | 0 source entries / 0 resources |
 | `PToolsHTTPFilePortal` | `PooToolsSource/PToolsHTTPFilePortal` | PToolsHTTPServer | — | 0 source entries / 1 resources |
 | `PToolsHTTPServer` | `PooToolsSource/PToolsHTTPServer` | — | — | 0 source entries / 0 resources |
@@ -220,7 +218,9 @@ Generated at: 2026-10-03T05:18:13Z
 | `PToolsModelTests` | `Tests/PToolsModelTests` | PToolsModel, PToolsModelCore, PToolsModelMacroPlugin | SwiftSyntaxMacrosTestSupport | 0 source entries / 0 resources |
 | `PToolsModelUIKit` | `PooToolsSource/PToolsModelUIKit` | PToolsModelCore | — | 0 source entries / 0 resources |
 | `PToolsNavigationTests` | `Tests/PToolsNavigationTests` | ptools | — | 0 source entries / 0 resources |
-| `PToolsNetworkTests` | `Tests/PToolsNetworkTests` | PToolsModelCore, PooToolsNetWork | Alamofire | 0 source entries / 0 resources |
+| `PToolsNetworkModelCore` | `PooToolsSource` | PToolsCore, PToolsModelCore, PToolsModelLegacyKakaJSON, PToolsModelLegacySmartCodable | — | 3 source entries / 0 resources |
+| `PToolsNetworkRuntimeTests` | `Tests/PToolsNetworkTests` | PToolsModelCore, PooToolsNetWork | Alamofire | 1 source entries / 0 resources |
+| `PToolsNetworkTests` | `Tests/PToolsNetworkTests` | PToolsModelCore, PToolsNetworkModelCore | — | 1 source entries / 0 resources |
 | `PToolsNotifications` | `PooToolsSource/PToolsNotifications` | PTNotificationPermission, PToolsRouteCore | — | 0 source entries / 0 resources |
 | `PToolsOverlay` | `PooToolsSource/Overlay` | PToolsCore, PToolsLogging, PToolsUIFoundation | — | 0 source entries / 0 resources |
 | `PToolsP2Tests` | `Tests/PToolsP2Tests` | PToolsActivities, PToolsAppIntents, PToolsAudio, PToolsConfiguration, PToolsCore, PToolsDocuments, PToolsFeedback, PToolsForm, PToolsRouteCore, PToolsWidgetCore, ptools | — | 0 source entries / 0 resources |
@@ -278,7 +278,7 @@ Generated at: 2026-10-03T05:18:13Z
 | `PooToolsMediaViewer` | `PooToolsSource/MediaViewer` | PooToolsLivePhoto, PooToolsMediaCore, PooToolsPageControl, PooToolsProgressBar, ptools | — | 0 source entries / 0 resources |
 | `PooToolsMessageKit` | `PooToolsSource/MessageKit` | PToolsSymbols, PooToolsCustomerLabel, ptools | — | 0 source entries / 0 resources |
 | `PooToolsMotion` | `PooToolsSource/Motion` | PTMotionPermission, ptools | — | 0 source entries / 0 resources |
-| `PooToolsNetWork` | `PooToolsSource/NetWork` | PToolsCore, PToolsModelCore, PToolsModelLegacyKakaJSON, PToolsModelLegacySmartCodable, PooToolsLoading, ptools | Alamofire | 0 source entries / 0 resources |
+| `PooToolsNetWork` | `PooToolsSource/NetWork` | PToolsCore, PToolsModelCore, PToolsModelLegacyKakaJSON, PToolsModelLegacySmartCodable, PToolsNetworkModelCore, PooToolsLoading, ptools | Alamofire | 11 source entries / 0 resources |
 | `PooToolsNetworkSpeedTest` | `PooToolsSource/NetworkSpeedTest` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsOSSKitSpeech` | `PooToolsSource/OSSKit` | PTSpeechPermission, ptools | — | 0 source entries / 0 resources |
 | `PooToolsPDF` | `PooToolsSource/PDF` | ptools | — | 0 source entries / 0 resources |
@@ -312,7 +312,7 @@ Generated at: 2026-10-03T05:18:13Z
 | `PooToolsVision` | `PooToolsSource/Vision` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsWhatsNewsKit` | `PooToolsSource/WhatsNewsKit` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsiOS17Tips` | `PooToolsSource/iOS17Tips` | ptools | — | 0 source entries / 0 resources |
-| `ptools` | `PooToolsSource` | PToolsCore, PToolsDate, PToolsDevice, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsUIFoundation | IQKeyboardManagerSwift, Kingfisher, Lottie, SnapKit | 28 source entries / 1 resources |
+| `ptools` | `PooToolsSource` | PToolsCore, PToolsDate, PToolsDevice, PToolsFontCatalogCore, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsUIFoundation | IQKeyboardManagerSwift, Kingfisher, Lottie, SnapKit | 30 source entries / 1 resources |
 
 ## Notes
 

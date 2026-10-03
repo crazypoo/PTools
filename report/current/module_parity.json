@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "generated_at": "2026-10-03T05:18:13Z",
+  "source_revision": "df42327494874fb628d8be8ca9428a01ec818ae6",
+  "generated_at": "2026-10-03T10:17:58Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -276,9 +276,11 @@
     "PTModelMixedLegacyFixture",
     "PTModelOnlyFixture",
     "PToolsDate",
+    "PToolsFontCatalogCore",
     "PToolsModelLegacyKakaJSON",
     "PToolsModelLegacySmartCodable",
-    "PToolsModelMacroPlugin"
+    "PToolsModelMacroPlugin",
+    "PToolsNetworkModelCore"
   ],
   "pod_only": [
     "Appz",
@@ -301,11 +303,87 @@
   ],
   "source_drift": [
     {
+      "module": "Core",
+      "spm": [
+        "ActionsheetAndAlert",
+        "Animation",
+        "AppDelegate",
+        "AppStore",
+        "ApplicationFunction",
+        "Badge",
+        "Base",
+        "BlackMagic",
+        "Blur",
+        "Button",
+        "Category",
+        "Colors",
+        "Core",
+        "DarkMode",
+        "FloatPanel",
+        "Font/PTFont.swift",
+        "Font/PTFontDescriptor.swift",
+        "Font/PTFontRuntime.swift",
+        "Foundation",
+        "Language",
+        "Line",
+        "Log",
+        "PermissionCore",
+        "PhotoLibraryPermission",
+        "Protocol",
+        "Rotation",
+        "SideMenuControl",
+        "StatusBar",
+        "Switch",
+        "iCloud"
+      ],
+      "cocoapods": [
+        "ActionsheetAndAlert",
+        "Animation",
+        "AppDelegate",
+        "AppStore",
+        "ApplicationFunction",
+        "Badge",
+        "Base",
+        "BlackMagic",
+        "Blur",
+        "Button",
+        "Category",
+        "Colors",
+        "Core",
+        "DarkMode",
+        "FloatPanel",
+        "Font",
+        "Foundation",
+        "Language",
+        "Line",
+        "Log",
+        "PToolsFontCore",
+        "PermissionCore",
+        "PhotoLibraryPermission",
+        "Protocol",
+        "Rotation",
+        "SideMenuControl",
+        "StatusBar",
+        "Switch",
+        "iCloud"
+      ]
+    },
+    {
       "module": "MeidaPermission",
       "spm": [
         "MeidaLibraryPermission"
       ],
       "cocoapods": []
+    },
+    {
+      "module": "NetWork",
+      "spm": [
+        "NetWork"
+      ],
+      "cocoapods": [
+        "NetWork",
+        "NetWorkModelCore"
+      ]
     }
   ],
   "dependency_drift": [
@@ -361,6 +439,7 @@
         "Logging",
         "PToolsCore",
         "PToolsDate",
+        "PToolsFontCatalogCore",
         "PToolsPermissionCore",
         "PToolsUIFoundation",
         "Symbols"
@@ -466,7 +545,8 @@
         "ModelCore",
         "PToolsCore",
         "PToolsModelLegacyKakaJSON",
-        "PToolsModelLegacySmartCodable"
+        "PToolsModelLegacySmartCodable",
+        "PToolsNetworkModelCore"
       ],
       "cocoapods": [
         "Core",
@@ -1481,13 +1561,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "af2721a92a75bf46d53c8c70ac19383890f3d2b028f53b45a84bb1788b672bd0",
-  "schemaVersion": 1,
-  "generatedAt": "2026-10-03T05:18:13Z",
-  "repository": "crazypoo/PTools",
-  "branch": "master",
-  "sourceRevision": "b6875bfcbb5b503f145e05d8bcc101c196cc316e",
-  "sourceVersion": "5.60.0",
-  "generatorVersion": "Scripts/validate_module_parity.sh",
-  "sourceInputsDigest": "eb66b030720b0fd30eb573eff88c7601464f448a455eafda9e1630c8be0309e3"
+  "fingerprint": "8949eb821c6af02437c5ee52d08690759382e36ba79e536227f97974ee6def80"
 }

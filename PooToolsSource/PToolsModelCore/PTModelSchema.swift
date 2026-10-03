@@ -171,6 +171,11 @@ public protocol PTStaticClassModel: AnyObject, Codable, PTStaticDecodableType {
 public protocol PTStaticModel: Codable & Sendable, PTStaticDecodableType {
     static var ptSchema: PTModelSchema<Self> { get }
 
+    // English: Generated models opt into decoder-level static dispatch; hand-written schemas keep their existing Codable boundary.
+    // Español: Los modelos generados activan el dispatch estático del decoder; los esquemas manuales conservan su límite Codable.
+    // 中文：生成模型显式开启 decoder 层静态分发，手写 Schema 继续保持原有 Codable 边界。
+    static var ptDecodeUsesStaticPath: Bool { get }
+
     // English: Generated models expose the same precedence contract as manual schemas.
     // Español: Los modelos generados exponen el mismo contrato de precedencia que los esquemas manuales.
     // 中文：生成模型与手写 Schema 共用同一套优先级契约。
@@ -219,6 +224,7 @@ public extension PTStaticModel {
 
     static var ptSchemaPrecedence: PTStaticSchemaPrecedence { .staticBeforeCodable }
     static var ptUsesDirectPath: Bool { true }
+    static var ptDecodeUsesStaticPath: Bool { false }
 
     static func ptDirectDecode(_ fields: [String: PTJSONValue],
                                using decoder: PTModelDecoder) throws -> Self? {
@@ -606,7 +612,11 @@ public enum PTStaticCodec {
            let model = try Model.ptDirectDecode(object, using: decoder) {
             return model
         }
-        return try Model.ptSchema.decode(from: normalized, using: decoder)
+        // English: Disable only the active model's decoder dispatch to avoid recursive schema re-entry.
+        // Español: Desactiva solo el dispatch del modelo activo para evitar volver recursivamente al mismo esquema.
+        // 中文：仅关闭当前模型的 decoder 分发，避免递归重新进入同一个 Schema。
+        return try Model.ptSchema.decode(from: normalized,
+                                        using: decoder.excludingStaticDispatch(for: Model.self))
     }
 
     // English: Capture unknown members alongside a decoded model for forward-compatible consumers.
