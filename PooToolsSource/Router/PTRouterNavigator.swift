@@ -38,7 +38,11 @@ internal enum PTRouterNavigator {
                               transitionStyle: transitionStyle)
             }
         case .push:
-            PTUtils.push(viewController)
+            if let adaptiveContainer = adaptiveContainer(from: PTUtils.getTopViewController(nil)) {
+                adaptiveContainer.pt_showAdaptive(viewController)
+            } else {
+                PTUtils.push(viewController)
+            }
         case .popToTaget:
             PTUtils.popToVC(ofType: type(of: viewController))
         case .windowNavRoot:
@@ -48,6 +52,20 @@ internal enum PTRouterNavigator {
         case .showTab:
             showTabBar(queries: queries)
         }
+    }
+
+    // English: Walk the visible controller hierarchy so adaptive containers own the presentation decision.
+    // Español: Recorre la jerarquía visible para que los contenedores adaptativos decidan la presentación.
+    // 中文：遍历当前可见控制器层级，让自适应容器统一决定展示方式。
+    private static func adaptiveContainer(from viewController: UIViewController?) -> PTAdaptiveNavigationContainer? {
+        var current = viewController
+        while let controller = current {
+            if let container = controller as? PTAdaptiveNavigationContainer {
+                return container
+            }
+            current = controller.parent
+        }
+        return nil
     }
 
     // English: Switch tabs only after the current navigation stack has returned to its root.

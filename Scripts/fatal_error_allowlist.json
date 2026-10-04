@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "rules": [
+    {
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "category": "ABSTRACT_CONTRACT",
+      "reason": "The base text-field effect type is intentionally abstract; concrete subclasses must implement the animation hooks.",
+      "removeIn": "6.0.0"
+    },
+    {
+      "path": "PooToolsSource/ImageEditor/PTStickerManager.swift",
+      "category": "ABSTRACT_CONTRACT",
+      "reason": "The base sticker contract exposes abstract state for concrete sticker implementations.",
+      "removeIn": "6.0.0"
+    }
+  ]
+}

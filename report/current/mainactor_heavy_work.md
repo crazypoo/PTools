@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_mainactor_heavy_work.rb
-Source revision: 70dde0456c0525709ed3de840428c60ac66b8427
-Generated at: 2026-10-03T15:23:01Z
+Source revision: b575ef04bf62427d87cb27532cca6a38e0545245
+Generated at: 2026-10-04T03:20:37Z
 -->
 
 # MainActor 重活盘点
@@ -42,13 +42,13 @@ Generated at: 2026-10-03T15:23:01Z
 | `PooToolsSource/Core/PTLoadImageFunction.swift` | 682 | `UIImage\(data:` | INTENTIONAL | `return UIImage(data: data)` |
 | `PooToolsSource/NetWork/Network.swift` | 451 | `JSONDecoder` | INTENTIONAL | `if let statusModel = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) {` |
 | `PooToolsSource/NetWork/Network.swift` | 626 | `JSONDecoder` | INTENTIONAL | `let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 271 | `FileManager.default` | MIGRATED | `?? FileManager.default.temporaryDirectory.path` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 273 | `FileManager.default` | MIGRATED | `try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 379 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.removeItem(atPath: path)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 386 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.removeItem(atPath: diskPath)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 387 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 417 | `FileManager.default` | MIGRATED | `let fm = FileManager.default` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 449 | `JSONEncoder` | MIGRATED | `try? JSONEncoder().encode(object)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 458 | `JSONDecoder` | MIGRATED | `try? JSONDecoder().decode(CacheObject.self, from: data)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 467 | `Data\(contentsOf:` | MIGRATED | `try? Data(contentsOf: URL(fileURLWithPath: path))` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 477 | `FileManager.default` | MIGRATED | `try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 266 | `FileManager.default` | MIGRATED | `?? FileManager.default.temporaryDirectory.path` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 268 | `FileManager.default` | MIGRATED | `try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 374 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.removeItem(atPath: path)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 381 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.removeItem(atPath: diskPath)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 382 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 412 | `FileManager.default` | MIGRATED | `let fm = FileManager.default` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 444 | `JSONEncoder` | MIGRATED | `try? JSONEncoder().encode(object)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 453 | `JSONDecoder` | MIGRATED | `try? JSONDecoder().decode(CacheObject.self, from: data)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 462 | `Data\(contentsOf:` | MIGRATED | `try? Data(contentsOf: URL(fileURLWithPath: path))` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 472 | `FileManager.default` | MIGRATED | `try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)` |

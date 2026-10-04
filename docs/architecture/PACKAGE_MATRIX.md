@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: 260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907
-Generated at: 2026-10-02T13:59:57Z
-Version source: 5.60.0
+Source revision: b575ef04bf62427d87cb27532cca6a38e0545245
+Generated at: 2026-10-04T02:51:03Z
+Version source: 5.61.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -122,6 +122,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `SocketKit` | A | `PooTools/SocketKit` | `PooToolsSocketKit` | Keep; review drift |
 | `SpeechRecognizerPermission` | A | `PooTools/SpeechRecognizerPermission` | `PTSpeechPermission` | Keep; review drift |
 | `SpeedPanel` | A | `PooTools/SpeedPanel` | `PooToolsSpeedPanel` | Keep; review drift |
+| `SplitView` | A | `PooTools/SplitView` | `PooToolsSplitView` | Keep; review drift |
 | `StepCount` | A | `PooTools/StepCount` | `PooToolsStepCount` | Keep; review drift |
 | `Stepper` | A | `PooTools/Stepper` | `PooToolsStepper` | Keep; review drift |
 | `Storage` | A | `PooTools/Storage` | — | Keep; review drift |
@@ -159,9 +160,11 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `PTModelMixedLegacyFixture` | C | — | `PTModelMixedLegacyFixture` | Parity decision before 6.0 |
 | `PTModelOnlyFixture` | C | — | `PTModelOnlyFixture` | Parity decision before 6.0 |
 | `PToolsDate` | C | — | `PToolsDate` | Parity decision before 6.0 |
+| `PToolsFontCatalogCore` | C | — | `PToolsFontCatalogCore` | Parity decision before 6.0 |
 | `PToolsModelLegacyKakaJSON` | C | — | `PToolsModelLegacyKakaJSON` | Parity decision before 6.0 |
 | `PToolsModelLegacySmartCodable` | C | — | `PToolsModelLegacySmartCodable` | Parity decision before 6.0 |
 | `PToolsModelMacroPlugin` | C | — | `PToolsModelMacroPlugin` | Parity decision before 6.0 |
+| `PToolsNetworkModelCore` | C | — | `PToolsNetworkModelCore` | Parity decision before 6.0 |
 
 ## Compatibility entries
 

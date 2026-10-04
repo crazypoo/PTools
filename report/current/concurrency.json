@@ -2,13 +2,12 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "70dde0456c0525709ed3de840428c60ac66b8427",
-  "generated_at": "2026-10-03T15:22:01Z",
+  "source_revision": "b575ef04bf62427d87cb27532cca6a38e0545245",
+  "generated_at": "2026-10-04T03:19:44Z",
   "counts": {
     "main_queue_async": 26,
     "task_detached": 31,
-    "unchecked_sendable": 45,
-    "as_bang": 4
+    "unchecked_sendable": 49
   },
   "locations": [
     {
@@ -62,14 +61,26 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/C7Collector/C7CollectorCamera.swift",
-      "line": 18,
+      "line": 17,
       "text": "private struct PTSystemPixelBufferBox: @unchecked Sendable {"
     },
     {
-      "rule": "as_bang",
-      "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 369,
-      "text": "let tap = sender as! UITapGestureRecognizer"
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
+      "line": 13,
+      "text": "private struct PTC7FilterBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
+      "line": 17,
+      "text": "private final class PTC7VideoCompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
+      "line": 42,
+      "text": "private final class PTC7VideoFilterCompositor: NSObject, AVVideoCompositing, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
@@ -146,7 +157,7 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Category/UICollectionView+PTEX.swift",
-      "line": 302,
+      "line": 318,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -246,16 +257,10 @@
       "text": "final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {"
     },
     {
-      "rule": "as_bang",
-      "path": "PooToolsSource/DebugUserDefault/PTUserDefaultKeysAndValues.swift",
-      "line": 29,
-      "text": "let _keys = NSDictionary(contentsOfFile: preferencePath)?.allKeys as! [String]"
-    },
-    {
-      "rule": "as_bang",
-      "path": "PooToolsSource/DebugUserDefault/PTUserDefultsViewController.swift",
-      "line": 95,
-      "text": "model.desc = String(format: \"%@\", value.values.first as! CVarArg)"
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
+      "line": 17,
+      "text": "private struct PTHeartRateSampleBufferBox: @unchecked Sendable {"
     },
     {
       "rule": "main_queue_async",
@@ -322,12 +327,6 @@
       "path": "PooToolsSource/Inspector/Manager.swift",
       "line": 35,
       "text": "DispatchQueue.main.async(execute: closure)"
-    },
-    {
-      "rule": "as_bang",
-      "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
-      "line": 422,
-      "text": "let cell = tableView.dequeueReusableCell(withIdentifier: \"Cell\", for: indexPath) as! MilestoneCell"
     },
     {
       "rule": "unchecked_sendable",
@@ -404,43 +403,43 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 21,
+      "line": 22,
       "text": "public final class NetworkReachability: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 69,
+      "line": 61,
       "text": "public final class PTNetWorkStatus: @unchecked Sendable {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 407,
+      "line": 402,
       "text": "Task.detached(priority: .background) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 448,
+      "line": 443,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 457,
+      "line": 452,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 466,
+      "line": 461,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 475,
+      "line": 470,
       "text": "Task.detached(priority: .background) {"
     },
     {

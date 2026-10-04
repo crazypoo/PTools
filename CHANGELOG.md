@@ -4,6 +4,15 @@
 
 版本唯一来源为根目录 `VERSION`；外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
 
+## 5.61.0 — 2026-10-04
+
+- 完成 5.x 最终运行时安全、Scene、存储和 Swift 6 并发边界收口：移除 Kakapos 生产依赖，清理 `AppWindows!`，补齐 `@unchecked Sendable` 分类和工作树安全报告。
+- HeartRate 改为可恢复的相机/像素处理错误；NetworkSpeedTest 改为显式 endpoint 的 actor 测速器；Ping 增加类型化状态机和 `PTPingSession`。
+- Location 使用 `PTLocationSnapshot` 与旧键迁移；`PTFileStorage` 的文件 I/O 移至 utility 队列并保留 atomic write；UserDefaults 兼容入口移除 `synchronize()`。
+- 新增 `PTSplitViewController` 与 Router 自适应桥接，支持双栏/三栏、紧凑 push、regular secondary、Inspector 和状态恢复。
+- 修复泛型 Cell/Header/Footer 出列、UIDocumentPicker 缺少参数和 iOS 18 zoom 转场回调的用户路径崩溃，补齐 Example Demo、指南和 5.61.0 发布门禁。
+- `PooTools-Example` Simulator Debug 构建通过；真机、真实宿主、真实测速 endpoint、iPad 多窗口视觉和 Instruments 证据仍需集成方完成，当前不创建正式 tag。
+
 ## 5.60.0 — 2026-10-02
 
 - 收口 5.60.0 剩余实施路线：P0 Nested Model / Network 错误语义与真实测试 Gate、P1 Learning Lab 与迁移文档、P2 模块 parity / singleton ownership / deprecated freeze / God File 拆分 / Font Catalog / Network 与 Router 分层、P3 并发例外复审均已落地。

@@ -1,14 +1,16 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "70dde0456c0525709ed3de840428c60ac66b8427",
-  "generated_at": "2026-10-03T15:22:02Z",
+  "source_revision": "b575ef04bf62427d87cb27532cca6a38e0545245",
+  "generated_at": "2026-10-04T03:19:45Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
     "PooToolsSource/Category/PHAsset+PTEX.swift",
     "PooToolsSource/Category/PTVideoThumbnailService.swift",
     "PooToolsSource/C7Collector/C7CollectorCamera.swift",
+    "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
+    "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
     "PooToolsSource/LivePhoto/PTLivePhoto.swift",
     "PooToolsSource/Motion/PTMotion.swift",
     "PooToolsSource/NFC/PTNFCToolKit.swift",
@@ -42,8 +44,26 @@
   "declarations": [
     {
       "path": "PooToolsSource/C7Collector/C7CollectorCamera.swift",
-      "line": 18,
+      "line": 17,
       "declaration": "private struct PTSystemPixelBufferBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
+      "line": 13,
+      "declaration": "private struct PTC7FilterBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
+      "line": 17,
+      "declaration": "private final class PTC7VideoCompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
+      "line": 42,
+      "declaration": "private final class PTC7VideoFilterCompositor: NSObject, AVVideoCompositing, @unchecked Sendable {",
       "allowlisted": true
     },
     {
@@ -110,6 +130,12 @@
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
       "line": 26,
       "declaration": "final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
+      "line": 17,
+      "declaration": "private struct PTHeartRateSampleBufferBox: @unchecked Sendable {",
       "allowlisted": true
     },
     {
@@ -186,13 +212,13 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 21,
+      "line": 22,
       "declaration": "public final class NetworkReachability: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 69,
+      "line": 61,
       "declaration": "public final class PTNetWorkStatus: @unchecked Sendable {",
       "allowlisted": true
     },

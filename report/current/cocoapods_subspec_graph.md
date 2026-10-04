@@ -3,18 +3,18 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: 70dde0456c0525709ed3de840428c60ac66b8427
-Generated at: 2026-10-03T15:22:33Z
+Source revision: b575ef04bf62427d87cb27532cca6a38e0545245
+Generated at: 2026-10-04T03:20:12Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.60.0`
+- Podspec: `PooTools` `5.61.0`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
-- Subspec count: `142`
+- Subspec count: `143`
 
 ## Subspecs
 
@@ -75,14 +75,14 @@ Generated at: 2026-10-03T15:22:33Z
 | `ImageEditor` | `PooTools/Core`, `PooTools/HarbethKit`, `PooTools/MediaCore`, `PooTools/PhotoPicker`, `PooTools/Symbols` | — | `ImageEditor` | — | — |
 | `ImagePicker` | `PooTools/CameraPermission`, `PooTools/Core` | — | `ImagePicker` | — | — |
 | `Input` | `PooTools/Core` | `PhoneNumberKit` | `Input` | — | — |
-| `InputAll` | `PooTools/Appz`, `PooTools/Audio`, `PooTools/BankCard`, `PooTools/Banner`, `PooTools/BilogyID`, `PooTools/Calendar`, `PooTools/CheckBox`, `PooTools/CheckDirtyWord`, `PooTools/CheckUpdate`, `PooTools/ChinesePinyin`, `PooTools/Circle`, `PooTools/CodeView`, `PooTools/Configuration`, `PooTools/Core`, `PooTools/Country`, `PooTools/CustomerLabel`, `PooTools/CustomerNumberKeyboard`, `PooTools/DEBUG`, `PooTools/DEBUG_TrackingEyes`, `PooTools/DataEncrypt`, `PooTools/Feedback`, `PooTools/Flag`, `PooTools/Guide`, `PooTools/HTTPFilePortal`, `PooTools/HarbethKit`, `PooTools/HeartRate`, `PooTools/Hud`, `PooTools/IAP`, `PooTools/ImageEditor`, `PooTools/Input`, `PooTools/Instructions`, `PooTools/KeyChain`, `PooTools/LaunchTimeProfiler`, `PooTools/Layout`, `PooTools/LivePhoto`, `PooTools/Loading`, `PooTools/Location`, `PooTools/MediaViewer`, `PooTools/MessageKit`, `PooTools/Motion`, `PooTools/NetWork`, `PooTools/OSSKitSpeech`, `PooTools/PDF`, `PooTools/PageControl`, `PooTools/PagingControl`, `PooTools/PhoneInfo`, `PooTools/PhotoPicker`, `PooTools/Picker`, `PooTools/Ping`, `PooTools/PopoverKit`, `PooTools/ProgressBar`, `PooTools/RateView`, `PooTools/Router`, `PooTools/SVG`, `PooTools/ScanQRCode`, `PooTools/ScrollBanner`, `PooTools/Search`, `PooTools/SearchBar`, `PooTools/Security`, `PooTools/SecuritySuite`, `PooTools/Segmented`, `PooTools/Share`, `PooTools/Slider`, `PooTools/SmartScreenshot`, `PooTools/SocketKit`, `PooTools/Stepper`, `PooTools/Tabbar`, `PooTools/Telephony`, `PooTools/VideoEditor`, `PooTools/Vision`, `PooTools/WhatsNewsKit`, `PooTools/ZipArchive`, `PooTools/iOS17Tips` | — | — | — | — |
+| `InputAll` | `PooTools/Appz`, `PooTools/Audio`, `PooTools/BankCard`, `PooTools/Banner`, `PooTools/BilogyID`, `PooTools/Calendar`, `PooTools/CheckBox`, `PooTools/CheckDirtyWord`, `PooTools/CheckUpdate`, `PooTools/ChinesePinyin`, `PooTools/Circle`, `PooTools/CodeView`, `PooTools/Configuration`, `PooTools/Core`, `PooTools/Country`, `PooTools/CustomerLabel`, `PooTools/CustomerNumberKeyboard`, `PooTools/DEBUG`, `PooTools/DEBUG_TrackingEyes`, `PooTools/DataEncrypt`, `PooTools/Feedback`, `PooTools/Flag`, `PooTools/Guide`, `PooTools/HTTPFilePortal`, `PooTools/HarbethKit`, `PooTools/HeartRate`, `PooTools/Hud`, `PooTools/IAP`, `PooTools/ImageEditor`, `PooTools/Input`, `PooTools/Instructions`, `PooTools/KeyChain`, `PooTools/LaunchTimeProfiler`, `PooTools/Layout`, `PooTools/LivePhoto`, `PooTools/Loading`, `PooTools/Location`, `PooTools/MediaViewer`, `PooTools/MessageKit`, `PooTools/Motion`, `PooTools/NetWork`, `PooTools/OSSKitSpeech`, `PooTools/PDF`, `PooTools/PageControl`, `PooTools/PagingControl`, `PooTools/PhoneInfo`, `PooTools/PhotoPicker`, `PooTools/Picker`, `PooTools/Ping`, `PooTools/PopoverKit`, `PooTools/ProgressBar`, `PooTools/RateView`, `PooTools/Router`, `PooTools/SVG`, `PooTools/ScanQRCode`, `PooTools/ScrollBanner`, `PooTools/Search`, `PooTools/SearchBar`, `PooTools/Security`, `PooTools/SecuritySuite`, `PooTools/Segmented`, `PooTools/Share`, `PooTools/Slider`, `PooTools/SmartScreenshot`, `PooTools/SocketKit`, `PooTools/SplitView`, `PooTools/Stepper`, `PooTools/Tabbar`, `PooTools/Telephony`, `PooTools/VideoEditor`, `PooTools/Vision`, `PooTools/WhatsNewsKit`, `PooTools/ZipArchive`, `PooTools/iOS17Tips` | — | — | — | — |
 | `Instructions` | `PooTools/Core`, `PooTools/Overlay` | — | `Instructions` | — | — |
 | `KeyChain` | — | — | `KeyChain` | — | — |
 | `LaunchTimeProfiler` | `PooTools/Core` | — | `LaunchTimeProfiler` | — | — |
 | `Layout` | `PooTools/Core` | `CollectionViewPagingLayout` | `Layout` | — | — |
 | `LivePhoto` | `PooTools/Core` | — | `LivePhoto` | — | — |
 | `Loading` | `PooTools/Core` | — | `Loading` | — | — |
-| `Location` | `PooTools/Core`, `PooTools/LocationPermission` | — | `Location` | CoreLocation | — |
+| `Location` | `PooTools/Core`, `PooTools/LocationPermission`, `PooTools/Storage` | — | `Location` | CoreLocation | — |
 | `LocationPermission` | `PooTools/PToolsPermissionCore` | — | `LocationPermission` | — | — |
 | `Logging` | — | — | `PToolsLogging` | Foundation, OSLog | — |
 | `MXMetricManagerKit` | `PooTools/Core` | — | `MXMetricKitManager` | — | — |
@@ -100,7 +100,7 @@ Generated at: 2026-10-03T15:22:33Z
 | `MotionPermission` | `PooTools/PToolsPermissionCore` | — | `MotionPermission` | — | — |
 | `NFCKit` | `PooTools/Core` | — | `NFC` | — | — |
 | `NetWork` | `PooTools/Network` | — | — | — | — |
-| `Network` | `PooTools/Core`, `PooTools/Loading`, `PooTools/ModelCore`, `PooTools/ModelLegacyKakaJSON`, `PooTools/ModelLegacySmartCodable` | `Alamofire` | `NetWork`, `NetWorkModelCore` | — | — |
+| `Network` | `PooTools/Connectivity`, `PooTools/Core`, `PooTools/Loading`, `PooTools/ModelCore`, `PooTools/ModelLegacyKakaJSON`, `PooTools/ModelLegacySmartCodable` | `Alamofire` | `NetWork`, `NetWorkModelCore` | — | — |
 | `NetworkSpeedTest` | `PooTools/Core` | — | `NetworkSpeedTest` | — | — |
 | `NotificationBanner` | `PooTools/Banner` | — | — | — | — |
 | `NotificationPermission` | `PooTools/PToolsPermissionCore` | — | `NotificationPermission` | — | — |
@@ -117,7 +117,7 @@ Generated at: 2026-10-03T15:22:33Z
 | `PageControl` | `PooTools/Core` | — | `PageControl` | — | — |
 | `PagingControl` | `PooTools/Core` | — | `SegmentControl` | — | — |
 | `PhoneInfo` | — | — | `PhoneInfo` | Security | — |
-| `PhotoPicker` | `PooTools/Core`, `PooTools/ImagePicker`, `PooTools/Loading`, `PooTools/MediaCore`, `PooTools/Symbols` | `Kakapos` | `PhotoPicker` | — | — |
+| `PhotoPicker` | `PooTools/Core`, `PooTools/ImagePicker`, `PooTools/Loading`, `PooTools/MediaCore`, `PooTools/Symbols` | — | `PhotoPicker` | — | — |
 | `Picker` | `PooTools/Core` | — | `Picker` | — | — |
 | `Ping` | `PooTools/Core` | — | `Ping` | — | — |
 | `Popover` | `PooTools/Overlay`, `PooTools/Symbols` | — | `Popover` | — | — |
@@ -144,6 +144,7 @@ Generated at: 2026-10-03T15:22:33Z
 | `SocketKit` | `PooTools/Core`, `PooTools/Logging` | — | `SocketKit` | — | — |
 | `SpeechRecognizerPermission` | `PooTools/PToolsPermissionCore` | — | `SpeechPremission` | — | — |
 | `SpeedPanel` | `PooTools/Core` | — | `SpeedPanel` | — | — |
+| `SplitView` | `PooTools/Core` | — | `SplitView` | Foundation, UIKit | — |
 | `StepCount` | `PooTools/Core`, `PooTools/HealthPermission` | — | `HealthKit` | HealthKit | — |
 | `Stepper` | `PooTools/Core` | — | `Stepper` | — | — |
 | `Storage` | `PooTools/KeyChain`, `PooTools/StorageCore` | — | `PToolsStorage` | Foundation, Security | — |

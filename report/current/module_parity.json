@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "e9ae991e3411ea728be377c2e82b1635af069c05",
-  "generated_at": "2026-10-03T12:21:13Z",
+  "source_revision": "b575ef04bf62427d87cb27532cca6a38e0545245",
+  "generated_at": "2026-10-04T02:51:00Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -127,6 +127,7 @@
     "PooToolsSmartScreenshot",
     "PooToolsSocketKit",
     "PooToolsSpeedPanel",
+    "PooToolsSplitView",
     "PooToolsStepCount",
     "PooToolsStepper",
     "PooToolsTelephony",
@@ -254,6 +255,7 @@
     "SocketKit",
     "SpeechRecognizerPermission",
     "SpeedPanel",
+    "SplitView",
     "StepCount",
     "Stepper",
     "Storage",
@@ -540,6 +542,7 @@
       "module": "NetWork",
       "field": "internal_dependencies",
       "spm": [
+        "Connectivity",
         "Core",
         "Loading",
         "ModelCore",
@@ -549,6 +552,7 @@
         "PToolsNetworkModelCore"
       ],
       "cocoapods": [
+        "Connectivity",
         "Core",
         "Loading",
         "ModelCore",
@@ -1468,6 +1472,22 @@
       }
     },
     {
+      "module": "SplitView",
+      "spm": {
+        "defines": [],
+        "upcoming_features": [
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_SPLITVIEW"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "Storage",
       "spm": {
         "defines": [],
@@ -1561,13 +1581,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "8949eb821c6af02437c5ee52d08690759382e36ba79e536227f97974ee6def80",
-  "schemaVersion": 1,
-  "generatedAt": "2026-10-03T12:21:13Z",
-  "repository": "crazypoo/PTools",
-  "branch": "master",
-  "sourceRevision": "e9ae991e3411ea728be377c2e82b1635af069c05",
-  "sourceVersion": "5.60.0",
-  "generatorVersion": "Scripts/validate_module_parity.sh",
-  "sourceInputsDigest": "51cdd4d720ea7bc9b8f86737ccd98a49ddcefa19dddcdcde04ad78c0e9d9a3be"
+  "fingerprint": "0f4a6fff1fad4860eac89c341cc2196ab1dcf7fea674b29ee3e756647d9537f5"
 }

@@ -3,6 +3,13 @@
 本文只覆盖 `PooTools.podspec` `default_subspec` 声明的 Core 及其直接扩展边界。目标平台为
 iOS 17+，语言模式为 Swift 6+。
 
+## 0. 5.61.0 Final Closure
+
+5.61.0 是 5.x 的架构收口版本：新代码优先使用 `PTSplitViewController`、`PTNetworkSpeedTester`、
+`PTPingSession`、`PTStorage` 和 `PTLocationSnapshot`。Kakapos 已从 PTools 生产依赖移除；旧的
+测速、Ping、UserDefaults 和 Scene 入口仍保留一个兼容周期。真实宿主和真机验证完成后，后续
+Breaking Cleanup 统一进入 6.0，不在 5.x 再增加平行实现。
+
 ## 1. Migration Policy
 
 5.x 保留公开符号和模块路径；新能力进入 canonical API，旧入口作为薄兼容包装器并标记迁移方向。

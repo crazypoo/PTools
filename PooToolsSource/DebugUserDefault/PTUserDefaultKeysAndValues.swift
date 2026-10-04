@@ -26,7 +26,10 @@ class PTUserDefaultKeysAndValues: NSObject {
             if let bundle: String = Bundle.main.bundleIdentifier {
                 let preferencePath: String = NSHomeDirectory() + "/Library/Preferences/\(bundle).plist"
                 
-                let _keys = NSDictionary(contentsOfFile: preferencePath)?.allKeys as! [String]
+                // English: Plist keys are untrusted input and must be validated before use.
+                // Español: Las claves del plist son datos no confiables y deben validarse antes de usarse.
+                // 中文：plist 键属于不可信输入，使用前必须经过类型校验。
+                let _keys = NSDictionary(contentsOfFile: preferencePath)?.allKeys.compactMap { $0 as? String } ?? []
                 
                 return _keys.filter {
                     !$0.contains("LocalConsole.")

@@ -10,9 +10,10 @@ import Foundation
 
 enum PTApplicationDirectories {
     static var support: URL {
-        guard let supportDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-            fatalError("Unable to retrieve application support directory.")
-        }
-        return supportDirectory
+        // English: Diagnostics must remain usable even when the sandbox does not expose Application Support.
+        // Español: Las herramientas de diagnóstico deben seguir funcionando aunque el sandbox no exponga Application Support.
+        // 中文：即使沙盒无法提供 Application Support，诊断工具也必须继续可用。
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+            ?? FileManager.default.temporaryDirectory.appendingPathComponent("PTools", isDirectory: true)
     }
 }

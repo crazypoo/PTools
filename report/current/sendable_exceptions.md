@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_sendable_exceptions.rb
-Source revision: 70dde0456c0525709ed3de840428c60ac66b8427
-Generated at: 2026-10-03T15:22:02Z
+Source revision: b575ef04bf62427d87cb27532cca6a38e0545245
+Generated at: 2026-10-04T03:19:45Z
 -->
 
 # Swift 6 Sendable 例外清单
@@ -13,7 +13,10 @@ Generated at: 2026-10-03T15:22:02Z
 
 | 类型/声明位置 | 行号 | 声明 | 白名单 | 处理原则 |
 | --- | ---: | --- | --- | --- |
-| `PooToolsSource/C7Collector/C7CollectorCamera.swift` | 18 | `private struct PTSystemPixelBufferBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/C7Collector/C7CollectorCamera.swift` | 17 | `private struct PTSystemPixelBufferBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/C7Collector/PTC7VideoExportService.swift` | 13 | `private struct PTC7FilterBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/C7Collector/PTC7VideoExportService.swift` | 17 | `private final class PTC7VideoCompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/C7Collector/PTC7VideoExportService.swift` | 42 | `private final class PTC7VideoFilterCompositor: NSObject, AVVideoCompositing, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Calendar/PTEventOnCalendar.swift` | 15 | `private struct PTSendableEventStoreBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Calendar/PTEventOnCalendar.swift` | 19 | `public struct PTSendableEventArrayBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Calendar/PTEventOnCalendar.swift` | 27 | `public struct PTSendableReminderArrayBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
@@ -25,6 +28,7 @@ Generated at: 2026-10-03T15:22:02Z
 | `PooToolsSource/DebugCrash/PTCrashHandler.swift` | 13 | `private struct PTSafeExceptionBox: @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
 | `PooToolsSource/DebugCrash/PTCrashHandler.swift` | 17 | `private struct PTSafeSignalPointerBox: @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
 | `PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift` | 26 | `final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
+| `PooToolsSource/HeartRate/PTHeartRateViewController.swift` | 17 | `private struct PTHeartRateSampleBufferBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/Inspector/MainThreadAsyncOperation.swift` | 12 | `final class MainThreadAsyncOperation: MainThreadOperation, @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
 | `PooToolsSource/Inspector/MainThreadOperation.swift` | 12 | `class MainThreadOperation: Operation, @unchecked Sendable {` | yes | 诊断/运行时兼容边界，待诊断目标隔离 |
 | `PooToolsSource/LivePhoto/PTLivePhoto.swift` | 17 | `private final class AVContext: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
@@ -37,8 +41,8 @@ Generated at: 2026-10-03T15:22:02Z
 | `PooToolsSource/NFC/PTNFCToolKit.swift` | 23 | `private struct PTNFCSessionAndNDEFSendableBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/NetWork/Network+LegacyCompatibility.swift` | 18 | `private struct PTLegacyModelTypeBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/NetWork/Network.swift` | 153 | `public final class Network: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 21 | `public final class NetworkReachability: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 69 | `public final class PTNetWorkStatus: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 22 | `public final class NetworkReachability: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 61 | `public final class PTNetWorkStatus: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/OSSKit/OSSSpeech.swift` | 129 | `public class OSSSpeech: NSObject, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/OSSKit/OSSSpeech.swift` | 385 | `final class ConverterState: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/OSSKit/OSSUtterance.swift` | 27 | `public class OSSUtterance: AVSpeechUtterance, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |

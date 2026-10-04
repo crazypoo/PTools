@@ -55,36 +55,53 @@ public actor PTUserDefaultsStorage: PTStorageBackend {
 
 public actor PTFileStorage: PTStorageBackend {
     public let directoryURL: URL
+    private let ioQueue = DispatchQueue(label: "com.pootools.storage.file-io", qos: .utility)
 
     public init(directoryURL: URL) {
         self.directoryURL = directoryURL
     }
 
     public func data(for key: String) async throws -> Data? {
-        try ensureDirectory()
         let url = fileURL(for: key)
-        guard FileManager.default.fileExists(atPath: url.path) else { return nil }
-        return try Data(contentsOf: url)
+        return try await performIO { [directoryURL] in
+            try FileManager.default.createDirectory(at: directoryURL,
+                                                    withIntermediateDirectories: true)
+            guard FileManager.default.fileExists(atPath: url.path) else { return nil }
+            return try Data(contentsOf: url)
+        }
     }
 
     public func set(_ data: Data, for key: String) async throws {
         guard !key.isEmpty else { throw PTStorageError.invalidKey }
-        try ensureDirectory()
-        // English: Data.atomic replaces the destination after the temporary write completes.
-        // Español: Data.atomic reemplaza el destino después de completar la escritura temporal.
-        // 中文：Data.atomic 会在临时写入完成后替换目标文件。
-        try data.write(to: fileURL(for: key), options: [.atomic])
+        let url = fileURL(for: key)
+        try await performIO { [directoryURL] in
+            try FileManager.default.createDirectory(at: directoryURL,
+                                                    withIntermediateDirectories: true)
+            // English: Data.atomic replaces the destination after the temporary write completes.
+            // Español: Data.atomic reemplaza el destino después de completar la escritura temporal.
+            // 中文：Data.atomic 会在临时写入完成后替换目标文件。
+            try data.write(to: url, options: [.atomic])
+        }
     }
 
     public func removeValue(for key: String) async throws {
         let url = fileURL(for: key)
-        guard FileManager.default.fileExists(atPath: url.path) else { return }
-        try FileManager.default.removeItem(at: url)
+        try await performIO {
+            guard FileManager.default.fileExists(atPath: url.path) else { return }
+            try FileManager.default.removeItem(at: url)
+        }
     }
 
-    private func ensureDirectory() throws {
-        try FileManager.default.createDirectory(at: directoryURL,
-                                                withIntermediateDirectories: true)
+    private func performIO<Value: Sendable>(_ operation: @escaping @Sendable () throws -> Value) async throws -> Value {
+        try await withCheckedThrowingContinuation { continuation in
+            ioQueue.async {
+                do {
+                    continuation.resume(returning: try operation())
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
 
     private func fileURL(for key: String) -> URL {

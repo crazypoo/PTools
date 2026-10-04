@@ -1,0 +1,835 @@
+{
+  "schema_version": 1,
+  "baseline": "5.61.0",
+  "rule": "One canonical owner per system capability; adapters and specialized exceptions are registered explicitly.",
+  "owners": [
+    {
+      "capability": "user_defaults_generic_storage",
+      "owner": "PToolsStorage",
+      "backend": "PTUserDefaultsStorage",
+      "classification": "MERGE_BACKEND_NOW",
+      "adapters": [
+        "PTCoreUserDefaultsWrapper",
+        "UserDefaults+PTEX"
+      ],
+      "scan_patterns": [
+        "UserDefaults\\.standard",
+        "PTUserDefaultsStorage"
+      ],
+      "matches": [
+        "PooToolsSource/BioID/PTBiologyID.swift",
+        "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
+        "PooToolsSource/Core/PTAppUserdefault.swift",
+        "PooToolsSource/DarkMode/PTDrakModeOption.swift",
+        "PooToolsSource/Debug/PTDebugFunction.swift",
+        "PooToolsSource/DebugUserDefault/PTUserDefaultKeysAndValues.swift",
+        "PooToolsSource/DebugUserDefault/PTUserDefultsViewController.swift",
+        "PooToolsSource/LocalConsole/LocalConsole.swift",
+        "PooToolsSource/Location/PTGetGPSData.swift",
+        "PooToolsSource/PToolsStorage/PTStorage.swift",
+        "PooToolsSource/PToolsWidgetCore/PTWidgetCore.swift"
+      ],
+      "match_count": 11
+    },
+    {
+      "capability": "network_connectivity",
+      "owner": "PToolsConnectivity",
+      "backend": "PTConnectivityMonitor",
+      "classification": "MERGE_BACKEND_NOW",
+      "adapters": [
+        "NetworkReachability",
+        "PTNetWorkStatus"
+      ],
+      "scan_patterns": [
+        "NWPathMonitor",
+        "PTConnectivityMonitor"
+      ],
+      "matches": [
+        "PooToolsSource/Debug/PTPlatformDiagnosticsViewController.swift",
+        "PooToolsSource/NetWork/NetworkSupport.swift",
+        "PooToolsSource/PToolsConnectivity/PTConnectivity.swift"
+      ],
+      "match_count": 3
+    },
+    {
+      "capability": "permission_contracts",
+      "owner": "PToolsPermissionCore",
+      "backend": "PTPermission",
+      "classification": "CANONICAL + COMPAT",
+      "adapters": [
+        "PermissionCore"
+      ],
+      "scan_patterns": [
+        "PTPermission",
+        "PTPermissionAuthorizationState"
+      ],
+      "matches": [
+        "PooToolsSource/BluetoothPermission/PTPermissionBluetooth.swift",
+        "PooToolsSource/BluetoothPermission/PTPermissionBluetoothHandler.swift",
+        "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
+        "PooToolsSource/Calendar/PTEventOnCalendar.swift",
+        "PooToolsSource/CalendarPermission/PTPermissionCalendar.swift",
+        "PooToolsSource/CameraPermission/PTPermissionCamera.swift",
+        "PooToolsSource/Category/String+PTEX.swift",
+        "PooToolsSource/Category/UIViewController+PTEX.swift",
+        "PooToolsSource/ContactsPermission/PTPermissionContacts.swift",
+        "PooToolsSource/DarkMode/PTThemeProvider.swift",
+        "PooToolsSource/DevMask/PTDevMaskView.swift",
+        "PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift",
+        "PooToolsSource/HealthPermission/PTPermissionHealth.swift",
+        "PooToolsSource/ImagePicker/PTImagePicker.swift",
+        "PooToolsSource/Location/PTGetGPSData.swift",
+        "PooToolsSource/LocationPermission/PTPermissionLocation.swift",
+        "PooToolsSource/LocationPermission/PTPermissionLocationAccuracy.swift",
+        "PooToolsSource/LocationPermission/PTPermissionLocationAlwaysHandler.swift",
+        "PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift",
+        "PooToolsSource/MeidaLibraryPermission/PTPermissionMedia.swift",
+        "PooToolsSource/MicPermission/PTPermissionMic.swift",
+        "PooToolsSource/MotionPermission/PTPermissionMotion.swift",
+        "PooToolsSource/NotificationPermission/PTPermissionNotification.swift",
+        "PooToolsSource/PToolsAudio/PTAudio.swift",
+        "PooToolsSource/PToolsNotifications/PTNotifications.swift",
+        "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift",
+        "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
+        "PooToolsSource/PToolsPermissionUI/PTPermissionUI.swift",
+        "PooToolsSource/PermissionCore/PTPermission.swift",
+        "PooToolsSource/PermissionCore/PTPermissionCell.swift",
+        "PooToolsSource/PermissionCore/PTPermissionHeader.swift",
+        "PooToolsSource/PermissionCore/PTPermissionModel.swift",
+        "PooToolsSource/PermissionCore/PTPermissionSettingCell.swift",
+        "PooToolsSource/PermissionCore/PTPermissionSettingHeader.swift",
+        "PooToolsSource/PermissionCore/PTPermissionSettingViewController.swift",
+        "PooToolsSource/PermissionCore/PTPermissionText.swift",
+        "PooToolsSource/PermissionCore/PTPermissionViewController.swift",
+        "PooToolsSource/PhotoLibraryPermission/PTPermissionPhotoLibrary.swift",
+        "PooToolsSource/PhotoPicker/PTMediaLibCameraContainerViewController.swift",
+        "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
+        "PooToolsSource/QRCodeScan/PTScanQRController.swift",
+        "PooToolsSource/RemindersPermission/PTPermissionReminders.swift",
+        "PooToolsSource/SiriPermission/PTPermissionSiri.swift",
+        "PooToolsSource/SpeechPremission/PTPermissionSpeech.swift",
+        "PooToolsSource/TrackingPermission/PTPermissionTracking.swift"
+      ],
+      "match_count": 45
+    },
+    {
+      "capability": "feedback_haptics",
+      "owner": "PToolsFeedback",
+      "backend": "PTHapticEngine",
+      "classification": "CANONICAL + COMPAT",
+      "adapters": [
+        "PTFeedbackCenter",
+        "PTPhoneFeedBackControl",
+        "UIFeedbackGenerator"
+      ],
+      "scan_patterns": [
+        "UIImpactFeedbackGenerator",
+        "UISelectionFeedbackGenerator",
+        "PTHapticEngine"
+      ],
+      "matches": [
+        "PooToolsSource/Category/Device+PTEX.swift",
+        "PooToolsSource/CheckBox/PTCheckBox.swift",
+        "PooToolsSource/Core/PTPhoneFeedBackControl.swift",
+        "PooToolsSource/ImageEditor/PTImageEditorConfig.swift",
+        "PooToolsSource/PToolsFeedback/PTFeedback.swift",
+        "PooToolsSource/Slider/PTRangeSeekSlider.swift",
+        "PooToolsSource/Slider/PTSlider.swift"
+      ],
+      "match_count": 7
+    },
+    {
+      "capability": "theme_tokens",
+      "owner": "PToolsTheme",
+      "backend": "PTThemeRegistry",
+      "classification": "LAYERED",
+      "adapters": [
+        "PTThemeProvider",
+        "PTDarkModeOption",
+        "PTAppBaseConfig"
+      ],
+      "scan_patterns": [
+        "PTThemeRegistry",
+        "PTThemeProvider",
+        "PTDarkModeOption"
+      ],
+      "matches": [
+        "PooToolsSource/ActionsheetAndAlert/PTDynamicNotificationView.swift",
+        "PooToolsSource/ActionsheetAndAlert/PTPopoverMenuContent.swift",
+        "PooToolsSource/Base/PTAppBaseConfig.swift",
+        "PooToolsSource/DarkMode/PTDarkFollowSystemFooter.swift",
+        "PooToolsSource/DarkMode/PTDarkModeControl.swift",
+        "PooToolsSource/DarkMode/PTDarkModeHeader.swift",
+        "PooToolsSource/DarkMode/PTDarkModePickerView.swift",
+        "PooToolsSource/DarkMode/PTDarkSmartFooter.swift",
+        "PooToolsSource/DarkMode/PTDrakModeOption.swift",
+        "PooToolsSource/DarkMode/PTThemeProvider.swift",
+        "PooToolsSource/LocalConsole/LocalConsole.swift",
+        "PooToolsSource/PToolsForm/PTFormSupport.swift",
+        "PooToolsSource/PToolsTheme/PTTheme.swift",
+        "PooToolsSource/VideoEditor/PTVideoEditorConfig.swift",
+        "PooToolsSource/VideoEditor/PTVideoEditorToolsCell.swift",
+        "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
+        "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift"
+      ],
+      "match_count": 17
+    },
+    {
+      "capability": "logging",
+      "owner": "PToolsLogging",
+      "backend": "PTLogger",
+      "classification": "CANONICAL + COMPAT",
+      "adapters": [
+        "PTNSLogConsole",
+        "Logger+PTEX"
+      ],
+      "scan_patterns": [
+        "PTLogger",
+        "PTNSLogConsole"
+      ],
+      "matches": [
+        "PooToolsSource/AESAndDES/PTDataEncryption.swift",
+        "PooToolsSource/ActionsheetAndAlert/PTAlertController.swift",
+        "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift",
+        "PooToolsSource/AppDelegate/PTAppWindowsDelegate.swift",
+        "PooToolsSource/ApplicationFunction/PCleanCache.swift",
+        "PooToolsSource/Base/PTAudioCache.swift",
+        "PooToolsSource/Base/PTBaseTabBarViewController+SystemTabs.swift",
+        "PooToolsSource/Base/PTBaseTabBarViewController.swift",
+        "PooToolsSource/Base/PTBaseViewController.swift",
+        "PooToolsSource/Base/PTBaseWebViewController.swift",
+        "PooToolsSource/Base/PTCollectionView.swift",
+        "PooToolsSource/BlackMagic/PTSwiftMethodSwizzle.swift",
+        "PooToolsSource/C7Collector/C7Collector.swift",
+        "PooToolsSource/C7Collector/C7CollectorCamera.swift",
+        "PooToolsSource/C7Collector/PTCameraFilterConfig.swift",
+        "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
+        "PooToolsSource/Category/AVAsset+PTEX.swift",
+        "PooToolsSource/Category/AVCaptureDevice+PTEX.swift",
+        "PooToolsSource/Category/AVExport+PTEX.swift",
+        "PooToolsSource/Category/Array+PTEX.swift",
+        "PooToolsSource/Category/Data+PTEX.swift",
+        "PooToolsSource/Category/Date+PTEX.swift",
+        "PooToolsSource/Category/Device+PTEX.swift",
+        "PooToolsSource/Category/Dictionary+PTEX.swift",
+        "PooToolsSource/Category/FileManager+PTEX.swift",
+        "PooToolsSource/Category/Mirror+PTEX.swift",
+        "PooToolsSource/Category/NSImage+PTEX.swift",
+        "PooToolsSource/Category/PHAsset+PTEX.swift",
+        "PooToolsSource/Category/String+PTEX.swift",
+        "PooToolsSource/Category/UIApplication+PTEX.swift",
+        "PooToolsSource/Category/UICollectionView+PTEX.swift",
+        "PooToolsSource/Category/UIFont+PTEX.swift",
+        "PooToolsSource/Category/UIImage+PTEX.swift",
+        "PooToolsSource/Category/UIImage+PTFaceAware.swift",
+        "PooToolsSource/Category/UITextView+BKExt.swift",
+        "PooToolsSource/Category/UIViewController+Swizzled.swift",
+        "PooToolsSource/Category/URL+PTEX.swift",
+        "PooToolsSource/Category/UserDefaults+PTEX.swift",
+        "PooToolsSource/Category/WKWebView+PTEX.swift",
+        "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
+        "PooToolsSource/Contact/PTContact.swift",
+        "PooToolsSource/Core/PTTimeUtils.swift",
+        "PooToolsSource/Core/PTUtils.swift",
+        "PooToolsSource/Debug/PTDebugFunction.swift",
+        "PooToolsSource/Debug/PTDebugShareManager.swift",
+        "PooToolsSource/Debug/PTInstruments.swift",
+        "PooToolsSource/Debug/PTLaunchTimeTracker.swift",
+        "PooToolsSource/DebugCrash/PTCrashDetailViewController.swift",
+        "PooToolsSource/DebugCrash/PTCrashLogViewController.swift",
+        "PooToolsSource/DebugCrash/PTCrashManager.swift",
+        "PooToolsSource/DebugCrash/PTCreateLeakViewController.swift",
+        "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
+        "PooToolsSource/DebugLibs/PTLoadedLibsViewController.swift",
+        "PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift",
+        "PooToolsSource/DebugPerformance/PTDebugPerformanceToolKit.swift",
+        "PooToolsSource/DebugPerformance/PTPerformanceLeakDetector.swift",
+        "PooToolsSource/DebugUserDefault/PTUserDefultsViewController.swift",
+        "PooToolsSource/HealthKit/PTHealthKit.swift",
+        "PooToolsSource/HeartRate/PTHeartRateManager.swift",
+        "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
+        "PooToolsSource/Hud/PTProgressHUD.swift",
+        "PooToolsSource/IAP/PTIAPManager.swift",
+        "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
+        "PooToolsSource/ImageEditor/PTEditImageViewController.swift",
+        "PooToolsSource/ImagePicker/PTImagePicker.swift",
+        "PooToolsSource/Inspector/Coordinator.swift",
+        "PooToolsSource/Inspector/ElementInspectorViewController.swift",
+        "PooToolsSource/Inspector/UIDocumentPickerViewController+InspectorEX.swift",
+        "PooToolsSource/Inspector/UITableView+InspectorEX.swift",
+        "PooToolsSource/Inspector/ViewHierarchyRoot.swift",
+        "PooToolsSource/KingfisherSVG/Kingfisher+SVG.swift",
+        "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
+        "PooToolsSource/LivePhoto/PTLivePhoto.swift",
+        "PooToolsSource/Loading/PTHudView.swift",
+        "PooToolsSource/LocalConsole/LocalConsole.swift",
+        "PooToolsSource/Log/PTLogFileManager.swift",
+        "PooToolsSource/Log/PTNSLog.swift",
+        "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
+        "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+        "PooToolsSource/Motion/PTMotion.swift",
+        "PooToolsSource/NFC/PTNFCToolKit.swift",
+        "PooToolsSource/NetWork/Network+Logging.swift",
+        "PooToolsSource/NetWork/Network.swift",
+        "PooToolsSource/NetWork/NetworkMetrics.swift",
+        "PooToolsSource/NetWork/NetworkSupport.swift",
+        "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift",
+        "PooToolsSource/PDF/PTPDFManager.swift",
+        "PooToolsSource/PDF/PTViewToPDF.swift",
+        "PooToolsSource/PToolsLogging/Core/PTLogger.swift",
+        "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift",
+        "PooToolsSource/PToolsLogging/File/PTLogFileWriter.swift",
+        "PooToolsSource/PToolsLogging/Internal/PTLoggerInternalDiagnostics.swift",
+        "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
+        "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
+        "PooToolsSource/Ping/PTPingTool.swift",
+        "PooToolsSource/QRCodeScan/PTScanQRController.swift",
+        "PooToolsSource/Rotation/PTRotationManager.swift",
+        "PooToolsSource/Router/PTRouterLegacyCompatibility.swift",
+        "PooToolsSource/Router/PTRouterManager.swift",
+        "PooToolsSource/SideMenuControl/PTSideMenuControl.swift",
+        "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+        "PooToolsSource/StatusBar/StatusBarManager.swift",
+        "PooToolsSource/VideoEditor/PTVideoEditorToolsSlider.swift",
+        "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController+Lifecycle.swift",
+        "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
+        "PooToolsSource/VideoEditor/PTVideoEditorVideoTimeLineGenerator.swift",
+        "PooToolsSource/VideoEditor/VideoConverter.swift",
+        "PooToolsSource/Vision/PTVision.swift",
+        "PooToolsSource/WhereIsMyEye/PTEyeTrackingManager.swift",
+        "PooToolsSource/WhereIsMyEye/PTEyeTrackingSessionManager.swift",
+        "PooToolsSource/WhereIsMyEye/PTFaceEye.swift",
+        "PooToolsSource/iCloud/PTiCloudFileManager.swift",
+        "PooToolsSource/iCloud/PTiCloudKeychainService.swift",
+        "PooToolsSource/iOS17Tips/PTTip.swift"
+      ],
+      "match_count": 114
+    },
+    {
+      "capability": "routing",
+      "owner": "PooToolsRouter",
+      "backend": "PTRouteRequest",
+      "classification": "CANONICAL + COMPAT",
+      "adapters": [
+        "PTRouter",
+        "PTRouterRequest"
+      ],
+      "scan_patterns": [
+        "PTRouteRequest",
+        "PTRouterRequest",
+        "PTRouter"
+      ],
+      "matches": [
+        "PooToolsSource/AppDelegate/PTAppWindowsDelegate.swift",
+        "PooToolsSource/DarkMode/PTDarkModeControl.swift",
+        "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
+        "PooToolsSource/DebugUserDefault/PTUserDefultsViewController.swift",
+        "PooToolsSource/PToolsAppIntents/PTAppIntents.swift",
+        "PooToolsSource/PToolsDeepLink/PTDeepLink.swift",
+        "PooToolsSource/PToolsNotifications/PTNotifications.swift",
+        "PooToolsSource/PToolsRouteCore/PTRouteCore.swift",
+        "PooToolsSource/PToolsWidgetCore/PTWidgetCore.swift",
+        "PooToolsSource/Router/PTRouteHostCoordinator.swift",
+        "PooToolsSource/Router/PTRouteRouter.swift",
+        "PooToolsSource/Router/PTRouter.swift",
+        "PooToolsSource/Router/PTRouterBridge.swift",
+        "PooToolsSource/Router/PTRouterBuilder.swift",
+        "PooToolsSource/Router/PTRouterDebugTool.swift",
+        "PooToolsSource/Router/PTRouterDynamicParamsMapping.swift",
+        "PooToolsSource/Router/PTRouterInterceptor.swift",
+        "PooToolsSource/Router/PTRouterLegacyCompatibility.swift",
+        "PooToolsSource/Router/PTRouterManager.swift",
+        "PooToolsSource/Router/PTRouterMatcher.swift",
+        "PooToolsSource/Router/PTRouterNavigator.swift",
+        "PooToolsSource/Router/PTRouterParser.swift",
+        "PooToolsSource/Router/PTRouterPattern.swift",
+        "PooToolsSource/Router/PTRouterRequest.swift",
+        "PooToolsSource/Router/PTRouterResolver.swift",
+        "PooToolsSource/Router/PTRouterServiceManager.swift",
+        "PooToolsSource/Router/PTRouterServiceProtocol.swift",
+        "PooToolsSource/Router/PTRouterable.swift",
+        "PooToolsSource/Router/PTRouterableProxy.swift"
+      ],
+      "match_count": 29
+    },
+    {
+      "capability": "network_requests",
+      "owner": "PooToolsNetWork",
+      "backend": "PTNetworkExecutor",
+      "classification": "LAYERED",
+      "adapters": [
+        "Network",
+        "requestApi",
+        "requestBodyAPI"
+      ],
+      "scan_patterns": [
+        "PTNetworkExecutor",
+        "class Network",
+        "requestApi"
+      ],
+      "matches": [
+        "PooToolsSource/NetWork/Network+LegacyCompatibility.swift",
+        "PooToolsSource/NetWork/Network.swift",
+        "PooToolsSource/NetWork/NetworkMetrics.swift",
+        "PooToolsSource/NetWork/NetworkSupport.swift",
+        "PooToolsSource/NetWork/PTNetworkArchitecture.swift"
+      ],
+      "match_count": 5
+    },
+    {
+      "capability": "audio_session",
+      "owner": "PToolsAudio",
+      "backend": "PTAudioSessionCoordinator",
+      "classification": "MERGE_BACKEND_NOW",
+      "adapters": [
+        "C7CollectorCamera",
+        "OSSSpeech",
+        "VideoEditor"
+      ],
+      "scan_patterns": [
+        "AVAudioSession\\.sharedInstance",
+        "PTAudioSessionCoordinator"
+      ],
+      "matches": [
+        "PooToolsSource/C7Collector/C7CollectorCamera.swift",
+        "PooToolsSource/OSSKit/OSSSpeech.swift",
+        "PooToolsSource/PToolsAudio/PTAudio.swift",
+        "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController+Lifecycle.swift"
+      ],
+      "match_count": 4
+    },
+    {
+      "capability": "speech_recognition",
+      "owner": "PTSpeech",
+      "backend": "SFSpeechRecognizer",
+      "classification": "SPECIALIZED_EXCEPTION",
+      "adapters": [
+        "OSSSpeech"
+      ],
+      "scan_patterns": [
+        "SFSpeechRecognizer",
+        "SFSpeechAudioBufferRecognitionRequest"
+      ],
+      "matches": [
+        "PooToolsSource/OSSKit/OSSSpeech.swift",
+        "PooToolsSource/Speech/PTSpeech.swift",
+        "PooToolsSource/SpeechPremission/PTPermissionSpeech.swift"
+      ],
+      "match_count": 3
+    },
+    {
+      "capability": "media_save",
+      "owner": "PTMediaSaveService",
+      "backend": "PTMediaSaveService",
+      "classification": "MERGE_BACKEND_NOW",
+      "adapters": [
+        "PHPhotoLibrary+PTEX",
+        "UIImage+PTEX"
+      ],
+      "scan_patterns": [
+        "PTMediaSaveService",
+        "PHPhotoLibrary\\.shared"
+      ],
+      "matches": [
+        "PooToolsSource/C7Collector/C7CollectorCamera.swift",
+        "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
+        "PooToolsSource/Category/PHPhotoLibrary+PTEX.swift",
+        "PooToolsSource/Category/UIImage+PTEX.swift",
+        "PooToolsSource/Core/PTMediaSaveService.swift",
+        "PooToolsSource/LivePhoto/PTLivePhoto.swift",
+        "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
+        "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
+        "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
+        "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
+        "PooToolsSource/PhotoPicker/PTMediaSaveUI.swift",
+        "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift"
+      ],
+      "match_count": 12
+    },
+    {
+      "capability": "photo_requests",
+      "owner": "PTMediaLibManager",
+      "backend": "PTMediaRequestCoordinator",
+      "classification": "CANONICAL + COMPAT",
+      "adapters": [
+        "PHAsset+PTEX",
+        "PhotoPicker"
+      ],
+      "scan_patterns": [
+        "PTMediaRequestCoordinator",
+        "requestImage",
+        "fetchOriginalImage"
+      ],
+      "matches": [
+        "PooToolsSource/Category/PHAsset+PTEX.swift",
+        "PooToolsSource/Core/PTLoadImageFunction.swift",
+        "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
+        "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
+        "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
+        "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
+        "PooToolsSource/PhotoPicker/PTMediaRequestCoordinator.swift"
+      ],
+      "match_count": 7
+    },
+    {
+      "capability": "video_thumbnail",
+      "owner": "PTVideoThumbnailService",
+      "backend": "PTVideoThumbnailService",
+      "classification": "CANONICAL + COMPAT",
+      "adapters": [
+        "AVAsset+PTEX",
+        "PTVideoCoverCache"
+      ],
+      "scan_patterns": [
+        "PTVideoThumbnailService",
+        "AVAssetImageGenerator"
+      ],
+      "matches": [
+        "PooToolsSource/Base/PTVideoCoverCache.swift",
+        "PooToolsSource/Category/AVAsset+PTEX.swift",
+        "PooToolsSource/Category/AVPlayerItem+PTEX.swift",
+        "PooToolsSource/Category/FileManager+PTEX.swift",
+        "PooToolsSource/Category/PHAsset+PTEX.swift",
+        "PooToolsSource/Category/PTVideoThumbnailService.swift",
+        "PooToolsSource/Category/String+PTEX.swift",
+        "PooToolsSource/Category/UIImage+PTEX.swift",
+        "PooToolsSource/Category/UIView+PTEX.swift",
+        "PooToolsSource/Core/PTLoadImageFunction.swift",
+        "PooToolsSource/LivePhoto/PTLivePhoto.swift",
+        "PooToolsSource/MessageKit/PTChatMediaCell.swift",
+        "PooToolsSource/ScrollBanner/PTBannerMediaManager.swift",
+        "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
+        "PooToolsSource/VideoEditor/PTVideoEditorVideoTimeLineGenerator.swift"
+      ],
+      "match_count": 15
+    },
+    {
+      "capability": "image_loading",
+      "owner": "PTLoadImageFunction",
+      "backend": "PTLoadImageFunction.loadImage",
+      "classification": "CANONICAL + COMPAT",
+      "adapters": [
+        "UIImageView.loadImage",
+        "UIButton.loadImage"
+      ],
+      "scan_patterns": [
+        "PTLoadImageFunction",
+        "loadImage"
+      ],
+      "matches": [
+        "PooToolsSource/Animation/PTGroupBuyAvatarView.swift",
+        "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
+        "PooToolsSource/Base/PTAppBaseConfig.swift",
+        "PooToolsSource/Base/PTFusionCell.swift",
+        "PooToolsSource/Base/PTGAnimationImageView.swift",
+        "PooToolsSource/Base/PTImageCell.swift",
+        "PooToolsSource/Base/PTTabBarMediaContent.swift",
+        "PooToolsSource/Button/PTActionLayoutButton.swift",
+        "PooToolsSource/Button/PTLayoutButton.swift",
+        "PooToolsSource/Button/PTSortButton.swift",
+        "PooToolsSource/Category/UIButton+PTEX.swift",
+        "PooToolsSource/Category/UIImageView+PTEX.swift",
+        "PooToolsSource/Category/UIView+PTEX.swift",
+        "PooToolsSource/Core/PTLoadImageFunction.swift",
+        "PooToolsSource/DarkMode/PTThemeProvider.swift",
+        "PooToolsSource/Guide/PTGuidePageHUD.swift",
+        "PooToolsSource/ImageEditor/PTEditImageViewController.swift",
+        "PooToolsSource/ImagePicker/PTImagePicker.swift",
+        "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
+        "PooToolsSource/Input/PTTextField.swift",
+        "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+        "PooToolsSource/MessageKit/PTChatBaseCell.swift",
+        "PooToolsSource/MessageKit/PTChatConfig.swift",
+        "PooToolsSource/MessageKit/PTChatMediaCell.swift",
+        "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
+        "PooToolsSource/PToolsUIFoundation/PTRichTextMediaController.swift",
+        "PooToolsSource/PageControl/PTImagePageControl.swift",
+        "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
+        "PooToolsSource/ScrollBanner/PTBannerView.swift",
+        "PooToolsSource/SearchBar/PTSearchBar.swift",
+        "PooToolsSource/SegmentControl/PTMainSegmentCell.swift",
+        "PooToolsSource/Stepper/PTStepperView.swift",
+        "PooToolsSource/Switch/PTSwitch.swift",
+        "PooToolsSource/VideoEditor/PTVideoEditorFilterControl.swift",
+        "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift"
+      ],
+      "match_count": 35
+    },
+    {
+      "capability": "media_cache",
+      "owner": "PTMediaCache",
+      "backend": "PTMediaCache",
+      "classification": "LAYERED",
+      "adapters": [
+        "PTVideoCoverCache",
+        "PTVideoFileCache"
+      ],
+      "scan_patterns": [
+        "PTMediaCache",
+        "PTVideoCoverCache"
+      ],
+      "matches": [
+        "PooToolsSource/Base/PTVideoCoverCache.swift",
+        "PooToolsSource/Core/PTLoadImageFunction.swift",
+        "PooToolsSource/Core/PTMediaCache.swift",
+        "PooToolsSource/ScrollBanner/PTBannerMediaManager.swift"
+      ],
+      "match_count": 4
+    },
+    {
+      "capability": "device_capability",
+      "owner": "PToolsDevice",
+      "backend": "PTDevice",
+      "classification": "CANONICAL + COMPAT",
+      "adapters": [
+        "UIDevice+PTEX"
+      ],
+      "scan_patterns": [
+        "PTDevice",
+        "UIDevice"
+      ],
+      "matches": [
+        "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
+        "PooToolsSource/Category/AutoScale+PTEX.swift",
+        "PooToolsSource/Category/Device+PTEX.swift",
+        "PooToolsSource/Category/UIView+PTEX.swift",
+        "PooToolsSource/Core/PTMarcos_swift.swift",
+        "PooToolsSource/Debug/PTInstruments.swift",
+        "PooToolsSource/Debug/StdoutCapture.swift",
+        "PooToolsSource/DebugCategory/UIView+PTSwizzle.swift",
+        "PooToolsSource/DebugCrash/PTDebugUserInfo.swift",
+        "PooToolsSource/DebugPerformance/PTDebugPerformanceViewController.swift",
+        "PooToolsSource/Inspector/DeviceShakeModifier.swift",
+        "PooToolsSource/LocalConsole/LocalConsole.swift",
+        "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+        "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
+        "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift",
+        "PooToolsSource/PToolsDevice/Core/PTDeviceCatalog.swift",
+        "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift",
+        "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift",
+        "PooToolsSource/PToolsDevice/Generated/PTAppleTVCatalog.generated.swift",
+        "PooToolsSource/PToolsDevice/Generated/PTAppleVisionCatalog.generated.swift",
+        "PooToolsSource/PToolsDevice/Generated/PTAppleWatchCatalog.generated.swift",
+        "PooToolsSource/PToolsDevice/Generated/PTDeviceIdentifierIndex.generated.swift",
+        "PooToolsSource/PToolsDevice/Generated/PTHomePodCatalog.generated.swift",
+        "PooToolsSource/PToolsDevice/Generated/PTMacCatalog.generated.swift",
+        "PooToolsSource/PToolsDevice/Generated/PTiPadCatalog.generated.swift",
+        "PooToolsSource/PToolsDevice/Generated/PTiPhoneCatalog.generated.swift",
+        "PooToolsSource/PToolsDevice/Generated/PTiPodCatalog.generated.swift",
+        "PooToolsSource/PToolsSimulation/PTSimulation.swift",
+        "PooToolsSource/Protocol/PTProtocol.swift",
+        "PooToolsSource/Rotation/PTRotationManager.swift",
+        "PooToolsSource/Share/PTActivityViewController.swift",
+        "PooToolsSource/WhereIsMyEye/PTEyeTrackingManager.swift",
+        "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift"
+      ],
+      "match_count": 33
+    },
+    {
+      "capability": "date_values",
+      "owner": "PToolsDate",
+      "backend": "PToolsDate",
+      "classification": "CANONICAL + COMPAT",
+      "adapters": [
+        "Date+PTEX",
+        "String+PTEX"
+      ],
+      "scan_patterns": [
+        "PToolsDate",
+        "dateFormat"
+      ],
+      "matches": [
+        "PooToolsSource/Category/AVCaptureDevice+PTEX.swift",
+        "PooToolsSource/Category/Date+PTEX.swift",
+        "PooToolsSource/Category/DateFormatter+PTEX.swift",
+        "PooToolsSource/Category/Locale+PTEX.swift",
+        "PooToolsSource/Category/NSString+PTEX.swift",
+        "PooToolsSource/Category/String+PTEX.swift",
+        "PooToolsSource/Category/TimeInterval+PTEX.swift",
+        "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
+        "PooToolsSource/Core/PTLayerExports.swift",
+        "PooToolsSource/Core/PTTimeUtils.swift",
+        "PooToolsSource/DebugCrash/PTCrashDetailModel.swift",
+        "PooToolsSource/DebugCrash/PTCrashLogViewController.swift",
+        "PooToolsSource/DebugCrash/PTCrashViewModel.swift",
+        "PooToolsSource/DebugFile/PTFileModel.swift",
+        "PooToolsSource/HeartRate/PTHeartRateManager.swift",
+        "PooToolsSource/Log/PTNSLog.swift",
+        "PooToolsSource/MessageKit/PTChatView.swift",
+        "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift",
+        "PooToolsSource/OSSKit/OSSSpeech.swift",
+        "PooToolsSource/PToolsDate/PTDateParser.swift",
+        "PooToolsSource/PToolsDate/PTZonedDate.swift",
+        "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+        "PooToolsSource/PToolsLogging/File/PTLogFileWriter.swift",
+        "PooToolsSource/PToolsModelCore/PTModelFoundationCodecs.swift"
+      ],
+      "match_count": 24
+    },
+    {
+      "capability": "qr_static_recognition",
+      "owner": "PTVision",
+      "backend": "Vision",
+      "classification": "MERGE_BACKEND_NOW",
+      "adapters": [
+        "PTScanQRController"
+      ],
+      "scan_patterns": [
+        "VNDetectBarcodesRequest",
+        "CIDetector"
+      ],
+      "matches": [
+        "PooToolsSource/QRCodeScan/PTScanQRController.swift",
+        "PooToolsSource/Vision/PTVision.swift"
+      ],
+      "match_count": 2
+    },
+    {
+      "capability": "main_actor_dispatch",
+      "owner": "PToolsCore",
+      "backend": "PTMainActorBridge",
+      "classification": "CANONICAL + COMPAT",
+      "adapters": [
+        "PTGCDManager.runOnMain"
+      ],
+      "scan_patterns": [
+        "PTMainActorBridge",
+        "DispatchQueue\\.main\\.async"
+      ],
+      "matches": [
+        "PooToolsSource/Animation/PTListAnimation.swift",
+        "PooToolsSource/Base/PTTabBarItemView.swift",
+        "PooToolsSource/Base/PTTabBarView.swift",
+        "PooToolsSource/Category/PHAsset+PTEX.swift",
+        "PooToolsSource/Category/UICollectionView+PTEX.swift",
+        "PooToolsSource/Category/UIControl+PTEX.swift",
+        "PooToolsSource/Category/UIFeedbackGenerator+PTEX.swift",
+        "PooToolsSource/Core/PTGCDManager.swift",
+        "PooToolsSource/Core/PTMediaSaveService.swift",
+        "PooToolsSource/Core/PTPhoneFeedBackControl.swift",
+        "PooToolsSource/Core/PTUtils+SceneConcurrency.swift",
+        "PooToolsSource/DarkMode/PTDrakModeOption.swift",
+        "PooToolsSource/Debug/PTDebugFunction.swift",
+        "PooToolsSource/Debug/StdoutCapture.swift",
+        "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
+        "PooToolsSource/Hud/PTProgressHUD.swift",
+        "PooToolsSource/ImageEditor/PTCutViewController.swift",
+        "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
+        "PooToolsSource/ImageEditor/PTStickerManager.swift",
+        "PooToolsSource/ImagePicker/PTImagePicker.swift",
+        "PooToolsSource/Input/PTGrowingText.swift",
+        "PooToolsSource/Input/PTInputBoxView.swift",
+        "PooToolsSource/Inspector/InspectorElementSectionViewController.swift",
+        "PooToolsSource/Inspector/Manager.swift",
+        "PooToolsSource/LocalConsole/LocalConsole.swift",
+        "PooToolsSource/LocationPermission/PTPermissionLocation.swift",
+        "PooToolsSource/MessageKit/PTChatBaseCell.swift",
+        "PooToolsSource/MessageKit/PTChatFileCell.swift",
+        "PooToolsSource/MessageKit/PTChatMediaCell.swift",
+        "PooToolsSource/MessageKit/PTChatView.swift",
+        "PooToolsSource/MessageKit/PTChatVoiceCell.swift",
+        "PooToolsSource/Motion/PTMotion.swift",
+        "PooToolsSource/PToolsCore/PTMainActorBridge.swift",
+        "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
+        "PooToolsSource/ProgressBar/PTCircularProgressView.swift",
+        "PooToolsSource/Router/PTRouter.swift",
+        "PooToolsSource/ScreenShot/UIView+PTSnapShot.swift",
+        "PooToolsSource/ScreenShot/UIWindow+PTSnapShot.swift",
+        "PooToolsSource/VideoEditor/CropPickerView.swift"
+      ],
+      "match_count": 39
+    },
+    {
+      "capability": "overlay_host",
+      "owner": "PToolsOverlay",
+      "backend": "PTOverlayHost",
+      "classification": "MERGE_BACKEND_NOW",
+      "adapters": [
+        "PTAlertManager",
+        "PooToolsBanner"
+      ],
+      "scan_patterns": [
+        "PTOverlayHost",
+        "PTOverlayWindow",
+        "PTAlertWindow"
+      ],
+      "matches": [
+        "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift",
+        "PooToolsSource/ActionsheetAndAlert/PTAlertWindow.swift",
+        "PooToolsSource/Banner/PTBannerPresenter.swift",
+        "PooToolsSource/Instructions/PTInstructionCoordinator.swift",
+        "PooToolsSource/Overlay/PTOverlayCore.swift",
+        "PooToolsSource/Overlay/PTOverlayPresentation.swift",
+        "PooToolsSource/Popover/PTPopover.swift",
+        "PooToolsSource/TipsView/PTTipsOverlayIntegration.swift"
+      ],
+      "match_count": 8
+    },
+    {
+      "capability": "segmented_control",
+      "owner": "PTSegmentedView",
+      "backend": "PTSegmentedView",
+      "classification": "CANONICAL + COMPAT",
+      "adapters": [
+        "PTSegmentView"
+      ],
+      "scan_patterns": [
+        "PTSegmentedView",
+        "PTSegmentView"
+      ],
+      "matches": [
+        "PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift",
+        "PooToolsSource/SegmentControl/PTPaging.swift",
+        "PooToolsSource/SegmentControl/PTSegmentedView.swift",
+        "PooToolsSource/Segmented/PTSegmentView.swift"
+      ],
+      "match_count": 4
+    },
+    {
+      "capability": "content_state",
+      "owner": "PToolsContentState",
+      "backend": "PTContentState",
+      "classification": "LAYERED",
+      "adapters": [
+        "PTUnavailableManager",
+        "legacy EmptyDataSet"
+      ],
+      "scan_patterns": [
+        "PTContentState",
+        "PTUnavailableManager"
+      ],
+      "matches": [
+        "PooToolsSource/Base/PTBaseViewController.swift",
+        "PooToolsSource/Base/PTCollectionView.swift",
+        "PooToolsSource/Base/PTUnavailableFunction.swift",
+        "PooToolsSource/PToolsContentState/PTBaseViewController+ContentState.swift",
+        "PooToolsSource/PToolsContentState/PTContentState.swift",
+        "PooToolsSource/Search/PTSearchViewController.swift"
+      ],
+      "match_count": 6
+    },
+    {
+      "capability": "split_navigation",
+      "owner": "PooToolsSplitView",
+      "backend": "PTSplitViewController",
+      "classification": "MERGE_BACKEND_NOW",
+      "adapters": [
+        "PTRouter"
+      ],
+      "scan_patterns": [
+        "PTSplitViewController",
+        "PTAdaptiveNavigationContainer"
+      ],
+      "matches": [
+        "PooToolsSource/Core/PTAdaptiveNavigationContainer.swift",
+        "PooToolsSource/Router/PTRouterNavigator.swift",
+        "PooToolsSource/SplitView/PTSplitViewController.swift"
+      ],
+      "match_count": 3
+    }
+  ],
+  "generator": "Scripts/report_semantic_capability_ownership.sh",
+  "source_revision": "b575ef04bf62427d87cb27532cca6a38e0545245",
+  "generated_at": "2026-10-04T03:19:39Z",
+  "source_file_count": 1143
+}

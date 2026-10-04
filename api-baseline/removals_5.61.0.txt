@@ -1,0 +1,13 @@
+# English: Carry forward the reviewed legacy model and typed-network signature changes from the 5.58–5.60 migration.
+# Español: Mantiene los cambios revisados de modelos legacy y firmas de red tipadas de la migración 5.58–5.60.
+# 中文：延续 5.58–5.60 迁移中已审核的旧模型和类型化网络签名变更。
+public|class|mappingForKey
+public|class|public class-based decoder API can migrate to immutable snapshot structs.
+public|func|public func performCodableRequest<T: SmartCodableX & Sendable>(
+
+# English: CameraType.captureDevice() now has an optional result so unavailable hardware is reported instead of crashing.
+# Español: CameraType.captureDevice() ahora devuelve un resultado opcional para informar hardware no disponible sin fallar.
+# 中文：CameraType.captureDevice() 改为可选结果，在硬件不可用时返回状态而不是崩溃。
+public|func|public func captureDevice() -> AVCaptureDevice
+open|func|open func kj_modelKey(from property: KakaJSON.Property) -> ModelPropertyKey
+open|func|open func kj_modelValue(from jsonValue:Any?,_ property:KakaJSON.Property) -> Any?

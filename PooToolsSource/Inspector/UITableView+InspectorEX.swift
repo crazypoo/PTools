@@ -381,7 +381,11 @@ extension UITableView {
         let identifier = String(describing: T.self)
 
         guard let cell = dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? T else {
-            fatalError("Could not dequeue cell with identifier: \(identifier)")
+            // English: Preserve the legacy non-optional API with a safe standalone cell when registration is incomplete.
+            // Español: Conserva la API heredada no opcional con una celda independiente si falta el registro.
+            // 中文：注册不完整时使用安全的独立 Cell，保持旧的非可选 API 不崩溃。
+            PTNSLogConsole("⚠️ [UITableView] 无法复用类型为 \(identifier) 的 Cell，已返回临时实例。")
+            return T(style: .default, reuseIdentifier: identifier)
         }
 
         return cell
@@ -396,7 +400,12 @@ extension UITableView {
     func dequeueReusableHeaderFooterView<T: UITableViewHeaderFooterView>(_: T.Type = T.self) -> T {
         let identifier = String(describing: T.self)
 
-        guard let headerFooter = dequeueReusableHeaderFooterView(withIdentifier: String(describing: T.self)) as? T else { fatalError("Could not dequeue header/footer with identifier: \(identifier)")
+        guard let headerFooter = dequeueReusableHeaderFooterView(withIdentifier: String(describing: T.self)) as? T else {
+            // English: Preserve the legacy non-optional API with an isolated fallback header/footer.
+            // Español: Conserva la API heredada no opcional con un encabezado/pie aislado de reserva.
+            // 中文：使用独立的安全 Header/Footer 作为兜底，保持旧 API 不崩溃。
+            PTNSLogConsole("⚠️ [UITableView] 无法复用类型为 \(identifier) 的 Header/Footer，已返回临时实例。")
+            return T(reuseIdentifier: identifier)
         }
 
         return headerFooter

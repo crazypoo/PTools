@@ -168,9 +168,13 @@ enum PTDemoRegistry {
         make("media.live-photo", "PooToolsLivePhoto", "LivePhoto", .mediaGraphics, .hostRequired, .sheet, .runnable, [.photoLibrary], legacy: "LivePhoto", tags: ["photo", "live-photo"]),
         make("media.live-photo-disassemble", "PooToolsLivePhoto", "LivePhotoDisassemble", .mediaGraphics, .hostRequired, .sheet, .runnable, [.photoLibrary], legacy: "LivePhotoDisassemble", tags: ["photo", "live-photo"]),
         make("navigation.route", "PooToolsRouter", "路由", .navigationRouting, .interactive, .sheet, .runnable, legacy: "路由", tags: ["route"]),
+        make("navigation.split-view", "PooToolsSplitView", "Adaptive SplitView", .navigationRouting, .interactive, .push, .runnable, legacy: "AdaptiveSplitView", tags: ["split-view", "ipad", "adaptive", "state-restoration"]),
         make("navigation.segment-paging-regression", "PooToolsSegmented", "Segmented / JX Parity & Paging", .navigationRouting, .interactive, .push, .runnable, legacy: "SegmentedPagingRegression", tags: ["segment", "paging", "badge", "jx-parity", "regression"]),
         make("navigation.segment-item-separator", "PooToolsSegmented", "Segmented / Item Separator", .navigationRouting, .interactive, .push, .runnable, legacy: "SegmentedItemSeparator", tags: ["segment", "separator", "rtl", "reuse"]),
         make("security.encryption", "PooToolsDataEncrypt", "Encryption", .securityPrivacy, .interactive, .sheet, .runnable, legacy: "Encryption", tags: ["crypto"]),
+        make("network.speed-test", "PooToolsNetworkSpeedTest", "Network Speed Test", .networkConnectivity, .interactive, .push, .runnable, legacy: "NetworkSpeedTest", tags: ["network", "speed", "endpoint"]),
+        make("network.ping", "PooToolsPing", "Ping Session", .networkConnectivity, .interactive, .push, .runnable, legacy: "PingSession", tags: ["network", "ping", "state-machine"]),
+        make("device.heart-rate", "PooToolsHeartRate", "Heart Rate", .permissionsDevice, .hostRequired, .fullScreen, .physicalDeviceRequired, [.camera, .physicalDevice], legacy: "HeartRate", tags: ["camera", "health", "runtime-safety"]),
     ]
 
     static var sections: [PTDemoSection] {
@@ -247,8 +251,22 @@ final class PTDemoCoordinator {
     static let shared = PTDemoCoordinator()
 
     func viewController(for descriptor: PTDemoDescriptor) -> UIViewController {
-        PTDemoFactoryRegistry.shared.makeViewController(for: descriptor)
-            ?? PTFuncDetailViewController(descriptor: descriptor)
+        if let registered = PTDemoFactoryRegistry.shared.makeViewController(for: descriptor) {
+            return registered
+        }
+
+        switch descriptor.id.rawValue {
+        case "navigation.split-view":
+            return PT5_61SplitViewDemoViewController()
+        case "network.speed-test":
+            return PT5_61NetworkSpeedDemoViewController()
+        case "network.ping":
+            return PT5_61PingDemoViewController()
+        case "device.heart-rate":
+            return PTHeartRateViewController()
+        default:
+            return PTFuncDetailViewController(descriptor: descriptor)
+        }
     }
 
     func present(_ descriptor: PTDemoDescriptor, from host: UIViewController, sizes: [PTSheetSize] = [.percent(0.5)]) {
@@ -261,6 +279,210 @@ final class PTDemoCoordinator {
             host.showDetailViewController(viewController, sender: nil)
         case .sheet, .inline, .action:
             UIViewController.currentPresentToSheet(vc: viewController, sizes: sizes)
+        }
+    }
+}
+
+// English: This compact SplitView demo exercises double/triple columns and adaptive navigation without a second demo framework.
+// Español: Este demo compacto de SplitView prueba columnas dobles/triples y navegación adaptativa sin otro framework de demos.
+// 中文：这个紧凑的 SplitView Demo 演示双栏/三栏和自适应导航，不创建第二套 Demo 框架。
+@MainActor
+private final class PT5_61SplitViewDemoViewController: PTSplitViewController {
+    init() {
+        super.init(configuration: PTSplitConfiguration(style: .tripleColumn,
+                                                        displayMode: .oneBesideSecondary,
+                                                        splitBehavior: .tile,
+                                                        primaryWidthFraction: 0.25,
+                                                        supplementaryWidthFraction: 0.25,
+                                                        navigationPolicy: .wrapAll))
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setPrimary(PT5_61DemoLabelViewController(title: "Sidebar / 主栏"))
+        setSupplementary(PT5_61DemoLabelViewController(title: "Search / 搜索"))
+        setSecondary(PT5_61DemoLabelViewController(title: "Detail / 详情"))
+        setInspector(PT5_61DemoLabelViewController(title: "Inspector / 检查器"))
+    }
+}
+
+// English: The shared label controller keeps the demo deterministic and safe on every simulator size.
+// Español: El controlador de etiqueta compartido mantiene el demo determinista y seguro en cualquier tamaño de simulador.
+// 中文：共享标签控制器让 Demo 在不同模拟器尺寸下保持确定且安全。
+@MainActor
+private final class PT5_61DemoLabelViewController: PTBaseViewController {
+    private let titleText: String
+
+    init(title: String) {
+        titleText = title
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        titleText = ""
+        super.init(coder: coder)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let label = UILabel()
+        label.text = titleText
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.textColor = .label
+        view.addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+}
+
+// English: Network speed demos require explicit endpoints and never ship a built-in public server.
+// Español: Los demos de velocidad requieren endpoints explícitos y nunca incluyen un servidor público integrado.
+// 中文：测速 Demo 必须显式输入 endpoint，不内置生产公共服务器。
+@MainActor
+private final class PT5_61NetworkSpeedDemoViewController: PTBaseViewController {
+    private let downloadField = UITextField()
+    private let uploadField = UITextField()
+    private let statusLabel = UILabel()
+    private var task: Task<Void, Never>?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = "Network Speed Test"
+        configureView()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        task?.cancel()
+        task = nil
+    }
+
+    private func configureView() {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 12
+        stack.alignment = .fill
+        downloadField.placeholder = "Download URL"
+        uploadField.placeholder = "Upload URL"
+        downloadField.borderStyle = .roundedRect
+        uploadField.borderStyle = .roundedRect
+        statusLabel.numberOfLines = 0
+        statusLabel.text = "请输入测试服务地址"
+        let button = UIButton(type: .system)
+        button.setTitle("Start / Cancel", for: .normal)
+        button.addTarget(self, action: #selector(startOrCancel), for: .touchUpInside)
+        [downloadField, uploadField, button, statusLabel].forEach(stack.addArrangedSubview)
+        view.addSubview(stack)
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            stack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20)
+        ])
+    }
+
+    @objc private func startOrCancel() {
+        if task != nil {
+            task?.cancel()
+            task = nil
+            Task { await PTNetworkSpeedTester.shared.cancel() }
+            statusLabel.text = "已取消"
+            return
+        }
+        guard let downloadURL = URL(string: downloadField.text ?? ""),
+              let uploadURL = URL(string: uploadField.text ?? "") else {
+            statusLabel.text = "请输入有效的 http/https URL"
+            return
+        }
+        let configuration = PTNetworkSpeedTestConfiguration(downloadURL: downloadURL,
+                                                             uploadURL: uploadURL)
+        task = Task { [weak self] in
+            do {
+                let stream = await PTNetworkSpeedTester.shared.start(configuration: configuration)
+                for try await snapshot in stream {
+                    guard let self else { return }
+                    self.statusLabel.text = "\(snapshot.phase)  \(snapshot.megabitsPerSecond) Mbps"
+                }
+            } catch {
+                self?.statusLabel.text = error.localizedDescription
+            }
+            self?.task = nil
+        }
+    }
+}
+
+// English: Ping demo exposes resolving, success, failure and stop through the typed session state.
+// Español: El demo de ping expone resolución, éxito, fallo y parada mediante el estado tipado de la sesión.
+// 中文：Ping Demo 通过类型化 Session 状态展示解析、成功、失败和停止。
+@MainActor
+private final class PT5_61PingDemoViewController: PTBaseViewController {
+    private let hostField = UITextField()
+    private let statusLabel = UILabel()
+    private let session = PTPingSession()
+    private var task: Task<Void, Never>?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = "Ping Session"
+        hostField.placeholder = "Host or IP"
+        hostField.text = "example.com"
+        hostField.borderStyle = .roundedRect
+        statusLabel.numberOfLines = 0
+        let button = UIButton(type: .system)
+        button.setTitle("Start / Stop", for: .normal)
+        button.addTarget(self, action: #selector(startOrStop), for: .touchUpInside)
+        let stack = UIStackView(arrangedSubviews: [hostField, button, statusLabel])
+        stack.axis = .vertical
+        stack.spacing = 12
+        view.addSubview(stack)
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            stack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20)
+        ])
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        task?.cancel()
+        Task { await session.stop() }
+    }
+
+    @objc private func startOrStop() {
+        if task != nil {
+            task?.cancel()
+            task = nil
+            Task { await session.stop() }
+            statusLabel.text = "stopped"
+            return
+        }
+        let host = hostField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !host.isEmpty else {
+            statusLabel.text = "请输入 Host"
+            return
+        }
+        let pingSession = session
+        task = Task { [weak self, pingSession] in
+            let stream = await pingSession.start(host: host)
+            do {
+                for try await response in stream {
+                    guard let self else { return }
+                    self.statusLabel.text = "success  \(response.responseTime)"
+                }
+            } catch {
+                self?.statusLabel.text = error.localizedDescription
+            }
+            self?.task = nil
         }
     }
 }

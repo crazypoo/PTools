@@ -231,7 +231,16 @@ public class SimplePing {
 	header, or nil if you want the packet to include a standard 56 byte payload
 	(resulting in a standard 64 byte ping). */
 	public func sendPing(data: Data?) {
-		guard let hostAddress = hostAddress else {fatalError("Gotta wait for -simplePing:didStartWithAddress: before sending a ping")}
+		guard let hostAddress = hostAddress else {
+			// English: Report an invalid lifecycle call through the delegate instead of trapping.
+			// Español: Informa una llamada de ciclo de vida no válida mediante el delegado en lugar de provocar un trap.
+			// 中文：通过代理报告无效的生命周期调用，不再直接触发崩溃。
+			delegate?.simplePing(self,
+			                    didFail: NSError(domain: "PooTools.SimplePing",
+			                                      code: 1,
+			                                      userInfo: [NSLocalizedDescriptionKey: "Ping has not resolved a host address"]))
+			return
+		}
 		
 		/* *** Construct the ping packet. *** */
 		
@@ -250,7 +259,11 @@ public class SimplePing {
 			packet = pingPacket(type: ICMPv6TypeEcho.request.rawValue, payload: payload, requiresChecksum: true)
 			
 		default:
-			fatalError()
+			delegate?.simplePing(self,
+			                    didFail: NSError(domain: "PooTools.SimplePing",
+			                                      code: 2,
+			                                      userInfo: [NSLocalizedDescriptionKey: "Unsupported ping address family"]))
+			return
 		}
 		
 		/* *** Send the packet. *** */
@@ -524,7 +537,7 @@ public class SimplePing {
 		switch hostAddressFamily {
 		case sa_family_t(AF_INET):  return validatePing4ResponsePacket(&packet, sequenceNumber: &sequenceNumber)
 		case sa_family_t(AF_INET6): return validatePing6ResponsePacket(&packet, sequenceNumber: &sequenceNumber)
-		default: fatalError()
+		default: return false
 		}
 	}
 	

@@ -11,6 +11,13 @@ import AVFoundation
 import SnapKit
 import Lottie
 
+// English: CMSampleBuffer is a system-owned frame passed through one narrow compatibility box.
+// Español: CMSampleBuffer es un fotograma del sistema que cruza un único adaptador de compatibilidad.
+// 中文：CMSampleBuffer 是系统拥有的帧，只通过一个窄范围兼容包装器跨越并发边界。
+private struct PTHeartRateSampleBufferBox: @unchecked Sendable {
+    let value: CMSampleBuffer
+}
+
 public typealias RGB = (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
 public typealias HSV = (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat)
 
@@ -64,7 +71,7 @@ public func rgb2hsv(_ rgb: RGB) -> HSV {
     
     let d: CGFloat = maxV - minV
     
-    s = maxV == 0 ? 0 : d / minV;
+    s = maxV == 0 ? 0 : d / maxV
     
     if (maxV == minV) {
         h = 0
@@ -88,6 +95,7 @@ public func rgb2hsv(_ rgb: RGB) -> HSV {
 }
 
 @objcMembers
+@MainActor
 public class PTHeartRateViewController: PTBaseViewController {
 
     public let sessionQueue = DispatchQueue(label: "camera.session.collector.metal")
@@ -105,16 +113,17 @@ public class PTHeartRateViewController: PTBaseViewController {
         return view
     }()
     
-    private var heartRateManager: PTHeartRateManager!
+    private var heartRateManager: PTHeartRateManager?
     private var inputs: [CGFloat] = []
     private var measurementStartedFlag = false
-    private var timer = Timer()
+    private var timer: Timer?
     private var svgaIsPlaying:Bool = false
     
     var validFrameCounter = 0
         
     var fiter = PTFiter()
     var pulseDetector = PTPulseDetector()
+    private let ciContext = CIContext(options: nil)
     
     lazy var pulseRate : UILabel = {
         let view = UILabel()
@@ -135,7 +144,12 @@ public class PTHeartRateViewController: PTBaseViewController {
     }()
     
     lazy var player : LottieAnimationView = {
-        let view = LottieAnimationView(dotLottieUrl: URL(string: "https://lottie.host/80012aeb-ac39-44e4-8ae0-20b9ba56f1bf/73xBogjj9i.lottie")!)
+        let view: LottieAnimationView
+        if let url = URL(string: "https://lottie.host/80012aeb-ac39-44e4-8ae0-20b9ba56f1bf/73xBogjj9i.lottie") {
+            view = LottieAnimationView(dotLottieUrl: url)
+        } else {
+            view = LottieAnimationView()
+        }
         view.frame = CGRectMake(0, 0, 88, 88)
         view.contentMode = .scaleAspectFit
         view.loopMode = .loop
@@ -145,6 +159,7 @@ public class PTHeartRateViewController: PTBaseViewController {
 
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        initCaptureSession()
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
@@ -199,28 +214,29 @@ public class PTHeartRateViewController: PTBaseViewController {
     
     private func initVideoCapture() {
         let specs = VideoSpec(fps: 30, size: CGSize(width: 300, height: 300))
-        heartRateManager = PTHeartRateManager(cameraType: .back, preferredSpec: specs, previewContainer: previewLayer.layer)
-        heartRateManager.imageBufferHandler = { [unowned self] (imageBuffer) in
-            handle(buffer: imageBuffer)
-        }
-    }
-    
-    private func initCaptureSession() {
-        sessionQueue.async {
-            PTGCDManager.shared.runOnMain {
-                self.heartRateManager.startCapture()
+        let manager = PTHeartRateManager(cameraType: .back, preferredSpec: specs, previewContainer: previewLayer.layer)
+        heartRateManager = manager
+        manager.imageBufferHandler = { [weak self] imageBuffer in
+            let box = PTHeartRateSampleBufferBox(value: imageBuffer)
+            Task { @MainActor [weak self, box] in
+                self?.handle(buffer: box.value)
             }
+        }
+        if let error = manager.configurationError {
+            PTNSLogConsole(error.localizedDescription, levelType: .error, loggerType: .health)
         }
     }
 
+    private func initCaptureSession() {
+        heartRateManager?.startCapture()
+    }
+
     private func deinitCaptureSession() {
-        sessionQueue.async {
-            PTGCDManager.shared.runOnMain {
-                self.heartRateManager.stopCapture()
-                self.toggleTorch(status: false)
-                self.player.stop()
-            }
-        }
+        timer?.invalidate()
+        timer = nil
+        heartRateManager?.stopCapture()
+        toggleTorch(status: false)
+        player.stop()
     }
 
     private func toggleTorch(status: Bool) {
@@ -229,29 +245,31 @@ public class PTHeartRateViewController: PTBaseViewController {
     }
 
     private func startMeasurement() {
-        self.toggleTorch(status: true)
-        self.timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { [weak self] (timer) in
-            PTGCDManager.shared.runOnMain { [weak self] in
-                guard let self = self else { return }
+        toggleTorch(status: true)
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
                 let average = self.pulseDetector.getAverage()
-                let pulse = 60.0/average
+                let pulse = average > 0 ? 60.0 / average : -60
                 if pulse == -60 {
                     UIView.animate(withDuration: 0.2, animations: {
                         self.pulseRate.alpha = 0
-                    }) { (finished) in
+                    }) { finished in
                         self.pulseRate.isHidden = finished
                     }
                 } else {
                     UIView.animate(withDuration: 0.2, animations: {
                         self.pulseRate.alpha = 1.0
-                    }) { (_) in
+                    }) { _ in
                         self.pulseRate.isHidden = false
                         self.pulseRate.text = "\(lroundf(pulse)) BPM"
                     }
                 }
             }
-        })
-    }    
+        }
+    }
+
 }
 
 extension PTHeartRateViewController {
@@ -260,36 +278,23 @@ extension PTHeartRateViewController {
         var greenmean:CGFloat = 0.0;
         var bluemean:CGFloat = 0.0;
         
-        let pixelBuffer = CMSampleBufferGetImageBuffer(buffer)
-        let cameraImage = CIImage(cvPixelBuffer: pixelBuffer!)
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(buffer) else { return }
+        let cameraImage = CIImage(cvPixelBuffer: pixelBuffer)
 
         let extent = cameraImage.extent
         let inputExtent = CIVector(x: extent.origin.x, y: extent.origin.y, z: extent.size.width, w: extent.size.height)
-        let averageFilter = CIFilter(name: "CIAreaAverage", parameters: [kCIInputImageKey: cameraImage, kCIInputExtentKey: inputExtent])!
-        let outputImage = averageFilter.outputImage!
+        guard let averageFilter = CIFilter(name: "CIAreaAverage") else { return }
+        averageFilter.setValue(cameraImage, forKey: kCIInputImageKey)
+        averageFilter.setValue(inputExtent, forKey: kCIInputExtentKey)
+        guard let outputImage = averageFilter.outputImage,
+              let cgImage = ciContext.createCGImage(outputImage, from: outputImage.extent),
+              let rawData = cgImage.dataProvider?.data,
+              let bytes = CFDataGetBytePtr(rawData),
+              CFDataGetLength(rawData) >= 3 else { return }
 
-        let ctx = CIContext(options:nil)
-        let cgImage = ctx.createCGImage(outputImage, from:outputImage.extent)!
-        
-        let rawData:NSData = cgImage.dataProvider!.data!
-        let pixels = rawData.bytes.assumingMemoryBound(to: UInt8.self)
-        let bytes = UnsafeBufferPointer<UInt8>(start:pixels, count:rawData.length)
-        var BGRA_index = 0
-        for pixel in UnsafeBufferPointer(start: bytes.baseAddress, count: bytes.count) {
-            switch BGRA_index {
-            case 0:
-                bluemean = CGFloat (pixel)
-            case 1:
-                greenmean = CGFloat (pixel)
-            case 2:
-                redmean = CGFloat (pixel)
-            case 3:
-                break
-            default:
-                break
-            }
-            BGRA_index += 1
-        }
+        bluemean = CGFloat(bytes[0])
+        greenmean = CGFloat(bytes[1])
+        redmean = CGFloat(bytes[2])
         
         let hsv = rgb2hsv((red: redmean, green: greenmean, blue: bluemean, alpha: 1.0))
         if (hsv.1 > 0.5 && hsv.2 > 0.5) {

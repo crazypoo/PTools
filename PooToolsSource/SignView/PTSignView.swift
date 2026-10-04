@@ -145,11 +145,23 @@ public class PTSignView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func showView() {
-        AppWindows!.addSubview(self)
+    public func showView(in hostView: UIView?) {
+        // English: Prefer an explicit host and fall back to the active scene without force unwrapping.
+        // Español: Prefiere un host explícito y usa la escena activa como respaldo sin desempaquetado forzado.
+        // 中文：优先使用明确的承载视图，兜底到当前场景，并移除强制解包。
+        guard let container = hostView ?? PTSceneContext.activeWindow() else { return }
+        container.addSubview(self)
         self.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+
+    // English: Preserve the historical no-argument entry point for 5.x callers.
+    // Español: Conserva la entrada histórica sin argumentos para los clientes de 5.x.
+    // 中文：保留 5.x 调用方使用的无参数历史入口。
+    @available(*, deprecated, message: "Use showView(in:) to provide an explicit host view when possible.")
+    public func showView() {
+        showView(in: nil)
     }
     
     public func viewDismiss() {

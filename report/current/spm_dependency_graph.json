@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "70dde0456c0525709ed3de840428c60ac66b8427",
-  "generated_at": "2026-10-03T15:22:34Z",
+  "source_revision": "b575ef04bf62427d87cb27532cca6a38e0545245",
+  "generated_at": "2026-10-04T03:20:13Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -785,6 +785,7 @@
         "PooToolsSmartScreenshot",
         "PooToolsSocketKit",
         "PooToolsSpeedPanel",
+        "PooToolsSplitView",
         "PooToolsStepCount",
         "PooToolsStepper",
         "PooToolsTelephony",
@@ -1501,6 +1502,17 @@
       ]
     },
     {
+      "name": "PooToolsSplitView",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsSplitView"
+      ]
+    },
+    {
       "name": "PooToolsStepCount",
       "type": {
         "library": [
@@ -1747,31 +1759,6 @@
           "requirement": {
             "exact": [
               "1.1.2"
-            ]
-          },
-          "traits": [
-            {
-              "name": "default"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "sourceControl": [
-        {
-          "identity": "kakapos",
-          "location": {
-            "remote": [
-              {
-                "urlString": "https://github.com/yangKJ/Kakapos.git"
-              }
-            ]
-          },
-          "productFilter": null,
-          "requirement": {
-            "revision": [
-              "64ef17d978700cbe5d1168be7e57561a4459feee"
             ]
           },
           "traits": [
@@ -7053,6 +7040,17 @@
           }
         },
         {
+          "name": "PToolsStorage",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsStorage",
+              null
+            ]
+          }
+        },
+        {
           "name": "ptools",
           "kind": "internal",
           "package": null,
@@ -7321,6 +7319,17 @@
       ],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsConnectivity",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsConnectivity",
+              null
+            ]
+          }
+        },
         {
           "name": "PToolsCore",
           "kind": "internal",
@@ -7747,19 +7756,7 @@
           }
         }
       ],
-      "third_party_dependencies": [
-        {
-          "name": "Kakapos",
-          "kind": "third_party",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "Kakapos",
-              null
-            ]
-          }
-        }
-      ],
+      "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -8646,6 +8643,38 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_SPEEDPANEL"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsSplitView",
+      "type": "regular",
+      "path": "PooToolsSource/SplitView",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
             }
           },
           "tool": "swift"

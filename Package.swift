@@ -93,6 +93,10 @@ let package = Package(
         // 中文：独立公开仅依赖 Foundation 的日期语境和日历感知值类型。
         .library(name: "PToolsDate", targets: ["PToolsDate"]),
         .library(name: "PToolsUIFoundation", targets: ["PToolsUIFoundation"]),
+        // English: Publish adaptive UIKit split navigation as an opt-in container module.
+        // Español: Publica la navegación UIKit adaptativa en columnas como un módulo de contenedor opt-in.
+        // 中文：将自适应 UIKit 分栏导航作为可选容器模块公开。
+        .library(name: "PooToolsSplitView", targets: ["PooToolsSplitView"]),
         // English: Publish the reusable scene-aware overlay infrastructure independently from banner content.
         // Español: Publica la infraestructura de overlays consciente de escenas separada del contenido del banner.
         // 中文：独立公开与 Banner 内容解耦的多 Scene 浮层基础设施。
@@ -240,7 +244,7 @@ let package = Package(
             "PToolsModelUIKit", "PToolsModelCombine",
             "PToolsConnectivity", "PToolsStorageCore", "PToolsStorage", "PToolsRouteCore",
             "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks",
-            "PToolsTheme", "PToolsAccessibility", "PToolsContentState", "PToolsForm",
+            "PToolsTheme", "PToolsAccessibility", "PToolsContentState", "PToolsForm", "PooToolsSplitView",
             "PToolsBluetooth", "PToolsDocuments", "PToolsSimulationCore", "PToolsSimulation",
             "PToolsConfiguration", "PToolsFeedback", "PToolsAudio", "PToolsAppIntents",
             "PToolsWidgetCore", "PToolsActivities",
@@ -290,10 +294,6 @@ let package = Package(
         .package(url: "https://github.com/amirdew/CollectionViewPagingLayout.git", exact: "1.1.0"),
         .package(url: "https://github.com/PhoneNumberKit/PhoneNumberKit.git", from: "5.0.0"),
         .package(url: "https://github.com/yangKJ/Harbeth.git", exact: "3.0.0"),
-        // English: Pin the known 1.1.0 tag commit because the upstream annotated tag has changed across SwiftPM caches.
-        // Español: Fija el commit conocido de la etiqueta 1.1.0 porque la etiqueta anotada upstream cambia entre cachés de SwiftPM.
-        // 中文：固定已验证的 1.1.0 标签提交，避免上游带注释标签在不同 SwiftPM 缓存中产生冲突。
-        .package(url: "https://github.com/yangKJ/Kakapos.git", revision: "64ef17d978700cbe5d1168be7e57561a4459feee"),
         .package(url: "https://github.com/pocketsvg/PocketSVG.git", from: "2.7.0"),
         .package(url: "https://github.com/apple/swift-protobuf.git", exact: "1.37.0"),
         .package(url: "https://github.com/Kitura/Swift-JWT.git", exact: "4.0.0"),
@@ -444,6 +444,17 @@ let package = Package(
             name: "PToolsUIFoundation",
             dependencies: ["PToolsCore", "SnapKit"],
             path: "PooToolsSource/PToolsUIFoundation",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
+        ),
+        // English: Keep SplitView on top of existing UIKit and scene/navigation infrastructure.
+        // Español: Mantiene SplitView sobre la infraestructura UIKit, de escenas y navegación existente.
+        // 中文：让 SplitView 建立在现有 UIKit、Scene 和导航基础设施之上。
+        .target(
+            name: "PooToolsSplitView",
+            dependencies: ["ptools"],
+            path: "PooToolsSource/SplitView",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]
@@ -819,7 +830,7 @@ let package = Package(
         ),
         .target(
             name: "PooToolsNetWork",
-            dependencies: ["ptools", "PToolsCore", "PToolsModelCore", "PToolsModelLegacySmartCodable", "PToolsModelLegacyKakaJSON", "PToolsNetworkModelCore", "PooToolsLoading", "Alamofire"],
+            dependencies: ["ptools", "PToolsCore", "PToolsModelCore", "PToolsModelLegacySmartCodable", "PToolsModelLegacyKakaJSON", "PToolsNetworkModelCore", "PToolsConnectivity", "PooToolsLoading", "Alamofire"],
             path: "PooToolsSource/NetWork",
             sources: [
                 "Network+Download.swift", "Network+LegacyCompatibility.swift", "Network+Logging.swift",
@@ -839,7 +850,7 @@ let package = Package(
         // 高级业务模块
         // ==========================================
         .target(name: "PooToolsImagePicker", dependencies: ["ptools", "PTCameraPermission"], path: "PooToolsSource/ImagePicker", swiftSettings: [.define("POOTOOLS_IMAGEPICKER"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsPhotoPicker", dependencies: ["ptools", "PToolsSymbols", "PooToolsMediaCore", "PooToolsImagePicker", "PTCameraPermission", "PooToolsLoading", "Kakapos"], path: "PooToolsSource", sources: ["PhotoPicker"], swiftSettings: [.define("POOTOOLS_PHOTOPICKER"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsPhotoPicker", dependencies: ["ptools", "PToolsSymbols", "PooToolsMediaCore", "PooToolsImagePicker", "PTCameraPermission", "PooToolsLoading"], path: "PooToolsSource", sources: ["PhotoPicker"], swiftSettings: [.define("POOTOOLS_PHOTOPICKER"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsHarbethKit", dependencies: ["ptools", "PToolsSymbols", "Harbeth", "PTCameraPermission"], path: "PooToolsSource/C7Collector", swiftSettings: [.define("POOTOOLS_HARBETHKIT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsImageEditor", dependencies: ["ptools", "PToolsSymbols", "PooToolsMediaCore", "Harbeth", "PooToolsHarbethKit", "PooToolsPhotoPicker"], path: "PooToolsSource/ImageEditor", swiftSettings: [.define("POOTOOLS_IMAGEEDITOR"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsVideoEditor", dependencies: ["ptools", "PToolsSymbols", "PooToolsMediaCore", "Harbeth", "PooToolsHarbethKit", "PooToolsProgressBar", "PooToolsLoading"], path: "PooToolsSource/VideoEditor", swiftSettings: [.define("POOTOOLS_VIDEOEDITOR"), .define("POOTOOLS_COCOAPODS")]),
@@ -874,7 +885,7 @@ let package = Package(
         .target(name: "PooToolsSlider", dependencies: ["SnapKit"], path: "PooToolsSource/Slider", swiftSettings: [.define("POOTOOLS_SLIDER"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsCheckUpdate", dependencies: ["PooToolsNetWork", .product(name: "SwiftJWT", package: "Swift-JWT")], path: "PooToolsSource/CheckUpdate", swiftSettings: [.define("POOTOOLS_CHECKUPDATE"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsLayout", dependencies: ["ptools", "CollectionViewPagingLayout"], path: "PooToolsSource/Layout", swiftSettings: [.define("POOTOOLS_LAYOUT"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsLocation", dependencies: ["ptools", "PTLocationPermission"], path: "PooToolsSource/Location", swiftSettings: [.define("POOTOOLS_LOCATION"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsLocation", dependencies: ["ptools", "PToolsStorage", "PTLocationPermission"], path: "PooToolsSource/Location", swiftSettings: [.define("POOTOOLS_LOCATION"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSmartScreenshot", dependencies: ["ptools"], path: "PooToolsSource/ScreenShot", swiftSettings: [.define("POOTOOLS_SMARTSCREENSHOT"), .define("POOTOOLS_COCOAPODS")]),
         // English: PagingControl is now entirely native and depends only on the PTools Core contract.
         // Español: PagingControl ahora es completamente nativo y depende solo del contrato Core de PTools.

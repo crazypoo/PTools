@@ -10,7 +10,7 @@ extension ViewHierarchyCoordinator: @MainActor AsyncOperationProtocol {
     func asyncOperation(name: String, execute closure: @escaping Closure) {
         let mainTask = MainThreadOperation(name: name, closure: closure)
 
-        guard let keyWindow = AppWindows else {
+        guard let keyWindow = PTSceneContext.activeWindow() else {
             return operationQueue.addOperation(mainTask)
         }
 

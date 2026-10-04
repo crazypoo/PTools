@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "baseline": "5.61.0",
+  "rule": "One canonical owner per system capability; adapters and specialized exceptions are registered explicitly.",
+  "owners": [
+    {"capability": "user_defaults_generic_storage", "owner": "PToolsStorage", "backend": "PTUserDefaultsStorage", "classification": "MERGE_BACKEND_NOW", "adapters": ["PTCoreUserDefaultsWrapper", "UserDefaults+PTEX"], "scan_patterns": ["UserDefaults\\.standard", "PTUserDefaultsStorage"]},
+    {"capability": "network_connectivity", "owner": "PToolsConnectivity", "backend": "PTConnectivityMonitor", "classification": "MERGE_BACKEND_NOW", "adapters": ["NetworkReachability", "PTNetWorkStatus"], "scan_patterns": ["NWPathMonitor", "PTConnectivityMonitor"]},
+    {"capability": "permission_contracts", "owner": "PToolsPermissionCore", "backend": "PTPermission", "classification": "CANONICAL + COMPAT", "adapters": ["PermissionCore"], "scan_patterns": ["PTPermission", "PTPermissionAuthorizationState"]},
+    {"capability": "feedback_haptics", "owner": "PToolsFeedback", "backend": "PTHapticEngine", "classification": "CANONICAL + COMPAT", "adapters": ["PTFeedbackCenter", "PTPhoneFeedBackControl", "UIFeedbackGenerator"], "scan_patterns": ["UIImpactFeedbackGenerator", "UISelectionFeedbackGenerator", "PTHapticEngine"]},
+    {"capability": "theme_tokens", "owner": "PToolsTheme", "backend": "PTThemeRegistry", "classification": "LAYERED", "adapters": ["PTThemeProvider", "PTDarkModeOption", "PTAppBaseConfig"], "scan_patterns": ["PTThemeRegistry", "PTThemeProvider", "PTDarkModeOption"]},
+    {"capability": "logging", "owner": "PToolsLogging", "backend": "PTLogger", "classification": "CANONICAL + COMPAT", "adapters": ["PTNSLogConsole", "Logger+PTEX"], "scan_patterns": ["PTLogger", "PTNSLogConsole"]},
+    {"capability": "routing", "owner": "PooToolsRouter", "backend": "PTRouteRequest", "classification": "CANONICAL + COMPAT", "adapters": ["PTRouter", "PTRouterRequest"], "scan_patterns": ["PTRouteRequest", "PTRouterRequest", "PTRouter"]},
+    {"capability": "network_requests", "owner": "PooToolsNetWork", "backend": "PTNetworkExecutor", "classification": "LAYERED", "adapters": ["Network", "requestApi", "requestBodyAPI"], "scan_patterns": ["PTNetworkExecutor", "class Network", "requestApi"]},
+    {"capability": "audio_session", "owner": "PToolsAudio", "backend": "PTAudioSessionCoordinator", "classification": "MERGE_BACKEND_NOW", "adapters": ["C7CollectorCamera", "OSSSpeech", "VideoEditor"], "scan_patterns": ["AVAudioSession\\.sharedInstance", "PTAudioSessionCoordinator"]},
+    {"capability": "speech_recognition", "owner": "PTSpeech", "backend": "SFSpeechRecognizer", "classification": "SPECIALIZED_EXCEPTION", "adapters": ["OSSSpeech"], "scan_patterns": ["SFSpeechRecognizer", "SFSpeechAudioBufferRecognitionRequest"]},
+    {"capability": "media_save", "owner": "PTMediaSaveService", "backend": "PTMediaSaveService", "classification": "MERGE_BACKEND_NOW", "adapters": ["PHPhotoLibrary+PTEX", "UIImage+PTEX"], "scan_patterns": ["PTMediaSaveService", "PHPhotoLibrary\\.shared"]},
+    {"capability": "photo_requests", "owner": "PTMediaLibManager", "backend": "PTMediaRequestCoordinator", "classification": "CANONICAL + COMPAT", "adapters": ["PHAsset+PTEX", "PhotoPicker"], "scan_patterns": ["PTMediaRequestCoordinator", "requestImage", "fetchOriginalImage"]},
+    {"capability": "video_thumbnail", "owner": "PTVideoThumbnailService", "backend": "PTVideoThumbnailService", "classification": "CANONICAL + COMPAT", "adapters": ["AVAsset+PTEX", "PTVideoCoverCache"], "scan_patterns": ["PTVideoThumbnailService", "AVAssetImageGenerator"]},
+    {"capability": "image_loading", "owner": "PTLoadImageFunction", "backend": "PTLoadImageFunction.loadImage", "classification": "CANONICAL + COMPAT", "adapters": ["UIImageView.loadImage", "UIButton.loadImage"], "scan_patterns": ["PTLoadImageFunction", "loadImage"]},
+    {"capability": "media_cache", "owner": "PTMediaCache", "backend": "PTMediaCache", "classification": "LAYERED", "adapters": ["PTVideoCoverCache", "PTVideoFileCache"], "scan_patterns": ["PTMediaCache", "PTVideoCoverCache"]},
+    {"capability": "device_capability", "owner": "PToolsDevice", "backend": "PTDevice", "classification": "CANONICAL + COMPAT", "adapters": ["UIDevice+PTEX"], "scan_patterns": ["PTDevice", "UIDevice"]},
+    {"capability": "date_values", "owner": "PToolsDate", "backend": "PToolsDate", "classification": "CANONICAL + COMPAT", "adapters": ["Date+PTEX", "String+PTEX"], "scan_patterns": ["PToolsDate", "dateFormat"]},
+    {"capability": "qr_static_recognition", "owner": "PTVision", "backend": "Vision", "classification": "MERGE_BACKEND_NOW", "adapters": ["PTScanQRController"], "scan_patterns": ["VNDetectBarcodesRequest", "CIDetector"]},
+    {"capability": "main_actor_dispatch", "owner": "PToolsCore", "backend": "PTMainActorBridge", "classification": "CANONICAL + COMPAT", "adapters": ["PTGCDManager.runOnMain"], "scan_patterns": ["PTMainActorBridge", "DispatchQueue\\.main\\.async"]},
+    {"capability": "overlay_host", "owner": "PToolsOverlay", "backend": "PTOverlayHost", "classification": "MERGE_BACKEND_NOW", "adapters": ["PTAlertManager", "PooToolsBanner"], "scan_patterns": ["PTOverlayHost", "PTOverlayWindow", "PTAlertWindow"]},
+    {"capability": "segmented_control", "owner": "PTSegmentedView", "backend": "PTSegmentedView", "classification": "CANONICAL + COMPAT", "adapters": ["PTSegmentView"], "scan_patterns": ["PTSegmentedView", "PTSegmentView"]},
+    {"capability": "content_state", "owner": "PToolsContentState", "backend": "PTContentState", "classification": "LAYERED", "adapters": ["PTUnavailableManager", "legacy EmptyDataSet"], "scan_patterns": ["PTContentState", "PTUnavailableManager"]},
+    {"capability": "split_navigation", "owner": "PooToolsSplitView", "backend": "PTSplitViewController", "classification": "MERGE_BACKEND_NOW", "adapters": ["PTRouter"], "scan_patterns": ["PTSplitViewController", "PTAdaptiveNavigationContainer"]}
+  ]
+}

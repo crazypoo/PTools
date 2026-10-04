@@ -133,10 +133,25 @@ public struct PTCacheMetrics: Sendable, Codable, Equatable {
 public struct PTLocationSnapshot: Codable, Hashable, Sendable {
     public let latitude: Double
     public let longitude: Double
+    public let city: String
 
-    public init(latitude: Double, longitude: Double) {
+    // English: Keep the city optional in practice so older coordinate-only callers remain source compatible.
+    // Español: Mantiene la ciudad opcional en la práctica para conservar la compatibilidad de los llamadores antiguos.
+    // 中文：让城市字段在实际使用中保持可选语义，兼容旧的仅坐标调用方。
+    public init(latitude: Double, longitude: Double, city: String = "") {
         self.latitude = latitude
         self.longitude = longitude
+        self.city = city
+    }
+
+    // English: Decode snapshots written before the city field was introduced.
+    // Español: Decodifica instantáneas escritas antes de introducir el campo de ciudad.
+    // 中文：兼容城市字段加入前写入的旧快照。
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        latitude = try container.decode(Double.self, forKey: .latitude)
+        longitude = try container.decode(Double.self, forKey: .longitude)
+        city = try container.decodeIfPresent(String.self, forKey: .city) ?? ""
     }
 }
 

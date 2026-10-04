@@ -45,6 +45,25 @@ public enum PTPingError: Error, Equatable, Sendable {
     case requestError   //发起失败
     case receiveError   //响应失败
     case timeout        //超时
+    case notReady
+    case resolvingFailed
+    case unsupportedAddressFamily
+    case sendFailed
+    case stopped
+}
+
+// English: The state makes ping lifecycle and cancellation observable without exposing SimplePing internals.
+// Español: El estado hace observable el ciclo de vida y la cancelación sin exponer los detalles de SimplePing.
+// 中文：状态机让调用方可以观察 Ping 的生命周期和取消过程，同时隐藏 SimplePing 细节。
+public enum PTPingState: Sendable, Equatable {
+    case idle
+    case resolving
+    case ready
+    case sending(sequence: UInt16)
+    case waiting(sequence: UInt16)
+    case success
+    case failed
+    case stopped
 }
 
 struct PTPingItem: Sendable {
@@ -61,6 +80,7 @@ open class PTPingTool: NSObject {
     open var stopWhenError = false                             //遇到错误停止ping
     open private(set) var isPing = false
     open var isRunning: Bool = false
+    open private(set) var state: PTPingState = .idle
     open var showNetworkActivityIndicator: NetworkActivityIndicatorStatus = .none              //是否在状态栏显示
     
     open var hostName: String? {
@@ -154,6 +174,7 @@ private extension PTPingTool {
 
         pingInterval = interval
         self.complete = complete
+        state = .resolving
         pinger.addressStyle = pingType
         pinger.start()
         isRunning = true
@@ -177,12 +198,18 @@ private extension PTPingTool {
         sendTimer?.invalidate()
         sendTimer = nil
         isRunning = false
+        state = .stopped
     }
 
     //ping完成一次之后的清理，ping成功或失败均会调用
     func pingComplete() {
         pinger.stop()
         isPing = false
+        if !isRunning {
+            state = .stopped
+        } else {
+            state = .idle
+        }
         lastSendItem = nil
         lastReciveItem = nil
         pingAddressIP = ""
@@ -260,6 +287,7 @@ extension PTPingTool: SimplePingDelegate {
     // 代理方法将由 SimplePing 在其调度的 RunLoop (此处为 Main) 上触发，受 @MainActor 保护
     nonisolated public func simplePing(_ pinger: SimplePing, didStart address: Data) {
         Task { @MainActor in
+            self.state = .ready
             self.pingAddressIP = self.displayAddressForAddress(address: NSData(data: address))
             if self.debugLog {
                 PTNSLogConsole("ping: ", self.pingAddressIP, levelType: PTLogMode, loggerType: .network)
@@ -271,6 +299,7 @@ extension PTPingTool: SimplePingDelegate {
 
     nonisolated public func simplePing(_ pinger: SimplePing, didFail error: Error) {
         Task { @MainActor in
+            self.state = .failed
             if self.debugLog {
                 PTNSLogConsole("ping failed: ", self.shortErrorFromError(error: error as NSError), levelType: .error, loggerType: .network)
             }
@@ -289,11 +318,13 @@ extension PTPingTool: SimplePingDelegate {
 
     nonisolated public func simplePing(_ pinger: SimplePing, didSendPacket packet: Data, sequenceNumber: UInt16) {
         Task { @MainActor in
+            self.state = .sending(sequence: sequenceNumber)
             if self.debugLog {
                 PTNSLogConsole("ping sent \(packet.count) data bytes, icmp_seq=\(sequenceNumber)", levelType: PTLogMode, loggerType: .network)
             }
             self.isPing = true
             self.lastSendItem = PTPingItem(sendTime: Date(), sequence: sequenceNumber)
+            self.state = .waiting(sequence: sequenceNumber)
             
             //发送数据之后监测是否超时
             if self.timeout.second > 0 {
@@ -328,6 +359,7 @@ extension PTPingTool: SimplePingDelegate {
 
     nonisolated public func simplePing(_ pinger: SimplePing, didFailToSendPacket packet: Data, sequenceNumber: UInt16, error: Error) {
         Task { @MainActor in
+            self.state = .failed
             if self.debugLog {
                 PTNSLogConsole("ping send error: ", sequenceNumber, self.shortErrorFromError(error: error as NSError), levelType: .error, loggerType: .network)
             }
@@ -344,6 +376,7 @@ extension PTPingTool: SimplePingDelegate {
 
     nonisolated public func simplePing(_ pinger: SimplePing, didReceivePingResponsePacket packet: Data, sequenceNumber: UInt16) {
         Task { @MainActor in
+            self.state = .success
             if let sendPingItem = self.lastSendItem {
                 let time = Date().timeIntervalSince(sendPingItem.sendTime).truncatingRemainder(dividingBy: 1) * 1000
                 if self.debugLog {
@@ -362,6 +395,7 @@ extension PTPingTool: SimplePingDelegate {
 
     nonisolated public func simplePing(_ pinger: SimplePing, didReceiveUnexpectedPacket packet: Data) {
         Task { @MainActor in
+            self.state = .failed
             if self.debugLog {
                 PTNSLogConsole("unexpected receive packet, size=\(packet.count)", levelType: PTLogMode, loggerType: .network)
             }
@@ -370,5 +404,109 @@ extension PTPingTool: SimplePingDelegate {
                 self.pingStop()
             }
         }
+    }
+}
+
+// English: Keep the legacy main-actor tool as the transport driver for a structured actor API.
+// Español: Mantiene la herramienta heredada en MainActor como controlador de transporte para la API de actor estructurada.
+// 中文：复用旧的 MainActor 工具作为底层传输驱动，对外提供结构化 actor API。
+@MainActor
+private final class PTPingDriver {
+    private let tool: PTPingTool
+
+    init(host: String) {
+        tool = PTPingTool(hostName: host)
+    }
+
+    func start(handler: @escaping PingComplete) {
+        tool.start(interval: .second(0), complete: handler)
+    }
+
+    func stop() {
+        tool.stop()
+    }
+}
+
+public actor PTPingSession {
+    private var continuation: AsyncThrowingStream<PTPingResponse, Error>.Continuation?
+    private var loopTask: Task<Void, Never>?
+    public private(set) var state: PTPingState = .idle
+
+    public init() {}
+
+    public func start(host: String,
+                      interval: Duration = .seconds(1)) -> AsyncThrowingStream<PTPingResponse, Error> {
+        stopCurrent()
+        state = .resolving
+
+        let stream = AsyncThrowingStream<PTPingResponse, Error> { [weak self] continuation in
+            guard let self else { return }
+            Task { await self.install(continuation: continuation, host: host, interval: interval) }
+            continuation.onTermination = { @Sendable [weak self] _ in
+                Task { await self?.stop() }
+            }
+        }
+        return stream
+    }
+
+    public func stop() {
+        stopCurrent()
+    }
+
+    private func install(continuation: AsyncThrowingStream<PTPingResponse, Error>.Continuation,
+                         host: String,
+                         interval: Duration) {
+        self.continuation = continuation
+        let boundedInterval = max(Self.seconds(from: interval), 0.05)
+        let task = Task { @MainActor [weak self] in
+            let driver = PTPingDriver(host: host)
+            driver.start { [weak self] response, error in
+                Task { await self?.receive(response: response, error: error) }
+            }
+            do {
+                while !Task.isCancelled {
+                    try await Task.sleep(for: .milliseconds(Int64(boundedInterval * 1000)))
+                    guard !Task.isCancelled else { break }
+                    driver.start { [weak self] response, error in
+                        Task { await self?.receive(response: response, error: error) }
+                    }
+                }
+            } catch {
+                // English: Cancellation is the normal exit path for a session loop.
+                // Español: La cancelación es la salida normal del bucle de sesión.
+                // 中文：取消是会话循环的正常退出路径。
+            }
+            driver.stop()
+        }
+        loopTask = task
+    }
+
+    private func receive(response: PTPingResponse?, error: Error?) {
+        if let response {
+            state = .success
+            continuation?.yield(response)
+            state = .ready
+            return
+        }
+        if let error {
+            state = .failed
+            continuation?.yield(with: .failure(error))
+            continuation?.finish()
+            loopTask?.cancel()
+            loopTask = nil
+        }
+    }
+
+    private func stopCurrent() {
+        loopTask?.cancel()
+        loopTask = nil
+        continuation?.finish()
+        continuation = nil
+        state = .stopped
+    }
+
+    private static func seconds(from duration: Duration) -> TimeInterval {
+        let components = duration.components
+        return TimeInterval(components.seconds) + TimeInterval(components.attoseconds) / 1_000_000_000_000_000_000
     }
 }

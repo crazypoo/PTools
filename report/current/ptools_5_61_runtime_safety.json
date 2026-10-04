@@ -1,0 +1,1158 @@
+{
+  "generator": "Scripts/report_5_61_runtime_safety.sh",
+  "schema_version": 1,
+  "baseline": "5.61.0",
+  "source_revision": "b575ef04bf62427d87cb27532cca6a38e0545245",
+  "source_tree_hash": "4c337f7562a092cc34e2d05cba6baaa9204224343881fa16dee58ecfb8589e8f",
+  "generated_at": "2026-10-04T03:17:28Z",
+  "checks": {
+    "kakapos": {
+      "count": 0,
+      "matches": []
+    },
+    "app_windows_force_unwrap": {
+      "count": 0,
+      "matches": []
+    },
+    "forceful_operations": {
+      "count": 0,
+      "matches": []
+    },
+    "fatal_error": {
+      "count": 146,
+      "unclassified_count": 0,
+      "matches": [
+        {
+          "path": "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift",
+          "line": 54,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ActionsheetAndAlert/PTAlertController.swift",
+          "line": 31,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ActionsheetAndAlert/PTAlertTips.swift",
+          "line": 176,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ActionsheetAndAlert/PTAlertTips.swift",
+          "line": 439,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ActionsheetAndAlert/PTAlertTipsIcon.swift",
+          "line": 53,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ActionsheetAndAlert/PTAlertTipsIcon.swift",
+          "line": 99,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ActionsheetAndAlert/PTAlertTipsIcon.swift",
+          "line": 181,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ActionsheetAndAlert/PTAlertTipsIcon.swift",
+          "line": 268,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ActionsheetAndAlert/PTDynamicNotificationView.swift",
+          "line": 65,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ActionsheetAndAlert/PTPopoverMenuContent.swift",
+          "line": 77,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Animation/PTCoinAnimation.swift",
+          "line": 42,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Animation/PTGroupBuyAvatarView.swift",
+          "line": 53,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Animation/PTWaterWaveView.swift",
+          "line": 85,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Base/PTBaseButton.swift",
+          "line": 48,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Base/PTBaseViewController+Navigation.swift",
+          "line": 23,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "required public init?(coder: NSCoder) { fatalError() }"
+        },
+        {
+          "path": "PooToolsSource/Base/PTBaseViewController+Navigation.swift",
+          "line": 123,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "public required init?(coder: NSCoder) { fatalError() }"
+        },
+        {
+          "path": "PooToolsSource/Base/PTBaseViewController.swift",
+          "line": 823,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
+          "line": 93,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Base/PTEmptyDataSetView.swift",
+          "line": 115,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Base/PTGAnimationImageView.swift",
+          "line": 88,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Base/PTTabBarItemView.swift",
+          "line": 79,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "public required init?(coder: NSCoder) { fatalError() }"
+        },
+        {
+          "path": "PooToolsSource/Button/PTLayoutButton.swift",
+          "line": 417,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
+          "line": 818,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/C7Collector/PTFilterImageCell.swift",
+          "line": 56,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/C7Collector/PTHarBethFilter.swift",
+          "line": 36,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift",
+          "line": 98,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
+          "line": 222,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/CodeView/PTCodeView.swift",
+          "line": 56,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Core/PTUpdateTipsViewController.swift",
+          "line": 115,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Core/PTUpdateTipsViewController.swift",
+          "line": 190,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DarkMode/PTDarkFollowSystemFooter.swift",
+          "line": 42,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DarkMode/PTDarkModeHeader.swift",
+          "line": 164,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DarkMode/PTDarkSmartFooter.swift",
+          "line": 120,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DebugColor/PTColorPickPlugin.swift",
+          "line": 147,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "required init?(coder: NSCoder) { fatalError() }"
+        },
+        {
+          "path": "PooToolsSource/DebugColor/PTColorPickPlugin.swift",
+          "line": 236,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DebugColor/PTColorPickPlugin.swift",
+          "line": 325,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DebugCrash/PTCrashDetailViewController.swift",
+          "line": 105,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherCell.swift",
+          "line": 95,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherCell.swift",
+          "line": 124,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherDetailViewController.swift",
+          "line": 148,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DebugPerformance/PTDebugSnapshotViewController.swift",
+          "line": 41,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DebugPerformance/PTPerformanceChartCell.swift",
+          "line": 35,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DebugPerformance/PTPerformanceSegmentCell.swift",
+          "line": 42,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
+          "line": 87,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
+          "line": 261,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
+          "line": 157,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
+          "line": 202,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Guide/PTGuidePageHUD.swift",
+          "line": 152,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ImageEditor/PTAdjustSliderView.swift",
+          "line": 108,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ImageEditor/PTAdjustToolCell.swift",
+          "line": 61,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ImageEditor/PTCutViewController.swift",
+          "line": 290,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ImageEditor/PTCutViewController.swift",
+          "line": 1026,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ImageEditor/PTEditImageViewController.swift",
+          "line": 645,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ImageEditor/PTEditInputViewController.swift",
+          "line": 171,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ImageEditor/PTEditToolsCell.swift",
+          "line": 60,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ImageEditor/PTImageCutRatioCell.swift",
+          "line": 64,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ImageEditor/PTStickerManager.swift",
+          "line": 120,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ImageEditor/PTStickerManager.swift",
+          "line": 418,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ImageEditor/PTStickerManager.swift",
+          "line": 1024,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Input/PTInputBoxView.swift",
+          "line": 122,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/BaseControl.swift",
+          "line": 66,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/BaseFormControl.swift",
+          "line": 75,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/BaseView.swift",
+          "line": 22,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/ColorPreviewControl.swift",
+          "line": 72,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/ElementChildrenPanelTableViewCodeCell.swift",
+          "line": 31,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/ElementChildrenPanelViewController.swift",
+          "line": 44,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/ElementInspectorViewController.swift",
+          "line": 191,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/HierarchyInspectorTableViewCell.swift",
+          "line": 18,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/HierarchyInspectorTableViewHeaderView.swift",
+          "line": 43,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/Icon.swift",
+          "line": 33,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/IconButton.swift",
+          "line": 52,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/ImagePreviewControl.swift",
+          "line": 83,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/InspectorElementSectionViewController.swift",
+          "line": 60,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/InspectorHighlightView.swift",
+          "line": 188,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/LayerView.swift",
+          "line": 74,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/LengthMeasurementView+ArrowView.swift",
+          "line": 38,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/LengthMeasurementView.swift",
+          "line": 55,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/OptionListControl.swift",
+          "line": 80,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/SectionHeader.swift",
+          "line": 171,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init?(coder:) not implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/SegmentedControl.swift",
+          "line": 59,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/SeparatorView.swift",
+          "line": 61,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/StepperControl.swift",
+          "line": 77,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/TextFieldControl.swift",
+          "line": 71,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/TextViewControl.swift",
+          "line": 78,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/ToggleControl.swift",
+          "line": 59,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/ToggleControl.swift",
+          "line": 109,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/ViewHierarchyElementThumbnailView.swift",
+          "line": 55,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/ViewHierarchyThumbnailViewController.swift",
+          "line": 19,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Inspector/WireframeView.swift",
+          "line": 32,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Keyboard/PTNumberKeyBoard.swift",
+          "line": 119,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
+          "line": 291,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "required init?(coder: NSCoder) { fatalError() }"
+        },
+        {
+          "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
+          "line": 339,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "required init?(coder: NSCoder) { fatalError() }"
+        },
+        {
+          "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
+          "line": 470,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "required init?(coder: NSCoder) { fatalError() }"
+        },
+        {
+          "path": "PooToolsSource/Line/PTImaginaryLineView.swift",
+          "line": 36,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Loading/PTHudView.swift",
+          "line": 104,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Loading/PTHudView.swift",
+          "line": 199,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
+          "line": 1759,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/LocalConsole/ResizeController.swift",
+          "line": 608,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/MediaViewer/PTMediaBrowserBottom.swift",
+          "line": 158,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+          "line": 291,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
+          "line": 292,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/MediaViewer/PTMediaBrowserNav.swift",
+          "line": 53,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/OSSKit/OSSUtterance.swift",
+          "line": 77,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/PermissionCore/PTPermissionCell.swift",
+          "line": 159,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/PermissionCore/PTPermissionHeader.swift",
+          "line": 44,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/PermissionCore/PTPermissionSettingCell.swift",
+          "line": 165,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/PermissionCore/PTPermissionSettingHeader.swift",
+          "line": 48,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/PhotoPicker/PTMediaLibAlbumListViewController.swift",
+          "line": 112,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
+          "line": 302,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "required init?(coder: NSCoder) { fatalError() }"
+        },
+        {
+          "path": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
+          "line": 401,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "required init?(coder: NSCoder) { fatalError() }"
+        },
+        {
+          "path": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
+          "line": 424,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "required init?(coder: NSCoder) { fatalError() }"
+        },
+        {
+          "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
+          "line": 118,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "required init?(coder: NSCoder) { fatalError(\"init(coder:) has not been implemented\") }"
+        },
+        {
+          "path": "PooToolsSource/ProgressBar/PTCircularProgressView.swift",
+          "line": 47,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ProgressBar/PTMediaBrowserLoadingView.swift",
+          "line": 95,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/ProgressBar/PTProgressBar.swift",
+          "line": 73,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
+          "line": 248,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/RateView/PTRateView.swift",
+          "line": 61,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Segmented/PTSegmentView.swift",
+          "line": 200,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Segmented/PTSegmentView.swift",
+          "line": 512,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/SignView/PTEasySignatureView.swift",
+          "line": 92,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/SignView/PTSignView.swift",
+          "line": 145,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/SpeedPanel/PTSpeedPanel.swift",
+          "line": 68,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Stepper/PTStepper.swift",
+          "line": 179,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Stepper/PTStepperCellsCollection.swift",
+          "line": 130,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Stepper/PTStepperCellsCollection.swift",
+          "line": 244,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/Stepper/PTStepperView.swift",
+          "line": 292,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/TouchInspector/TouchInspectorWindow.swift",
+          "line": 44,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/TouchInspector/TouchOverlayView.swift",
+          "line": 35,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/TouchInspector/TouchOverlayView.swift",
+          "line": 69,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/TouchInspector/TouchOverlayView.swift",
+          "line": 105,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/CompositionInstruction.swift",
+          "line": 49,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/LineButton.swift",
+          "line": 45,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/LineButton.swift",
+          "line": 119,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/PTVideoEditorBaseFloatingViewController.swift",
+          "line": 41,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/PTVideoEditorFilterControl.swift",
+          "line": 61,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/PTVideoEditorHandleLayer.swift",
+          "line": 48,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsCell.swift",
+          "line": 47,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsCropControl.swift",
+          "line": 92,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsSlider.swift",
+          "line": 94,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsSpeedControl.swift",
+          "line": 36,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift",
+          "line": 35,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimmingControl.swift",
+          "line": 79,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
+          "line": 1032,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/PTVideoEditorVideoTimeLineView.swift",
+          "line": 23,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+          "line": 193,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        },
+        {
+          "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+          "line": 364,
+          "category": "PROGRAMMATIC_ONLY",
+          "text": "fatalError(\"init(coder:) has not been implemented\")"
+        }
+      ]
+    },
+    "unchecked_sendable": {
+      "count": 49,
+      "matches": [
+        {
+          "path": "PooToolsSource/C7Collector/C7CollectorCamera.swift",
+          "line": 17,
+          "text": "private struct PTSystemPixelBufferBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
+          "line": 13,
+          "text": "private struct PTC7FilterBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
+          "line": 17,
+          "text": "private final class PTC7VideoCompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
+          "line": 42,
+          "text": "private final class PTC7VideoFilterCompositor: NSObject, AVVideoCompositing, @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
+          "line": 15,
+          "text": "private struct PTSendableEventStoreBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
+          "line": 19,
+          "text": "public struct PTSendableEventArrayBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
+          "line": 27,
+          "text": "public struct PTSendableReminderArrayBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/Category/AVExport+PTEX.swift",
+          "line": 13,
+          "text": "public struct PTAssetExportResult: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
+          "line": 21,
+          "text": "public struct PTSendableAVAsset: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/Category/PHAsset+PTEX.swift",
+          "line": 45,
+          "text": "private struct PTSendableExportSession: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/Category/PTVideoThumbnailService.swift",
+          "line": 37,
+          "text": "private struct PTVideoAssetSendableBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/Core/OSSVoice.swift",
+          "line": 162,
+          "text": "public class OSSVoice: AVSpeechSynthesisVoice, @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
+          "line": 13,
+          "text": "private struct PTSafeExceptionBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
+          "line": 17,
+          "text": "private struct PTSafeSignalPointerBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
+          "line": 26,
+          "text": "final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
+          "line": 17,
+          "text": "private struct PTHeartRateSampleBufferBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/Inspector/MainThreadAsyncOperation.swift",
+          "line": 12,
+          "text": "final class MainThreadAsyncOperation: MainThreadOperation, @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/Inspector/MainThreadOperation.swift",
+          "line": 12,
+          "text": "class MainThreadOperation: Operation, @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
+          "line": 17,
+          "text": "private final class AVContext: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
+          "line": 37,
+          "text": "private struct PTAVSendableBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
+          "line": 44,
+          "text": "private final class ProgressState: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
+          "line": 13,
+          "text": "public final class MetricsManager: NSObject, MXMetricManagerSubscriber, @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/Motion/PTMotion.swift",
+          "line": 81,
+          "text": "public class PTMotion: NSObject, @unchecked Sendable,CMHeadphoneMotionManagerDelegate {"
+        },
+        {
+          "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
+          "line": 14,
+          "text": "private struct PTNFCSessionAndTagSendableBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
+          "line": 19,
+          "text": "private struct PTNFCSessionSendableBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/NFC/PTNFCToolKit.swift",
+          "line": 23,
+          "text": "private struct PTNFCSessionAndNDEFSendableBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/NetWork/Network+LegacyCompatibility.swift",
+          "line": 18,
+          "text": "private struct PTLegacyModelTypeBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/NetWork/Network.swift",
+          "line": 153,
+          "text": "public final class Network: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+          "line": 22,
+          "text": "public final class NetworkReachability: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/NetWork/NetworkSupport.swift",
+          "line": 61,
+          "text": "public final class PTNetWorkStatus: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
+          "line": 129,
+          "text": "public class OSSSpeech: NSObject, @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
+          "line": 385,
+          "text": "final class ConverterState: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/OSSKit/OSSUtterance.swift",
+          "line": 27,
+          "text": "public class OSSUtterance: AVSpeechUtterance, @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/PToolsActivities/PTActivities.swift",
+          "line": 88,
+          "text": "private final class PTActivityKitSendableBox<Value>: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
+          "line": 68,
+          "text": "private final class PTHTTPNetworkConnectionTransport: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+          "line": 300,
+          "text": "public struct PTTLSIdentity: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
+          "line": 306,
+          "text": "public enum PTHTTPTLSConfiguration: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/PToolsUIFoundation/PTRichTextCache.swift",
+          "line": 7,
+          "text": "final class PTTextMatcherCache: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
+          "line": 20,
+          "text": "final class PTFetchImageOperation: Operation, @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
+          "line": 18,
+          "text": "private struct PTSafeMediaBox<T>: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
+          "line": 26,
+          "text": "public struct PTSendableDictionaryBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+          "line": 363,
+          "text": "private final class PTURLSessionWebSocketDelegateProxy: NSObject, URLSessionWebSocketDelegate, URLSessionTaskDelegate, @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/CompositionInstruction.swift",
+          "line": 11,
+          "text": "class CompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/Compositor.swift",
+          "line": 15,
+          "text": "public final class Compositor: NSObject, AVVideoCompositing, @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/Exporter.swift",
+          "line": 19,
+          "text": "struct PTSystemAVAssetBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift",
+          "line": 13,
+          "text": "private struct PTSafeMediaBox<T>: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
+          "line": 1535,
+          "text": "private struct PTC7SafeBox:@unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/VideoEditor/VideoConverter.swift",
+          "line": 47,
+          "text": "private struct PTSafeAudioExportBox: @unchecked Sendable {"
+        },
+        {
+          "path": "PooToolsSource/Vision/PTVision.swift",
+          "line": 27,
+          "text": "private struct PTObservationBox: @unchecked Sendable {"
+        }
+      ]
+    },
+    "split_view": {
+      "controller": true,
+      "configuration": true
+    }
+  }
+}

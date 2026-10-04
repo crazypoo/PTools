@@ -14,8 +14,12 @@ public extension UIDocumentPickerViewController {
     
     /// Initializes the picker instance for opening a document from a remote location.
     static func forOpening(_ options: Option...) -> UIDocumentPickerViewController {
-        guard let documentTypeOptions = options.documentTypeOptions else {
-            fatalError("Please provide document types using `.documentTypes()`")
+        let documentTypeOptions = options.documentTypeOptions ?? UTTTypeOptions([.item])
+        if options.documentTypeOptions == nil {
+            // English: Keep the legacy convenience API safe by falling back to any document type.
+            // Español: Mantiene segura la API de conveniencia heredada usando cualquier tipo de documento como reserva.
+            // 中文：旧便捷 API 缺少类型时回退到任意文档类型，避免运行时崩溃。
+            PTNSLogConsole("⚠️ [UIDocumentPicker] forOpening 未提供 documentTypes，已回退到 UTType.item。")
         }
         
         let viewController: UIDocumentPickerViewController = {
@@ -29,8 +33,9 @@ public extension UIDocumentPickerViewController {
     
     /// Initializes the picker instance for importing a document from a remote location.
     static func forImporting(_ options: Option...) -> UIDocumentPickerViewController {
-        guard let documentTypeOptions = options.documentTypeOptions else {
-            fatalError("Please provide document types using `.documentTypes()`")
+        let documentTypeOptions = options.documentTypeOptions ?? UTTTypeOptions([.item])
+        if options.documentTypeOptions == nil {
+            PTNSLogConsole("⚠️ [UIDocumentPicker] forImporting 未提供 documentTypes，已回退到 UTType.item。")
         }
         
         let viewController: UIDocumentPickerViewController = {
@@ -44,8 +49,9 @@ public extension UIDocumentPickerViewController {
     
     /// Initializes the picker for exporting local files to an external location. The new locations will be returned using `didPickDocumentAtURLs:`.
     static func forExporting(_ options: Option...) -> UIDocumentPickerViewController {
-        guard let urls = options.urls else {
-            fatalError("Please provide urls using `.urls()`")
+        let urls = options.urls ?? []
+        if options.urls == nil {
+            PTNSLogConsole("⚠️ [UIDocumentPicker] forExporting 未提供 urls，已创建空导出列表。")
         }
         
         let viewController: UIDocumentPickerViewController = {
@@ -59,8 +65,9 @@ public extension UIDocumentPickerViewController {
     
     /// Initializes the picker for moving local files to an external location. The new locations will be returned using `didPickDocumentAtURLs:`.
     static func forMoving(_ options: Option...) -> UIDocumentPickerViewController {
-        guard let urls = options.urls else {
-            fatalError("Please provide urls using `.urls()`")
+        let urls = options.urls ?? []
+        if options.urls == nil {
+            PTNSLogConsole("⚠️ [UIDocumentPicker] forMoving 未提供 urls，已创建空移动列表。")
         }
         
         let viewController: UIDocumentPickerViewController = {
@@ -212,4 +219,3 @@ extension UIDocumentPickerViewController.Option {
         return typeOptions
     }
 }
-

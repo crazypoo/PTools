@@ -1,6 +1,6 @@
 # PTools 文档导航
 
-当前版本：`5.56.2`。文档、模块、脚本、数据资产和测试清单的唯一治理入口是
+当前版本：`5.61.0`。文档、模块、脚本、数据资产和测试清单的唯一治理入口是
 [三语文档索引](index/README.zh-Hans.md) 与 `Scripts/Docs/audit_docs.py`。
 
 ## 使用者
@@ -12,6 +12,9 @@
 - [5.36 P2 Modern Extensions 指南](guides/PTOOLS_P2_MODERN_EXTENSIONS.md)
 - [Example 页面与回归入口](guides/EXAMPLE.md)
 - [5.x 到 6.0 迁移](migration/MIGRATION_6.md)
+- [5.61.0 Runtime Safety / Scene / Concurrency](architecture/PTOOLS_5_61_RUNTIME_SAFETY.md)
+- [5.61.0 SplitView 指南](splitview/PTSplitViewController_Guide.md)
+- [5.61.0 Storage 指南](storage/PTStorage_5_61.md)
 
 ## 架构
 

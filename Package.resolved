@@ -146,14 +146,6 @@
       }
     },
     {
-      "identity" : "kakapos",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/yangKJ/Kakapos.git",
-      "state" : {
-        "revision" : "64ef17d978700cbe5d1168be7e57561a4459feee"
-      }
-    },
-    {
       "identity" : "kingfisher",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",

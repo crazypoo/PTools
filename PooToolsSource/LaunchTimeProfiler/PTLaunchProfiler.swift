@@ -419,7 +419,12 @@ private class DashboardViewController: PTBaseViewController, UITableViewDataSour
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { milestones.count }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! MilestoneCell
+        // English: A registration mistake must not crash the diagnostic screen.
+        // Español: Un error de registro no debe bloquear la pantalla de diagnóstico.
+        // 中文：即使注册配置错误，也不能让诊断页面崩溃。
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? MilestoneCell else {
+            return UITableViewCell(style: .default, reuseIdentifier: nil)
+        }
         let item = milestones[indexPath.row]
         cell.configure(index: indexPath.row, milestone: item)
         return cell

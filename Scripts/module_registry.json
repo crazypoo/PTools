@@ -247,8 +247,7 @@
         "MediaCore",
         "PooToolsImagePicker",
         "PTCameraPermission",
-        "PooToolsLoading",
-        "Kakapos"
+        "PooToolsLoading"
       ],
       "compile_flags": [
         "POOTOOLS_PHOTOPICKER"
@@ -1445,6 +1444,14 @@
       "field": "source_directories",
       "reason": "SwiftPM extracts Network model snapshots into PToolsNetworkModelCore while CocoaPods compiles the Foundation-only snapshot inside the Network subspec to preserve the 5.x CocoaPods module contract.",
       "owner": "network",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "settings",
+      "module": "SplitView",
+      "reason": "SwiftPM enables strict concurrency for the new adaptive UIKit split-view target; CocoaPods inherits the aggregate target compiler contract while keeping the opt-in subspec API-compatible.",
+      "owner": "navigation",
       "expiration": "2027-03-31",
       "classification": "INTENTIONAL"
     }

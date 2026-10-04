@@ -22,12 +22,17 @@ public extension UserDefaults {
 }
 
 public extension PTPOP where Base: UserDefaults {
+
+    // English: Legacy dynamic UserDefaults access remains source-compatible but new code should use PTStorage or PTCoreUserDefaultsWrapper.
+    // Español: El acceso dinámico heredado a UserDefaults conserva compatibilidad, pero el código nuevo debe usar PTStorage o PTCoreUserDefaultsWrapper.
+    // 中文：保留旧的动态 UserDefaults 访问以兼容现有代码，新代码应使用 PTStorage 或 PTCoreUserDefaultsWrapper。
   
     //MARK: 存值
     ///存值
     /// - Parameters:
     ///   - value: 值
     ///   - key: 键
+    @available(*, deprecated, message: "Use PTStorage or PTCoreUserDefaultsWrapper for typed persistence.")
     @discardableResult
     static func userDefaultsSetValue(value: Any?,
                                      key: String?) -> Bool {
@@ -43,6 +48,7 @@ public extension PTPOP where Base: UserDefaults {
     /// - Parameters:
     ///  - key: 键
     /// - Returns: 返回值
+    @available(*, deprecated, message: "Use PTStorage or PTCoreUserDefaultsWrapper for typed persistence.")
     static func userDefaultsGetValue(key: String?) -> Any? {
         guard let key, !key.isEmpty else {
             return nil
@@ -62,6 +68,7 @@ public extension PTPOP where Base: UserDefaults {
     
     //MARK: 移除所有值
     ///移除所有值
+    @available(*, deprecated, message: "Use a scoped PTStorage migration instead of removing the entire domain.")
     static func removeAllKeyValue() {
         if let bundleID = Bundle.main.bundleIdentifier {
             Base.standard.removePersistentDomain(forName: bundleID)
@@ -77,13 +84,13 @@ public extension PTPOP where Base: UserDefaults {
     /// - Parameters:
     ///   - object: 模型
     ///   - key: 对应的key
+    @available(*, deprecated, message: "Use PTStorage for typed Codable persistence.")
     static func setItem<T: Decodable & Encodable>(_ object: T, forKey key: String) {
         let encoder = JSONEncoder()
         guard let encoded = try? encoder.encode(object) else {
             return
         }
         Base.standard.set(encoded, forKey: key)
-        Base.standard.synchronize()
     }
     
     //MARK: 取出模型
@@ -92,6 +99,7 @@ public extension PTPOP where Base: UserDefaults {
     ///   - type: 当时存储的类型
     ///   - key: 对应的key
     /// - Returns: 对应类型的模型
+    @available(*, deprecated, message: "Use PTStorage for typed Codable persistence.")
     static func getItem<T: Decodable & Encodable>(_ type: T.Type, forKey key: String) -> T? {
         
         guard let data = Base.standard.data(forKey: key) else {
@@ -108,12 +116,12 @@ public extension PTPOP where Base: UserDefaults {
     //MARK: 保存模型数组
     ///保存模型数组
     /// - Returns: 返回保存的结果
+    @available(*, deprecated, message: "Use PTStorage for typed Codable persistence.")
     @discardableResult
     static func setModelArray<T: Decodable & Encodable>(modelArrry object: [T], key: String) -> Bool {
         do {
             let data = try JSONEncoder().encode(object)
             Base.standard.set(data, forKey: key)
-            Base.standard.synchronize()
             return true
         } catch {
             PTNSLogConsole(error,levelType: .error,loggerType: .userDefaults)
@@ -124,6 +132,7 @@ public extension PTPOP where Base: UserDefaults {
     //MARK: 读取模型数组
     ///读取模型数组
     /// - Returns: 返回读取的模型数组
+    @available(*, deprecated, message: "Use PTStorage for typed Codable persistence.")
     static func getModelArray<T: Decodable & Encodable>(forKey key : String) -> [T] {
         guard let data = Base.standard.data(forKey: key) else { return [] }
         do {

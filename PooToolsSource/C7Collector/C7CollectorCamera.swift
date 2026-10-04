@@ -10,7 +10,6 @@ import Foundation
 @preconcurrency import AVFoundation
 import Harbeth
 import Photos
-import Kakapos
 
 /// CVPixelBuffer is supplied by AVFoundation on a capture queue. It is kept in
 /// this narrow system-framework compatibility box until it reaches the
@@ -603,39 +602,32 @@ extension C7CollectorCamera: @MainActor AVCaptureFileOutputRecordingDelegate {
     public func saveVideoToAlbum() {
         if let fileUrl = self.videoUrl {
             C7CameraConfig.share.hudShow()
-            let provider = VideoX.Provider(with: fileUrl)
-            let filtering = FilterInstruction { buffer, time, block in
-                let dest = HarbethIO(element: buffer, filters: self.filters)
-                dest.transmitOutput(success: block)
-            }
-            
-            var finish:Bool = false
-            
-            let exporter = VideoX(provider: provider)
-            let _ = exporter.export(options: [.OptimizeForNetworkUse: false,.ExportSessionTimeRange: TimeRangeType.range(CGFloat(PTCameraFilterConfig.share.minRecordDuration)...CGFloat(PTCameraFilterConfig.share.maxRecordDuration))],instructions: [filtering]) { results in
-                switch results {
-                case .success(let outputUrl):
-                    self.rotateVideo(inputURL: outputUrl) { error in
-                        if error != nil {
-                            PTNSLogConsole("\(error!)")
-                        } else {
-                            PTGCDManager.shared.runOnMain { [weak self = self] in
-                                self?.savedVideo?()
+            let timeRange = CMTimeRange(start: CMTime(seconds: Double(PTCameraFilterConfig.share.minRecordDuration), preferredTimescale: 600),
+                                        duration: CMTime(seconds: Double(PTCameraFilterConfig.share.maxRecordDuration - PTCameraFilterConfig.share.minRecordDuration), preferredTimescale: 600))
+            Task { [weak self] in
+                guard let self else { return }
+                do {
+                    // English: Use the native AVFoundation exporter; the old Kakapos path is no longer required.
+                    // Español: Usa el exportador nativo de AVFoundation; la ruta antigua de Kakapos ya no es necesaria.
+                    // 中文：使用 AVFoundation 原生导出器，不再依赖旧的 Kakapos 路径。
+                    let outputURL = try await PTC7VideoExportService.export(assetURL: fileUrl,
+                                                                              timeRange: timeRange,
+                                                                              optimizeForNetworkUse: false,
+                                                                              filters: self.filters)
+                    self.rotateVideo(inputURL: outputURL) { [weak self] error in
+                        Task { @MainActor in
+                            guard let self else { return }
+                            if let error {
+                                PTNSLogConsole(error.localizedDescription, levelType: .error, loggerType: .media)
+                            } else {
+                                self.savedVideo?()
                             }
+                            C7CameraConfig.share.hudHide()
                         }
                     }
-                case .failure(let error):
-                    PTNSLogConsole("\(error.description)")
-                }
-                C7CameraConfig.share.hudHide()
-                finish = true
-            } progress: { progress in
-            }
-            
-            PTGCDManager.shared.delayOnMain(time: 10) {
-                if !finish {
+                } catch {
+                    PTNSLogConsole(error.localizedDescription, levelType: .error, loggerType: .media)
                     C7CameraConfig.share.hudHide()
-                    PTNSLogConsole("转换失败")
                 }
             }
         }

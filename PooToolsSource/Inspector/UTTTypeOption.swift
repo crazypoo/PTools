@@ -13,6 +13,10 @@ import UniformTypeIdentifiers
 public typealias UTTTypeOptions = [UTTTypeOption]
 
 public enum UTTTypeOption: Equatable, Hashable {
+    // English: `item` is the universal fallback for a picker that has no explicit type.
+    // Español: `item` es el reemplazo universal para un picker sin tipo explícito.
+    // 中文：`item` 是未提供明确类型时文档选择器使用的通用兜底类型。
+    case item
     case image
     case jpeg
     case tiff
@@ -78,6 +82,8 @@ public enum UTTTypeOption: Equatable, Hashable {
     
     var uttType: UTType {
         switch self {
+        case .item:
+            return .item
         case .image:
             return .image
         case .jpeg:
@@ -199,6 +205,8 @@ public enum UTTTypeOption: Equatable, Hashable {
     
     private var cfString: CFString {
         switch self {
+        case .item:
+            return UTType.item.identifier as CFString
         case .image:
             return UTType.image.identifier as CFString
         case .jpeg:
@@ -328,4 +336,3 @@ extension Collection where Element == UTTTypeOption {
         map { $0.uttType }
     }
 }
-

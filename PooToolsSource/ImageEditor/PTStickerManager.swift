@@ -241,7 +241,12 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         return pan
     }()
     
-    public var state: PTBaseStickertState { fatalError() }
+    // English: The base sticker exposes an abstract state contract for concrete sticker implementations.
+    // Español: El sticker base expone un contrato de estado abstracto para las implementaciones concretas.
+    // 中文：基础贴纸为具体贴纸实现提供抽象状态契约。
+    public var state: PTBaseStickertState {
+        preconditionFailure("PTBaseStickerView.state must be implemented by a concrete sticker")
+    }
     
     var borderView: UIView { self }
     

@@ -52,6 +52,28 @@
       "removeIn": null
     },
     {
+      "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
+      "symbol": "PTC7FilterBox",
+      "category": "SYSTEM_WRAPPER",
+      "systemType": "Harbeth filter objects used by an AVFoundation video compositor",
+      "reason": "The private box carries the selected third-party filter instances into the compositor for one export only; the instances are not mutated after export starts.",
+      "protection": "The compositor serializes all filter access on its render queue and the box exposes only an immutable array reference.",
+      "owner": "C7Collector",
+      "replacementPlan": "Replace the third-party filter boundary with a Sendable frame-filter descriptor when Harbeth exposes value-based filters.",
+      "removeIn": "6.0.0"
+    },
+    {
+      "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
+      "symbol": "PTHeartRateSampleBufferBox",
+      "category": "SYSTEM_WRAPPER",
+      "systemType": "AVFoundation CMSampleBuffer callback value",
+      "reason": "The private box crosses the AVFoundation sample-buffer callback boundary only; the sample buffer is read synchronously and never mutated by the box.",
+      "protection": "The capture output owns delivery on its configured session queue, and the box contains only the immutable callback reference used by the processing task.",
+      "owner": "HeartRate",
+      "replacementPlan": "Replace the callback box with a typed sample snapshot when AVFoundation exposes a Sendable frame value for the supported deployment range.",
+      "removeIn": "6.0.0"
+    },
+    {
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
       "symbol": "PTSendableEventStoreBox",
       "category": "LOCK_PROTECTED",

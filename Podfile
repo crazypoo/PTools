@@ -70,6 +70,10 @@ target 'PooTools_Example' do
   # 中文：显式加入示例 Target 直接使用的 PooTools 可选功能。
   pod 'PooTools/HandSign', :path => './'
   pod 'PooTools/MediaPermission', :path => './'
+  # English: The catalog uses the typed speed-test demo directly, so keep its opt-in subspec explicit.
+  # Español: El catálogo usa directamente el demo de velocidad tipado; mantiene explícito su subspec opcional.
+  # 中文：目录直接使用类型化测速 Demo，因此显式声明对应的可选 subspec。
+  pod 'PooTools/NetworkSpeedTest', :path => './'
 
   # English: Keep modules imported directly by the example target explicit.
   # Español: Mantén explícitos los módulos que el target de ejemplo importa directamente.

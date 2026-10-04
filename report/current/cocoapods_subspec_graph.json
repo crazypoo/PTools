@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "70dde0456c0525709ed3de840428c60ac66b8427",
-  "generated_at": "2026-10-03T15:22:33Z",
+  "source_revision": "b575ef04bf62427d87cb27532cca6a38e0545245",
+  "generated_at": "2026-10-04T03:20:12Z",
   "name": "PooTools",
-  "version": "5.60.0",
+  "version": "5.61.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -12,7 +12,7 @@
     "6.0"
   ],
   "default_subspec": "Core",
-  "subspec_count": 142,
+  "subspec_count": 143,
   "subspecs": [
     {
       "name": "PooTools/Accessibility",
@@ -1371,6 +1371,7 @@
         "PooTools/Slider",
         "PooTools/SmartScreenshot",
         "PooTools/SocketKit",
+        "PooTools/SplitView",
         "PooTools/Stepper",
         "PooTools/Tabbar",
         "PooTools/Telephony",
@@ -1516,7 +1517,8 @@
       "short_name": "Location",
       "local_dependencies": [
         "PooTools/Core",
-        "PooTools/LocationPermission"
+        "PooTools/LocationPermission",
+        "PooTools/Storage"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -1880,6 +1882,7 @@
       "name": "PooTools/Network",
       "short_name": "Network",
       "local_dependencies": [
+        "PooTools/Connectivity",
         "PooTools/Core",
         "PooTools/Loading",
         "PooTools/ModelCore",
@@ -2242,9 +2245,7 @@
         "PooTools/MediaCore",
         "PooTools/Symbols"
       ],
-      "third_party_dependencies": [
-        "Kakapos"
-      ],
+      "third_party_dependencies": [],
       "source_files": [
         "PooToolsSource/PhotoPicker/*.{h,m,swift}"
       ],
@@ -2793,6 +2794,29 @@
       "frameworks": [],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SPEEDPANEL POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/SplitView",
+      "short_name": "SplitView",
+      "local_dependencies": [
+        "PooTools/Core"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/SplitView/*.{h,m,swift}"
+      ],
+      "source_directories": [
+        "SplitView"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "UIKit"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SPLITVIEW POOTOOLS_COCOAPODS"
       }
     },
     {

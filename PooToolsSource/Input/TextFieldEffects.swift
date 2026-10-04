@@ -43,27 +43,30 @@ open class TextFieldEffects: UITextField {
     /// 创建并执行文本输入时的动画（例如：输入框聚焦时，占位符向上移动并缩小）。
     /// ⚠️ 子类必须重写此方法，否则会触发致命错误。
     open func animateViewsForTextEntry() {
-        fatalError("\(#function) 必须在子类中被重写")
+        // English: This is an abstract contract; concrete controls must provide the animation implementation.
+        // Español: Este es un contrato abstracto; los controles concretos deben implementar la animación.
+        // 中文：这是抽象契约，具体控件必须提供动画实现。
+        preconditionFailure("\(#function) 必须在子类中被重写")
     }
     
     /// 创建并执行结束文本输入时的动画（例如：输入框失去焦点且无文本时，占位符恢复原位）。
     /// ⚠️ 子类必须重写此方法，否则会触发致命错误。
     open func animateViewsForTextDisplay() {
-        fatalError("\(#function) 必须在子类中被重写")
+        preconditionFailure("\(#function) 必须在子类中被重写")
     }
     
     /// 自定义绘制输入框的各种组件（例如绘制底部的下划线或边框）。
     /// - Parameter rect: 需要重绘的视图区域。
     /// ⚠️ 子类必须重写此方法，否则会触发致命错误。
     open func drawViewsForRect(_ rect: CGRect) {
-        fatalError("\(#function) 必须在子类中被重写")
+        preconditionFailure("\(#function) 必须在子类中被重写")
     }
     
     /// 当输入框的边界 (bounds) 发生变化时更新视图。
     /// - Parameter bounds: 新的边界 CGRect。
     /// ⚠️ 子类必须重写此方法，否则会触发致命错误。
     open func updateViewsForBoundsChange(_ bounds: CGRect) {
-        fatalError("\(#function) 必须在子类中被重写")
+        preconditionFailure("\(#function) 必须在子类中被重写")
     }
     
     // MARK: - UITextField 默认行为重写

@@ -1,8 +1,23 @@
 # PTools 路线图
 
-> 当前代码基线：`5.60.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.61.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.60.0` 为当前开发基线，外部依赖构建阻断解决前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.61.0` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.61.0 Final Runtime Safety / Scene / Concurrency Closure
+
+- ✅ P0 依赖收口：移除 Kakapos 的 SwiftPM/CocoaPods/锁文件/生产源码归属，C7 视频导出改用原生 AVFoundation/PTools 服务。
+- ✅ P0 HeartRate：相机、输入输出、像素转换、滤镜、权限和 Lottie 资源失败均改为可恢复错误或安全回退。
+- ✅ P0 NetworkSpeedTest：显式 endpoint、actor 状态、类型化 phase/snapshot、重复启动隔离和取消完成。
+- ✅ P0 Ping：补齐 resolving/ready/sending/waiting/success/failed/stopped 状态，增加 `PTPingSession`，移除公共错误路径崩溃。
+- ✅ P0 Scene：生产源码中的 `AppWindows!` 清零，媒体、签名、眼睛追踪和 Inspector 使用 `PTSceneContext`。
+- ✅ P1 Location / Storage：定位使用 `PTLocationSnapshot` 和迁移兼容键；`PTFileStorage` 文件 I/O 移至 utility 队列并保留 atomic write。
+- ✅ P1 并发边界：更新 `@unchecked Sendable` allowlist/registry，系统对象包装器注明不变量；不新增业务级 `nonisolated(unsafe)`。
+- ✅ P1 UIKit：用户可触发的泛型出列、文档选择器和 iOS 18 zoom 回调移除直接 fatal 崩溃；init(coder:) 保留项按 programmatic-only/abstract contract 分类。
+- ✅ P1 Adaptive Navigation：新增 `PTSplitViewController`，支持 double/triple column、compact push、regular secondary、Inspector、状态恢复和 Router 桥接。
+- ✅ P2 Demo / 文档：Example 增加 SplitView、NetworkSpeed、Ping、HeartRate 入口；补齐 5.61.0 架构、迁移和模块指南。
+- ✅ Quality：新增语义能力归属 manifest、工作树 runtime safety report、fatalError allowlist 和 `validate_5_61_release.sh`。
+- ⬜ 宿主/真机/Instruments：HeartRate、真实测速服务、Ping、iPad Stage Manager、Storage、SplitView resize 和长会话证据需由集成方补充；未完成前不创建正式 `5.61.0` tag。
 
 ## 5.60.0 Unified Architecture / PTModel / Network Usability
 

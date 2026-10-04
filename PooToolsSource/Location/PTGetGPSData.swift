@@ -8,6 +8,9 @@
 
 import UIKit
 import CoreLocation
+#if SWIFT_PACKAGE
+import PToolsStorage
+#endif
 
 @MainActor
 @objcMembers
@@ -22,13 +25,20 @@ public class PTGetGPSData: NSObject {
     var lat:Double = 0
     var lon:Double = 0
     var isShow:NSInteger = 0
+    public private(set) var currentSnapshot: PTLocationSnapshot?
     private var isInvalidated = false
+    private let storage = PTStorage(namespace: PTStorageNamespace(module: "PooTools", feature: "location"),
+                                     backend: PTUserDefaultsStorage())
+    private let storageKey = PTStorageKey<PTLocationSnapshot>("current")
     
     public override init() {
         super.init()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.distanceFilter = 1000
+        currentSnapshot = Self.legacySnapshot()
+        lat = currentSnapshot?.latitude ?? 0
+        lon = currentSnapshot?.longitude ?? 0
     }
 
     // English: Start one location session and keep its delegate on MainActor.
@@ -62,19 +72,45 @@ public class PTGetGPSData: NSObject {
     }
     
     public func getUserLocation(block: ((_ lat:String,_ lon:String,_ cityName:String) -> Void)?) {
-        let lon:String = (UserDefaults.standard.value(forKey: "lon") as? String) ?? "0.0"
-        let lat:String = (UserDefaults.standard.value(forKey: "lat") as? String) ?? "0.0"
-        let city:String = (UserDefaults.standard.value(forKey: "locCity") as? String) ?? "Unnkow city"
+        let snapshot = currentSnapshot ?? Self.legacySnapshot()
+        let latitude = snapshot?.latitude ?? 0
+        let longitude = snapshot?.longitude ?? 0
+        let city = snapshot?.city ?? "Unnkow city"
+        block?(String(latitude), String(longitude), city)
 
-        block?(lat,lon,city)
+        // English: Migrate the legacy keys once without changing the synchronous callback contract.
+        // Español: Migra las claves heredadas una vez sin cambiar el contrato síncrono del callback.
+        // 中文：在不改变同步回调契约的前提下，一次性迁移旧键值。
+        if let snapshot {
+            persist(snapshot)
+        }
     }
     
     func setObjectFunction(city:String) {
-        let lon = "\(lon)"
-        let lat = "\(lat)"
-        UserDefaults.standard.set(lon, forKey: "lon")
-        UserDefaults.standard.set(lat, forKey: "lat")
-        UserDefaults.standard.set(city, forKey: "locCity")
+        let snapshot = PTLocationSnapshot(latitude: lat, longitude: lon, city: city)
+        currentSnapshot = snapshot
+        persist(snapshot)
+    }
+
+    private func persist(_ snapshot: PTLocationSnapshot) {
+        Task { [storage, storageKey] in
+            try? await storage.set(snapshot, for: storageKey)
+        }
+        // Keep the legacy values for one migration window for existing consumers.
+        UserDefaults.standard.set(String(snapshot.longitude), forKey: "lon")
+        UserDefaults.standard.set(String(snapshot.latitude), forKey: "lat")
+        UserDefaults.standard.set(snapshot.city, forKey: "locCity")
+    }
+
+    private static func legacySnapshot() -> PTLocationSnapshot? {
+        guard let latitudeString = UserDefaults.standard.string(forKey: "lat"),
+              let longitudeString = UserDefaults.standard.string(forKey: "lon"),
+              let latitude = Double(latitudeString),
+              let longitude = Double(longitudeString) else {
+            return nil
+        }
+        let city = UserDefaults.standard.string(forKey: "locCity") ?? "Unnkow city"
+        return PTLocationSnapshot(latitude: latitude, longitude: longitude, city: city)
     }
 }
 

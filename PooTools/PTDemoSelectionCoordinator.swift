@@ -151,7 +151,7 @@ enum PTDemoSelectionCoordinator {
                     let signConfig = PTSignatureConfig()
                     
                     let sign = PTSignView(viewConfig: signConfig)
-                    sign.showView()
+                    sign.showView(in: controller.view)
                     sign.doneBlock = { image in
                         let newImage = UIImageView(image: image)
                         controller.view.addSubview(newImage)

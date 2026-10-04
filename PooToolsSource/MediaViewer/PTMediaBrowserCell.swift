@@ -419,14 +419,17 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                 
     func hideAnimation() {
         contentView.isUserInteractionEnabled = false
-        let window = AppWindows!
-        var targetTemp:CGRect? = CGRect(x: window.center.x, y: window.center.y, width: 0, height: 0)
-        targetTemp = contentView.convert(contentView.frame, to: contentView)
+        guard let window = PTSceneContext.window(for: contentView) else {
+            contentView.isUserInteractionEnabled = true
+            viewerDismissBlock?()
+            return
+        }
+        let targetTemp = CGRect(x: window.bounds.midX, y: window.bounds.midY, width: 0, height: 0)
 
         window.windowLevel = .normal
         UIView.animate(withDuration: 0.35) {
             self.tempView.transform = self.contentView.transform.inverted()
-            self.tempView.frame = targetTemp!
+            self.tempView.frame = targetTemp
         } completion: { finish in
             self.tempView.removeFromSuperview()
             self.contentView.alpha = 0

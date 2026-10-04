@@ -4,6 +4,7 @@
 
 import Foundation
 #if SWIFT_PACKAGE
+import PToolsConnectivity
 import ptools
 #endif
 #if SWIFT_PACKAGE
@@ -13,50 +14,41 @@ import PToolsCore
 import PToolsNetworkModelCore
 #endif
 @preconcurrency import Alamofire
-import Network
 import CoreTelephony
 
-/// 🌟 步骤 1：标记为 @unchecked Sendable。
-/// 这告诉编译器：“虽然我内部有 var，但我会通过加锁的方式自己保证线程安全，请允许我跨线程传递。”
+// English: Keep the legacy reachability facade while sharing the single connectivity monitor.
+// Español: Mantiene la fachada heredada de conectividad y comparte el único monitor de conectividad.
+// 中文：保留旧的网络可达性门面，同时复用全局唯一的连接状态监视器。
 public final class NetworkReachability: @unchecked Sendable {
-    
     public static let shared = NetworkReachability()
-    
-    private let monitor = NWPathMonitor()
-    private let queue = DispatchQueue(label: "network.reachability")
-    
-    // 🌟 步骤 2：引入互斥锁，用于保护共享数据的读写
     private let lock = NSLock()
-    
-    // 🌟 步骤 3：将真实的数据隐藏起来
     private var _isReachable: Bool = true
     private var _isExpensive: Bool = false
-    
-    // 🌟 步骤 4：对外暴露计算属性。每次读取时都加锁，保证读取时不会发生正在写入的情况。
+    private var observationTask: Task<Void, Never>?
+
     public var isReachable: Bool {
-        lock.withLock {
-            return _isReachable
-        }
+        lock.withLock { _isReachable }
     }
-    
+
     public var isExpensive: Bool {
-        lock.withLock {
-            return _isExpensive
-        }
+        lock.withLock { _isExpensive }
     }
-    
+
     private init() {
-        // NWPathMonitor 的回调是在我们指定的 queue (后台线程) 中触发的
-        monitor.pathUpdateHandler = { [weak self] path in
-            guard let self = self else { return }
-            
-            // 🌟 步骤 5：在写入数据时同样加锁，确保写入操作的原子性和安全性
-            self.lock.withLock {
-                self._isReachable = (path.status == .satisfied)
-                self._isExpensive = path.isExpensive
+        observationTask = Task { [weak self] in
+            let stream = await PTConnectivityMonitor.shared.snapshots()
+            for await snapshot in stream {
+                guard !Task.isCancelled else { return }
+                self?.lock.withLock {
+                    self?._isReachable = snapshot.isReachable
+                    self?._isExpensive = snapshot.isExpensive
+                }
             }
         }
-        monitor.start(queue: queue)
+    }
+
+    deinit {
+        observationTask?.cancel()
     }
 }
 
@@ -68,7 +60,6 @@ struct PTNetworkStatusModel: Decodable {
 
 public final class PTNetWorkStatus: @unchecked Sendable {
     public static let shared = PTNetWorkStatus()
-    private let queue = DispatchQueue(label: "pt.network.status.monitor")
     private let ctNetworkInfo = CTTelephonyNetworkInfo()
     
     private init() {}
@@ -99,30 +90,34 @@ public final class PTNetWorkStatus: @unchecked Sendable {
     
     public var statusStream: AsyncStream<NetworkStatus> {
         AsyncStream { continuation in
-            let monitor = NWPathMonitor()
-            monitor.pathUpdateHandler = { [weak self] path in
-                guard let self = self else { return }
-                let status: NetworkStatus
-                if path.status == .satisfied {
-                    if path.usesInterfaceType(.wifi) { status = .wifi }
-                    else if path.usesInterfaceType(.cellular) { status = .wwan(type: self.getCellularType()) }
-                    else if path.usesInterfaceType(.wiredEthernet) { status = .wiredEthernet }
-                    else if path.usesInterfaceType(.loopback) { status = .loopback }
-                    else if path.usesInterfaceType(.other) { status = .other }
-                    else if path.isExpensive { status = .checking }
-                    else { status = .unknown }
-                } else if path.status == .unsatisfied { status = .notReachable }
-                else if path.status == .requiresConnection { status = .requiresConnection }
-                else { status = .unknown }
-                
-                continuation.yield(status)
+            let task = Task { [weak self] in
+                let stream = await PTConnectivityMonitor.shared.snapshots()
+                for await snapshot in stream {
+                    guard let self else { return }
+                    continuation.yield(self.status(for: snapshot))
+                }
             }
-            monitor.start(queue: self.queue)
             continuation.onTermination = { @Sendable _ in
-                monitor.cancel()
+                task.cancel()
                 PTNSLogConsole("🌐 网络监听已自动销毁", levelType: PTLogMode, loggerType: .network)
             }
         }
+    }
+
+    private func status(for snapshot: PTConnectivitySnapshot) -> NetworkStatus {
+        guard snapshot.isReachable else {
+            switch snapshot.status {
+            case .requiresConnection: return .requiresConnection
+            case .unsatisfied, .satisfied: return .notReachable
+            case .unknown: return .unknown
+            }
+        }
+        if snapshot.interfaces.contains(.wifi) { return .wifi }
+        if snapshot.interfaces.contains(.cellular) { return .wwan(type: getCellularType()) }
+        if snapshot.interfaces.contains(.wiredEthernet) { return .wiredEthernet }
+        if snapshot.interfaces.contains(.loopback) { return .loopback }
+        if snapshot.interfaces.contains(.other) { return .other }
+        return snapshot.isExpensive ? .checking : .unknown
     }
 }
 

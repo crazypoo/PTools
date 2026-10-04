@@ -550,10 +550,11 @@ extension UIViewController {
     public class func newZoomPresentStyle(current:UIViewController,target:UIViewController,source:UIView,animated:Bool = true,completion:PTActionTask? = nil) {
         
         target.preferredTransition = .zoom(sourceViewProvider: { context in
+            // English: A transition callback must always return a view; use the supplied source when runtime metadata changes.
+            // Español: El callback de transición siempre debe devolver una vista; usa la fuente si cambia el metadato en tiempo de ejecución.
+            // 中文：转场回调必须始终返回视图；运行时类型元数据变化时回退到传入的源视图。
             guard let targetClass = NSClassFromString(target.className),
-                  context.zoomedViewController.isKind(of: targetClass) else {
-                fatalError("Unable to access the current view controller.")
-            }
+                  context.zoomedViewController.isKind(of: targetClass) else { return source }
             return source
         })
         current.present(target, animated: animated, completion: completion)

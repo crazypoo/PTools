@@ -91,8 +91,11 @@ class PTUserDefultsViewController: PTBaseViewController {
 
         let userdefultArrs = userdefaultShares.keyAndValues().map { value in
             let model = PTFusionCellModel()
-            model.name = value.keys.first!
-            model.desc = String(format: "%@", value.values.first as! CVarArg)
+            // English: Debug values are dynamic; render them descriptively instead of forcing a CVarArg cast.
+            // Español: Los valores de depuración son dinámicos; se representan descriptivamente sin forzar CVarArg.
+            // 中文：调试值是动态类型，使用描述性字符串展示，避免强制转换为 CVarArg。
+            model.name = value.keys.first ?? "Unknown"
+            model.desc = String(describing: value.values.first ?? "")
             model.haveLine = .Normal
             model.haveTopLine = .NO
             model.accessoryType = .DisclosureIndicator

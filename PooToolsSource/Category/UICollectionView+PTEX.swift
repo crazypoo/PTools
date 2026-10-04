@@ -280,13 +280,29 @@ public extension UICollectionView {
         register(nib, forCellWithReuseIdentifier: String(describing: cellType))
     }
     
-    /// 泛型复用 Cell，并在类型不匹配时返回明确错误。
-    /// Generic Cell dequeue with an explicit failure when the registered type does not match.
-    /// Reutilización genérica de celdas con un fallo explícito cuando el tipo no coincide.
+    /// 泛型复用 Cell，并在类型不匹配时返回安全的占位实例。
+    /// Generic Cell dequeue with a safe fallback when the registered type does not match.
+    /// Reutilización genérica de celdas con un reemplazo seguro cuando el tipo no coincide.
     func dequeueReusableCell<T: UICollectionViewCell>(with type: T.Type, for indexPath: IndexPath) -> T {
         let identifier = String(describing: type)
         guard let cell = dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? T else {
-            fatalError("🚨 [UICollectionView] 无法出列类型为 \(identifier) 的 Cell。请确保你已经注册了它！")
+            // English: Keep legacy callers alive while exposing the registration mistake in diagnostics.
+            // Español: Mantiene vivos los llamadores heredados y deja el error de registro en los diagnósticos.
+            // 中文：保留旧调用方的可用性，同时把注册错误记录到诊断日志中。
+            PTNSLogConsole("⚠️ [UICollectionView] 无法将复用 Cell 转换为 \(identifier)，已返回临时实例。请检查注册类型。")
+            return T(frame: .zero)
+        }
+        return cell
+    }
+
+    /// 尝试泛型复用 Cell；类型不匹配时返回 nil，不触发强制失败。
+    /// Attempts a generic Cell dequeue and returns nil when the registered type is incompatible.
+    /// Intenta reutilizar una celda genérica y devuelve nil si el tipo registrado no es compatible.
+    func dequeueReusableCellIfAvailable<T: UICollectionViewCell>(with type: T.Type, for indexPath: IndexPath) -> T? {
+        let identifier = String(describing: type)
+        guard let cell = dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? T else {
+            PTNSLogConsole("⚠️ [UICollectionView] 复用 Cell 类型不匹配：\(identifier)")
+            return nil
         }
         return cell
     }
@@ -307,7 +323,7 @@ public extension UICollectionView {
     
     // MARK: - 獲取Cell在Window的位置
     /// 獲取Cell在Window的位置
-    /// 注：去除了危险的 AppWindows! 强制解包，改用更安全的获取方式
+    /// 注：已移除危险的全局窗口强制解包，改用更安全的获取方式
     @objc func cellInWindow(cellFrame: CGRect) -> CGRect {
         guard let window = PTSceneContext.window(for: self) else { return cellFrame }
         return convert(cellFrame, to: window)

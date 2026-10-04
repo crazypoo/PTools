@@ -22,8 +22,6 @@ public class PTFaceEye: NSObject {
     @MainActor private lazy var manager:PTEyeTrackingManager = {
         let manager = PTEyeTrackingManager()
         manager.delegate = self
-        manager.showCursorView(parent: AppWindows!)
-        manager.showStatusView(parent: AppWindows!)
         return manager
     }()
     
@@ -33,11 +31,17 @@ public class PTFaceEye: NSObject {
     
     ///开启
     @MainActor public func createEye() {
-        if deviceInfo.isFaceIDCapable {
-            manager.run()
-        } else {
-            PTNSLogConsole("设备不能运行", levelType: .error,loggerType: .debug)
+        guard let window = PTSceneContext.activeWindow() else {
+            PTNSLogConsole("没有可用的活动窗口", levelType: .error, loggerType: .debug)
+            return
         }
+        guard deviceInfo.isFaceIDCapable else {
+            PTNSLogConsole("设备不能运行", levelType: .error,loggerType: .debug)
+            return
+        }
+        manager.showCursorView(parent: window)
+        manager.showStatusView(parent: window)
+        manager.run()
     }
     
     ///关闭
@@ -54,7 +58,8 @@ public class PTFaceEye: NSObject {
     
     ///开启焦点
     @MainActor public func showCursorView() {
-        manager.showCursorView(parent: AppWindows!)
+        guard let window = PTSceneContext.activeWindow() else { return }
+        manager.showCursorView(parent: window)
     }
 }
 

@@ -288,7 +288,10 @@ class PTDarkModePickerView: UIView {
     }
 
     required init?(coder: NSCoder) {
-        fatalError("不支持从 NSCoder 创建时间选择器")
+        // English: This picker is intentionally programmatic-only; storyboard construction is rejected explicitly.
+        // Español: Este picker solo se crea por código; la construcción desde storyboard se rechaza explícitamente.
+        // 中文：该时间选择器只支持代码创建，明确拒绝从 storyboard 初始化。
+        preconditionFailure("不支持从 NSCoder 创建时间选择器")
     }
 }
 

@@ -366,7 +366,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
     
     private lazy var focusCursorTapGes: UITapGestureRecognizer = {
         let taps = UITapGestureRecognizer { sender in
-            let tap = sender as! UITapGestureRecognizer
+            guard let tap = sender as? UITapGestureRecognizer else { return }
             guard !self.filtersButton.isSelected else {
                 return
             }

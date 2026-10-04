@@ -403,6 +403,18 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COCOAPODS POOTOOLS_SPLIT_CORE POOTOOLS_SPLIT_UIFOUNDATION"
         }
     end
+
+    # English: Adaptive split navigation is optional and reuses the existing Core navigation stack.
+    # Español: La navegación adaptativa en columnas es opcional y reutiliza la pila de navegación Core existente.
+    # 中文：自适应分栏导航保持可选，并复用现有 Core 导航栈。
+    s.subspec 'SplitView' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.source_files = 'PooToolsSource/SplitView/*.{h,m,swift}'
+        subspec.frameworks = 'UIKit', 'Foundation'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_SPLITVIEW POOTOOLS_COCOAPODS"
+        }
+    end
     
     # English: Keep the old Network spelling as a thin compatibility alias.
     # Español: Mantiene la grafía antigua de Network como un alias de compatibilidad ligero.
@@ -413,6 +425,7 @@ Pod::Spec.new do |s|
 
     s.subspec 'Network' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/Connectivity'
         subspec.dependency 'PooTools/ModelCore'
         subspec.dependency 'PooTools/ModelLegacySmartCodable'
         subspec.dependency 'PooTools/ModelLegacyKakaJSON'
@@ -711,6 +724,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'Location' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/Storage'
         subspec.dependency 'PooTools/LocationPermission'
         subspec.source_files = 'PooToolsSource/Location/*.{h,m,swift}'
         subspec.frameworks = 'CoreLocation'
@@ -1172,7 +1186,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/MediaCore'
         subspec.dependency 'PooTools/ImagePicker'
         subspec.dependency 'PooTools/Loading'
-        subspec.dependency 'Kakapos'
         subspec.source_files = 'PooToolsSource/PhotoPicker/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PHOTOPICKER POOTOOLS_COCOAPODS"
@@ -1346,6 +1359,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/SplitView'
         subspec.dependency 'PooTools/DataEncrypt'
         subspec.dependency 'PooTools/Security'
         subspec.dependency 'PooTools/Hud'
