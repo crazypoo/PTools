@@ -1034,7 +1034,7 @@ let package = Package(
         ),
         .testTarget(
             name: "PToolsNavigationTests",
-            dependencies: ["ptools"],
+            dependencies: ["ptools", "PooToolsSplitView"],
             path: "Tests/PToolsNavigationTests"
         ),
         .testTarget(

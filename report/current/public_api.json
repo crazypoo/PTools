@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "b575ef04bf62427d87cb27532cca6a38e0545245",
-  "generated_at": "2026-10-04T03:19:44Z",
+  "source_revision": "2e8cbdcc7e181e010af22947d0e2465d5a5e6c59",
+  "generated_at": "2026-10-04T15:10:43Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -74984,9 +74984,17 @@
       "declaration": "public var navigationPolicy: PTSplitNavigationPolicy"
     },
     {
+      "key": "PooToolsSource/SplitView/PTSplitConfiguration.swift|public|var|public var inspectorMode: PTSplitInspectorMode",
+      "path": "PooToolsSource/SplitView/PTSplitConfiguration.swift",
+      "line": 25,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var inspectorMode: PTSplitInspectorMode"
+    },
+    {
       "key": "PooToolsSource/SplitView/PTSplitConfiguration.swift|public|init|public init(style: Style = .doubleColumn,",
       "path": "PooToolsSource/SplitView/PTSplitConfiguration.swift",
-      "line": 26,
+      "line": 27,
       "access": "public",
       "kind": "init",
       "declaration": "public init(style: Style = .doubleColumn,"
@@ -74994,7 +75002,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitConfiguration.swift|public|enum|public enum PTSplitColumn: Hashable, Sendable",
       "path": "PooToolsSource/SplitView/PTSplitConfiguration.swift",
-      "line": 43,
+      "line": 46,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTSplitColumn: Hashable, Sendable {"
@@ -75002,15 +75010,23 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitConfiguration.swift|public|enum|public enum PTSplitNavigationPolicy: Sendable",
       "path": "PooToolsSource/SplitView/PTSplitConfiguration.swift",
-      "line": 50,
+      "line": 54,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTSplitNavigationPolicy: Sendable {"
     },
     {
+      "key": "PooToolsSource/SplitView/PTSplitConfiguration.swift|public|enum|public enum PTSplitInspectorMode: Sendable",
+      "path": "PooToolsSource/SplitView/PTSplitConfiguration.swift",
+      "line": 66,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTSplitInspectorMode: Sendable {"
+    },
+    {
       "key": "PooToolsSource/SplitView/PTSplitConfiguration.swift|public|enum|public enum PTSplitPresentationTarget: Sendable",
       "path": "PooToolsSource/SplitView/PTSplitConfiguration.swift",
-      "line": 58,
+      "line": 72,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTSplitPresentationTarget: Sendable {"
@@ -75018,7 +75034,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitConfiguration.swift|public|struct|public struct PTSplitState: Codable, Sendable, Equatable",
       "path": "PooToolsSource/SplitView/PTSplitConfiguration.swift",
-      "line": 67,
+      "line": 82,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTSplitState: Codable, Sendable, Equatable {"
@@ -75026,7 +75042,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitConfiguration.swift|public|var|public var selectedPrimaryIdentifier: String?",
       "path": "PooToolsSource/SplitView/PTSplitConfiguration.swift",
-      "line": 68,
+      "line": 83,
       "access": "public",
       "kind": "var",
       "declaration": "public var selectedPrimaryIdentifier: String?"
@@ -75034,7 +75050,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitConfiguration.swift|public|var|public var selectedSupplementaryIdentifier: String?",
       "path": "PooToolsSource/SplitView/PTSplitConfiguration.swift",
-      "line": 69,
+      "line": 84,
       "access": "public",
       "kind": "var",
       "declaration": "public var selectedSupplementaryIdentifier: String?"
@@ -75042,15 +75058,23 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitConfiguration.swift|public|var|public var selectedSecondaryIdentifier: String?",
       "path": "PooToolsSource/SplitView/PTSplitConfiguration.swift",
-      "line": 70,
+      "line": 85,
       "access": "public",
       "kind": "var",
       "declaration": "public var selectedSecondaryIdentifier: String?"
     },
     {
+      "key": "PooToolsSource/SplitView/PTSplitConfiguration.swift|public|var|public var selectedCompactIdentifier: String?",
+      "path": "PooToolsSource/SplitView/PTSplitConfiguration.swift",
+      "line": 86,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var selectedCompactIdentifier: String?"
+    },
+    {
       "key": "PooToolsSource/SplitView/PTSplitConfiguration.swift|public|var|public var inspectorVisible: Bool",
       "path": "PooToolsSource/SplitView/PTSplitConfiguration.swift",
-      "line": 71,
+      "line": 87,
       "access": "public",
       "kind": "var",
       "declaration": "public var inspectorVisible: Bool"
@@ -75058,7 +75082,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitConfiguration.swift|public|init|public init(selectedPrimaryIdentifier: String? = nil,",
       "path": "PooToolsSource/SplitView/PTSplitConfiguration.swift",
-      "line": 73,
+      "line": 89,
       "access": "public",
       "kind": "init",
       "declaration": "public init(selectedPrimaryIdentifier: String? = nil,"
@@ -75096,17 +75120,41 @@
       "declaration": "public var secondaryViewController: UIViewController? {"
     },
     {
-      "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|var|public var inspectorViewController: UIViewController?",
+      "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|var|public var compactViewController: UIViewController?",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
       "line": 28,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var compactViewController: UIViewController? {"
+    },
+    {
+      "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|var|public var inspectorViewController: UIViewController?",
+      "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
+      "line": 32,
       "access": "public",
       "kind": "var",
       "declaration": "public var inspectorViewController: UIViewController? {"
     },
     {
+      "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|var|public var isCompactPresentation: Bool",
+      "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
+      "line": 39,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isCompactPresentation: Bool {"
+    },
+    {
+      "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|var|public var activeNavigationController: UINavigationController?",
+      "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
+      "line": 46,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var activeNavigationController: UINavigationController? {"
+    },
+    {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|init|public init(configuration: PTSplitConfiguration = PTSplitConfiguration())",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 32,
+      "line": 68,
       "access": "public",
       "kind": "init",
       "declaration": "public init(configuration: PTSplitConfiguration = PTSplitConfiguration()) {"
@@ -75114,7 +75162,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func update(configuration: PTSplitConfiguration)",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 50,
+      "line": 86,
       "access": "public",
       "kind": "func",
       "declaration": "public func update(configuration: PTSplitConfiguration) {"
@@ -75122,7 +75170,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func setPrimary(_ viewController: UIViewController?)",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 55,
+      "line": 91,
       "access": "public",
       "kind": "func",
       "declaration": "public func setPrimary(_ viewController: UIViewController?) {"
@@ -75130,7 +75178,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func setSupplementary(_ viewController: UIViewController?)",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 59,
+      "line": 95,
       "access": "public",
       "kind": "func",
       "declaration": "public func setSupplementary(_ viewController: UIViewController?) {"
@@ -75138,15 +75186,23 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func setSecondary(_ viewController: UIViewController?)",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 63,
+      "line": 99,
       "access": "public",
       "kind": "func",
       "declaration": "public func setSecondary(_ viewController: UIViewController?) {"
     },
     {
+      "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func setCompact(_ viewController: UIViewController?)",
+      "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
+      "line": 103,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func setCompact(_ viewController: UIViewController?) {"
+    },
+    {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func setInspector(_ viewController: UIViewController?)",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 67,
+      "line": 107,
       "access": "public",
       "kind": "func",
       "declaration": "public func setInspector(_ viewController: UIViewController?) {"
@@ -75154,7 +75210,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func setViewController(_ viewController: UIViewController?, for column: PTSplitColumn)",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 74,
+      "line": 115,
       "access": "public",
       "kind": "func",
       "declaration": "public func setViewController(_ viewController: UIViewController?, for column: PTSplitColumn) {"
@@ -75162,7 +75218,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func viewController(for column: PTSplitColumn) -> UIViewController?",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 87,
+      "line": 130,
       "access": "public",
       "kind": "func",
       "declaration": "public func viewController(for column: PTSplitColumn) -> UIViewController? {"
@@ -75170,7 +75226,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func show(_ viewController: UIViewController,",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 100,
+      "line": 148,
       "access": "public",
       "kind": "func",
       "declaration": "public func show(_ viewController: UIViewController,"
@@ -75178,7 +75234,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func pt_showAdaptive(_ viewController: UIViewController)",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 127,
+      "line": 177,
       "access": "public",
       "kind": "func",
       "declaration": "public func pt_showAdaptive(_ viewController: UIViewController) {"
@@ -75186,7 +75242,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func pt_showAdaptive(_ viewController: UIViewController,",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 131,
+      "line": 181,
       "access": "public",
       "kind": "func",
       "declaration": "public func pt_showAdaptive(_ viewController: UIViewController,"
@@ -75194,7 +75250,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func showInspector(animated: Bool = true)",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 136,
+      "line": 186,
       "access": "public",
       "kind": "func",
       "declaration": "public func showInspector(animated: Bool = true) {"
@@ -75202,7 +75258,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func hideInspector(animated: Bool = true)",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 141,
+      "line": 191,
       "access": "public",
       "kind": "func",
       "declaration": "public func hideInspector(animated: Bool = true) {"
@@ -75210,7 +75266,7 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func makeState(identifierFor: (UIViewController) -> String?) -> PTSplitState",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 145,
+      "line": 199,
       "access": "public",
       "kind": "func",
       "declaration": "public func makeState(identifierFor: (UIViewController) -> String?) -> PTSplitState {"
@@ -75218,10 +75274,18 @@
     {
       "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func restore(state: PTSplitState,",
       "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
-      "line": 152,
+      "line": 207,
       "access": "public",
       "kind": "func",
       "declaration": "public func restore(state: PTSplitState,"
+    },
+    {
+      "key": "PooToolsSource/SplitView/PTSplitViewController.swift|public|func|public func navigationController(for column: PTSplitColumn) -> UINavigationController?",
+      "path": "PooToolsSource/SplitView/PTSplitViewController.swift",
+      "line": 247,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func navigationController(for column: PTSplitColumn) -> UINavigationController? {"
     },
     {
       "key": "PooToolsSource/StatusBar/StatusBarManager.swift|public|class|public class StatusBarState: NSObject",

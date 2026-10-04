@@ -23,6 +23,7 @@ done
 
 bash Scripts/report_semantic_capability_ownership.sh >/dev/null
 bash Scripts/report_5_61_runtime_safety.sh --check
+bash Scripts/validate_5_61_splitview_demo.sh
 swift package dump-package >/dev/null
 git diff --check
 

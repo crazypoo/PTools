@@ -63,6 +63,7 @@
 		55F0D0010000000000000001 /* PTDemoCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0D0020000000000000001 /* PTDemoCatalog.swift */; };
 		55F0D0030000000000000001 /* PTDemoSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0D0040000000000000001 /* PTDemoSelectionCoordinator.swift */; };
 		55F0D0050000000000000001 /* PTModelNetworkDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0D0060000000000000001 /* PTModelNetworkDemoViewController.swift */; };
+		55F0D0070000000000000001 /* PTSplitViewDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0D0080000000000000001 /* PTSplitViewDemo.swift */; };
 		55F299932BEE205600CC970A /* PTImageListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F299922BEE205600CC970A /* PTImageListViewController.swift */; };
 		55F3A9D02E3B140F001A0571 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55F3A9CF2E3B140F001A0571 /* HealthKit.framework */; };
 		55FA6CBD2B0285FD00BC464B /* icon_cycle_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55FA6CBC2B0285FD00BC464B /* icon_cycle_selected@3x.png */; };
@@ -1008,6 +1009,7 @@
 		55F0D0020000000000000001 /* PTDemoCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDemoCatalog.swift; sourceTree = "<group>"; };
 		55F0D0040000000000000001 /* PTDemoSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDemoSelectionCoordinator.swift; sourceTree = "<group>"; };
 		55F0D0060000000000000001 /* PTModelNetworkDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTModelNetworkDemoViewController.swift; sourceTree = "<group>"; };
+		55F0D0080000000000000001 /* PTSplitViewDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSplitViewDemo.swift; sourceTree = "<group>"; };
 		55F162E32B18E36200320925 /* C7Collector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C7Collector.swift; sourceTree = "<group>"; };
 		55F162E52B18E3C200320925 /* C7CollectorVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C7CollectorVideo.swift; sourceTree = "<group>"; };
 		55F162E72B18E3F300320925 /* C7CollectorCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C7CollectorCamera.swift; sourceTree = "<group>"; };
@@ -3314,6 +3316,7 @@
 				55F0D0020000000000000001 /* PTDemoCatalog.swift */,
 				55F0D0040000000000000001 /* PTDemoSelectionCoordinator.swift */,
 				55F0D0060000000000000001 /* PTModelNetworkDemoViewController.swift */,
+				55F0D0080000000000000001 /* PTSplitViewDemo.swift */,
 				55C06F652FB1025400776B29 /* PTLoginInterceptor.swift */,
 				55C06F672FB103A500776B29 /* PTTestLoginViewController.swift */,
 				55AF2E222C1CC2B40001D094 /* PTTagCell.swift */,
@@ -3670,6 +3673,7 @@
 				55F0D0010000000000000001 /* PTDemoCatalog.swift in Sources */,
 				55F0D0030000000000000001 /* PTDemoSelectionCoordinator.swift in Sources */,
 				55F0D0050000000000000001 /* PTModelNetworkDemoViewController.swift in Sources */,
+				55F0D0070000000000000001 /* PTSplitViewDemo.swift in Sources */,
 				552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */,
 				55A3B0602F4C15AF007D9C63 /* SceneDelegate.swift in Sources */,
 				5590CB9A2F1F335C003DD740 /* PTTabBarTestOneViewController.swift in Sources */,

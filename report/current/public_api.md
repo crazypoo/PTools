@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: b575ef04bf62427d87cb27532cca6a38e0545245
-Generated at: 2026-10-04T03:19:44Z
+Source revision: 2e8cbdcc7e181e010af22947d0e2465d5a5e6c59
+Generated at: 2026-10-04T15:10:43Z
 -->
 
 # PTools 当前公开 API 清单
@@ -9385,36 +9385,44 @@ Generated at: 2026-10-04T03:19:44Z
 | PooToolsSource/SplitView/PTSplitConfiguration.swift:22 | var | public | public var supplementaryWidthFraction: CGFloat? |
 | PooToolsSource/SplitView/PTSplitConfiguration.swift:23 | var | public | public var automaticallyCollapseInCompactWidth: Bool |
 | PooToolsSource/SplitView/PTSplitConfiguration.swift:24 | var | public | public var navigationPolicy: PTSplitNavigationPolicy |
-| PooToolsSource/SplitView/PTSplitConfiguration.swift:26 | init | public | public init(style: Style = .doubleColumn, |
-| PooToolsSource/SplitView/PTSplitConfiguration.swift:43 | enum | public | public enum PTSplitColumn: Hashable, Sendable { |
-| PooToolsSource/SplitView/PTSplitConfiguration.swift:50 | enum | public | public enum PTSplitNavigationPolicy: Sendable { |
-| PooToolsSource/SplitView/PTSplitConfiguration.swift:58 | enum | public | public enum PTSplitPresentationTarget: Sendable { |
-| PooToolsSource/SplitView/PTSplitConfiguration.swift:67 | struct | public | public struct PTSplitState: Codable, Sendable, Equatable { |
-| PooToolsSource/SplitView/PTSplitConfiguration.swift:68 | var | public | public var selectedPrimaryIdentifier: String? |
-| PooToolsSource/SplitView/PTSplitConfiguration.swift:69 | var | public | public var selectedSupplementaryIdentifier: String? |
-| PooToolsSource/SplitView/PTSplitConfiguration.swift:70 | var | public | public var selectedSecondaryIdentifier: String? |
-| PooToolsSource/SplitView/PTSplitConfiguration.swift:71 | var | public | public var inspectorVisible: Bool |
-| PooToolsSource/SplitView/PTSplitConfiguration.swift:73 | init | public | public init(selectedPrimaryIdentifier: String? = nil, |
+| PooToolsSource/SplitView/PTSplitConfiguration.swift:25 | var | public | public var inspectorMode: PTSplitInspectorMode |
+| PooToolsSource/SplitView/PTSplitConfiguration.swift:27 | init | public | public init(style: Style = .doubleColumn, |
+| PooToolsSource/SplitView/PTSplitConfiguration.swift:46 | enum | public | public enum PTSplitColumn: Hashable, Sendable { |
+| PooToolsSource/SplitView/PTSplitConfiguration.swift:54 | enum | public | public enum PTSplitNavigationPolicy: Sendable { |
+| PooToolsSource/SplitView/PTSplitConfiguration.swift:66 | enum | public | public enum PTSplitInspectorMode: Sendable { |
+| PooToolsSource/SplitView/PTSplitConfiguration.swift:72 | enum | public | public enum PTSplitPresentationTarget: Sendable { |
+| PooToolsSource/SplitView/PTSplitConfiguration.swift:82 | struct | public | public struct PTSplitState: Codable, Sendable, Equatable { |
+| PooToolsSource/SplitView/PTSplitConfiguration.swift:83 | var | public | public var selectedPrimaryIdentifier: String? |
+| PooToolsSource/SplitView/PTSplitConfiguration.swift:84 | var | public | public var selectedSupplementaryIdentifier: String? |
+| PooToolsSource/SplitView/PTSplitConfiguration.swift:85 | var | public | public var selectedSecondaryIdentifier: String? |
+| PooToolsSource/SplitView/PTSplitConfiguration.swift:86 | var | public | public var selectedCompactIdentifier: String? |
+| PooToolsSource/SplitView/PTSplitConfiguration.swift:87 | var | public | public var inspectorVisible: Bool |
+| PooToolsSource/SplitView/PTSplitConfiguration.swift:89 | init | public | public init(selectedPrimaryIdentifier: String? = nil, |
 | PooToolsSource/SplitView/PTSplitViewController.swift:12 | class | open | open class PTSplitViewController: UISplitViewController, PTAdaptiveNavigationContainer { |
 | PooToolsSource/SplitView/PTSplitViewController.swift:16 | var | public | public var primaryViewController: UIViewController? { |
 | PooToolsSource/SplitView/PTSplitViewController.swift:20 | var | public | public var supplementaryViewController: UIViewController? { |
 | PooToolsSource/SplitView/PTSplitViewController.swift:24 | var | public | public var secondaryViewController: UIViewController? { |
-| PooToolsSource/SplitView/PTSplitViewController.swift:28 | var | public | public var inspectorViewController: UIViewController? { |
-| PooToolsSource/SplitView/PTSplitViewController.swift:32 | init | public | public init(configuration: PTSplitConfiguration = PTSplitConfiguration()) { |
-| PooToolsSource/SplitView/PTSplitViewController.swift:50 | func | public | public func update(configuration: PTSplitConfiguration) { |
-| PooToolsSource/SplitView/PTSplitViewController.swift:55 | func | public | public func setPrimary(_ viewController: UIViewController?) { |
-| PooToolsSource/SplitView/PTSplitViewController.swift:59 | func | public | public func setSupplementary(_ viewController: UIViewController?) { |
-| PooToolsSource/SplitView/PTSplitViewController.swift:63 | func | public | public func setSecondary(_ viewController: UIViewController?) { |
-| PooToolsSource/SplitView/PTSplitViewController.swift:67 | func | public | public func setInspector(_ viewController: UIViewController?) { |
-| PooToolsSource/SplitView/PTSplitViewController.swift:74 | func | public | public func setViewController(_ viewController: UIViewController?, for column: PTSplitColumn) { |
-| PooToolsSource/SplitView/PTSplitViewController.swift:87 | func | public | public func viewController(for column: PTSplitColumn) -> UIViewController? { |
-| PooToolsSource/SplitView/PTSplitViewController.swift:100 | func | public | public func show(_ viewController: UIViewController, |
-| PooToolsSource/SplitView/PTSplitViewController.swift:127 | func | public | public func pt_showAdaptive(_ viewController: UIViewController) { |
-| PooToolsSource/SplitView/PTSplitViewController.swift:131 | func | public | public func pt_showAdaptive(_ viewController: UIViewController, |
-| PooToolsSource/SplitView/PTSplitViewController.swift:136 | func | public | public func showInspector(animated: Bool = true) { |
-| PooToolsSource/SplitView/PTSplitViewController.swift:141 | func | public | public func hideInspector(animated: Bool = true) { |
-| PooToolsSource/SplitView/PTSplitViewController.swift:145 | func | public | public func makeState(identifierFor: (UIViewController) -> String?) -> PTSplitState { |
-| PooToolsSource/SplitView/PTSplitViewController.swift:152 | func | public | public func restore(state: PTSplitState, |
+| PooToolsSource/SplitView/PTSplitViewController.swift:28 | var | public | public var compactViewController: UIViewController? { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:32 | var | public | public var inspectorViewController: UIViewController? { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:39 | var | public | public var isCompactPresentation: Bool { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:46 | var | public | public var activeNavigationController: UINavigationController? { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:68 | init | public | public init(configuration: PTSplitConfiguration = PTSplitConfiguration()) { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:86 | func | public | public func update(configuration: PTSplitConfiguration) { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:91 | func | public | public func setPrimary(_ viewController: UIViewController?) { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:95 | func | public | public func setSupplementary(_ viewController: UIViewController?) { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:99 | func | public | public func setSecondary(_ viewController: UIViewController?) { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:103 | func | public | public func setCompact(_ viewController: UIViewController?) { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:107 | func | public | public func setInspector(_ viewController: UIViewController?) { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:115 | func | public | public func setViewController(_ viewController: UIViewController?, for column: PTSplitColumn) { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:130 | func | public | public func viewController(for column: PTSplitColumn) -> UIViewController? { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:148 | func | public | public func show(_ viewController: UIViewController, |
+| PooToolsSource/SplitView/PTSplitViewController.swift:177 | func | public | public func pt_showAdaptive(_ viewController: UIViewController) { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:181 | func | public | public func pt_showAdaptive(_ viewController: UIViewController, |
+| PooToolsSource/SplitView/PTSplitViewController.swift:186 | func | public | public func showInspector(animated: Bool = true) { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:191 | func | public | public func hideInspector(animated: Bool = true) { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:199 | func | public | public func makeState(identifierFor: (UIViewController) -> String?) -> PTSplitState { |
+| PooToolsSource/SplitView/PTSplitViewController.swift:207 | func | public | public func restore(state: PTSplitState, |
+| PooToolsSource/SplitView/PTSplitViewController.swift:247 | func | public | public func navigationController(for column: PTSplitColumn) -> UINavigationController? { |
 | PooToolsSource/StatusBar/StatusBarManager.swift:13 | class | public | public class StatusBarState: NSObject { |
 | PooToolsSource/StatusBar/StatusBarManager.swift:17 | var | open | open var isHidden = false |
 | PooToolsSource/StatusBar/StatusBarManager.swift:18 | var | open | open var style: UIStatusBarStyle = .default |

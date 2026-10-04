@@ -2,9 +2,9 @@
   "generator": "Scripts/report_5_61_runtime_safety.sh",
   "schema_version": 1,
   "baseline": "5.61.0",
-  "source_revision": "b575ef04bf62427d87cb27532cca6a38e0545245",
-  "source_tree_hash": "4c337f7562a092cc34e2d05cba6baaa9204224343881fa16dee58ecfb8589e8f",
-  "generated_at": "2026-10-04T03:17:28Z",
+  "source_revision": "2e8cbdcc7e181e010af22947d0e2465d5a5e6c59",
+  "source_tree_hash": "14d7dcac7921a98379a36cc5a6cc58dfaea8b527bdd231ddf6559a1ca364fa41",
+  "generated_at": "2026-10-04T14:57:17Z",
   "checks": {
     "kakapos": {
       "count": 0,

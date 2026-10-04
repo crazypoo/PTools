@@ -15,8 +15,9 @@ PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码�
 
 DebugNetwork 2.0 是只读观测工具，支持 immutable capture、Timeline、过滤、脱敏 cURL/HAR/Text 导出和多 Scene presentation。使用方式见 [DebugNetwork 指南](docs/debug/DEBUG_NETWORK.md)。
 
-5.61.0 增加 `PTSplitViewController` 自适应分栏、`PTNetworkSpeedTester`、`PTPingSession`、
-HeartRate 安全状态和 `PTStorage` 文件 I/O 收口。使用示例见
+5.61.0 增加 `PTSplitViewController` 的 iPhone / iPad 自适应分栏、compact 导航栈、Router、状态
+恢复和 Inspector Demo，同时增加 `PTNetworkSpeedTester`、`PTPingSession`、HeartRate 安全状态和
+`PTStorage` 文件 I/O 收口。使用示例见
 [SplitView 指南](docs/splitview/PTSplitViewController_Guide.md)、[测速指南](docs/network/PTNetworkSpeedTester_Guide.md)、
 [Ping 指南](docs/ping/PTPingSession_Guide.md) 和 [5.61.0 迁移说明](docs/migrations/5.61_RUNTIME_SAFETY.md)。
 

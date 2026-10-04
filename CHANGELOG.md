@@ -10,6 +10,7 @@
 - HeartRate 改为可恢复的相机/像素处理错误；NetworkSpeedTest 改为显式 endpoint 的 actor 测速器；Ping 增加类型化状态机和 `PTPingSession`。
 - Location 使用 `PTLocationSnapshot` 与旧键迁移；`PTFileStorage` 的文件 I/O 移至 utility 队列并保留 atomic write；UserDefaults 兼容入口移除 `synchronize()`。
 - 新增 `PTSplitViewController` 与 Router 自适应桥接，支持双栏/三栏、紧凑 push、regular secondary、Inspector 和状态恢复。
+- 完成 SplitView Demo 收口：目录入口改为 root-container，新增 iPhone/iPad 自适应 Category → Component → Detail 流程、compact column、Router `.push`、状态保存/恢复、Inspector 运行态和 device-independent 回归门禁。
 - 修复泛型 Cell/Header/Footer 出列、UIDocumentPicker 缺少参数和 iOS 18 zoom 转场回调的用户路径崩溃，补齐 Example Demo、指南和 5.61.0 发布门禁。
 - `PooTools-Example` Simulator Debug 构建通过；真机、真实宿主、真实测速 endpoint、iPad 多窗口视觉和 Instruments 证据仍需集成方完成，当前不创建正式 tag。
 

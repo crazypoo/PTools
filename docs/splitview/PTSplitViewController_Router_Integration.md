@@ -14,6 +14,14 @@
 没有自适应容器时，原有 `PTUtils.push` 行为保持不变。这样旧项目无需迁移，iPad 项目只需把
 根容器替换为 `PTSplitViewController` 即可获得默认适配。
 
+`navigation.split-view` Demo 以 root container 全屏展示，避免把 `UISplitViewController` 放进外层
+`UINavigationController`。Demo 的 Router 按钮和业务中的 `.push` 使用同一条路径：compact 环境
+进入当前可见导航栈，regular 环境更新 secondary；不会把页面推入隐藏列或外层 Demo 导航栈。
+
+显式 `split.show(_:target: .navigationPush)` 也只面向当前真实可见的导航栈。需要明确写入列时，
+使用 `.primary`、`.supplementary`、`.secondary` 或 `.compact`；`.secondary` 不会因 compact 环境
+而改变语义。
+
 自定义业务目的地时直接调用：
 
 ```swift

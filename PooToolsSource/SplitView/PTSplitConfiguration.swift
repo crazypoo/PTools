@@ -22,6 +22,7 @@ public struct PTSplitConfiguration: Sendable {
     public var supplementaryWidthFraction: CGFloat?
     public var automaticallyCollapseInCompactWidth: Bool
     public var navigationPolicy: PTSplitNavigationPolicy
+    public var inspectorMode: PTSplitInspectorMode
 
     public init(style: Style = .doubleColumn,
                 displayMode: UISplitViewController.DisplayMode = .automatic,
@@ -29,7 +30,8 @@ public struct PTSplitConfiguration: Sendable {
                 primaryWidthFraction: CGFloat? = nil,
                 supplementaryWidthFraction: CGFloat? = nil,
                 automaticallyCollapseInCompactWidth: Bool = true,
-                navigationPolicy: PTSplitNavigationPolicy = .wrapAll) {
+                navigationPolicy: PTSplitNavigationPolicy = .wrapAll,
+                inspectorMode: PTSplitInspectorMode = .automatic) {
         self.style = style
         self.displayMode = displayMode
         self.splitBehavior = splitBehavior
@@ -37,6 +39,7 @@ public struct PTSplitConfiguration: Sendable {
         self.supplementaryWidthFraction = supplementaryWidthFraction
         self.automaticallyCollapseInCompactWidth = automaticallyCollapseInCompactWidth
         self.navigationPolicy = navigationPolicy
+        self.inspectorMode = inspectorMode
     }
 }
 
@@ -44,6 +47,7 @@ public enum PTSplitColumn: Hashable, Sendable {
     case primary
     case supplementary
     case secondary
+    case compact
     case inspector
 }
 
@@ -51,8 +55,18 @@ public enum PTSplitNavigationPolicy: Sendable {
     case none
     case wrapPrimary
     case wrapSecondary
+    case wrapCompact
     case wrapAll
     case custom
+}
+
+// English: Select the native iOS 26 inspector column when available, or retain the sheet fallback.
+// Español: Selecciona la columna inspector nativa de iOS 26 cuando esté disponible o conserva el fallback de hoja.
+// 中文：优先使用 iOS 26 原生 Inspector 栏，不支持时保留页面 Sheet 兜底。
+public enum PTSplitInspectorMode: Sendable {
+    case automatic
+    case nativeWhenAvailable
+    case sheet
 }
 
 public enum PTSplitPresentationTarget: Sendable {
@@ -60,6 +74,7 @@ public enum PTSplitPresentationTarget: Sendable {
     case primary
     case supplementary
     case secondary
+    case compact
     case inspector
     case navigationPush
 }
@@ -68,15 +83,18 @@ public struct PTSplitState: Codable, Sendable, Equatable {
     public var selectedPrimaryIdentifier: String?
     public var selectedSupplementaryIdentifier: String?
     public var selectedSecondaryIdentifier: String?
+    public var selectedCompactIdentifier: String?
     public var inspectorVisible: Bool
 
     public init(selectedPrimaryIdentifier: String? = nil,
                 selectedSupplementaryIdentifier: String? = nil,
                 selectedSecondaryIdentifier: String? = nil,
+                selectedCompactIdentifier: String? = nil,
                 inspectorVisible: Bool = false) {
         self.selectedPrimaryIdentifier = selectedPrimaryIdentifier
         self.selectedSupplementaryIdentifier = selectedSupplementaryIdentifier
         self.selectedSecondaryIdentifier = selectedSecondaryIdentifier
+        self.selectedCompactIdentifier = selectedCompactIdentifier
         self.inspectorVisible = inspectorVisible
     }
 }

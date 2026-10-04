@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "b575ef04bf62427d87cb27532cca6a38e0545245",
-  "generated_at": "2026-10-04T03:20:13Z",
+  "source_revision": "2e8cbdcc7e181e010af22947d0e2465d5a5e6c59",
+  "generated_at": "2026-10-04T15:12:25Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -4252,6 +4252,17 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PooToolsSplitView",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsSplitView",
+              null
+            ]
+          }
+        },
         {
           "name": "ptools",
           "kind": "internal",

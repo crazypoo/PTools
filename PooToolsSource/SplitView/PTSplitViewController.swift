@@ -25,8 +25,44 @@ open class PTSplitViewController: UISplitViewController, PTAdaptiveNavigationCon
         viewController(for: PTSplitColumn.secondary)
     }
 
+    public var compactViewController: UIViewController? {
+        viewController(for: PTSplitColumn.compact)
+    }
+
     public var inspectorViewController: UIViewController? {
         storedInspectorViewController
+    }
+
+    // English: Use the actual collapsed state or horizontal size class instead of the device idiom.
+    // Español: Usa el estado colapsado real o la clase de tamaño horizontal en lugar del tipo de dispositivo.
+    // 中文：依据真实折叠状态或水平尺寸类别判断紧凑展示，不判断设备类型。
+    public var isCompactPresentation: Bool {
+        isCollapsed || traitCollection.horizontalSizeClass == .compact
+    }
+
+    // English: Automatic and router-driven presentation share the currently visible navigation stack.
+    // Español: La presentación automática y la del router comparten la pila de navegación visible actual.
+    // 中文：自动展示和 Router 展示统一使用当前真实可见的导航栈。
+    public var activeNavigationController: UINavigationController? {
+        if isCompactPresentation {
+            if let compact = navigationController(for: .compact) {
+                return compact
+            }
+
+            for controller in viewControllers.reversed() {
+                if let navigationController = navigationController(from: controller) {
+                    return navigationController
+                }
+            }
+
+            return navigationController(for: .primary)
+                ?? navigationController(for: .supplementary)
+                ?? navigationController(for: .secondary)
+        }
+
+        return navigationController(for: .secondary)
+            ?? navigationController(for: .supplementary)
+            ?? navigationController(for: .primary)
     }
 
     public init(configuration: PTSplitConfiguration = PTSplitConfiguration()) {
@@ -64,10 +100,15 @@ open class PTSplitViewController: UISplitViewController, PTAdaptiveNavigationCon
         super.setViewController(wrapped(viewController, for: .secondary), for: .secondary)
     }
 
+    public func setCompact(_ viewController: UIViewController?) {
+        super.setViewController(wrapped(viewController, for: .compact), for: .compact)
+    }
+
     public func setInspector(_ viewController: UIViewController?) {
         storedInspectorViewController = viewController
+        applyInspectorMode()
         if viewController == nil {
-            dismiss(animated: false)
+            hideInspector(animated: false)
         }
     }
 
@@ -79,6 +120,8 @@ open class PTSplitViewController: UISplitViewController, PTAdaptiveNavigationCon
             setSupplementary(viewController)
         case .secondary:
             setSecondary(viewController)
+        case .compact:
+            setCompact(viewController)
         case .inspector:
             setInspector(viewController)
         }
@@ -92,7 +135,12 @@ open class PTSplitViewController: UISplitViewController, PTAdaptiveNavigationCon
             return super.viewController(for: UISplitViewController.Column.supplementary)
         case .secondary:
             return super.viewController(for: UISplitViewController.Column.secondary)
+        case .compact:
+            return super.viewController(for: UISplitViewController.Column.compact)
         case .inspector:
+            if #available(iOS 26.0, *), usesNativeInspector {
+                return super.viewController(for: .inspector) ?? storedInspectorViewController
+            }
             return storedInspectorViewController
         }
     }
@@ -107,13 +155,15 @@ open class PTSplitViewController: UISplitViewController, PTAdaptiveNavigationCon
             setSupplementary(viewController)
         case .secondary:
             setSecondary(viewController)
+        case .compact:
+            setCompact(viewController)
         case .inspector:
             setInspector(viewController)
             presentInspectorIfNeeded(animated: animated)
         case .navigationPush:
             push(viewController, animated: animated)
         case .automatic:
-            if isCompactWidth {
+            if isCompactPresentation {
                 push(viewController, animated: animated)
             } else {
                 setSecondary(viewController)
@@ -139,14 +189,19 @@ open class PTSplitViewController: UISplitViewController, PTAdaptiveNavigationCon
     }
 
     public func hideInspector(animated: Bool = true) {
-        dismiss(animated: animated)
+        if #available(iOS 26.0, *), usesNativeInspector {
+            hide(.inspector)
+        } else if presentedViewController === storedInspectorViewController {
+            dismiss(animated: animated)
+        }
     }
 
     public func makeState(identifierFor: (UIViewController) -> String?) -> PTSplitState {
         PTSplitState(selectedPrimaryIdentifier: primaryViewController.flatMap { identifierFor($0) },
                      selectedSupplementaryIdentifier: supplementaryViewController.flatMap { identifierFor($0) },
                      selectedSecondaryIdentifier: secondaryViewController.flatMap { identifierFor($0) },
-                     inspectorVisible: presentedViewController === storedInspectorViewController)
+                     selectedCompactIdentifier: compactViewController.flatMap { identifierFor($0) },
+                     inspectorVisible: isInspectorVisible)
     }
 
     public func restore(state: PTSplitState,
@@ -160,35 +215,47 @@ open class PTSplitViewController: UISplitViewController, PTAdaptiveNavigationCon
         if let identifier = state.selectedSecondaryIdentifier {
             setSecondary(resolve(identifier))
         }
+        if let identifier = state.selectedCompactIdentifier {
+            setCompact(resolve(identifier))
+        }
         if state.inspectorVisible {
             presentInspectorIfNeeded(animated: false)
         }
     }
 
-    private var isCompactWidth: Bool {
-        traitCollection.horizontalSizeClass == .compact
-    }
-
     private func push(_ viewController: UIViewController, animated: Bool) {
-        let navigationController = visibleNavigationController
-        if let navigationController {
+        if let navigationController = activeNavigationController {
             navigationController.pushViewController(viewController, animated: animated)
+            return
+        }
+
+        // English: Never silently drop a push when a caller supplied an unwrapped column.
+        // Español: Nunca descarta silenciosamente un push cuando el llamador proporcionó una columna sin envolver.
+        // 中文：调用方未提供导航包装时，也不能静默丢弃 push 请求。
+        if isCompactPresentation {
+            if let compactViewController,
+               !(compactViewController is UINavigationController) {
+                compactViewController.show(viewController, sender: nil)
+            } else {
+                setCompact(viewController)
+            }
         } else {
             setSecondary(viewController)
         }
     }
 
-    private var visibleNavigationController: UINavigationController? {
-        if let navigationController = secondaryViewController as? UINavigationController {
-            return navigationController
-        }
-        if let navigationController = supplementaryViewController as? UINavigationController {
-            return navigationController
-        }
-        return primaryViewController as? UINavigationController
+    public func navigationController(for column: PTSplitColumn) -> UINavigationController? {
+        guard let viewController = viewController(for: column) else { return nil }
+        return navigationController(from: viewController)
     }
 
     private func presentInspectorIfNeeded(animated: Bool) {
+        guard storedInspectorViewController != nil else { return }
+        if #available(iOS 26.0, *), usesNativeInspector {
+            show(.inspector)
+            return
+        }
+
         guard let inspector = storedInspectorViewController,
               presentedViewController == nil else { return }
         inspector.modalPresentationStyle = .pageSheet
@@ -211,6 +278,8 @@ open class PTSplitViewController: UISplitViewController, PTAdaptiveNavigationCon
             return column == .primary
         case .wrapSecondary:
             return column == .secondary
+        case .wrapCompact:
+            return column == .compact
         case .wrapAll:
             return column != .inspector
         }
@@ -221,9 +290,48 @@ open class PTSplitViewController: UISplitViewController, PTAdaptiveNavigationCon
         preferredSplitBehavior = configuration.splitBehavior
         preferredPrimaryColumnWidthFraction = validatedFraction(configuration.primaryWidthFraction)
         preferredSupplementaryColumnWidthFraction = validatedFraction(configuration.supplementaryWidthFraction)
-        if configuration.automaticallyCollapseInCompactWidth {
-            presentsWithGesture = true
+        presentsWithGesture = configuration.automaticallyCollapseInCompactWidth
+        applyInspectorMode()
+    }
+
+    private var usesNativeInspector: Bool {
+        switch configuration.inspectorMode {
+        case .sheet:
+            return false
+        case .automatic, .nativeWhenAvailable:
+            return true
         }
+    }
+
+    private var isInspectorVisible: Bool {
+        if #available(iOS 26.0, *), usesNativeInspector {
+            return isShowing(.inspector)
+        }
+        return presentedViewController === storedInspectorViewController
+    }
+
+    private func applyInspectorMode() {
+        guard #available(iOS 26.0, *) else { return }
+        if usesNativeInspector {
+            super.setViewController(storedInspectorViewController, for: .inspector)
+        } else {
+            super.setViewController(nil, for: .inspector)
+        }
+    }
+
+    private func navigationController(from viewController: UIViewController) -> UINavigationController? {
+        if let navigationController = viewController as? UINavigationController {
+            return navigationController
+        }
+        if let navigationController = viewController.navigationController {
+            return navigationController
+        }
+        for child in viewController.children.reversed() {
+            if let navigationController = navigationController(from: child) {
+                return navigationController
+            }
+        }
+        return nil
     }
 
     private func validatedFraction(_ value: CGFloat?) -> CGFloat {

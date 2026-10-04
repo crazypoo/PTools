@@ -14,8 +14,8 @@
 - ✅ P1 Location / Storage：定位使用 `PTLocationSnapshot` 和迁移兼容键；`PTFileStorage` 文件 I/O 移至 utility 队列并保留 atomic write。
 - ✅ P1 并发边界：更新 `@unchecked Sendable` allowlist/registry，系统对象包装器注明不变量；不新增业务级 `nonisolated(unsafe)`。
 - ✅ P1 UIKit：用户可触发的泛型出列、文档选择器和 iOS 18 zoom 回调移除直接 fatal 崩溃；init(coder:) 保留项按 programmatic-only/abstract contract 分类。
-- ✅ P1 Adaptive Navigation：新增 `PTSplitViewController`，支持 double/triple column、compact push、regular secondary、Inspector、状态恢复和 Router 桥接。
-- ✅ P2 Demo / 文档：Example 增加 SplitView、NetworkSpeed、Ping、HeartRate 入口；补齐 5.61.0 架构、迁移和模块指南。
+- ✅ P1 Adaptive Navigation：新增 `PTSplitViewController`，支持 double/triple column、compact column/push、regular secondary、Inspector、状态恢复和 Router 桥接；`.automatic`/`.navigationPush` 使用真实可见导航栈，不按设备类型分支。
+- ✅ P2 Demo / 文档：Example 的 SplitView 入口改为 root-container，全量覆盖 iPhone compact、iPad regular、Router、状态保存/恢复和 Inspector 运行态；补齐 5.61.0 架构、迁移和模块指南。
 - ✅ Quality：新增语义能力归属 manifest、工作树 runtime safety report、fatalError allowlist 和 `validate_5_61_release.sh`。
 - ⬜ 宿主/真机/Instruments：HeartRate、真实测速服务、Ping、iPad Stage Manager、Storage、SplitView resize 和长会话证据需由集成方补充；未完成前不创建正式 `5.61.0` tag。
 

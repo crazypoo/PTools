@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory.rb
-Source revision: b575ef04bf62427d87cb27532cca6a38e0545245
-Generated at: 2026-10-04T03:20:37Z
+Source revision: 2e8cbdcc7e181e010af22947d0e2465d5a5e6c59
+Generated at: 2026-10-04T15:14:14Z
 -->
 
 # PTools 当前缓存盘点

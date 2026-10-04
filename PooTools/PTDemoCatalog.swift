@@ -44,6 +44,7 @@ enum PTDemoPresentation: String, Codable, Hashable, Sendable {
     case push
     case sheet
     case fullScreen
+    case rootContainer
     case inline
     case action
 }
@@ -168,7 +169,7 @@ enum PTDemoRegistry {
         make("media.live-photo", "PooToolsLivePhoto", "LivePhoto", .mediaGraphics, .hostRequired, .sheet, .runnable, [.photoLibrary], legacy: "LivePhoto", tags: ["photo", "live-photo"]),
         make("media.live-photo-disassemble", "PooToolsLivePhoto", "LivePhotoDisassemble", .mediaGraphics, .hostRequired, .sheet, .runnable, [.photoLibrary], legacy: "LivePhotoDisassemble", tags: ["photo", "live-photo"]),
         make("navigation.route", "PooToolsRouter", "路由", .navigationRouting, .interactive, .sheet, .runnable, legacy: "路由", tags: ["route"]),
-        make("navigation.split-view", "PooToolsSplitView", "Adaptive SplitView", .navigationRouting, .interactive, .push, .runnable, legacy: "AdaptiveSplitView", tags: ["split-view", "ipad", "adaptive", "state-restoration"]),
+        make("navigation.split-view", "PooToolsSplitView", "Adaptive SplitView — iPhone / iPad", .navigationRouting, .interactive, .rootContainer, .runnable, legacy: "AdaptiveSplitView", tags: ["split-view", "iphone", "ipad", "compact", "regular", "adaptive", "router", "state-restoration", "inspector"]),
         make("navigation.segment-paging-regression", "PooToolsSegmented", "Segmented / JX Parity & Paging", .navigationRouting, .interactive, .push, .runnable, legacy: "SegmentedPagingRegression", tags: ["segment", "paging", "badge", "jx-parity", "regression"]),
         make("navigation.segment-item-separator", "PooToolsSegmented", "Segmented / Item Separator", .navigationRouting, .interactive, .push, .runnable, legacy: "SegmentedItemSeparator", tags: ["segment", "separator", "rtl", "reuse"]),
         make("security.encryption", "PooToolsDataEncrypt", "Encryption", .securityPrivacy, .interactive, .sheet, .runnable, legacy: "Encryption", tags: ["crypto"]),
@@ -273,74 +274,24 @@ final class PTDemoCoordinator {
         let viewController = viewController(for: descriptor)
         switch descriptor.presentation {
         case .push:
-            host.navigationController?.pushViewController(viewController, animated: true)
+            if let navigationController = host.navigationController {
+                navigationController.pushViewController(viewController, animated: true)
+            } else {
+                // English: A Demo must remain visible even when its host has no navigation controller.
+                // Español: Un Demo debe seguir siendo visible aunque su host no tenga navegación.
+                // 中文：即使宿主没有导航控制器，Demo 也不能静默无响应。
+                viewController.modalPresentationStyle = .fullScreen
+                host.present(viewController, animated: true)
+            }
         case .fullScreen:
             viewController.modalPresentationStyle = .fullScreen
             host.showDetailViewController(viewController, sender: nil)
+        case .rootContainer:
+            viewController.modalPresentationStyle = .fullScreen
+            host.present(viewController, animated: true)
         case .sheet, .inline, .action:
             UIViewController.currentPresentToSheet(vc: viewController, sizes: sizes)
         }
-    }
-}
-
-// English: This compact SplitView demo exercises double/triple columns and adaptive navigation without a second demo framework.
-// Español: Este demo compacto de SplitView prueba columnas dobles/triples y navegación adaptativa sin otro framework de demos.
-// 中文：这个紧凑的 SplitView Demo 演示双栏/三栏和自适应导航，不创建第二套 Demo 框架。
-@MainActor
-private final class PT5_61SplitViewDemoViewController: PTSplitViewController {
-    init() {
-        super.init(configuration: PTSplitConfiguration(style: .tripleColumn,
-                                                        displayMode: .oneBesideSecondary,
-                                                        splitBehavior: .tile,
-                                                        primaryWidthFraction: 0.25,
-                                                        supplementaryWidthFraction: 0.25,
-                                                        navigationPolicy: .wrapAll))
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setPrimary(PT5_61DemoLabelViewController(title: "Sidebar / 主栏"))
-        setSupplementary(PT5_61DemoLabelViewController(title: "Search / 搜索"))
-        setSecondary(PT5_61DemoLabelViewController(title: "Detail / 详情"))
-        setInspector(PT5_61DemoLabelViewController(title: "Inspector / 检查器"))
-    }
-}
-
-// English: The shared label controller keeps the demo deterministic and safe on every simulator size.
-// Español: El controlador de etiqueta compartido mantiene el demo determinista y seguro en cualquier tamaño de simulador.
-// 中文：共享标签控制器让 Demo 在不同模拟器尺寸下保持确定且安全。
-@MainActor
-private final class PT5_61DemoLabelViewController: PTBaseViewController {
-    private let titleText: String
-
-    init(title: String) {
-        titleText = title
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        titleText = ""
-        super.init(coder: coder)
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let label = UILabel()
-        label.text = titleText
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.textColor = .label
-        view.addSubview(label)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
     }
 }
 

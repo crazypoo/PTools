@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: b575ef04bf62427d87cb27532cca6a38e0545245
-Generated at: 2026-10-04T03:20:13Z
+Source revision: 2e8cbdcc7e181e010af22947d0e2465d5a5e6c59
+Generated at: 2026-10-04T15:12:25Z
 -->
 
 # SwiftPM Dependency Graph
@@ -218,7 +218,7 @@ Generated at: 2026-10-04T03:20:13Z
 | `PToolsModelMacroPlugin` | `PToolsModelMacros` | — | SwiftCompilerPlugin, SwiftSyntax, SwiftSyntaxBuilder, SwiftSyntaxMacros | 1 source entries / 0 resources |
 | `PToolsModelTests` | `Tests/PToolsModelTests` | PToolsModel, PToolsModelCore, PToolsModelMacroPlugin | SwiftSyntaxMacrosTestSupport | 0 source entries / 0 resources |
 | `PToolsModelUIKit` | `PooToolsSource/PToolsModelUIKit` | PToolsModelCore | — | 0 source entries / 0 resources |
-| `PToolsNavigationTests` | `Tests/PToolsNavigationTests` | ptools | — | 0 source entries / 0 resources |
+| `PToolsNavigationTests` | `Tests/PToolsNavigationTests` | PooToolsSplitView, ptools | — | 0 source entries / 0 resources |
 | `PToolsNetworkModelCore` | `PooToolsSource` | PToolsCore, PToolsModelCore, PToolsModelLegacyKakaJSON, PToolsModelLegacySmartCodable | — | 3 source entries / 0 resources |
 | `PToolsNetworkRuntimeTests` | `Tests/PToolsNetworkTests` | PToolsModelCore, PooToolsNetWork | Alamofire | 1 source entries / 0 resources |
 | `PToolsNetworkTests` | `Tests/PToolsNetworkTests` | PToolsModelCore, PToolsNetworkModelCore | — | 1 source entries / 0 resources |
