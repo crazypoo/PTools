@@ -1837,7 +1837,6 @@
     - "PooToolsImagePicker"
     - "PTCameraPermission"
     - "PooToolsLoading"
-    - "Kakapos"
   owner: "PTools maintainers"
   docs: true
   canonical_slug: "poo-tools-photo-picker"
@@ -2100,6 +2099,21 @@
   owner: "PTools maintainers"
   docs: true
   canonical_slug: "poo-tools-speed-panel"
+  aliases: []
+-
+  id: "poo-tools-split-view"
+  name: "PooToolsSplitView"
+  swiftpm_product: "PooToolsSplitView"
+  cocoapods_subspec: ""
+  source: ""
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "poo-tools-split-view"
   aliases: []
 -
   id: "poo-tools-step-count"
@@ -2499,6 +2513,21 @@
   canonical_slug: "ptools-activities"
   aliases: []
 -
+  id: "ptools-app-integrity"
+  name: "PToolsAppIntegrity"
+  swiftpm_product: "PToolsAppIntegrity"
+  cocoapods_subspec: "AppIntegrity"
+  source: "PooToolsSource/PToolsAppIntegrity"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-app-integrity"
+  aliases: []
+-
   id: "ptools-app-intents"
   name: "PToolsAppIntents"
   swiftpm_product: "PToolsAppIntents"
@@ -2529,6 +2558,38 @@
   owner: "PTools maintainers"
   docs: true
   canonical_slug: "ptools-audio"
+  aliases: []
+-
+  id: "ptools-auth"
+  name: "PToolsAuth"
+  swiftpm_product: "PToolsAuth"
+  cocoapods_subspec: "Auth"
+  source: "PooToolsSource/PToolsAuth"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsAuthCore"
+    - "PToolsStorage"
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-auth"
+  aliases: []
+-
+  id: "ptools-auth-core"
+  name: "PToolsAuthCore"
+  swiftpm_product: "PToolsAuthCore"
+  cocoapods_subspec: "AuthCore"
+  source: "PooToolsSource/PToolsAuthCore"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-auth-core"
   aliases: []
 -
   id: "ptools-background-tasks"
@@ -2623,6 +2684,37 @@
   owner: "PTools maintainers"
   docs: true
   canonical_slug: "ptools-core"
+  aliases: []
+-
+  id: "ptools-database"
+  name: "PToolsDatabase"
+  swiftpm_product: "PToolsDatabase"
+  cocoapods_subspec: "Database"
+  source: "PooToolsSource/PToolsDatabase"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsDatabaseCore"
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-database"
+  aliases: []
+-
+  id: "ptools-database-core"
+  name: "PToolsDatabaseCore"
+  swiftpm_product: "PToolsDatabaseCore"
+  cocoapods_subspec: "DatabaseCore"
+  source: "PooToolsSource/PToolsDatabaseCore"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-database-core"
   aliases: []
 -
   id: "ptools-date"
@@ -2764,6 +2856,37 @@
   canonical_slug: "ptools-logging"
   aliases: []
 -
+  id: "ptools-map"
+  name: "PToolsMap"
+  swiftpm_product: "PToolsMap"
+  cocoapods_subspec: "Map"
+  source: "PooToolsSource/PToolsMap"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsMapCore"
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-map"
+  aliases: []
+-
+  id: "ptools-map-core"
+  name: "PToolsMapCore"
+  swiftpm_product: "PToolsMapCore"
+  cocoapods_subspec: "MapCore"
+  source: "PooToolsSource/PToolsMapCore"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-map-core"
+  aliases: []
+-
   id: "ptools-model"
   name: "PToolsModel"
   swiftpm_product: "PToolsModel"
@@ -2874,6 +2997,37 @@
   canonical_slug: "ptools-notifications"
   aliases: []
 -
+  id: "ptools-observability"
+  name: "PToolsObservability"
+  swiftpm_product: "PToolsObservability"
+  cocoapods_subspec: "Observability"
+  source: "PooToolsSource/PToolsObservability"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsObservabilityCore"
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-observability"
+  aliases: []
+-
+  id: "ptools-observability-core"
+  name: "PToolsObservabilityCore"
+  swiftpm_product: "PToolsObservabilityCore"
+  cocoapods_subspec: "ObservabilityCore"
+  source: "PooToolsSource/PToolsObservabilityCore"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-observability-core"
+  aliases: []
+-
   id: "ptools-overlay"
   name: "PToolsOverlay"
   swiftpm_product: "PToolsOverlay"
@@ -2922,6 +3076,38 @@
   owner: "PTools maintainers"
   docs: true
   canonical_slug: "ptools-permission-ui"
+  aliases: []
+-
+  id: "ptools-realtime"
+  name: "PToolsRealtime"
+  swiftpm_product: "PToolsRealtime"
+  cocoapods_subspec: "Realtime"
+  source: "PooToolsSource/PToolsRealtime"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsRealtimeCore"
+    - "PooToolsSocketKit"
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-realtime"
+  aliases: []
+-
+  id: "ptools-realtime-core"
+  name: "PToolsRealtimeCore"
+  swiftpm_product: "PToolsRealtimeCore"
+  cocoapods_subspec: "RealtimeCore"
+  source: "PooToolsSource/PToolsRealtimeCore"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-realtime-core"
   aliases: []
 -
   id: "ptools-route-core"
@@ -3000,6 +3186,21 @@
   canonical_slug: "ptools-storage-core"
   aliases: []
 -
+  id: "ptools-storekit"
+  name: "PToolsStoreKit"
+  swiftpm_product: "PToolsStoreKit"
+  cocoapods_subspec: "StoreKit"
+  source: "PooToolsSource/PToolsStoreKit"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-storekit"
+  aliases: []
+-
   id: "ptools-symbols"
   name: "PToolsSymbols"
   swiftpm_product: "PToolsSymbols"
@@ -3013,6 +3214,37 @@
   owner: "PTools maintainers"
   docs: true
   canonical_slug: "ptools-symbols"
+  aliases: []
+-
+  id: "ptools-sync"
+  name: "PToolsSync"
+  swiftpm_product: "PToolsSync"
+  cocoapods_subspec: "Sync"
+  source: "PooToolsSource/PToolsSync"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsSyncCore"
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-sync"
+  aliases: []
+-
+  id: "ptools-sync-core"
+  name: "PToolsSyncCore"
+  swiftpm_product: "PToolsSyncCore"
+  cocoapods_subspec: "SyncCore"
+  source: "PooToolsSource/PToolsSyncCore"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-sync-core"
   aliases: []
 -
   id: "ptools-theme"
@@ -3031,6 +3263,37 @@
   canonical_slug: "ptools-theme"
   aliases: []
 -
+  id: "ptools-transfer"
+  name: "PToolsTransfer"
+  swiftpm_product: "PToolsTransfer"
+  cocoapods_subspec: "Transfer"
+  source: "PooToolsSource/PToolsTransfer"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsTransferCore"
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-transfer"
+  aliases: []
+-
+  id: "ptools-transfer-core"
+  name: "PToolsTransferCore"
+  swiftpm_product: "PToolsTransferCore"
+  cocoapods_subspec: "TransferCore"
+  source: "PooToolsSource/PToolsTransferCore"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-transfer-core"
+  aliases: []
+-
   id: "ptools-uifoundation"
   name: "PToolsUIFoundation"
   swiftpm_product: "PToolsUIFoundation"
@@ -3045,6 +3308,53 @@
   owner: "PTools maintainers"
   docs: true
   canonical_slug: "ptools-uifoundation"
+  aliases: []
+-
+  id: "ptools-web"
+  name: "PToolsWeb"
+  swiftpm_product: "PToolsWeb"
+  cocoapods_subspec: "Web"
+  source: "PooToolsSource/PToolsWeb"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsWebBridge"
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-web"
+  aliases: []
+-
+  id: "ptools-web-bridge"
+  name: "PToolsWebBridge"
+  swiftpm_product: "PToolsWebBridge"
+  cocoapods_subspec: "WebBridge"
+  source: "PooToolsSource/PToolsWebBridge"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies:
+    - "PToolsWebCore"
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-web-bridge"
+  aliases: []
+-
+  id: "ptools-web-core"
+  name: "PToolsWebCore"
+  swiftpm_product: "PToolsWebCore"
+  cocoapods_subspec: "WebCore"
+  source: "PooToolsSource/PToolsWebCore"
+  category: "application-infrastructure"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-web-core"
   aliases: []
 -
   id: "ptools-widget-core"
@@ -3364,6 +3674,21 @@
   owner: "PTools maintainers"
   docs: true
   canonical_slug: "speed-panel"
+  aliases: []
+-
+  id: "split-view"
+  name: "SplitView"
+  swiftpm_product: ""
+  cocoapods_subspec: "SplitView"
+  source: ""
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "split-view"
   aliases: []
 -
   id: "step-count"

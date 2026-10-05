@@ -115,6 +115,22 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/CI/prepare_cocoapods.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/CI/prepare_quality_environment.sh"
+  language: "sh"
+  domain: "CI"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/CI/quality_gate.sh"
   language: "sh"
   domain: "CI"
@@ -203,6 +219,54 @@
   entrypoint: true
   action: "KEEP"
 -
+  path: "Scripts/Font/collect-fonts.sh"
+  language: "sh"
+  domain: "Font"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Font/diff-font-catalog.py"
+  language: "py"
+  domain: "Font"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Font/generate-font-catalog.py"
+  language: "py"
+  domain: "Font"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Font/update-font-catalog.sh"
+  language: "sh"
+  domain: "Font"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Font/validate-font-catalog.py"
+  language: "py"
+  domain: "Font"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Font/verify-generated-fonts.sh"
+  language: "sh"
+  domain: "Font"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/Governance/audit_data_assets.py"
   language: "py"
   domain: "Governance"
@@ -283,6 +347,14 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/Governance/generate_deprecated_freeze_manifest.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/Governance/generate_public_api_classification.py"
   language: "py"
   domain: "Governance"
@@ -339,6 +411,14 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/Governance/validate_deprecated_freeze.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/Governance/validate_deprecated_manifest.py"
   language: "py"
   domain: "Governance"
@@ -372,6 +452,14 @@
   action: "KEEP"
 -
   path: "Scripts/Governance/validate_public_api_freeze.py"
+  language: "py"
+  domain: "Governance"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/Governance/validate_ui_singleton_ownership.py"
   language: "py"
   domain: "Governance"
   status: "ACTIVE"
@@ -515,6 +603,14 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/report_5_61_runtime_safety.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/report_accessibility.rb"
   language: "rb"
   domain: "Scripts"
@@ -573,6 +669,14 @@
 -
   path: "Scripts/report_public_api.rb"
   language: "rb"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/report_semantic_capability_ownership.sh"
+  language: "sh"
   domain: "Scripts"
   status: "ACTIVE"
   canonical: true
@@ -680,6 +784,22 @@
   domain: "Scripts"
   status: "ACTIVE"
   canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_5_61_release.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_5_61_splitview_demo.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "LEGACY_REVIEW"
+  canonical: false
   entrypoint: false
   action: "KEEP"
 -

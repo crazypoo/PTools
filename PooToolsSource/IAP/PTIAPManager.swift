@@ -15,6 +15,10 @@ public typealias PurchaseCompletionBlock = (SKPaymentTransaction?) -> Void
 public typealias IAPErrorBlock = (Error) -> Void
 
 @MainActor
+// English: StoreKit 1 remains a source-compatible adapter while new code migrates to PToolsStoreKit and StoreKit 2.
+// Español: StoreKit 1 permanece como adaptador compatible mientras el código nuevo migra a PToolsStoreKit y StoreKit 2.
+// 中文：StoreKit 1 继续作为源码兼容适配层，新代码应迁移到 PToolsStoreKit 和 StoreKit 2。
+@available(*, deprecated, message: "Use PToolsStoreKit and StoreKit 2 for new code; this StoreKit 1 adapter remains until 6.0.0.")
 public class PTIAPManager: NSObject, @MainActor SKProductsRequestDelegate, @MainActor SKPaymentTransactionObserver {
     
     public static let shared = PTIAPManager()

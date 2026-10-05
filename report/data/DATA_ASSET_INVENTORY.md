@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907
-Generated at: 2026-10-02T14:50:53+08:00 -->
+Source revision: f7c0c7dc885f3b0e6fc3b0050fb2d69f609dcf6a
+Generated at: 2026-10-04T23:23:18+08:00 -->
 # Data Asset Inventory
 
-- Version: `5.60.0`
-- Records: `237`
+- Version: `5.62.0`
+- Records: `245`
 
 | path | kind | format | generated | source_of_truth | action |
 | --- | --- | --- | --- | --- | --- |
@@ -63,6 +63,8 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | PooTools/Images.xcassets/TextImage.imageset/Contents.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | PooTools/Images.xcassets/icon_clear.imageset/Contents.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | PooTools/camera.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
+| PooToolsSource/Font/Resources/FontCatalog/FontCatalog.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
+| PooToolsSource/Font/Resources/FontCatalog/FontCatalog.pending.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | PooToolsSource/PToolsDevice/Resources/DeviceCatalog/apple-tv.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | PooToolsSource/PToolsDevice/Resources/DeviceCatalog/apple-vision.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
 | PooToolsSource/PToolsDevice/Resources/DeviceCatalog/apple-watch.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
@@ -189,7 +191,9 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | Scripts/Governance/lifecycle_resource_allowlist.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/concurrency_exception_registry.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/dependency_freeze.json | DEV_TOOL | json | False | False | KEEP |
+| Scripts/deprecated_6_freeze_manifest.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/deprecated_6_removal_manifest.json | DEV_TOOL | json | False | False | KEEP |
+| Scripts/fatal_error_allowlist.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/module_freeze.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/module_registry.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/naming_debt_registry.json | DEV_TOOL | json | False | False | KEEP |
@@ -198,6 +202,8 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | Scripts/public_api_classification.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/public_api_freeze.json | DEV_TOOL | json | False | False | KEEP |
 | Scripts/registry.yml | DEV_TOOL | yml | False | False | KEEP |
+| Scripts/semantic_capability_ownership.json | DEV_TOOL | json | False | False | KEEP |
+| Scripts/ui_singleton_ownership.json | DEV_TOOL | json | False | False | KEEP |
 | Tests/registry.yml | SOURCE_OF_TRUTH | yml | False | True | KEEP |
 | _config.yml | CI | yml | False | False | KEEP |
 | api-baseline/5.18.2/public_api.json | SOURCE_OF_TRUTH | json | False | True | KEEP |
@@ -233,7 +239,9 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | report/current/large_files.json | REPORT | json | True | False | KEEP |
 | report/current/mainactor_heavy_work.json | REPORT | json | True | False | KEEP |
 | report/current/module_parity.json | REPORT | json | True | False | KEEP |
+| report/current/ptools_5_61_runtime_safety.json | REPORT | json | True | False | KEEP |
 | report/current/public_api.json | REPORT | json | True | False | KEEP |
+| report/current/semantic_capability_ownership.json | REPORT | json | True | False | KEEP |
 | report/current/sendable_exceptions.json | REPORT | json | True | False | KEEP |
 | report/current/singletons.json | REPORT | json | True | False | KEEP |
 | report/current/spm_dependency_graph.json | REPORT | json | True | False | KEEP |

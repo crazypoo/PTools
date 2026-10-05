@@ -492,6 +492,24 @@
       "format": "json",
       "generated": false,
       "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Font/Resources/FontCatalog/FontCatalog.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
+      "path": "PooToolsSource/Font/Resources/FontCatalog/FontCatalog.pending.json",
+      "source_of_truth": true
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "SOURCE_OF_TRUTH",
       "path": "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/apple-tv.json",
       "source_of_truth": true
     },
@@ -1626,7 +1644,25 @@
       "format": "json",
       "generated": false,
       "kind": "DEV_TOOL",
+      "path": "Scripts/deprecated_6_freeze_manifest.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "DEV_TOOL",
       "path": "Scripts/deprecated_6_removal_manifest.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "DEV_TOOL",
+      "path": "Scripts/fatal_error_allowlist.json",
       "source_of_truth": false
     },
     {
@@ -1699,6 +1735,24 @@
       "generated": false,
       "kind": "DEV_TOOL",
       "path": "Scripts/registry.yml",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "DEV_TOOL",
+      "path": "Scripts/semantic_capability_ownership.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": false,
+      "kind": "DEV_TOOL",
+      "path": "Scripts/ui_singleton_ownership.json",
       "source_of_truth": false
     },
     {
@@ -2022,7 +2076,25 @@
       "format": "json",
       "generated": true,
       "kind": "REPORT",
+      "path": "report/current/ptools_5_61_runtime_safety.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
       "path": "report/current/public_api.json",
+      "source_of_truth": false
+    },
+    {
+      "action": "KEEP",
+      "consumer": "repository",
+      "format": "json",
+      "generated": true,
+      "kind": "REPORT",
+      "path": "report/current/semantic_capability_ownership.json",
       "source_of_truth": false
     },
     {
@@ -2134,8 +2206,8 @@
       "source_of_truth": false
     }
   ],
-  "generated_at": "2026-10-02T14:50:53+08:00",
+  "generated_at": "2026-10-04T23:23:18+08:00",
   "generator": "Scripts/Docs/audit_docs.py",
-  "source_revision": "260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907",
-  "version": "5.60.0"
+  "source_revision": "f7c0c7dc885f3b0e6fc3b0050fb2d69f609dcf6a",
+  "version": "5.62.0"
 }

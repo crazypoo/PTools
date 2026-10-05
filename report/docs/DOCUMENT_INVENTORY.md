@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907
-Generated at: 2026-10-02T14:50:53+08:00 -->
+Source revision: f7c0c7dc885f3b0e6fc3b0050fb2d69f609dcf6a
+Generated at: 2026-10-04T23:23:18+08:00 -->
 # Document Inventory
 
-- Version: `5.60.0`
-- Records: `909`
+- Version: `5.62.0`
+- Records: `987`
 
 | path | documentType | language | status | action |
 | --- | --- | --- | --- | --- |
@@ -31,6 +31,10 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | docs/architecture/HTTP_SUPPORT_MATRIX.md | ARCHITECTURE | zh-Hans | ACTIVE | KEEP |
 | docs/architecture/PACKAGE_MATRIX.md | ARCHITECTURE | en | ACTIVE | KEEP |
 | docs/architecture/PTOOLS_5_36_1_FINALIZATION_MATRIX.md | ARCHITECTURE | zh-Hans | ACTIVE | KEEP |
+| docs/architecture/PTOOLS_5_60_CONCURRENCY_AUDIT.md | ARCHITECTURE | zh-Hans+en+es | ACTIVE | KEEP |
+| docs/architecture/PTOOLS_5_60_NETWORK_ROUTER_SPLIT.md | ARCHITECTURE | zh-Hans+en+es | ACTIVE | KEEP |
+| docs/architecture/PTOOLS_5_60_UI_OWNERSHIP.md | ARCHITECTURE | zh-Hans+en+es | ACTIVE | KEEP |
+| docs/architecture/PTOOLS_5_61_RUNTIME_SAFETY.md | ARCHITECTURE | zh-Hans | ACTIVE | KEEP |
 | docs/architecture/PTOOLS_CATEGORY_GUIDELINES.md | ARCHITECTURE | zh-Hans | ACTIVE | KEEP |
 | docs/architecture/PTOOLS_DATE_GUIDE.md | ARCHITECTURE | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/architecture/PTOOLS_DEVICE_ARCHITECTURE.md | ARCHITECTURE | zh-Hans | ACTIVE | KEEP |
@@ -68,6 +72,7 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | docs/dependencies/THIRD_PARTY_NOTICES.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/examples/PTOOLS_HTTP_SERVER_INTEGRATION.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/examples/PTPOPOVER_EXAMPLE.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/font/PTFONT_GUIDE.md | REFERENCE | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/governance/DEPENDENCY_FREEZE_6.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/governance/DEPRECATED_6.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/governance/MODULE_FREEZE_6.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
@@ -103,6 +108,7 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | docs/migrations/5.36.1_FINALIZATION.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/5.36_P2_MODERN_EXTENSIONS.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/5.57_FORM_2.md | MIGRATION | zh-Hans+en+es | ACTIVE | KEEP |
+| docs/migrations/5.61_RUNTIME_SAFETY.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/DEVICEKIT_TO_PTOOLS_DEVICE.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/GCDWEBSERVER_TO_PTOOLS_HTTP_SERVER.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/INSTRUCTIONS_TO_PTOOLS_INSTRUCTIONS.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
@@ -125,6 +131,7 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | docs/model/PTMODEL_FREEZE_5_58.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/model/PTMODEL_G1_G3_EXECUTION_STATUS_5_58.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/model/PTMODEL_GUIDE.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/model/PTMODEL_LEGACY_CODABLE_COCOAPODS_5_60.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/model/PTMODEL_LICENSE_ATTRIBUTION.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/model/PTMODEL_MIGRATION_5_58.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/model/PTMODEL_NETWORK_NESTED_JSON_5_60.md | REFERENCE | zh-Hans+en+es | ACTIVE | KEEP |
@@ -547,6 +554,9 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | docs/modules/poo-tools-speed-panel/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/poo-tools-speed-panel/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/poo-tools-speed-panel/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/poo-tools-split-view/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/poo-tools-split-view/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/poo-tools-split-view/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/poo-tools-step-count/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/poo-tools-step-count/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/poo-tools-step-count/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
@@ -622,12 +632,21 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | docs/modules/ptools-activities/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-activities/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-activities/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-app-integrity/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-app-integrity/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-app-integrity/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/ptools-app-intents/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-app-intents/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-app-intents/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/ptools-audio/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-audio/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-audio/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-auth-core/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-auth-core/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-auth-core/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-auth/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-auth/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-auth/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/ptools-background-tasks/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-background-tasks/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-background-tasks/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
@@ -646,6 +665,12 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | docs/modules/ptools-core/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-core/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-core/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-database-core/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-database-core/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-database-core/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-database/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-database/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-database/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/ptools-date/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-date/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-date/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
@@ -673,6 +698,12 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | docs/modules/ptools-logging/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-logging/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-logging/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-map-core/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-map-core/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-map-core/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-map/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-map/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-map/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/ptools-model-combine/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-model-combine/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-model-combine/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
@@ -694,6 +725,12 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | docs/modules/ptools-notifications/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-notifications/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-notifications/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-observability-core/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-observability-core/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-observability-core/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-observability/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-observability/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-observability/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/ptools-overlay/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-overlay/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-overlay/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
@@ -703,6 +740,12 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | docs/modules/ptools-permission-ui/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-permission-ui/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-permission-ui/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-realtime-core/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-realtime-core/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-realtime-core/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-realtime/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-realtime/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-realtime/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/ptools-route-core/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-route-core/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-route-core/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
@@ -718,15 +761,39 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | docs/modules/ptools-storage/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-storage/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-storage/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-storekit/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-storekit/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-storekit/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/ptools-symbols/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-symbols/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-symbols/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-sync-core/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-sync-core/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-sync-core/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-sync/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-sync/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-sync/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/ptools-theme/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-theme/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-theme/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-transfer-core/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-transfer-core/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-transfer-core/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-transfer/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-transfer/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-transfer/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/ptools-uifoundation/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-uifoundation/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-uifoundation/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-web-bridge/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-web-bridge/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-web-bridge/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-web-core/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-web-core/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-web-core/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/ptools-web/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/ptools-web/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/ptools-web/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/ptools-widget-core/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/ptools-widget-core/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/ptools-widget-core/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
@@ -793,6 +860,9 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | docs/modules/speed-panel/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/speed-panel/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/speed-panel/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/split-view/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/split-view/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/split-view/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/step-count/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/step-count/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/step-count/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
@@ -838,15 +908,21 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | docs/modules/zip-archive/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/zip-archive/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/zip-archive/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/network/PTNetworkSpeedTester_Guide.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/paging/GESTURE_POLICY.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/paging/NESTED_SCROLLING.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/paging/PAGE_LIFECYCLE.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/paging/PTOOLS_PAGING_ARCHITECTURE.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/paging/PTPAGINGVIEW_GUIDE.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/paging/PTSEGMENTEDVIEW_GUIDE.md | REFERENCE | zh-Hans+en+es | ACTIVE | KEEP |
+| docs/ping/PTPingSession_Guide.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/popover/PTPOPOVER_GUIDE.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/reports/SYMBOL_CATALOG_DIFF.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/security/PTOOLS_HTTP_SERVER_SECURITY.md | SECURITY | zh-Hans | ACTIVE | KEEP |
+| docs/splitview/PTSplitViewController_Guide.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/splitview/PTSplitViewController_Router_Integration.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/splitview/PTSplitViewController_Simulator_Matrix.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/storage/PTStorage_5_61.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/testing/DATE_TIMEZONE_DST_TEST_MATRIX.md | REFERENCE | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/testing/HTTP_SERVER_TEST_MATRIX.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/testing/WEBSOCKET_TEST_MATRIX.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
@@ -860,6 +936,8 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | report/baselines/5.10/debug_scene_regression.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/baselines/5.11/build_validation.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/baselines/5.11/instruments_overhead.md | GENERATED | zh-Hans | GENERATED | KEEP |
+| report/baselines/5.60.0/build_validation.md | GENERATED | zh-Hans+en+es | GENERATED | KEEP |
+| report/baselines/5.60.0/runtime_validation.md | GENERATED | zh-Hans+en+es | GENERATED | KEEP |
 | report/baselines/5.7.9/architecture_baseline.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/baselines/5.8/build_validation_5.8.0.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/baselines/5.8/build_validation_5.8.9.md | GENERATED | zh-Hans | GENERATED | KEEP |

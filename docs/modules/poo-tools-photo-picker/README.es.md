@@ -55,7 +55,7 @@ Usa el producto o subspec mínimo publicado. El nombre del registro es `PooTools
 
 ## 6. Conceptos principales
 
-La frontera pública prioriza tipos de valor. Dependencias directas registradas: ptools, MediaCore, PooToolsImagePicker, PTCameraPermission, PooToolsLoading, Kakapos.
+La frontera pública prioriza tipos de valor. Dependencias directas registradas: ptools, MediaCore, PooToolsImagePicker, PTCameraPermission, PooToolsLoading.
 
 ## 7. API principales
 

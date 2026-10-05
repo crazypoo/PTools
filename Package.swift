@@ -124,6 +124,28 @@ let package = Package(
         // 中文：公开不依赖 UIKit 和第三方服务端代码的原生嵌入式 HTTP Server。
         .library(name: "PToolsHTTPServer", targets: ["PToolsHTTPServer"]),
         .library(name: "PToolsHTTPFilePortal", targets: ["PToolsHTTPFilePortal"]),
+        // English: Publish application infrastructure as opt-in products; Core stays unchanged.
+        // Español: Publica la infraestructura de aplicaciones como productos opt-in; Core permanece sin cambios.
+        // 中文：将应用基础设施作为可选产品发布，不改变 Core 默认入口。
+        .library(name: "PToolsDatabaseCore", targets: ["PToolsDatabaseCore"]),
+        .library(name: "PToolsDatabase", targets: ["PToolsDatabase"]),
+        .library(name: "PToolsAuthCore", targets: ["PToolsAuthCore"]),
+        .library(name: "PToolsAuth", targets: ["PToolsAuth"]),
+        .library(name: "PToolsSyncCore", targets: ["PToolsSyncCore"]),
+        .library(name: "PToolsSync", targets: ["PToolsSync"]),
+        .library(name: "PToolsTransferCore", targets: ["PToolsTransferCore"]),
+        .library(name: "PToolsTransfer", targets: ["PToolsTransfer"]),
+        .library(name: "PToolsStoreKit", targets: ["PToolsStoreKit"]),
+        .library(name: "PToolsObservabilityCore", targets: ["PToolsObservabilityCore"]),
+        .library(name: "PToolsObservability", targets: ["PToolsObservability"]),
+        .library(name: "PToolsWebCore", targets: ["PToolsWebCore"]),
+        .library(name: "PToolsWebBridge", targets: ["PToolsWebBridge"]),
+        .library(name: "PToolsWeb", targets: ["PToolsWeb"]),
+        .library(name: "PToolsMapCore", targets: ["PToolsMapCore"]),
+        .library(name: "PToolsMap", targets: ["PToolsMap"]),
+        .library(name: "PToolsAppIntegrity", targets: ["PToolsAppIntegrity"]),
+        .library(name: "PToolsRealtimeCore", targets: ["PToolsRealtimeCore"]),
+        .library(name: "PToolsRealtime", targets: ["PToolsRealtime"]),
 
         // ==========================================
         // 基础 UI 与细分组件模块
@@ -724,6 +746,114 @@ let package = Package(
             path: "PooToolsSource/PToolsActivities",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
+        // English: Database contracts remain Foundation-only and the implementation links Apple's SQLite3.
+        // Español: Los contratos de base de datos solo usan Foundation y la implementación enlaza SQLite3 de Apple.
+        // 中文：数据库契约仅依赖 Foundation，实现层链接 Apple 系统 SQLite3。
+        .target(
+            name: "PToolsDatabaseCore",
+            path: "PooToolsSource/PToolsDatabaseCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsDatabase",
+            dependencies: ["PToolsDatabaseCore"],
+            path: "PooToolsSource/PToolsDatabase",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")],
+            linkerSettings: [.linkedLibrary("sqlite3")]
+        ),
+        .target(
+            name: "PToolsAuthCore",
+            path: "PooToolsSource/PToolsAuthCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsAuth",
+            dependencies: ["PToolsAuthCore", "PToolsStorage", "PToolsStorageCore"],
+            path: "PooToolsSource/PToolsAuth",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsTransferCore",
+            path: "PooToolsSource/PToolsTransferCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsTransfer",
+            dependencies: ["PToolsTransferCore"],
+            path: "PooToolsSource/PToolsTransfer",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsSyncCore",
+            path: "PooToolsSource/PToolsSyncCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsSync",
+            dependencies: ["PToolsSyncCore"],
+            path: "PooToolsSource/PToolsSync",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsStoreKit",
+            path: "PooToolsSource/PToolsStoreKit",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsObservabilityCore",
+            path: "PooToolsSource/PToolsObservabilityCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsObservability",
+            dependencies: ["PToolsObservabilityCore"],
+            path: "PooToolsSource/PToolsObservability",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsWebCore",
+            path: "PooToolsSource/PToolsWebCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsWebBridge",
+            dependencies: ["PToolsWebCore"],
+            path: "PooToolsSource/PToolsWebBridge",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsWeb",
+            dependencies: ["PToolsWebBridge"],
+            path: "PooToolsSource/PToolsWeb",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsMapCore",
+            path: "PooToolsSource/PToolsMapCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsMap",
+            dependencies: ["PToolsMapCore"],
+            path: "PooToolsSource/PToolsMap",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsAppIntegrity",
+            path: "PooToolsSource/PToolsAppIntegrity",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsRealtimeCore",
+            path: "PooToolsSource/PToolsRealtimeCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsRealtime",
+            dependencies: ["PToolsRealtimeCore", "PooToolsSocketKit"],
+            path: "PooToolsSource/PToolsRealtime",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
         // ==========================================
         // 核心基座模块 (Core)
         // ==========================================
@@ -1127,6 +1257,17 @@ let package = Package(
             name: "PToolsP2Tests",
             dependencies: ["ptools", "PToolsConfiguration", "PToolsAudio", "PToolsCore", "PToolsFeedback", "PToolsForm", "PToolsDocuments", "PToolsAppIntents", "PToolsWidgetCore", "PToolsActivities", "PToolsRouteCore"],
             path: "Tests/PToolsP2Tests",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
+        ),
+        // English: Cover the optional application-infrastructure contracts without requiring live external services.
+        // Español: Cubre los contratos opcionales de infraestructura sin requerir servicios externos reales.
+        // 中文：覆盖可选应用基础设施契约，不依赖真实外部服务。
+        .testTarget(
+            name: "PToolsApplicationInfrastructureTests",
+            dependencies: ["PToolsDatabase", "PToolsRealtimeCore"],
+            path: "Tests/PToolsApplicationInfrastructureTests",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]

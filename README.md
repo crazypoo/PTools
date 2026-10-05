@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.61.0`，真机/宿主回归与发布证据完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.62.0`，真机/宿主回归与发布证据完成前不创建正式 tag。
 
 DebugNetwork 2.0 是只读观测工具，支持 immutable capture、Timeline、过滤、脱敏 cURL/HAR/Text 导出和多 Scene presentation。使用方式见 [DebugNetwork 指南](docs/debug/DEBUG_NETWORK.md)。
 
@@ -20,6 +20,11 @@ DebugNetwork 2.0 是只读观测工具，支持 immutable capture、Timeline、�
 `PTStorage` 文件 I/O 收口。使用示例见
 [SplitView 指南](docs/splitview/PTSplitViewController_Guide.md)、[测速指南](docs/network/PTNetworkSpeedTester_Guide.md)、
 [Ping 指南](docs/ping/PTPingSession_Guide.md) 和 [5.61.0 迁移说明](docs/migrations/5.61_RUNTIME_SAFETY.md)。
+
+5.62.0 增加可选的应用基础设施：SQLite 数据库、认证、离线同步、后台传输、StoreKit 2、可观测性、
+WKWebView Bridge、MapKit、App Attest/DeviceCheck、远程配置和 SSE/WebSocket 实时能力。它们不进入
+默认 Core 或 `PooToolsAll`，按需选择 `PTools*` SwiftPM product 或 `PooTools/*` CocoaPods subspec。
+使用边界和迁移示例见 [5.62.0 应用基础设施指南](docs/guides/PTOOLS_APPLICATION_INFRASTRUCTURE_5_62.md)。
 
 ## Requirements
 
@@ -88,6 +93,17 @@ pod 'PooTools/HTTPServer'
 # pod 'PooTools/AppIntents'
 # pod 'PooTools/WidgetCore'
 # pod 'PooTools/Activities'
+# 需要应用基础设施时按需添加：
+# pod 'PooTools/Database'
+# pod 'PooTools/Auth'
+# pod 'PooTools/Sync'
+# pod 'PooTools/Transfer'
+# pod 'PooTools/StoreKit'
+# pod 'PooTools/Observability'
+# pod 'PooTools/Web'
+# pod 'PooTools/Map'
+# pod 'PooTools/AppIntegrity'
+# pod 'PooTools/Realtime'
 ```
 
 按功能选择最小 subspec；需要完整示例时才考虑 `PooToolsAll`。

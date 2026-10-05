@@ -26,6 +26,7 @@ ALLOWED_COVERAGE = {
     "host_required",
     "extension_required",
     "physical_device_required",
+    "entitlement_required",
     "compatibility_alias",
 }
 
@@ -103,7 +104,7 @@ def factory_contract_failures() -> list[str]:
     required_snippets = {
         "main-actor factory registry": "@MainActor\nfinal class PTDemoFactoryRegistry",
         "factory lookup": "func makeViewController(for descriptor: PTDemoDescriptor)",
-        "compatibility host fallback": "?? PTFuncDetailViewController(descriptor: descriptor)",
+        "compatibility host fallback": "return PTFuncDetailViewController(descriptor: descriptor)",
     }
     return [
         f"missing Demo Factory contract ({label})"

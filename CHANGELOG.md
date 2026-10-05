@@ -4,6 +4,14 @@
 
 版本唯一来源为根目录 `VERSION`；外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
 
+## 5.62.0 — 2026-10-05
+
+- 新增可选 SQLite 数据库基础设施：actor、预编译参数绑定、事务、迁移、观察、备份/恢复和 Codable 映射。
+- 新增认证、离线同步、后台传输、StoreKit 2、可观测性、WKWebView Bridge、MapKit、App Integrity、远程配置和 Realtime 能力。
+- 所有新能力保持独立 SwiftPM product 与 CocoaPods subspec，不改变默认 Core 和 `PooToolsAll` 的依赖边界。
+- 新增 Demo Catalog、三语模块文档、应用基础设施指南、质量门禁和合约测试入口。
+- 继续保留旧 `PTModelProtocol`、`PTIAPManager` 等兼容入口；完整 Xcode、真机、外部宿主和远程服务回归需在依赖可用后完成。
+
 ## 5.61.0 — 2026-10-04
 
 - 完成 5.x 最终运行时安全、Scene、存储和 Swift 6 并发边界收口：移除 Kakapos 生产依赖，清理 `AppWindows!`，补齐 `@unchecked Sendable` 分类和工作树安全报告。

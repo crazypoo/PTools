@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-02T14:50:53+08:00",
+  "generated_at": "2026-10-04T23:23:18+08:00",
   "generator": "Scripts/Docs/audit_docs.py",
   "scripts": [
     {
@@ -134,6 +134,24 @@
       "domain": "CI",
       "entrypoint": false,
       "language": "sh",
+      "path": "Scripts/CI/prepare_cocoapods.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/CI/prepare_quality_environment.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "CI",
+      "entrypoint": false,
+      "language": "sh",
       "path": "Scripts/CI/quality_gate.sh",
       "status": "ACTIVE"
     },
@@ -225,6 +243,60 @@
       "entrypoint": true,
       "language": "py",
       "path": "Scripts/Example/validate_demo_coverage.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Font",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/Font/collect-fonts.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Font",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Font/diff-font-catalog.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Font",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Font/generate-font-catalog.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Font",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/Font/update-font-catalog.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Font",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Font/validate-font-catalog.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Font",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/Font/verify-generated-fonts.sh",
       "status": "ACTIVE"
     },
     {
@@ -323,6 +395,15 @@
       "domain": "Governance",
       "entrypoint": false,
       "language": "py",
+      "path": "Scripts/Governance/generate_deprecated_freeze_manifest.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Governance",
+      "entrypoint": false,
+      "language": "py",
       "path": "Scripts/Governance/generate_public_api_classification.py",
       "status": "ACTIVE"
     },
@@ -386,6 +467,15 @@
       "domain": "Governance",
       "entrypoint": false,
       "language": "py",
+      "path": "Scripts/Governance/validate_deprecated_freeze.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Governance",
+      "entrypoint": false,
+      "language": "py",
       "path": "Scripts/Governance/validate_deprecated_manifest.py",
       "status": "ACTIVE"
     },
@@ -423,6 +513,15 @@
       "entrypoint": false,
       "language": "py",
       "path": "Scripts/Governance/validate_public_api_freeze.py",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Governance",
+      "entrypoint": false,
+      "language": "py",
+      "path": "Scripts/Governance/validate_ui_singleton_ownership.py",
       "status": "ACTIVE"
     },
     {
@@ -580,6 +679,15 @@
     },
     {
       "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/report_5_61_runtime_safety.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
       "canonical": true,
       "domain": "Scripts",
       "entrypoint": false,
@@ -648,6 +756,15 @@
       "entrypoint": false,
       "language": "rb",
       "path": "Scripts/report_public_api.rb",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/report_semantic_capability_ownership.sh",
       "status": "ACTIVE"
     },
     {
@@ -766,6 +883,24 @@
       "language": "sh",
       "path": "Scripts/validate_59_contracts.sh",
       "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_5_61_release.sh",
+      "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": false,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_5_61_splitview_demo.sh",
+      "status": "LEGACY_REVIEW"
     },
     {
       "action": "KEEP",
@@ -1155,6 +1290,6 @@
       "status": "ACTIVE"
     }
   ],
-  "source_revision": "260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907",
-  "version": "5.60.0"
+  "source_revision": "f7c0c7dc885f3b0e6fc3b0050fb2d69f609dcf6a",
+  "version": "5.62.0"
 }

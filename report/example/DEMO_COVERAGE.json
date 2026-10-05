@@ -1,22 +1,23 @@
 {
   "counts": {
-    "compatibility_alias": 3,
-    "documentation": 110,
+    "compatibility_alias": 4,
+    "documentation": 118,
+    "entitlement_required": 1,
     "extension_required": 3,
-    "physical_device_required": 7,
-    "runnable": 114
+    "physical_device_required": 8,
+    "runnable": 124
   },
   "factoryCoverage": {
-    "descriptorCount": 53,
+    "descriptorCount": 68,
     "policy": "main_actor_registry_or_compatibility_host",
     "unresolved": []
   },
   "failures": [],
-  "generated_at": "2026-10-03T18:26:55+08:00",
+  "generated_at": "2026-10-04T23:23:18+08:00",
   "generator": "Scripts/Example/validate_demo_coverage.py",
   "missing": [],
-  "moduleCount": 237,
+  "moduleCount": 258,
   "schemaVersion": 1,
-  "source_revision": "e9ae991e3411ea728be377c2e82b1635af069c05",
-  "version": "5.60.0"
+  "source_revision": "f7c0c7dc885f3b0e6fc3b0050fb2d69f609dcf6a",
+  "version": "5.62.0"
 }

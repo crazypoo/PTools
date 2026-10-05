@@ -44,6 +44,7 @@ Demo 身份由 `PooTools/PTDemoCatalog.swift` 中的 `PTDemoID` 和 `PTDemoDescr
 | Theme | 语言、DarkMode 和 `PTDarkModeControl` | trait、动态颜色、透明度和 String Catalog | `PTTheme`、`PTLanguage` |
 | Debug | `PTSideController` 的调试入口 | Scene-scoped Console、Inspector 和诊断 | `PooToolsDEBUG` |
 | Accessibility | 各页面的辅助功能场景 | Dynamic Type、Reduce Motion、Reduce Transparency | `PTUIAccessibility` |
+| Application Infrastructure | `PTDemoCatalog` → Application Infrastructure | SQLite、Auth、Sync、Transfer、StoreKit、Observability、Web、Map、Integrity、Remote Config、Realtime | `PToolsDatabase` 等可选 product |
 
 ## 最小回归路径
 
@@ -110,6 +111,14 @@ console.isVisiable = true
 ```
 
 旧的 `LocalConsole.shared` 仍然兼容，但新页面应传入明确的 `UIWindowScene`，避免多窗口时显示到错误场景。
+
+### Application Infrastructure
+
+5.62.0 的基础设施 Demo 使用稳定 ID `infrastructure.*`，由 `PTDemoCoordinator` 路由到统一的轻量宿主；
+它不会把可选模块加入默认 Core。需要运行真实契约时，在 Example 或宿主中按需加入对应的 CocoaPods subspec，
+或在 SwiftPM 中选择对应 product。Database Demo 会创建本地 SQLite 表、插入一行并显示查询结果，其他 Demo
+显示能力边界和宿主配置要求。完整入口和三语安装说明见
+[Application Infrastructure Guide](PTOOLS_APPLICATION_INFRASTRUCTURE_5_62.md)。
 
 ## 回归清单
 

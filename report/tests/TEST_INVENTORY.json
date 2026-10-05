@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-02T14:50:53+08:00",
+  "generated_at": "2026-10-04T23:23:18+08:00",
   "generator": "Scripts/Docs/audit_docs.py",
-  "source_revision": "260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907",
+  "source_revision": "f7c0c7dc885f3b0e6fc3b0050fb2d69f609dcf6a",
   "tests": [
     {
       "action": "KEEP",
@@ -50,7 +50,7 @@
     {
       "action": "KEEP",
       "canonical": true,
-      "file_count": 7,
+      "file_count": 8,
       "files": [
         "Tests/PToolsDebugTests/Fixtures/PTDebugNetworkHTTPFixture.swift",
         "Tests/PToolsDebugTests/Fixtures/PTDebugNetworkURLProtocolStub.swift",
@@ -58,6 +58,7 @@
         "Tests/PToolsDebugTests/PTDebugNetworkCaptureMatrixTests.swift",
         "Tests/PToolsDebugTests/PTDebugNetworkParityTests.swift",
         "Tests/PToolsDebugTests/PTDebugNetworkPerformanceTests.swift",
+        "Tests/PToolsDebugTests/PTLoadedLibsTests.swift",
         "Tests/PToolsDebugTests/PTNetworkCaptureContractTests.swift"
       ],
       "level": "CONTRACT",
@@ -74,6 +75,34 @@
       "level": "CONTRACT",
       "path": "Tests/PToolsDeviceTests",
       "target": "PToolsDeviceTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 4,
+      "files": [
+        "Tests/PToolsFontTests/PTFontCatalogTests.swift",
+        "Tests/PToolsFontTests/PTFontCompatibilityTests.swift",
+        "Tests/PToolsFontTests/PTFontGeneratedConsistencyTests.swift",
+        "Tests/PToolsFontTests/PTFontRuntimeTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsFontTests",
+      "target": "PToolsFontRuntimeTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 4,
+      "files": [
+        "Tests/PToolsFontTests/PTFontCatalogTests.swift",
+        "Tests/PToolsFontTests/PTFontCompatibilityTests.swift",
+        "Tests/PToolsFontTests/PTFontGeneratedConsistencyTests.swift",
+        "Tests/PToolsFontTests/PTFontRuntimeTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsFontTests",
+      "target": "PToolsFontTests"
     },
     {
       "action": "KEEP",
@@ -143,6 +172,18 @@
       "level": "CONTRACT",
       "path": "Tests/PToolsNavigationTests",
       "target": "PToolsNavigationTests"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "file_count": 2,
+      "files": [
+        "Tests/PToolsNetworkTests/PTNetworkModelPathTests.swift",
+        "Tests/PToolsNetworkTests/PTNetworkQualityTests.swift"
+      ],
+      "level": "CONTRACT",
+      "path": "Tests/PToolsNetworkTests",
+      "target": "PToolsNetworkRuntimeTests"
     },
     {
       "action": "KEEP",
@@ -238,5 +279,5 @@
       "target": "PToolsUIFoundationTests"
     }
   ],
-  "version": "5.60.0"
+  "version": "5.62.0"
 }

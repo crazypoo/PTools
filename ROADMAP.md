@@ -1,8 +1,20 @@
 # PTools 路线图
 
-> 当前代码基线：`5.61.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.62.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.61.0` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.62.0` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.62.0 Application Infrastructure / P0-P1
+
+- ✅ P0 Database：新增 Foundation-only SQLite Core 与 actor 实现，覆盖参数绑定、事务、迁移、观察、备份/恢复和 Codable 映射。
+- ✅ P0 Auth / Sync / Transfer：新增认证 provider 契约、Keychain 复用、单飞刷新、离线 mutation queue、幂等重试、冲突接口和后台传输能力。
+- ✅ P0 StoreKit / Observability：新增 StoreKit 2 类型化 facade、旧 IAP 兼容层、事件/Trace/Span/Metric/Breadcrumb、脱敏、采样和离线缓冲。
+- ✅ P1 Web / Map / Integrity：新增 WKWebView reply bridge、内容世界与安全策略、MapKit geocode/search/route/snapshot、App Attest/DeviceCheck 能力边界。
+- ✅ P1 Remote Configuration：新增 ETag/TTL/cache/signed/LKG/composite/stable rollout/kill-switch provider 组合能力。
+- ✅ P1 Realtime：新增 SSE 解析、重连、Last-Event-ID、心跳和订阅契约，复用现有 PooToolsSocketKit 适配器。
+- ✅ Package / Demo / Docs：新增可选 SwiftPM products、CocoaPods subspec、Demo Catalog、三语模块索引、应用基础设施指南和验证脚本入口。
+- ✅ Xcode / CocoaPods / Simulator：`PooTools-Example` 已完成 Debug 与 arm64 Simulator Release 构建，`pod install --no-repo-update` 已解析 `5.62.0`。
+- ⬜ 真机 / 宿主 / 外部服务：仍需完成 Device、StoreKit、App Attest、后台传输、Web、Map、SSE 和长会话证据；未完成前不创建正式 `5.62.0` tag。
 
 ## 5.61.0 Final Runtime Safety / Scene / Concurrency Closure
 

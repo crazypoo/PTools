@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 260ebd36bb21c8cf640a52fdccfe5fd0ff1fc907
-Generated at: 2026-10-02T14:50:53+08:00 -->
+Source revision: f7c0c7dc885f3b0e6fc3b0050fb2d69f609dcf6a
+Generated at: 2026-10-04T23:23:18+08:00 -->
 # Script Inventory
 
-- Version: `5.60.0`
-- Records: `128`
+- Version: `5.62.0`
+- Records: `143`
 
 | path | language | domain | status | canonical | action |
 | --- | --- | --- | --- | --- | --- |
@@ -23,6 +23,8 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | Scripts/CI/check_p1_advanced_modules.sh | sh | CI | ACTIVE | True | KEEP |
 | Scripts/CI/check_p2_modern_modules.sh | sh | CI | ACTIVE | True | KEEP |
 | Scripts/CI/check_popovers_removed.sh | sh | CI | ACTIVE | True | KEEP |
+| Scripts/CI/prepare_cocoapods.sh | sh | CI | ACTIVE | True | KEEP |
+| Scripts/CI/prepare_quality_environment.sh | sh | CI | ACTIVE | True | KEEP |
 | Scripts/CI/quality_gate.sh | sh | CI | ACTIVE | True | KEEP |
 | Scripts/CI/version_facts.rb | rb | CI | ACTIVE | True | KEEP |
 | Scripts/Device/check_unknown_identifiers.py | py | Device | ACTIVE | True | KEEP |
@@ -34,6 +36,12 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | Scripts/Docs/audit_docs.py | py | Docs | ACTIVE | True | KEEP |
 | Scripts/Docs/test_version_source_stability.py | py | Docs | ACTIVE | True | KEEP |
 | Scripts/Example/validate_demo_coverage.py | py | Example | ACTIVE | True | KEEP |
+| Scripts/Font/collect-fonts.sh | sh | Font | ACTIVE | True | KEEP |
+| Scripts/Font/diff-font-catalog.py | py | Font | ACTIVE | True | KEEP |
+| Scripts/Font/generate-font-catalog.py | py | Font | ACTIVE | True | KEEP |
+| Scripts/Font/update-font-catalog.sh | sh | Font | ACTIVE | True | KEEP |
+| Scripts/Font/validate-font-catalog.py | py | Font | ACTIVE | True | KEEP |
+| Scripts/Font/verify-generated-fonts.sh | sh | Font | ACTIVE | True | KEEP |
 | Scripts/Governance/audit_data_assets.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/audit_repository.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/audit_scripts.py | py | Governance | ACTIVE | True | KEEP |
@@ -44,6 +52,7 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | Scripts/Governance/generate_concurrency_registry_v2.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/generate_current_reports.rb | rb | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/generate_deprecated_6_manifest.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/generate_deprecated_freeze_manifest.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/generate_public_api_classification.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/generate_runtime_validation_report.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/source_inputs_digest.rb | rb | Governance | ACTIVE | True | KEEP |
@@ -51,11 +60,13 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | Scripts/Governance/validate_concurrency_registry.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/validate_current_reports.sh | sh | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/validate_dependency_freeze.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/validate_deprecated_freeze.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/validate_deprecated_manifest.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/validate_haptic_backend.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/validate_lifecycle_resources.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/validate_module_freeze.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Governance/validate_public_api_freeze.py | py | Governance | ACTIVE | True | KEEP |
+| Scripts/Governance/validate_ui_singleton_ownership.py | py | Governance | ACTIVE | True | KEEP |
 | Scripts/Migration/cleanup_example_source_membership.rb | rb | Migration | ACTIVE | True | KEEP |
 | Scripts/PTModel/audit_model_dependencies.swift | swift | PTModel | ACTIVE | True | KEEP |
 | Scripts/PTModel/benchmark_models.swift | swift | PTModel | ACTIVE | True | KEEP |
@@ -73,6 +84,7 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | Scripts/generate_package_matrix.rb | rb | Scripts | ACTIVE | True | KEEP |
 | Scripts/ptools.py | py | Scripts | ACTIVE | True | KEEP |
 | Scripts/quality.sh | sh | Scripts | ACTIVE | True | KEEP |
+| Scripts/report_5_61_runtime_safety.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/report_accessibility.rb | rb | Scripts | ACTIVE | True | KEEP |
 | Scripts/report_cache_inventory.rb | rb | Scripts | ACTIVE | True | KEEP |
 | Scripts/report_cocoapods_subspec_graph.rb | rb | Scripts | ACTIVE | True | KEEP |
@@ -81,6 +93,7 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | Scripts/report_duplicate_entries.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/report_mainactor_heavy_work.rb | rb | Scripts | ACTIVE | True | KEEP |
 | Scripts/report_public_api.rb | rb | Scripts | ACTIVE | True | KEEP |
+| Scripts/report_semantic_capability_ownership.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/report_sendable_exceptions.rb | rb | Scripts | ACTIVE | True | KEEP |
 | Scripts/report_singletons.rb | rb | Scripts | ACTIVE | True | KEEP |
 | Scripts/report_spm_dependency_graph.rb | rb | Scripts | ACTIVE | True | KEEP |
@@ -94,6 +107,8 @@ Generated at: 2026-10-02T14:50:53+08:00 -->
 | Scripts/validate_58_contracts.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_592_quality.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_59_contracts.sh | sh | Scripts | ACTIVE | True | KEEP |
+| Scripts/validate_5_61_release.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
+| Scripts/validate_5_61_splitview_demo.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_api_baseline.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_attributedstring_absorption_5_25.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_branch_dependencies.sh | sh | Scripts | ACTIVE | True | KEEP |

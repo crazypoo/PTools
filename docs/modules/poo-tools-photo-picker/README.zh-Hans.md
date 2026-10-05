@@ -55,7 +55,7 @@ import PooToolsPhotoPicker
 
 ## 6. 核心概念
 
-公开边界优先使用值类型。registry 记录的直接依赖：ptools, MediaCore, PooToolsImagePicker, PTCameraPermission, PooToolsLoading, Kakapos。
+公开边界优先使用值类型。registry 记录的直接依赖：ptools, MediaCore, PooToolsImagePicker, PTCameraPermission, PooToolsLoading。
 
 ## 7. 主要 API
 

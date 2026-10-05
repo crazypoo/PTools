@@ -55,7 +55,7 @@ Use the smallest published product or subspec. The registry name is `PooToolsPho
 
 ## 6. Core Concepts
 
-The public boundary is value-first where possible. Direct dependencies recorded by the registry: ptools, MediaCore, PooToolsImagePicker, PTCameraPermission, PooToolsLoading, Kakapos.
+The public boundary is value-first where possible. Direct dependencies recorded by the registry: ptools, MediaCore, PooToolsImagePicker, PTCameraPermission, PooToolsLoading.
 
 ## 7. Main APIs
 

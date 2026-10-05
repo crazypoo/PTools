@@ -74,6 +74,19 @@ target 'PooTools_Example' do
   # Español: El catálogo usa directamente el demo de velocidad tipado; mantiene explícito su subspec opcional.
   # 中文：目录直接使用类型化测速 Demo，因此显式声明对应的可选 subspec。
   pod 'PooTools/NetworkSpeedTest', :path => './'
+  # English: Exercise the 5.62 application-infrastructure modules from the catalog without changing the default Core product.
+  # Español: Ejercita los módulos de infraestructura 5.62 desde el catálogo sin cambiar el producto Core predeterminado.
+  # 中文：让目录可以实际运行 5.62 应用基础设施模块，同时不改变默认 Core 产品。
+  pod 'PooTools/Database', :path => './'
+  pod 'PooTools/Auth', :path => './'
+  pod 'PooTools/Sync', :path => './'
+  pod 'PooTools/Transfer', :path => './'
+  pod 'PooTools/StoreKit', :path => './'
+  pod 'PooTools/Observability', :path => './'
+  pod 'PooTools/Web', :path => './'
+  pod 'PooTools/Map', :path => './'
+  pod 'PooTools/AppIntegrity', :path => './'
+  pod 'PooTools/Realtime', :path => './'
 
   # English: Keep modules imported directly by the example target explicit.
   # Español: Mantén explícitos los módulos que el target de ejemplo importa directamente.

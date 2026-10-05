@@ -484,7 +484,8 @@ modules:
   module_id: "poo-tools-heart-rate"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "device.heart-rate"
 -
   module_id: "poo-tools-hud"
   coverage: "runnable"
@@ -593,7 +594,8 @@ modules:
   module_id: "poo-tools-network-speed-test"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "network.speed-test"
 -
   module_id: "poo-tools-osskit-speech"
   coverage: "runnable"
@@ -635,7 +637,8 @@ modules:
   module_id: "poo-tools-ping"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "network.ping"
 -
   module_id: "poo-tools-popover"
   coverage: "runnable"
@@ -881,7 +884,8 @@ modules:
   module_id: "ptools-configuration"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "infrastructure.remote-config"
 -
   module_id: "ptools-connectivity"
   coverage: "runnable"
@@ -1240,4 +1244,121 @@ modules:
   module_id: "zip-archive"
   coverage: "documentation"
   canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-database-core"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-database"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "infrastructure.database"
+-
+  module_id: "ptools-auth-core"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-auth"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "infrastructure.auth"
+-
+  module_id: "ptools-sync-core"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-sync"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "infrastructure.sync"
+-
+  module_id: "ptools-transfer-core"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-transfer"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "infrastructure.transfer"
+-
+  module_id: "ptools-storekit"
+  coverage: "entitlement_required"
+  canonical_module_id: null
+  demos:
+    - "infrastructure.storekit"
+-
+  module_id: "ptools-observability-core"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-observability"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "infrastructure.observability"
+-
+  module_id: "ptools-web-core"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-web-bridge"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "infrastructure.webbridge"
+-
+  module_id: "ptools-web"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-map-core"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-map"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "infrastructure.map"
+-
+  module_id: "ptools-app-integrity"
+  coverage: "physical_device_required"
+  canonical_module_id: null
+  demos:
+    - "infrastructure.integrity"
+-
+  module_id: "ptools-realtime-core"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-realtime"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "infrastructure.realtime"
+
+-
+  module_id: "poo-tools-split-view"
+  coverage: "runnable"
+  canonical_module_id: null
+  demos:
+    - "navigation.split-view"
+-
+  module_id: "split-view"
+  coverage: "compatibility_alias"
+  canonical_module_id: "poo-tools-split-view"
   demos: []

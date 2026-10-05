@@ -96,18 +96,18 @@ public func rgb2hsv(_ rgb: RGB) -> HSV {
 
 @objcMembers
 @MainActor
-public class PTHeartRateViewController: PTBaseViewController {
+open class PTHeartRateViewController: PTBaseViewController {
 
     public let sessionQueue = DispatchQueue(label: "camera.session.collector.metal")
 
-    lazy var previewLayerShadowView : UIView = {
+    public lazy var previewLayerShadowView : UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         view.addShadow(ofColor: .black, radius: 3, offset: CGSizeMake(0, 3), opacity: 0.25)
         return view
     }()
     
-    lazy var previewLayer : UIView = {
+    public lazy var previewLayer : UIView = {
         let view = UIView()
         view.viewCorner(radius: 12, borderWidth: 0, borderColor: .clear)
         return view
@@ -125,7 +125,7 @@ public class PTHeartRateViewController: PTBaseViewController {
     var pulseDetector = PTPulseDetector()
     private let ciContext = CIContext(options: nil)
     
-    lazy var pulseRate : UILabel = {
+    public lazy var pulseRate : UILabel = {
         let view = UILabel()
         view.textColor = .systemRed
         view.textAlignment = .center
@@ -133,7 +133,7 @@ public class PTHeartRateViewController: PTBaseViewController {
         return view
     }()
     
-    lazy var validFrames : UILabel = {
+    public lazy var validFrames : UILabel = {
         let view = UILabel()
         view.backgroundColor = .black
         view.textColor = .white
@@ -143,7 +143,7 @@ public class PTHeartRateViewController: PTBaseViewController {
         return view
     }()
     
-    lazy var player : LottieAnimationView = {
+    public lazy var player : LottieAnimationView = {
         let view: LottieAnimationView
         if let url = URL(string: "https://lottie.host/80012aeb-ac39-44e4-8ae0-20b9ba56f1bf/73xBogjj9i.lottie") {
             view = LottieAnimationView(dotLottieUrl: url)

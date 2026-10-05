@@ -382,6 +382,116 @@ Pod::Spec.new do |s|
         }
     end
 
+    # English: Application infrastructure is opt-in and never enters the default Core subspec.
+    # Español: La infraestructura de aplicaciones es opt-in y nunca entra en el subspec Core predeterminado.
+    # 中文：应用基础设施全部为可选 subspec，不进入默认 Core。
+    s.subspec 'DatabaseCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsDatabaseCore/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
+    s.subspec 'Database' do |subspec|
+        subspec.dependency 'PooTools/DatabaseCore'
+        subspec.source_files = 'PooToolsSource/PToolsDatabase/**/*.swift'
+        subspec.frameworks = 'Foundation'
+        subspec.libraries = 'sqlite3'
+    end
+
+    s.subspec 'AuthCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsAuthCore/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
+    s.subspec 'Auth' do |subspec|
+        subspec.dependency 'PooTools/AuthCore'
+        subspec.dependency 'PooTools/Storage'
+        subspec.source_files = 'PooToolsSource/PToolsAuth/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
+    s.subspec 'SyncCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsSyncCore/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
+    s.subspec 'Sync' do |subspec|
+        subspec.dependency 'PooTools/SyncCore'
+        subspec.source_files = 'PooToolsSource/PToolsSync/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
+    s.subspec 'TransferCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsTransferCore/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
+    s.subspec 'Transfer' do |subspec|
+        subspec.dependency 'PooTools/TransferCore'
+        subspec.source_files = 'PooToolsSource/PToolsTransfer/**/*.swift'
+        subspec.frameworks = 'Foundation', 'CryptoKit'
+    end
+
+    s.subspec 'StoreKit' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsStoreKit/**/*.swift'
+        subspec.frameworks = 'Foundation', 'StoreKit'
+    end
+
+    s.subspec 'ObservabilityCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsObservabilityCore/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
+    s.subspec 'Observability' do |subspec|
+        subspec.dependency 'PooTools/ObservabilityCore'
+        subspec.source_files = 'PooToolsSource/PToolsObservability/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
+    s.subspec 'WebCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsWebCore/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
+    s.subspec 'WebBridge' do |subspec|
+        subspec.dependency 'PooTools/WebCore'
+        subspec.source_files = 'PooToolsSource/PToolsWebBridge/**/*.swift'
+        subspec.frameworks = 'Foundation', 'WebKit'
+    end
+
+    s.subspec 'Web' do |subspec|
+        subspec.dependency 'PooTools/WebBridge'
+        subspec.source_files = 'PooToolsSource/PToolsWeb/**/*.swift'
+        subspec.frameworks = 'Foundation', 'UIKit', 'WebKit'
+    end
+
+    s.subspec 'MapCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsMapCore/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
+    s.subspec 'Map' do |subspec|
+        subspec.dependency 'PooTools/MapCore'
+        subspec.source_files = 'PooToolsSource/PToolsMap/**/*.swift'
+        subspec.frameworks = 'Foundation', 'UIKit', 'MapKit', 'CoreLocation', 'Contacts'
+    end
+
+    s.subspec 'AppIntegrity' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsAppIntegrity/**/*.swift'
+        subspec.frameworks = 'Foundation', 'DeviceCheck'
+    end
+
+    s.subspec 'RealtimeCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsRealtimeCore/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
+    s.subspec 'Realtime' do |subspec|
+        subspec.dependency 'PooTools/RealtimeCore'
+        subspec.dependency 'PooTools/SocketKit'
+        subspec.source_files = 'PooToolsSource/PToolsRealtime/**/*.swift'
+        subspec.frameworks = 'Foundation', 'Network'
+    end
+
     s.subspec "Core" do |subspec|
         subspec.dependency 'PooTools/PToolsCore'
         subspec.dependency 'PooTools/Device'

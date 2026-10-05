@@ -435,6 +435,22 @@
   consumer: "repository"
   action: "KEEP"
 -
+  path: "PooToolsSource/Font/Resources/FontCatalog/FontCatalog.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "PooToolsSource/Font/Resources/FontCatalog/FontCatalog.pending.json"
+  kind: "SOURCE_OF_TRUTH"
+  format: "json"
+  generated: false
+  source_of_truth: true
+  consumer: "repository"
+  action: "KEEP"
+-
   path: "PooToolsSource/PToolsDevice/Resources/DeviceCatalog/apple-tv.json"
   kind: "SOURCE_OF_TRUTH"
   format: "json"
@@ -1443,7 +1459,23 @@
   consumer: "repository"
   action: "KEEP"
 -
+  path: "Scripts/deprecated_6_freeze_manifest.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
   path: "Scripts/deprecated_6_removal_manifest.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Scripts/fatal_error_allowlist.json"
   kind: "DEV_TOOL"
   format: "json"
   generated: false
@@ -1510,6 +1542,22 @@
   path: "Scripts/registry.yml"
   kind: "DEV_TOOL"
   format: "yml"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Scripts/semantic_capability_ownership.json"
+  kind: "DEV_TOOL"
+  format: "json"
+  generated: false
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "Scripts/ui_singleton_ownership.json"
+  kind: "DEV_TOOL"
+  format: "json"
   generated: false
   source_of_truth: false
   consumer: "repository"
@@ -1795,7 +1843,23 @@
   consumer: "repository"
   action: "KEEP"
 -
+  path: "report/current/ptools_5_61_runtime_safety.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
   path: "report/current/public_api.json"
+  kind: "REPORT"
+  format: "json"
+  generated: true
+  source_of_truth: false
+  consumer: "repository"
+  action: "KEEP"
+-
+  path: "report/current/semantic_capability_ownership.json"
   kind: "REPORT"
   format: "json"
   generated: true

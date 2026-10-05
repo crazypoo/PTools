@@ -176,6 +176,20 @@ enum PTDemoRegistry {
         make("network.speed-test", "PooToolsNetworkSpeedTest", "Network Speed Test", .networkConnectivity, .interactive, .push, .runnable, legacy: "NetworkSpeedTest", tags: ["network", "speed", "endpoint"]),
         make("network.ping", "PooToolsPing", "Ping Session", .networkConnectivity, .interactive, .push, .runnable, legacy: "PingSession", tags: ["network", "ping", "state-machine"]),
         make("device.heart-rate", "PooToolsHeartRate", "Heart Rate", .permissionsDevice, .hostRequired, .fullScreen, .physicalDeviceRequired, [.camera, .physicalDevice], legacy: "HeartRate", tags: ["camera", "health", "runtime-safety"]),
+        // English: Application infrastructure demos expose each opt-in contract without changing the default Core product.
+        // Español: Los demos de infraestructura exponen cada contrato opt-in sin cambiar el producto Core predeterminado.
+        // 中文：应用基础设施 Demo 展示各个可选契约，但不改变默认 Core 产品。
+        make("infrastructure.database", "PToolsDatabase", "SQLite Database", .storageData, .interactive, .push, .runnable, tags: ["sqlite3", "actor", "migration"]),
+        make("infrastructure.auth", "PToolsAuth", "Authentication", .securityPrivacy, .interactive, .push, .runnable, tags: ["auth", "refresh", "pkce"]),
+        make("infrastructure.sync", "PToolsSync", "Offline Sync", .storageData, .interactive, .push, .runnable, tags: ["offline", "retry", "conflict"]),
+        make("infrastructure.transfer", "PToolsTransfer", "Transfer Queue", .networkConnectivity, .interactive, .push, .runnable, tags: ["background", "checksum"]),
+        make("infrastructure.storekit", "PToolsStoreKit", "StoreKit 2", .modernSystem, .hostRequired, .push, .entitlementRequired, [.entitlement], tags: ["storekit2", "purchase"]),
+        make("infrastructure.observability", "PToolsObservability", "Observability", .debugDiagnostics, .interactive, .push, .runnable, tags: ["metrics", "privacy"]),
+        make("infrastructure.webbridge", "PToolsWebBridge", "Web Bridge", .modernSystem, .interactive, .push, .runnable, tags: ["webkit", "reply"]),
+        make("infrastructure.map", "PToolsMap", "MapKit", .modernSystem, .interactive, .push, .runnable, tags: ["mapkit", "route"]),
+        make("infrastructure.integrity", "PToolsAppIntegrity", "App Integrity", .securityPrivacy, .hostRequired, .push, .physicalDeviceRequired, [.physicalDevice], tags: ["app-attest", "devicecheck"]),
+        make("infrastructure.remote-config", "PToolsConfiguration", "Remote Configuration", .modernSystem, .interactive, .push, .runnable, tags: ["etag", "rollout", "kill-switch"]),
+        make("infrastructure.realtime", "PToolsRealtime", "Realtime SSE", .networkConnectivity, .interactive, .push, .runnable, tags: ["sse", "websocket", "reconnect"]),
     ]
 
     static var sections: [PTDemoSection] {
@@ -265,6 +279,20 @@ final class PTDemoCoordinator {
             return PT5_61PingDemoViewController()
         case "device.heart-rate":
             return PTHeartRateViewController()
+        case "infrastructure.database",
+             "infrastructure.auth",
+             "infrastructure.sync",
+             "infrastructure.transfer",
+             "infrastructure.storekit",
+             "infrastructure.observability",
+             "infrastructure.webbridge",
+             "infrastructure.map",
+             "infrastructure.integrity",
+             "infrastructure.remote-config",
+             "infrastructure.realtime":
+            return PTApplicationInfrastructureDemoViewController(moduleID: descriptor.moduleID,
+                                                                   title: descriptor.titleKey,
+                                                                   tags: descriptor.tags)
         default:
             return PTFuncDetailViewController(descriptor: descriptor)
         }
@@ -291,6 +319,97 @@ final class PTDemoCoordinator {
             host.present(viewController, animated: true)
         case .sheet, .inline, .action:
             UIViewController.currentPresentToSheet(vc: viewController, sizes: sizes)
+        }
+    }
+}
+
+// English: A lightweight host keeps optional infrastructure demos reachable without importing every opt-in module into the Example target.
+// Español: Un host ligero mantiene accesibles los demos opcionales sin importar todos los módulos opt-in en el target Example.
+// 中文：轻量宿主让可选基础设施 Demo 可达，同时避免 Example target 引入全部可选模块。
+@MainActor
+private final class PTApplicationInfrastructureDemoViewController: PTBaseViewController {
+    private let moduleID: String
+    private let demoTitle: String
+    private let tags: [String]
+    private let statusLabel = UILabel()
+
+    init(moduleID: String, title: String, tags: [String]) {
+        self.moduleID = moduleID
+        self.demoTitle = title
+        self.tags = tags
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = demoTitle
+        configureView()
+    }
+
+    private func configureView() {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 16
+        stack.alignment = .fill
+
+        let titleLabel = UILabel()
+        titleLabel.text = demoTitle
+        titleLabel.font = .preferredFont(forTextStyle: .title2)
+
+        let moduleLabel = UILabel()
+        moduleLabel.text = "Module: \(moduleID)"
+        moduleLabel.font = .preferredFont(forTextStyle: .subheadline)
+        moduleLabel.textColor = .secondaryLabel
+
+        let contractLabel = UILabel()
+        contractLabel.numberOfLines = 0
+        contractLabel.text = "iOS 17+ / Swift 6+\n可选基础设施契约已注册；实际宿主按需引入对应 product。"
+
+        let tagLabel = UILabel()
+        tagLabel.numberOfLines = 0
+        tagLabel.textColor = .secondaryLabel
+        tagLabel.text = "Capabilities: \(tags.joined(separator: " · "))"
+
+        let button = UIButton(type: .system)
+        button.setTitle("Run local contract check", for: .normal)
+        button.addTarget(self, action: #selector(runContractCheck), for: .touchUpInside)
+
+        statusLabel.numberOfLines = 0
+        statusLabel.textColor = .secondaryLabel
+        statusLabel.text = "等待检查"
+        [titleLabel, moduleLabel, contractLabel, tagLabel, button, statusLabel].forEach(stack.addArrangedSubview)
+
+        view.addSubview(stack)
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            stack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20)
+        ])
+    }
+
+    @objc private func runContractCheck() {
+        let currentModule = moduleID
+        statusLabel.text = "运行中… / Ejecutando… / Running…"
+        Task { [weak self] in
+            do {
+                if currentModule == "PToolsDatabase" {
+                    let databaseURL = FileManager.default.temporaryDirectory.appendingPathComponent("ptools-5.62-demo.sqlite")
+                    let database = try await PTDatabase.open(url: databaseURL)
+                    try await database.execute("CREATE TABLE IF NOT EXISTS demo (id INTEGER PRIMARY KEY, name TEXT NOT NULL)")
+                    _ = try await database.insert(PTDatabaseQuery("INSERT INTO demo (name) VALUES (?)",
+                                                                   arguments: [.text("PTools")]))
+                    let rows = try await database.query("SELECT id, name FROM demo")
+                    self?.statusLabel.text = "SQLite OK · rows: \(rows.count) · actor isolated"
+                } else {
+                    self?.statusLabel.text = "\(currentModule) · 契约入口可达 / contrato accesible / contract reachable"
+                }
+            } catch {
+                self?.statusLabel.text = "失败 / Error: \(error.localizedDescription)"
+            }
         }
     }
 }

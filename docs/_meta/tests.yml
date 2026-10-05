@@ -42,7 +42,7 @@
   target: "PToolsDebugTests"
   path: "Tests/PToolsDebugTests"
   level: "CONTRACT"
-  file_count: 7
+  file_count: 8
   files:
     - "Tests/PToolsDebugTests/Fixtures/PTDebugNetworkHTTPFixture.swift"
     - "Tests/PToolsDebugTests/Fixtures/PTDebugNetworkURLProtocolStub.swift"
@@ -50,6 +50,7 @@
     - "Tests/PToolsDebugTests/PTDebugNetworkCaptureMatrixTests.swift"
     - "Tests/PToolsDebugTests/PTDebugNetworkParityTests.swift"
     - "Tests/PToolsDebugTests/PTDebugNetworkPerformanceTests.swift"
+    - "Tests/PToolsDebugTests/PTLoadedLibsTests.swift"
     - "Tests/PToolsDebugTests/PTNetworkCaptureContractTests.swift"
   canonical: true
   action: "KEEP"
@@ -60,6 +61,30 @@
   file_count: 1
   files:
     - "Tests/PToolsDeviceTests/PTDeviceTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsFontRuntimeTests"
+  path: "Tests/PToolsFontTests"
+  level: "CONTRACT"
+  file_count: 4
+  files:
+    - "Tests/PToolsFontTests/PTFontCatalogTests.swift"
+    - "Tests/PToolsFontTests/PTFontCompatibilityTests.swift"
+    - "Tests/PToolsFontTests/PTFontGeneratedConsistencyTests.swift"
+    - "Tests/PToolsFontTests/PTFontRuntimeTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsFontTests"
+  path: "Tests/PToolsFontTests"
+  level: "CONTRACT"
+  file_count: 4
+  files:
+    - "Tests/PToolsFontTests/PTFontCatalogTests.swift"
+    - "Tests/PToolsFontTests/PTFontCompatibilityTests.swift"
+    - "Tests/PToolsFontTests/PTFontGeneratedConsistencyTests.swift"
+    - "Tests/PToolsFontTests/PTFontRuntimeTests.swift"
   canonical: true
   action: "KEEP"
 -
@@ -117,6 +142,16 @@
   file_count: 1
   files:
     - "Tests/PToolsNavigationTests/PTNavigationRegressionTests.swift"
+  canonical: true
+  action: "KEEP"
+-
+  target: "PToolsNetworkRuntimeTests"
+  path: "Tests/PToolsNetworkTests"
+  level: "CONTRACT"
+  file_count: 2
+  files:
+    - "Tests/PToolsNetworkTests/PTNetworkModelPathTests.swift"
+    - "Tests/PToolsNetworkTests/PTNetworkQualityTests.swift"
   canonical: true
   action: "KEEP"
 -
