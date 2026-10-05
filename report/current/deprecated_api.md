@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: 2e8cbdcc7e181e010af22947d0e2465d5a5e6c59
-Generated at: 2026-10-04T15:12:41Z
+Source revision: ce2216ac80d2a749565c5cf8a603b1407e82382e
+Generated at: 2026-10-05T10:57:36Z
 -->
 
 # PTools 当前弃用入口清单
@@ -360,6 +360,7 @@ Generated at: 2026-10-04T15:12:41Z
 | `PooToolsSource/Font/Generated/PTFontCompatibility.generated.swift:877` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Font/Generated/PTFontCompatibility.generated.swift:880` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Font/Generated/PTFontCompatibility.generated.swift:883` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/IAP/PTIAPManager.swift:21` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/ImagePicker/PTImagePicker.swift:547` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/ImagePicker/PTImagePicker.swift:598` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/ImagePicker/PTImagePicker.swift:627` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
@@ -435,4 +436,4 @@ Generated at: 2026-10-04T15:12:41Z
 | `PooToolsSource/SegmentControl/PTSegmentedTypes.swift:214` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/SignView/PTSignView.swift:162` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 
-扫描数量：`421`。该数量用于发现漂移，不代表可以自动删除公开 API。
+扫描数量：`422`。该数量用于发现漂移，不代表可以自动删除公开 API。

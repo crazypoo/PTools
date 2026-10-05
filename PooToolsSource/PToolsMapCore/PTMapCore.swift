@@ -30,6 +30,99 @@ public struct PTMapPlace: Codable, Hashable, Sendable {
     }
 }
 
+public struct PTMapAnnotation: Codable, Hashable, Sendable {
+    public let id: String
+    public let title: String?
+    public let subtitle: String?
+    public let coordinate: PTMapCoordinate
+
+    public init(id: String,
+                title: String? = nil,
+                subtitle: String? = nil,
+                coordinate: PTMapCoordinate) {
+        self.id = id
+        self.title = title
+        self.subtitle = subtitle
+        self.coordinate = coordinate
+    }
+}
+
+public struct PTMapSearchResult: Codable, Hashable, Sendable {
+    public let query: String
+    public let places: [PTMapPlace]
+
+    public init(query: String, places: [PTMapPlace]) {
+        self.query = query
+        self.places = places
+    }
+}
+
+public enum PTMapTransport: String, Codable, Hashable, Sendable {
+    case automobile
+    case walking
+    case transit
+    case cycling
+}
+
+public struct PTMapETA: Codable, Hashable, Sendable {
+    public let distance: Double
+    public let expectedTravelTime: TimeInterval
+    public let arrivalDate: Date?
+
+    public init(distance: Double,
+                expectedTravelTime: TimeInterval,
+                arrivalDate: Date? = nil) {
+        self.distance = distance
+        self.expectedTravelTime = expectedTravelTime
+        self.arrivalDate = arrivalDate
+    }
+}
+
+public struct PTMapRouteStep: Codable, Hashable, Sendable {
+    public let instruction: String
+    public let distance: Double
+    public let expectedTravelTime: TimeInterval
+    public let coordinates: [PTMapCoordinate]
+
+    public init(instruction: String,
+                distance: Double,
+                expectedTravelTime: TimeInterval,
+                coordinates: [PTMapCoordinate] = []) {
+        self.instruction = instruction
+        self.distance = distance
+        self.expectedTravelTime = expectedTravelTime
+        self.coordinates = coordinates
+    }
+}
+
+public struct PTMapRouteDetails: Codable, Hashable, Sendable {
+    public let route: PTMapRoute
+    public let eta: PTMapETA
+    public let steps: [PTMapRouteStep]
+    public let alternatives: [PTMapRoute]
+
+    public init(route: PTMapRoute,
+                eta: PTMapETA,
+                steps: [PTMapRouteStep] = [],
+                alternatives: [PTMapRoute] = []) {
+        self.route = route
+        self.eta = eta
+        self.steps = steps
+        self.alternatives = alternatives
+    }
+}
+
+public enum PTMapExternalProvider: String, Codable, Hashable, Sendable {
+    case apple
+    case google
+    case googleUniversalLink
+}
+
+public protocol PTExternalMapProvider: Sendable {
+    var identifier: String { get }
+    func url(for coordinate: PTMapCoordinate, label: String?) -> URL?
+}
+
 public struct PTMapRoute: Codable, Hashable, Sendable {
     public let distance: Double
     public let expectedTravelTime: TimeInterval

@@ -79,9 +79,65 @@ public struct PTDatabaseSchemaVersion: Sendable, Equatable, Codable {
 public struct PTDatabaseMigrationPlan: Sendable, Equatable {
     public let migrations: [PTDatabaseMigration]
     public let destructive: Bool
-    public init(migrations: [PTDatabaseMigration], destructive: Bool = false) {
+    public let backupPolicy: PTDatabaseMigrationBackupPolicy
+
+    public init(migrations: [PTDatabaseMigration],
+                destructive: Bool = false,
+                backupPolicy: PTDatabaseMigrationBackupPolicy = .none) {
         self.migrations = migrations
         self.destructive = destructive
+        self.backupPolicy = backupPolicy
+    }
+}
+
+public enum PTDatabaseMigrationBackupPolicy: Sendable, Equatable {
+    case none
+    case beforeMigration(URL)
+}
+
+// English: Runtime SQLite settings are immutable and applied when the actor opens the handle.
+// Español: La configuración de SQLite es inmutable y se aplica al abrir el handle del actor.
+// 中文：SQLite 运行时配置是不可变值，并在 actor 打开句柄时应用。
+public struct PTDatabaseRuntimeConfiguration: Sendable, Equatable, Codable {
+    public enum JournalMode: String, Sendable, Codable {
+        case wal
+        case delete
+        case truncate
+        case memory
+        case off
+    }
+
+    public enum SynchronousMode: String, Sendable, Codable {
+        case off
+        case normal
+        case full
+        case extra
+    }
+
+    public enum CheckpointPolicy: String, Sendable, Codable {
+        case never
+        case beforeBackup
+    }
+
+    public let foreignKeysEnabled: Bool
+    public let journalMode: JournalMode
+    public let synchronousMode: SynchronousMode
+    public let busyTimeoutMilliseconds: Int32
+    public let checkpointPolicy: CheckpointPolicy
+    public let checkpointOnBackup: Bool
+
+    public init(foreignKeysEnabled: Bool = true,
+                journalMode: JournalMode = .wal,
+                synchronousMode: SynchronousMode = .normal,
+                busyTimeoutMilliseconds: Int32 = 5_000,
+                checkpointOnBackup: Bool = true,
+                checkpointPolicy: CheckpointPolicy? = nil) {
+        self.foreignKeysEnabled = foreignKeysEnabled
+        self.journalMode = journalMode
+        self.synchronousMode = synchronousMode
+        self.busyTimeoutMilliseconds = max(0, busyTimeoutMilliseconds)
+        self.checkpointPolicy = checkpointPolicy ?? (checkpointOnBackup ? .beforeBackup : .never)
+        self.checkpointOnBackup = self.checkpointPolicy == .beforeBackup
     }
 }
 
@@ -89,11 +145,55 @@ public struct PTDatabaseBackupDescriptor: Sendable, Equatable, Codable {
     public let url: URL
     public let createdAt: Date
     public let byteCount: Int64
-    public init(url: URL, createdAt: Date = .now, byteCount: Int64 = 0) {
+    public let schemaVersion: Int
+    public let integrityPassed: Bool
+    public init(url: URL,
+                createdAt: Date = .now,
+                byteCount: Int64 = 0,
+                schemaVersion: Int = 0,
+                integrityPassed: Bool = true) {
         self.url = url
         self.createdAt = createdAt
         self.byteCount = max(0, byteCount)
+        self.schemaVersion = max(0, schemaVersion)
+        self.integrityPassed = integrityPassed
     }
+}
+
+public struct PTDatabaseRuntimeSnapshot: Sendable, Equatable, Codable {
+    public let sqliteVersion: String
+    public let journalMode: String
+    public let synchronousMode: String
+    public let foreignKeysEnabled: Bool
+    public let schemaVersion: Int
+
+    public init(sqliteVersion: String,
+                journalMode: String,
+                synchronousMode: String,
+                foreignKeysEnabled: Bool,
+                schemaVersion: Int) {
+        self.sqliteVersion = sqliteVersion
+        self.journalMode = journalMode
+        self.synchronousMode = synchronousMode
+        self.foreignKeysEnabled = foreignKeysEnabled
+        self.schemaVersion = max(0, schemaVersion)
+    }
+}
+
+public struct PTDatabaseIntegrityReport: Sendable, Equatable, Codable {
+    public let passed: Bool
+    public let result: String
+    public let schemaVersion: Int
+    public init(passed: Bool, result: String, schemaVersion: Int) {
+        self.passed = passed
+        self.result = result
+        self.schemaVersion = max(0, schemaVersion)
+    }
+}
+
+public enum PTDatabaseRestoreVerification: Sendable, Equatable {
+    case integrityCheck
+    case skip
 }
 
 public enum PTDatabaseRestorePolicy: Sendable, Equatable {
@@ -141,18 +241,99 @@ public struct PTDatabasePredicate: Sendable, Equatable {
     }
 }
 
+// English: A closure-free row decoder keeps model mapping optional and independent from PTModel.
+// Español: Un decodificador de filas sin dependencias mantiene el mapeo de modelos opcional e independiente de PTModel.
+// 中文：无闭包依赖的行解码器让模型映射保持可选，并与 PTModel 解耦。
+public struct PTDatabaseRowDecoder<Value: Sendable>: Sendable {
+    private let decodeValue: @Sendable (PTDatabaseRow) throws -> Value
+
+    public init(_ decode: @escaping @Sendable (PTDatabaseRow) throws -> Value) {
+        self.decodeValue = decode
+    }
+
+    public func decode(_ row: PTDatabaseRow) throws -> Value {
+        try decodeValue(row)
+    }
+}
+
 public protocol PTDatabaseBackend: Sendable {
     func execute(_ query: PTDatabaseQuery) async throws
     func query(_ query: PTDatabaseQuery) async throws -> [PTDatabaseRow]
 }
 
 public struct PTDatabaseMigration: Sendable, Equatable {
-    public let version: Int
+    public let fromVersion: Int
+    public let toVersion: Int
     public let statements: [String]
+    public let isDestructive: Bool
 
-    public init(version: Int, statements: [String]) {
-        self.version = version
+    public var version: Int { toVersion }
+
+    public init(version: Int,
+                statements: [String],
+                isDestructive: Bool = false) {
+        self.fromVersion = max(0, version - 1)
+        self.toVersion = max(0, version)
         self.statements = statements
+        self.isDestructive = isDestructive
+    }
+
+    public init(fromVersion: Int,
+                toVersion: Int,
+                statements: [String],
+                isDestructive: Bool = false) {
+        self.fromVersion = max(0, fromVersion)
+        self.toVersion = max(0, toVersion)
+        self.statements = statements
+        self.isDestructive = isDestructive
+    }
+}
+
+public struct PTDatabaseMigrationValidation: Sendable, Equatable {
+    public let currentVersion: Int
+    public let targetVersion: Int
+    public let pendingVersions: [Int]
+
+    public init(currentVersion: Int, targetVersion: Int, pendingVersions: [Int]) {
+        self.currentVersion = max(0, currentVersion)
+        self.targetVersion = max(0, targetVersion)
+        self.pendingVersions = pendingVersions
+    }
+}
+
+// English: Validate the migration chain independently from SQLite execution.
+// Español: Valida la cadena de migraciones de forma independiente de la ejecución SQLite.
+// 中文：将迁移链校验与 SQLite 执行解耦，便于测试缺失和重复迁移。
+public enum PTDatabaseMigrationValidator {
+    public static func validate(_ migrations: [PTDatabaseMigration],
+                                currentVersion: Int) throws -> PTDatabaseMigrationValidation {
+        let current = max(0, currentVersion)
+        let ordered = migrations.sorted { lhs, rhs in
+            lhs.toVersion == rhs.toVersion ? lhs.fromVersion < rhs.fromVersion : lhs.toVersion < rhs.toVersion
+        }
+        var seen = Set<Int>()
+        for migration in ordered {
+            guard migration.toVersion > migration.fromVersion else {
+                throw PTDatabaseError.downgradeNotAllowed(current: current,
+                                                          requested: migration.toVersion)
+            }
+            guard seen.insert(migration.toVersion).inserted else {
+                throw PTDatabaseError.duplicateMigration(migration.toVersion)
+            }
+        }
+        var expected = current
+        var pending: [Int] = []
+        for migration in ordered where migration.toVersion > current {
+            guard migration.fromVersion == expected else {
+                throw PTDatabaseError.migrationGap(expected: expected,
+                                                   actual: migration.fromVersion)
+            }
+            expected = migration.toVersion
+            pending.append(migration.toVersion)
+        }
+        return PTDatabaseMigrationValidation(currentVersion: current,
+                                             targetVersion: expected,
+                                             pendingVersions: pending)
     }
 }
 
@@ -172,8 +353,12 @@ public enum PTDatabaseError: Error, Sendable, Equatable {
     case queryFailed(String)
     case transactionFailed(String)
     case migrationFailed(Int, String)
+    case migrationGap(expected: Int, actual: Int)
+    case duplicateMigration(Int)
+    case downgradeNotAllowed(current: Int, requested: Int)
     case backupFailed(String)
     case restoreFailed(String)
     case decodingFailed(String)
+    case integrityCheckFailed(String)
     case closed
 }

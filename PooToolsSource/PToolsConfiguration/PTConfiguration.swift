@@ -84,18 +84,23 @@ public struct PTFeatureFlagDefinition: Codable, Hashable, Sendable {
     public let name: String
     public let defaultState: PTFeatureFlagState
     public let conditions: [PTConfigurationCondition]
+    public let targeting: PTConfigurationTargeting?
 
     public init(name: String,
                 defaultState: PTFeatureFlagState = .unknown,
-                conditions: [PTConfigurationCondition] = []) {
+                conditions: [PTConfigurationCondition] = [],
+                targeting: PTConfigurationTargeting? = nil) {
         self.name = name
         self.defaultState = defaultState
         self.conditions = conditions
+        self.targeting = targeting
     }
 
     fileprivate func evaluate(in context: PTConfigurationContext) -> PTFeatureFlagState {
         guard defaultState == .conditional else { return defaultState }
-        return conditions.allSatisfy { $0.matches(context) } ? .enabled : .disabled
+        let conditionsMatch = conditions.allSatisfy { $0.matches(context) }
+        let targetingMatches = targeting?.matches(context) ?? true
+        return conditionsMatch && targetingMatches ? .enabled : .disabled
     }
 }
 
@@ -125,17 +130,33 @@ public struct PTConfigurationContext: Codable, Hashable, Sendable {
 public struct PTConfigurationSnapshot: Codable, Hashable, Sendable {
     public let context: PTConfigurationContext
     public let values: [String: Data]
+    public let sources: [String: PTConfigurationSource]
     public let flags: [String: PTFeatureFlagState]
     public let createdAt: Date
 
     public init(context: PTConfigurationContext,
                 values: [String: Data] = [:],
+                sources: [String: PTConfigurationSource] = [:],
                 flags: [String: PTFeatureFlagState] = [:],
                 createdAt: Date = .now) {
         self.context = context
         self.values = values
+        self.sources = sources
         self.flags = flags
         self.createdAt = createdAt
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        context = try container.decode(PTConfigurationContext.self, forKey: .context)
+        values = try container.decode([String: Data].self, forKey: .values)
+        sources = try container.decodeIfPresent([String: PTConfigurationSource].self, forKey: .sources) ?? [:]
+        flags = try container.decodeIfPresent([String: PTFeatureFlagState].self, forKey: .flags) ?? [:]
+        createdAt = try container.decodeIfPresent(Date.self, forKey: .createdAt) ?? .now
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case context, values, sources, flags, createdAt
     }
 
     public func value<Value: Codable & Sendable>(for key: PTConfigKey<Value>) throws -> Value {
@@ -151,8 +172,18 @@ public struct PTConfigurationSnapshot: Codable, Hashable, Sendable {
         flags[name] ?? .unknown
     }
 
+    public func source(for key: String) -> PTConfigurationSource? {
+        sources[key]
+    }
+
     public func isEnabled(_ name: String) -> Bool {
         flagState(for: name) == .enabled
+    }
+
+    public func isKillSwitchActive(_ name: String) -> Bool {
+        guard let data = values["kill-switch.\(name)"],
+              let active = try? JSONDecoder().decode(Bool.self, from: data) else { return false }
+        return active
     }
 }
 
@@ -161,6 +192,70 @@ public enum PTConfigurationError: Error, Codable, Hashable, Sendable {
     case encodingFailed(String)
     case decodingFailed(String)
     case remoteProviderFailed
+    case remoteHTTPStatus(Int)
+    case killSwitchActive(String)
+    case signedConfigurationExpired
+    case signatureInvalid
+}
+
+// English: Targeting values are evaluated before a feature becomes visible to the caller.
+// Español: Los valores de targeting se evalúan antes de exponer una feature al caller.
+// 中文：功能开关对调用方可见前，先统一评估这些定向条件。
+public struct PTConfigurationTargeting: Codable, Hashable, Sendable {
+    public let environment: PTConfigurationEnvironment?
+    public let minimumAppVersion: String?
+    public let minimumBuildNumber: Int?
+    public let locale: String?
+    public let deviceFamily: String?
+    public let percentage: Int?
+    public let stableIdentifier: String?
+
+    public init(environment: PTConfigurationEnvironment? = nil,
+                minimumAppVersion: String? = nil,
+                minimumBuildNumber: Int? = nil,
+                locale: String? = nil,
+                deviceFamily: String? = nil,
+                percentage: Int? = nil,
+                stableIdentifier: String? = nil) {
+        self.environment = environment
+        self.minimumAppVersion = minimumAppVersion
+        self.minimumBuildNumber = minimumBuildNumber
+        self.locale = locale
+        self.deviceFamily = deviceFamily
+        self.percentage = percentage
+        self.stableIdentifier = stableIdentifier
+    }
+
+    public func matches(_ context: PTConfigurationContext) -> Bool {
+        if let environment, environment != context.environment { return false }
+        if let minimumAppVersion,
+           !PTConfigurationVersion.isAtLeast(context.appVersion, minimumAppVersion) { return false }
+        if let minimumBuildNumber,
+           (Int(context.buildNumber) ?? 0) < minimumBuildNumber { return false }
+        if let locale,
+           context.locale.caseInsensitiveCompare(locale) != .orderedSame { return false }
+        if let deviceFamily,
+           context.deviceFamily.caseInsensitiveCompare(deviceFamily) != .orderedSame { return false }
+        if let percentage {
+            let key = stableIdentifier ?? context.appVersion + ":" + context.buildNumber
+            let hash = key.utf8.reduce(UInt64(0)) { ($0 &* 31) &+ UInt64($1) }
+            if Int(hash % 100) >= min(max(percentage, 0), 100) { return false }
+        }
+        return true
+    }
+}
+
+public enum PTConfigurationVersion {
+    public static func isAtLeast(_ lhs: String, _ rhs: String) -> Bool {
+        let left = lhs.split(separator: ".").map { Int($0) ?? 0 }
+        let right = rhs.split(separator: ".").map { Int($0) ?? 0 }
+        for index in 0..<max(left.count, right.count) {
+            let l = index < left.count ? left[index] : 0
+            let r = index < right.count ? right[index] : 0
+            if l != r { return l > r }
+        }
+        return true
+    }
 }
 
 public protocol PTConfigurationProvider: Sendable {
@@ -206,14 +301,16 @@ public actor PTConfigurationStore {
         }
 
         var resolved: [String: Data] = [:]
+        var resolvedSources: [String: PTConfigurationSource] = [:]
         for source in [PTConfigurationSource.defaults,
                        .bundle,
                        .environment,
                        .localOverride,
                        .remote,
-                       .debugOverride] {
+            .debugOverride] {
             for (key, value) in layers[source] ?? [:] {
                 resolved[key] = value
+                resolvedSources[key] = source
             }
         }
 
@@ -231,6 +328,7 @@ public actor PTConfigurationStore {
 
         currentSnapshot = PTConfigurationSnapshot(context: context,
                                                   values: resolved,
+                                                  sources: resolvedSources,
                                                   flags: resolvedFlags)
         if let storage {
             try? await storage.set(currentSnapshot,
@@ -250,6 +348,14 @@ public actor PTConfigurationStore {
     public func value<Value: Codable & Sendable>(for key: PTConfigKey<Value>,
                                                  in snapshot: PTConfigurationSnapshot) throws -> Value {
         try snapshot.value(for: key)
+    }
+
+    public func ensureKillSwitchIsInactive(_ name: String,
+                                           in snapshot: PTConfigurationSnapshot? = nil) throws {
+        let value = snapshot ?? currentSnapshot
+        if value.isKillSwitchActive(name) {
+            throw PTConfigurationError.killSwitchActive(name)
+        }
     }
 
     public func setLocalOverride<Value: Codable & Sendable>(_ value: Value,

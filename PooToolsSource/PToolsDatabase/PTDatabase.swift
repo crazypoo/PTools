@@ -8,6 +8,31 @@ import SQLite3
 import PToolsDatabaseCore
 #endif
 
+public protocol PTDatabaseMigrationStep: Sendable {
+    var fromVersion: Int { get }
+    var toVersion: Int { get }
+    var isDestructive: Bool { get }
+    func migrate(using database: PTDatabase) async throws
+}
+
+public extension PTDatabaseMigrationStep {
+    var isDestructive: Bool { false }
+}
+
+public struct PTDatabaseMigrationResult: Sendable, Equatable {
+    public let appliedVersions: [Int]
+    public let finalSchemaVersion: Int
+    public let backup: PTDatabaseBackupDescriptor?
+
+    public init(appliedVersions: [Int],
+                finalSchemaVersion: Int,
+                backup: PTDatabaseBackupDescriptor? = nil) {
+        self.appliedVersions = appliedVersions
+        self.finalSchemaVersion = finalSchemaVersion
+        self.backup = backup
+    }
+}
+
 // English: This narrow wrapper owns one SQLite C handle and closes it exactly once.
 // Español: Este wrapper estrecho posee un handle C de SQLite y lo cierra exactamente una vez.
 // 中文：这个窄范围包装器独占一个 SQLite C handle，并保证只关闭一次。
@@ -20,18 +45,22 @@ private final class PTSQLiteHandle: @unchecked Sendable {
 public actor PTDatabase {
     private static let sqliteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
     public let fileURL: URL
+    public let configuration: PTDatabaseRuntimeConfiguration
     private var handle: PTSQLiteHandle?
     private var observers: [UUID: AsyncStream<PTDatabaseChange>.Continuation] = [:]
     private var observationObservers: [UUID: (table: String?, continuation: AsyncStream<PTDatabaseObservation>.Continuation)] = [:]
 
-    public static func open(url: URL) async throws -> PTDatabase {
-        try PTDatabase(fileURL: url)
+    public static func open(url: URL,
+                            configuration: PTDatabaseRuntimeConfiguration = .init()) async throws -> PTDatabase {
+        try PTDatabase(fileURL: url, configuration: configuration)
     }
 
-    public init(fileURL: URL? = nil) throws {
+    public init(fileURL: URL? = nil,
+                configuration: PTDatabaseRuntimeConfiguration = .init()) throws {
         let url = fileURL ?? URL(fileURLWithPath: ":memory:")
         self.fileURL = url
-        self.handle = try Self.openHandle(for: url)
+        self.configuration = configuration
+        self.handle = try Self.openHandle(for: url, configuration: configuration)
     }
 
     public func execute(_ query: PTDatabaseQuery) throws {
@@ -95,6 +124,62 @@ public actor PTDatabase {
         try queryDecoded(PTDatabaseQuery(sql, arguments: arguments), as: type)
     }
 
+    // English: Fetch one bounded page and one look-ahead row without loading the full result set.
+    // Español: Obtiene una página limitada y una fila de adelanto sin cargar todo el resultado.
+    // 中文：使用一条预读记录获取有界分页，避免一次性加载完整结果集。
+    public func page(_ request: PTDatabaseQuery,
+                    offset: Int = 0,
+                    limit: Int = 50) throws -> PTDatabasePage<PTDatabaseRow> {
+        let safeOffset = max(0, offset)
+        let safeLimit = min(max(1, limit), 1_000)
+        let baseSQL = request.sql.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines.union(CharacterSet(charactersIn: ";")))
+        let paged = PTDatabaseQuery("SELECT * FROM (\(baseSQL)) AS ptools_page LIMIT ? OFFSET ?",
+                                    arguments: request.arguments + [.integer(Int64(safeLimit + 1)), .integer(Int64(safeOffset))])
+        var values = try query(paged)
+        let hasMore = values.count > safeLimit
+        if hasMore { values.removeLast() }
+        return PTDatabasePage(values: values, offset: safeOffset, limit: safeLimit, hasMore: hasMore)
+    }
+
+    public func pageDecoded<Value: Decodable & Sendable>(_ request: PTDatabaseQuery,
+                                                         as type: Value.Type,
+                                                         offset: Int = 0,
+                                                         limit: Int = 50) throws -> PTDatabasePage<Value> {
+        let rows = try page(request, offset: offset, limit: limit)
+        let values = try rows.values.map { row -> Value in
+            let object = row.values.reduce(into: [String: Any]()) { result, item in
+                result[item.key] = jsonValue(item.value)
+            }
+            guard JSONSerialization.isValidJSONObject(object) else {
+                throw PTDatabaseError.decodingFailed("Invalid row")
+            }
+            do {
+                return try JSONDecoder().decode(type, from: JSONSerialization.data(withJSONObject: object))
+            } catch {
+                throw PTDatabaseError.decodingFailed(String(describing: error))
+            }
+        }
+        return PTDatabasePage(values: values, offset: rows.offset, limit: rows.limit, hasMore: rows.hasMore)
+    }
+
+    public func page<Value: Sendable>(_ request: PTDatabaseQuery,
+                                      decoder: PTDatabaseRowDecoder<Value>,
+                                      offset: Int = 0,
+                                      limit: Int = 50) throws -> PTDatabasePage<Value> {
+        let rows = try page(request, offset: offset, limit: limit)
+        return PTDatabasePage(values: try rows.values.map(decoder.decode),
+                              offset: rows.offset,
+                              limit: rows.limit,
+                              hasMore: rows.hasMore)
+    }
+
+    public func pageModels<Model: Decodable & Sendable>(_ request: PTDatabaseQuery,
+                                                        as type: Model.Type,
+                                                        offset: Int = 0,
+                                                        limit: Int = 50) throws -> PTDatabasePage<Model> {
+        try pageDecoded(request, as: type, offset: offset, limit: limit)
+    }
+
     public func withTransaction<T: Sendable>(_ queries: [PTDatabaseQuery], returning value: @autoclosure () -> T) throws -> T {
         try execute(PTDatabaseQuery("BEGIN IMMEDIATE TRANSACTION"))
         do {
@@ -122,8 +207,17 @@ public actor PTDatabase {
     }
 
     public func migrate(_ migrations: [PTDatabaseMigration]) throws {
+        try migrate(migrations, allowDestructive: false)
+    }
+
+    private func migrate(_ migrations: [PTDatabaseMigration], allowDestructive: Bool) throws {
         let current = try schemaVersion()
-        for migration in migrations.sorted(by: { $0.version < $1.version }) where migration.version > current {
+        guard allowDestructive || migrations.allSatisfy({ !$0.isDestructive }) else {
+            throw PTDatabaseError.migrationFailed(0, "Destructive migration requires an explicit migration plan")
+        }
+        let pending = try Self.validate(migrations: migrations, currentVersion: current)
+        for migration in pending {
+            let migrationStartVersion = try schemaVersion()
             do {
                 try execute(PTDatabaseQuery("BEGIN IMMEDIATE TRANSACTION"))
                 for statement in migration.statements { try execute(PTDatabaseQuery(statement)) }
@@ -132,22 +226,96 @@ public actor PTDatabase {
                 publish(.migrated(toVersion: migration.version), table: nil)
             } catch {
                 try? execute(PTDatabaseQuery("ROLLBACK"))
+                // English: Verify that a failed migration did not advance the schema version.
+                // Español: Verifica que una migración fallida no haya avanzado la versión del esquema.
+                // 中文：确认失败迁移没有推进 schema version，保护后续重试。
+                if (try? schemaVersion()) != migrationStartVersion {
+                    throw PTDatabaseError.migrationFailed(migration.version,
+                                                         "Migration failure changed schema version")
+                }
                 throw PTDatabaseError.migrationFailed(migration.version, String(describing: error))
             }
         }
     }
 
     public func migrate(_ plan: PTDatabaseMigrationPlan) throws {
-        if plan.destructive == false, plan.migrations.contains(where: { $0.statements.contains { $0.localizedCaseInsensitiveContains("DROP TABLE") } }) {
+        if plan.destructive == false, plan.migrations.contains(where: \.isDestructive) {
             throw PTDatabaseError.migrationFailed(0, "Destructive migration requires explicit opt-in")
         }
-        try migrate(plan.migrations)
+        if case .beforeMigration(let destination) = plan.backupPolicy {
+            _ = try backup(to: destination)
+        }
+        try migrate(plan.migrations, allowDestructive: plan.destructive)
+    }
+
+    public func migrate(steps: [any PTDatabaseMigrationStep],
+                        destructive: Bool = false,
+                        backupTo backupURL: URL? = nil) async throws -> PTDatabaseMigrationResult {
+        let descriptors = steps.map {
+            PTDatabaseMigration(fromVersion: $0.fromVersion,
+                                toVersion: $0.toVersion,
+                                statements: [],
+                                isDestructive: $0.isDestructive)
+        }
+        let current = try schemaVersion()
+        if !destructive, descriptors.contains(where: \.isDestructive) {
+            throw PTDatabaseError.migrationFailed(0, "Destructive migration requires explicit opt-in")
+        }
+        let validation = try PTDatabaseMigrationValidator.validate(descriptors, currentVersion: current)
+        let backup = try backupURL.map { try backup(to: $0) }
+        let byVersion = steps.reduce(into: [Int: any PTDatabaseMigrationStep]()) { result, step in
+            result[step.toVersion] = step
+        }
+        var applied: [Int] = []
+        for version in validation.pendingVersions {
+            guard let step = byVersion[version] else {
+                throw PTDatabaseError.migrationFailed(version, "Migration step is missing")
+            }
+            let startVersion = try schemaVersion()
+            do {
+                try await transaction { database in
+                    try await step.migrate(using: database)
+                    try await database.execute("PRAGMA user_version = \(version)")
+                }
+                applied.append(version)
+                publish(.migrated(toVersion: version), table: nil)
+            } catch {
+                if (try? schemaVersion()) != startVersion {
+                    throw PTDatabaseError.migrationFailed(version, "Migration failure changed schema version")
+                }
+                throw PTDatabaseError.migrationFailed(version, String(describing: error))
+            }
+        }
+        return PTDatabaseMigrationResult(appliedVersions: applied,
+                                         finalSchemaVersion: try schemaVersion(),
+                                         backup: backup)
+    }
+
+    public func validateMigrations(_ migrations: [PTDatabaseMigration]) throws {
+        _ = try Self.validate(migrations: migrations, currentVersion: schemaVersion())
     }
 
     public func schemaVersion() throws -> Int {
         guard let row = try query(PTDatabaseQuery("PRAGMA user_version")).first,
               case .integer(let value) = row.values.values.first else { return 0 }
         return Int(value)
+    }
+
+    public func runtimeSnapshot() throws -> PTDatabaseRuntimeSnapshot {
+        PTDatabaseRuntimeSnapshot(sqliteVersion: try scalarText("SELECT sqlite_version()"),
+                                  journalMode: try scalarText("PRAGMA journal_mode"),
+                                  synchronousMode: try scalarText("PRAGMA synchronous"),
+                                  foreignKeysEnabled: try scalarInteger("PRAGMA foreign_keys") != 0,
+                                  schemaVersion: try schemaVersion())
+    }
+
+    public func close() {
+        handle = nil
+    }
+
+    public func reopen() throws {
+        guard handle == nil else { return }
+        handle = try Self.openHandle(for: fileURL, configuration: configuration)
     }
 
     public func changes() -> AsyncStream<PTDatabaseChange> {
@@ -170,16 +338,41 @@ public actor PTDatabase {
         }
     }
 
+    // English: SQLite's integrity check is part of the public restore and backup contract.
+    // Español: La comprobación de integridad de SQLite forma parte del contrato público de backup y restore.
+    // 中文：SQLite 完整性检查是公开备份与恢复契约的一部分。
+    public func integrityCheck() throws -> PTDatabaseIntegrityReport {
+        let rows = try query(PTDatabaseQuery("PRAGMA integrity_check"))
+        let result: String
+        if let first = rows.first, case .text(let value) = first.values.values.first {
+            result = value
+        } else {
+            result = ""
+        }
+        return PTDatabaseIntegrityReport(passed: result.caseInsensitiveCompare("ok") == .orderedSame,
+                                         result: result,
+                                         schemaVersion: try schemaVersion())
+    }
+
     @discardableResult
     public func backup(to destination: URL) throws -> PTDatabaseBackupDescriptor {
         guard let handle else { throw PTDatabaseError.closed }
+        if configuration.checkpointPolicy == .beforeBackup {
+            try execute("PRAGMA wal_checkpoint(FULL)")
+        }
+        let parent = destination.deletingLastPathComponent()
+        try FileManager.default.createDirectory(at: parent, withIntermediateDirectories: true)
+        let temporary = parent.appendingPathComponent(".\(destination.lastPathComponent).\(UUID().uuidString).tmp")
         let source = handle.pointer
         var target: OpaquePointer?
-        guard sqlite3_open_v2(destination.path, &target, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, nil) == SQLITE_OK,
+        guard sqlite3_open_v2(temporary.path, &target, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, nil) == SQLITE_OK,
               let target else {
             throw PTDatabaseError.backupFailed(message())
         }
-        defer { sqlite3_close(target) }
+        defer {
+            sqlite3_close(target)
+            try? FileManager.default.removeItem(at: temporary)
+        }
         guard let backup = sqlite3_backup_init(target, "main", source, "main") else {
             throw PTDatabaseError.backupFailed(String(cString: sqlite3_errmsg(target)))
         }
@@ -188,8 +381,18 @@ public actor PTDatabase {
         guard result == SQLITE_DONE, finish == SQLITE_OK else {
             throw PTDatabaseError.backupFailed(String(cString: sqlite3_errmsg(target)))
         }
+        guard let report = try? Self.integrityReport(for: temporary), report.passed else {
+            throw PTDatabaseError.backupFailed("Backup integrity check failed")
+        }
+        if FileManager.default.fileExists(atPath: destination.path) {
+            try FileManager.default.removeItem(at: destination)
+        }
+        try FileManager.default.moveItem(at: temporary, to: destination)
         let byteCount = (try? FileManager.default.attributesOfItem(atPath: destination.path)[.size] as? NSNumber)?.int64Value ?? 0
-        return PTDatabaseBackupDescriptor(url: destination, byteCount: byteCount)
+        return PTDatabaseBackupDescriptor(url: destination,
+                                          byteCount: byteCount,
+                                          schemaVersion: report.schemaVersion,
+                                          integrityPassed: report.passed)
     }
 
     public func restore(from source: URL, policy: PTDatabaseRestorePolicy = .replaceExisting) throws {
@@ -199,20 +402,46 @@ public actor PTDatabase {
         if policy == .failIfExisting, FileManager.default.fileExists(atPath: fileURL.path) {
             throw PTDatabaseError.restoreFailed("Destination database already exists")
         }
-        close()
+        let parent = fileURL.deletingLastPathComponent()
+        let staged = parent.appendingPathComponent(".\(fileURL.lastPathComponent).\(UUID().uuidString).restore")
         do {
-            if FileManager.default.fileExists(atPath: fileURL.path) {
-                try FileManager.default.removeItem(at: fileURL)
+            try FileManager.default.createDirectory(at: parent, withIntermediateDirectories: true)
+            try FileManager.default.copyItem(at: source, to: staged)
+            let report = try Self.integrityReport(for: staged)
+            guard report.passed else { throw PTDatabaseError.integrityCheckFailed(report.result) }
+            close()
+            let replacement = fileURL.appendingPathExtension("previous")
+            if FileManager.default.fileExists(atPath: replacement.path) { try? FileManager.default.removeItem(at: replacement) }
+            if FileManager.default.fileExists(atPath: fileURL.path) { try FileManager.default.moveItem(at: fileURL, to: replacement) }
+            do {
+                try FileManager.default.moveItem(at: staged, to: fileURL)
+            } catch {
+                if FileManager.default.fileExists(atPath: replacement.path) {
+                    try? FileManager.default.moveItem(at: replacement, to: fileURL)
+                }
+                throw error
             }
-            try FileManager.default.copyItem(at: source, to: fileURL)
-            handle = try Self.openHandle(for: fileURL)
+            do {
+                handle = try Self.openHandle(for: fileURL, configuration: configuration)
+            } catch {
+                close()
+                try? FileManager.default.removeItem(at: fileURL)
+                if FileManager.default.fileExists(atPath: replacement.path) {
+                    try? FileManager.default.moveItem(at: replacement, to: fileURL)
+                }
+                handle = try? Self.openHandle(for: fileURL, configuration: configuration)
+                throw error
+            }
+            try? FileManager.default.removeItem(at: replacement)
             publish(.restored, table: nil)
         } catch {
+            try? FileManager.default.removeItem(at: staged)
             throw PTDatabaseError.restoreFailed(String(describing: error))
         }
     }
 
-    private static func openHandle(for url: URL) throws -> PTSQLiteHandle {
+    private static func openHandle(for url: URL,
+                                   configuration: PTDatabaseRuntimeConfiguration = .init()) throws -> PTSQLiteHandle {
         if url.path != ":memory:" {
             try FileManager.default.createDirectory(at: url.deletingLastPathComponent(),
                                                     withIntermediateDirectories: true)
@@ -224,12 +453,29 @@ public actor PTDatabase {
             if let candidate { sqlite3_close(candidate) }
             throw PTDatabaseError.openFailed(error)
         }
-        sqlite3_busy_timeout(candidate, 5_000)
+        sqlite3_busy_timeout(candidate, configuration.busyTimeoutMilliseconds)
+        do {
+            try apply(configuration, to: candidate)
+        } catch {
+            sqlite3_close(candidate)
+            throw error
+        }
         return PTSQLiteHandle(pointer: candidate)
     }
 
-    private func close() {
-        handle = nil
+    private static func apply(_ configuration: PTDatabaseRuntimeConfiguration,
+                              to pointer: OpaquePointer) throws {
+        let foreignKeys = configuration.foreignKeysEnabled ? "ON" : "OFF"
+        let statements = [
+            "PRAGMA foreign_keys = \(foreignKeys)",
+            "PRAGMA journal_mode = \(configuration.journalMode.rawValue)",
+            "PRAGMA synchronous = \(configuration.synchronousMode.rawValue)"
+        ]
+        for sql in statements {
+            guard sqlite3_exec(pointer, sql, nil, nil, nil) == SQLITE_OK else {
+                throw PTDatabaseError.openFailed(String(cString: sqlite3_errmsg(pointer)))
+            }
+        }
     }
 
     private func prepare(_ sql: String) throws -> OpaquePointer {
@@ -310,6 +556,28 @@ public actor PTDatabase {
         return String(cString: sqlite3_errmsg(handle.pointer))
     }
 
+    private func scalarText(_ sql: String) throws -> String {
+        guard let row = try query(sql).first,
+              let value = row.values.values.first else { return "" }
+        switch value {
+        case .text(let value): return value
+        case .integer(let value): return String(value)
+        case .real(let value): return String(value)
+        default: return ""
+        }
+    }
+
+    private func scalarInteger(_ sql: String) throws -> Int64 {
+        guard let row = try query(sql).first,
+              let value = row.values.values.first else { return 0 }
+        switch value {
+        case .integer(let value): return value
+        case .real(let value): return Int64(value)
+        case .text(let value): return Int64(value) ?? 0
+        default: return 0
+        }
+    }
+
     private func publish(_ change: PTDatabaseChange, table: String?) {
         observers.values.forEach { $0.yield(change) }
         let observation = PTDatabaseObservation(table: table, change: change)
@@ -334,5 +602,40 @@ public actor PTDatabase {
         default: candidates = []
         }
         return candidates.first?.trimmingCharacters(in: CharacterSet(charactersIn: "`\";"))
+    }
+
+    private static func validate(migrations: [PTDatabaseMigration], currentVersion: Int) throws -> [PTDatabaseMigration] {
+        _ = try PTDatabaseMigrationValidator.validate(migrations, currentVersion: currentVersion)
+        return migrations.sorted { $0.toVersion < $1.toVersion }.filter { $0.toVersion > currentVersion }
+    }
+
+    private static func integrityReport(for url: URL) throws -> PTDatabaseIntegrityReport {
+        var pointer: OpaquePointer?
+        guard sqlite3_open_v2(url.path, &pointer, SQLITE_OPEN_READONLY | SQLITE_OPEN_FULLMUTEX, nil) == SQLITE_OK,
+              let pointer else {
+            throw PTDatabaseError.openFailed("Unable to open database for integrity check")
+        }
+        defer { sqlite3_close(pointer) }
+        var statement: OpaquePointer?
+        guard sqlite3_prepare_v2(pointer, "PRAGMA integrity_check", -1, &statement, nil) == SQLITE_OK,
+              let statement else {
+            throw PTDatabaseError.integrityCheckFailed("Unable to prepare integrity check")
+        }
+        defer { sqlite3_finalize(statement) }
+        guard sqlite3_step(statement) == SQLITE_ROW,
+              let value = sqlite3_column_text(statement, 0) else {
+            throw PTDatabaseError.integrityCheckFailed("No integrity result")
+        }
+        let result = String(cString: value)
+        var versionStatement: OpaquePointer?
+        var version = 0
+        if sqlite3_prepare_v2(pointer, "PRAGMA user_version", -1, &versionStatement, nil) == SQLITE_OK,
+           let versionStatement {
+            defer { sqlite3_finalize(versionStatement) }
+            if sqlite3_step(versionStatement) == SQLITE_ROW { version = Int(sqlite3_column_int64(versionStatement, 0)) }
+        }
+        return PTDatabaseIntegrityReport(passed: result.caseInsensitiveCompare("ok") == .orderedSame,
+                                         result: result,
+                                         schemaVersion: version)
     }
 }

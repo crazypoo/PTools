@@ -3,15 +3,15 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_singletons.rb
-Source revision: 2e8cbdcc7e181e010af22947d0e2465d5a5e6c59
-Generated at: 2026-10-04T15:10:48Z
+Source revision: ce2216ac80d2a749565c5cf8a603b1407e82382e
+Generated at: 2026-10-05T10:56:33Z
 -->
 
 # PTools 当前单例范围盘点
 
 本报告用于后续 DI 迁移；它不会自动改变现有单例生命周期。
 
-- .shared / .share 调用文本计数：**1644**
+- .shared / .share 调用文本计数：**1651**
 - 单例声明计数：**131**
 
 | 位置 | 名称 | 分类 | 声明 | 迁移建议 |
@@ -71,7 +71,7 @@ Generated at: 2026-10-04T15:10:48Z
 | PooToolsSource/DebugPerformance/PTFPSTool.swift:14 | shared | C Shared mutable service | public static let shared = PTFPSTool.init() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DebugRuler/PTViewRulerPlugin.swift:17 | share | D Shared mutable UI or scene state | public static let share = PTViewRulerPlugin.init() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/HealthKit/PTHealthKit.swift:16 | share | C Shared mutable service | public static let share = PTHealthKit() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/IAP/PTIAPManager.swift:20 | shared | C Shared mutable service | public static let shared = PTIAPManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/IAP/PTIAPManager.swift:24 | shared | C Shared mutable service | public static let shared = PTIAPManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/ImageEditor/PTImageEditorConfig.swift:36 | share | D Shared mutable UI or scene state | public static let share = PTImageEditorConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/Inspector/ViewHierarchy.swift:11 | shared | C Shared mutable service | static let shared = ViewHierarchy(application: .shared) | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Instructions/PTInstructionCoordinator.swift:600 | shared | C Shared mutable service | public static let shared = PTInstructionSessionRegistry() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |

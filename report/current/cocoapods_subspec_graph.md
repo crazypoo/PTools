@@ -3,18 +3,18 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: 2e8cbdcc7e181e010af22947d0e2465d5a5e6c59
-Generated at: 2026-10-04T15:12:23Z
+Source revision: ce2216ac80d2a749565c5cf8a603b1407e82382e
+Generated at: 2026-10-05T10:57:21Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.61.0`
+- Podspec: `PooTools` `5.62.0`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
-- Subspec count: `143`
+- Subspec count: `162`
 
 ## Subspecs
 
@@ -22,9 +22,12 @@ Generated at: 2026-10-04T15:12:23Z
 | --- | --- | --- | --- | --- | --- |
 | `Accessibility` | `PooTools/PToolsUIFoundation` | — | `PToolsAccessibility` | Foundation, UIKit | — |
 | `Activities` | — | — | `PToolsActivities` | ActivityKit, Foundation | — |
+| `AppIntegrity` | — | — | `PToolsAppIntegrity` | DeviceCheck, Foundation | — |
 | `AppIntents` | `PooTools/RouteCore` | — | `PToolsAppIntents` | AppIntents, Foundation | — |
 | `Appz` | `PooTools/Core` | `Appz` | — | — | — |
 | `Audio` | `PooTools/MicPermission` | — | `PToolsAudio` | AVFoundation, AudioToolbox, Foundation | — |
+| `Auth` | `PooTools/AuthCore`, `PooTools/Storage` | — | `PToolsAuth` | Foundation | — |
+| `AuthCore` | — | — | `PToolsAuthCore` | Foundation | — |
 | `BackgroundTasks` | — | — | `PToolsBackgroundTasks` | BackgroundTasks, Foundation | — |
 | `BankCard` | `PooTools/Core` | — | `BankCard` | — | — |
 | `Banner` | `PooTools/Logging`, `PooTools/Overlay`, `PooTools/PToolsCore`, `PooTools/Symbols` | — | `Banner` | Foundation, UIKit | — |
@@ -53,6 +56,8 @@ Generated at: 2026-10-04T15:12:23Z
 | `DEBUG` | `PooTools/BackgroundTasks`, `PooTools/Connectivity`, `PooTools/Core`, `PooTools/DeepLink`, `PooTools/NetWork`, `PooTools/Notifications`, `PooTools/Overlay`, `PooTools/PDF`, `PooTools/RouteCore`, `PooTools/SearchBar`, `PooTools/Share`, `PooTools/Storage`, `PooTools/Symbols` | — | `DEBUGLocation`, `Debug`, `DebugCategory`, `DebugColor`, `DebugCrash`, `DebugFile`, `DebugLibs`, `DebugNetwork`, `DebugPerformance`, `DebugRuler`, `DebugUserDefault`, `DevMask`, `Inspector`, `LocalConsole`, `TouchInspector` | — | — |
 | `DEBUG_TrackingEyes` | `PooTools/CameraPermission`, `PooTools/Core`, `PooTools/DEBUG` | — | `WhereIsMyEye` | — | — |
 | `DataEncrypt` | `PooTools/Core` | `CryptoSwift` | `AESAndDES` | — | — |
+| `Database` | `PooTools/DatabaseCore` | — | `PToolsDatabase` | Foundation | — |
+| `DatabaseCore` | — | — | `PToolsDatabaseCore` | Foundation | — |
 | `Date` | — | — | `PToolsDate` | Foundation | — |
 | `DeepLink` | `PooTools/RouteCore` | — | `PToolsDeepLink` | Foundation | — |
 | `Device` | — | — | `PToolsDevice` | Foundation | — |
@@ -86,6 +91,8 @@ Generated at: 2026-10-04T15:12:23Z
 | `LocationPermission` | `PooTools/PToolsPermissionCore` | — | `LocationPermission` | — | — |
 | `Logging` | — | — | `PToolsLogging` | Foundation, OSLog | — |
 | `MXMetricManagerKit` | `PooTools/Core` | — | `MXMetricKitManager` | — | — |
+| `Map` | `PooTools/MapCore` | — | `PToolsMap` | Contacts, CoreLocation, Foundation, MapKit, UIKit | — |
+| `MapCore` | — | — | `PToolsMapCore` | Foundation | — |
 | `MediaCore` | — | — | `PToolsMediaCore` | Foundation | — |
 | `MediaPermission` | `PooTools/PToolsPermissionCore` | — | `MeidaLibraryPermission` | — | — |
 | `MediaViewer` | `PooTools/Core`, `PooTools/LivePhoto`, `PooTools/MediaCore`, `PooTools/PageControl`, `PooTools/ProgressBar` | — | `MediaViewer` | Photos | — |
@@ -106,6 +113,8 @@ Generated at: 2026-10-04T15:12:23Z
 | `NotificationPermission` | `PooTools/PToolsPermissionCore` | — | `NotificationPermission` | — | — |
 | `Notifications` | `PooTools/NotificationPermission`, `PooTools/RouteCore` | — | `PToolsNotifications` | Foundation, UniformTypeIdentifiers, UserNotifications | — |
 | `OSSKitSpeech` | `PooTools/Core`, `PooTools/SpeechRecognizerPermission` | — | `OSSKit` | Speech | — |
+| `Observability` | `PooTools/ObservabilityCore` | — | `PToolsObservability` | Foundation | — |
+| `ObservabilityCore` | — | — | `PToolsObservabilityCore` | Foundation | — |
 | `Overlay` | `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsUIFoundation` | — | `Overlay` | Foundation, UIKit | — |
 | `PDF` | `PooTools/Core` | — | `PDF` | — | — |
 | `PToolsCore` | — | — | `PToolsCore` | Foundation | — |
@@ -124,6 +133,8 @@ Generated at: 2026-10-04T15:12:23Z
 | `PopoverKit` | `PooTools/PToolsCore`, `PooTools/Popover` | — | — | — | — |
 | `ProgressBar` | `PooTools/Core` | — | `ProgressBar` | — | — |
 | `RateView` | `PooTools/PToolsUIFoundation` | `SnapKit` | `RateView` | — | — |
+| `Realtime` | `PooTools/RealtimeCore`, `PooTools/SocketKit` | — | `PToolsRealtime` | Foundation, Network | — |
+| `RealtimeCore` | — | — | `PToolsRealtimeCore` | Foundation | — |
 | `RemindersPermission` | `PooTools/PToolsPermissionCore` | — | `RemindersPermission` | — | — |
 | `RouteCore` | — | — | `PToolsRouteCore` | Foundation | — |
 | `Router` | `PooTools/Core`, `PooTools/DeepLink`, `PooTools/RouteCore` | — | `Router` | — | — |
@@ -149,15 +160,23 @@ Generated at: 2026-10-04T15:12:23Z
 | `Stepper` | `PooTools/Core` | — | `Stepper` | — | — |
 | `Storage` | `PooTools/KeyChain`, `PooTools/StorageCore` | — | `PToolsStorage` | Foundation, Security | — |
 | `StorageCore` | — | — | `PToolsStorageCore` | Foundation | — |
+| `StoreKit` | — | — | `PToolsStoreKit` | Foundation, StoreKit | — |
 | `Symbols` | — | — | `PToolsSymbols` | Foundation, OSLog, UIKit | PooToolsSymbolsResources |
+| `Sync` | `PooTools/SyncCore` | — | `PToolsSync` | Foundation | — |
+| `SyncCore` | — | — | `PToolsSyncCore` | Foundation | — |
 | `Tabbar` | `PooTools/Core` | — | — | — | — |
 | `Telephony` | `PooTools/Core` | — | `CallMessageMail` | CoreTelephony, MessageUI, WebKit | — |
 | `Theme` | `PooTools/PToolsUIFoundation` | — | `PToolsTheme` | Foundation, UIKit | — |
 | `TipsView` | `PooTools/Core` | — | `TipsView` | — | — |
 | `TrackingPermission` | `PooTools/PToolsPermissionCore` | — | `TrackingPermission` | — | — |
+| `Transfer` | `PooTools/TransferCore` | — | `PToolsTransfer` | CryptoKit, Foundation | — |
+| `TransferCore` | — | — | `PToolsTransferCore` | Foundation | — |
 | `VideoCache` | `PooTools/Core` | `KTVHTTPCache` | — | — | — |
 | `VideoEditor` | `PooTools/Core`, `PooTools/HarbethKit`, `PooTools/Loading`, `PooTools/MediaCore`, `PooTools/ProgressBar`, `PooTools/Symbols` | — | `VideoEditor` | — | — |
 | `Vision` | `PooTools/Core` | — | `Vision` | — | — |
+| `Web` | `PooTools/WebBridge` | — | `PToolsWeb` | Foundation, UIKit, WebKit | — |
+| `WebBridge` | `PooTools/WebCore` | — | `PToolsWebBridge` | Foundation, WebKit | — |
+| `WebCore` | — | — | `PToolsWebCore` | Foundation | — |
 | `WebKit` | `PooTools/Core` | — | `WebKit` | — | — |
 | `WhatsNewsKit` | `PooTools/Core` | — | `WhatsNewsKit` | — | — |
 | `WidgetCore` | `PooTools/DeepLink`, `PooTools/RouteCore`, `PooTools/Storage` | — | `PToolsWidgetCore` | Foundation, WidgetKit | — |

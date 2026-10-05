@@ -3,17 +3,17 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: 2e8cbdcc7e181e010af22947d0e2465d5a5e6c59
-Generated at: 2026-10-04T15:12:23Z
+Source revision: ce2216ac80d2a749565c5cf8a603b1407e82382e
+Generated at: 2026-10-05T10:57:21Z
 -->
 
 # SwiftPM / CocoaPods Module Parity
 
 - Status: `baseline`
-- Fingerprint: `0f4a6fff1fad4860eac89c341cc2196ab1dcf7fea674b29ee3e756647d9537f5`
+- Fingerprint: `d20f653ca41f92a30f7da31a93b3fc88043a8a1a496c03dc01bf4920838a9bcd`
 - Matched modules: `123`
-- SwiftPM-only modules: `11`
-- CocoaPods-only modules: `17`
+- SwiftPM-only modules: `30`
+- CocoaPods-only modules: `36`
 - Source-directory drift: `3`
 - Dependency drift: `23`
 - Swift setting / macro drift: `56`
@@ -23,8 +23,8 @@ Generated at: 2026-10-04T15:12:23Z
 | Class | Modules / count |
 | --- | --- |
 | Matched | `Accessibility`, `Activities`, `AppIntents`, `Audio`, `BackgroundTasks`, `BankCard`, `Banner`, `BilogyID`, `Bluetooth`, `BluetoothPermission`, `Calendar`, `CalendarPermission`, `CameraPermission`, `CheckBox`, `CheckDirtyWord`, `CheckUpdate`, `ChinesePinyin`, `Circle`, `CodeView`, `Configuration`, `Connectivity`, `Contact`, `ContactsPermission`, `ContentState`, `Core`, `Country`, `CustomerLabel`, `CustomerNumberKeyboard`, `DEBUG`, `DEBUG_TrackingEyes`, `DataEncrypt`, `DeepLink`, `Device`, `Documents`, `FaceIDPermission`, `Feedback`, `Form`, `Guide`, `HTTPFilePortal`, `HTTPServer`, `HandSign`, `HarbethKit`, `HealthPermission`, `HeartRate`, `Hud`, `IAP`, `ImageEditor`, `ImagePicker`, `Input`, `Instructions`, `KeyChain`, `LaunchTimeProfiler`, `Layout`, `LivePhoto`, `Loading`, `Location`, `LocationPermission`, `Logging`, `MediaCore`, `MediaViewer`, `MeidaPermission`, `MessageKit`, `MicPermission`, `Model`, `ModelCore`, `Motion`, `MotionPermission`, `NetWork`, `NetworkSpeedTest`, `NotificationPermission`, `Notifications`, `OSSKitSpeech`, `Overlay`, `PDF`, `PToolsCore`, `PToolsModelCombine`, `PToolsModelUIKit`, `PToolsPermissionCore`, `PToolsPermissionUI`, `PToolsUIFoundation`, `PageControl`, `PagingControl`, `PhoneInfo`, `PhotoPicker`, `Picker`, `Ping`, `Popover`, `ProgressBar`, `RateView`, `RemindersPermission`, `RouteCore`, `Router`, `SVG`, `ScanQRCode`, `ScrollBanner`, `Search`, `SearchBar`, `Security`, `Segmented`, `Share`, `Simulation`, `SimulationCore`, `SiriPermission`, `Slider`, `SmartScreenshot`, `SocketKit`, `SpeechRecognizerPermission`, `SpeedPanel`, `SplitView`, `StepCount`, `Stepper`, `Storage`, `StorageCore`, `Symbols`, `Telephony`, `Theme`, `TipsView`, `TrackingPermission`, `VideoEditor`, `Vision`, `WhatsNewsKit`, `WidgetCore`, `iOS17Tips` |
-| SwiftPM only | `PTModelBenchmark`, `PTModelLegacyKakaJSONFixture`, `PTModelLegacySmartCodableFixture`, `PTModelMixedLegacyFixture`, `PTModelOnlyFixture`, `PToolsDate`, `PToolsFontCatalogCore`, `PToolsModelLegacyKakaJSON`, `PToolsModelLegacySmartCodable`, `PToolsModelMacroPlugin`, `PToolsNetworkModelCore` |
-| CocoaPods only | `Appz`, `Date`, `FilterCamera`, `Flag`, `GCDWebServer`, `InputAll`, `MXMetricManagerKit`, `ModelLegacyKakaJSON`, `ModelLegacySmartCodable`, `NFCKit`, `NotificationBanner`, `PopoverKit`, `SecuritySuite`, `Tabbar`, `VideoCache`, `WebKit`, `ZipArchive` |
+| SwiftPM only | `PTModelBenchmark`, `PTModelLegacyKakaJSONFixture`, `PTModelLegacySmartCodableFixture`, `PTModelMixedLegacyFixture`, `PTModelOnlyFixture`, `PToolsAppIntegrity`, `PToolsAuth`, `PToolsAuthCore`, `PToolsDatabase`, `PToolsDatabaseCore`, `PToolsDate`, `PToolsFontCatalogCore`, `PToolsMap`, `PToolsMapCore`, `PToolsModelLegacyKakaJSON`, `PToolsModelLegacySmartCodable`, `PToolsModelMacroPlugin`, `PToolsNetworkModelCore`, `PToolsObservability`, `PToolsObservabilityCore`, `PToolsRealtime`, `PToolsRealtimeCore`, `PToolsStoreKit`, `PToolsSync`, `PToolsSyncCore`, `PToolsTransfer`, `PToolsTransferCore`, `PToolsWeb`, `PToolsWebBridge`, `PToolsWebCore` |
+| CocoaPods only | `AppIntegrity`, `Appz`, `Auth`, `AuthCore`, `Database`, `DatabaseCore`, `Date`, `FilterCamera`, `Flag`, `GCDWebServer`, `InputAll`, `MXMetricManagerKit`, `Map`, `MapCore`, `ModelLegacyKakaJSON`, `ModelLegacySmartCodable`, `NFCKit`, `NotificationBanner`, `Observability`, `ObservabilityCore`, `PopoverKit`, `Realtime`, `RealtimeCore`, `SecuritySuite`, `StoreKit`, `Sync`, `SyncCore`, `Tabbar`, `Transfer`, `TransferCore`, `VideoCache`, `Web`, `WebBridge`, `WebCore`, `WebKit`, `ZipArchive` |
 
 ## Drift details
 

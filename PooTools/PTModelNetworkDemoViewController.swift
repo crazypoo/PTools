@@ -264,7 +264,8 @@ final class PTModelNetworkDemoViewController: PTListViewController {
     }
 
     private func runLegacyFontName() {
-        publish("Legacy FontName\nFontName.PingFangSCRegular = \(FontName.PingFangSCRegular)\nforwarded catalog count = \(FontName.fontNames().count)\n迁移新代码请使用 PTFont.pingFangSCRegular。")
+        let migratedFont = PTFont.pingFangSCRegular
+        publish("Legacy FontName\n迁移后的字体 = \(migratedFont.postScriptName)\nforwarded catalog count = \(PTFontCatalog.allFonts.count)\n迁移新代码请使用 PTFont.pingFangSCRegular。")
     }
 }
 

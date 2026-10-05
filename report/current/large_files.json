@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "2e8cbdcc7e181e010af22947d0e2465d5a5e6c59",
-  "generated_at": "2026-10-04T15:14:12Z",
+  "source_revision": "ce2216ac80d2a749565c5cf8a603b1407e82382e",
+  "generated_at": "2026-10-05T10:58:05Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -2051,7 +2051,7 @@
     },
     {
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "lines": 260,
+      "lines": 264,
       "classification": "ok"
     },
     {
@@ -4240,6 +4240,11 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsAppIntegrity/PTAppIntegrity.swift",
+      "lines": 319,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsAppIntents/PTAppIntents.swift",
       "lines": 86,
       "classification": "ok"
@@ -4247,6 +4252,16 @@
     {
       "path": "PooToolsSource/PToolsAudio/PTAudio.swift",
       "lines": 422,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsAuth/PTAuth.swift",
+      "lines": 495,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsAuthCore/PTAuthCore.swift",
+      "lines": 233,
       "classification": "ok"
     },
     {
@@ -4261,7 +4276,12 @@
     },
     {
       "path": "PooToolsSource/PToolsConfiguration/PTConfiguration.swift",
-      "lines": 298,
+      "lines": 404,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsConfiguration/PTRemoteConfigurationProviders.swift",
+      "lines": 370,
       "classification": "ok"
     },
     {
@@ -4317,6 +4337,16 @@
     {
       "path": "PooToolsSource/PToolsCore/PTURLParser.swift",
       "lines": 56,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDatabase/PTDatabase.swift",
+      "lines": 641,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsDatabaseCore/PTDatabaseCore.swift",
+      "lines": 364,
       "classification": "ok"
     },
     {
@@ -4535,6 +4565,16 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsMap/PTMap.swift",
+      "lines": 230,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsMapCore/PTMapCore.swift",
+      "lines": 139,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift",
       "lines": 203,
       "classification": "ok"
@@ -4665,6 +4705,16 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsObservability/PTObservability.swift",
+      "lines": 386,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsObservabilityCore/PTObservabilityCore.swift",
+      "lines": 227,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift",
       "lines": 61,
       "classification": "ok"
@@ -4677,6 +4727,16 @@
     {
       "path": "PooToolsSource/PToolsPermissionUI/PTPermissionUI.swift",
       "lines": 72,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsRealtime/PTRealtime.swift",
+      "lines": 246,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsRealtimeCore/PTRealtimeCore.swift",
+      "lines": 134,
       "classification": "ok"
     },
     {
@@ -4702,6 +4762,11 @@
     {
       "path": "PooToolsSource/PToolsStorageCore/PTStorageCore.swift",
       "lines": 81,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsStoreKit/PTStoreKit.swift",
+      "lines": 290,
       "classification": "ok"
     },
     {
@@ -4750,8 +4815,38 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsSync/PTSync.swift",
+      "lines": 296,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsSyncCore/PTSyncCore.swift",
+      "lines": 173,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsTheme/PTTheme.swift",
       "lines": 302,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsTransfer/PTTransfer.swift",
+      "lines": 366,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsTransfer/PTTransferDownloadController.swift",
+      "lines": 204,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsTransfer/PTTransferResumeStore.swift",
+      "lines": 37,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
+      "lines": 220,
       "classification": "ok"
     },
     {
@@ -4797,6 +4892,21 @@
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift",
       "lines": 329,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsWeb/PTWeb.swift",
+      "lines": 46,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsWebBridge/PTWebBridge.swift",
+      "lines": 189,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsWebCore/PTWebCore.swift",
+      "lines": 107,
       "classification": "ok"
     },
     {
@@ -5411,7 +5521,7 @@
     },
     {
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "lines": 968,
+      "lines": 975,
       "classification": "ok"
     },
     {

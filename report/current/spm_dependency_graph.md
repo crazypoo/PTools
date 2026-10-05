@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: 2e8cbdcc7e181e010af22947d0e2465d5a5e6c59
-Generated at: 2026-10-04T15:12:25Z
+Source revision: ce2216ac80d2a749565c5cf8a603b1407e82382e
+Generated at: 2026-10-05T10:57:23Z
 -->
 
 # SwiftPM Dependency Graph
@@ -13,7 +13,7 @@ Generated at: 2026-10-04T15:12:25Z
 - Package: `ptools`
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
-- Target count: `157`
+- Target count: `177`
 - Core direct third-party dependencies: `4` (baseline `18`)
 
 ## Products
@@ -42,14 +42,19 @@ Generated at: 2026-10-04T15:12:25Z
 | `PTTrackingPermission` | `PTTrackingPermission` |
 | `PToolsAccessibility` | `PToolsAccessibility` |
 | `PToolsActivities` | `PToolsActivities` |
+| `PToolsAppIntegrity` | `PToolsAppIntegrity` |
 | `PToolsAppIntents` | `PToolsAppIntents` |
 | `PToolsAudio` | `PToolsAudio` |
+| `PToolsAuth` | `PToolsAuth` |
+| `PToolsAuthCore` | `PToolsAuthCore` |
 | `PToolsBackgroundTasks` | `PToolsBackgroundTasks` |
 | `PToolsBluetooth` | `PToolsBluetooth` |
 | `PToolsConfiguration` | `PToolsConfiguration` |
 | `PToolsConnectivity` | `PToolsConnectivity` |
 | `PToolsContentState` | `PToolsContentState` |
 | `PToolsCore` | `PToolsCore` |
+| `PToolsDatabase` | `PToolsDatabase` |
+| `PToolsDatabaseCore` | `PToolsDatabaseCore` |
 | `PToolsDate` | `PToolsDate` |
 | `PToolsDeepLink` | `PToolsDeepLink` |
 | `PToolsDevice` | `PToolsDevice` |
@@ -59,6 +64,8 @@ Generated at: 2026-10-04T15:12:25Z
 | `PToolsHTTPFilePortal` | `PToolsHTTPFilePortal` |
 | `PToolsHTTPServer` | `PToolsHTTPServer` |
 | `PToolsLogging` | `PToolsLogging` |
+| `PToolsMap` | `PToolsMap` |
+| `PToolsMapCore` | `PToolsMapCore` |
 | `PToolsModel` | `PToolsModel` |
 | `PToolsModelCombine` | `PToolsModelCombine` |
 | `PToolsModelCore` | `PToolsModelCore` |
@@ -66,17 +73,29 @@ Generated at: 2026-10-04T15:12:25Z
 | `PToolsModelLegacySmartCodable` | `PToolsModelLegacySmartCodable` |
 | `PToolsModelUIKit` | `PToolsModelUIKit` |
 | `PToolsNotifications` | `PToolsNotifications` |
+| `PToolsObservability` | `PToolsObservability` |
+| `PToolsObservabilityCore` | `PToolsObservabilityCore` |
 | `PToolsOverlay` | `PToolsOverlay` |
 | `PToolsPermissionCore` | `PToolsPermissionCore` |
 | `PToolsPermissionUI` | `PToolsPermissionUI` |
+| `PToolsRealtime` | `PToolsRealtime` |
+| `PToolsRealtimeCore` | `PToolsRealtimeCore` |
 | `PToolsRouteCore` | `PToolsRouteCore` |
 | `PToolsSimulation` | `PToolsSimulation` |
 | `PToolsSimulationCore` | `PToolsSimulationCore` |
 | `PToolsStorage` | `PToolsStorage` |
 | `PToolsStorageCore` | `PToolsStorageCore` |
+| `PToolsStoreKit` | `PToolsStoreKit` |
 | `PToolsSymbols` | `PToolsSymbols` |
+| `PToolsSync` | `PToolsSync` |
+| `PToolsSyncCore` | `PToolsSyncCore` |
 | `PToolsTheme` | `PToolsTheme` |
+| `PToolsTransfer` | `PToolsTransfer` |
+| `PToolsTransferCore` | `PToolsTransferCore` |
 | `PToolsUIFoundation` | `PToolsUIFoundation` |
+| `PToolsWeb` | `PToolsWeb` |
+| `PToolsWebBridge` | `PToolsWebBridge` |
+| `PToolsWebCore` | `PToolsWebCore` |
 | `PToolsWidgetCore` | `PToolsWidgetCore` |
 | `PooToolsAll` | `PTBluetoothPermission`, `PTCalendarPermission`, `PTCameraPermission`, `PTContactsPermission`, `PTFaceIDPermission`, `PTHealthPermission`, `PTLocationPermission`, `PTMediaPermission`, `PTMicPermission`, `PTMotionPermission`, `PTNotificationPermission`, `PTRemindersPermission`, `PTSiriPermission`, `PTSpeechPermission`, `PTTrackingPermission`, `PToolsAccessibility`, `PToolsActivities`, `PToolsAppIntents`, `PToolsAudio`, `PToolsBackgroundTasks`, `PToolsBluetooth`, `PToolsConfiguration`, `PToolsConnectivity`, `PToolsContentState`, `PToolsDate`, `PToolsDeepLink`, `PToolsDocuments`, `PToolsFeedback`, `PToolsForm`, `PToolsHTTPFilePortal`, `PToolsHTTPServer`, `PToolsLogging`, `PToolsModel`, `PToolsModelCombine`, `PToolsModelCore`, `PToolsModelUIKit`, `PToolsNotifications`, `PToolsOverlay`, `PToolsPermissionCore`, `PToolsPermissionUI`, `PToolsRouteCore`, `PToolsSimulation`, `PToolsSimulationCore`, `PToolsStorage`, `PToolsStorageCore`, `PToolsSymbols`, `PToolsTheme`, `PToolsWidgetCore`, `PooToolsBankCard`, `PooToolsBanner`, `PooToolsBioID`, `PooToolsCalendar`, `PooToolsCheckBox`, `PooToolsCheckDirtyWord`, `PooToolsCheckUpdate`, `PooToolsChinesePinyin`, `PooToolsCircle`, `PooToolsCodeView`, `PooToolsContact`, `PooToolsCountry`, `PooToolsCustomerLabel`, `PooToolsDEBUG`, `PooToolsDEBUGTrackingEyes`, `PooToolsDataEncrypt`, `PooToolsGuide`, `PooToolsHandSign`, `PooToolsHarbethKit`, `PooToolsHeartRate`, `PooToolsHud`, `PooToolsIAP`, `PooToolsImageEditor`, `PooToolsImagePicker`, `PooToolsInput`, `PooToolsInstructions`, `PooToolsKeyChain`, `PooToolsKeyboard`, `PooToolsLaunchTimeProfiler`, `PooToolsLayout`, `PooToolsLivePhoto`, `PooToolsLoading`, `PooToolsLocation`, `PooToolsMediaCore`, `PooToolsMediaViewer`, `PooToolsMessageKit`, `PooToolsMotion`, `PooToolsNetWork`, `PooToolsNetworkSpeedTest`, `PooToolsOSSKitSpeech`, `PooToolsPDF`, `PooToolsPageControl`, `PooToolsPagingControl`, `PooToolsPhoneInfo`, `PooToolsPhotoPicker`, `PooToolsPicker`, `PooToolsPing`, `PooToolsPopover`, `PooToolsProgressBar`, `PooToolsRateView`, `PooToolsRouter`, `PooToolsSVG`, `PooToolsScanQRCode`, `PooToolsScrollBanner`, `PooToolsSearch`, `PooToolsSearchBar`, `PooToolsSecurity`, `PooToolsSegmented`, `PooToolsShare`, `PooToolsSlider`, `PooToolsSmartScreenshot`, `PooToolsSocketKit`, `PooToolsSpeedPanel`, `PooToolsSplitView`, `PooToolsStepCount`, `PooToolsStepper`, `PooToolsTelephony`, `PooToolsTipsView`, `PooToolsVideoEditor`, `PooToolsVision`, `PooToolsWhatsNewsKit`, `PooToolsiOS17Tips`, `ptools` |
 | `PooToolsBankCard` | `PooToolsBankCard` |
@@ -181,8 +200,12 @@ Generated at: 2026-10-04T15:12:25Z
 | `PToolsAccessibility` | `PooToolsSource/PToolsAccessibility` | PToolsUIFoundation | — | 0 source entries / 0 resources |
 | `PToolsActivities` | `PooToolsSource/PToolsActivities` | — | — | 0 source entries / 0 resources |
 | `PToolsAdvancedTests` | `Tests/PToolsAdvancedTests` | PToolsBluetooth, PToolsConnectivity, PToolsCore, PToolsDevice, PToolsSimulation, PToolsSimulationCore | — | 0 source entries / 0 resources |
+| `PToolsAppIntegrity` | `PooToolsSource/PToolsAppIntegrity` | — | — | 0 source entries / 0 resources |
 | `PToolsAppIntents` | `PooToolsSource/PToolsAppIntents` | PToolsRouteCore | — | 0 source entries / 0 resources |
+| `PToolsApplicationInfrastructureTests` | `Tests/PToolsApplicationInfrastructureTests` | PToolsAppIntegrity, PToolsAuth, PToolsAuthCore, PToolsConfiguration, PToolsDatabase, PToolsMap, PToolsMapCore, PToolsObservability, PToolsObservabilityCore, PToolsRealtimeCore, PToolsStoreKit, PToolsSync, PToolsSyncCore, PToolsTransfer, PToolsTransferCore, PToolsWebBridge, PToolsWebCore | — | 0 source entries / 0 resources |
 | `PToolsAudio` | `PooToolsSource/PToolsAudio` | PTMicPermission | — | 0 source entries / 0 resources |
+| `PToolsAuth` | `PooToolsSource/PToolsAuth` | PToolsAuthCore, PToolsStorage, PToolsStorageCore | — | 0 source entries / 0 resources |
+| `PToolsAuthCore` | `PooToolsSource/PToolsAuthCore` | — | — | 0 source entries / 0 resources |
 | `PToolsBackgroundTasks` | `PooToolsSource/PToolsBackgroundTasks` | — | — | 0 source entries / 0 resources |
 | `PToolsBannerTests` | `Tests/PToolsBannerTests` | PooToolsBanner | — | 0 source entries / 0 resources |
 | `PToolsBluetooth` | `PooToolsSource/PToolsBluetooth` | — | — | 0 source entries / 0 resources |
@@ -191,6 +214,8 @@ Generated at: 2026-10-04T15:12:25Z
 | `PToolsContentState` | `PooToolsSource/PToolsContentState` | PToolsAccessibility, PToolsConnectivity, PToolsTheme, ptools | — | 0 source entries / 0 resources |
 | `PToolsCore` | `PooToolsSource/PToolsCore` | — | — | 0 source entries / 0 resources |
 | `PToolsCoreTests` | `Tests/PooToolsCoreTests` | PToolsCore | — | 0 source entries / 0 resources |
+| `PToolsDatabase` | `PooToolsSource/PToolsDatabase` | PToolsDatabaseCore | — | 0 source entries / 0 resources |
+| `PToolsDatabaseCore` | `PooToolsSource/PToolsDatabaseCore` | — | — | 0 source entries / 0 resources |
 | `PToolsDate` | `PooToolsSource/PToolsDate` | — | — | 0 source entries / 0 resources |
 | `PToolsDateTests` | `Tests/PToolsDateTests` | PToolsDate | — | 0 source entries / 0 resources |
 | `PToolsDebugTests` | `Tests/PToolsDebugTests` | PooToolsDEBUG | — | 0 source entries / 0 resources |
@@ -209,6 +234,8 @@ Generated at: 2026-10-04T15:12:25Z
 | `PToolsListTests` | `Tests/PToolsListTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsLogging` | `PooToolsSource/PToolsLogging` | — | — | 0 source entries / 0 resources |
 | `PToolsLoggingTests` | `Tests/PToolsLoggingTests` | PToolsLogging | — | 0 source entries / 0 resources |
+| `PToolsMap` | `PooToolsSource/PToolsMap` | PToolsMapCore | — | 0 source entries / 0 resources |
+| `PToolsMapCore` | `PooToolsSource/PToolsMapCore` | — | — | 0 source entries / 0 resources |
 | `PToolsMediaTests` | `Tests/PToolsMediaTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsModel` | `PooToolsSource/PToolsModel` | PToolsModelCore, PToolsModelMacroPlugin | — | 0 source entries / 0 resources |
 | `PToolsModelCombine` | `PooToolsSource/PToolsModelCombine` | — | — | 0 source entries / 0 resources |
@@ -223,12 +250,16 @@ Generated at: 2026-10-04T15:12:25Z
 | `PToolsNetworkRuntimeTests` | `Tests/PToolsNetworkTests` | PToolsModelCore, PooToolsNetWork | Alamofire | 1 source entries / 0 resources |
 | `PToolsNetworkTests` | `Tests/PToolsNetworkTests` | PToolsModelCore, PToolsNetworkModelCore | — | 1 source entries / 0 resources |
 | `PToolsNotifications` | `PooToolsSource/PToolsNotifications` | PTNotificationPermission, PToolsRouteCore | — | 0 source entries / 0 resources |
+| `PToolsObservability` | `PooToolsSource/PToolsObservability` | PToolsLogging, PToolsObservabilityCore | — | 0 source entries / 0 resources |
+| `PToolsObservabilityCore` | `PooToolsSource/PToolsObservabilityCore` | — | — | 0 source entries / 0 resources |
 | `PToolsOverlay` | `PooToolsSource/Overlay` | PToolsCore, PToolsLogging, PToolsUIFoundation | — | 0 source entries / 0 resources |
 | `PToolsP2Tests` | `Tests/PToolsP2Tests` | PToolsActivities, PToolsAppIntents, PToolsAudio, PToolsConfiguration, PToolsCore, PToolsDocuments, PToolsFeedback, PToolsForm, PToolsRouteCore, PToolsWidgetCore, ptools | — | 0 source entries / 0 resources |
 | `PToolsPermissionCore` | `PooToolsSource/PToolsPermissionCore` | — | — | 0 source entries / 0 resources |
 | `PToolsPermissionTests` | `Tests/PToolsPermissionTests` | ptools | — | 0 source entries / 0 resources |
 | `PToolsPermissionUI` | `PooToolsSource/PToolsPermissionUI` | PToolsPermissionCore, PToolsUIFoundation | — | 0 source entries / 0 resources |
 | `PToolsPlatformTests` | `Tests/PToolsPlatformTests` | PToolsBackgroundTasks, PToolsConnectivity, PToolsDeepLink, PToolsNotifications, PToolsRouteCore, PToolsStorage, PToolsStorageCore | — | 0 source entries / 0 resources |
+| `PToolsRealtime` | `PooToolsSource/PToolsRealtime` | PToolsRealtimeCore, PooToolsSocketKit | — | 0 source entries / 0 resources |
+| `PToolsRealtimeCore` | `PooToolsSource/PToolsRealtimeCore` | — | — | 0 source entries / 0 resources |
 | `PToolsRichTextTests` | `Tests/PToolsRichTextTests` | PToolsUIFoundation | — | 0 source entries / 0 resources |
 | `PToolsRouteCore` | `PooToolsSource/PToolsRouteCore` | — | — | 0 source entries / 0 resources |
 | `PToolsSimulation` | `PooToolsSource/PToolsSimulation` | PToolsBluetooth, PToolsConnectivity, PToolsCore, PToolsDevice, PToolsSimulationCore | — | 0 source entries / 0 resources |
@@ -236,11 +267,19 @@ Generated at: 2026-10-04T15:12:25Z
 | `PToolsSocketKitTests` | `Tests/PToolsSocketKitTests` | PooToolsSocketKit | — | 0 source entries / 0 resources |
 | `PToolsStorage` | `PooToolsSource/PToolsStorage` | PToolsStorageCore, PooToolsKeyChain | — | 0 source entries / 0 resources |
 | `PToolsStorageCore` | `PooToolsSource/PToolsStorageCore` | — | — | 0 source entries / 0 resources |
+| `PToolsStoreKit` | `PooToolsSource/PToolsStoreKit` | — | — | 0 source entries / 0 resources |
 | `PToolsSymbols` | `PooToolsSource/PToolsSymbols` | — | — | 0 source entries / 1 resources |
 | `PToolsSymbolsTests` | `Tests/PToolsSymbolsTests` | PToolsSymbols | — | 0 source entries / 0 resources |
+| `PToolsSync` | `PooToolsSource/PToolsSync` | PToolsConnectivity, PToolsDatabase, PToolsDatabaseCore, PToolsSyncCore | — | 0 source entries / 0 resources |
+| `PToolsSyncCore` | `PooToolsSource/PToolsSyncCore` | — | — | 0 source entries / 0 resources |
 | `PToolsTheme` | `PooToolsSource/PToolsTheme` | PToolsUIFoundation | — | 0 source entries / 0 resources |
+| `PToolsTransfer` | `PooToolsSource/PToolsTransfer` | PToolsTransferCore | — | 0 source entries / 0 resources |
+| `PToolsTransferCore` | `PooToolsSource/PToolsTransferCore` | — | — | 0 source entries / 0 resources |
 | `PToolsUIFoundation` | `PooToolsSource/PToolsUIFoundation` | PToolsCore | SnapKit | 0 source entries / 0 resources |
 | `PToolsUIFoundationTests` | `Tests/PToolsUIFoundationTests` | PooToolsPagingControl, ptools | — | 0 source entries / 0 resources |
+| `PToolsWeb` | `PooToolsSource/PToolsWeb` | PToolsWebBridge | — | 0 source entries / 0 resources |
+| `PToolsWebBridge` | `PooToolsSource/PToolsWebBridge` | PToolsWebCore | — | 0 source entries / 0 resources |
+| `PToolsWebCore` | `PooToolsSource/PToolsWebCore` | — | — | 0 source entries / 0 resources |
 | `PToolsWidgetCore` | `PooToolsSource/PToolsWidgetCore` | PToolsDeepLink, PToolsRouteCore, PToolsStorage, PToolsStorageCore | — | 0 source entries / 0 resources |
 | `PooToolsBankCard` | `PooToolsSource/BankCard` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsBanner` | `PooToolsSource/Banner` | PToolsCore, PToolsLogging, PToolsOverlay, PToolsSymbols | — | 0 source entries / 0 resources |

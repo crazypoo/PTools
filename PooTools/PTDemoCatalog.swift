@@ -279,20 +279,28 @@ final class PTDemoCoordinator {
             return PT5_61PingDemoViewController()
         case "device.heart-rate":
             return PTHeartRateViewController()
-        case "infrastructure.database",
-             "infrastructure.auth",
-             "infrastructure.sync",
-             "infrastructure.transfer",
-             "infrastructure.storekit",
-             "infrastructure.observability",
-             "infrastructure.webbridge",
-             "infrastructure.map",
-             "infrastructure.integrity",
-             "infrastructure.remote-config",
-             "infrastructure.realtime":
-            return PTApplicationInfrastructureDemoViewController(moduleID: descriptor.moduleID,
-                                                                   title: descriptor.titleKey,
-                                                                   tags: descriptor.tags)
+        case "infrastructure.database":
+            return PTDatabaseInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
+        case "infrastructure.auth":
+            return PTAuthInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
+        case "infrastructure.sync":
+            return PTSyncInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
+        case "infrastructure.transfer":
+            return PTTransferInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
+        case "infrastructure.storekit":
+            return PTStoreKitInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
+        case "infrastructure.observability":
+            return PTObservabilityInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
+        case "infrastructure.webbridge":
+            return PTWebBridgeInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
+        case "infrastructure.map":
+            return PTMapInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
+        case "infrastructure.integrity":
+            return PTIntegrityInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
+        case "infrastructure.remote-config":
+            return PTRemoteConfigurationInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
+        case "infrastructure.realtime":
+            return PTRealtimeInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
         default:
             return PTFuncDetailViewController(descriptor: descriptor)
         }
@@ -323,15 +331,16 @@ final class PTDemoCoordinator {
     }
 }
 
-// English: A lightweight host keeps optional infrastructure demos reachable without importing every opt-in module into the Example target.
-// Español: Un host ligero mantiene accesibles los demos opcionales sin importar todos los módulos opt-in en el target Example.
-// 中文：轻量宿主让可选基础设施 Demo 可达，同时避免 Example target 引入全部可选模块。
+// English: The shared host owns only presentation and lifecycle; each infrastructure demo supplies its own local operation.
+// Español: El host compartido solo gestiona presentación y ciclo de vida; cada demo de infraestructura aporta su propia operación local.
+// 中文：共享宿主只负责展示和生命周期，各基础设施 Demo 自己提供本地可运行操作。
 @MainActor
-private final class PTApplicationInfrastructureDemoViewController: PTBaseViewController {
+private class PTApplicationInfrastructureDemoViewController: PTBaseViewController {
     private let moduleID: String
     private let demoTitle: String
     private let tags: [String]
     private let statusLabel = UILabel()
+    private var task: Task<Void, Never>?
 
     init(moduleID: String, title: String, tags: [String]) {
         self.moduleID = moduleID
@@ -343,10 +352,18 @@ private final class PTApplicationInfrastructureDemoViewController: PTBaseViewCon
     @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
 
+    deinit { task?.cancel() }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = demoTitle
         configureView()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        task?.cancel()
+        task = nil
     }
 
     private func configureView() {
@@ -377,10 +394,14 @@ private final class PTApplicationInfrastructureDemoViewController: PTBaseViewCon
         button.setTitle("Run local contract check", for: .normal)
         button.addTarget(self, action: #selector(runContractCheck), for: .touchUpInside)
 
+        let resetButton = UIButton(type: .system)
+        resetButton.setTitle("Reset", for: .normal)
+        resetButton.addTarget(self, action: #selector(resetDemo), for: .touchUpInside)
+
         statusLabel.numberOfLines = 0
         statusLabel.textColor = .secondaryLabel
         statusLabel.text = "等待检查"
-        [titleLabel, moduleLabel, contractLabel, tagLabel, button, statusLabel].forEach(stack.addArrangedSubview)
+        [titleLabel, moduleLabel, contractLabel, tagLabel, button, resetButton, statusLabel].forEach(stack.addArrangedSubview)
 
         view.addSubview(stack)
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -392,25 +413,217 @@ private final class PTApplicationInfrastructureDemoViewController: PTBaseViewCon
     }
 
     @objc private func runContractCheck() {
-        let currentModule = moduleID
         statusLabel.text = "运行中… / Ejecutando… / Running…"
-        Task { [weak self] in
+        task?.cancel()
+        task = Task { [weak self] in
             do {
-                if currentModule == "PToolsDatabase" {
-                    let databaseURL = FileManager.default.temporaryDirectory.appendingPathComponent("ptools-5.62-demo.sqlite")
-                    let database = try await PTDatabase.open(url: databaseURL)
-                    try await database.execute("CREATE TABLE IF NOT EXISTS demo (id INTEGER PRIMARY KEY, name TEXT NOT NULL)")
-                    _ = try await database.insert(PTDatabaseQuery("INSERT INTO demo (name) VALUES (?)",
-                                                                   arguments: [.text("PTools")]))
-                    let rows = try await database.query("SELECT id, name FROM demo")
-                    self?.statusLabel.text = "SQLite OK · rows: \(rows.count) · actor isolated"
-                } else {
-                    self?.statusLabel.text = "\(currentModule) · 契约入口可达 / contrato accesible / contract reachable"
-                }
+                let result = try await self?.runModuleCheck() ?? "未返回结果"
+                guard !Task.isCancelled else { return }
+                self?.statusLabel.text = result
             } catch {
+                guard !Task.isCancelled else { return }
                 self?.statusLabel.text = "失败 / Error: \(error.localizedDescription)"
             }
         }
+    }
+
+    @objc private func resetDemo() {
+        task?.cancel()
+        task = nil
+        statusLabel.text = "等待检查"
+    }
+
+    func runModuleCheck() async throws -> String {
+        "\(moduleID) · 本地操作未提供 / operación local no disponible / local operation unavailable"
+    }
+}
+
+// English: Each controller below is a real catalog route with an isolated module-specific smoke operation.
+// Español: Cada controlador siguiente es una ruta real del catálogo con una prueba aislada del módulo.
+// 中文：下面每个控制器都是独立的真实目录路由，并执行对应模块的轻量冒烟检查。
+@MainActor
+private final class PTDatabaseInfrastructureDemoViewController: PTApplicationInfrastructureDemoViewController {
+    private let databaseURL = FileManager.default.temporaryDirectory
+        .appendingPathComponent("ptools-5.62-demo-\(UUID().uuidString).sqlite")
+
+    override func runModuleCheck() async throws -> String {
+        let database = try await PTDatabase.open(url: databaseURL)
+        try await database.execute("CREATE TABLE IF NOT EXISTS demo (id INTEGER PRIMARY KEY, name TEXT NOT NULL)")
+        try await database.execute("DELETE FROM demo")
+        try await database.transaction { database in
+            _ = try await database.insert(PTDatabaseQuery("INSERT INTO demo (name) VALUES (?)", arguments: [.text("PTools")]))
+            _ = try await database.insert(PTDatabaseQuery("INSERT INTO demo (name) VALUES (?)", arguments: [.text("Infrastructure")]))
+        }
+        try await database.execute("UPDATE demo SET name = ? WHERE id = 1", arguments: [.text("PTools 5.62")])
+        let page = try await database.pageModels(PTDatabaseQuery("SELECT id, name FROM demo ORDER BY id"),
+                                                 as: PTDemoDatabaseRow.self,
+                                                 offset: 0,
+                                                 limit: 1)
+        let backupURL = databaseURL.deletingPathExtension().appendingPathExtension("backup.sqlite")
+        let backup = try await database.backup(to: backupURL)
+        let integrity = try await database.integrityCheck()
+        let runtime = try await database.runtimeSnapshot()
+        await database.close()
+        try await database.reopen()
+        return "SQLite OK · rows: \(page.values.count) · more: \(page.hasMore) · backup: \(backup.byteCount) bytes · integrity: \(integrity.passed) · \(runtime.journalMode) · \(runtime.sqliteVersion)"
+    }
+}
+
+@MainActor
+private final class PTAuthInfrastructureDemoViewController: PTApplicationInfrastructureDemoViewController {
+    override func runModuleCheck() async throws -> String {
+        let store = PTDemoAuthCredentialStore()
+        let remote = PTDemoAuthRemoteProvider()
+        let service = PTAuthService(credentialStore: store, remoteProvider: remote)
+        let session = PTAuthSession(userID: "demo",
+                                    token: PTAuthToken(accessToken: "expired",
+                                                       refreshToken: "refresh",
+                                                       expiresAt: .distantPast))
+        try await service.signIn(session)
+        let tokens = try await withThrowingTaskGroup(of: String.self, returning: [String].self) { group in
+            for _ in 0..<100 { group.addTask { try await service.validToken().accessToken } }
+            var values: [String] = []
+            for try await value in group { values.append(value) }
+            return values
+        }
+        let state = await service.state()
+        let refreshCount = await remote.refreshCount
+        let challenge = PTOAuthPKCEGenerator.makeChallenge(state: "demo-state")
+        let callbackURL = URL(string: "demo://callback?code=demo-code&state=demo-state")!
+        _ = try PTOAuthCallbackValidator.validate(callbackURL: callbackURL, expectedState: challenge.state)
+        return "Auth OK · 100 tokens: \(tokens.count) · refreshes: \(refreshCount) · state: \(String(describing: state)) · Apple: \(PTAppleAuthCapability().isAvailable) · Passkey: \(PTPasskeyCapability().isAvailable)"
+    }
+}
+
+@MainActor
+private final class PTSyncInfrastructureDemoViewController: PTApplicationInfrastructureDemoViewController {
+    override func runModuleCheck() async throws -> String {
+        let database = try PTDatabase()
+        let store = try await PTSyncDatabaseStore(database: database)
+        let engine = PTSyncEngine(store: store, remote: PTDemoSyncRemote())
+        for index in 0..<10 {
+            try await engine.enqueue(PTSyncMutation(key: "demo-\(index)", payload: Data("{}".utf8)))
+        }
+        let result = await engine.sync()
+        let pending = try await store.pending()
+        return "Sync OK · results: \(result.count) · pending: \(pending.count) · durable store boundary ready"
+    }
+}
+
+@MainActor
+private final class PTTransferInfrastructureDemoViewController: PTApplicationInfrastructureDemoViewController {
+    override func runModuleCheck() async throws -> String {
+        let request = PTTransferRequest(source: .download(URL(string: "https://example.invalid/file")!),
+                                        destination: FileManager.default.temporaryDirectory.appendingPathComponent("demo.file"),
+                                        priority: .high)
+        let snapshot = PTTransferSnapshot(request: request, state: .queued)
+        let runtime = PTTransferRuntimeSnapshot(id: request.id,
+                                                state: snapshot.state,
+                                                progress: snapshot.progress,
+                                                canResume: false)
+        return "Transfer request OK · priority: \(snapshot.request.priority.rawValue) · max concurrent: \(snapshot.request.policy.maxConcurrent) · state: \(runtime.state) · cancellation boundary ready"
+    }
+}
+
+@MainActor
+private final class PTStoreKitInfrastructureDemoViewController: PTApplicationInfrastructureDemoViewController {
+    override func runModuleCheck() async throws -> String {
+        let store = PTStore(verificationPolicy: .init(finishVerifiedTransactions: false))
+        let products = (try? await store.products(for: ["com.pootools.demo.credits", "com.pootools.demo.pro", "com.pootools.demo.plus.monthly"])) ?? []
+        return "StoreKit 2 ready · products: \(products.count) · configuration: PToolsDemo.storekit · purchase remains explicit"
+    }
+}
+
+@MainActor
+private final class PTObservabilityInfrastructureDemoViewController: PTApplicationInfrastructureDemoViewController {
+    override func runModuleCheck() async throws -> String {
+        let bufferURL = FileManager.default.temporaryDirectory.appendingPathComponent("ptools-observability-demo.jsonl")
+        let buffer = PTPersistentObservabilityBuffer(fileURL: bufferURL)
+        let recorder = PTObservabilityRecorder(persistentBuffer: buffer)
+        await recorder.record(event: PTObservabilityEvent(name: "demo.event", attributes: ["token": "secret"]))
+        await recorder.record(metric: PTObservabilityMetric(name: "demo.metric", value: 1))
+        let span = await recorder.startSpan(name: "demo.span")
+        await span.setAttribute("checkout", for: "flow")
+        await span.end()
+        let records = await recorder.snapshot()
+        let flushed = await buffer.flush(to: [PTLoggingObservabilitySink()])
+        return "Observability OK · records: \(records.count) · flushed: \(flushed) · persistent buffer ready"
+    }
+}
+
+@MainActor
+private final class PTWebBridgeInfrastructureDemoViewController: PTApplicationInfrastructureDemoViewController {
+    override func runModuleCheck() async throws -> String {
+        let script = PTWebScriptBootstrap(methods: ["ping"]).source()
+        return "WebBridge OK · bootstrap bytes: \(script.utf8.count) · reply boundary ready"
+    }
+}
+
+@MainActor
+private final class PTMapInfrastructureDemoViewController: PTApplicationInfrastructureDemoViewController {
+    override func runModuleCheck() async throws -> String {
+        let coordinate = PTMapCoordinate(latitude: 31.2304, longitude: 121.4737)
+        let url = PTMapService().externalMapURL(provider: .apple, destination: coordinate)
+        return "MapKit OK · coordinate: \(coordinate.latitude),\(coordinate.longitude) · URL: \(url != nil)"
+    }
+}
+
+@MainActor
+private final class PTIntegrityInfrastructureDemoViewController: PTApplicationInfrastructureDemoViewController {
+    override func runModuleCheck() async throws -> String {
+        let service = PTAppIntegrityService()
+        return "Integrity capability: \(String(describing: service.capability)) · real device check remains explicit"
+    }
+}
+
+@MainActor
+private final class PTRemoteConfigurationInfrastructureDemoViewController: PTApplicationInfrastructureDemoViewController {
+    override func runModuleCheck() async throws -> String {
+        let key = PTConfigKey(name: "demo.enabled", defaultValue: true)
+        let store = PTConfigurationStore(defaults: [key.name: try JSONEncoder().encode(true)])
+        let snapshot = try await store.refresh()
+        let value = try snapshot.value(for: key)
+        let source = snapshot.source(for: key.name)?.rawValue ?? "default"
+        return "Remote Config OK · demo.enabled: \(value) · source: \(source) · LKG boundary ready"
+    }
+}
+
+@MainActor
+private final class PTRealtimeInfrastructureDemoViewController: PTApplicationInfrastructureDemoViewController {
+    override func runModuleCheck() async throws -> String {
+        var parser = PTSSEParser()
+        _ = parser.consume("retry: 1000")
+        _ = parser.consume("data: ping")
+        let event = parser.finish()
+        let subscription = PTRealtimeSubscription(topic: "demo")
+        return "Realtime OK · event: \(event?.data ?? "none") · retry: \(parser.reconnectDelay != nil) · subscription: \(subscription.id)"
+    }
+}
+
+private struct PTDemoDatabaseRow: Decodable, Sendable {
+    let id: Int64
+    let name: String
+}
+
+private actor PTDemoAuthCredentialStore: PTAuthCredentialStore {
+    private var token: PTAuthToken?
+    func loadToken() async throws -> PTAuthToken? { token }
+    func saveToken(_ token: PTAuthToken) async throws { self.token = token }
+    func removeToken() async throws { token = nil }
+}
+
+private actor PTDemoAuthRemoteProvider: PTAuthRemoteProvider {
+    private(set) var refreshCount = 0
+    func refresh(token: PTAuthToken) async throws -> PTAuthToken {
+        refreshCount += 1
+        return PTAuthToken(accessToken: "fresh", refreshToken: token.refreshToken, expiresAt: .distantFuture)
+    }
+}
+
+private struct PTDemoSyncRemote: PTSyncRemoteAdapter {
+    func push(_ mutation: PTSyncMutation) async throws {}
+    func pull(cursor: String?) async throws -> PTSyncPullPage {
+        PTSyncPullPage(mutations: [], nextCursor: cursor, hasMore: false)
     }
 }
 

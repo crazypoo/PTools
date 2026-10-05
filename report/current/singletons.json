@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons.rb",
-  "source_revision": "2e8cbdcc7e181e010af22947d0e2465d5a5e6c59",
-  "generated_at": "2026-10-04T15:10:48Z",
-  "shared_call_count": 1644,
+  "source_revision": "ce2216ac80d2a749565c5cf8a603b1407e82382e",
+  "generated_at": "2026-10-05T10:56:33Z",
+  "shared_call_count": 1651,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -502,7 +502,7 @@
     },
     {
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 20,
+      "line": 24,
       "declaration": "public static let shared = PTIAPManager()",
       "name": "shared",
       "category": "C",

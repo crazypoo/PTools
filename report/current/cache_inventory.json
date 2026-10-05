@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "2e8cbdcc7e181e010af22947d0e2465d5a5e6c59",
-  "generated_at": "2026-10-04T15:14:14Z",
+  "source_revision": "ce2216ac80d2a749565c5cf8a603b1407e82382e",
+  "generated_at": "2026-10-05T10:58:05Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -801,6 +801,30 @@
       "line": 237,
       "kind": "disk or custom cache",
       "text": "// MARK: - Disk Cache"
+    },
+    {
+      "path": "PooToolsSource/PToolsConfiguration/PTRemoteConfigurationProviders.swift",
+      "line": 177,
+      "kind": "disk or custom cache",
+      "text": "public let cache: any PTConfigurationProvider"
+    },
+    {
+      "path": "PooToolsSource/PToolsConfiguration/PTRemoteConfigurationProviders.swift",
+      "line": 178,
+      "kind": "disk or custom cache",
+      "text": "public init(remote: any PTConfigurationProvider, cache: any PTConfigurationProvider) {"
+    },
+    {
+      "path": "PooToolsSource/PToolsConfiguration/PTRemoteConfigurationProviders.swift",
+      "line": 179,
+      "kind": "disk or custom cache",
+      "text": "self.remote = remote; self.cache = cache"
+    },
+    {
+      "path": "PooToolsSource/PToolsConfiguration/PTRemoteConfigurationProviders.swift",
+      "line": 183,
+      "kind": "disk or custom cache",
+      "text": "catch { return try await cache.values(for: context) }"
     },
     {
       "path": "PooToolsSource/PToolsCore/PTCoreContracts.swift",

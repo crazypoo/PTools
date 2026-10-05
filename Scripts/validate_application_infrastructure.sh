@@ -16,16 +16,17 @@ module_paths() {
         transfer) echo "PToolsTransferCore PToolsTransfer" ;;
         storekit) echo "PToolsStoreKit" ;;
         observability) echo "PToolsObservabilityCore PToolsObservability" ;;
-        web) echo "PToolsWebCore PToolsWebBridge PToolsWeb" ;;
+        web|webbridge) echo "PToolsWebCore PToolsWebBridge PToolsWeb" ;;
         map) echo "PToolsMapCore PToolsMap" ;;
         integrity) echo "PToolsAppIntegrity" ;;
+        remote-config) echo "PToolsConfiguration" ;;
         realtime) echo "PToolsRealtimeCore PToolsRealtime" ;;
     esac
 }
 
 if [[ "$requested_scope" != "all" ]]; then
     case "$requested_scope" in
-        database|auth|sync|transfer|storekit|observability|web|map|integrity|realtime) ;;
+        database|auth|sync|transfer|storekit|observability|web|webbridge|map|integrity|remote-config|realtime) ;;
         *)
             echo "FAIL: unknown application infrastructure scope: $requested_scope" >&2
             exit 2
@@ -33,7 +34,7 @@ if [[ "$requested_scope" != "all" ]]; then
     esac
 fi
 
-scopes=(database auth sync transfer storekit observability web map integrity realtime)
+scopes=(database auth sync transfer storekit observability webbridge map integrity remote-config realtime)
 if [[ "$requested_scope" != "all" ]]; then
     scopes=("$requested_scope")
 fi
@@ -86,8 +87,10 @@ expected = {
     "storekit": ("PToolsStoreKit",),
     "observability": ("PToolsObservabilityCore", "PToolsObservability"),
     "web": ("PToolsWebCore", "PToolsWebBridge", "PToolsWeb"),
+    "webbridge": ("PToolsWebCore", "PToolsWebBridge", "PToolsWeb"),
     "map": ("PToolsMapCore", "PToolsMap"),
     "integrity": ("PToolsAppIntegrity",),
+    "remote-config": ("PToolsConfiguration",),
     "realtime": ("PToolsRealtimeCore", "PToolsRealtime"),
 }
 scopes = tuple(expected) if scope == "all" else (scope,)
@@ -104,7 +107,47 @@ if re.search(r'PooToolsAll[\s\S]{0,800}PTools(Database|Auth|Sync|Transfer|StoreK
 subprocess.run(["swift", "package", "dump-package"], cwd=root, check=True, stdout=subprocess.DEVNULL)
 PY
 
+# English: Build each Foundation-first target when the host platform supports it; UIKit-only transitive products are reported as blockers.
+# Español: Construye cada target Foundation-first cuando la plataforma anfitriona lo permite; los productos UIKit transitivos se reportan como bloqueos.
+# 中文：在宿主平台支持时逐个构建 Foundation-first target；UIKit 传递依赖问题单独报告为阻断。
+package_blocked=0
+for scope in "${scopes[@]}"; do
+    for target in $(module_paths "$scope"); do
+        if [[ "$target" == "PToolsRealtime" ]]; then
+            echo "BLOCKED: $target requires an iOS host because PooToolsSocketKit depends on UIKit"
+            package_blocked=1
+            continue
+        fi
+        if ! swift build --target "$target" >/tmp/ptools-application-infrastructure-"$target".log 2>&1; then
+            if grep -q "unable to resolve module dependency: 'UIKit'" /tmp/ptools-application-infrastructure-"$target".log; then
+                echo "BLOCKED: $target requires an iOS host (UIKit is unavailable on macOS)"
+                package_blocked=1
+            else
+                cat /tmp/ptools-application-infrastructure-"$target".log >&2
+                exit 1
+            fi
+        fi
+    done
+done
+
+if [[ "$requested_scope" == "all" ]]; then
+    test_log=/tmp/ptools-application-infrastructure-tests.log
+    if ! swift test --filter PToolsApplicationInfrastructureTests >"$test_log" 2>&1; then
+        if grep -q "unable to resolve module dependency: 'UIKit'" "$test_log"; then
+            echo "BLOCKED: PToolsApplicationInfrastructureTests requires an iOS host (UIKit is unavailable on macOS)"
+            package_blocked=1
+        else
+            cat "$test_log" >&2
+            exit 1
+        fi
+    fi
+fi
+
 python3 "$repo_root/Scripts/Example/validate_demo_coverage.py" --check
 python3 "$repo_root/Scripts/Docs/audit_docs.py" --check
 git -C "$repo_root" diff --check
+if [[ "$package_blocked" -ne 0 ]]; then
+    echo "BLOCKED: application infrastructure package checks require iOS/Xcode host"
+    exit 3
+fi
 echo "PASS: application infrastructure validation ($requested_scope)"

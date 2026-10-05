@@ -26,10 +26,11 @@
         "PooToolsSource/DebugUserDefault/PTUserDefultsViewController.swift",
         "PooToolsSource/LocalConsole/LocalConsole.swift",
         "PooToolsSource/Location/PTGetGPSData.swift",
+        "PooToolsSource/PToolsAppIntegrity/PTAppIntegrity.swift",
         "PooToolsSource/PToolsStorage/PTStorage.swift",
         "PooToolsSource/PToolsWidgetCore/PTWidgetCore.swift"
       ],
-      "match_count": 11
+      "match_count": 12
     },
     {
       "capability": "network_connectivity",
@@ -280,6 +281,7 @@
         "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift",
         "PooToolsSource/PToolsLogging/File/PTLogFileWriter.swift",
         "PooToolsSource/PToolsLogging/Internal/PTLoggerInternalDiagnostics.swift",
+        "PooToolsSource/PToolsObservability/PTObservability.swift",
         "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
         "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
         "PooToolsSource/Ping/PTPingTool.swift",
@@ -303,7 +305,7 @@
         "PooToolsSource/iCloud/PTiCloudKeychainService.swift",
         "PooToolsSource/iOS17Tips/PTTip.swift"
       ],
-      "match_count": 114
+      "match_count": 115
     },
     {
       "capability": "routing",
@@ -602,6 +604,7 @@
         "PooToolsSource/Inspector/DeviceShakeModifier.swift",
         "PooToolsSource/LocalConsole/LocalConsole.swift",
         "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+        "PooToolsSource/PToolsAppIntegrity/PTAppIntegrity.swift",
         "PooToolsSource/PToolsDevice/Core/PTDevice.swift",
         "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift",
         "PooToolsSource/PToolsDevice/Core/PTDeviceCatalog.swift",
@@ -616,6 +619,7 @@
         "PooToolsSource/PToolsDevice/Generated/PTiPadCatalog.generated.swift",
         "PooToolsSource/PToolsDevice/Generated/PTiPhoneCatalog.generated.swift",
         "PooToolsSource/PToolsDevice/Generated/PTiPodCatalog.generated.swift",
+        "PooToolsSource/PToolsObservabilityCore/PTObservabilityCore.swift",
         "PooToolsSource/PToolsSimulation/PTSimulation.swift",
         "PooToolsSource/Protocol/PTProtocol.swift",
         "PooToolsSource/Rotation/PTRotationManager.swift",
@@ -623,7 +627,7 @@
         "PooToolsSource/WhereIsMyEye/PTEyeTrackingManager.swift",
         "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift"
       ],
-      "match_count": 33
+      "match_count": 35
     },
     {
       "capability": "date_values",
@@ -829,7 +833,7 @@
     }
   ],
   "generator": "Scripts/report_semantic_capability_ownership.sh",
-  "source_revision": "2e8cbdcc7e181e010af22947d0e2465d5a5e6c59",
-  "generated_at": "2026-10-04T15:10:01Z",
-  "source_file_count": 1143
+  "source_revision": "ce2216ac80d2a749565c5cf8a603b1407e82382e",
+  "generated_at": "2026-10-05T10:56:19Z",
+  "source_file_count": 1165
 }

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "2e8cbdcc7e181e010af22947d0e2465d5a5e6c59",
-  "generated_at": "2026-10-04T15:10:45Z",
+  "source_revision": "ce2216ac80d2a749565c5cf8a603b1407e82382e",
+  "generated_at": "2026-10-05T10:56:32Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -19,6 +19,7 @@
     "PooToolsSource/NetWork/NetworkSupport.swift",
     "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
     "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
+    "PooToolsSource/PToolsDatabase/PTDatabase.swift",
     "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
     "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
     "PooToolsSource/PToolsActivities/PTActivities.swift",
@@ -39,7 +40,8 @@
     "PooToolsSource/MXMetricKitManager/MetricsManager.swift",
     "PooToolsSource/OSSKit/OSSSpeech.swift",
     "PooToolsSource/OSSKit/OSSUtterance.swift",
-    "PooToolsSource/SocketKit/PTWebSocketClient.swift"
+    "PooToolsSource/SocketKit/PTWebSocketClient.swift",
+    "PooToolsSource/PToolsTransfer/PTTransferDownloadController.swift"
   ],
   "declarations": [
     {
@@ -247,6 +249,12 @@
       "allowlisted": true
     },
     {
+      "path": "PooToolsSource/PToolsDatabase/PTDatabase.swift",
+      "line": 39,
+      "declaration": "private final class PTSQLiteHandle: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
       "path": "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift",
       "line": 68,
       "declaration": "private final class PTHTTPNetworkConnectionTransport: @unchecked Sendable {",
@@ -262,6 +270,12 @@
       "path": "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift",
       "line": 306,
       "declaration": "public enum PTHTTPTLSConfiguration: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/PToolsTransfer/PTTransferDownloadController.swift",
+      "line": 13,
+      "declaration": "final class PTTransferDownloadController: NSObject, URLSessionDownloadDelegate, @unchecked Sendable {",
       "allowlisted": true
     },
     {

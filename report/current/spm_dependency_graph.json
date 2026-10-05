@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "2e8cbdcc7e181e010af22947d0e2465d5a5e6c59",
-  "generated_at": "2026-10-04T15:12:25Z",
+  "source_revision": "ce2216ac80d2a749565c5cf8a603b1407e82382e",
+  "generated_at": "2026-10-05T10:57:23Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -271,6 +271,17 @@
       ]
     },
     {
+      "name": "PToolsAppIntegrity",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsAppIntegrity"
+      ]
+    },
+    {
       "name": "PToolsAppIntents",
       "type": {
         "library": [
@@ -290,6 +301,28 @@
       },
       "targets": [
         "PToolsAudio"
+      ]
+    },
+    {
+      "name": "PToolsAuth",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsAuth"
+      ]
+    },
+    {
+      "name": "PToolsAuthCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsAuthCore"
       ]
     },
     {
@@ -356,6 +389,28 @@
       },
       "targets": [
         "PToolsCore"
+      ]
+    },
+    {
+      "name": "PToolsDatabase",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDatabase"
+      ]
+    },
+    {
+      "name": "PToolsDatabaseCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDatabaseCore"
       ]
     },
     {
@@ -458,6 +513,28 @@
       ]
     },
     {
+      "name": "PToolsMap",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsMap"
+      ]
+    },
+    {
+      "name": "PToolsMapCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsMapCore"
+      ]
+    },
+    {
       "name": "PToolsModel",
       "type": {
         "library": [
@@ -535,6 +612,28 @@
       ]
     },
     {
+      "name": "PToolsObservability",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsObservability"
+      ]
+    },
+    {
+      "name": "PToolsObservabilityCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsObservabilityCore"
+      ]
+    },
+    {
       "name": "PToolsOverlay",
       "type": {
         "library": [
@@ -565,6 +664,28 @@
       },
       "targets": [
         "PToolsPermissionUI"
+      ]
+    },
+    {
+      "name": "PToolsRealtime",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsRealtime"
+      ]
+    },
+    {
+      "name": "PToolsRealtimeCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsRealtimeCore"
       ]
     },
     {
@@ -623,6 +744,17 @@
       ]
     },
     {
+      "name": "PToolsStoreKit",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsStoreKit"
+      ]
+    },
+    {
       "name": "PToolsSymbols",
       "type": {
         "library": [
@@ -631,6 +763,28 @@
       },
       "targets": [
         "PToolsSymbols"
+      ]
+    },
+    {
+      "name": "PToolsSync",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsSync"
+      ]
+    },
+    {
+      "name": "PToolsSyncCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsSyncCore"
       ]
     },
     {
@@ -645,6 +799,28 @@
       ]
     },
     {
+      "name": "PToolsTransfer",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsTransfer"
+      ]
+    },
+    {
+      "name": "PToolsTransferCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsTransferCore"
+      ]
+    },
+    {
       "name": "PToolsUIFoundation",
       "type": {
         "library": [
@@ -653,6 +829,39 @@
       },
       "targets": [
         "PToolsUIFoundation"
+      ]
+    },
+    {
+      "name": "PToolsWeb",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsWeb"
+      ]
+    },
+    {
+      "name": "PToolsWebBridge",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsWebBridge"
+      ]
+    },
+    {
+      "name": "PToolsWebCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsWebCore"
       ]
     },
     {
@@ -3042,6 +3251,26 @@
       ]
     },
     {
+      "name": "PToolsAppIntegrity",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsAppIntegrity",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsAppIntents",
       "type": "regular",
       "path": "PooToolsSource/PToolsAppIntents",
@@ -3055,6 +3284,214 @@
           "declaration": {
             "byName": [
               "PToolsRouteCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsApplicationInfrastructureTests",
+      "type": "test",
+      "path": "Tests/PToolsApplicationInfrastructureTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsAppIntegrity",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsAppIntegrity",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsAuth",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsAuth",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsAuthCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsAuthCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsConfiguration",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsConfiguration",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDatabase",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDatabase",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsMap",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsMap",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsMapCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsMapCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsObservability",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsObservability",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsObservabilityCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsObservabilityCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsRealtimeCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsRealtimeCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsStoreKit",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsStoreKit",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsSync",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSync",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsSyncCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSyncCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsTransfer",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsTransfer",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsTransferCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsTransferCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsWebBridge",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsWebBridge",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsWebCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsWebCore",
               null
             ]
           }
@@ -3092,6 +3529,80 @@
           }
         }
       ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsAuth",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsAuth",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsAuthCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsAuthCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsStorage",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsStorage",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsStorageCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsStorageCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsAuthCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsAuthCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
@@ -3338,6 +3849,66 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": []
+    },
+    {
+      "name": "PToolsDatabase",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsDatabase",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsDatabaseCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDatabaseCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "linkedLibrary": {
+              "_0": "sqlite3"
+            }
+          },
+          "tool": "linker"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDatabaseCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsDatabaseCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
     },
     {
       "name": "PToolsDate",
@@ -3908,6 +4479,58 @@
       "swift_settings": []
     },
     {
+      "name": "PToolsMap",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsMap",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsMapCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsMapCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsMapCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsMapCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsMediaTests",
       "type": "test",
       "path": "Tests/PToolsMediaTests",
@@ -4467,6 +5090,69 @@
       ]
     },
     {
+      "name": "PToolsObservability",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsObservability",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsLogging",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsLogging",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsObservabilityCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsObservabilityCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsObservabilityCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsObservabilityCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsOverlay",
       "type": "regular",
       "path": "PooToolsSource/Overlay",
@@ -4863,6 +5549,69 @@
       ]
     },
     {
+      "name": "PToolsRealtime",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsRealtime",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsRealtimeCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsRealtimeCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsSocketKit",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsSocketKit",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsRealtimeCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsRealtimeCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsRichTextTests",
       "type": "test",
       "path": "Tests/PToolsRichTextTests",
@@ -5088,6 +5837,26 @@
       ]
     },
     {
+      "name": "PToolsStoreKit",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsStoreKit",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsSymbols",
       "type": "regular",
       "path": "PooToolsSource/PToolsSymbols",
@@ -5138,6 +5907,91 @@
       "swift_settings": []
     },
     {
+      "name": "PToolsSync",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsSync",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsConnectivity",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsConnectivity",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDatabase",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDatabase",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDatabaseCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDatabaseCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsSyncCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSyncCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsSyncCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsSyncCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsTheme",
       "type": "regular",
       "path": "PooToolsSource/PToolsTheme",
@@ -5156,6 +6010,58 @@
           }
         }
       ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsTransfer",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsTransfer",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsTransferCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsTransferCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsTransferCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsTransferCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": [
@@ -5246,6 +6152,90 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": []
+    },
+    {
+      "name": "PToolsWeb",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsWeb",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsWebBridge",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsWebBridge",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsWebBridge",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsWebBridge",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsWebCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsWebCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsWebCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsWebCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
     },
     {
       "name": "PToolsWidgetCore",

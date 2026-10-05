@@ -33,6 +33,14 @@ public final class PTWebViewController: UIViewController {
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         bridge = PTWebBridge(webView: webView)
+        bridge.installBootstrap()
+    }
+
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if isMovingFromParent || isBeingDismissed {
+            bridge.invalidate()
+        }
     }
 }
 #endif

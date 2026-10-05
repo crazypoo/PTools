@@ -1,0 +1,64 @@
+{
+  "products" : [
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "ptools-demo-consumable",
+      "localizations" : [
+        {
+          "description" : "A consumable infrastructure demo item",
+          "displayName" : "Demo Credits",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.pootools.demo.credits",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : true,
+      "internalID" : "ptools-demo-nonconsumable",
+      "localizations" : [
+        {
+          "description" : "A non-consumable infrastructure demo item",
+          "displayName" : "Demo Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.pootools.demo.pro",
+      "type" : "NonConsumable"
+    },
+    {
+      "duration" : "P1M",
+      "familyShareable" : true,
+      "internalID" : "ptools-demo-subscription",
+      "localizations" : [
+        {
+          "description" : "A monthly infrastructure demo subscription",
+          "displayName" : "Demo Plus",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.pootools.demo.plus.monthly",
+      "recurringSubscriptionPeriod" : "P1M",
+      "type" : "Auto-Renewable Subscription"
+    }
+  ],
+  "settings" : {
+    "_storeKitErrors" : [
+      {
+        "configuration" : "subscription",
+        "error" : "billing-retry"
+      },
+      {
+        "configuration" : "subscription",
+        "error" : "grace-period"
+      },
+      {
+        "configuration" : "subscription",
+        "error" : "revoked"
+      }
+    ]
+  },
+  "version" : 1
+}

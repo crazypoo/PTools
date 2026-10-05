@@ -19,6 +19,10 @@ PooToolsSource/NetWork/Network+LegacyCompatibility.swift
 PooToolsSource/NetWork/NetworkSupport.swift
 PooToolsSource/PhotoPicker/PTFetchImageOperation.swift
 PooToolsSource/PhotoPicker/PTMediaLibManager.swift
+# SQLite C handle only: PTDatabase owns the serialized access and never exposes the pointer as a value.
+# Solo para el handle C de SQLite: PTDatabase posee el acceso serializado y nunca expone el puntero como valor.
+# 仅用于 SQLite C handle：PTDatabase 独占串行访问，不会把指针作为值暴露出去。
+PooToolsSource/PToolsDatabase/PTDatabase.swift
 PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift
 PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift
 # ActivityKit system-boundary wrapper only: legacy Activity and ActivityContent values cross @concurrent SDK calls through an audited box.
@@ -62,3 +66,7 @@ PooToolsSource/OSSKit/OSSUtterance.swift
 # Proxy del delegado de URLSession únicamente: solo cruzan la frontera de callbacks una política de confianza inmutable y un cierre de eventos Sendable; el estado queda en el actor.
 # 仅用于 URLSession 委托代理：跨 Foundation 回调边界的只有不可变信任策略和 Sendable 事件闭包，Socket 状态仍由 actor 独占。
 PooToolsSource/SocketKit/PTWebSocketClient.swift
+# URLSession download delegate only: the controller protects continuation and task state with a lock.
+# Solo para el delegado de descarga URLSession: el controlador protege continuation y estado con un lock.
+# 仅用于 URLSession 下载代理：控制器通过锁保护 continuation 和任务状态。
+PooToolsSource/PToolsTransfer/PTTransferDownloadController.swift

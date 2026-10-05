@@ -737,6 +737,13 @@ public actor PTWebSocketClient {
         metrics
     }
 
+    // English: Expose an actor-safe heartbeat probe for realtime adapters.
+    // Español: Expone una comprobación de heartbeat segura para los adaptadores realtime.
+    // 中文：为 realtime 适配器提供 actor 安全的心跳探测入口。
+    public func ping() async throws -> Duration {
+        try await pingWithTimeout()
+    }
+
     private func makeRequest() throws -> URLRequest {
         guard let scheme = configuration.url.scheme?.lowercased(), scheme == "ws" || scheme == "wss" else {
             throw PTWebSocketError.invalidURL

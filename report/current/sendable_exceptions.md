@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_sendable_exceptions.rb
-Source revision: 2e8cbdcc7e181e010af22947d0e2465d5a5e6c59
-Generated at: 2026-10-04T15:10:45Z
+Source revision: ce2216ac80d2a749565c5cf8a603b1407e82382e
+Generated at: 2026-10-05T10:56:32Z
 -->
 
 # Swift 6 Sendable 例外清单
@@ -47,9 +47,11 @@ Generated at: 2026-10-04T15:10:45Z
 | `PooToolsSource/OSSKit/OSSSpeech.swift` | 385 | `final class ConverterState: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/OSSKit/OSSUtterance.swift` | 27 | `public class OSSUtterance: AVSpeechUtterance, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/PToolsActivities/PTActivities.swift` | 88 | `private final class PTActivityKitSendableBox<Value>: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/PToolsDatabase/PTDatabase.swift` | 39 | `private final class PTSQLiteHandle: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift` | 68 | `private final class PTHTTPNetworkConnectionTransport: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift` | 300 | `public struct PTTLSIdentity: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift` | 306 | `public enum PTHTTPTLSConfiguration: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
+| `PooToolsSource/PToolsTransfer/PTTransferDownloadController.swift` | 13 | `final class PTTransferDownloadController: NSObject, URLSessionDownloadDelegate, @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/PToolsUIFoundation/PTRichTextCache.swift` | 7 | `final class PTTextMatcherCache: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 | `PooToolsSource/PhotoPicker/PTFetchImageOperation.swift` | 20 | `final class PTFetchImageOperation: Operation, @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/PhotoPicker/PTMediaLibManager.swift` | 18 | `private struct PTSafeMediaBox<T>: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |

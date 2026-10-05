@@ -790,7 +790,7 @@ let package = Package(
         ),
         .target(
             name: "PToolsSync",
-            dependencies: ["PToolsSyncCore"],
+            dependencies: ["PToolsSyncCore", "PToolsDatabase", "PToolsDatabaseCore", "PToolsConnectivity"],
             path: "PooToolsSource/PToolsSync",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
@@ -806,7 +806,7 @@ let package = Package(
         ),
         .target(
             name: "PToolsObservability",
-            dependencies: ["PToolsObservabilityCore"],
+            dependencies: ["PToolsObservabilityCore", "PToolsLogging"],
             path: "PooToolsSource/PToolsObservability",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
@@ -1266,7 +1266,13 @@ let package = Package(
         // 中文：覆盖可选应用基础设施契约，不依赖真实外部服务。
         .testTarget(
             name: "PToolsApplicationInfrastructureTests",
-            dependencies: ["PToolsDatabase", "PToolsRealtimeCore"],
+            dependencies: [
+                "PToolsDatabase", "PToolsRealtimeCore", "PToolsAuthCore", "PToolsAuth",
+                "PToolsTransferCore", "PToolsTransfer", "PToolsSyncCore", "PToolsSync",
+                "PToolsStoreKit", "PToolsObservabilityCore", "PToolsObservability",
+                "PToolsWebCore", "PToolsWebBridge", "PToolsMapCore", "PToolsMap",
+                "PToolsAppIntegrity", "PToolsConfiguration"
+            ],
             path: "Tests/PToolsApplicationInfrastructureTests",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")

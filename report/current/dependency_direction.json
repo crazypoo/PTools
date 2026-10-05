@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "2e8cbdcc7e181e010af22947d0e2465d5a5e6c59",
-  "generated_at": "2026-10-04T15:12:25Z",
+  "source_revision": "ce2216ac80d2a749565c5cf8a603b1407e82382e",
+  "generated_at": "2026-10-05T10:57:23Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, PToolsDevice, and PToolsFontCatalogCore",
@@ -108,6 +108,18 @@
       "destination": "PTMicPermission"
     },
     {
+      "source": "PToolsAuth",
+      "destination": "PToolsAuthCore"
+    },
+    {
+      "source": "PToolsAuth",
+      "destination": "PToolsStorage"
+    },
+    {
+      "source": "PToolsAuth",
+      "destination": "PToolsStorageCore"
+    },
+    {
       "source": "PToolsConfiguration",
       "destination": "PToolsStorage"
     },
@@ -130,6 +142,10 @@
     {
       "source": "PToolsContentState",
       "destination": "ptools"
+    },
+    {
+      "source": "PToolsDatabase",
+      "destination": "PToolsDatabaseCore"
     },
     {
       "source": "PToolsDeepLink",
@@ -180,6 +196,10 @@
       "destination": "PToolsHTTPServer"
     },
     {
+      "source": "PToolsMap",
+      "destination": "PToolsMapCore"
+    },
+    {
       "source": "PToolsModel",
       "destination": "PToolsModelCore"
     },
@@ -216,6 +236,14 @@
       "destination": "PToolsRouteCore"
     },
     {
+      "source": "PToolsObservability",
+      "destination": "PToolsLogging"
+    },
+    {
+      "source": "PToolsObservability",
+      "destination": "PToolsObservabilityCore"
+    },
+    {
       "source": "PToolsOverlay",
       "destination": "PToolsCore"
     },
@@ -234,6 +262,14 @@
     {
       "source": "PToolsPermissionUI",
       "destination": "PToolsUIFoundation"
+    },
+    {
+      "source": "PToolsRealtime",
+      "destination": "PToolsRealtimeCore"
+    },
+    {
+      "source": "PToolsRealtime",
+      "destination": "PooToolsSocketKit"
     },
     {
       "source": "PToolsSimulation",
@@ -264,12 +300,40 @@
       "destination": "PooToolsKeyChain"
     },
     {
+      "source": "PToolsSync",
+      "destination": "PToolsConnectivity"
+    },
+    {
+      "source": "PToolsSync",
+      "destination": "PToolsDatabase"
+    },
+    {
+      "source": "PToolsSync",
+      "destination": "PToolsDatabaseCore"
+    },
+    {
+      "source": "PToolsSync",
+      "destination": "PToolsSyncCore"
+    },
+    {
       "source": "PToolsTheme",
       "destination": "PToolsUIFoundation"
     },
     {
+      "source": "PToolsTransfer",
+      "destination": "PToolsTransferCore"
+    },
+    {
       "source": "PToolsUIFoundation",
       "destination": "PToolsCore"
+    },
+    {
+      "source": "PToolsWeb",
+      "destination": "PToolsWebBridge"
+    },
+    {
+      "source": "PToolsWebBridge",
+      "destination": "PToolsWebCore"
     },
     {
       "source": "PToolsWidgetCore",

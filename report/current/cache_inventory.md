@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory.rb
-Source revision: 2e8cbdcc7e181e010af22947d0e2465d5a5e6c59
-Generated at: 2026-10-04T15:14:14Z
+Source revision: ce2216ac80d2a749565c5cf8a603b1407e82382e
+Generated at: 2026-10-05T10:58:05Z
 -->
 
 # PTools 当前缓存盘点
@@ -146,6 +146,10 @@ Generated at: 2026-10-04T15:14:14Z
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:223 | disk or custom cache | cache.totalCostLimit = pdfCachePolicy.costLimit |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:224 | disk or custom cache | return cache |
 | PooToolsSource/PDF/UIImage+PTpdfEX.swift:237 | disk or custom cache | // MARK: - Disk Cache |
+| PooToolsSource/PToolsConfiguration/PTRemoteConfigurationProviders.swift:177 | disk or custom cache | public let cache: any PTConfigurationProvider |
+| PooToolsSource/PToolsConfiguration/PTRemoteConfigurationProviders.swift:178 | disk or custom cache | public init(remote: any PTConfigurationProvider, cache: any PTConfigurationProvider) { |
+| PooToolsSource/PToolsConfiguration/PTRemoteConfigurationProviders.swift:179 | disk or custom cache | self.remote = remote; self.cache = cache |
+| PooToolsSource/PToolsConfiguration/PTRemoteConfigurationProviders.swift:183 | disk or custom cache | catch { return try await cache.values(for: context) } |
 | PooToolsSource/PToolsCore/PTCoreContracts.swift:5 | disk or custom cache | // English: Foundation-only contracts shared by logging, cache, and error adapters. |
 | PooToolsSource/PToolsCore/PTCoreContracts.swift:40 | disk or custom cache | // English: Use a small typed cache contract instead of exposing a third-party cache type. |
 | PooToolsSource/PToolsCore/PTCoreContracts.swift:53 | disk or custom cache | // English: The default memory cache is actor-isolated, bounded by ownership, and dependency-free. |

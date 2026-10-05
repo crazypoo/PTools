@@ -1,0 +1,18 @@
+# English: Carry forward the reviewed legacy model, typed-network and camera-availability compatibility changes from the 5.58–5.61 migration.
+# Español: Mantiene los cambios de compatibilidad revisados de modelos legacy, red tipada y disponibilidad de cámara de la migración 5.58–5.61.
+# 中文：延续 5.58–5.61 迁移中已审核的旧模型、类型化网络和相机可用性兼容性变化。
+public|class|mappingForKey
+public|class|public class-based decoder API can migrate to immutable snapshot structs.
+public|func|public func performCodableRequest<T: SmartCodableX & Sendable>(
+
+# English: CameraType.captureDevice() now has an optional result so unavailable hardware is reported instead of crashing.
+# Español: CameraType.captureDevice() ahora devuelve un resultado opcional para informar hardware no disponible en lugar de fallar.
+# 中文：CameraType.captureDevice() 改为可选结果，在硬件不可用时返回状态而不是闪退。
+public|func|public func captureDevice() -> AVCaptureDevice
+open|func|open func kj_modelKey(from property: KakaJSON.Property) -> ModelPropertyKey
+open|func|open func kj_modelValue(from jsonValue:Any?,_ property:KakaJSON.Property) -> Any?
+
+# English: PTHeartRateViewController is now open for controlled subclassing in host applications; the baseline comparator records the access-level migration.
+# Español: PTHeartRateViewController ahora es open para subclasificación controlada en aplicaciones anfitrionas; el comparador registra la migración de acceso.
+# 中文：PTHeartRateViewController 现在开放为 open，供宿主应用受控继承；基线比较器登记这次访问级别迁移。
+public|class|PTHeartRateViewController

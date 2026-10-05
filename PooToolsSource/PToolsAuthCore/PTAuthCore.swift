@@ -37,6 +37,12 @@ public struct PTAuthSession: Codable, Hashable, Sendable {
 }
 
 public enum PTAuthState: Sendable, Equatable {
+    case unknown
+    case anonymous
+    case authenticating
+    case authenticated(PTAuthSession)
+    case refreshing(PTAuthSession)
+    case expired(PTAuthSession)
     case signedOut
     case signedIn(PTAuthSession)
 }
@@ -48,6 +54,12 @@ public enum PTAuthError: Error, Sendable, Equatable {
     case credentialStoreFailed
     case invalidResponse
     case cancelled
+    case invalidCallback
+    case stateMismatch
+    case nonceMismatch
+    case unsupportedProvider
+    case unauthorized
+    case sessionChanged
 }
 
 public protocol PTAuthCredentialStore: Sendable {
@@ -70,11 +82,18 @@ public struct PTAuthPKCEConfiguration: Sendable, Equatable {
     public let authorizationURL: URL
     public let redirectURL: URL
     public let scopes: [String]
-    public init(clientID: String, authorizationURL: URL, redirectURL: URL, scopes: [String] = []) {
+    public let nonce: String?
+
+    public init(clientID: String,
+                authorizationURL: URL,
+                redirectURL: URL,
+                scopes: [String] = [],
+                nonce: String? = nil) {
         self.clientID = clientID
         self.authorizationURL = authorizationURL
         self.redirectURL = redirectURL
         self.scopes = scopes
+        self.nonce = nonce
     }
 }
 
@@ -102,6 +121,110 @@ public struct PTAuthAuthorizationRequest: Sendable, Equatable {
         self.nonce = nonce
         self.codeVerifier = codeVerifier
     }
+}
+
+public struct PTAuthCallback: Sendable, Equatable {
+    public let code: String
+    public let state: String
+    public let nonce: String?
+
+    public init(code: String, state: String, nonce: String? = nil) {
+        self.code = code
+        self.state = state
+        self.nonce = nonce
+    }
+}
+
+public struct PTAuthNetworkRequest: Sendable, Equatable {
+    public let url: URL
+    public let method: String
+    public let headers: [String: String]
+    public let body: Data?
+    public let isRefreshRequest: Bool
+
+    public init(url: URL,
+                method: String = "GET",
+                headers: [String: String] = [:],
+                body: Data? = nil,
+                isRefreshRequest: Bool = false) {
+        self.url = url
+        self.method = method
+        self.headers = headers
+        self.body = body
+        self.isRefreshRequest = isRefreshRequest
+    }
+}
+
+public struct PTAuthNetworkResponse: Sendable, Equatable {
+    public let statusCode: Int
+    public let headers: [String: String]
+    public let body: Data
+
+    public init(statusCode: Int, headers: [String: String] = [:], body: Data = Data()) {
+        self.statusCode = statusCode
+        self.headers = headers
+        self.body = body
+    }
+}
+
+public protocol PTAuthNetworkAdapter: Sendable {
+    func send(_ request: PTAuthNetworkRequest) async throws -> PTAuthNetworkResponse
+}
+
+// English: Network owns transport; this credential contract owns only token lookup and refresh.
+// Español: Network posee el transporte; este contrato de credenciales solo posee la lectura y renovación del token.
+// 中文：Network 只负责传输；这个凭据契约只负责读取和刷新令牌。
+public protocol PTNetworkCredentialProvider: Sendable {
+    func currentToken() async throws -> PTAuthToken?
+    func refreshToken() async throws -> PTAuthToken
+    func authorizationDidExpire() async
+}
+
+public enum PTNetworkAuthorizationDecision: Sendable, Equatable {
+    case authorized
+    case replayed
+    case expired
+}
+
+public struct PTOAuthPKCETokenExchangeRequest: Sendable, Equatable {
+    public let callback: PTAuthCallback
+    public let clientID: String
+    public let redirectURL: URL
+    public let codeVerifier: String
+
+    public init(callback: PTAuthCallback,
+                clientID: String,
+                redirectURL: URL,
+                codeVerifier: String) {
+        self.callback = callback
+        self.clientID = clientID
+        self.redirectURL = redirectURL
+        self.codeVerifier = codeVerifier
+    }
+}
+
+public struct PTAuthRetryPolicy: Sendable, Equatable {
+    public let maxUnauthorizedReplay: Int
+    public init(maxUnauthorizedReplay: Int = 1) {
+        self.maxUnauthorizedReplay = max(0, maxUnauthorizedReplay)
+    }
+}
+
+public struct PTAuthPKCEChallenge: Sendable, Equatable {
+    public let verifier: String
+    public let challenge: String
+    public let state: String
+
+    public init(verifier: String, challenge: String, state: String) {
+        self.verifier = verifier
+        self.challenge = challenge
+        self.state = state
+    }
+}
+
+public enum PTAuthCapability: String, Sendable, Equatable {
+    case apple
+    case passkey
 }
 
 public protocol PTAuthProvider: Sendable {

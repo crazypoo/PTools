@@ -556,6 +556,28 @@
       "owner": "Vision",
       "replacementPlan": "Replace the wrapper with a framework snapshot or actor-backed adapter when the minimum deployment and SDK APIs allow it.",
       "removeIn": null
+    },
+    {
+      "path": "PooToolsSource/PToolsDatabase/PTDatabase.swift",
+      "symbol": "PTSQLiteHandle",
+      "category": "SYSTEM_WRAPPER",
+      "systemType": "SQLite C database handle",
+      "reason": "The private handle crosses only the database actor boundary and is never exposed as a Sendable value.",
+      "protection": "PTDatabase serializes all SQLite access and keeps the pointer private to the database implementation.",
+      "owner": "Database",
+      "replacementPlan": "Replace the C handle wrapper with a native Sendable database value when the SQLite API supports it.",
+      "removeIn": "6.0.0"
+    },
+    {
+      "path": "PooToolsSource/PToolsTransfer/PTTransferDownloadController.swift",
+      "symbol": "PTTransferDownloadController",
+      "category": "SYSTEM_WRAPPER",
+      "systemType": "URLSessionDownloadDelegate and URLSessionDownloadTask",
+      "reason": "The private delegate adapter is the only URLSession callback bridge for pause, resume data and progress.",
+      "protection": "NSLock protects the task, continuation and resume-data state; the queue actor owns the controller lifecycle.",
+      "owner": "Transfer",
+      "replacementPlan": "Replace the delegate bridge with a fully actor-native URLSession API when the platform exposes equivalent resume-data controls.",
+      "removeIn": "6.0.0"
     }
   ]
 }

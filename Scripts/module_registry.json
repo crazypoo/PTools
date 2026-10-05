@@ -1036,6 +1036,310 @@
       "owner": "packaging",
       "expiration": "2026-12-31",
       "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsAppIntegrity",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsAuth",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsAuthCore",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsDatabase",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsDatabaseCore",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsMap",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsMapCore",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsObservability",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsObservabilityCore",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsRealtime",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsRealtimeCore",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsStoreKit",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsSync",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsSyncCore",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsTransfer",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsTransferCore",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsWeb",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsWebBridge",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsWebCore",
+      "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "AppIntegrity",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "Auth",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "AuthCore",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "Database",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "DatabaseCore",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "Map",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "MapCore",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "Observability",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "ObservabilityCore",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "Realtime",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "RealtimeCore",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "StoreKit",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "Sync",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "SyncCore",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "Transfer",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "TransferCore",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "Web",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "WebBridge",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "WebCore",
+      "reason": "CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked.",
+      "owner": "application-infrastructure",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
     }
   ],
   "known_drift": [
