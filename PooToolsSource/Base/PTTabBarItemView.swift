@@ -221,40 +221,22 @@ final public class PTTabBarItemView: UIControl {
     }
     
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        let view = super.hitTest(point, with: event)
-        // 如果点击到的子视图是我们的 ImageView，我们强行把响应者改成自己 (ContentView)
-        
-        if let findView = view as? PTTabBarItemView {
-            if let badge = findView.imageContent.badge {
-                return badge
-            } else {
-                return self
-            }
-        } else {
-            if let findView = view {
-                if let _ = findView as? LottieAnimationView {
-                    return self
-                }
-                var findImageView:UIView?
-                for subs in findView.subviews {
-                    if let findSubs = subs as? UIImageView {
-                        findImageView = findSubs
-                        break
-                    }
-                }
-                if let _ = findImageView {
-                    return self
-                } else {
-                    return findView
-                }
-            } else {
-                return view
-            }
+        guard let hitView = super.hitTest(point, with: event) else {
+            return nil
         }
-    }
-    
-    // 这样你的 touchesBegan 就能正常工作了
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-    }
+
+        // English: Preserve explicit badge interaction such as drag-to-remove.
+        // Español: Conserva la interacción explícita del badge, como arrastrar para eliminar.
+        // 中文：Badge 属于独立交互区域，例如支持拖拽删除，因此保留其命中结果。
+        if let badge = imageContent.badge,
+           hitView === badge || hitView.isDescendant(of: badge) {
+            return hitView
+        }
+
+        // English: All decorative item content routes interaction back to the UIControl.
+        // Español: Todo el contenido decorativo devuelve la interacción al UIControl.
+        // 中文：Icon、Lottie、标题、Stack、Container 等都只是 Item 的视觉内容，
+        // 点击应该统一交回 PTTabBarItemView，保证整个 Item 都可以触发 touchUpInside。
+        return self
+    }    
 }
