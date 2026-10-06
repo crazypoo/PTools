@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "ce2216ac80d2a749565c5cf8a603b1407e82382e",
-  "generated_at": "2026-10-05T10:57:23Z",
+  "source_revision": "709b16be6083e89fafa73181bef6d4902013cbcb",
+  "generated_at": "2026-10-06T02:29:33Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -1183,6 +1183,17 @@
       ]
     },
     {
+      "name": "PooToolsFilterCamera",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsFilterCamera"
+      ]
+    },
+    {
       "name": "PooToolsGuide",
       "type": {
         "library": [
@@ -1766,6 +1777,17 @@
       ]
     },
     {
+      "name": "PooToolsVideoCache",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "ptools"
+      ]
+    },
+    {
       "name": "PooToolsVideoEditor",
       "type": {
         "library": [
@@ -1785,6 +1807,17 @@
       },
       "targets": [
         "PooToolsVision"
+      ]
+    },
+    {
+      "name": "PooToolsWebKit",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PooToolsWebKit"
       ]
     },
     {
@@ -7215,6 +7248,57 @@
       ]
     },
     {
+      "name": "PooToolsFilterCamera",
+      "type": "regular",
+      "path": "PooToolsSource/FilterCamera",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsHarbethKit",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsHarbethKit",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsMediaViewer",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsMediaViewer",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_FILTERCAMERA"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PooToolsGuide",
       "type": "regular",
       "path": "PooToolsSource/Guide",
@@ -7330,6 +7414,17 @@
           "declaration": {
             "byName": [
               "PToolsSymbols",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsMediaViewer",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsMediaViewer",
               null
             ]
           }
@@ -10005,6 +10100,54 @@
           "kind": {
             "define": {
               "_0": "POOTOOLS_VISION"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PooToolsWebKit",
+      "type": "regular",
+      "path": "PooToolsSource/WebKit",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_COCOAPODS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_WEBKIT"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
             }
           },
           "tool": "swift"

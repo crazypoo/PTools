@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "ce2216ac80d2a749565c5cf8a603b1407e82382e",
-  "generated_at": "2026-10-05T10:58:05Z",
+  "source_revision": "709b16be6083e89fafa73181bef6d4902013cbcb",
+  "generated_at": "2026-10-06T02:28:56Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -631,7 +631,7 @@
     },
     {
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "lines": 820,
+      "lines": 824,
       "classification": "ok"
     },
     {
@@ -1922,6 +1922,11 @@
     {
       "path": "PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift",
       "lines": 94,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/FilterCamera/PTFilterCameraCompatibility.swift",
+      "lines": 6,
       "classification": "ok"
     },
     {
@@ -3961,7 +3966,7 @@
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "lines": 720,
+      "lines": 690,
       "classification": "ok"
     },
     {
@@ -3976,7 +3981,7 @@
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "lines": 795,
+      "lines": 792,
       "classification": "ok"
     },
     {
@@ -5781,7 +5786,7 @@
     },
     {
       "path": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift",
-      "lines": 146,
+      "lines": 148,
       "classification": "ok"
     },
     {

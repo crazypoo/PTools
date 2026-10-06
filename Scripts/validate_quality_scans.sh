@@ -68,6 +68,10 @@ bash Scripts/validate_concurrency_5_19.sh
 # Español: Mantén las líneas base de paridad SPM/CocoaPods y dirección de dependencias en la puerta de calidad.
 # 中文：将 SPM/CocoaPods 一致性和依赖方向基线纳入常规质量门禁。
 bash Scripts/validate_module_parity.sh --check
+# English: Hard-gate the three CocoaPods / SwiftPM compatibility products and removed ownerships.
+# Español: Bloquea estrictamente los tres productos de compatibilidad y las dependencias cuya propiedad fue retirada.
+# 中文：将三个 CocoaPods / SwiftPM 兼容产品及已移除依赖所有权纳入硬门禁。
+bash Scripts/validate_distribution_parity.sh
 bash Scripts/CI/check_p0_platform_modules.sh
 bash Scripts/CI/check_p1_advanced_modules.sh
 bash Scripts/CI/check_p2_modern_modules.sh

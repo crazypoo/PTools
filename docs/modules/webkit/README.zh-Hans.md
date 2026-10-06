@@ -1,13 +1,13 @@
 ---
-module: "PooToolsFilterCamera"
-module_id: "filter-camera"
+module: "PooToolsWebKit"
+module_id: "webkit"
 language: "zh-Hans"
 status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
-swiftpm_product: "PooToolsFilterCamera"
-cocoapods_subspec: "FilterCamera"
-source: "PooToolsSource/C7Collector"
+swiftpm_product: "PooToolsWebKit"
+cocoapods_subspec: "WebKit"
+source: "PooToolsSource/WebKit"
 category: "compatibility"
 last_reviewed: "2026-09-28"
 canonical: false
@@ -16,11 +16,11 @@ product_version_source: "repository:VERSION"
 document_schema_version: 1
 ---
 
-# PooToolsFilterCamera
+# PooToolsWebKit
 
 ## 1. 概览
 
-PooToolsFilterCamera 是 PTools 的 compatibility 模块。本指南由 canonical 模块 registry 生成，说明 iOS 17+ 与 Swift 6+ 下的稳定使用边界。
+PooToolsWebKit 是 PTools 的 compatibility 模块。本指南由 canonical 模块 registry 生成，说明 iOS 17+ 与 Swift 6+ 下的稳定使用边界。
 
 ## 2. 要求
 
@@ -34,28 +34,28 @@ PooToolsFilterCamera 是 PTools 的 compatibility 模块。本指南由 canonica
 Swift Package Manager：
 
 ```swift
-import PooToolsFilterCamera
+import PooToolsWebKit
 ```
 
 CocoaPods：
 
 ```ruby
-pod 'PooTools/FilterCamera'
+pod 'PooTools/WebKit'
 ```
 
 ## 4. 导入
 
 ```swift
-import PooToolsFilterCamera
+import PooToolsWebKit
 ```
 
 ## 5. 快速开始
 
-优先选择最小的 product 或 subspec。registry 中的名称是 `PooToolsFilterCamera`，不要猜测没有发布的 product 或依赖。
+优先选择最小的 product 或 subspec。registry 中的名称是 `PooToolsWebKit`，不要猜测没有发布的 product 或依赖。
 
 ## 6. 核心概念
 
-公开边界优先使用值类型。registry 记录的直接依赖：HarbethKit, MediaViewer。
+公开边界优先使用值类型。registry 记录的直接依赖：Core。
 
 ## 7. 主要 API
 

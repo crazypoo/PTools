@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T23:23:18+08:00",
+  "generated_at": "2026-10-05T22:52:34+08:00",
   "generator": "Scripts/Docs/audit_docs.py",
   "scripts": [
     {
@@ -913,12 +913,30 @@
     },
     {
       "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_application_infrastructure.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
       "canonical": false,
       "domain": "Scripts",
       "entrypoint": false,
       "language": "sh",
       "path": "Scripts/validate_attributedstring_absorption_5_25.sh",
       "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_auth.sh",
+      "status": "ACTIVE"
     },
     {
       "action": "KEEP",
@@ -963,6 +981,15 @@
       "entrypoint": false,
       "language": "sh",
       "path": "Scripts/validate_core_source_contract.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_database.sh",
       "status": "ACTIVE"
     },
     {
@@ -1016,6 +1043,15 @@
       "domain": "Scripts",
       "entrypoint": false,
       "language": "sh",
+      "path": "Scripts/validate_distribution_parity.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
       "path": "Scripts/validate_docs.sh",
       "status": "ACTIVE"
     },
@@ -1054,6 +1090,15 @@
       "language": "sh",
       "path": "Scripts/validate_instruments_5_11.sh",
       "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_integrity.sh",
+      "status": "ACTIVE"
     },
     {
       "action": "KEEP",
@@ -1102,6 +1147,15 @@
     },
     {
       "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_map.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
       "canonical": false,
       "domain": "Scripts",
       "entrypoint": false,
@@ -1134,6 +1188,15 @@
       "entrypoint": false,
       "language": "sh",
       "path": "Scripts/validate_network_security.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_observability.sh",
       "status": "ACTIVE"
     },
     {
@@ -1214,7 +1277,25 @@
       "domain": "Scripts",
       "entrypoint": false,
       "language": "sh",
+      "path": "Scripts/validate_realtime.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
       "path": "Scripts/validate_release.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_remote_configuration.sh",
       "status": "ACTIVE"
     },
     {
@@ -1234,6 +1315,15 @@
       "language": "sh",
       "path": "Scripts/validate_socketrocket_removal_5_27.sh",
       "status": "LEGACY_REVIEW"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_storekit.sh",
+      "status": "ACTIVE"
     },
     {
       "action": "KEEP",
@@ -1268,7 +1358,25 @@
       "domain": "Scripts",
       "entrypoint": false,
       "language": "sh",
+      "path": "Scripts/validate_sync.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
       "path": "Scripts/validate_test_matrix.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_transfer.sh",
       "status": "ACTIVE"
     },
     {
@@ -1286,10 +1394,28 @@
       "domain": "Scripts",
       "entrypoint": false,
       "language": "sh",
+      "path": "Scripts/validate_web.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
+      "path": "Scripts/validate_webbridge.sh",
+      "status": "ACTIVE"
+    },
+    {
+      "action": "KEEP",
+      "canonical": true,
+      "domain": "Scripts",
+      "entrypoint": false,
+      "language": "sh",
       "path": "Scripts/validate_xcode_source_warnings.sh",
       "status": "ACTIVE"
     }
   ],
-  "source_revision": "f7c0c7dc885f3b0e6fc3b0050fb2d69f609dcf6a",
+  "source_revision": "709b16be6083e89fafa73181bef6d4902013cbcb",
   "version": "5.62.0"
 }

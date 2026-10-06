@@ -810,6 +810,48 @@
       "compile_flags": ["StrictConcurrency"],
       "resources": [],
       "category": "application-infrastructure"
+    },
+    {
+      "name": "WebKit",
+      "module_id": "webkit",
+      "canonical_slug": "webkit",
+      "aliases": [],
+      "spm_product": "PooToolsWebKit",
+      "spm_target": "PooToolsWebKit",
+      "pod_subspec": "WebKit",
+      "source_path": "PooToolsSource/WebKit",
+      "dependencies": ["Core"],
+      "compile_flags": ["POOTOOLS_WEBKIT", "StrictConcurrency"],
+      "resources": [],
+      "category": "compatibility"
+    },
+    {
+      "name": "VideoCache",
+      "module_id": "video-cache",
+      "canonical_slug": "video-cache",
+      "aliases": [],
+      "spm_product": "PooToolsVideoCache",
+      "spm_target": "ptools",
+      "pod_subspec": "VideoCache",
+      "source_path": "PooToolsSource/Base",
+      "dependencies": ["Core"],
+      "compile_flags": ["POOTOOLS_VIDEOCACHE"],
+      "resources": [],
+      "category": "compatibility"
+    },
+    {
+      "name": "FilterCamera",
+      "module_id": "filter-camera",
+      "canonical_slug": "filter-camera",
+      "aliases": [],
+      "spm_product": "PooToolsFilterCamera",
+      "spm_target": "PooToolsFilterCamera",
+      "pod_subspec": "FilterCamera",
+      "source_path": "PooToolsSource/C7Collector",
+      "dependencies": ["HarbethKit", "MediaViewer"],
+      "compile_flags": ["POOTOOLS_FILTERCAMERA"],
+      "resources": [],
+      "category": "compatibility"
     }
   ],
   "known_module_only": [
@@ -935,19 +977,11 @@
     },
     {
       "kind": "pod_only",
-      "module": "FilterCamera",
-      "reason": "CocoaPods-only feature entry without a SwiftPM target.",
-      "owner": "packaging",
-      "expiration": "2026-12-31",
-      "classification": "LEGACY"
-    },
-    {
-      "kind": "pod_only",
       "module": "Flag",
-      "reason": "CocoaPods dependency-only subspec controlled by Core flags.",
+      "reason": "Legacy compatibility subspec retained for old Podfiles; FlagKit is host-owned and is no longer installed by PTools.",
       "owner": "packaging",
-      "expiration": "2026-12-31",
-      "classification": "INTENTIONAL"
+      "expiration": "2027-03-31",
+      "classification": "LEGACY"
     },
     {
       "kind": "pod_only",
@@ -1009,22 +1043,6 @@
       "kind": "pod_only",
       "module": "Tabbar",
       "reason": "CocoaPods dependency-only subspec controlled by Core flags.",
-      "owner": "packaging",
-      "expiration": "2026-12-31",
-      "classification": "INTENTIONAL"
-    },
-    {
-      "kind": "pod_only",
-      "module": "VideoCache",
-      "reason": "CocoaPods dependency-only subspec controlled by Core flags.",
-      "owner": "packaging",
-      "expiration": "2026-12-31",
-      "classification": "INTENTIONAL"
-    },
-    {
-      "kind": "pod_only",
-      "module": "WebKit",
-      "reason": "CocoaPods-only optional integration without a SwiftPM target.",
       "owner": "packaging",
       "expiration": "2026-12-31",
       "classification": "INTENTIONAL"
@@ -2022,6 +2040,15 @@
       "module": "SplitView",
       "reason": "SwiftPM enables strict concurrency for the new adaptive UIKit split-view target; CocoaPods inherits the aggregate target compiler contract while keeping the opt-in subspec API-compatible.",
       "owner": "navigation",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "HarbethKit",
+      "field": "internal_dependencies",
+      "reason": "The SwiftPM C7Collector target imports MediaViewer for its review controller types; CocoaPods keeps MediaViewer on the FilterCamera aggregate compatibility subspec.",
+      "owner": "filter-camera",
       "expiration": "2027-03-31",
       "classification": "INTENTIONAL"
     }

@@ -13,9 +13,6 @@ import AVKit
 import Kingfisher
 import Photos
 import PhotosUI
-#if POOTOOLS_VIDEOCACHE
-import KTVHTTPCache
-#endif
 
 @MainActor
 class PTMediaBrowserCell: PTBaseNormalCell {
@@ -570,18 +567,11 @@ extension PTMediaBrowserCell {
                 self.videoPlayHandler?(videoController)
             } else {
                 if let url = URL(string: videoURL) {
-#if POOTOOLS_VIDEOCACHE
-                if let proxyURL = KTVHTTPCache.proxyURL(withOriginalURL: url) {
-                    let playerItem = AVPlayerItem(url: proxyURL)
-                    let player = AVPlayer(playerItem: playerItem)
-                    videoController.videoPlayer = player
+                    // English: Start remote playback immediately; PTVideoManager caches the same URL in parallel.
+                    // Español: Inicia la reproducción remota de inmediato; PTVideoManager almacena la misma URL en paralelo.
+                    // 中文：立即开始远程播放；PTVideoManager 会并行缓存同一个 URL。
+                    videoController.videoPlayer = AVPlayer(url: url)
                     self.videoPlayHandler?(videoController)
-                } else {
-                    self.prepareVideoFunction(url: url, videoController: videoController)
-                }
-#else
-                self.prepareVideoFunction(url: url, videoController: videoController)
-#endif
                 } else {
                     PTNSLogConsole("Video url error")
                 }
@@ -591,26 +581,6 @@ extension PTMediaBrowserCell {
             self.videoPlayHandler?(videoController)
         default:
             PTNSLogConsole("Video item error")
-        }
-    }
-    
-    func prepareVideoFunction(url:URL,videoController:PTPlayerViewController) {
-        self.showLoading()
-        PTVideoManager.shared.getVideoItem(for: url.absoluteString,autoCacheVideo: true) { _, _, progress in
-            self.loading.progress = progress
-        } coverReady: { item in
-            
-        } videoReady: { item in
-            PTGCDManager.shared.runOnMain {
-                self.hideLoading()
-                self.videoCacheURL = item.localVideoURL
-                if let findLocal = item.localVideoURL {
-                    videoController.videoPlayer = AVPlayer(url: findLocal)
-                    self.videoPlayHandler?(videoController)
-                } else {
-                    PTNSLogConsole("Video url error")
-                }
-            }
         }
     }
     

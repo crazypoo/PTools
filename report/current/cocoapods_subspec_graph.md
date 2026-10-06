@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: ce2216ac80d2a749565c5cf8a603b1407e82382e
-Generated at: 2026-10-05T10:57:21Z
+Source revision: 709b16be6083e89fafa73181bef6d4902013cbcb
+Generated at: 2026-10-06T02:29:34Z
 -->
 
 # CocoaPods Subspec Graph
@@ -64,8 +64,8 @@ Generated at: 2026-10-05T10:57:21Z
 | `Documents` | `PooTools/PDF` | — | `PToolsDocuments` | Foundation, QuickLook, UIKit, UniformTypeIdentifiers | — |
 | `FaceIDPermission` | `PooTools/PToolsPermissionCore` | — | `FaceIDPermission` | — | — |
 | `Feedback` | `PooTools/PToolsCore` | — | `PToolsFeedback` | CoreHaptics, Foundation, UIKit | — |
-| `FilterCamera` | `PooTools/CameraPermission`, `PooTools/Core`, `PooTools/HarbethKit`, `PooTools/MediaViewer`, `PooTools/MicPermission` | — | `FilterCamera` | — | — |
-| `Flag` | `PooTools/Core` | `FlagKit` | — | — | — |
+| `FilterCamera` | `PooTools/HarbethKit`, `PooTools/MediaViewer` | — | — | — | — |
+| `Flag` | `PooTools/Core` | — | — | — | — |
 | `Form` | `PooTools/Accessibility`, `PooTools/CheckBox`, `PooTools/ContentState`, `PooTools/Core`, `PooTools/Input`, `PooTools/PToolsCore`, `PooTools/Picker`, `PooTools/Slider`, `PooTools/Stepper`, `PooTools/Theme` | — | `PToolsForm` | Foundation, UIKit | — |
 | `GCDWebServer` | `PooTools/HTTPFilePortal` | — | — | — | — |
 | `Guide` | `PooTools/Core`, `PooTools/PageControl` | — | `Guide` | — | — |
@@ -171,13 +171,13 @@ Generated at: 2026-10-05T10:57:21Z
 | `TrackingPermission` | `PooTools/PToolsPermissionCore` | — | `TrackingPermission` | — | — |
 | `Transfer` | `PooTools/TransferCore` | — | `PToolsTransfer` | CryptoKit, Foundation | — |
 | `TransferCore` | — | — | `PToolsTransferCore` | Foundation | — |
-| `VideoCache` | `PooTools/Core` | `KTVHTTPCache` | — | — | — |
+| `VideoCache` | `PooTools/Core` | — | — | — | — |
 | `VideoEditor` | `PooTools/Core`, `PooTools/HarbethKit`, `PooTools/Loading`, `PooTools/MediaCore`, `PooTools/ProgressBar`, `PooTools/Symbols` | — | `VideoEditor` | — | — |
 | `Vision` | `PooTools/Core` | — | `Vision` | — | — |
 | `Web` | `PooTools/WebBridge` | — | `PToolsWeb` | Foundation, UIKit, WebKit | — |
 | `WebBridge` | `PooTools/WebCore` | — | `PToolsWebBridge` | Foundation, WebKit | — |
 | `WebCore` | — | — | `PToolsWebCore` | Foundation | — |
-| `WebKit` | `PooTools/Core` | — | `WebKit` | — | — |
+| `WebKit` | `PooTools/Core` | — | `WebKit` | Foundation, UIKit, WebKit | — |
 | `WhatsNewsKit` | `PooTools/Core` | — | `WhatsNewsKit` | — | — |
 | `WidgetCore` | `PooTools/DeepLink`, `PooTools/RouteCore`, `PooTools/Storage` | — | `PToolsWidgetCore` | Foundation, WidgetKit | — |
 | `ZipArchive` | `PooTools/Core` | `SSZipArchive` | — | — | — |

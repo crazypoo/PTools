@@ -1,15 +1,16 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: f7c0c7dc885f3b0e6fc3b0050fb2d69f609dcf6a
-Generated at: 2026-10-04T23:23:18+08:00 -->
+Source revision: 709b16be6083e89fafa73181bef6d4902013cbcb
+Generated at: 2026-10-05T22:52:34+08:00 -->
 # Test Inventory
 
 - Version: `5.62.0`
-- Records: `23`
+- Records: `24`
 
 | target | path | level | file_count | canonical | action |
 | --- | --- | --- | --- | --- | --- |
 | PToolsAdvancedTests | Tests/PToolsAdvancedTests | CONTRACT | 1 | True | KEEP |
+| PToolsApplicationInfrastructureTests | Tests/PToolsApplicationInfrastructureTests | CONTRACT | 1 | True | KEEP |
 | PToolsBannerTests | Tests/PToolsBannerTests | CONTRACT | 1 | True | KEEP |
 | PToolsCoreTests | Tests/PooToolsCoreTests | CONTRACT | 1 | True | KEEP |
 | PToolsDateTests | Tests/PToolsDateTests | CONTRACT | 1 | True | KEEP |

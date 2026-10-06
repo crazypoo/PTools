@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: ce2216ac80d2a749565c5cf8a603b1407e82382e
-Generated at: 2026-10-05T10:57:23Z
+Source revision: 709b16be6083e89fafa73181bef6d4902013cbcb
+Generated at: 2026-10-06T02:29:33Z
 -->
 
 # SwiftPM Dependency Graph
@@ -13,7 +13,7 @@ Generated at: 2026-10-05T10:57:23Z
 - Package: `ptools`
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
-- Target count: `177`
+- Target count: `179`
 - Core direct third-party dependencies: `4` (baseline `18`)
 
 ## Products
@@ -114,6 +114,7 @@ Generated at: 2026-10-05T10:57:23Z
 | `PooToolsDEBUG` | `PooToolsDEBUG` |
 | `PooToolsDEBUGTrackingEyes` | `PooToolsDEBUGTrackingEyes` |
 | `PooToolsDataEncrypt` | `PooToolsDataEncrypt` |
+| `PooToolsFilterCamera` | `PooToolsFilterCamera` |
 | `PooToolsGuide` | `PooToolsGuide` |
 | `PooToolsHandSign` | `PooToolsHandSign` |
 | `PooToolsHarbethKit` | `PooToolsHarbethKit` |
@@ -167,8 +168,10 @@ Generated at: 2026-10-05T10:57:23Z
 | `PooToolsStepper` | `PooToolsStepper` |
 | `PooToolsTelephony` | `PooToolsTelephony` |
 | `PooToolsTipsView` | `PooToolsTipsView` |
+| `PooToolsVideoCache` | `ptools` |
 | `PooToolsVideoEditor` | `PooToolsVideoEditor` |
 | `PooToolsVision` | `PooToolsVision` |
+| `PooToolsWebKit` | `PooToolsWebKit` |
 | `PooToolsWhatsNewsKit` | `PooToolsWhatsNewsKit` |
 | `PooToolsiOS17Tips` | `PooToolsiOS17Tips` |
 | `ptools` | `ptools` |
@@ -297,9 +300,10 @@ Generated at: 2026-10-05T10:57:23Z
 | `PooToolsDEBUG` | `PooToolsSource` | PToolsBackgroundTasks, PToolsConnectivity, PToolsDeepLink, PToolsNotifications, PToolsOverlay, PToolsRouteCore, PToolsStorage, PToolsSymbols, PooToolsNetWork, PooToolsPDF, PooToolsSearchBar, PooToolsShare, ptools | — | 15 source entries / 0 resources |
 | `PooToolsDEBUGTrackingEyes` | `PooToolsSource/WhereIsMyEye` | PTCameraPermission, PooToolsDEBUG, ptools | — | 0 source entries / 0 resources |
 | `PooToolsDataEncrypt` | `PooToolsSource/AESAndDES` | ptools | CryptoSwift | 0 source entries / 0 resources |
+| `PooToolsFilterCamera` | `PooToolsSource/FilterCamera` | PooToolsHarbethKit, PooToolsMediaViewer | — | 0 source entries / 0 resources |
 | `PooToolsGuide` | `PooToolsSource/Guide` | PooToolsPageControl, ptools | — | 0 source entries / 0 resources |
 | `PooToolsHandSign` | `PooToolsSource/SignView` | ptools | — | 0 source entries / 0 resources |
-| `PooToolsHarbethKit` | `PooToolsSource/C7Collector` | PTCameraPermission, PToolsSymbols, ptools | Harbeth | 0 source entries / 0 resources |
+| `PooToolsHarbethKit` | `PooToolsSource/C7Collector` | PTCameraPermission, PToolsSymbols, PooToolsMediaViewer, ptools | Harbeth | 0 source entries / 0 resources |
 | `PooToolsHeartRate` | `PooToolsSource/HeartRate` | PTCameraPermission, ptools | Lottie | 0 source entries / 0 resources |
 | `PooToolsHud` | `PooToolsSource/Hud` | PooToolsProgressBar, ptools | — | 0 source entries / 0 resources |
 | `PooToolsIAP` | `PooToolsSource/IAP` | ptools | — | 0 source entries / 0 resources |
@@ -351,6 +355,7 @@ Generated at: 2026-10-05T10:57:23Z
 | `PooToolsTipsView` | `PooToolsSource/TipsView` | PToolsOverlay, ptools | — | 0 source entries / 0 resources |
 | `PooToolsVideoEditor` | `PooToolsSource/VideoEditor` | PToolsSymbols, PooToolsHarbethKit, PooToolsLoading, PooToolsMediaCore, PooToolsProgressBar, ptools | Harbeth | 0 source entries / 0 resources |
 | `PooToolsVision` | `PooToolsSource/Vision` | ptools | — | 0 source entries / 0 resources |
+| `PooToolsWebKit` | `PooToolsSource/WebKit` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsWhatsNewsKit` | `PooToolsSource/WhatsNewsKit` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsiOS17Tips` | `PooToolsSource/iOS17Tips` | ptools | — | 0 source entries / 0 resources |
 | `ptools` | `PooToolsSource` | PToolsCore, PToolsDate, PToolsDevice, PToolsFontCatalogCore, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsUIFoundation | IQKeyboardManagerSwift, Kingfisher, Lottie, SnapKit | 30 source entries / 1 resources |

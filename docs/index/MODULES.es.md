@@ -39,7 +39,7 @@ Cada producto SwiftPM y subspec de CocoaPods registrado tiene una guía triling�
 | [DeepLink](../modules/deep-link/README.es.md) | `—` | `DeepLink` |
 | [Device](../modules/device/README.es.md) | `—` | `Device` |
 | [FaceIDPermission](../modules/face-idpermission/README.es.md) | `—` | `FaceIDPermission` |
-| [FilterCamera](../modules/filter-camera/README.es.md) | `—` | `FilterCamera` |
+| [PooToolsFilterCamera](../modules/filter-camera/README.es.md) | `PooToolsFilterCamera` | `FilterCamera` |
 | [Flag](../modules/flag/README.es.md) | `—` | `Flag` |
 | [GCDWebServer](../modules/gcdweb-server/README.es.md) | `—` | `GCDWebServer` |
 | [Guide](../modules/guide/README.es.md) | `—` | `Guide` |
@@ -262,8 +262,8 @@ Cada producto SwiftPM y subspec de CocoaPods registrado tiene una guía triling�
 | [Telephony](../modules/telephony/README.es.md) | `—` | `Telephony` |
 | [TipsView](../modules/tips-view/README.es.md) | `—` | `TipsView` |
 | [TrackingPermission](../modules/tracking-permission/README.es.md) | `—` | `TrackingPermission` |
-| [VideoCache](../modules/video-cache/README.es.md) | `—` | `VideoCache` |
+| [PooToolsVideoCache](../modules/video-cache/README.es.md) | `PooToolsVideoCache` | `VideoCache` |
 | [Vision](../modules/vision/README.es.md) | `—` | `Vision` |
-| [WebKit](../modules/web-kit/README.es.md) | `—` | `WebKit` |
+| [PooToolsWebKit](../modules/webkit/README.es.md) | `PooToolsWebKit` | `WebKit` |
 | [WhatsNewsKit](../modules/whats-news-kit/README.es.md) | `—` | `WhatsNewsKit` |
 | [ZipArchive](../modules/zip-archive/README.es.md) | `—` | `ZipArchive` |

@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: f7c0c7dc885f3b0e6fc3b0050fb2d69f609dcf6a
-Generated at: 2026-10-04T23:23:18+08:00 -->
+Source revision: 709b16be6083e89fafa73181bef6d4902013cbcb
+Generated at: 2026-10-05T22:52:34+08:00 -->
 # Script Inventory
 
 - Version: `5.62.0`
-- Records: `143`
+- Records: `157`
 
 | path | language | domain | status | canonical | action |
 | --- | --- | --- | --- | --- | --- |
@@ -110,31 +110,38 @@ Generated at: 2026-10-04T23:23:18+08:00 -->
 | Scripts/validate_5_61_release.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_5_61_splitview_demo.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_api_baseline.sh | sh | Scripts | ACTIVE | True | KEEP |
+| Scripts/validate_application_infrastructure.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_attributedstring_absorption_5_25.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
+| Scripts/validate_auth.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_branch_dependencies.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_build_entries.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_concurrency_5_19.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_core_boundary_5_12.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_core_source_contract.sh | sh | Scripts | ACTIVE | True | KEEP |
+| Scripts/validate_database.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_debug_foundation_5_10.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_debug_instruments_5_18.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_dependencies_5_9_6.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_dependency_direction.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_deprecated_inventory.sh | sh | Scripts | ACTIVE | True | KEEP |
+| Scripts/validate_distribution_parity.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_docs.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_document_versions.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_file_size_gate.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_gcdwebserver_removal_5_28.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_instruments_5_11.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
+| Scripts/validate_integrity.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_lifecycle_5_9.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_localizations.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_logging_5_21.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_logging_5_22.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_logging_foundation_5_20.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
+| Scripts/validate_map.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_migration_5_9_7.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_module_parity.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_naming_debt.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_network_security.sh | sh | Scripts | ACTIVE | True | KEEP |
+| Scripts/validate_observability.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_p1_architecture_closure.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_p1_dependency_supply_chain.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_p1_performance_registry.sh | sh | Scripts | ACTIVE | True | KEEP |
@@ -143,12 +150,19 @@ Generated at: 2026-10-04T23:23:18+08:00 -->
 | Scripts/validate_p2_performance_closure.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_permission_source_contract.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_quality_scans.sh | sh | Scripts | ACTIVE | True | KEEP |
+| Scripts/validate_realtime.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_release.sh | sh | Scripts | ACTIVE | True | KEEP |
+| Scripts/validate_remote_configuration.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_search_5_18_1.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_socketrocket_removal_5_27.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
+| Scripts/validate_storekit.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_swiftdate_removal_5_26.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
 | Scripts/validate_swifterswift_removal.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_symbols_5_24.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
+| Scripts/validate_sync.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_test_matrix.sh | sh | Scripts | ACTIVE | True | KEEP |
+| Scripts/validate_transfer.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_ui_5_13_contract.sh | sh | Scripts | LEGACY_REVIEW | False | KEEP |
+| Scripts/validate_web.sh | sh | Scripts | ACTIVE | True | KEEP |
+| Scripts/validate_webbridge.sh | sh | Scripts | ACTIVE | True | KEEP |
 | Scripts/validate_xcode_source_warnings.sh | sh | Scripts | ACTIVE | True | KEEP |

@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "ce2216ac80d2a749565c5cf8a603b1407e82382e",
-  "generated_at": "2026-10-05T10:56:31Z",
+  "source_revision": "709b16be6083e89fafa73181bef6d4902013cbcb",
+  "generated_at": "2026-10-06T02:27:42Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -11866,7 +11866,7 @@
     {
       "key": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift|public|class|public class PTFilterCameraViewController: PTBaseViewController",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 18,
+      "line": 22,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTFilterCameraViewController: PTBaseViewController {"
@@ -11874,7 +11874,7 @@
     {
       "key": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift|public|var|public var onlyCamera:Bool = true",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 20,
+      "line": 24,
       "access": "public",
       "kind": "var",
       "declaration": "public var onlyCamera:Bool = true"
@@ -11882,7 +11882,7 @@
     {
       "key": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift|public|var|public var useThisImageHandler:((UIImage) -> Void)?",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 21,
+      "line": 25,
       "access": "public",
       "kind": "var",
       "declaration": "public var useThisImageHandler:((UIImage) -> Void)?"
@@ -11890,7 +11890,7 @@
     {
       "key": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift|public|var|public var mediaLibDismissCallback:PTActionTask? = nil",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 22,
+      "line": 26,
       "access": "public",
       "kind": "var",
       "declaration": "public var mediaLibDismissCallback:PTActionTask? = nil"
@@ -11898,7 +11898,7 @@
     {
       "key": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift|public|func|public func preview(_ collector: C7Collector, fliter image: C7Image)",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 730,
+      "line": 734,
       "access": "public",
       "kind": "func",
       "declaration": "public func preview(_ collector: C7Collector, fliter image: C7Image) {"
@@ -11906,7 +11906,7 @@
     {
       "key": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift|public|func|public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 736,
+      "line": 740,
       "access": "public",
       "kind": "func",
       "declaration": "public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {"
@@ -11914,7 +11914,7 @@
     {
       "key": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift|public|func|public func animationDidStop(_ anim: CAAnimation, finished flag: Bool)",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 749,
+      "line": 753,
       "access": "public",
       "kind": "func",
       "declaration": "public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {"
@@ -33778,7 +33778,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|open|class|open class func centerOfScrollVIewContent(scrollView:UIScrollView) -> CGPoint",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 329,
+      "line": 326,
       "access": "open",
       "kind": "class",
       "declaration": "open class func centerOfScrollVIewContent(scrollView:UIScrollView) -> CGPoint {"
@@ -33786,7 +33786,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func viewForZooming(in scrollView: UIScrollView) -> UIView?",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 660,
+      "line": 630,
       "access": "public",
       "kind": "func",
       "declaration": "public func viewForZooming(in scrollView: UIScrollView) -> UIView? {"
@@ -33794,7 +33794,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 665,
+      "line": 635,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {"
@@ -33802,7 +33802,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 670,
+      "line": 640,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { }"
@@ -33810,7 +33810,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 672,
+      "line": 642,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { }"
@@ -33818,7 +33818,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidZoom(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 674,
+      "line": 644,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidZoom(_ scrollView: UIScrollView) {"
@@ -33826,7 +33826,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidScroll(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 684,
+      "line": 654,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidScroll(_ scrollView: UIScrollView) {"
@@ -34066,7 +34066,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift|public|class|public class PTMediaBrowserController: PTBaseViewController",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "line": 21,
+      "line": 18,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTMediaBrowserController: PTBaseViewController {"
@@ -34074,7 +34074,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift|public|var|public var viewDismissBlock:PTActionTask?",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "line": 24,
+      "line": 21,
       "access": "public",
       "kind": "var",
       "declaration": "public var viewDismissBlock:PTActionTask?"
@@ -34082,7 +34082,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift|public|var|public var defaultIndex: Int = 0",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "line": 26,
+      "line": 23,
       "access": "public",
       "kind": "var",
       "declaration": "public var defaultIndex: Int = 0"
@@ -34090,7 +34090,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift|public|var|public var viewMoreActionBlock:PTViewerEXIndexBlock?",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "line": 32,
+      "line": 29,
       "access": "public",
       "kind": "var",
       "declaration": "public var viewMoreActionBlock:PTViewerEXIndexBlock?"
@@ -34098,7 +34098,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift|public|var|public var viewSaveImageBlock:PTViewerSaveBlock?",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "line": 34,
+      "line": 31,
       "access": "public",
       "kind": "var",
       "declaration": "public var viewSaveImageBlock:PTViewerSaveBlock?"
@@ -34106,7 +34106,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift|public|var|public var viewDeleteImageBlock:PTViewerIndexBlock?",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "line": 36,
+      "line": 33,
       "access": "public",
       "kind": "var",
       "declaration": "public var viewDeleteImageBlock:PTViewerIndexBlock?"
@@ -34114,7 +34114,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift|public|var|public var browserCurrentDataBlock:((Int)->Void)?",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "line": 39,
+      "line": 36,
       "access": "public",
       "kind": "var",
       "declaration": "public var browserCurrentDataBlock:((Int)->Void)?"
@@ -34122,7 +34122,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift|public|init|public init(mediaData: [PTMediaBrowserModel], defaultIndex: Int = 0)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "line": 285,
+      "line": 282,
       "access": "public",
       "kind": "init",
       "declaration": "public init(mediaData: [PTMediaBrowserModel], defaultIndex: Int = 0) {"
@@ -34130,7 +34130,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift|public|func|public func mediasShow()",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "line": 454,
+      "line": 451,
       "access": "public",
       "kind": "func",
       "declaration": "public func mediasShow() {"
@@ -34138,7 +34138,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift|public|func|public func reloadConfig(mediaData:[PTMediaBrowserModel])",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "line": 459,
+      "line": 456,
       "access": "public",
       "kind": "func",
       "declaration": "public func reloadConfig(mediaData:[PTMediaBrowserModel]) {"
@@ -84810,7 +84810,7 @@
     {
       "key": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift|public|func|public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error)",
       "path": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift",
-      "line": 126,
+      "line": 128,
       "access": "public",
       "kind": "func",
       "declaration": "public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {"
@@ -84818,7 +84818,7 @@
     {
       "key": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift|public|func|public func webViewWebContentProcessDidTerminate(_ webView: WKWebView)",
       "path": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift",
-      "line": 131,
+      "line": 133,
       "access": "public",
       "kind": "func",
       "declaration": "public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {"

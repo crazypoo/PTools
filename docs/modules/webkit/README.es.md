@@ -1,13 +1,13 @@
 ---
-module: "PooToolsVideoCache"
-module_id: "video-cache"
+module: "PooToolsWebKit"
+module_id: "webkit"
 language: "es"
 status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
-swiftpm_product: "PooToolsVideoCache"
-cocoapods_subspec: "VideoCache"
-source: "PooToolsSource/Base"
+swiftpm_product: "PooToolsWebKit"
+cocoapods_subspec: "WebKit"
+source: "PooToolsSource/WebKit"
 category: "compatibility"
 last_reviewed: "2026-09-28"
 canonical: false
@@ -16,11 +16,11 @@ product_version_source: "repository:VERSION"
 document_schema_version: 1
 ---
 
-# PooToolsVideoCache
+# PooToolsWebKit
 
 ## 1. Descripción
 
-PooToolsVideoCache es un módulo PTools de categoría compatibility. Esta guía se genera desde el registro canónico y describe el límite compatible en iOS 17+ y Swift 6+.
+PooToolsWebKit es un módulo PTools de categoría compatibility. Esta guía se genera desde el registro canónico y describe el límite compatible en iOS 17+ y Swift 6+.
 
 ## 2. Requisitos
 
@@ -34,24 +34,24 @@ PooToolsVideoCache es un módulo PTools de categoría compatibility. Esta guía 
 Swift Package Manager:
 
 ```swift
-import PooToolsVideoCache
+import PooToolsWebKit
 ```
 
 CocoaPods:
 
 ```ruby
-pod 'PooTools/VideoCache'
+pod 'PooTools/WebKit'
 ```
 
 ## 4. Importación
 
 ```swift
-import PooToolsVideoCache
+import PooToolsWebKit
 ```
 
 ## 5. Inicio rápido
 
-Usa el producto o subspec mínimo publicado. El nombre del registro es `PooToolsVideoCache`; no inventes productos ni dependencias no publicadas.
+Usa el producto o subspec mínimo publicado. El nombre del registro es `PooToolsWebKit`; no inventes productos ni dependencias no publicadas.
 
 ## 6. Conceptos principales
 

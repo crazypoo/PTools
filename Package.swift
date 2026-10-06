@@ -192,6 +192,10 @@ let package = Package(
         .library(name: "PooToolsSearchBar", targets: ["PooToolsSearchBar"]),
         .library(name: "PooToolsSearch", targets: ["PooToolsSearch"]),
         .library(name: "PooToolsMediaViewer", targets: ["PooToolsMediaViewer"]),
+        // English: Preserve the legacy VideoCache product while routing playback through PTools' native cache.
+        // Español: Conserva el producto VideoCache heredado y dirige la reproducción a la caché nativa de PTools.
+        // 中文：保留旧 VideoCache 产品，并将播放路由到 PTools 原生缓存。
+        .library(name: "PooToolsVideoCache", targets: ["ptools"]),
 
         // ==========================================
         // 高级业务模块
@@ -199,6 +203,14 @@ let package = Package(
         .library(name: "PooToolsImagePicker", targets: ["PooToolsImagePicker"]),
         .library(name: "PooToolsPhotoPicker", targets: ["PooToolsPhotoPicker"]),
         .library(name: "PooToolsHarbethKit", targets: ["PooToolsHarbethKit"]),
+        // English: Expose the historical FilterCamera feature as one product over its real implementation targets.
+        // Español: Expone la función FilterCamera histórica como un producto sobre sus targets reales.
+        // 中文：将历史 FilterCamera 功能作为一个产品，暴露其真实实现 target。
+        .library(name: "PooToolsFilterCamera", targets: ["PooToolsFilterCamera"]),
+        // English: Keep the old HTML height calculator available without requiring the newer Web stack.
+        // Español: Mantiene disponible el calculador de altura HTML antiguo sin exigir la nueva pila Web.
+        // 中文：保留旧 HTML 高度计算器，无需引入新的 Web 栈。
+        .library(name: "PooToolsWebKit", targets: ["PooToolsWebKit"]),
         .library(name: "PooToolsImageEditor", targets: ["PooToolsImageEditor"]),
         .library(name: "PooToolsVideoEditor", targets: ["PooToolsVideoEditor"]),
         .library(name: "PooToolsCheckDirtyWord", targets: ["PooToolsCheckDirtyWord"]),
@@ -827,6 +839,19 @@ let package = Package(
             path: "PooToolsSource/PToolsWeb",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
+        // English: This compatibility target owns only PTHTMLHeightCalculator and stays independent from PToolsWeb.
+        // Español: Este target de compatibilidad solo contiene PTHTMLHeightCalculator y permanece independiente de PToolsWeb.
+        // 中文：这个兼容 target 只负责 PTHTMLHeightCalculator，并独立于 PToolsWeb。
+        .target(
+            name: "PooToolsWebKit",
+            dependencies: ["ptools"],
+            path: "PooToolsSource/WebKit",
+            swiftSettings: [
+                .define("POOTOOLS_WEBKIT"),
+                .define("POOTOOLS_COCOAPODS"),
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
+        ),
         .target(
             name: "PToolsMapCore",
             path: "PooToolsSource/PToolsMapCore",
@@ -981,7 +1006,11 @@ let package = Package(
         // ==========================================
         .target(name: "PooToolsImagePicker", dependencies: ["ptools", "PTCameraPermission"], path: "PooToolsSource/ImagePicker", swiftSettings: [.define("POOTOOLS_IMAGEPICKER"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsPhotoPicker", dependencies: ["ptools", "PToolsSymbols", "PooToolsMediaCore", "PooToolsImagePicker", "PTCameraPermission", "PooToolsLoading"], path: "PooToolsSource", sources: ["PhotoPicker"], swiftSettings: [.define("POOTOOLS_PHOTOPICKER"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsHarbethKit", dependencies: ["ptools", "PToolsSymbols", "Harbeth", "PTCameraPermission"], path: "PooToolsSource/C7Collector", swiftSettings: [.define("POOTOOLS_HARBETHKIT"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsHarbethKit", dependencies: ["ptools", "PToolsSymbols", "Harbeth", "PTCameraPermission", "PooToolsMediaViewer"], path: "PooToolsSource/C7Collector", swiftSettings: [.define("POOTOOLS_HARBETHKIT"), .define("POOTOOLS_COCOAPODS")]),
+        // English: Re-export the existing implementation targets without compiling FilterCamera source a second time.
+        // Español: Reexporta los targets de implementación existentes sin compilar dos veces el código de FilterCamera.
+        // 中文：重新导出已有实现 target，不重复编译 FilterCamera 源码。
+        .target(name: "PooToolsFilterCamera", dependencies: ["PooToolsHarbethKit", "PooToolsMediaViewer"], path: "PooToolsSource/FilterCamera", swiftSettings: [.define("POOTOOLS_FILTERCAMERA"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsImageEditor", dependencies: ["ptools", "PToolsSymbols", "PooToolsMediaCore", "Harbeth", "PooToolsHarbethKit", "PooToolsPhotoPicker"], path: "PooToolsSource/ImageEditor", swiftSettings: [.define("POOTOOLS_IMAGEEDITOR"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsVideoEditor", dependencies: ["ptools", "PToolsSymbols", "PooToolsMediaCore", "Harbeth", "PooToolsHarbethKit", "PooToolsProgressBar", "PooToolsLoading"], path: "PooToolsSource/VideoEditor", swiftSettings: [.define("POOTOOLS_VIDEOEDITOR"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSVG", dependencies: ["ptools", "Kingfisher", "PocketSVG"], path: "PooToolsSource/KingfisherSVG", swiftSettings: [.define("POOTOOLS_SVG"), .define("POOTOOLS_COCOAPODS")]),

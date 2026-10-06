@@ -424,15 +424,17 @@
   aliases: []
 -
   id: "filter-camera"
-  name: "FilterCamera"
-  swiftpm_product: ""
+  name: "PooToolsFilterCamera"
+  swiftpm_product: "PooToolsFilterCamera"
   cocoapods_subspec: "FilterCamera"
-  source: ""
+  source: "PooToolsSource/C7Collector"
   category: "compatibility"
-  status: "compatibility"
+  status: "stable"
   minimum_ios: "17.0"
   swift: "6+"
-  dependencies: []
+  dependencies:
+    - "HarbethKit"
+    - "MediaViewer"
   owner: "PTools maintainers"
   docs: true
   canonical_slug: "filter-camera"
@@ -3842,15 +3844,16 @@
   aliases: []
 -
   id: "video-cache"
-  name: "VideoCache"
-  swiftpm_product: ""
+  name: "PooToolsVideoCache"
+  swiftpm_product: "PooToolsVideoCache"
   cocoapods_subspec: "VideoCache"
-  source: ""
+  source: "PooToolsSource/Base"
   category: "compatibility"
-  status: "compatibility"
+  status: "stable"
   minimum_ios: "17.0"
   swift: "6+"
-  dependencies: []
+  dependencies:
+    - "Core"
   owner: "PTools maintainers"
   docs: true
   canonical_slug: "video-cache"
@@ -3871,19 +3874,20 @@
   canonical_slug: "vision"
   aliases: []
 -
-  id: "web-kit"
-  name: "WebKit"
-  swiftpm_product: ""
+  id: "webkit"
+  name: "PooToolsWebKit"
+  swiftpm_product: "PooToolsWebKit"
   cocoapods_subspec: "WebKit"
-  source: ""
+  source: "PooToolsSource/WebKit"
   category: "compatibility"
-  status: "compatibility"
+  status: "stable"
   minimum_ios: "17.0"
   swift: "6+"
-  dependencies: []
+  dependencies:
+    - "Core"
   owner: "PTools maintainers"
   docs: true
-  canonical_slug: "web-kit"
+  canonical_slug: "webkit"
   aliases: []
 -
   id: "whats-news-kit"

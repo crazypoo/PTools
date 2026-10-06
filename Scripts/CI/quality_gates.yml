@@ -31,6 +31,9 @@ gates:
   - id: PODS
     script: pod lib lint
     workflowJob: cocoapods
+  - id: DISTRIBUTION_PARITY
+    script: Scripts/validate_distribution_parity.sh
+    workflowJob: cocoapods
   - id: XCODE
     script: xcodebuild
     workflowJob: xcode-build

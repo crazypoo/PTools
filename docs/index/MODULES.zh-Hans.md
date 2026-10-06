@@ -39,7 +39,7 @@ generated: true
 | [DeepLink](../modules/deep-link/README.zh-Hans.md) | `—` | `DeepLink` |
 | [Device](../modules/device/README.zh-Hans.md) | `—` | `Device` |
 | [FaceIDPermission](../modules/face-idpermission/README.zh-Hans.md) | `—` | `FaceIDPermission` |
-| [FilterCamera](../modules/filter-camera/README.zh-Hans.md) | `—` | `FilterCamera` |
+| [PooToolsFilterCamera](../modules/filter-camera/README.zh-Hans.md) | `PooToolsFilterCamera` | `FilterCamera` |
 | [Flag](../modules/flag/README.zh-Hans.md) | `—` | `Flag` |
 | [GCDWebServer](../modules/gcdweb-server/README.zh-Hans.md) | `—` | `GCDWebServer` |
 | [Guide](../modules/guide/README.zh-Hans.md) | `—` | `Guide` |
@@ -262,8 +262,8 @@ generated: true
 | [Telephony](../modules/telephony/README.zh-Hans.md) | `—` | `Telephony` |
 | [TipsView](../modules/tips-view/README.zh-Hans.md) | `—` | `TipsView` |
 | [TrackingPermission](../modules/tracking-permission/README.zh-Hans.md) | `—` | `TrackingPermission` |
-| [VideoCache](../modules/video-cache/README.zh-Hans.md) | `—` | `VideoCache` |
+| [PooToolsVideoCache](../modules/video-cache/README.zh-Hans.md) | `PooToolsVideoCache` | `VideoCache` |
 | [Vision](../modules/vision/README.zh-Hans.md) | `—` | `Vision` |
-| [WebKit](../modules/web-kit/README.zh-Hans.md) | `—` | `WebKit` |
+| [PooToolsWebKit](../modules/webkit/README.zh-Hans.md) | `PooToolsWebKit` | `WebKit` |
 | [WhatsNewsKit](../modules/whats-news-kit/README.zh-Hans.md) | `—` | `WhatsNewsKit` |
 | [ZipArchive](../modules/zip-archive/README.zh-Hans.md) | `—` | `ZipArchive` |

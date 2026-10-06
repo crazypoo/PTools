@@ -182,6 +182,7 @@ run_named_gate() {
       run_gate PODS bash -c '
         set -euo pipefail
         bash Scripts/validate_module_parity.sh --check
+        bash Scripts/validate_distribution_parity.sh
         if ! pod lib lint PooTools.podspec --allow-warnings --skip-tests; then
           printf "FAIL [PODS_LINT_FAILURE] File PooTools.podspec Expected CocoaPods lint to pass Actual pod lib lint failed or was cancelled Rule CocoaPods packaging must remain independently diagnosable\\n" >&2
           exit 1

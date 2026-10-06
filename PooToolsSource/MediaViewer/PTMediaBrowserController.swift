@@ -11,9 +11,6 @@ import SnapKit
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif
-#if POOTOOLS_VIDEOCACHE
-import KTVHTTPCache
-#endif
 
 let numberOfVisibleLines = 2
 

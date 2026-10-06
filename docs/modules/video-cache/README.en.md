@@ -1,13 +1,13 @@
 ---
-module: "VideoCache"
+module: "PooToolsVideoCache"
 module_id: "video-cache"
 language: "en"
-status: "compatibility"
+status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
-swiftpm_product: "null"
+swiftpm_product: "PooToolsVideoCache"
 cocoapods_subspec: "VideoCache"
-source: "manifest-only"
+source: "PooToolsSource/Base"
 category: "compatibility"
 last_reviewed: "2026-09-28"
 canonical: true
@@ -16,25 +16,25 @@ product_version_source: "repository:VERSION"
 document_schema_version: 1
 ---
 
-# VideoCache
+# PooToolsVideoCache
 
 ## 1. Overview
 
-VideoCache is a PTools compatibility module. This guide is generated from the canonical module registry and documents the supported boundary for iOS 17+ and Swift 6+.
+PooToolsVideoCache is a PTools compatibility module. This guide is generated from the canonical module registry and documents the supported boundary for iOS 17+ and Swift 6+.
 
 ## 2. Requirements
 
 - Platform: iOS 17.0+
 - Swift: 6+
 - Category: `compatibility`
-- Status: `compatibility`
+- Status: `stable`
 
 ## 3. Installation
 
 Swift Package Manager:
 
 ```swift
-// This entry is CocoaPods-only; import the module exposed by the selected subspec.
+import PooToolsVideoCache
 ```
 
 CocoaPods:
@@ -46,16 +46,16 @@ pod 'PooTools/VideoCache'
 ## 4. Import
 
 ```swift
-// This entry is CocoaPods-only; import the module exposed by the selected subspec.
+import PooToolsVideoCache
 ```
 
 ## 5. Quick Start
 
-Use the smallest published product or subspec. The registry name is `VideoCache`; do not infer an unpublished product or dependency.
+Use the smallest published product or subspec. The registry name is `PooToolsVideoCache`; do not infer an unpublished product or dependency.
 
 ## 6. Core Concepts
 
-The public boundary is value-first where possible. Direct dependencies recorded by the registry: None declared by the registry..
+The public boundary is value-first where possible. Direct dependencies recorded by the registry: Core.
 
 ## 7. Main APIs
 

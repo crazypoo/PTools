@@ -1,13 +1,13 @@
 ---
-module: "PooToolsFilterCamera"
-module_id: "filter-camera"
+module: "PooToolsWebKit"
+module_id: "webkit"
 language: "en"
 status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
-swiftpm_product: "PooToolsFilterCamera"
-cocoapods_subspec: "FilterCamera"
-source: "PooToolsSource/C7Collector"
+swiftpm_product: "PooToolsWebKit"
+cocoapods_subspec: "WebKit"
+source: "PooToolsSource/WebKit"
 category: "compatibility"
 last_reviewed: "2026-09-28"
 canonical: true
@@ -16,11 +16,11 @@ product_version_source: "repository:VERSION"
 document_schema_version: 1
 ---
 
-# PooToolsFilterCamera
+# PooToolsWebKit
 
 ## 1. Overview
 
-PooToolsFilterCamera is a PTools compatibility module. This guide is generated from the canonical module registry and documents the supported boundary for iOS 17+ and Swift 6+.
+PooToolsWebKit is a PTools compatibility module. This guide is generated from the canonical module registry and documents the supported boundary for iOS 17+ and Swift 6+.
 
 ## 2. Requirements
 
@@ -34,28 +34,28 @@ PooToolsFilterCamera is a PTools compatibility module. This guide is generated f
 Swift Package Manager:
 
 ```swift
-import PooToolsFilterCamera
+import PooToolsWebKit
 ```
 
 CocoaPods:
 
 ```ruby
-pod 'PooTools/FilterCamera'
+pod 'PooTools/WebKit'
 ```
 
 ## 4. Import
 
 ```swift
-import PooToolsFilterCamera
+import PooToolsWebKit
 ```
 
 ## 5. Quick Start
 
-Use the smallest published product or subspec. The registry name is `PooToolsFilterCamera`; do not infer an unpublished product or dependency.
+Use the smallest published product or subspec. The registry name is `PooToolsWebKit`; do not infer an unpublished product or dependency.
 
 ## 6. Core Concepts
 
-The public boundary is value-first where possible. Direct dependencies recorded by the registry: HarbethKit, MediaViewer.
+The public boundary is value-first where possible. Direct dependencies recorded by the registry: Core.
 
 ## 7. Main APIs
 

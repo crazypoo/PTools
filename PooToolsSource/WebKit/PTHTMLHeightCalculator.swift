@@ -108,14 +108,16 @@ extension PTHTMLHeightCalculator: WKNavigationDelegate {
     
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         guard isCurrentNavigation(navigation) else { return }
-        // 使用 Task 包装与 WebView 交互的 JS 评估，对齐 Actor 隔离
-        Task { @MainActor [weak self, weak webView] in
+        // English: Make the task result type explicit so the Swift 6 compiler does not infer a throwing overload.
+        // Español: Hace explícito el tipo de resultado para que el compilador Swift 6 no infiera una sobrecarga con throws.
+        // 中文：显式声明任务结果类型，避免 Swift 6 编译器误选 throwing 重载。
+        Task<Void, Never> { @MainActor [weak self, weak webView] in
             guard let self, let webView, self.isCurrentNavigation(navigation) else { return }
             do {
                 // 推荐获取 document.documentElement.scrollHeight 往往比 body 更加精准
                 let result = try await webView.evaluateJavaScript("document.documentElement.scrollHeight")
                 guard self.isCurrentNavigation(navigation) else { return }
-                let height = (result as? NSNumber)?.decimalValue.description.cgFloat ?? 0
+                let height = (result as? NSNumber).map { CGFloat(truncating: $0) } ?? 0
                 finishCalculation(with: height)
             } catch {
                 finishCalculation(with: 0)

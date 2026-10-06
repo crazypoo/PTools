@@ -811,11 +811,27 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/validate_application_infrastructure.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/validate_attributedstring_absorption_5_25.sh"
   language: "sh"
   domain: "Scripts"
   status: "LEGACY_REVIEW"
   canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_auth.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
   entrypoint: false
   action: "KEEP"
 -
@@ -852,6 +868,14 @@
   action: "KEEP"
 -
   path: "Scripts/validate_core_source_contract.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_database.sh"
   language: "sh"
   domain: "Scripts"
   status: "ACTIVE"
@@ -899,6 +923,14 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/validate_distribution_parity.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/validate_docs.sh"
   language: "sh"
   domain: "Scripts"
@@ -936,6 +968,14 @@
   domain: "Scripts"
   status: "LEGACY_REVIEW"
   canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_integrity.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
   entrypoint: false
   action: "KEEP"
 -
@@ -979,6 +1019,14 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/validate_map.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/validate_migration_5_9_7.sh"
   language: "sh"
   domain: "Scripts"
@@ -1004,6 +1052,14 @@
   action: "KEEP"
 -
   path: "Scripts/validate_network_security.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_observability.sh"
   language: "sh"
   domain: "Scripts"
   status: "ACTIVE"
@@ -1075,7 +1131,23 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/validate_realtime.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/validate_release.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_remote_configuration.sh"
   language: "sh"
   domain: "Scripts"
   status: "ACTIVE"
@@ -1096,6 +1168,14 @@
   domain: "Scripts"
   status: "LEGACY_REVIEW"
   canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_storekit.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
   entrypoint: false
   action: "KEEP"
 -
@@ -1123,7 +1203,23 @@
   entrypoint: false
   action: "KEEP"
 -
+  path: "Scripts/validate_sync.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
   path: "Scripts/validate_test_matrix.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_transfer.sh"
   language: "sh"
   domain: "Scripts"
   status: "ACTIVE"
@@ -1136,6 +1232,22 @@
   domain: "Scripts"
   status: "LEGACY_REVIEW"
   canonical: false
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_web.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
+  entrypoint: false
+  action: "KEEP"
+-
+  path: "Scripts/validate_webbridge.sh"
+  language: "sh"
+  domain: "Scripts"
+  status: "ACTIVE"
+  canonical: true
   entrypoint: false
   action: "KEEP"
 -

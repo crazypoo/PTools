@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: f7c0c7dc885f3b0e6fc3b0050fb2d69f609dcf6a
-Generated at: 2026-10-04T23:23:18+08:00 -->
+Source revision: 709b16be6083e89fafa73181bef6d4902013cbcb
+Generated at: 2026-10-05T22:52:34+08:00 -->
 # Document Inventory
 
 - Version: `5.62.0`
-- Records: `987`
+- Records: `1002`
 
 | path | documentType | language | status | action |
 | --- | --- | --- | --- | --- |
@@ -47,6 +47,8 @@ Generated at: 2026-10-04T23:23:18+08:00 -->
 | docs/architecture/PTOOLS_SYMBOL_GUIDELINES.md | ARCHITECTURE | zh-Hans | ACTIVE | KEEP |
 | docs/architecture/PTOOLS_WEBSOCKET_GUIDE.md | ARCHITECTURE | zh-Hans | ACTIVE | KEEP |
 | docs/archive/README.md | ARCHIVE | zh-Hans+en+es | ARCHIVED | KEEP |
+| docs/audits/APPLICATION_INFRASTRUCTURE_LIFECYCLE_5_62.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
+| docs/audits/APPLICATION_INFRASTRUCTURE_SECURITY_5_62.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/audits/ATTRIBUTEDSTRING_USAGE_AUDIT.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/audits/COCOALUMBERJACK_USAGE_AUDIT.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
 | docs/audits/DEVICEKIT_USAGE_AUDIT.md | REFERENCE | zh-Hans | ACTIVE | KEEP |
@@ -82,6 +84,7 @@ Generated at: 2026-10-04T23:23:18+08:00 -->
 | docs/guides/MODULES.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
 | docs/guides/PTINSTRUCTIONS_GUIDE.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
 | docs/guides/PTOOLS_5_56_2_CLOSURE.md | HOW_TO | zh-Hans+en+es | ACTIVE | KEEP |
+| docs/guides/PTOOLS_APPLICATION_INFRASTRUCTURE_5_62.md | HOW_TO | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/guides/PTOOLS_DEVICE_GUIDE.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
 | docs/guides/PTOOLS_FORM_GUIDE.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
 | docs/guides/PTOOLS_P1_ADVANCED_CAPABILITIES.md | HOW_TO | zh-Hans | ACTIVE | KEEP |
@@ -101,6 +104,7 @@ Generated at: 2026-10-04T23:23:18+08:00 -->
 | docs/maintenance/DEVICE_CATALOG_MAINTENANCE.md | QUALITY | zh-Hans | ACTIVE | KEEP |
 | docs/maintenance/DOCUMENTATION_AND_ASSET_GOVERNANCE.md | QUALITY | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/migration/5.25.5_PTRichText_MEDIA.md | MIGRATION | zh-Hans+en+es | ACTIVE | KEEP |
+| docs/migration/5.62_COCOAPODS_TO_SWIFTPM_PARITY.md | MIGRATION | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/migration/5.x-canonical-api.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migration/MIGRATION_6.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/5.34_PLATFORM_INFRASTRUCTURE.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
@@ -109,6 +113,7 @@ Generated at: 2026-10-04T23:23:18+08:00 -->
 | docs/migrations/5.36_P2_MODERN_EXTENSIONS.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/5.57_FORM_2.md | MIGRATION | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/migrations/5.61_RUNTIME_SAFETY.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
+| docs/migrations/5.62_APPLICATION_INFRASTRUCTURE.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/DEVICEKIT_TO_PTOOLS_DEVICE.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/GCDWEBSERVER_TO_PTOOLS_HTTP_SERVER.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migrations/INSTRUCTIONS_TO_PTOOLS_INSTRUCTIONS.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
@@ -902,6 +907,9 @@ Generated at: 2026-10-04T23:23:18+08:00 -->
 | docs/modules/web-kit/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/web-kit/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/web-kit/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
+| docs/modules/webkit/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
+| docs/modules/webkit/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
+| docs/modules/webkit/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
 | docs/modules/whats-news-kit/README.en.md | MODULE_GUIDE | en | ACTIVE | KEEP |
 | docs/modules/whats-news-kit/README.es.md | MODULE_GUIDE | es | ACTIVE | KEEP |
 | docs/modules/whats-news-kit/README.zh-Hans.md | MODULE_GUIDE | zh-Hans | ACTIVE | KEEP |
@@ -938,6 +946,12 @@ Generated at: 2026-10-04T23:23:18+08:00 -->
 | report/baselines/5.11/instruments_overhead.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/baselines/5.60.0/build_validation.md | GENERATED | zh-Hans+en+es | GENERATED | KEEP |
 | report/baselines/5.60.0/runtime_validation.md | GENERATED | zh-Hans+en+es | GENERATED | KEEP |
+| report/baselines/5.62.0/application-infrastructure/auth.md | GENERATED | zh-Hans | GENERATED | KEEP |
+| report/baselines/5.62.0/application-infrastructure/database.md | GENERATED | zh-Hans | GENERATED | KEEP |
+| report/baselines/5.62.0/application-infrastructure/realtime.md | GENERATED | zh-Hans | GENERATED | KEEP |
+| report/baselines/5.62.0/application-infrastructure/sync.md | GENERATED | zh-Hans | GENERATED | KEEP |
+| report/baselines/5.62.0/application-infrastructure/transfer.md | GENERATED | zh-Hans | GENERATED | KEEP |
+| report/baselines/5.62.0/application-infrastructure/webbridge.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/baselines/5.7.9/architecture_baseline.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/baselines/5.8/build_validation_5.8.0.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/baselines/5.8/build_validation_5.8.9.md | GENERATED | zh-Hans | GENERATED | KEEP |
@@ -994,5 +1008,6 @@ Generated at: 2026-10-04T23:23:18+08:00 -->
 | report/repository/TEST_CLEANUP_MANIFEST.md | GENERATED | en | GENERATED | KEEP |
 | report/repository/TEST_INVENTORY.md | GENERATED | en | GENERATED | KEEP |
 | report/runtime/5.59.0/debugnetwork-performance.md | GENERATED | zh-Hans | GENERATED | KEEP |
+| report/runtime/5.62.0/README.md | GENERATED | zh-Hans | GENERATED | KEEP |
 | report/scripts/SCRIPT_INVENTORY.md | GENERATED | en | GENERATED | KEEP |
 | report/tests/TEST_INVENTORY.md | GENERATED | en | GENERATED | KEEP |

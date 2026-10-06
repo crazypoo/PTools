@@ -172,9 +172,12 @@ end
 spm_product_names = spm.fetch("products", []).map { |product| product["name"] }.sort
 pod_names = pod_subspecs.keys
 spm_names = spm_targets.keys
-matched = (spm_names & pod_names).sort
-spm_only = (spm_names - pod_names).sort
-pod_only = (pod_names - spm_names).sort
+raw_matched = (spm_names & pod_names).sort
+raw_spm_only = (spm_names - pod_names).sort
+raw_pod_only = (pod_names - spm_names).sort
+matched = raw_matched
+spm_only = raw_spm_only
+pod_only = raw_pod_only
 
 source_drift = []
 dependency_drift = []
@@ -215,6 +218,42 @@ unless File.file?(registry_path)
   exit 1
 end
 registry = JSON.parse(File.read(registry_path))
+# English: Compatibility products intentionally map one historical Pod identity to an existing or aggregate SwiftPM product.
+# Español: Los productos de compatibilidad asignan intencionalmente una identidad Pod histórica a un producto SwiftPM existente o agregado.
+# 中文：兼容产品有意将历史 Pod 身份映射到已有或聚合的 SwiftPM 产品。
+compatibility_modules = registry.fetch("modules", []).select { |entry| entry["category"] == "compatibility" }
+compatibility_matches = compatibility_modules.map do |entry|
+  spm_product = entry.fetch("spm_product").to_s
+  spm_target = entry.fetch("spm_target").to_s
+  pod_subspec = entry.fetch("pod_subspec").to_s
+  pod_name = canonical_name(pod_subspec)
+  unless spm_product_names.include?(spm_product)
+    warn "FAIL: compatibility product is missing from Package.swift: #{spm_product}"
+    exit 1
+  end
+  unless spm_names.include?(canonical_name(spm_target))
+    warn "FAIL: compatibility target is missing from Package.swift: #{spm_target}"
+    exit 1
+  end
+  unless pod_subspecs.key?(pod_name)
+    warn "FAIL: compatibility subspec is missing from PooTools.podspec: #{pod_subspec}"
+    exit 1
+  end
+  {
+    "module" => entry.fetch("name"),
+    "spm_product" => spm_product,
+    "spm_target" => spm_target,
+    "pod_subspec" => pod_subspec,
+    "source_path" => entry.fetch("source_path")
+  }
+end
+compatibility_names = compatibility_matches.map { |item| canonical_name(item.fetch("pod_subspec")) }
+matched = (raw_matched - compatibility_names).sort
+spm_only = (raw_spm_only - compatibility_names).sort
+pod_only = (raw_pod_only - compatibility_names).sort
+source_drift.reject! { |item| compatibility_names.include?(item.fetch("module")) }
+dependency_drift.reject! { |item| compatibility_names.include?(item.fetch("module")) }
+settings_drift.reject! { |item| compatibility_names.include?(item.fetch("module")) }
 expected_metadata = %w[reason owner expiration classification]
 unless registry.fetch("required_drift_metadata", []) == expected_metadata
   warn "FAIL: module registry required_drift_metadata must be #{expected_metadata.inspect}"
@@ -320,6 +359,7 @@ payload = {
     "spm" => spm_product_names.select { |name| name == "PooToolsAll" },
     "cocoapods" => pod_subspecs.values.map { |item| item["original_name"] }.select { |name| name == "InputAll" }
   },
+  "compatibility_matches" => compatibility_matches,
   "matched" => matched,
   "spm_only" => spm_only,
   "pod_only" => pod_only,
@@ -375,6 +415,17 @@ markdown << "| Matched | #{matched.map { |name| "`#{name}`" }.join(", ")} |"
 markdown << "| SwiftPM only | #{spm_only.empty? ? "—" : spm_only.map { |name| "`#{name}`" }.join(", ")} |"
 markdown << "| CocoaPods only | #{pod_only.empty? ? "—" : pod_only.map { |name| "`#{name}`" }.join(", ")} |"
 markdown << ""
+markdown << "## Compatibility products"
+markdown << ""
+markdown << "These entries are explicit product mappings, not parity exceptions or duplicated source implementations."
+markdown << ""
+markdown << "| Module | SwiftPM product | SwiftPM target | CocoaPods subspec | Source ownership |"
+markdown << "| --- | --- | --- | --- | --- |"
+compatibility_matches.each do |item|
+  markdown << "| `#{item["module"]}` | `#{item["spm_product"]}` | `#{item["spm_target"]}` | `#{item["pod_subspec"]}` | `#{item["source_path"]}` |"
+end
+markdown << "| None | — | — | — | — |" if compatibility_matches.empty?
+markdown << ""
 markdown << "## Drift details"
 markdown << ""
 markdown << "The baseline records existing differences as explicit review items. A later manifest or podspec change must update this baseline only after review."
@@ -419,6 +470,7 @@ resolution << "# Module Parity Resolution"
 resolution << ""
 resolution << "- Registry: `Scripts/module_registry.json`"
 resolution << "- Current exceptions: `#{current_entries.length}`"
+resolution << "- Compatibility products: `#{compatibility_matches.length}`"
 resolution << "- Policy: every parity exception is classified as INTENTIONAL, LEGACY, or FIX_REQUIRED; FIX_REQUIRED must be zero before release."
 resolution << ""
 resolution << "| Module | Class | SPM dependency / value | Pod dependency / value | Reason | Action | Owner | Target version | Expiration |"
@@ -446,5 +498,5 @@ current_entries.sort_by { |entry| [entry["kind"], entry["module"], entry["field"
 end
 File.write(resolution_path, resolution.join("\n") + "\n")
 
-puts "Parity #{mode}: matched=#{matched.length} spm_only=#{spm_only.length} pod_only=#{pod_only.length} source_drift=#{source_drift.length} dependency_drift=#{dependency_drift.length} settings_drift=#{settings_drift.length}"
+puts "Parity #{mode}: matched=#{matched.length} compatibility=#{compatibility_matches.length} spm_only=#{spm_only.length} pod_only=#{pod_only.length} source_drift=#{source_drift.length} dependency_drift=#{dependency_drift.length} settings_drift=#{settings_drift.length}"
 RUBY

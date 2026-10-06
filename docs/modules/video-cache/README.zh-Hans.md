@@ -1,13 +1,13 @@
 ---
-module: "VideoCache"
+module: "PooToolsVideoCache"
 module_id: "video-cache"
 language: "zh-Hans"
-status: "compatibility"
+status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
-swiftpm_product: "null"
+swiftpm_product: "PooToolsVideoCache"
 cocoapods_subspec: "VideoCache"
-source: "manifest-only"
+source: "PooToolsSource/Base"
 category: "compatibility"
 last_reviewed: "2026-09-28"
 canonical: false
@@ -16,25 +16,25 @@ product_version_source: "repository:VERSION"
 document_schema_version: 1
 ---
 
-# VideoCache
+# PooToolsVideoCache
 
 ## 1. 概览
 
-VideoCache 是 PTools 的 compatibility 模块。本指南由 canonical 模块 registry 生成，说明 iOS 17+ 与 Swift 6+ 下的稳定使用边界。
+PooToolsVideoCache 是 PTools 的 compatibility 模块。本指南由 canonical 模块 registry 生成，说明 iOS 17+ 与 Swift 6+ 下的稳定使用边界。
 
 ## 2. 要求
 
 - 平台：iOS 17.0+
 - Swift：6+
 - 分类：`compatibility`
-- 状态：`compatibility`
+- 状态：`stable`
 
 ## 3. 安装
 
 Swift Package Manager：
 
 ```swift
-// This entry is CocoaPods-only; import the module exposed by the selected subspec.
+import PooToolsVideoCache
 ```
 
 CocoaPods：
@@ -46,16 +46,16 @@ pod 'PooTools/VideoCache'
 ## 4. 导入
 
 ```swift
-// This entry is CocoaPods-only; import the module exposed by the selected subspec.
+import PooToolsVideoCache
 ```
 
 ## 5. 快速开始
 
-优先选择最小的 product 或 subspec。registry 中的名称是 `VideoCache`，不要猜测没有发布的 product 或依赖。
+优先选择最小的 product 或 subspec。registry 中的名称是 `PooToolsVideoCache`，不要猜测没有发布的 product 或依赖。
 
 ## 6. 核心概念
 
-公开边界优先使用值类型。registry 记录的直接依赖：None declared by the registry.。
+公开边界优先使用值类型。registry 记录的直接依赖：Core。
 
 ## 7. 主要 API
 

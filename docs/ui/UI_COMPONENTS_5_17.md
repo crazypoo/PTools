@@ -46,7 +46,7 @@
 | Tabbar | PTools UI | Core / Base | selection / rotation | static + multi-scene | PooTools Example | architecture docs | 保留 Base 兼容入口 |
 | Instructions | PTools UI | Core / Overlay | coachmark / dismiss | scene + rotation | PooTools Example | podspec + SwiftPM | 5.32.0 原生 `PooToolsInstructions` |
 | Appz | PTools UI | Core / Appz | per-call | dependency + URL scheme | PooTools Example | podspec | Swift 5 外部适配器保留 |
-| Flag | PTools UI | Core / FlagKit | image / reuse | dependency + RTL | PooTools Example | podspec | 外部适配器保留 |
+| Flag | PTools UI | Core / host-owned optional assets | image / reuse | dependency + RTL | PooTools Example | podspec | 旧入口保留，FlagKit 由宿主显式管理 |
 | WhatsNewsKit | PTools UI | Core | feed / reuse | static + Dynamic Type | PooTools Example | podspec | 保留兼容入口 |
 | iOS17Tips | PTools UI | Core | present / dismiss | static + scene | PooTools Example | podspec | 保留兼容入口 |
 | ChinesePinyin | PTools Utility | Core | per-call | static | PooTools Example | podspec | 保留兼容入口 |

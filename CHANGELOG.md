@@ -11,6 +11,10 @@
 - 所有新能力保持独立 SwiftPM product 与 CocoaPods subspec，不改变默认 Core 和 `PooToolsAll` 的依赖边界。
 - 新增 Demo Catalog、三语模块文档、应用基础设施指南、质量门禁和合约测试入口。
 - 继续保留旧 `PTModelProtocol`、`PTIAPManager` 等兼容入口；完整 Xcode、真机、外部宿主和远程服务回归需在依赖可用后完成。
+- 完成 CocoaPods → SwiftPM 对等迁移前置：新增 `PooToolsWebKit`、`PooToolsVideoCache`、`PooToolsFilterCamera` 兼容产品；WebKit、视频缓存和 FilterCamera 继续复用现有 PTools 实现。
+- 移除 PTools 对 `KTVHTTPCache` 和 `FlagKit` 的运行时/安装所有权；旧 `VideoCache`、`FilterCamera`、`WebKit`、`Flag` Pod 入口保留为兼容入口，并新增分发对等硬门禁。
+- `PTMediaBrowserCell` 改为本地缓存优先、远程立即播放，缓存失败不再阻塞视频首播；宿主不再需要 KTVHTTPCache 或 Bonjour/localhost Patch。
+- CocoaPods / SwiftPM 双构建与真机核心能力仍需宿主环境完成最终证据后，才能将 `PTOOLS_SPM_MIGRATION_READY` 标记为 true。
 
 ## 5.61.0 — 2026-10-04
 

@@ -39,7 +39,7 @@ Every listed SwiftPM product and CocoaPods subspec has a generated tri-lingual u
 | [DeepLink](../modules/deep-link/README.en.md) | `—` | `DeepLink` |
 | [Device](../modules/device/README.en.md) | `—` | `Device` |
 | [FaceIDPermission](../modules/face-idpermission/README.en.md) | `—` | `FaceIDPermission` |
-| [FilterCamera](../modules/filter-camera/README.en.md) | `—` | `FilterCamera` |
+| [PooToolsFilterCamera](../modules/filter-camera/README.en.md) | `PooToolsFilterCamera` | `FilterCamera` |
 | [Flag](../modules/flag/README.en.md) | `—` | `Flag` |
 | [GCDWebServer](../modules/gcdweb-server/README.en.md) | `—` | `GCDWebServer` |
 | [Guide](../modules/guide/README.en.md) | `—` | `Guide` |
@@ -262,8 +262,8 @@ Every listed SwiftPM product and CocoaPods subspec has a generated tri-lingual u
 | [Telephony](../modules/telephony/README.en.md) | `—` | `Telephony` |
 | [TipsView](../modules/tips-view/README.en.md) | `—` | `TipsView` |
 | [TrackingPermission](../modules/tracking-permission/README.en.md) | `—` | `TrackingPermission` |
-| [VideoCache](../modules/video-cache/README.en.md) | `—` | `VideoCache` |
+| [PooToolsVideoCache](../modules/video-cache/README.en.md) | `PooToolsVideoCache` | `VideoCache` |
 | [Vision](../modules/vision/README.en.md) | `—` | `Vision` |
-| [WebKit](../modules/web-kit/README.en.md) | `—` | `WebKit` |
+| [PooToolsWebKit](../modules/webkit/README.en.md) | `PooToolsWebKit` | `WebKit` |
 | [WhatsNewsKit](../modules/whats-news-kit/README.en.md) | `—` | `WhatsNewsKit` |
 | [ZipArchive](../modules/zip-archive/README.en.md) | `—` | `ZipArchive` |

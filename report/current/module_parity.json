@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "ce2216ac80d2a749565c5cf8a603b1407e82382e",
-  "generated_at": "2026-10-05T10:09:18Z",
+  "source_revision": "709b16be6083e89fafa73181bef6d4902013cbcb",
+  "generated_at": "2026-10-06T01:53:26Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -98,6 +98,7 @@
     "PooToolsDEBUG",
     "PooToolsDEBUGTrackingEyes",
     "PooToolsDataEncrypt",
+    "PooToolsFilterCamera",
     "PooToolsGuide",
     "PooToolsHandSign",
     "PooToolsHarbethKit",
@@ -151,8 +152,10 @@
     "PooToolsStepper",
     "PooToolsTelephony",
     "PooToolsTipsView",
+    "PooToolsVideoCache",
     "PooToolsVideoEditor",
     "PooToolsVision",
+    "PooToolsWebKit",
     "PooToolsWhatsNewsKit",
     "PooToolsiOS17Tips",
     "ptools"
@@ -165,6 +168,29 @@
       "InputAll"
     ]
   },
+  "compatibility_matches": [
+    {
+      "module": "WebKit",
+      "spm_product": "PooToolsWebKit",
+      "spm_target": "PooToolsWebKit",
+      "pod_subspec": "WebKit",
+      "source_path": "PooToolsSource/WebKit"
+    },
+    {
+      "module": "VideoCache",
+      "spm_product": "PooToolsVideoCache",
+      "spm_target": "ptools",
+      "pod_subspec": "VideoCache",
+      "source_path": "PooToolsSource/Base"
+    },
+    {
+      "module": "FilterCamera",
+      "spm_product": "PooToolsFilterCamera",
+      "spm_target": "PooToolsFilterCamera",
+      "pod_subspec": "FilterCamera",
+      "source_path": "PooToolsSource/C7Collector"
+    }
+  ],
   "matched": [
     "Accessibility",
     "Activities",
@@ -330,7 +356,6 @@
     "Database",
     "DatabaseCore",
     "Date",
-    "FilterCamera",
     "Flag",
     "GCDWebServer",
     "InputAll",
@@ -353,11 +378,9 @@
     "Tabbar",
     "Transfer",
     "TransferCore",
-    "VideoCache",
     "Web",
     "WebBridge",
     "WebCore",
-    "WebKit",
     "ZipArchive"
   ],
   "source_drift": [
@@ -553,6 +576,21 @@
         "Slider",
         "Stepper",
         "Theme"
+      ]
+    },
+    {
+      "module": "HarbethKit",
+      "field": "internal_dependencies",
+      "spm": [
+        "CameraPermission",
+        "Core",
+        "MediaViewer",
+        "Symbols"
+      ],
+      "cocoapods": [
+        "CameraPermission",
+        "Core",
+        "Symbols"
       ]
     },
     {
@@ -1638,5 +1676,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "d20f653ca41f92a30f7da31a93b3fc88043a8a1a496c03dc01bf4920838a9bcd"
+  "fingerprint": "033bfb32201f236caaf4a6b8c944be3094370b01394edeba2f3a38fa2cb8913b"
 }

@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons.rb",
-  "source_revision": "ce2216ac80d2a749565c5cf8a603b1407e82382e",
-  "generated_at": "2026-10-05T10:56:33Z",
-  "shared_call_count": 1651,
+  "source_revision": "709b16be6083e89fafa73181bef6d4902013cbcb",
+  "generated_at": "2026-10-06T02:27:43Z",
+  "shared_call_count": 1649,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",

@@ -1,13 +1,13 @@
 ---
-module: "FilterCamera"
+module: "PooToolsFilterCamera"
 module_id: "filter-camera"
 language: "es"
-status: "compatibility"
+status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
-swiftpm_product: "null"
+swiftpm_product: "PooToolsFilterCamera"
 cocoapods_subspec: "FilterCamera"
-source: "manifest-only"
+source: "PooToolsSource/C7Collector"
 category: "compatibility"
 last_reviewed: "2026-09-28"
 canonical: false
@@ -16,25 +16,25 @@ product_version_source: "repository:VERSION"
 document_schema_version: 1
 ---
 
-# FilterCamera
+# PooToolsFilterCamera
 
 ## 1. Descripción
 
-FilterCamera es un módulo PTools de categoría compatibility. Esta guía se genera desde el registro canónico y describe el límite compatible en iOS 17+ y Swift 6+.
+PooToolsFilterCamera es un módulo PTools de categoría compatibility. Esta guía se genera desde el registro canónico y describe el límite compatible en iOS 17+ y Swift 6+.
 
 ## 2. Requisitos
 
 - Plataforma: iOS 17.0+
 - Swift: 6+
 - Categoría: `compatibility`
-- Estado: `compatibility`
+- Estado: `stable`
 
 ## 3. Instalación
 
 Swift Package Manager:
 
 ```swift
-// This entry is CocoaPods-only; import the module exposed by the selected subspec.
+import PooToolsFilterCamera
 ```
 
 CocoaPods:
@@ -46,16 +46,16 @@ pod 'PooTools/FilterCamera'
 ## 4. Importación
 
 ```swift
-// This entry is CocoaPods-only; import the module exposed by the selected subspec.
+import PooToolsFilterCamera
 ```
 
 ## 5. Inicio rápido
 
-Usa el producto o subspec mínimo publicado. El nombre del registro es `FilterCamera`; no inventes productos ni dependencias no publicadas.
+Usa el producto o subspec mínimo publicado. El nombre del registro es `PooToolsFilterCamera`; no inventes productos ni dependencias no publicadas.
 
 ## 6. Conceptos principales
 
-La frontera pública prioriza tipos de valor. Dependencias directas registradas: None declared by the registry..
+La frontera pública prioriza tipos de valor. Dependencias directas registradas: HarbethKit, MediaViewer.
 
 ## 7. API principales
 

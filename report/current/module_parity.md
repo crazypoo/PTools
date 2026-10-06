@@ -3,19 +3,19 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: ce2216ac80d2a749565c5cf8a603b1407e82382e
-Generated at: 2026-10-05T10:57:21Z
+Source revision: 709b16be6083e89fafa73181bef6d4902013cbcb
+Generated at: 2026-10-06T02:29:34Z
 -->
 
 # SwiftPM / CocoaPods Module Parity
 
 - Status: `baseline`
-- Fingerprint: `d20f653ca41f92a30f7da31a93b3fc88043a8a1a496c03dc01bf4920838a9bcd`
+- Fingerprint: `033bfb32201f236caaf4a6b8c944be3094370b01394edeba2f3a38fa2cb8913b`
 - Matched modules: `123`
 - SwiftPM-only modules: `30`
-- CocoaPods-only modules: `36`
+- CocoaPods-only modules: `33`
 - Source-directory drift: `3`
-- Dependency drift: `23`
+- Dependency drift: `24`
 - Swift setting / macro drift: `56`
 
 ## Classification
@@ -24,7 +24,17 @@ Generated at: 2026-10-05T10:57:21Z
 | --- | --- |
 | Matched | `Accessibility`, `Activities`, `AppIntents`, `Audio`, `BackgroundTasks`, `BankCard`, `Banner`, `BilogyID`, `Bluetooth`, `BluetoothPermission`, `Calendar`, `CalendarPermission`, `CameraPermission`, `CheckBox`, `CheckDirtyWord`, `CheckUpdate`, `ChinesePinyin`, `Circle`, `CodeView`, `Configuration`, `Connectivity`, `Contact`, `ContactsPermission`, `ContentState`, `Core`, `Country`, `CustomerLabel`, `CustomerNumberKeyboard`, `DEBUG`, `DEBUG_TrackingEyes`, `DataEncrypt`, `DeepLink`, `Device`, `Documents`, `FaceIDPermission`, `Feedback`, `Form`, `Guide`, `HTTPFilePortal`, `HTTPServer`, `HandSign`, `HarbethKit`, `HealthPermission`, `HeartRate`, `Hud`, `IAP`, `ImageEditor`, `ImagePicker`, `Input`, `Instructions`, `KeyChain`, `LaunchTimeProfiler`, `Layout`, `LivePhoto`, `Loading`, `Location`, `LocationPermission`, `Logging`, `MediaCore`, `MediaViewer`, `MeidaPermission`, `MessageKit`, `MicPermission`, `Model`, `ModelCore`, `Motion`, `MotionPermission`, `NetWork`, `NetworkSpeedTest`, `NotificationPermission`, `Notifications`, `OSSKitSpeech`, `Overlay`, `PDF`, `PToolsCore`, `PToolsModelCombine`, `PToolsModelUIKit`, `PToolsPermissionCore`, `PToolsPermissionUI`, `PToolsUIFoundation`, `PageControl`, `PagingControl`, `PhoneInfo`, `PhotoPicker`, `Picker`, `Ping`, `Popover`, `ProgressBar`, `RateView`, `RemindersPermission`, `RouteCore`, `Router`, `SVG`, `ScanQRCode`, `ScrollBanner`, `Search`, `SearchBar`, `Security`, `Segmented`, `Share`, `Simulation`, `SimulationCore`, `SiriPermission`, `Slider`, `SmartScreenshot`, `SocketKit`, `SpeechRecognizerPermission`, `SpeedPanel`, `SplitView`, `StepCount`, `Stepper`, `Storage`, `StorageCore`, `Symbols`, `Telephony`, `Theme`, `TipsView`, `TrackingPermission`, `VideoEditor`, `Vision`, `WhatsNewsKit`, `WidgetCore`, `iOS17Tips` |
 | SwiftPM only | `PTModelBenchmark`, `PTModelLegacyKakaJSONFixture`, `PTModelLegacySmartCodableFixture`, `PTModelMixedLegacyFixture`, `PTModelOnlyFixture`, `PToolsAppIntegrity`, `PToolsAuth`, `PToolsAuthCore`, `PToolsDatabase`, `PToolsDatabaseCore`, `PToolsDate`, `PToolsFontCatalogCore`, `PToolsMap`, `PToolsMapCore`, `PToolsModelLegacyKakaJSON`, `PToolsModelLegacySmartCodable`, `PToolsModelMacroPlugin`, `PToolsNetworkModelCore`, `PToolsObservability`, `PToolsObservabilityCore`, `PToolsRealtime`, `PToolsRealtimeCore`, `PToolsStoreKit`, `PToolsSync`, `PToolsSyncCore`, `PToolsTransfer`, `PToolsTransferCore`, `PToolsWeb`, `PToolsWebBridge`, `PToolsWebCore` |
-| CocoaPods only | `AppIntegrity`, `Appz`, `Auth`, `AuthCore`, `Database`, `DatabaseCore`, `Date`, `FilterCamera`, `Flag`, `GCDWebServer`, `InputAll`, `MXMetricManagerKit`, `Map`, `MapCore`, `ModelLegacyKakaJSON`, `ModelLegacySmartCodable`, `NFCKit`, `NotificationBanner`, `Observability`, `ObservabilityCore`, `PopoverKit`, `Realtime`, `RealtimeCore`, `SecuritySuite`, `StoreKit`, `Sync`, `SyncCore`, `Tabbar`, `Transfer`, `TransferCore`, `VideoCache`, `Web`, `WebBridge`, `WebCore`, `WebKit`, `ZipArchive` |
+| CocoaPods only | `AppIntegrity`, `Appz`, `Auth`, `AuthCore`, `Database`, `DatabaseCore`, `Date`, `Flag`, `GCDWebServer`, `InputAll`, `MXMetricManagerKit`, `Map`, `MapCore`, `ModelLegacyKakaJSON`, `ModelLegacySmartCodable`, `NFCKit`, `NotificationBanner`, `Observability`, `ObservabilityCore`, `PopoverKit`, `Realtime`, `RealtimeCore`, `SecuritySuite`, `StoreKit`, `Sync`, `SyncCore`, `Tabbar`, `Transfer`, `TransferCore`, `Web`, `WebBridge`, `WebCore`, `ZipArchive` |
+
+## Compatibility products
+
+These entries are explicit product mappings, not parity exceptions or duplicated source implementations.
+
+| Module | SwiftPM product | SwiftPM target | CocoaPods subspec | Source ownership |
+| --- | --- | --- | --- | --- |
+| `WebKit` | `PooToolsWebKit` | `PooToolsWebKit` | `WebKit` | `PooToolsSource/WebKit` |
+| `VideoCache` | `PooToolsVideoCache` | `ptools` | `VideoCache` | `PooToolsSource/Base` |
+| `FilterCamera` | `PooToolsFilterCamera` | `PooToolsFilterCamera` | `FilterCamera` | `PooToolsSource/C7Collector` |
 
 ## Drift details
 
@@ -45,6 +55,7 @@ The baseline records existing differences as explicit review items. A later mani
 - `Core` / `internal_dependencies`: SPM=["Device", "Logging", "PToolsCore", "PToolsDate", "PToolsFontCatalogCore", "PToolsPermissionCore", "PToolsUIFoundation", "Symbols"]; CocoaPods=["Date", "Device", "Logging", "PToolsCore", "PToolsUIFoundation", "Symbols"]
 - `Core` / `third_party_dependencies`: SPM=["IQKeyboardManager", "Kingfisher", "SnapKit", "lottie-ios"]; CocoaPods=["IQKeyboardManagerSwift", "IQKeyboardToolbarManager", "Kingfisher", "SnapKit", "lottie-ios"]
 - `Form` / `internal_dependencies`: SPM=["Accessibility", "CheckBox", "ContentState", "Core", "PToolsCore", "Picker", "Slider", "Theme"]; CocoaPods=["Accessibility", "CheckBox", "ContentState", "Core", "Input", "PToolsCore", "Picker", "Slider", "Stepper", "Theme"]
+- `HarbethKit` / `internal_dependencies`: SPM=["CameraPermission", "Core", "MediaViewer", "Symbols"]; CocoaPods=["CameraPermission", "Core", "Symbols"]
 - `ImageEditor` / `third_party_dependencies`: SPM=["Harbeth"]; CocoaPods=[]
 - `Instructions` / `internal_dependencies`: SPM=["Overlay"]; CocoaPods=["Core", "Overlay"]
 - `MeidaPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["MeidaPermission"]

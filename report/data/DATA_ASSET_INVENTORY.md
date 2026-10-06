@@ -1,7 +1,7 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: f7c0c7dc885f3b0e6fc3b0050fb2d69f609dcf6a
-Generated at: 2026-10-04T23:23:18+08:00 -->
+Source revision: 709b16be6083e89fafa73181bef6d4902013cbcb
+Generated at: 2026-10-05T22:52:34+08:00 -->
 # Data Asset Inventory
 
 - Version: `5.62.0`

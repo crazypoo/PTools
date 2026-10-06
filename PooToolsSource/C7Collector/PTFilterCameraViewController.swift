@@ -12,6 +12,10 @@ import AVFoundation
 import SnapKit
 #if SWIFT_PACKAGE
 import PToolsSymbols
+// English: SwiftPM keeps MediaViewer explicit because this target uses its review controller types.
+// Español: SwiftPM mantiene MediaViewer explícito porque este target usa sus tipos de revisión.
+// 中文：SwiftPM 显式依赖 MediaViewer，因为本 target 使用其中的预览控制器类型。
+import PooToolsMediaViewer
 #endif
 import Photos
 

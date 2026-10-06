@@ -3,14 +3,15 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: ce2216ac80d2a749565c5cf8a603b1407e82382e
-Generated at: 2026-10-05T10:57:21Z
+Source revision: 709b16be6083e89fafa73181bef6d4902013cbcb
+Generated at: 2026-10-06T02:29:34Z
 -->
 
 # Module Parity Resolution
 
 - Registry: `Scripts/module_registry.json`
-- Current exceptions: `148`
+- Current exceptions: `146`
+- Compatibility products: `3`
 - Policy: every parity exception is classified as INTENTIONAL, LEGACY, or FIX_REQUIRED; FIX_REQUIRED must be zero before release.
 
 | Module | Class | SPM dependency / value | Pod dependency / value | Reason | Action | Owner | Target version | Expiration |
@@ -22,6 +23,7 @@ Generated at: 2026-10-05T10:57:21Z
 | Core | INTENTIONAL | ["Device","Logging","PToolsCore","PToolsDate","PToolsFontCatalogCore","PToolsPermissionCore","PToolsUIFoundation","Symbols"] | ["Date","Device","Logging","PToolsCore","PToolsUIFoundation","Symbols"] | SwiftPM publishes split contracts; CocoaPods keeps monolithic Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | architecture | 6.0.0 | 2026-12-31 |
 | Core | INTENTIONAL | ["IQKeyboardManager","Kingfisher","SnapKit","lottie-ios"] | ["IQKeyboardManagerSwift","IQKeyboardToolbarManager","Kingfisher","SnapKit","lottie-ios"] | SPM and CocoaPods expose different direct and transitive Core dependencies. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Form | INTENTIONAL | ["Accessibility","CheckBox","ContentState","Core","PToolsCore","Picker","Slider","Theme"] | ["Accessibility","CheckBox","ContentState","Core","Input","PToolsCore","Picker","Slider","Stepper","Theme"] | SwiftPM uses the stable Picker, CheckBox and Slider targets and native fallbacks; CocoaPods retains legacy Input and Stepper compatibility dependencies for the 5.x subspec contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | p1-form | 6.0.0 | 2026-12-31 |
+| HarbethKit | INTENTIONAL | ["CameraPermission","Core","MediaViewer","Symbols"] | ["CameraPermission","Core","Symbols"] | The SwiftPM C7Collector target imports MediaViewer for its review controller types; CocoaPods keeps MediaViewer on the FilterCamera aggregate compatibility subspec. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | filter-camera | 6.0.0 | 2027-03-31 |
 | ImageEditor | INTENTIONAL | ["Harbeth"] | [] | SPM declares Harbeth; CocoaPods uses the local HarbethKit route. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Instructions | INTENTIONAL | ["Overlay"] | ["Core","Overlay"] | SwiftPM receives Core transitively through the shared Overlay target; CocoaPods keeps an explicit Core dependency for the 5.x subspec contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | ui-components | 6.0.0 | 2026-12-31 |
 | MeidaPermission | INTENTIONAL | ["PToolsPermissionCore"] | ["MeidaPermission"] | SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | permissions | 6.0.0 | 2026-12-31 |
@@ -45,8 +47,7 @@ Generated at: 2026-10-05T10:57:21Z
 | Database | INTENTIONAL | — | — | CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | application-infrastructure | 6.0.0 | 2027-03-31 |
 | DatabaseCore | INTENTIONAL | — | — | CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | application-infrastructure | 6.0.0 | 2027-03-31 |
 | Date | LEGACY | — | — | CocoaPods uses the shorter Date subspec name while SwiftPM exposes the canonical PToolsDate product. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
-| FilterCamera | LEGACY | — | — | CocoaPods-only feature entry without a SwiftPM target. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
-| Flag | INTENTIONAL | — | — | CocoaPods dependency-only subspec controlled by Core flags. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
+| Flag | LEGACY | — | — | Legacy compatibility subspec retained for old Podfiles; FlagKit is host-owned and is no longer installed by PTools. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2027-03-31 |
 | GCDWebServer | INTENTIONAL | — | — | CocoaPods dependency-only subspec controlled by Core flags. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | InputAll | INTENTIONAL | — | — | CocoaPods aggregate subspec without a standalone SwiftPM target. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | MXMetricManagerKit | INTENTIONAL | — | — | CocoaPods-only optional integration without a SwiftPM target. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
@@ -68,11 +69,9 @@ Generated at: 2026-10-05T10:57:21Z
 | Tabbar | INTENTIONAL | — | — | CocoaPods dependency-only subspec controlled by Core flags. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Transfer | INTENTIONAL | — | — | CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | application-infrastructure | 6.0.0 | 2027-03-31 |
 | TransferCore | INTENTIONAL | — | — | CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | application-infrastructure | 6.0.0 | 2027-03-31 |
-| VideoCache | INTENTIONAL | — | — | CocoaPods dependency-only subspec controlled by Core flags. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Web | INTENTIONAL | — | — | CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | application-infrastructure | 6.0.0 | 2027-03-31 |
 | WebBridge | INTENTIONAL | — | — | CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | application-infrastructure | 6.0.0 | 2027-03-31 |
 | WebCore | INTENTIONAL | — | — | CocoaPods exposes the opt-in 5.62 application-infrastructure subspec; SwiftPM keeps the canonical target/product contract and parity migration is tracked. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | application-infrastructure | 6.0.0 | 2027-03-31 |
-| WebKit | INTENTIONAL | — | — | CocoaPods-only optional integration without a SwiftPM target. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | ZipArchive | INTENTIONAL | — | — | CocoaPods dependency-only subspec controlled by Core flags. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | packaging | 6.0.0 | 2026-12-31 |
 | Accessibility | INTENTIONAL | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":[],"upcoming_features":[]} | SwiftPM enables strict concurrency for the standalone accessibility target; CocoaPods inherits the aggregate target compiler contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | p1-accessibility | 6.0.0 | 2026-12-31 |
 | Activities | INTENTIONAL | {"defines":[],"upcoming_features":["StrictConcurrency"]} | {"defines":["POOTOOLS_ACTIVITIES","POOTOOLS_COCOAPODS"],"upcoming_features":[]} | SwiftPM enables strict concurrency for the ActivityKit lifecycle bridge; CocoaPods keeps the extension-safe subspec compiler contract. | 保留兼容差异并持续由 parity 门禁验证；在 6.0.0 前完成迁移评估。 | p2-extension | 6.0.0 | 2027-03-31 |

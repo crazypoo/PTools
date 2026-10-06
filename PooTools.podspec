@@ -1312,15 +1312,11 @@ Pod::Spec.new do |s|
     end
     
     s.subspec 'FilterCamera' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PooTools/CameraPermission'
-        subspec.dependency 'PooTools/MicPermission'
+        # English: Keep this historical subspec as an aggregate over the real C7Collector implementation.
+        # Español: Mantiene este subspec histórico como agregado sobre la implementación real de C7Collector.
+        # 中文：保留这个历史 subspec 作为真实 C7Collector 实现的聚合入口。
         subspec.dependency 'PooTools/HarbethKit'
         subspec.dependency 'PooTools/MediaViewer'
-        subspec.source_files = 'PooToolsSource/FilterCamera/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_FILTERCAMERA POOTOOLS_COCOAPODS"
-        }
     end
     
     s.subspec 'ImageEditor' do |subspec|
@@ -1404,14 +1400,11 @@ Pod::Spec.new do |s|
     
     s.subspec 'Flag' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'FlagKit'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_FLAG POOTOOLS_COCOAPODS"
-        }
     end
     
     s.subspec 'WebKit' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.frameworks = 'Foundation', 'UIKit', 'WebKit'
         subspec.source_files = 'PooToolsSource/WebKit/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_WEBKIT POOTOOLS_COCOAPODS"
@@ -1443,8 +1436,10 @@ Pod::Spec.new do |s|
     end
     
     s.subspec 'VideoCache' do |subspec|
+        # English: Keep the 5.x name while using PTools' native file cache instead of a proxy server.
+        # Español: Conserva el nombre de 5.x y usa la caché de archivos nativa de PTools en lugar de un servidor proxy.
+        # 中文：保留 5.x 名称，改用 PTools 原生文件缓存，不再依赖代理服务器。
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'KTVHTTPCache'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_VIDEOCACHE POOTOOLS_COCOAPODS"
         }

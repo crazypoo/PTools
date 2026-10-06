@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: ce2216ac80d2a749565c5cf8a603b1407e82382e
-Generated at: 2026-10-05T10:56:31Z
+Source revision: 709b16be6083e89fafa73181bef6d4902013cbcb
+Generated at: 2026-10-06T02:27:42Z
 -->
 
 # PTools 当前公开 API 清单
@@ -1495,13 +1495,13 @@ Generated at: 2026-10-05T10:56:31Z
 | PooToolsSource/C7Collector/PTCameraFilterConfig.swift:225 | var | public | public var allowTakePhoto: Bool { |
 | PooToolsSource/C7Collector/PTCameraFilterConfig.swift:236 | var | public | public var allowRecordVideo: Bool { |
 | PooToolsSource/C7Collector/PTCameraFilterConfig.swift:246 | class | public | @objc public class func mergeVideos(fileUrls: [URL], completion: @escaping @Sendable (URL?, Error?) -> Void) { |
-| PooToolsSource/C7Collector/PTFilterCameraViewController.swift:18 | class | public | public class PTFilterCameraViewController: PTBaseViewController { |
-| PooToolsSource/C7Collector/PTFilterCameraViewController.swift:20 | var | public | public var onlyCamera:Bool = true |
-| PooToolsSource/C7Collector/PTFilterCameraViewController.swift:21 | var | public | public var useThisImageHandler:((UIImage) -> Void)? |
-| PooToolsSource/C7Collector/PTFilterCameraViewController.swift:22 | var | public | public var mediaLibDismissCallback:PTActionTask? = nil |
-| PooToolsSource/C7Collector/PTFilterCameraViewController.swift:730 | func | public | public func preview(_ collector: C7Collector, fliter image: C7Image) { |
-| PooToolsSource/C7Collector/PTFilterCameraViewController.swift:736 | func | public | public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool { |
-| PooToolsSource/C7Collector/PTFilterCameraViewController.swift:749 | func | public | public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) { |
+| PooToolsSource/C7Collector/PTFilterCameraViewController.swift:22 | class | public | public class PTFilterCameraViewController: PTBaseViewController { |
+| PooToolsSource/C7Collector/PTFilterCameraViewController.swift:24 | var | public | public var onlyCamera:Bool = true |
+| PooToolsSource/C7Collector/PTFilterCameraViewController.swift:25 | var | public | public var useThisImageHandler:((UIImage) -> Void)? |
+| PooToolsSource/C7Collector/PTFilterCameraViewController.swift:26 | var | public | public var mediaLibDismissCallback:PTActionTask? = nil |
+| PooToolsSource/C7Collector/PTFilterCameraViewController.swift:734 | func | public | public func preview(_ collector: C7Collector, fliter image: C7Image) { |
+| PooToolsSource/C7Collector/PTFilterCameraViewController.swift:740 | func | public | public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool { |
+| PooToolsSource/C7Collector/PTFilterCameraViewController.swift:753 | func | public | public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) { |
 | PooToolsSource/C7Collector/PTFilterImageCell.swift:16 | class | public | public class PTFilterImageCell: PTBaseNormalCell { |
 | PooToolsSource/C7Collector/PTHarBethFilter.swift:12 | typealias | public | public typealias PTFilterApplierType = (_ image: UIImage) -> UIImage |
 | PooToolsSource/C7Collector/PTHarBethFilter.swift:14 | typealias | public | public typealias maxminTuple = (current: Float, min: Float, max: Float)? |
@@ -4234,13 +4234,13 @@ Generated at: 2026-10-05T10:56:31Z
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:86 | func | public | public func didReceive(_ payloads: [MXMetricPayload]) { |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:108 | func | public | public func didReceive(_ payloads: [MXDiagnosticPayload]) { |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:146 | func | public | public func uploadPendingMetrics() { |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:329 | class | open | open class func centerOfScrollVIewContent(scrollView:UIScrollView) -> CGPoint { |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:660 | func | public | public func viewForZooming(in scrollView: UIScrollView) -> UIView? { |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:665 | func | public | public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) { |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:670 | func | public | public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { } |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:672 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { } |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:674 | func | public | public func scrollViewDidZoom(_ scrollView: UIScrollView) { |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:684 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:326 | class | open | open class func centerOfScrollVIewContent(scrollView:UIScrollView) -> CGPoint { |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:630 | func | public | public func viewForZooming(in scrollView: UIScrollView) -> UIView? { |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:635 | func | public | public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) { |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:640 | func | public | public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { } |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:642 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { } |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:644 | func | public | public func scrollViewDidZoom(_ scrollView: UIScrollView) { |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:654 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
 | PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift:11 | typealias | public | public typealias PTViewerSaveBlock = (_ finish:Bool) -> Void |
 | PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift:12 | typealias | public | public typealias PTViewerIndexBlock = (_ dataIndex:Int) -> Void |
 | PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift:13 | typealias | public | public typealias PTViewerEXIndexBlock = (_ dataIndex:Int,_ image:UIImage?) -> Void |
@@ -4270,16 +4270,16 @@ Generated at: 2026-10-05T10:56:31Z
 | PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift:78 | var | public | public var imageLongTapAction:Bool = true |
 | PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift:80 | enum | public | public enum PTMediaPageControlOption:Int { |
 | PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift:89 | var | public | @PTClampedPropertyWrapper(range: 50...200) public var dismissY:CGFloat = 200 |
-| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:21 | class | public | public class PTMediaBrowserController: PTBaseViewController { |
-| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:24 | var | public | public var viewDismissBlock:PTActionTask? |
-| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:26 | var | public | public var defaultIndex: Int = 0 |
-| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:32 | var | public | public var viewMoreActionBlock:PTViewerEXIndexBlock? |
-| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:34 | var | public | public var viewSaveImageBlock:PTViewerSaveBlock? |
-| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:36 | var | public | public var viewDeleteImageBlock:PTViewerIndexBlock? |
-| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:39 | var | public | public var browserCurrentDataBlock:((Int)->Void)? |
-| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:285 | init | public | public init(mediaData: [PTMediaBrowserModel], defaultIndex: Int = 0) { |
-| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:454 | func | public | public func mediasShow() { |
-| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:459 | func | public | public func reloadConfig(mediaData:[PTMediaBrowserModel]) { |
+| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:18 | class | public | public class PTMediaBrowserController: PTBaseViewController { |
+| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:21 | var | public | public var viewDismissBlock:PTActionTask? |
+| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:23 | var | public | public var defaultIndex: Int = 0 |
+| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:29 | var | public | public var viewMoreActionBlock:PTViewerEXIndexBlock? |
+| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:31 | var | public | public var viewSaveImageBlock:PTViewerSaveBlock? |
+| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:33 | var | public | public var viewDeleteImageBlock:PTViewerIndexBlock? |
+| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:36 | var | public | public var browserCurrentDataBlock:((Int)->Void)? |
+| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:282 | init | public | public init(mediaData: [PTMediaBrowserModel], defaultIndex: Int = 0) { |
+| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:451 | func | public | public func mediasShow() { |
+| PooToolsSource/MediaViewer/PTMediaBrowserController.swift:456 | func | public | public func reloadConfig(mediaData:[PTMediaBrowserModel]) { |
 | PooToolsSource/MediaViewer/PTMediaBrowserModel.swift:12 | class | public | public final class PTMediaBrowserModel: NSObject { |
 | PooToolsSource/MediaViewer/PTMediaBrowserModel.swift:13 | var | public | public var imageInfo: String = "" |
 | PooToolsSource/MediaViewer/PTMediaBrowserModel.swift:17 | var | public | public var imageURL: Any? |
@@ -10613,8 +10613,8 @@ Generated at: 2026-10-05T10:56:31Z
 | PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:14 | class | public | public final class PTHTMLHeightCalculator: NSObject { |
 | PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:52 | func | public | public func calculateHeight(for html: String) async -> CGFloat { |
 | PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:109 | func | public | public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) { |
-| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:126 | func | public | public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) { |
-| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:131 | func | public | public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) { |
+| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:128 | func | public | public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) { |
+| PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:133 | func | public | public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) { |
 | PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:15 | enum | public | @objc public enum PTWhatsNewsPresentationOption:Int { |
 | PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:27 | class | public | public class PTWhatsNews:NSObject { |
 | PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:33 | class | public | @MainActor public class func shouldPresent(with option: PTWhatsNewsPresentationOption = .always, currentVersion: String? = nil) -> Bool { |

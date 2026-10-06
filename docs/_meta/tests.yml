@@ -12,6 +12,15 @@
   canonical: true
   action: "KEEP"
 -
+  target: "PToolsApplicationInfrastructureTests"
+  path: "Tests/PToolsApplicationInfrastructureTests"
+  level: "CONTRACT"
+  file_count: 1
+  files:
+    - "Tests/PToolsApplicationInfrastructureTests/PTApplicationInfrastructureTests.swift"
+  canonical: true
+  action: "KEEP"
+-
   target: "PToolsBannerTests"
   path: "Tests/PToolsBannerTests"
   level: "CONTRACT"

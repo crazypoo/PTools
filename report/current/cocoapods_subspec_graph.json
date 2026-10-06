@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "ce2216ac80d2a749565c5cf8a603b1407e82382e",
-  "generated_at": "2026-10-05T10:57:21Z",
+  "source_revision": "709b16be6083e89fafa73181bef6d4902013cbcb",
+  "generated_at": "2026-10-06T02:29:34Z",
   "name": "PooTools",
   "version": "5.62.0",
   "platforms": {
@@ -1055,25 +1055,16 @@
       "name": "PooTools/FilterCamera",
       "short_name": "FilterCamera",
       "local_dependencies": [
-        "PooTools/CameraPermission",
-        "PooTools/Core",
         "PooTools/HarbethKit",
-        "PooTools/MediaViewer",
-        "PooTools/MicPermission"
+        "PooTools/MediaViewer"
       ],
       "third_party_dependencies": [],
-      "source_files": [
-        "PooToolsSource/FilterCamera/*.{h,m,swift}"
-      ],
-      "source_directories": [
-        "FilterCamera"
-      ],
+      "source_files": [],
+      "source_directories": [],
       "resource_bundles": {},
       "resources": [],
       "frameworks": [],
-      "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_FILTERCAMERA POOTOOLS_COCOAPODS"
-      }
+      "pod_target_xcconfig": {}
     },
     {
       "name": "PooTools/Flag",
@@ -1081,17 +1072,13 @@
       "local_dependencies": [
         "PooTools/Core"
       ],
-      "third_party_dependencies": [
-        "FlagKit"
-      ],
+      "third_party_dependencies": [],
       "source_files": [],
       "source_directories": [],
       "resource_bundles": {},
       "resources": [],
       "frameworks": [],
-      "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_FLAG POOTOOLS_COCOAPODS"
-      }
+      "pod_target_xcconfig": {}
     },
     {
       "name": "PooTools/Form",
@@ -3349,9 +3336,7 @@
       "local_dependencies": [
         "PooTools/Core"
       ],
-      "third_party_dependencies": [
-        "KTVHTTPCache"
-      ],
+      "third_party_dependencies": [],
       "source_files": [],
       "source_directories": [],
       "resource_bundles": {},
@@ -3482,7 +3467,11 @@
       ],
       "resource_bundles": {},
       "resources": [],
-      "frameworks": [],
+      "frameworks": [
+        "Foundation",
+        "UIKit",
+        "WebKit"
+      ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_WEBKIT POOTOOLS_COCOAPODS"
       }
