@@ -24,6 +24,82 @@ import AVFoundation
 extension UIView: PTProtocolCompatible {}
 public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
 
+// English: Choose a rendering path based on whether UIKit draws content in the backing layer.
+// Español: Elige la ruta de renderizado según si UIKit dibuja el contenido en la capa de respaldo.
+// 中文：根据 UIKit 内容是否绘制在宿主 backing layer 上选择渲染路径。
+private enum PTGradientBackgroundRenderingMode {
+    case sublayer
+    case backingBackground
+
+    @MainActor
+    static func forView(_ view: UIView) -> Self {
+        view is UILabel || view is UIImageView ? .backingBackground : .sublayer
+    }
+}
+
+// English: Rasterize only content-backed backgrounds so text and images stay above the gradient.
+// Español: Rasteriza solo los fondos de vistas con contenido respaldado para mantener texto e imágenes encima.
+// 中文：只将内容型 View 的背景栅格化，确保文字和图片始终绘制在渐变之上。
+@MainActor
+private enum PTGradientBackgroundRenderer {
+    static func image(bounds: CGRect,
+                      type: Imagegradien,
+                      colors: [UIColor],
+                      path: UIBezierPath,
+                      traitCollection: UITraitCollection,
+                      scale: CGFloat) -> UIImage? {
+        guard bounds.width.isFinite,
+              bounds.height.isFinite,
+              bounds.width > 0,
+              bounds.height > 0,
+              !colors.isEmpty else { return nil }
+
+        let size = bounds.size
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = scale.isFinite && scale > 0 ? scale : 1
+        format.opaque = false
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+        let resolvedColors = colors.map { $0.resolvedColor(with: traitCollection).cgColor }
+
+        return renderer.image { rendererContext in
+            let context = rendererContext.cgContext
+            context.saveGState()
+            context.addPath(path.cgPath)
+            context.clip()
+
+            if resolvedColors.count == 1 {
+                context.setFillColor(resolvedColors[0])
+                context.fill(CGRect(origin: .zero, size: size))
+            } else if let gradient = CGGradient(colorsSpace: nil,
+                                                 colors: resolvedColors as CFArray,
+                                                 locations: nil) {
+                let startPoint: CGPoint
+                let endPoint: CGPoint
+                switch type {
+                case .LeftToRight:
+                    startPoint = CGPoint(x: 0, y: size.height / 2)
+                    endPoint = CGPoint(x: size.width, y: size.height / 2)
+                case .TopToBottom:
+                    startPoint = CGPoint(x: size.width / 2, y: 0)
+                    endPoint = CGPoint(x: size.width / 2, y: size.height)
+                case .RightToLeft:
+                    startPoint = CGPoint(x: size.width, y: size.height / 2)
+                    endPoint = CGPoint(x: 0, y: size.height / 2)
+                case .BottomToTop:
+                    startPoint = CGPoint(x: size.width / 2, y: size.height)
+                    endPoint = CGPoint(x: size.width / 2, y: 0)
+                }
+                context.drawLinearGradient(gradient,
+                                           start: startPoint,
+                                           end: endPoint,
+                                           options: [])
+            }
+
+            context.restoreGState()
+        }
+    }
+}
+
 @MainActor
 private final class PTCornerTrackerView: UIView {
     var cornerAction: ((CGRect) -> Void)?
@@ -800,6 +876,8 @@ public extension UIView {
         tracker.gradientAction = { [weak self] currentBounds in
             guard let self, currentBounds.width > 0, currentBounds.height > 0 else { return }
 
+            let renderingMode = PTGradientBackgroundRenderingMode.forView(self)
+
             let bgPath = self.pt_customCornerPath(bounds: currentBounds,
                                                   radius: radius,
                                                   topLeft: topLeft,
@@ -809,22 +887,47 @@ public extension UIView {
                                                   corner: corner,
                                                   capsule: capsule)
 
-            let bgLayer = self.gradientLayer(named: "PTSuperBg", insertAt: 0)
             if hasBackgroundGradient, let bgType, let bgColors {
-                bgLayer.frame = currentBounds
-                bgLayer.colors = bgColors.map(\.cgColor)
-                self.applyGradientType(bgLayer, type: bgType)
-                let mask = self.gradientMaskLayer(for: bgLayer, named: "PTSuperBgMask")
-                mask.frame = currentBounds
-                mask.path = bgPath.cgPath
-                mask.fillColor = UIColor.white.cgColor
-                bgLayer.mask = mask
-                self.backgroundColor = .clear
+                switch renderingMode {
+                case .sublayer:
+                    let bgLayer = self.gradientLayer(named: "PTSuperBg", insertAt: 0)
+                    bgLayer.frame = currentBounds
+                    bgLayer.colors = bgColors.map(\.cgColor)
+                    self.applyGradientType(bgLayer, type: bgType)
+                    let mask = self.gradientMaskLayer(for: bgLayer, named: "PTSuperBgMask")
+                    mask.frame = currentBounds
+                    mask.path = bgPath.cgPath
+                    mask.fillColor = UIColor.white.cgColor
+                    bgLayer.mask = mask
+                    self.backgroundColor = .clear
+                case .backingBackground:
+                    // English: Remove legacy sublayers before applying the true backing background.
+                    // Español: Elimina las subcapas heredadas antes de aplicar el fondo de respaldo real.
+                    // 中文：设置真正的 backing background 前先清理旧的背景子 Layer。
+                    self.removeGradientBackgroundLayer()
+                    let patternImage = PTGradientBackgroundRenderer.image(
+                        bounds: currentBounds,
+                        type: bgType,
+                        colors: bgColors,
+                        path: bgPath,
+                        traitCollection: self.traitCollection,
+                        scale: self.window?.screen.scale ?? UIScreen.main.scale
+                    )
+                    if let patternImage {
+                        self.backgroundColor = UIColor(patternImage: patternImage)
+                    } else {
+                        self.backgroundColor = self.ptGradientOriginalBackgroundColor
+                    }
+                }
             } else {
-                bgLayer.removeFromSuperlayer()
+                self.removeGradientBackgroundLayer()
+                self.backgroundColor = self.ptGradientOriginalBackgroundColor
             }
 
-            let borderLayer = self.gradientLayer(named: "PTSuperBorder", insertAt: hasBackgroundGradient ? 1 : 0)
+            let borderLayer = self.gradientLayer(
+                named: "PTSuperBorder",
+                insertAt: renderingMode == .sublayer && hasBackgroundGradient ? 1 : 0
+            )
             if hasBorderGradient, let borderType, let borderColors {
                 let safeBorderWidth = max(0, borderWidth)
                 let halfBorder = min(safeBorderWidth / 2, min(currentBounds.width, currentBounds.height) / 2)
@@ -852,14 +955,21 @@ public extension UIView {
                 borderLayer.removeFromSuperlayer()
             }
 
-            if hasBackgroundGradient {
-                self.backgroundColor = .clear
-            } else if self.ptGradientBackgroundColorCaptured {
+            if !hasBackgroundGradient && self.ptGradientBackgroundColorCaptured {
                 self.backgroundColor = self.ptGradientOriginalBackgroundColor
             }
         }
         tracker.invalidateLayout()
         tracker.applyCurrentLayout()
+    }
+
+    // English: Remove only the background gradient layer and keep border layers untouched.
+    // Español: Elimina solo la capa de fondo y conserva intactas las capas de borde.
+    // 中文：只移除背景渐变 Layer，保留边框渐变 Layer。
+    private func removeGradientBackgroundLayer() {
+        layer.sublayers?
+            .filter { $0.name == "PTSuperBg" }
+            .forEach { $0.removeFromSuperlayer() }
     }
 
     private func gradientLayer(named name: String, insertAt index: Int) -> CAGradientLayer {

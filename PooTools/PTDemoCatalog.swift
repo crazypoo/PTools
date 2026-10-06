@@ -4,6 +4,7 @@
 
 import UIKit
 import PooTools
+import SnapKit
 
 enum PTDemoKind: String, Codable, Hashable, Sendable {
     case interactive
@@ -146,6 +147,8 @@ enum PTDemoRegistry {
         make("ui.movie-cut-output", "PooToolsProgressBar", "类似剪映的视频输出进度效果", .uiComponents, .interactive, .sheet, .runnable, legacy: "类似剪映的视频输出进度效果", tags: ["progress"]),
         make("ui.progress-bar", "PooToolsProgressBar", "进度条", .uiComponents, .interactive, .sheet, .runnable, legacy: "进度条", tags: ["progress"]),
         make("ui.alert", "PooToolsBanner", "Alert", .uiComponents, .interactive, .sheet, .runnable, legacy: "Alert", tags: ["alert", "action-sheet"]),
+        make("ui.tabbar-insets", "PToolsUIFoundation", "TabBar Item Insets", .uiComponents, .interactive, .push, .runnable, legacy: "TabBar Item Insets", tags: ["tabbar", "selection", "insets", "offset"]),
+        make("ui.gradient-rendering", "PToolsUIFoundation", "Gradient Rendering", .uiComponents, .interactive, .push, .runnable, legacy: "Gradient Rendering", tags: ["gradient", "label", "image-view"]),
         make("ui.menu", "PToolsUIFoundation", "Menu", .uiComponents, .interactive, .sheet, .runnable, legacy: "Menu", tags: ["menu"]),
         make("ui.loading", "PooToolsLoading", "Loading", .uiComponents, .interactive, .sheet, .runnable, legacy: "Loading", tags: ["loading"]),
         make("permissions.overview", "PToolsPermissionUI", "Permission", .permissionsDevice, .hostRequired, .push, .runnable, legacy: "Permission", tags: ["permission"]),
@@ -279,6 +282,10 @@ final class PTDemoCoordinator {
             return PT5_61PingDemoViewController()
         case "device.heart-rate":
             return PTHeartRateViewController()
+        case "ui.tabbar-insets":
+            return PTTabBarInsetsDemoViewController()
+        case "ui.gradient-rendering":
+            return PTGradientRenderingDemoViewController()
         case "infrastructure.database":
             return PTDatabaseInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
         case "infrastructure.auth":
@@ -767,5 +774,159 @@ private final class PT5_61PingDemoViewController: PTBaseViewController {
             }
             self?.task = nil
         }
+    }
+}
+
+// English: Demonstrates independent selection insets, content insets and content offset.
+// Español: Demuestra insets de selección, insets de contenido y offset de contenido independientes.
+// 中文：演示选中背景内缩、项目内容内边距和项目内容偏移彼此独立。
+@MainActor
+private final class PTTabBarInsetsDemoViewController: PTBaseViewController {
+    private let modeControl = UISegmentedControl(items: ["Legacy", "Selection", "Content", "Offset", "Combined"])
+    private let descriptionLabel = UILabel()
+    private var previewBar: PTTabBarView?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = "TabBar Item Insets"
+        descriptionLabel.numberOfLines = 0
+        descriptionLabel.textAlignment = .center
+        modeControl.selectedSegmentIndex = 1
+        modeControl.addTarget(self, action: #selector(modeChanged), for: .valueChanged)
+
+        let stack = UIStackView(arrangedSubviews: [modeControl, descriptionLabel])
+        stack.axis = .vertical
+        stack.spacing = 12
+        view.addSubview(stack)
+        stack.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
+            make.top.equalTo(view.safeAreaLayoutGuide).inset(16)
+        }
+        rebuildPreview()
+    }
+
+    @objc private func modeChanged() {
+        rebuildPreview()
+    }
+
+    private func rebuildPreview() {
+        previewBar?.removeFromSuperview()
+
+        let mode = modeControl.selectedSegmentIndex
+        let layout: PTTabBarLayoutAppearance
+        switch mode {
+        case 0:
+            layout = PTTabBarLayoutAppearance(tabBottomSpacing: 10, tabSelectedMetail: true, tabTopSpacing: 10)
+            descriptionLabel.text = "Legacy slot spacing changes the old item layout."
+        case 1:
+            layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
+                                               tabSelectedMetailColor: .systemBlue,
+                                               tabSelectedMetailInsets: UIEdgeInsets(top: 10, left: 6, bottom: 10, right: 6))
+            descriptionLabel.text = "Selection background changes; icon and title size stay unchanged."
+        case 2:
+            layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
+                                               tabSelectedMetailColor: .systemBlue,
+                                               tabItemContentInsets: UIEdgeInsets(top: 4, left: 4, bottom: 2, right: 4))
+            descriptionLabel.text = "Content padding changes the content boundary only."
+        case 3:
+            layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
+                                               tabSelectedMetailColor: .systemBlue,
+                                               tabItemContentOffset: UIOffset(horizontal: 0, vertical: -3))
+            descriptionLabel.text = "Content moves upward without changing icon size or selection frame."
+        default:
+            layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
+                                               tabSelectedMetailColor: .systemBlue,
+                                              tabItemContentInsets: UIEdgeInsets(top: 3, left: 4, bottom: 2, right: 4), tabItemContentOffset: UIOffset(horizontal: 0, vertical: -2), tabSelectedMetailInsets: UIEdgeInsets(top: 8, left: 6, bottom: 8, right: 6))
+            descriptionLabel.text = "Selection, padding and translation are applied by separate layers."
+        }
+
+        let appearance = PTTabBarAppearance(normalColor: .secondaryLabel,
+                                             selectedColor: .systemBlue,
+                                             layout: layout)
+        let bar = PTTabBarView(frame: .zero, appearance: appearance)
+        let configs = [
+            PTTabBarItemConfig(title: "Home",
+                               content: PTTabBarImageContent(normal: demoImage(systemName: "house"),
+                                                             selected: demoImage(systemName: "house.fill")),
+                               viewController: UIViewController()),
+            PTTabBarItemConfig(title: "List",
+                               content: PTTabBarImageContent(normal: demoImage(systemName: "list.bullet"),
+                                                             selected: demoImage(systemName: "list.bullet.rectangle.fill")),
+                               viewController: UIViewController()),
+            PTTabBarItemConfig(title: "Profile",
+                               content: PTTabBarImageContent(normal: demoImage(systemName: "person"),
+                                                             selected: demoImage(systemName: "person.fill")),
+                               viewController: UIViewController())
+        ]
+        bar.setup(configs: configs)
+        view.addSubview(bar)
+        bar.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(24)
+            make.height.equalTo(CGFloat.kTabbarHeight_Total)
+        }
+        previewBar = bar
+    }
+
+    private func demoImage(systemName: String) -> UIImage {
+        UIImage(systemName: systemName) ?? UIImage()
+    }
+}
+
+// English: Demonstrates gradient backgrounds behind UILabel and UIImageView content.
+// Español: Demuestra fondos degradados detrás del contenido de UILabel y UIImageView.
+// 中文：演示 UILabel 和 UIImageView 内容后方的渐变背景。
+@MainActor
+private final class PTGradientRenderingDemoViewController: PTBaseViewController {
+    private let label = UILabel()
+    private let imageView = UIImageView()
+    private let borderSwitch = UISwitch()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = "Gradient Rendering"
+
+        label.text = "Visible UILabel text"
+        label.textAlignment = .center
+        label.textColor = .white
+        imageView.image = UIImage(systemName: "photo")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        imageView.contentMode = .scaleAspectFit
+
+        let borderLabel = UILabel()
+        borderLabel.text = "Border"
+        borderSwitch.isOn = true
+        borderSwitch.addTarget(self, action: #selector(renderGradients), for: .valueChanged)
+        let borderRow = UIStackView(arrangedSubviews: [borderLabel, borderSwitch])
+        borderRow.axis = .horizontal
+        borderRow.distribution = .equalSpacing
+
+        let stack = UIStackView(arrangedSubviews: [label, imageView, borderRow])
+        stack.axis = .vertical
+        stack.alignment = .fill
+        stack.spacing = 18
+        view.addSubview(stack)
+        stack.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(24)
+            make.centerY.equalToSuperview()
+        }
+        label.snp.makeConstraints { $0.height.equalTo(56) }
+        imageView.snp.makeConstraints { $0.height.equalTo(120) }
+        renderGradients()
+    }
+
+    @objc private func renderGradients() {
+        let borderWidth: CGFloat = borderSwitch.isOn ? 2 : 0
+        label.superGradient(bgType: .LeftToRight,
+                            bgColors: [.systemBlue, .systemPurple],
+                            borderType: borderWidth > 0 ? .LeftToRight : nil,
+                            borderColors: borderWidth > 0 ? [.white, .systemGray] : nil,
+                            borderWidth: borderWidth,
+                            radius: 14)
+        imageView.superGradient(bgType: .TopToBottom,
+                                bgColors: [.systemOrange, .systemRed],
+                                borderType: borderWidth > 0 ? .LeftToRight : nil,
+                                borderColors: borderWidth > 0 ? [.white, .systemYellow] : nil,
+                                borderWidth: borderWidth,
+                                radius: 20)
     }
 }

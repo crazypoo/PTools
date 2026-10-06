@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "709b16be6083e89fafa73181bef6d4902013cbcb",
-  "generated_at": "2026-10-06T02:27:44Z",
+  "source_revision": "0726ca37b7560eed16d61e69b2835daafa3e2f17",
+  "generated_at": "2026-10-06T03:52:24Z",
   "counts": {
     "reduce_motion": 60,
     "accessibility": 269,
@@ -338,22 +338,22 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 55
+      "line": 75
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 56
+      "line": 76
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 101
+      "line": 128
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 102
+      "line": 129
     },
     {
       "rule": "reduce_motion",
@@ -363,37 +363,37 @@
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTTabBarSelectionCoordinator.swift",
-      "line": 127
+      "line": 125
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 181
+      "line": 193
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 186
+      "line": 198
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 666
+      "line": 679
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 802
+      "line": 815
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 813
+      "line": 826
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 865
+      "line": 869
     },
     {
       "rule": "accessibility",
@@ -553,7 +553,7 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Category/UIView+PTEX.swift",
-      "line": 41
+      "line": 117
     },
     {
       "rule": "accessibility",

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "709b16be6083e89fafa73181bef6d4902013cbcb",
-  "generated_at": "2026-10-06T02:28:56Z",
+  "source_revision": "0726ca37b7560eed16d61e69b2835daafa3e2f17",
+  "generated_at": "2026-10-06T03:52:22Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -256,7 +256,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "lines": 180,
+      "lines": 202,
       "classification": "ok"
     },
     {
@@ -471,12 +471,12 @@
     },
     {
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "lines": 182,
+      "lines": 228,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Base/PTTabBarLayoutEngine.swift",
-      "lines": 35,
+      "lines": 98,
       "classification": "ok"
     },
     {
@@ -486,7 +486,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTTabBarSelectionCoordinator.swift",
-      "lines": 142,
+      "lines": 140,
       "classification": "ok"
     },
     {
@@ -496,7 +496,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "lines": 867,
+      "lines": 871,
       "classification": "ok"
     },
     {
@@ -1146,8 +1146,8 @@
     },
     {
       "path": "PooToolsSource/Category/UIView+PTEX.swift",
-      "lines": 1927,
-      "classification": "architecture_exception"
+      "lines": 2037,
+      "classification": "hard_limit_allowlisted"
     },
     {
       "path": "PooToolsSource/Category/UIViewController+PTEX.swift",
@@ -1486,7 +1486,7 @@
     },
     {
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "lines": 395,
+      "lines": 422,
       "classification": "ok"
     },
     {
@@ -5842,5 +5842,5 @@
   ],
   "warning_count": 14,
   "architecture_exception_count": 10,
-  "hard_limit_allowlisted_count": 3
+  "hard_limit_allowlisted_count": 4
 }

@@ -73,7 +73,22 @@ public struct PTTabBarLayoutAppearance {
     public let tabSelectedFont: UIFont
     public let tabSelectedMetail: Bool
     public let tabSelectedMetailColor: UIColor
+    // English: Preserve the legacy read-only snapshot field for source compatibility.
+    // Español: Conserva el campo de instantánea de solo lectura heredado para compatibilidad de código.
+    // 中文：保留旧的只读快照字段，兼容已有源码。
     public let tabSelectedMetailLRSpacing: CGFloat
+    // English: Insets for the selected surface only; they never participate in item sizing.
+    // Español: Insets solo para la superficie seleccionada; nunca participan en el tamaño del elemento.
+    // 中文：只作用于选中背景的四边内缩，不参与 Tab 项目尺寸计算。
+    public let tabSelectedMetailInsets: UIEdgeInsets
+    // English: Internal content padding for icon, title and custom item views.
+    // Español: Relleno interno para el icono, el título y las vistas personalizadas del elemento.
+    // 中文：图标、标题和自定义内容 View 的内部内边距。
+    public let tabItemContentInsets: UIEdgeInsets
+    // English: Translation for the complete item content without resizing it.
+    // Español: Traslación del contenido completo del elemento sin redimensionarlo.
+    // 中文：整体平移项目内容，不改变内容尺寸。
+    public let tabItemContentOffset: UIOffset
     public let tabTopSpacing: CGFloat
     public let tabbarBar26LRSpacing: CGFloat
     public let tabbarBorderColor: UIColor
@@ -129,7 +144,10 @@ public struct PTTabBarLayoutAppearance {
                 tabbarShowValueLabel: Bool = false,
                 tabbarTopLeft: CGFloat = 0,
                 tabbarTopRight: CGFloat = 0,
-                tabbarValueLabelColor: UIColor = .systemBlue) {
+                tabbarValueLabelColor: UIColor = .systemBlue,
+                tabItemContentInsets: UIEdgeInsets = .zero,
+                tabItemContentOffset: UIOffset = .zero,
+                tabSelectedMetailInsets: UIEdgeInsets? = nil) {
         self.loadImageShowValueFont = loadImageShowValueFont
         self.tab26BottomSpacing = tab26BottomSpacing
         self.tab26Mode = tab26Mode
@@ -139,6 +157,12 @@ public struct PTTabBarLayoutAppearance {
         self.tabSelectedMetail = tabSelectedMetail
         self.tabSelectedMetailColor = tabSelectedMetailColor
         self.tabSelectedMetailLRSpacing = tabSelectedMetailLRSpacing
+        self.tabSelectedMetailInsets = tabSelectedMetailInsets ?? UIEdgeInsets(top: 0,
+                                                                                  left: tabSelectedMetailLRSpacing,
+                                                                                  bottom: 0,
+                                                                                  right: tabSelectedMetailLRSpacing)
+        self.tabItemContentInsets = tabItemContentInsets
+        self.tabItemContentOffset = tabItemContentOffset
         self.tabTopSpacing = tabTopSpacing
         self.tabbarBar26LRSpacing = tabbarBar26LRSpacing
         self.tabbarBorderColor = tabbarBorderColor
@@ -174,7 +198,7 @@ public struct PTTabBarLayoutAppearance {
                                         tabSelectedFont: config.tabSelectedFont,
                                         tabSelectedMetail: config.tabSelectedMetail,
                                         tabSelectedMetailColor: config.tabSelectedMetailColor,
-                                        tabSelectedMetailLRSpacing: config.tabSelectedMetailLRSpacing,
+                                        tabSelectedMetailLRSpacing: config.tabSelectedMetailInsets.left,
                                         tabTopSpacing: config.tabTopSpacing,
                                         tabbarBar26LRSpacing: config.tabbarBar26LRSpacing,
                                         tabbarBorderColor: config.tabbarBorderColor,
@@ -197,7 +221,10 @@ public struct PTTabBarLayoutAppearance {
                                         tabbarShowValueLabel: config.tabbarShowValueLabel,
                                         tabbarTopLeft: config.tabbarTopLeft,
                                         tabbarTopRight: config.tabbarTopRight,
-                                        tabbarValueLabelColor: config.tabbarValueLabelColor)
+                                        tabbarValueLabelColor: config.tabbarValueLabelColor,
+                                        tabItemContentInsets: config.tabItemContentInsets,
+                                        tabItemContentOffset: config.tabItemContentOffset,
+                                        tabSelectedMetailInsets: config.tabSelectedMetailInsets)
     }
 }
 

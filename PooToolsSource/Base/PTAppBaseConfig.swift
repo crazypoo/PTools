@@ -142,12 +142,34 @@ public class PTAppBaseConfig: NSObject {
     public var tab26BottomSpacing:CGFloat = 15
     public var tab26Mode:Bool = false
     public var tabSelectedMetail:Bool = false
+    // English: Adds padding inside each tab item's content area without changing the selection surface.
+    // Español: Añade relleno dentro del contenido de cada elemento sin cambiar la superficie seleccionada.
+    // 中文：为每个 Tab 项目的内容区域增加内边距，不改变选中背景。
+    public var tabItemContentInsets: UIEdgeInsets = .zero
+    // English: Translates the icon and title together without resizing either one.
+    // Español: Desplaza juntos el icono y el título sin cambiar su tamaño.
+    // 中文：整体平移图标和标题，不改变二者尺寸。
+    public var tabItemContentOffset: UIOffset = .zero
+    // English: Controls only the selected surface frame on all four sides.
+    // Español: Controla únicamente el marco de la superficie seleccionada en sus cuatro lados.
+    // 中文：只控制选中背景四个方向的内缩。
+    public var tabSelectedMetailInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
     // English: Selects the shared TabBar surface policy; automatic follows the current system appearance.
     // Español: Selecciona la política de superficie compartida del TabBar; automático sigue la apariencia del sistema.
     // 中文：选择统一的 TabBar 表面策略；automatic 会跟随当前系统外观。
     @nonobjc public var tabBarVisualStyle: PTVisualStyle = .automatic
     public var tabSelectedMetailColor:UIColor = .lightGray
-    public var tabSelectedMetailLRSpacing:CGFloat = 5
+    // English: Legacy alias for the horizontal selection inset; kept source-compatible during 5.x.
+    // Español: Alias heredado para el inset horizontal de selección; conserva la compatibilidad durante 5.x.
+    // 中文：选中背景水平内缩的旧别名，5.x 期间保持源码兼容。
+    @available(*, deprecated, message: "Use tabSelectedMetailInsets instead.")
+    public var tabSelectedMetailLRSpacing: CGFloat {
+        get { tabSelectedMetailInsets.left }
+        set {
+            tabSelectedMetailInsets.left = newValue
+            tabSelectedMetailInsets.right = newValue
+        }
+    }
     public var tabbarMetailMode:Bool = false
     public var tabbarCenterMetail:Bool = false
     public var tabbarCenterBGColor:UIColor = .clear

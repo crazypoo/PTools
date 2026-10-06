@@ -1,10 +1,10 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 709b16be6083e89fafa73181bef6d4902013cbcb
-Generated at: 2026-10-05T22:52:34+08:00 -->
+Source revision: 0726ca37b7560eed16d61e69b2835daafa3e2f17
+Generated at: 2026-10-06T10:58:20+08:00 -->
 # Test Inventory
 
-- Version: `5.62.0`
+- Version: `5.62.1`
 - Records: `24`
 
 | target | path | level | file_count | canonical | action |
@@ -32,4 +32,4 @@ Generated at: 2026-10-05T22:52:34+08:00 -->
 | PToolsRichTextTests | Tests/PToolsRichTextTests | CONTRACT | 1 | True | KEEP |
 | PToolsSocketKitTests | Tests/PToolsSocketKitTests | CONTRACT | 1 | True | KEEP |
 | PToolsSymbolsTests | Tests/PToolsSymbolsTests | CONTRACT | 1 | True | KEEP |
-| PToolsUIFoundationTests | Tests/PToolsUIFoundationTests | CONTRACT | 4 | True | KEEP |
+| PToolsUIFoundationTests | Tests/PToolsUIFoundationTests | CONTRACT | 5 | True | KEEP |

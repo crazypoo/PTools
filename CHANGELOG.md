@@ -4,6 +4,15 @@
 
 版本唯一来源为根目录 `VERSION`；外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
 
+## 5.62.1 — 2026-10-06
+
+- 解耦 TabBar 选中背景与 Item 内容布局，新增 `tabSelectedMetailInsets`、`tabItemContentInsets` 和 `tabItemContentOffset`。
+- 保留 `tabSelectedMetailLRSpacing` 兼容入口并标记弃用；选中背景四边 Insets 不再参与 Icon 尺寸计算。
+- 支持每个 `PTTabBarItemConfig` 单独覆盖内容 Insets / Offset，保留旧的 TabBar 容器和安全区参数语义。
+- 修复 `PTTabBarView` 内容容器重构后的语言刷新路径，并补充 TabBar Insets 与渐变渲染 Demo、回归测试。
+- 修复 `UILabel` / `UIImageView` 的 `backgroundGradient` 内容遮挡：内容型 View 使用按 bounds 栅格化的 backing background，普通容器继续使用 CAGradientLayer。
+- 完善圆角、胶囊、动态颜色、边框、Bounds 变化和旧 `PTSuperBg` 清理逻辑；完整 Xcode Simulator 构建仍受外部 Harbeth Metal Toolchain 缺失阻断。
+
 ## 5.62.0 — 2026-10-05
 
 - 新增可选 SQLite 数据库基础设施：actor、预编译参数绑定、事务、迁移、观察、备份/恢复和 Codable 映射。

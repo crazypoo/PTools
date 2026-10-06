@@ -18,15 +18,25 @@ import PToolsCore
 final public class PTTabBarItemView: UIControl {
     
     private let titleLabel = UILabel()
+    private let contentContainerView = UIView()
+    private let contentStackView = UIStackView()
     private var content: PTTabBarItemContent
     private let appearance: PTTabBarAppearance
+    private let contentInsetsOverride: UIEdgeInsets?
+    private let contentOffsetOverride: UIOffset?
+    private var lastContentLayoutBounds: CGSize = .zero
+    private var lastResolvedContentInsets: UIEdgeInsets = .zero
+    private var lastResolvedContentOffset: UIOffset = .zero
         
     public class func itemImageSize() -> CGFloat {
-        let tab26ModeBottomSpacing = deviceInfo.isFaceIDCapable ? PTAppBaseConfig.share.tab26BottomSpacing : 0
-        let safeAreaHeight:CGFloat = PTAppBaseConfig.share.tab26Mode ? tab26ModeBottomSpacing : 0
-        let barHeight:CGFloat = PTAppBaseConfig.share.tab26Mode ? CGFloat.kTabbarHeight_Total : CGFloat.kTabbarHeight
-        let imageSize = barHeight - safeAreaHeight - PTAppBaseConfig.share.tabTopSpacing - PTAppBaseConfig.share.tabContentSpacing - (PTAppBaseConfig.share.tabSelectedFont.pointSize + 2) - PTAppBaseConfig.share.tabBottomSpacing
-        return imageSize
+        let appearance = PTTabBarAppearance.legacyDefault
+        let tab26ModeBottomSpacing = deviceInfo.isFaceIDCapable ? appearance.layout.tab26BottomSpacing : 0
+        let safeAreaHeight: CGFloat = appearance.layout.tab26Mode ? tab26ModeBottomSpacing : 0
+        let barHeight: CGFloat = appearance.layout.tab26Mode ? CGFloat.kTabbarHeight_Total : CGFloat.kTabbarHeight
+        return PTTabBarLayoutEngine.itemImageSize(barHeight: barHeight,
+                                                  safeAreaHeight: safeAreaHeight,
+                                                  titleHeight: appearance.selectedFont.pointSize + 2,
+                                                  appearance: appearance.layout)
     }
 
     // English: New instances calculate their icon size from the captured appearance snapshot.
@@ -37,7 +47,17 @@ final public class PTTabBarItemView: UIControl {
         let tab26ModeBottomSpacing = deviceInfo.isFaceIDCapable ? layout.tab26BottomSpacing : 0
         let safeAreaHeight = layout.tab26Mode ? tab26ModeBottomSpacing : 0
         let barHeight = layout.tab26Mode ? CGFloat.kTabbarHeight_Total : CGFloat.kTabbarHeight
-        return barHeight - safeAreaHeight - layout.tabTopSpacing - layout.tabContentSpacing - (layout.tabSelectedFont.pointSize + 2) - layout.tabBottomSpacing
+        return PTTabBarLayoutEngine.itemImageSize(barHeight: barHeight,
+                                                  safeAreaHeight: safeAreaHeight,
+                                                  titleHeight: appearance.selectedFont.pointSize + 2,
+                                                  appearance: layout)
+    }
+
+    // English: Expose the real title label to the TabBar without exposing its storage publicly.
+    // Español: Expone la etiqueta real al TabBar sin hacer pública su propiedad interna.
+    // 中文：向 TabBar 暴露真实标题 Label，但不公开内部存储。
+    var titleLabelForLayout: UILabel? {
+        titleLabel.superview == contentStackView ? titleLabel : nil
     }
     
     public var imageContent: UIView {
@@ -60,6 +80,8 @@ final public class PTTabBarItemView: UIControl {
     public init(content: PTTabBarItemContent, title: String) {
         self.appearance = .legacyDefault
         self.content = content
+        self.contentInsetsOverride = nil
+        self.contentOffsetOverride = nil
         super.init(frame: .zero)
         setupUI(title: title)
     }
@@ -69,9 +91,13 @@ final public class PTTabBarItemView: UIControl {
     // 中文：在构建 TabBar 项目层级前固定外观快照。
     public init(content: PTTabBarItemContent,
                 title: String,
-                appearance: PTTabBarAppearance) {
+                appearance: PTTabBarAppearance,
+                contentInsets: UIEdgeInsets? = nil,
+                contentOffset: UIOffset? = nil) {
         self.appearance = appearance
         self.content = content
+        self.contentInsetsOverride = contentInsets
+        self.contentOffsetOverride = contentOffset
         super.init(frame: .zero)
         setupUI(title: title)
     }
@@ -79,14 +105,14 @@ final public class PTTabBarItemView: UIControl {
     public required init?(coder: NSCoder) { fatalError() }
     
     private func setupUI(title: String) {
-        
-        var subViews = [UIView]()
-        if !title.stringIsEmpty() {
-            subViews = [titleLabel,content.view]
-        } else {
-            subViews = [content.view]
-        }
-        
+        contentContainerView.backgroundColor = .clear
+        contentStackView.axis = .vertical
+        contentStackView.alignment = .center
+        contentStackView.distribution = .fill
+        contentStackView.spacing = appearance.layout.tabContentSpacing
+        contentContainerView.addSubview(contentStackView)
+        addSubview(contentContainerView)
+
         if !title.stringIsEmpty() {
             titleLabel.numberOfLines = 1
             titleLabel.text = title
@@ -94,28 +120,15 @@ final public class PTTabBarItemView: UIControl {
                                                font: appearance.normalFont)
             titleLabel.textAlignment = .center
             titleLabel.textColor = appearance.normalColor
+            contentStackView.addArrangedSubview(titleLabel)
         }
-        
-        addSubviews(subViews)
+        contentStackView.insertArrangedSubview(content.view, at: 0)
+        content.view.snp.makeConstraints { $0.size.equalTo(itemImageSize()) }
 
         accessibilityTraits = [.button]
         accessibilityLabel = title
-                
-        content.view.snp.makeConstraints {
-            if !title.stringIsEmpty() {
-                $0.top.centerX.equalToSuperview()
-            } else {
-                $0.center.equalToSuperview()
-            }
-            $0.size.equalTo(itemImageSize())
-        }
-        
-        if !title.stringIsEmpty() {
-            titleLabel.snp.makeConstraints {
-                $0.top.equalTo(content.view.snp.bottom).offset(appearance.layout.tabContentSpacing)
-                $0.left.right.bottom.equalToSuperview()
-            }
-        }
+
+        applyContentLayout(force: true)
         
         if appearance.layout.tabSelectedMetail {
             PTMainActorBridge.after(0.1) { [weak self] in
@@ -130,14 +143,48 @@ final public class PTTabBarItemView: UIControl {
     
     // 🌟 新增方法：用于恢复 Icon 的初始布局
     public func restoreIconLayout() {
-        let hasTitle = !(titleLabel.text?.stringIsEmpty() ?? true)
-        content.view.snp.remakeConstraints {
-            if hasTitle {
-                $0.top.centerX.equalToSuperview()
-            } else {
-                $0.center.equalToSuperview()
-            }
-            $0.size.equalTo(itemImageSize())
+        if content.view.superview !== contentStackView {
+            contentStackView.insertArrangedSubview(content.view, at: 0)
+        }
+        applyContentLayout(force: true)
+    }
+
+    // English: Detach only the content view when the selected tab enters minimized mode.
+    // Español: Desvincula solo la vista de contenido cuando la pestaña seleccionada entra en modo minimizado.
+    // 中文：选中 Tab 进入最小化模式时，只移出内容 View。
+    func detachContentForMinimize() {
+        contentStackView.removeArrangedSubview(content.view)
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        applyContentLayout()
+    }
+
+    // English: Keep content padding and translation in one resolver used by setup and restoration.
+    // Español: Mantiene el relleno y la traslación en un único resolvedor usado por setup y restauración.
+    // 中文：让初始化和恢复布局共用同一个内容布局解析器。
+    private func applyContentLayout(force: Bool = false) {
+        let resolvedInsets = PTTabBarLayoutEngine.safeContentInsets(contentInsetsOverride ?? appearance.layout.tabItemContentInsets)
+        let resolvedOffset = PTTabBarLayoutEngine.safeContentOffset(contentOffsetOverride ?? appearance.layout.tabItemContentOffset)
+        guard force || lastContentLayoutBounds != bounds.size
+                || lastResolvedContentInsets != resolvedInsets
+                || lastResolvedContentOffset != resolvedOffset else { return }
+
+        lastContentLayoutBounds = bounds.size
+        lastResolvedContentInsets = resolvedInsets
+        lastResolvedContentOffset = resolvedOffset
+
+        contentContainerView.snp.remakeConstraints { make in
+            make.edges.equalToSuperview().inset(resolvedInsets)
+        }
+        contentStackView.snp.remakeConstraints { make in
+            make.centerX.equalToSuperview().offset(resolvedOffset.horizontal)
+            make.centerY.equalToSuperview().offset(resolvedOffset.vertical)
+            make.leading.greaterThanOrEqualToSuperview()
+            make.trailing.lessThanOrEqualToSuperview()
+            make.top.greaterThanOrEqualToSuperview()
+            make.bottom.lessThanOrEqualToSuperview()
         }
     }
     
@@ -179,4 +226,3 @@ final public class PTTabBarItemView: UIControl {
         super.touchesBegan(touches, with: event)
     }
 }
-

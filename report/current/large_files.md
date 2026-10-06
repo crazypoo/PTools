@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: 709b16be6083e89fafa73181bef6d4902013cbcb
-Generated at: 2026-10-06T02:28:56Z
+Source revision: 0726ca37b7560eed16d61e69b2835daafa3e2f17
+Generated at: 2026-10-06T03:52:22Z
 -->
 
 # 当前文件尺寸门禁
@@ -13,7 +13,7 @@ Generated at: 2026-10-06T02:28:56Z
 
 - Warning：14
 - Architecture exception：10
-- Hard-limit allowlisted：3
+- Hard-limit allowlisted：4
 
 | 文件 | 行数 | 分类 |
 | --- | ---: | --- |
@@ -22,7 +22,7 @@ Generated at: 2026-10-06T02:28:56Z
 | `PooToolsSource/Category/String+PTEX.swift` | 1878 | architecture_exception |
 | `PooToolsSource/Category/UIImage+PTEX.swift` | 1433 | warning |
 | `PooToolsSource/Category/UIScrollView+PTRefreshEX.swift` | 1446 | warning |
-| `PooToolsSource/Category/UIView+PTEX.swift` | 1927 | architecture_exception |
+| `PooToolsSource/Category/UIView+PTEX.swift` | 2037 | hard_limit_allowlisted |
 | `PooToolsSource/Debug/CwlDemangle.swift` | 4627 | hard_limit_allowlisted |
 | `PooToolsSource/Debug/PTInstruments.swift` | 1459 | warning |
 | `PooToolsSource/FloatPanel/PTSheetViewController.swift` | 1030 | warning |

@@ -16,8 +16,6 @@ extension PTTabBarView {
 
         let wasMinimized = minimizedCenterView.superview != nil
         if wasMinimized, currentIndex >= 0, currentIndex < items.count {
-            let previousIcon = items[currentIndex].imageContent
-            items[currentIndex].addSubview(previousIcon)
             items[currentIndex].restoreIconLayout()
         }
 
@@ -28,6 +26,7 @@ extension PTTabBarView {
 
         if wasMinimized {
             let selectedIcon = items[index].imageContent
+            items[index].detachContentForMinimize()
             minimizedCenterView.addSubview(selectedIcon)
             selectedIcon.snp.remakeConstraints { make in
                 make.center.equalToSuperview()
@@ -100,16 +99,15 @@ extension PTTabBarView {
         // 坐标系转换：把目标 Item 在 StackView 里的 frame 转换到当前参照层中
         let convertedFrame = stackView.convert(targetItem.frame, to: targetContainer)
         
-        // 还原原有的左右内缩逻辑 (LRSpacing)
-        let inset = appearanceSnapshot.layout.tabSelectedMetailLRSpacing
-        let finalFrame = CGRect(
-            x: convertedFrame.origin.x + inset,
-            y: convertedFrame.origin.y,
-            width: max(convertedFrame.width - (inset * 2), 0),
-            height: convertedFrame.height
+        // English: Apply selection-only insets; item content geometry remains untouched.
+        // Español: Aplica insets exclusivos de selección; la geometría del contenido no cambia.
+        // 中文：只应用选中背景内缩，不影响项目内容几何尺寸。
+        let finalFrame = PTTabBarLayoutEngine.selectionFrame(
+            frame: convertedFrame,
+            insets: appearanceSnapshot.layout.tabSelectedMetailInsets
         )
         
-        let cornerRadius = finalFrame.height / 2
+        let cornerRadius = min(finalFrame.width, finalFrame.height) / 2
 
         let frameChanged = sharedSelectionMaskView.frame != finalFrame
         let cornerRadiusChanged = sharedSelectionMaskView.layer.cornerRadius != cornerRadius

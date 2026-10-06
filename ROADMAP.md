@@ -1,8 +1,19 @@
 # PTools 路线图
 
-> 当前代码基线：`5.62.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.62.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.62.0` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.62.1` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.62.1 TabBar Insets 解耦 / 内容型渐变修复
+
+- ✅ 新增 `tabItemContentInsets`、`tabItemContentOffset` 和 `tabSelectedMetailInsets`，分别表达内容边界、内容平移和选中背景边界。
+- ✅ `PTTabBarLayoutAppearance`、`PTTabBarLayoutEngine`、`PTTabBarItemView` 和 `PTTabBarSelectionCoordinator` 使用同一份外观快照与几何计算。
+- ✅ 选中背景支持四边安全 Clamp，且不会改变 Icon、Title、Badge、UIImage、Lottie 或 Custom Content 的尺寸计算。
+- ✅ 保留并弃用 `tabSelectedMetailLRSpacing`；旧的 `tabTopSpacing`、`tabBottomSpacing` 和 `tab26BottomSpacing` 继续保持兼容语义。
+- ✅ 增加 Legacy、Selection-only、Content Insets、Content Offset、Combined 五组 TabBar Demo，以及 Label / ImageView 渐变 Demo。
+- ✅ `UILabel` / `UIImageView` 的背景渐变改为按当前 Bounds 栅格化到 `UIColor(patternImage:)`，保留普通 UIView / UIButton 的 CAGradientLayer 路径和渐变边框。
+- ✅ 增加圆角、动态颜色、Bounds 更新、旧背景 Layer 清理和核心布局回归测试。
+- ⬜ 完整 Xcode Simulator Debug / Release 验证仍受外部 Harbeth 缺失 Metal Toolchain 阻断；待工具链可用后补齐 iOS 17～27、iPad Split View / Stage Manager、真机视觉回归，再创建正式 tag。
 
 ## 5.62.0 Application Infrastructure / P0-P1
 

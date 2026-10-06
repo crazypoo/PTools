@@ -25,8 +25,8 @@ final class PTSegmentedPagingTests: XCTestCase {
     func testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement() {
         let style = PTSegmentStyle(normalFont: .systemFont(ofSize: 14),
                                     selectedFont: .boldSystemFont(ofSize: 14),
-                                    itemHeight: 44,
                                     itemInsets: .zero,
+                                    itemHeight: 44,
                                     distribution: .intrinsic,
                                     selectedScale: 1.2)
         let image = UIImage(systemName: "star")!
@@ -34,7 +34,8 @@ final class PTSegmentedPagingTests: XCTestCase {
 
         let measured = PTMainSegmentCell.measuredWidth(item: item, style: style)
         let title = "收藏".size(withAttributes: [.font: style.selectedFont]).width
-        let expectedMinimum = ceil(title * style.selectedScale + style.itemHeight - 12 + style.imageSpacing)
+        let scaledTitleWidth = title * style.selectedScale
+        let expectedMinimum = ceil(scaledTitleWidth + style.itemHeight - 12 + style.imageSpacing)
 
         XCTAssertGreaterThanOrEqual(measured, expectedMinimum)
     }

@@ -106,6 +106,7 @@ target 'PooTools_Example' do
   pod 'SwiftLint'
   pod 'Swinject'
   pod 'KTVHTTPCache'
+  pod 'FlagKit'
 #  pod 'Protobuf'
 #  pod 'SVGAPlayer'
 #  pod 'SmartCodable/Inherit'

@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: f7c0c7dc885f3b0e6fc3b0050fb2d69f609dcf6a
-Generated at: 2026-10-04T18:48:26Z
-Version source: 5.62.0
+Source revision: 0726ca37b7560eed16d61e69b2835daafa3e2f17
+Generated at: 2026-10-06T03:36:37Z
+Version source: 5.62.1
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -137,34 +137,69 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `WhatsNewsKit` | A | `PooTools/WhatsNewsKit` | `PooToolsWhatsNewsKit` | Keep; review drift |
 | `WidgetCore` | A | `PooTools/WidgetCore` | `PToolsWidgetCore` | Keep; review drift |
 | `iOS17Tips` | A | `PooTools/iOS17Tips` | `PooToolsiOS17Tips` | Keep; review drift |
+| `AppIntegrity` | B | `PooTools/AppIntegrity` | — | Parity decision before 6.0 |
 | `Appz` | B | `PooTools/Appz` | — | Parity decision before 6.0 |
+| `Auth` | B | `PooTools/Auth` | — | Parity decision before 6.0 |
+| `AuthCore` | B | `PooTools/AuthCore` | — | Parity decision before 6.0 |
+| `Database` | B | `PooTools/Database` | — | Parity decision before 6.0 |
+| `DatabaseCore` | B | `PooTools/DatabaseCore` | — | Parity decision before 6.0 |
 | `Date` | B | `PooTools/Date` | — | Parity decision before 6.0 |
-| `FilterCamera` | B | `PooTools/FilterCamera` | — | Parity decision before 6.0 |
 | `Flag` | B | `PooTools/Flag` | — | Parity decision before 6.0 |
 | `GCDWebServer` | B | `PooTools/GCDWebServer` | — | Parity decision before 6.0 |
 | `InputAll` | B | `PooTools/InputAll` | — | Parity decision before 6.0 |
 | `MXMetricManagerKit` | B | `PooTools/MXMetricManagerKit` | — | Parity decision before 6.0 |
+| `Map` | B | `PooTools/Map` | — | Parity decision before 6.0 |
+| `MapCore` | B | `PooTools/MapCore` | — | Parity decision before 6.0 |
 | `ModelLegacyKakaJSON` | B | `PooTools/ModelLegacyKakaJSON` | — | Parity decision before 6.0 |
 | `ModelLegacySmartCodable` | B | `PooTools/ModelLegacySmartCodable` | — | Parity decision before 6.0 |
 | `NFCKit` | B | `PooTools/NFCKit` | — | Parity decision before 6.0 |
 | `NotificationBanner` | B | `PooTools/NotificationBanner` | — | Parity decision before 6.0 |
+| `Observability` | B | `PooTools/Observability` | — | Parity decision before 6.0 |
+| `ObservabilityCore` | B | `PooTools/ObservabilityCore` | — | Parity decision before 6.0 |
 | `PopoverKit` | B | `PooTools/PopoverKit` | — | Parity decision before 6.0 |
+| `Realtime` | B | `PooTools/Realtime` | — | Parity decision before 6.0 |
+| `RealtimeCore` | B | `PooTools/RealtimeCore` | — | Parity decision before 6.0 |
 | `SecuritySuite` | B | `PooTools/SecuritySuite` | — | Parity decision before 6.0 |
+| `StoreKit` | B | `PooTools/StoreKit` | — | Parity decision before 6.0 |
+| `Sync` | B | `PooTools/Sync` | — | Parity decision before 6.0 |
+| `SyncCore` | B | `PooTools/SyncCore` | — | Parity decision before 6.0 |
 | `Tabbar` | B | `PooTools/Tabbar` | — | Parity decision before 6.0 |
-| `VideoCache` | B | `PooTools/VideoCache` | — | Parity decision before 6.0 |
-| `WebKit` | B | `PooTools/WebKit` | — | Parity decision before 6.0 |
+| `Transfer` | B | `PooTools/Transfer` | — | Parity decision before 6.0 |
+| `TransferCore` | B | `PooTools/TransferCore` | — | Parity decision before 6.0 |
+| `Web` | B | `PooTools/Web` | — | Parity decision before 6.0 |
+| `WebBridge` | B | `PooTools/WebBridge` | — | Parity decision before 6.0 |
+| `WebCore` | B | `PooTools/WebCore` | — | Parity decision before 6.0 |
 | `ZipArchive` | B | `PooTools/ZipArchive` | — | Parity decision before 6.0 |
 | `PTModelBenchmark` | C | — | `PTModelBenchmark` | Parity decision before 6.0 |
 | `PTModelLegacyKakaJSONFixture` | C | — | `PTModelLegacyKakaJSONFixture` | Parity decision before 6.0 |
 | `PTModelLegacySmartCodableFixture` | C | — | `PTModelLegacySmartCodableFixture` | Parity decision before 6.0 |
 | `PTModelMixedLegacyFixture` | C | — | `PTModelMixedLegacyFixture` | Parity decision before 6.0 |
 | `PTModelOnlyFixture` | C | — | `PTModelOnlyFixture` | Parity decision before 6.0 |
+| `PToolsAppIntegrity` | C | — | `PToolsAppIntegrity` | Parity decision before 6.0 |
+| `PToolsAuth` | C | — | `PToolsAuth` | Parity decision before 6.0 |
+| `PToolsAuthCore` | C | — | `PToolsAuthCore` | Parity decision before 6.0 |
+| `PToolsDatabase` | C | — | `PToolsDatabase` | Parity decision before 6.0 |
+| `PToolsDatabaseCore` | C | — | `PToolsDatabaseCore` | Parity decision before 6.0 |
 | `PToolsDate` | C | — | `PToolsDate` | Parity decision before 6.0 |
 | `PToolsFontCatalogCore` | C | — | `PToolsFontCatalogCore` | Parity decision before 6.0 |
+| `PToolsMap` | C | — | `PToolsMap` | Parity decision before 6.0 |
+| `PToolsMapCore` | C | — | `PToolsMapCore` | Parity decision before 6.0 |
 | `PToolsModelLegacyKakaJSON` | C | — | `PToolsModelLegacyKakaJSON` | Parity decision before 6.0 |
 | `PToolsModelLegacySmartCodable` | C | — | `PToolsModelLegacySmartCodable` | Parity decision before 6.0 |
 | `PToolsModelMacroPlugin` | C | — | `PToolsModelMacroPlugin` | Parity decision before 6.0 |
 | `PToolsNetworkModelCore` | C | — | `PToolsNetworkModelCore` | Parity decision before 6.0 |
+| `PToolsObservability` | C | — | `PToolsObservability` | Parity decision before 6.0 |
+| `PToolsObservabilityCore` | C | — | `PToolsObservabilityCore` | Parity decision before 6.0 |
+| `PToolsRealtime` | C | — | `PToolsRealtime` | Parity decision before 6.0 |
+| `PToolsRealtimeCore` | C | — | `PToolsRealtimeCore` | Parity decision before 6.0 |
+| `PToolsStoreKit` | C | — | `PToolsStoreKit` | Parity decision before 6.0 |
+| `PToolsSync` | C | — | `PToolsSync` | Parity decision before 6.0 |
+| `PToolsSyncCore` | C | — | `PToolsSyncCore` | Parity decision before 6.0 |
+| `PToolsTransfer` | C | — | `PToolsTransfer` | Parity decision before 6.0 |
+| `PToolsTransferCore` | C | — | `PToolsTransferCore` | Parity decision before 6.0 |
+| `PToolsWeb` | C | — | `PToolsWeb` | Parity decision before 6.0 |
+| `PToolsWebBridge` | C | — | `PToolsWebBridge` | Parity decision before 6.0 |
+| `PToolsWebCore` | C | — | `PToolsWebCore` | Parity decision before 6.0 |
 
 ## Compatibility entries
 

@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: 709b16be6083e89fafa73181bef6d4902013cbcb
-Generated at: 2026-10-06T02:27:42Z
+Source revision: 0726ca37b7560eed16d61e69b2835daafa3e2f17
+Generated at: 2026-10-06T03:52:23Z
 -->
 
 # PTools 当前公开 API 清单
@@ -511,36 +511,39 @@ Generated at: 2026-10-06T02:27:42Z
 | PooToolsSource/Base/PTAppBaseConfig.swift:142 | var | public | public var tab26BottomSpacing:CGFloat = 15 |
 | PooToolsSource/Base/PTAppBaseConfig.swift:143 | var | public | public var tab26Mode:Bool = false |
 | PooToolsSource/Base/PTAppBaseConfig.swift:144 | var | public | public var tabSelectedMetail:Bool = false |
-| PooToolsSource/Base/PTAppBaseConfig.swift:148 | var | public | @nonobjc public var tabBarVisualStyle: PTVisualStyle = .automatic |
-| PooToolsSource/Base/PTAppBaseConfig.swift:149 | var | public | public var tabSelectedMetailColor:UIColor = .lightGray |
-| PooToolsSource/Base/PTAppBaseConfig.swift:150 | var | public | public var tabSelectedMetailLRSpacing:CGFloat = 5 |
-| PooToolsSource/Base/PTAppBaseConfig.swift:151 | var | public | public var tabbarMetailMode:Bool = false |
-| PooToolsSource/Base/PTAppBaseConfig.swift:152 | var | public | public var tabbarCenterMetail:Bool = false |
-| PooToolsSource/Base/PTAppBaseConfig.swift:153 | var | public | public var tabbarCenterBGColor:UIColor = .clear |
-| PooToolsSource/Base/PTAppBaseConfig.swift:154 | var | public | public var tabbarCenterInsideOffset:CGFloat = 0 |
-| PooToolsSource/Base/PTAppBaseConfig.swift:155 | var | public | public var tabbarCenterName:String = "" |
-| PooToolsSource/Base/PTAppBaseConfig.swift:156 | var | public | public var tabbarCenterNameFont:UIFont = .appfont(size: 10) |
-| PooToolsSource/Base/PTAppBaseConfig.swift:157 | var | public | public var tabbarCenterNameColor:UIColor = .black |
-| PooToolsSource/Base/PTAppBaseConfig.swift:158 | var | public | public var tabbarCenterNameContentSpacing:CGFloat = 2 |
-| PooToolsSource/Base/PTAppBaseConfig.swift:159 | var | public | public var tabbarMiniSize:CGFloat = 56 |
-| PooToolsSource/Base/PTAppBaseConfig.swift:160 | var | public | public var tabbarScrollEnabled:Bool = false |
-| PooToolsSource/Base/PTAppBaseConfig.swift:161 | var | public | public var tabbarScrollOffset:CGFloat = 20 |
-| PooToolsSource/Base/PTAppBaseConfig.swift:162 | var | public | public var tabbarCenterButtonSize: CGFloat = 64 |
-| PooToolsSource/Base/PTAppBaseConfig.swift:163 | var | public | public var tabbarBar26LRSpacing:CGFloat = 24.adapter |
-| PooToolsSource/Base/PTAppBaseConfig.swift:165 | var | public | public var tabbarRadius: CGFloat = 0 |
-| PooToolsSource/Base/PTAppBaseConfig.swift:166 | var | public | public var tabbarTopLeft: CGFloat = 0 |
-| PooToolsSource/Base/PTAppBaseConfig.swift:167 | var | public | public var tabbarTopRight: CGFloat = 0 |
-| PooToolsSource/Base/PTAppBaseConfig.swift:168 | var | public | public var tabbarBottomLeft: CGFloat = 0 |
-| PooToolsSource/Base/PTAppBaseConfig.swift:169 | var | public | public var tabbarBottomRight: CGFloat = 0 |
-| PooToolsSource/Base/PTAppBaseConfig.swift:170 | var | public | public var tabbarCorner: UIRectCorner = .allCorners |
-| PooToolsSource/Base/PTAppBaseConfig.swift:171 | var | public | public var tabbarCapsule: Bool = false |
-| PooToolsSource/Base/PTAppBaseConfig.swift:172 | var | public | public var tabbarBorderWidth: CGFloat = 0 |
-| PooToolsSource/Base/PTAppBaseConfig.swift:173 | var | public | public var tabbarBorderColor: UIColor = .clear |
-| PooToolsSource/Base/PTAppBaseConfig.swift:174 | var | public | public var tabbarShowValueLabel: Bool = false |
-| PooToolsSource/Base/PTAppBaseConfig.swift:175 | var | public | public var tabbarValueLabelFont: UIFont = .appfont(size: 10) |
-| PooToolsSource/Base/PTAppBaseConfig.swift:176 | var | public | public var tabbarValueLabelColor: UIColor = .systemBlue |
-| PooToolsSource/Base/PTAppBaseConfig.swift:178 | var | public | public var tabBarAccessoryHeight: CGFloat = 44 |
-| PooToolsSource/Base/PTAppBaseConfig.swift:179 | var | public | public var tabBarAccessoryBottomSpacing: CGFloat = 10 |
+| PooToolsSource/Base/PTAppBaseConfig.swift:148 | var | public | public var tabItemContentInsets: UIEdgeInsets = .zero |
+| PooToolsSource/Base/PTAppBaseConfig.swift:152 | var | public | public var tabItemContentOffset: UIOffset = .zero |
+| PooToolsSource/Base/PTAppBaseConfig.swift:156 | var | public | public var tabSelectedMetailInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5) |
+| PooToolsSource/Base/PTAppBaseConfig.swift:160 | var | public | @nonobjc public var tabBarVisualStyle: PTVisualStyle = .automatic |
+| PooToolsSource/Base/PTAppBaseConfig.swift:161 | var | public | public var tabSelectedMetailColor:UIColor = .lightGray |
+| PooToolsSource/Base/PTAppBaseConfig.swift:166 | var | public | public var tabSelectedMetailLRSpacing: CGFloat { |
+| PooToolsSource/Base/PTAppBaseConfig.swift:173 | var | public | public var tabbarMetailMode:Bool = false |
+| PooToolsSource/Base/PTAppBaseConfig.swift:174 | var | public | public var tabbarCenterMetail:Bool = false |
+| PooToolsSource/Base/PTAppBaseConfig.swift:175 | var | public | public var tabbarCenterBGColor:UIColor = .clear |
+| PooToolsSource/Base/PTAppBaseConfig.swift:176 | var | public | public var tabbarCenterInsideOffset:CGFloat = 0 |
+| PooToolsSource/Base/PTAppBaseConfig.swift:177 | var | public | public var tabbarCenterName:String = "" |
+| PooToolsSource/Base/PTAppBaseConfig.swift:178 | var | public | public var tabbarCenterNameFont:UIFont = .appfont(size: 10) |
+| PooToolsSource/Base/PTAppBaseConfig.swift:179 | var | public | public var tabbarCenterNameColor:UIColor = .black |
+| PooToolsSource/Base/PTAppBaseConfig.swift:180 | var | public | public var tabbarCenterNameContentSpacing:CGFloat = 2 |
+| PooToolsSource/Base/PTAppBaseConfig.swift:181 | var | public | public var tabbarMiniSize:CGFloat = 56 |
+| PooToolsSource/Base/PTAppBaseConfig.swift:182 | var | public | public var tabbarScrollEnabled:Bool = false |
+| PooToolsSource/Base/PTAppBaseConfig.swift:183 | var | public | public var tabbarScrollOffset:CGFloat = 20 |
+| PooToolsSource/Base/PTAppBaseConfig.swift:184 | var | public | public var tabbarCenterButtonSize: CGFloat = 64 |
+| PooToolsSource/Base/PTAppBaseConfig.swift:185 | var | public | public var tabbarBar26LRSpacing:CGFloat = 24.adapter |
+| PooToolsSource/Base/PTAppBaseConfig.swift:187 | var | public | public var tabbarRadius: CGFloat = 0 |
+| PooToolsSource/Base/PTAppBaseConfig.swift:188 | var | public | public var tabbarTopLeft: CGFloat = 0 |
+| PooToolsSource/Base/PTAppBaseConfig.swift:189 | var | public | public var tabbarTopRight: CGFloat = 0 |
+| PooToolsSource/Base/PTAppBaseConfig.swift:190 | var | public | public var tabbarBottomLeft: CGFloat = 0 |
+| PooToolsSource/Base/PTAppBaseConfig.swift:191 | var | public | public var tabbarBottomRight: CGFloat = 0 |
+| PooToolsSource/Base/PTAppBaseConfig.swift:192 | var | public | public var tabbarCorner: UIRectCorner = .allCorners |
+| PooToolsSource/Base/PTAppBaseConfig.swift:193 | var | public | public var tabbarCapsule: Bool = false |
+| PooToolsSource/Base/PTAppBaseConfig.swift:194 | var | public | public var tabbarBorderWidth: CGFloat = 0 |
+| PooToolsSource/Base/PTAppBaseConfig.swift:195 | var | public | public var tabbarBorderColor: UIColor = .clear |
+| PooToolsSource/Base/PTAppBaseConfig.swift:196 | var | public | public var tabbarShowValueLabel: Bool = false |
+| PooToolsSource/Base/PTAppBaseConfig.swift:197 | var | public | public var tabbarValueLabelFont: UIFont = .appfont(size: 10) |
+| PooToolsSource/Base/PTAppBaseConfig.swift:198 | var | public | public var tabbarValueLabelColor: UIColor = .systemBlue |
+| PooToolsSource/Base/PTAppBaseConfig.swift:200 | var | public | public var tabBarAccessoryHeight: CGFloat = 44 |
+| PooToolsSource/Base/PTAppBaseConfig.swift:201 | var | public | public var tabBarAccessoryBottomSpacing: CGFloat = 10 |
 | PooToolsSource/Base/PTAudioCache.swift:18 | typealias | public | public typealias FileDownloadProgress = @MainActor @Sendable (Int64, Int64, Double) -> Void |
 | PooToolsSource/Base/PTAudioCache.swift:130 | class | public | public final class PTAudioCacheFileManager { |
 | PooToolsSource/Base/PTAudioCache.swift:152 | func | public | public func cacheFileURL(for url: URL) -> URL { |
@@ -1106,39 +1109,41 @@ Generated at: 2026-10-06T02:27:42Z
 | PooToolsSource/Base/PTSnapKitEX.swift:116 | func | public | public func distributeViewsAlong(axisType: ConstraintAxis, |
 | PooToolsSource/Base/PTSnapKitEX.swift:156 | func | public | public func distributeSudokuViews(fixedItemWidth: CGFloat, |
 | PooToolsSource/Base/PTSnapKitEX.swift:192 | func | public | public func distributeSudokuViews(fixedLineSpacing: CGFloat, |
-| PooToolsSource/Base/PTTabBarItemView.swift:24 | class | public | public class func itemImageSize() -> CGFloat { |
-| PooToolsSource/Base/PTTabBarItemView.swift:43 | var | public | public var imageContent: UIView { |
-| PooToolsSource/Base/PTTabBarItemView.swift:49 | var | public | public var isSelectedItem = false { |
-| PooToolsSource/Base/PTTabBarItemView.swift:60 | init | public | public init(content: PTTabBarItemContent, title: String) { |
-| PooToolsSource/Base/PTTabBarItemView.swift:70 | init | public | public init(content: PTTabBarItemContent, |
-| PooToolsSource/Base/PTTabBarItemView.swift:132 | func | public | public func restoreIconLayout() { |
+| PooToolsSource/Base/PTTabBarItemView.swift:31 | class | public | public class func itemImageSize() -> CGFloat { |
+| PooToolsSource/Base/PTTabBarItemView.swift:63 | var | public | public var imageContent: UIView { |
+| PooToolsSource/Base/PTTabBarItemView.swift:69 | var | public | public var isSelectedItem = false { |
+| PooToolsSource/Base/PTTabBarItemView.swift:80 | init | public | public init(content: PTTabBarItemContent, title: String) { |
+| PooToolsSource/Base/PTTabBarItemView.swift:92 | init | public | public init(content: PTTabBarItemContent, |
+| PooToolsSource/Base/PTTabBarItemView.swift:145 | func | public | public func restoreIconLayout() { |
 | PooToolsSource/Base/PTTabBarMediaContent.swift:30 | init | public | public init(normal: Any, |
 | PooToolsSource/Base/PTTabBarMediaContent.swift:56 | var | public | public var view: UIView { container } |
 | PooToolsSource/Base/PTTabBarMediaContent.swift:58 | func | public | @MainActor public func setSelected(_ selected: Bool, animated: Bool) { |
-| PooToolsSource/Base/PTTabBarSelectionCoordinator.swift:41 | func | public | public func select(_ index: Int) { |
-| PooToolsSource/Base/PTTabBarSelectionCoordinator.swift:45 | func | public | public func select(_ index: Int, userInitiated: Bool = false) { |
+| PooToolsSource/Base/PTTabBarSelectionCoordinator.swift:40 | func | public | public func select(_ index: Int) { |
+| PooToolsSource/Base/PTTabBarSelectionCoordinator.swift:44 | func | public | public func select(_ index: Int, userInitiated: Bool = false) { |
 | PooToolsSource/Base/PTTabBarView.swift:17 | enum | public | public enum PTTabBarLayoutStyle { |
 | PooToolsSource/Base/PTTabBarView.swift:23 | protocol | public | public protocol PTTabBarItemContent { |
 | PooToolsSource/Base/PTTabBarView.swift:29 | struct | public | public struct PTTabBarItemConfig { |
 | PooToolsSource/Base/PTTabBarView.swift:30 | let | public | public let title: String |
 | PooToolsSource/Base/PTTabBarView.swift:31 | let | public | public let content: PTTabBarItemContent |
 | PooToolsSource/Base/PTTabBarView.swift:32 | let | public | public let viewController: UIViewController |
-| PooToolsSource/Base/PTTabBarView.swift:34 | init | public | public init(title: String, |
-| PooToolsSource/Base/PTTabBarView.swift:47 | var | public | public var shouldSelectIndex: ((Int) -> Bool)? |
-| PooToolsSource/Base/PTTabBarView.swift:49 | var | public | public var willSelectIndex: ((Int) -> Void)? |
-| PooToolsSource/Base/PTTabBarView.swift:51 | var | public | public var didSelectIndex: ((Int) -> Void)? |
-| PooToolsSource/Base/PTTabBarView.swift:55 | var | public | public var didDoubleTapIndex: ((Int) -> Void)? |
-| PooToolsSource/Base/PTTabBarView.swift:57 | var | public | public var didTapCenter: PTActionTask? |
-| PooToolsSource/Base/PTTabBarView.swift:59 | var | public | public var badgeDragRemoveIndex: ((Int) -> Void)? |
-| PooToolsSource/Base/PTTabBarView.swift:61 | var | public | public var items: [PTTabBarItemView] = [] |
-| PooToolsSource/Base/PTTabBarView.swift:78 | var | public | public var centerTitle:String { |
-| PooToolsSource/Base/PTTabBarView.swift:104 | var | public | public var currentBarLayoutStyle : PTTabBarLayoutStyle { |
-| PooToolsSource/Base/PTTabBarView.swift:159 | init | public | public init(frame: CGRect, appearance: PTTabBarAppearance) { |
-| PooToolsSource/Base/PTTabBarView.swift:343 | func | public | public func setup(configs: [PTTabBarItemConfig], |
-| PooToolsSource/Base/PTTabBarView.swift:509 | func | public | public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .number,anumationType:PTBadgeAnimType = .none,badgeCanDrag:Bool = false) { |
-| PooToolsSource/Base/PTTabBarView.swift:515 | func | public | public func badge(index: Int, |
-| PooToolsSource/Base/PTTabBarView.swift:545 | func | public | public func removeBadge(index:Int) { |
-| PooToolsSource/Base/PTTabBarView.swift:563 | func | public | public func toggleMinimize(isMinimized: Bool, selectedIndex: Int) { |
+| PooToolsSource/Base/PTTabBarView.swift:36 | let | public | public let contentInsets: UIEdgeInsets? |
+| PooToolsSource/Base/PTTabBarView.swift:40 | let | public | public let contentOffset: UIOffset? |
+| PooToolsSource/Base/PTTabBarView.swift:42 | init | public | public init(title: String, |
+| PooToolsSource/Base/PTTabBarView.swift:59 | var | public | public var shouldSelectIndex: ((Int) -> Bool)? |
+| PooToolsSource/Base/PTTabBarView.swift:61 | var | public | public var willSelectIndex: ((Int) -> Void)? |
+| PooToolsSource/Base/PTTabBarView.swift:63 | var | public | public var didSelectIndex: ((Int) -> Void)? |
+| PooToolsSource/Base/PTTabBarView.swift:67 | var | public | public var didDoubleTapIndex: ((Int) -> Void)? |
+| PooToolsSource/Base/PTTabBarView.swift:69 | var | public | public var didTapCenter: PTActionTask? |
+| PooToolsSource/Base/PTTabBarView.swift:71 | var | public | public var badgeDragRemoveIndex: ((Int) -> Void)? |
+| PooToolsSource/Base/PTTabBarView.swift:73 | var | public | public var items: [PTTabBarItemView] = [] |
+| PooToolsSource/Base/PTTabBarView.swift:90 | var | public | public var centerTitle:String { |
+| PooToolsSource/Base/PTTabBarView.swift:116 | var | public | public var currentBarLayoutStyle : PTTabBarLayoutStyle { |
+| PooToolsSource/Base/PTTabBarView.swift:171 | init | public | public init(frame: CGRect, appearance: PTTabBarAppearance) { |
+| PooToolsSource/Base/PTTabBarView.swift:355 | func | public | public func setup(configs: [PTTabBarItemConfig], |
+| PooToolsSource/Base/PTTabBarView.swift:523 | func | public | public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .number,anumationType:PTBadgeAnimType = .none,badgeCanDrag:Bool = false) { |
+| PooToolsSource/Base/PTTabBarView.swift:529 | func | public | public func badge(index: Int, |
+| PooToolsSource/Base/PTTabBarView.swift:559 | func | public | public func removeBadge(index:Int) { |
+| PooToolsSource/Base/PTTabBarView.swift:577 | func | public | public func toggleMinimize(isMinimized: Bool, selectedIndex: Int) { |
 | PooToolsSource/Base/PTTriangleView.swift:11 | enum | public | public enum PTTriangleDirection { |
 | PooToolsSource/Base/PTTriangleView.swift:15 | class | public | public class PTTriangleView: UIView { |
 | PooToolsSource/Base/PTTriangleView.swift:16 | var | public | public var fillColor: UIColor = .systemBlue |
@@ -1793,8 +1798,8 @@ Generated at: 2026-10-06T02:27:42Z
 | PooToolsSource/Category/UIToolbar+PTEX.swift:48 | var | public | @MainActor public var scrollEdgeAppearance: UIToolbarAppearance { |
 | PooToolsSource/Category/UIView+PTEX.swift:16 | enum | public | @objc public enum Imagegradien:Int { |
 | PooToolsSource/Category/UIView+PTEX.swift:25 | typealias | public | public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void |
-| PooToolsSource/Category/UIView+PTEX.swift:1880 | protocol | public | public protocol UIFadeOut {} |
-| PooToolsSource/Category/UIView+PTEX.swift:1894 | func | public | public func fadeUpdate(duration: TimeInterval = 1, |
+| PooToolsSource/Category/UIView+PTEX.swift:1990 | protocol | public | public protocol UIFadeOut {} |
+| PooToolsSource/Category/UIView+PTEX.swift:2004 | func | public | public func fadeUpdate(duration: TimeInterval = 1, |
 | PooToolsSource/Category/UIViewController+PTEX.swift:15 | enum | public | @objc public enum PTSheetPresentType:Int { |
 | PooToolsSource/Category/UIViewController+PTEX.swift:511 | func | public | public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle { |
 | PooToolsSource/Category/UIViewController+PTEX.swift:517 | func | public | public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle { |
@@ -2349,70 +2354,73 @@ Generated at: 2026-10-06T02:27:42Z
 | PooToolsSource/DarkMode/PTThemeProvider.swift:73 | let | public | public let tabSelectedFont: UIFont |
 | PooToolsSource/DarkMode/PTThemeProvider.swift:74 | let | public | public let tabSelectedMetail: Bool |
 | PooToolsSource/DarkMode/PTThemeProvider.swift:75 | let | public | public let tabSelectedMetailColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:76 | let | public | public let tabSelectedMetailLRSpacing: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:77 | let | public | public let tabTopSpacing: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:78 | let | public | public let tabbarBar26LRSpacing: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:79 | let | public | public let tabbarBorderColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:80 | let | public | public let tabbarBorderWidth: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:81 | let | public | public let tabbarBottomLeft: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:82 | let | public | public let tabbarBottomRight: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:83 | let | public | public let tabbarCapsule: Bool |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:84 | let | public | public let tabbarCenterBGColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:85 | let | public | public let tabbarCenterButtonSize: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:86 | let | public | public let tabbarCenterInsideOffset: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:87 | let | public | public let tabbarCenterMetail: Bool |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:88 | let | public | public let tabbarCenterName: String |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:89 | let | public | public let tabbarCenterNameColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:90 | let | public | public let tabbarCenterNameContentSpacing: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:91 | let | public | public let tabbarCenterNameFont: UIFont |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:92 | let | public | public let tabbarCorner: UIRectCorner |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:93 | let | public | public let tabbarMetailMode: Bool |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:94 | let | public | public let tabbarMiniSize: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:95 | let | public | public let tabbarRadius: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:96 | let | public | public let tabbarShowValueLabel: Bool |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:97 | let | public | public let tabbarTopLeft: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:98 | let | public | public let tabbarTopRight: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:99 | let | public | public let tabbarValueLabelColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:101 | init | public | public init(loadImageShowValueFont: UIFont = .systemFont(ofSize: 16), |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:205 | struct | public | public struct PTTabBarAppearance { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:206 | var | public | public var normalColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:207 | var | public | public var selectedColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:208 | var | public | public var normalFont: UIFont |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:209 | var | public | public var selectedFont: UIFont |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:210 | var | public | public var visualStyle: PTTabBarVisualStyle |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:211 | let | public | public let layout: PTTabBarLayoutAppearance |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:213 | init | public | public init(normalColor: UIColor = .secondaryLabel, |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:242 | struct | public | public struct PTPermissionAppearance { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:243 | var | public | public var titleColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:244 | var | public | public var subtitleColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:245 | var | public | public var deniedColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:247 | init | public | public init(titleColor: UIColor = .label, |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:257 | struct | public | public struct PTMediaAppearance { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:258 | var | public | public var placeholder: UIImage? |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:259 | var | public | public var backgroundColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:261 | init | public | public init(placeholder: UIImage? = nil, backgroundColor: UIColor = .systemBackground) { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:268 | struct | public | public struct PTListAppearance { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:269 | var | public | public var backgroundColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:270 | var | public | public var cellBackgroundColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:272 | init | public | public init(backgroundColor: UIColor = .systemBackground, |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:280 | struct | public | public struct PTAlertAppearance { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:281 | var | public | public var backgroundColor: UIColor |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:282 | var | public | public var cornerRadius: CGFloat |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:284 | init | public | public init(backgroundColor: UIColor = .secondarySystemBackground, |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:295 | struct | public | public struct PTTheme { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:296 | var | public | public var navigation: PTNavigationAppearance |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:297 | var | public | public var tabBar: PTTabBarAppearance |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:298 | var | public | public var permission: PTPermissionAppearance |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:299 | var | public | public var media: PTMediaAppearance |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:300 | var | public | public var list: PTListAppearance |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:301 | var | public | public var alert: PTAlertAppearance |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:303 | init | public | public init(navigation: PTNavigationAppearance = .init(), |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:348 | protocol | public | public protocol PTThemeProvider: AnyObject { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:354 | protocol | public | public protocol PTThemeable: AnyObject { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:367 | class | public | public class LegacyThemeProvider: @MainActor PTThemeProvider { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:372 | init | public | public init() {} |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:376 | func | public | public func updateTheme() { |
-| PooToolsSource/DarkMode/PTThemeProvider.swift:383 | func | public | public func register<Observer: PTThemeable>(observer: Observer) { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:79 | let | public | public let tabSelectedMetailLRSpacing: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:83 | let | public | public let tabSelectedMetailInsets: UIEdgeInsets |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:87 | let | public | public let tabItemContentInsets: UIEdgeInsets |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:91 | let | public | public let tabItemContentOffset: UIOffset |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:92 | let | public | public let tabTopSpacing: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:93 | let | public | public let tabbarBar26LRSpacing: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:94 | let | public | public let tabbarBorderColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:95 | let | public | public let tabbarBorderWidth: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:96 | let | public | public let tabbarBottomLeft: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:97 | let | public | public let tabbarBottomRight: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:98 | let | public | public let tabbarCapsule: Bool |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:99 | let | public | public let tabbarCenterBGColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:100 | let | public | public let tabbarCenterButtonSize: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:101 | let | public | public let tabbarCenterInsideOffset: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:102 | let | public | public let tabbarCenterMetail: Bool |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:103 | let | public | public let tabbarCenterName: String |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:104 | let | public | public let tabbarCenterNameColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:105 | let | public | public let tabbarCenterNameContentSpacing: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:106 | let | public | public let tabbarCenterNameFont: UIFont |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:107 | let | public | public let tabbarCorner: UIRectCorner |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:108 | let | public | public let tabbarMetailMode: Bool |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:109 | let | public | public let tabbarMiniSize: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:110 | let | public | public let tabbarRadius: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:111 | let | public | public let tabbarShowValueLabel: Bool |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:112 | let | public | public let tabbarTopLeft: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:113 | let | public | public let tabbarTopRight: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:114 | let | public | public let tabbarValueLabelColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:116 | init | public | public init(loadImageShowValueFont: UIFont = .systemFont(ofSize: 16), |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:232 | struct | public | public struct PTTabBarAppearance { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:233 | var | public | public var normalColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:234 | var | public | public var selectedColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:235 | var | public | public var normalFont: UIFont |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:236 | var | public | public var selectedFont: UIFont |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:237 | var | public | public var visualStyle: PTTabBarVisualStyle |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:238 | let | public | public let layout: PTTabBarLayoutAppearance |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:240 | init | public | public init(normalColor: UIColor = .secondaryLabel, |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:269 | struct | public | public struct PTPermissionAppearance { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:270 | var | public | public var titleColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:271 | var | public | public var subtitleColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:272 | var | public | public var deniedColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:274 | init | public | public init(titleColor: UIColor = .label, |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:284 | struct | public | public struct PTMediaAppearance { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:285 | var | public | public var placeholder: UIImage? |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:286 | var | public | public var backgroundColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:288 | init | public | public init(placeholder: UIImage? = nil, backgroundColor: UIColor = .systemBackground) { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:295 | struct | public | public struct PTListAppearance { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:296 | var | public | public var backgroundColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:297 | var | public | public var cellBackgroundColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:299 | init | public | public init(backgroundColor: UIColor = .systemBackground, |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:307 | struct | public | public struct PTAlertAppearance { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:308 | var | public | public var backgroundColor: UIColor |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:309 | var | public | public var cornerRadius: CGFloat |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:311 | init | public | public init(backgroundColor: UIColor = .secondarySystemBackground, |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:322 | struct | public | public struct PTTheme { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:323 | var | public | public var navigation: PTNavigationAppearance |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:324 | var | public | public var tabBar: PTTabBarAppearance |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:325 | var | public | public var permission: PTPermissionAppearance |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:326 | var | public | public var media: PTMediaAppearance |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:327 | var | public | public var list: PTListAppearance |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:328 | var | public | public var alert: PTAlertAppearance |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:330 | init | public | public init(navigation: PTNavigationAppearance = .init(), |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:375 | protocol | public | public protocol PTThemeProvider: AnyObject { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:381 | protocol | public | public protocol PTThemeable: AnyObject { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:394 | class | public | public class LegacyThemeProvider: @MainActor PTThemeProvider { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:399 | init | public | public init() {} |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:403 | func | public | public func updateTheme() { |
+| PooToolsSource/DarkMode/PTThemeProvider.swift:410 | func | public | public func register<Observer: PTThemeable>(observer: Observer) { |
 | PooToolsSource/Debug/PTDebugFunction.swift:14 | class | public | public class PTDebugFunction: NSObject { |
 | PooToolsSource/Debug/PTDebugFunction.swift:60 | let | public | public let PTDevMaskTouchBubbleKey = "PTDevMaskTouchBubbleKey" |
 | PooToolsSource/Debug/PTDebugFunction.swift:61 | let | public | public let PTDevMaskKey = "PTDevMaskKey" |

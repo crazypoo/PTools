@@ -30,13 +30,25 @@ public struct PTTabBarItemConfig {
     public let title: String
     public let content: PTTabBarItemContent
     public let viewController: UIViewController
+    // English: Optional per-item padding overrides the global content inset.
+    // Español: El relleno opcional por elemento tiene prioridad sobre el inset global.
+    // 中文：项目级可选内边距优先于全局内容内边距。
+    public let contentInsets: UIEdgeInsets?
+    // English: Optional per-item translation overrides the global content offset.
+    // Español: La traslación opcional por elemento tiene prioridad sobre el offset global.
+    // 中文：项目级可选偏移优先于全局内容偏移。
+    public let contentOffset: UIOffset?
     
     public init(title: String,
                 content: PTTabBarItemContent,
-                viewController: UIViewController) {
+                viewController: UIViewController,
+                contentInsets: UIEdgeInsets? = nil,
+                contentOffset: UIOffset? = nil) {
         self.title = title
         self.content = content
         self.viewController = viewController
+        self.contentInsets = contentInsets
+        self.contentOffset = contentOffset
     }
 }
 
@@ -458,7 +470,9 @@ final public class PTTabBarView: UIView {
         let item = PTTabBarItemView(
             content: config.content,
             title: config.title,
-            appearance: appearanceSnapshot
+            appearance: appearanceSnapshot,
+            contentInsets: config.contentInsets,
+            contentOffset: config.contentOffset
         )
 
         item.addAction(UIAction { [weak self] _ in
@@ -569,6 +583,7 @@ final public class PTTabBarView: UIView {
             sharedSelectionMaskView.alpha = 0 // 🌟 最小化时隐藏共享游标
             // 1. 偷天换日：将当前选中的 Icon 转移到最小化容器中
             let iconView = selectedItem.imageContent
+            selectedItem.detachContentForMinimize()
             minimizedCenterView.addSubview(iconView)
             iconView.snp.remakeConstraints { make in
                 make.center.equalToSuperview()
@@ -596,8 +611,6 @@ final public class PTTabBarView: UIView {
             }
         } else {
             // 1. 物归原主：恢复 Icon 到原本的 ItemView 中
-            let iconView = selectedItem.imageContent
-            selectedItem.addSubview(iconView)
             selectedItem.restoreIconLayout() // 调用我们在步骤 1 写的恢复方法
 
             minimizedCenterView.removeFromSuperview()
@@ -830,20 +843,11 @@ public extension PTTabBarView {
 @MainActor
 private extension PTTabBarView {
 
-    /// `PTTabBarItemView.setupUI(title:)` currently adds titleLabel first,
-    /// followed by content.view. We intentionally resolve only the direct first
-    /// subview so labels inside a custom item content are not mistaken for the title.
+    // English: Resolve the item-owned title label instead of inspecting the content container.
+    // Español: Resuelve la etiqueta de título del elemento sin inspeccionar el contenedor de contenido.
+    // 中文：直接解析项目自己的标题 Label，避免误把内容容器里的 Label 当成标题。
     func pt_titleLabel(in item: PTTabBarItemView) -> UILabel? {
-        guard let firstSubview = item.subviews.first else {
-            return nil
-        }
-
-        // When an item has no title, content.view is the first direct subview.
-        guard firstSubview !== item.imageContent else {
-            return nil
-        }
-
-        return firstSubview as? UILabel
+        item.titleLabelForLayout
     }
 
     /// Refresh the center-raised localized title without rebuilding centerContent.

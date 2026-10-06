@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "709b16be6083e89fafa73181bef6d4902013cbcb",
-  "generated_at": "2026-10-06T02:27:42Z",
+  "source_revision": "0726ca37b7560eed16d61e69b2835daafa3e2f17",
+  "generated_at": "2026-10-06T03:52:23Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -3992,9 +3992,33 @@
       "declaration": "public var tabSelectedMetail:Bool = false"
     },
     {
-      "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|@nonobjc public var tabBarVisualStyle: PTVisualStyle = .automatic",
+      "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabItemContentInsets: UIEdgeInsets = .zero",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
       "line": 148,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var tabItemContentInsets: UIEdgeInsets = .zero"
+    },
+    {
+      "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabItemContentOffset: UIOffset = .zero",
+      "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
+      "line": 152,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var tabItemContentOffset: UIOffset = .zero"
+    },
+    {
+      "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabSelectedMetailInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)",
+      "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
+      "line": 156,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var tabSelectedMetailInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)"
+    },
+    {
+      "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|@nonobjc public var tabBarVisualStyle: PTVisualStyle = .automatic",
+      "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
+      "line": 160,
       "access": "public",
       "kind": "var",
       "declaration": "@nonobjc public var tabBarVisualStyle: PTVisualStyle = .automatic"
@@ -4002,23 +4026,23 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabSelectedMetailColor:UIColor = .lightGray",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 149,
+      "line": 161,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabSelectedMetailColor:UIColor = .lightGray"
     },
     {
-      "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabSelectedMetailLRSpacing:CGFloat = 5",
+      "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabSelectedMetailLRSpacing: CGFloat",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 150,
+      "line": 166,
       "access": "public",
       "kind": "var",
-      "declaration": "public var tabSelectedMetailLRSpacing:CGFloat = 5"
+      "declaration": "public var tabSelectedMetailLRSpacing: CGFloat {"
     },
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarMetailMode:Bool = false",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 151,
+      "line": 173,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarMetailMode:Bool = false"
@@ -4026,7 +4050,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarCenterMetail:Bool = false",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 152,
+      "line": 174,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarCenterMetail:Bool = false"
@@ -4034,7 +4058,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarCenterBGColor:UIColor = .clear",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 153,
+      "line": 175,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarCenterBGColor:UIColor = .clear"
@@ -4042,7 +4066,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarCenterInsideOffset:CGFloat = 0",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 154,
+      "line": 176,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarCenterInsideOffset:CGFloat = 0"
@@ -4050,7 +4074,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarCenterName:String = \"\"",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 155,
+      "line": 177,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarCenterName:String = \"\""
@@ -4058,7 +4082,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarCenterNameFont:UIFont = .appfont(size: 10)",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 156,
+      "line": 178,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarCenterNameFont:UIFont = .appfont(size: 10)"
@@ -4066,7 +4090,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarCenterNameColor:UIColor = .black",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 157,
+      "line": 179,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarCenterNameColor:UIColor = .black"
@@ -4074,7 +4098,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarCenterNameContentSpacing:CGFloat = 2",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 158,
+      "line": 180,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarCenterNameContentSpacing:CGFloat = 2"
@@ -4082,7 +4106,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarMiniSize:CGFloat = 56",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 159,
+      "line": 181,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarMiniSize:CGFloat = 56"
@@ -4090,7 +4114,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarScrollEnabled:Bool = false",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 160,
+      "line": 182,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarScrollEnabled:Bool = false"
@@ -4098,7 +4122,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarScrollOffset:CGFloat = 20",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 161,
+      "line": 183,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarScrollOffset:CGFloat = 20"
@@ -4106,7 +4130,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarCenterButtonSize: CGFloat = 64",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 162,
+      "line": 184,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarCenterButtonSize: CGFloat = 64"
@@ -4114,7 +4138,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarBar26LRSpacing:CGFloat = 24.adapter",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 163,
+      "line": 185,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarBar26LRSpacing:CGFloat = 24.adapter"
@@ -4122,7 +4146,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarRadius: CGFloat = 0",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 165,
+      "line": 187,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarRadius: CGFloat = 0"
@@ -4130,7 +4154,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarTopLeft: CGFloat = 0",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 166,
+      "line": 188,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarTopLeft: CGFloat = 0"
@@ -4138,7 +4162,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarTopRight: CGFloat = 0",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 167,
+      "line": 189,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarTopRight: CGFloat = 0"
@@ -4146,7 +4170,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarBottomLeft: CGFloat = 0",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 168,
+      "line": 190,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarBottomLeft: CGFloat = 0"
@@ -4154,7 +4178,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarBottomRight: CGFloat = 0",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 169,
+      "line": 191,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarBottomRight: CGFloat = 0"
@@ -4162,7 +4186,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarCorner: UIRectCorner = .allCorners",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 170,
+      "line": 192,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarCorner: UIRectCorner = .allCorners"
@@ -4170,7 +4194,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarCapsule: Bool = false",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 171,
+      "line": 193,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarCapsule: Bool = false"
@@ -4178,7 +4202,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarBorderWidth: CGFloat = 0",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 172,
+      "line": 194,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarBorderWidth: CGFloat = 0"
@@ -4186,7 +4210,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarBorderColor: UIColor = .clear",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 173,
+      "line": 195,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarBorderColor: UIColor = .clear"
@@ -4194,7 +4218,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarShowValueLabel: Bool = false",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 174,
+      "line": 196,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarShowValueLabel: Bool = false"
@@ -4202,7 +4226,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarValueLabelFont: UIFont = .appfont(size: 10)",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 175,
+      "line": 197,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarValueLabelFont: UIFont = .appfont(size: 10)"
@@ -4210,7 +4234,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabbarValueLabelColor: UIColor = .systemBlue",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 176,
+      "line": 198,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabbarValueLabelColor: UIColor = .systemBlue"
@@ -4218,7 +4242,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabBarAccessoryHeight: CGFloat = 44",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 178,
+      "line": 200,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabBarAccessoryHeight: CGFloat = 44"
@@ -4226,7 +4250,7 @@
     {
       "key": "PooToolsSource/Base/PTAppBaseConfig.swift|public|var|public var tabBarAccessoryBottomSpacing: CGFloat = 10",
       "path": "PooToolsSource/Base/PTAppBaseConfig.swift",
-      "line": 179,
+      "line": 201,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabBarAccessoryBottomSpacing: CGFloat = 10"
@@ -8754,7 +8778,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarItemView.swift|public|class|public class func itemImageSize() -> CGFloat",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 24,
+      "line": 31,
       "access": "public",
       "kind": "class",
       "declaration": "public class func itemImageSize() -> CGFloat {"
@@ -8762,7 +8786,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarItemView.swift|public|var|public var imageContent: UIView",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 43,
+      "line": 63,
       "access": "public",
       "kind": "var",
       "declaration": "public var imageContent: UIView {"
@@ -8770,7 +8794,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarItemView.swift|public|var|public var isSelectedItem = false",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 49,
+      "line": 69,
       "access": "public",
       "kind": "var",
       "declaration": "public var isSelectedItem = false {"
@@ -8778,7 +8802,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarItemView.swift|public|init|public init(content: PTTabBarItemContent, title: String)",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 60,
+      "line": 80,
       "access": "public",
       "kind": "init",
       "declaration": "public init(content: PTTabBarItemContent, title: String) {"
@@ -8786,7 +8810,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarItemView.swift|public|init|public init(content: PTTabBarItemContent,",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 70,
+      "line": 92,
       "access": "public",
       "kind": "init",
       "declaration": "public init(content: PTTabBarItemContent,"
@@ -8794,7 +8818,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarItemView.swift|public|func|public func restoreIconLayout()",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 132,
+      "line": 145,
       "access": "public",
       "kind": "func",
       "declaration": "public func restoreIconLayout() {"
@@ -8826,7 +8850,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarSelectionCoordinator.swift|public|func|public func select(_ index: Int)",
       "path": "PooToolsSource/Base/PTTabBarSelectionCoordinator.swift",
-      "line": 41,
+      "line": 40,
       "access": "public",
       "kind": "func",
       "declaration": "public func select(_ index: Int) {"
@@ -8834,7 +8858,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarSelectionCoordinator.swift|public|func|public func select(_ index: Int, userInitiated: Bool = false)",
       "path": "PooToolsSource/Base/PTTabBarSelectionCoordinator.swift",
-      "line": 45,
+      "line": 44,
       "access": "public",
       "kind": "func",
       "declaration": "public func select(_ index: Int, userInitiated: Bool = false) {"
@@ -8888,9 +8912,25 @@
       "declaration": "public let viewController: UIViewController"
     },
     {
+      "key": "PooToolsSource/Base/PTTabBarView.swift|public|let|public let contentInsets: UIEdgeInsets?",
+      "path": "PooToolsSource/Base/PTTabBarView.swift",
+      "line": 36,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let contentInsets: UIEdgeInsets?"
+    },
+    {
+      "key": "PooToolsSource/Base/PTTabBarView.swift|public|let|public let contentOffset: UIOffset?",
+      "path": "PooToolsSource/Base/PTTabBarView.swift",
+      "line": 40,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let contentOffset: UIOffset?"
+    },
+    {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|init|public init(title: String,",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 34,
+      "line": 42,
       "access": "public",
       "kind": "init",
       "declaration": "public init(title: String,"
@@ -8898,7 +8938,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var shouldSelectIndex: ((Int) -> Bool)?",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 47,
+      "line": 59,
       "access": "public",
       "kind": "var",
       "declaration": "public var shouldSelectIndex: ((Int) -> Bool)?"
@@ -8906,7 +8946,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var willSelectIndex: ((Int) -> Void)?",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 49,
+      "line": 61,
       "access": "public",
       "kind": "var",
       "declaration": "public var willSelectIndex: ((Int) -> Void)?"
@@ -8914,7 +8954,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var didSelectIndex: ((Int) -> Void)?",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 51,
+      "line": 63,
       "access": "public",
       "kind": "var",
       "declaration": "public var didSelectIndex: ((Int) -> Void)?"
@@ -8922,7 +8962,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var didDoubleTapIndex: ((Int) -> Void)?",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 55,
+      "line": 67,
       "access": "public",
       "kind": "var",
       "declaration": "public var didDoubleTapIndex: ((Int) -> Void)?"
@@ -8930,7 +8970,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var didTapCenter: PTActionTask?",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 57,
+      "line": 69,
       "access": "public",
       "kind": "var",
       "declaration": "public var didTapCenter: PTActionTask?"
@@ -8938,7 +8978,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var badgeDragRemoveIndex: ((Int) -> Void)?",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 59,
+      "line": 71,
       "access": "public",
       "kind": "var",
       "declaration": "public var badgeDragRemoveIndex: ((Int) -> Void)?"
@@ -8946,7 +8986,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var items: [PTTabBarItemView] = []",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 61,
+      "line": 73,
       "access": "public",
       "kind": "var",
       "declaration": "public var items: [PTTabBarItemView] = []"
@@ -8954,7 +8994,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var centerTitle:String",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 78,
+      "line": 90,
       "access": "public",
       "kind": "var",
       "declaration": "public var centerTitle:String {"
@@ -8962,7 +9002,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|var|public var currentBarLayoutStyle : PTTabBarLayoutStyle",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 104,
+      "line": 116,
       "access": "public",
       "kind": "var",
       "declaration": "public var currentBarLayoutStyle : PTTabBarLayoutStyle {"
@@ -8970,7 +9010,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|init|public init(frame: CGRect, appearance: PTTabBarAppearance)",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 159,
+      "line": 171,
       "access": "public",
       "kind": "init",
       "declaration": "public init(frame: CGRect, appearance: PTTabBarAppearance) {"
@@ -8978,7 +9018,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|public func setup(configs: [PTTabBarItemConfig],",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 343,
+      "line": 355,
       "access": "public",
       "kind": "func",
       "declaration": "public func setup(configs: [PTTabBarItemConfig],"
@@ -8986,7 +9026,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .number,anumationType:PTBadgeAnimType = .none,badgeCanDrag:Bool = false)",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 509,
+      "line": 523,
       "access": "public",
       "kind": "func",
       "declaration": "public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .number,anumationType:PTBadgeAnimType = .none,badgeCanDrag:Bool = false) {"
@@ -8994,7 +9034,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|public func badge(index: Int,",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 515,
+      "line": 529,
       "access": "public",
       "kind": "func",
       "declaration": "public func badge(index: Int,"
@@ -9002,7 +9042,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|public func removeBadge(index:Int)",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 545,
+      "line": 559,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeBadge(index:Int) {"
@@ -9010,7 +9050,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|public func toggleMinimize(isMinimized: Bool, selectedIndex: Int)",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 563,
+      "line": 577,
       "access": "public",
       "kind": "func",
       "declaration": "public func toggleMinimize(isMinimized: Bool, selectedIndex: Int) {"
@@ -14250,7 +14290,7 @@
     {
       "key": "PooToolsSource/Category/UIView+PTEX.swift|public|protocol|public protocol UIFadeOut",
       "path": "PooToolsSource/Category/UIView+PTEX.swift",
-      "line": 1880,
+      "line": 1990,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol UIFadeOut {}"
@@ -14258,7 +14298,7 @@
     {
       "key": "PooToolsSource/Category/UIView+PTEX.swift|public|func|public func fadeUpdate(duration: TimeInterval = 1,",
       "path": "PooToolsSource/Category/UIView+PTEX.swift",
-      "line": 1894,
+      "line": 2004,
       "access": "public",
       "kind": "func",
       "declaration": "public func fadeUpdate(duration: TimeInterval = 1,"
@@ -18698,15 +18738,39 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabSelectedMetailLRSpacing: CGFloat",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 76,
+      "line": 79,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabSelectedMetailLRSpacing: CGFloat"
     },
     {
+      "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabSelectedMetailInsets: UIEdgeInsets",
+      "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
+      "line": 83,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let tabSelectedMetailInsets: UIEdgeInsets"
+    },
+    {
+      "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabItemContentInsets: UIEdgeInsets",
+      "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
+      "line": 87,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let tabItemContentInsets: UIEdgeInsets"
+    },
+    {
+      "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabItemContentOffset: UIOffset",
+      "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
+      "line": 91,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let tabItemContentOffset: UIOffset"
+    },
+    {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabTopSpacing: CGFloat",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 77,
+      "line": 92,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabTopSpacing: CGFloat"
@@ -18714,7 +18778,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarBar26LRSpacing: CGFloat",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 78,
+      "line": 93,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarBar26LRSpacing: CGFloat"
@@ -18722,7 +18786,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarBorderColor: UIColor",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 79,
+      "line": 94,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarBorderColor: UIColor"
@@ -18730,7 +18794,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarBorderWidth: CGFloat",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 80,
+      "line": 95,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarBorderWidth: CGFloat"
@@ -18738,7 +18802,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarBottomLeft: CGFloat",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 81,
+      "line": 96,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarBottomLeft: CGFloat"
@@ -18746,7 +18810,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarBottomRight: CGFloat",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 82,
+      "line": 97,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarBottomRight: CGFloat"
@@ -18754,7 +18818,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarCapsule: Bool",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 83,
+      "line": 98,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarCapsule: Bool"
@@ -18762,7 +18826,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarCenterBGColor: UIColor",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 84,
+      "line": 99,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarCenterBGColor: UIColor"
@@ -18770,7 +18834,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarCenterButtonSize: CGFloat",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 85,
+      "line": 100,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarCenterButtonSize: CGFloat"
@@ -18778,7 +18842,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarCenterInsideOffset: CGFloat",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 86,
+      "line": 101,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarCenterInsideOffset: CGFloat"
@@ -18786,7 +18850,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarCenterMetail: Bool",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 87,
+      "line": 102,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarCenterMetail: Bool"
@@ -18794,7 +18858,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarCenterName: String",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 88,
+      "line": 103,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarCenterName: String"
@@ -18802,7 +18866,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarCenterNameColor: UIColor",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 89,
+      "line": 104,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarCenterNameColor: UIColor"
@@ -18810,7 +18874,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarCenterNameContentSpacing: CGFloat",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 90,
+      "line": 105,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarCenterNameContentSpacing: CGFloat"
@@ -18818,7 +18882,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarCenterNameFont: UIFont",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 91,
+      "line": 106,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarCenterNameFont: UIFont"
@@ -18826,7 +18890,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarCorner: UIRectCorner",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 92,
+      "line": 107,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarCorner: UIRectCorner"
@@ -18834,7 +18898,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarMetailMode: Bool",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 93,
+      "line": 108,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarMetailMode: Bool"
@@ -18842,7 +18906,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarMiniSize: CGFloat",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 94,
+      "line": 109,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarMiniSize: CGFloat"
@@ -18850,7 +18914,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarRadius: CGFloat",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 95,
+      "line": 110,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarRadius: CGFloat"
@@ -18858,7 +18922,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarShowValueLabel: Bool",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 96,
+      "line": 111,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarShowValueLabel: Bool"
@@ -18866,7 +18930,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarTopLeft: CGFloat",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 97,
+      "line": 112,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarTopLeft: CGFloat"
@@ -18874,7 +18938,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarTopRight: CGFloat",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 98,
+      "line": 113,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarTopRight: CGFloat"
@@ -18882,7 +18946,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let tabbarValueLabelColor: UIColor",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 99,
+      "line": 114,
       "access": "public",
       "kind": "let",
       "declaration": "public let tabbarValueLabelColor: UIColor"
@@ -18890,7 +18954,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|init|public init(loadImageShowValueFont: UIFont = .systemFont(ofSize: 16),",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 101,
+      "line": 116,
       "access": "public",
       "kind": "init",
       "declaration": "public init(loadImageShowValueFont: UIFont = .systemFont(ofSize: 16),"
@@ -18898,7 +18962,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|struct|public struct PTTabBarAppearance",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 205,
+      "line": 232,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTabBarAppearance {"
@@ -18906,7 +18970,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var normalColor: UIColor",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 206,
+      "line": 233,
       "access": "public",
       "kind": "var",
       "declaration": "public var normalColor: UIColor"
@@ -18914,7 +18978,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var selectedColor: UIColor",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 207,
+      "line": 234,
       "access": "public",
       "kind": "var",
       "declaration": "public var selectedColor: UIColor"
@@ -18922,7 +18986,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var normalFont: UIFont",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 208,
+      "line": 235,
       "access": "public",
       "kind": "var",
       "declaration": "public var normalFont: UIFont"
@@ -18930,7 +18994,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var selectedFont: UIFont",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 209,
+      "line": 236,
       "access": "public",
       "kind": "var",
       "declaration": "public var selectedFont: UIFont"
@@ -18938,7 +19002,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var visualStyle: PTTabBarVisualStyle",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 210,
+      "line": 237,
       "access": "public",
       "kind": "var",
       "declaration": "public var visualStyle: PTTabBarVisualStyle"
@@ -18946,7 +19010,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|let|public let layout: PTTabBarLayoutAppearance",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 211,
+      "line": 238,
       "access": "public",
       "kind": "let",
       "declaration": "public let layout: PTTabBarLayoutAppearance"
@@ -18954,7 +19018,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|init|public init(normalColor: UIColor = .secondaryLabel,",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 213,
+      "line": 240,
       "access": "public",
       "kind": "init",
       "declaration": "public init(normalColor: UIColor = .secondaryLabel,"
@@ -18962,7 +19026,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|struct|public struct PTPermissionAppearance",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 242,
+      "line": 269,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTPermissionAppearance {"
@@ -18970,7 +19034,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var titleColor: UIColor",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 243,
+      "line": 270,
       "access": "public",
       "kind": "var",
       "declaration": "public var titleColor: UIColor"
@@ -18978,7 +19042,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var subtitleColor: UIColor",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 244,
+      "line": 271,
       "access": "public",
       "kind": "var",
       "declaration": "public var subtitleColor: UIColor"
@@ -18986,7 +19050,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var deniedColor: UIColor",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 245,
+      "line": 272,
       "access": "public",
       "kind": "var",
       "declaration": "public var deniedColor: UIColor"
@@ -18994,7 +19058,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|init|public init(titleColor: UIColor = .label,",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 247,
+      "line": 274,
       "access": "public",
       "kind": "init",
       "declaration": "public init(titleColor: UIColor = .label,"
@@ -19002,7 +19066,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|struct|public struct PTMediaAppearance",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 257,
+      "line": 284,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTMediaAppearance {"
@@ -19010,7 +19074,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var placeholder: UIImage?",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 258,
+      "line": 285,
       "access": "public",
       "kind": "var",
       "declaration": "public var placeholder: UIImage?"
@@ -19018,7 +19082,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var backgroundColor: UIColor",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 259,
+      "line": 286,
       "access": "public",
       "kind": "var",
       "declaration": "public var backgroundColor: UIColor"
@@ -19026,7 +19090,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|init|public init(placeholder: UIImage? = nil, backgroundColor: UIColor = .systemBackground)",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 261,
+      "line": 288,
       "access": "public",
       "kind": "init",
       "declaration": "public init(placeholder: UIImage? = nil, backgroundColor: UIColor = .systemBackground) {"
@@ -19034,7 +19098,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|struct|public struct PTListAppearance",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 268,
+      "line": 295,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTListAppearance {"
@@ -19042,7 +19106,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var backgroundColor: UIColor",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 269,
+      "line": 296,
       "access": "public",
       "kind": "var",
       "declaration": "public var backgroundColor: UIColor"
@@ -19050,7 +19114,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var cellBackgroundColor: UIColor",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 270,
+      "line": 297,
       "access": "public",
       "kind": "var",
       "declaration": "public var cellBackgroundColor: UIColor"
@@ -19058,7 +19122,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|init|public init(backgroundColor: UIColor = .systemBackground,",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 272,
+      "line": 299,
       "access": "public",
       "kind": "init",
       "declaration": "public init(backgroundColor: UIColor = .systemBackground,"
@@ -19066,7 +19130,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|struct|public struct PTAlertAppearance",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 280,
+      "line": 307,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTAlertAppearance {"
@@ -19074,7 +19138,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var backgroundColor: UIColor",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 281,
+      "line": 308,
       "access": "public",
       "kind": "var",
       "declaration": "public var backgroundColor: UIColor"
@@ -19082,7 +19146,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var cornerRadius: CGFloat",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 282,
+      "line": 309,
       "access": "public",
       "kind": "var",
       "declaration": "public var cornerRadius: CGFloat"
@@ -19090,7 +19154,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|init|public init(backgroundColor: UIColor = .secondarySystemBackground,",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 284,
+      "line": 311,
       "access": "public",
       "kind": "init",
       "declaration": "public init(backgroundColor: UIColor = .secondarySystemBackground,"
@@ -19098,7 +19162,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|struct|public struct PTTheme",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 295,
+      "line": 322,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTheme {"
@@ -19106,7 +19170,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var navigation: PTNavigationAppearance",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 296,
+      "line": 323,
       "access": "public",
       "kind": "var",
       "declaration": "public var navigation: PTNavigationAppearance"
@@ -19114,7 +19178,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var tabBar: PTTabBarAppearance",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 297,
+      "line": 324,
       "access": "public",
       "kind": "var",
       "declaration": "public var tabBar: PTTabBarAppearance"
@@ -19122,7 +19186,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var permission: PTPermissionAppearance",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 298,
+      "line": 325,
       "access": "public",
       "kind": "var",
       "declaration": "public var permission: PTPermissionAppearance"
@@ -19130,7 +19194,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var media: PTMediaAppearance",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 299,
+      "line": 326,
       "access": "public",
       "kind": "var",
       "declaration": "public var media: PTMediaAppearance"
@@ -19138,7 +19202,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var list: PTListAppearance",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 300,
+      "line": 327,
       "access": "public",
       "kind": "var",
       "declaration": "public var list: PTListAppearance"
@@ -19146,7 +19210,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|var|public var alert: PTAlertAppearance",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 301,
+      "line": 328,
       "access": "public",
       "kind": "var",
       "declaration": "public var alert: PTAlertAppearance"
@@ -19154,7 +19218,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|init|public init(navigation: PTNavigationAppearance = .init(),",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 303,
+      "line": 330,
       "access": "public",
       "kind": "init",
       "declaration": "public init(navigation: PTNavigationAppearance = .init(),"
@@ -19162,7 +19226,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|protocol|public protocol PTThemeProvider: AnyObject",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 348,
+      "line": 375,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTThemeProvider: AnyObject {"
@@ -19170,7 +19234,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|protocol|public protocol PTThemeable: AnyObject",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 354,
+      "line": 381,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTThemeable: AnyObject {"
@@ -19178,7 +19242,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|class|public class LegacyThemeProvider: @MainActor PTThemeProvider",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 367,
+      "line": 394,
       "access": "public",
       "kind": "class",
       "declaration": "public class LegacyThemeProvider: @MainActor PTThemeProvider {"
@@ -19186,7 +19250,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|init|public init()",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 372,
+      "line": 399,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -19194,7 +19258,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|func|public func updateTheme()",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 376,
+      "line": 403,
       "access": "public",
       "kind": "func",
       "declaration": "public func updateTheme() {"
@@ -19202,7 +19266,7 @@
     {
       "key": "PooToolsSource/DarkMode/PTThemeProvider.swift|public|func|public func register<Observer: PTThemeable>(observer: Observer)",
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 383,
+      "line": 410,
       "access": "public",
       "kind": "func",
       "declaration": "public func register<Observer: PTThemeable>(observer: Observer) {"

@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons.rb",
-  "source_revision": "709b16be6083e89fafa73181bef6d4902013cbcb",
-  "generated_at": "2026-10-06T02:27:43Z",
-  "shared_call_count": 1649,
+  "source_revision": "0726ca37b7560eed16d61e69b2835daafa3e2f17",
+  "generated_at": "2026-10-06T03:52:24Z",
+  "shared_call_count": 1642,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -277,7 +277,7 @@
     },
     {
       "path": "PooToolsSource/DarkMode/PTThemeProvider.swift",
-      "line": 370,
+      "line": 397,
       "declaration": "public static let shared = LegacyThemeProvider()",
       "name": "shared",
       "category": "D",

@@ -1065,6 +1065,8 @@ modules:
     - "ui.menu"
     - "ui.sort-button"
     - "ui.swipe"
+    - "ui.tabbar-insets"
+    - "ui.gradient-rendering"
 -
   module_id: "ptools-widget-core"
   coverage: "extension_required"
