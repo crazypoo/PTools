@@ -78,14 +78,14 @@ enum PTTabBarLayoutEngine {
                       height: max(height - top - bottom, 0))
     }
 
-    // English: Normalize item padding and keep it safe for Auto Layout.
-    // Español: Normaliza el relleno del elemento y lo mantiene seguro para Auto Layout.
-    // 中文：规范化项目内边距，确保 Auto Layout 使用安全值。
+    // English: Normalize content insets while preserving finite negative values for expansion.
+    // Español: Normaliza los insets de contenido y conserva los valores negativos finitos para ampliar.
+    // 中文：规范化内容内边距，同时保留有限负值用于放大内容。
     static func safeContentInsets(_ insets: UIEdgeInsets) -> UIEdgeInsets {
-        UIEdgeInsets(top: insets.top.isFinite ? max(0, insets.top) : 0,
-                     left: insets.left.isFinite ? max(0, insets.left) : 0,
-                     bottom: insets.bottom.isFinite ? max(0, insets.bottom) : 0,
-                     right: insets.right.isFinite ? max(0, insets.right) : 0)
+        UIEdgeInsets(top: insets.top.isFinite ? insets.top : 0,
+                     left: insets.left.isFinite ? insets.left : 0,
+                     bottom: insets.bottom.isFinite ? insets.bottom : 0,
+                     right: insets.right.isFinite ? insets.right : 0)
     }
 
     // English: Normalize content translation without allowing NaN or infinity into constraints.
@@ -94,5 +94,48 @@ enum PTTabBarLayoutEngine {
     static func safeContentOffset(_ offset: UIOffset) -> UIOffset {
         UIOffset(horizontal: offset.horizontal.isFinite ? offset.horizontal : 0,
                  vertical: offset.vertical.isFinite ? offset.vertical : 0)
+    }
+
+    // English: Resolve the actual media/custom-content size from the base slot and its four insets.
+    // Español: Resuelve el tamaño real del contenido multimedia/personalizado desde el slot base y sus cuatro insets.
+    // 中文：根据基础尺寸和四边内边距计算媒体/自定义内容的真实尺寸。
+    static func contentSize(
+        baseSize: CGFloat,
+        insets: UIEdgeInsets,
+        maximumScale: CGFloat = 2
+    ) -> CGSize {
+        guard baseSize.isFinite else { return .zero }
+
+        let safeBaseSize = max(baseSize, 0)
+        let resolvedInsets = safeContentInsets(insets)
+        let safeScale = maximumScale.isFinite && maximumScale > 0 ? maximumScale : 2
+        let maximumDimension = safeBaseSize * safeScale
+
+        let width = safeBaseSize - resolvedInsets.left - resolvedInsets.right
+        let height = safeBaseSize - resolvedInsets.top - resolvedInsets.bottom
+        return CGSize(width: min(max(width, 0), maximumDimension),
+                      height: min(max(height, 0), maximumDimension))
+    }
+
+    // English: Fit content into the minimized host without changing its aspect ratio.
+    // Español: Ajusta el contenido al host minimizado sin cambiar su relación de aspecto.
+    // 中文：在最小化容器内等比适配内容，避免切换时突然放大或裁切。
+    static func fittedSize(contentSize: CGSize, inside containerSize: CGSize) -> CGSize {
+        guard contentSize.width.isFinite,
+              contentSize.height.isFinite,
+              containerSize.width.isFinite,
+              containerSize.height.isFinite,
+              contentSize.width > 0,
+              contentSize.height > 0,
+              containerSize.width > 0,
+              containerSize.height > 0 else {
+            return .zero
+        }
+
+        let scale = min(1,
+                        min(containerSize.width / contentSize.width,
+                            containerSize.height / contentSize.height))
+        return CGSize(width: contentSize.width * scale,
+                      height: contentSize.height * scale)
     }
 }

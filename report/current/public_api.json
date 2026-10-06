@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "0726ca37b7560eed16d61e69b2835daafa3e2f17",
-  "generated_at": "2026-10-06T03:52:23Z",
+  "source_revision": "535f9ab5b3a5d2cda66e846c8d6ac09178ec7bc8",
+  "generated_at": "2026-10-06T05:04:08Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -8778,7 +8778,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarItemView.swift|public|class|public class func itemImageSize() -> CGFloat",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 31,
+      "line": 32,
       "access": "public",
       "kind": "class",
       "declaration": "public class func itemImageSize() -> CGFloat {"
@@ -8786,7 +8786,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarItemView.swift|public|var|public var imageContent: UIView",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 63,
+      "line": 90,
       "access": "public",
       "kind": "var",
       "declaration": "public var imageContent: UIView {"
@@ -8794,7 +8794,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarItemView.swift|public|var|public var isSelectedItem = false",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 69,
+      "line": 96,
       "access": "public",
       "kind": "var",
       "declaration": "public var isSelectedItem = false {"
@@ -8802,7 +8802,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarItemView.swift|public|init|public init(content: PTTabBarItemContent, title: String)",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 80,
+      "line": 107,
       "access": "public",
       "kind": "init",
       "declaration": "public init(content: PTTabBarItemContent, title: String) {"
@@ -8810,7 +8810,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarItemView.swift|public|init|public init(content: PTTabBarItemContent,",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 92,
+      "line": 119,
       "access": "public",
       "kind": "init",
       "declaration": "public init(content: PTTabBarItemContent,"
@@ -8818,7 +8818,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarItemView.swift|public|func|public func restoreIconLayout()",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "line": 145,
+      "line": 171,
       "access": "public",
       "kind": "func",
       "declaration": "public func restoreIconLayout() {"
@@ -9042,7 +9042,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|public func removeBadge(index:Int)",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 559,
+      "line": 560,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeBadge(index:Int) {"
@@ -9050,7 +9050,7 @@
     {
       "key": "PooToolsSource/Base/PTTabBarView.swift|public|func|public func toggleMinimize(isMinimized: Bool, selectedIndex: Int)",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 577,
+      "line": 578,
       "access": "public",
       "kind": "func",
       "declaration": "public func toggleMinimize(isMinimized: Bool, selectedIndex: Int) {"

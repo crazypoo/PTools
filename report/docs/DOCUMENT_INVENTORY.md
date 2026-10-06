@@ -1,11 +1,11 @@
 <!-- AUTO-GENERATED FILE. DO NOT EDIT.
 Generator: Scripts/Docs/audit_docs.py
-Source revision: 0726ca37b7560eed16d61e69b2835daafa3e2f17
-Generated at: 2026-10-06T10:58:20+08:00 -->
+Source revision: 535f9ab5b3a5d2cda66e846c8d6ac09178ec7bc8
+Generated at: 2026-10-06T12:05:14+08:00 -->
 # Document Inventory
 
-- Version: `5.62.1`
-- Records: `1003`
+- Version: `5.62.2`
+- Records: `1004`
 
 | path | documentType | language | status | action |
 | --- | --- | --- | --- | --- |
@@ -105,6 +105,7 @@ Generated at: 2026-10-06T10:58:20+08:00 -->
 | docs/maintenance/DOCUMENTATION_AND_ASSET_GOVERNANCE.md | QUALITY | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/migration/5.25.5_PTRichText_MEDIA.md | MIGRATION | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/migration/5.62.1_TABBAR_CONTENT_SELECTION.md | MIGRATION | zh-Hans+en+es | ACTIVE | KEEP |
+| docs/migration/5.62.2_TABBAR_CONTENT_SIZE_FIX.md | MIGRATION | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/migration/5.62_COCOAPODS_TO_SWIFTPM_PARITY.md | MIGRATION | zh-Hans+en+es | ACTIVE | KEEP |
 | docs/migration/5.x-canonical-api.md | MIGRATION | zh-Hans | ACTIVE | KEEP |
 | docs/migration/MIGRATION_6.md | MIGRATION | zh-Hans | ACTIVE | KEEP |

@@ -27,6 +27,7 @@ final public class PTTabBarItemView: UIControl {
     private var lastContentLayoutBounds: CGSize = .zero
     private var lastResolvedContentInsets: UIEdgeInsets = .zero
     private var lastResolvedContentOffset: UIOffset = .zero
+    private var lastResolvedContentSize: CGSize = .zero
         
     public class func itemImageSize() -> CGFloat {
         let appearance = PTTabBarAppearance.legacyDefault
@@ -58,6 +59,32 @@ final public class PTTabBarItemView: UIControl {
     // 中文：向 TabBar 暴露真实标题 Label，但不公开内部存储。
     var titleLabelForLayout: UILabel? {
         titleLabel.superview == contentStackView ? titleLabel : nil
+    }
+
+    // English: Resolve only the media/custom-content size insets; the title remains independently sized.
+    // Español: Resuelve solo los insets del contenido multimedia/personalizado; el título conserva su tamaño independiente.
+    // 中文：只解析媒体/自定义内容的尺寸内边距，标题仍由自身字体独立决定尺寸。
+    private var resolvedContentInsets: UIEdgeInsets {
+        PTTabBarLayoutEngine.safeContentInsets(
+            contentInsetsOverride ?? appearance.layout.tabItemContentInsets
+        )
+    }
+
+    // English: Resolve the complete content-group translation separately from its size.
+    // Español: Resuelve por separado la traslación del grupo completo y su tamaño.
+    // 中文：将整体内容组偏移与内容尺寸分开解析。
+    private var resolvedContentOffset: UIOffset {
+        PTTabBarLayoutEngine.safeContentOffset(
+            contentOffsetOverride ?? appearance.layout.tabItemContentOffset
+        )
+    }
+
+    // English: Resolve the actual content size once for constraints, badges and minimized mode.
+    // Español: Resuelve una sola vez el tamaño real para las restricciones, los badges y el modo minimizado.
+    // 中文：统一计算真实内容尺寸，供约束、角标和最小化模式共同使用。
+    var resolvedContentSize: CGSize {
+        PTTabBarLayoutEngine.contentSize(baseSize: itemImageSize(),
+                                         insets: resolvedContentInsets)
     }
     
     public var imageContent: UIView {
@@ -123,7 +150,6 @@ final public class PTTabBarItemView: UIControl {
             contentStackView.addArrangedSubview(titleLabel)
         }
         contentStackView.insertArrangedSubview(content.view, at: 0)
-        content.view.snp.makeConstraints { $0.size.equalTo(itemImageSize()) }
 
         accessibilityTraits = [.button]
         accessibilityLabel = title
@@ -165,18 +191,24 @@ final public class PTTabBarItemView: UIControl {
     // Español: Mantiene el relleno y la traslación en un único resolvedor usado por setup y restauración.
     // 中文：让初始化和恢复布局共用同一个内容布局解析器。
     private func applyContentLayout(force: Bool = false) {
-        let resolvedInsets = PTTabBarLayoutEngine.safeContentInsets(contentInsetsOverride ?? appearance.layout.tabItemContentInsets)
-        let resolvedOffset = PTTabBarLayoutEngine.safeContentOffset(contentOffsetOverride ?? appearance.layout.tabItemContentOffset)
+        let resolvedInsets = resolvedContentInsets
+        let resolvedOffset = resolvedContentOffset
+        let resolvedSize = resolvedContentSize
         guard force || lastContentLayoutBounds != bounds.size
                 || lastResolvedContentInsets != resolvedInsets
-                || lastResolvedContentOffset != resolvedOffset else { return }
+                || lastResolvedContentOffset != resolvedOffset
+                || lastResolvedContentSize != resolvedSize else { return }
 
         lastContentLayoutBounds = bounds.size
         lastResolvedContentInsets = resolvedInsets
         lastResolvedContentOffset = resolvedOffset
+        lastResolvedContentSize = resolvedSize
 
         contentContainerView.snp.remakeConstraints { make in
-            make.edges.equalToSuperview().inset(resolvedInsets)
+            make.edges.equalToSuperview()
+        }
+        content.view.snp.remakeConstraints { make in
+            make.size.equalTo(resolvedSize)
         }
         contentStackView.snp.remakeConstraints { make in
             make.centerX.equalToSuperview().offset(resolvedOffset.horizontal)

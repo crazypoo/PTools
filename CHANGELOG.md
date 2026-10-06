@@ -4,6 +4,14 @@
 
 版本唯一来源为根目录 `VERSION`；外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
 
+## 5.62.2 — 2026-10-06
+
+- 修复 `tabItemContentInsets` 只改变外围容器而不改变 `content.view` 实际尺寸的问题。
+- 新增统一的 Content Size Resolver：支持正 Insets 缩小、有限负 Insets 扩展，并将异常数值和过大扩展安全限制。
+- Badge 和 Mini 模式改用同一份实际内容尺寸，避免内容缩放后角标偏移和 Normal ↔ Mini 尺寸跳变。
+- 补充十二种 TabBar Insets Demo，直接显示 UIImage、Lottie、Badge、Mini 和 Per-item 场景的实际尺寸。
+- 补充 5.62.2 迁移说明、布局引擎回归测试和版本治理；完整 Xcode Simulator 构建仍需外部 Harbeth Metal Toolchain 可用后验证。
+
 ## 5.62.1 — 2026-10-06
 
 - 解耦 TabBar 选中背景与 Item 内容布局，新增 `tabSelectedMetailInsets`、`tabItemContentInsets` 和 `tabItemContentOffset`。

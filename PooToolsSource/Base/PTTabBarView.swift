@@ -537,12 +537,13 @@ final public class PTTabBarView: UIView {
         config.canDragToDelete = badgeCanDrag
 
         let badgeWidth = PTBadgeMetrics.size(for: content, configuration: config).width
+        let contentWidth = item.resolvedContentSize.width
         let offX: CGFloat
         switch content {
         case .text:
-            offX = item.itemImageSize() - badgeWidth / 4
+            offX = contentWidth - badgeWidth / 4
         case .redDot, .number:
-            offX = item.itemImageSize() + badgeWidth / 2
+            offX = contentWidth + badgeWidth / 2
         }
         config.centerOffset = CGPointMake(offX, 7)
         item.imageContent.badgeConfig = config
@@ -585,9 +586,15 @@ final public class PTTabBarView: UIView {
             let iconView = selectedItem.imageContent
             selectedItem.detachContentForMinimize()
             minimizedCenterView.addSubview(iconView)
+            let fallbackSize = max(appearanceSnapshot.layout.tabbarMiniSize, 0)
+            let availableSize = minimizedCenterView.bounds.size.width > 0 && minimizedCenterView.bounds.size.height > 0
+                ? minimizedCenterView.bounds.size
+                : CGSize(width: fallbackSize, height: fallbackSize)
+            let fittedSize = PTTabBarLayoutEngine.fittedSize(contentSize: selectedItem.resolvedContentSize,
+                                                              inside: availableSize)
             iconView.snp.remakeConstraints { make in
                 make.center.equalToSuperview()
-                make.size.equalTo(selectedItem.itemImageSize())
+                make.size.equalTo(fittedSize)
             }
 
             addSubview(minimizedCenterView)

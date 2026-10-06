@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "0726ca37b7560eed16d61e69b2835daafa3e2f17",
-  "generated_at": "2026-10-06T03:52:25Z",
+  "source_revision": "535f9ab5b3a5d2cda66e846c8d6ac09178ec7bc8",
+  "generated_at": "2026-10-06T05:04:10Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"

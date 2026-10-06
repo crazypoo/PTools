@@ -782,25 +782,54 @@ private final class PT5_61PingDemoViewController: PTBaseViewController {
 // 中文：演示选中背景内缩、项目内容内边距和项目内容偏移彼此独立。
 @MainActor
 private final class PTTabBarInsetsDemoViewController: PTBaseViewController {
-    private let modeControl = UISegmentedControl(items: ["Legacy", "Selection", "Content", "Offset", "Combined"])
+    // English: Keep every sizing contract visible in one horizontally browsable demo.
+    // Español: Mantiene cada contrato de tamaño visible en un único demo desplazable horizontalmente.
+    // 中文：在一个可横向浏览的 Demo 中集中展示全部尺寸契约。
+    private let modeControl = UISegmentedControl(items: [
+        "Legacy", "Selection", "Content +", "Content −", "Vertical", "Horizontal",
+        "Offset", "Combined", "Per-item", "Badge", "Mini", "Lottie"
+    ])
+    private let modeScrollView = UIScrollView()
     private let descriptionLabel = UILabel()
+    private let actualSizeLabel = UILabel()
+    private let previewContainer = UIView()
     private var previewBar: PTTabBarView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "TabBar Item Insets"
+        modeScrollView.showsHorizontalScrollIndicator = false
+        modeScrollView.alwaysBounceHorizontal = true
+        modeScrollView.addSubview(modeControl)
+        modeControl.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalTo(900)
+            make.height.equalTo(32)
+        }
+
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
-        modeControl.selectedSegmentIndex = 1
+        descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
+        actualSizeLabel.numberOfLines = 0
+        actualSizeLabel.textAlignment = .center
+        actualSizeLabel.font = .monospacedDigitSystemFont(ofSize: 12, weight: .regular)
+        modeControl.selectedSegmentIndex = 0
         modeControl.addTarget(self, action: #selector(modeChanged), for: .valueChanged)
 
-        let stack = UIStackView(arrangedSubviews: [modeControl, descriptionLabel])
+        let stack = UIStackView(arrangedSubviews: [modeScrollView, descriptionLabel, actualSizeLabel, previewContainer])
         stack.axis = .vertical
+        stack.alignment = .fill
         stack.spacing = 12
         view.addSubview(stack)
         stack.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
             make.top.equalTo(view.safeAreaLayoutGuide).inset(16)
+        }
+        modeScrollView.snp.makeConstraints { make in
+            make.height.equalTo(36)
+        }
+        previewContainer.snp.makeConstraints { make in
+            make.height.equalTo(CGFloat.kTabbarHeight_Total)
         }
         rebuildPreview()
     }
@@ -809,35 +838,127 @@ private final class PTTabBarInsetsDemoViewController: PTBaseViewController {
         rebuildPreview()
     }
 
+    // English: Rebuild only the demo preview; the production TabBar API remains unchanged.
+    // Español: Reconstruye solo la vista previa del demo; la API de producción del TabBar no cambia.
+    // 中文：只重建 Demo 预览，不改变生产 TabBar API。
     private func rebuildPreview() {
         previewBar?.removeFromSuperview()
 
         let mode = modeControl.selectedSegmentIndex
         let layout: PTTabBarLayoutAppearance
+        let itemInsets: UIEdgeInsets?
+        let badge: PTBadgeContent?
+        let minimized: Bool
+        let lottie: Bool
         switch mode {
         case 0:
             layout = PTTabBarLayoutAppearance(tabBottomSpacing: 10, tabSelectedMetail: true, tabTopSpacing: 10)
-            descriptionLabel.text = "Legacy slot spacing changes the old item layout."
+            itemInsets = nil
+            badge = nil
+            minimized = false
+            lottie = false
+            descriptionLabel.text = "Legacy slot spacing remains unchanged; content size uses the zero-inset contract."
         case 1:
             layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
                                                tabSelectedMetailColor: .systemBlue,
                                                tabSelectedMetailInsets: UIEdgeInsets(top: 10, left: 6, bottom: 10, right: 6))
-            descriptionLabel.text = "Selection background changes; icon and title size stay unchanged."
+            itemInsets = nil
+            badge = nil
+            minimized = false
+            lottie = false
+            descriptionLabel.text = "Selection background changes; content and title sizes stay unchanged."
         case 2:
             layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
                                                tabSelectedMetailColor: .systemBlue,
                                                tabItemContentInsets: UIEdgeInsets(top: 4, left: 4, bottom: 2, right: 4))
-            descriptionLabel.text = "Content padding changes the content boundary only."
+            itemInsets = nil
+            badge = nil
+            minimized = false
+            lottie = false
+            descriptionLabel.text = "Positive insets shrink the real media/custom content view; the title is independent."
         case 3:
             layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
                                                tabSelectedMetailColor: .systemBlue,
+                                               tabItemContentInsets: UIEdgeInsets(top: -2, left: -2, bottom: -2, right: -2))
+            itemInsets = nil
+            badge = nil
+            minimized = false
+            lottie = false
+            descriptionLabel.text = "Negative insets expand the real content view, capped at the safe maximum scale."
+        case 4:
+            layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
+                                               tabSelectedMetailColor: .systemBlue,
+                                               tabItemContentInsets: UIEdgeInsets(top: 6, left: 0, bottom: 4, right: 0))
+            itemInsets = nil
+            badge = nil
+            minimized = false
+            lottie = false
+            descriptionLabel.text = "Vertical content insets change height without changing horizontal content size."
+        case 5:
+            layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
+                                               tabSelectedMetailColor: .systemBlue,
+                                               tabItemContentInsets: UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6))
+            itemInsets = nil
+            badge = nil
+            minimized = false
+            lottie = false
+            descriptionLabel.text = "Horizontal content insets change width without changing vertical content size."
+        case 6:
+            layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
+                                               tabSelectedMetailColor: .systemBlue,
                                                tabItemContentOffset: UIOffset(horizontal: 0, vertical: -3))
-            descriptionLabel.text = "Content moves upward without changing icon size or selection frame."
+            itemInsets = nil
+            badge = nil
+            minimized = false
+            lottie = false
+            descriptionLabel.text = "Content offset moves the complete content group without resizing it."
+        case 7:
+            layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
+                                               tabSelectedMetailColor: .systemBlue,
+                                               tabItemContentInsets: UIEdgeInsets(top: 3, left: 4, bottom: 2, right: 4),
+                                               tabItemContentOffset: UIOffset(horizontal: 0, vertical: -2),
+                                               tabSelectedMetailInsets: UIEdgeInsets(top: 8, left: 6, bottom: 8, right: 6))
+            itemInsets = nil
+            badge = nil
+            minimized = false
+            lottie = false
+            descriptionLabel.text = "Selection, actual content size and translation are applied by separate layers."
+        case 8:
+            layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
+                                               tabSelectedMetailColor: .systemBlue)
+            itemInsets = UIEdgeInsets(top: 5, left: 7, bottom: 1, right: 3)
+            badge = nil
+            minimized = false
+            lottie = false
+            descriptionLabel.text = "One item overrides the global content configuration without changing other items."
+        case 9:
+            layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
+                                               tabSelectedMetailColor: .systemBlue,
+                                               tabItemContentInsets: UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3))
+            itemInsets = nil
+            badge = .number(8)
+            minimized = false
+            lottie = false
+            descriptionLabel.text = "Badge placement follows the resolved content width instead of the legacy base slot."
+        case 10:
+            layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
+                                               tabSelectedMetailColor: .systemBlue,
+                                               tabbarMiniSize: 56,
+                                               tabItemContentInsets: UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2))
+            itemInsets = nil
+            badge = nil
+            minimized = true
+            lottie = false
+            descriptionLabel.text = "Mini mode fits the resolved content into the mini container without a size jump."
         default:
             layout = PTTabBarLayoutAppearance(tabSelectedMetail: true,
                                                tabSelectedMetailColor: .systemBlue,
-                                              tabItemContentInsets: UIEdgeInsets(top: 3, left: 4, bottom: 2, right: 4), tabItemContentOffset: UIOffset(horizontal: 0, vertical: -2), tabSelectedMetailInsets: UIEdgeInsets(top: 8, left: 6, bottom: 8, right: 6))
-            descriptionLabel.text = "Selection, padding and translation are applied by separate layers."
+                                               tabItemContentInsets: UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2))
+            itemInsets = nil
+            badge = nil
+            minimized = false
+            lottie = true
+            descriptionLabel.text = "Lottie content uses the same resolved size and inset pipeline as raster content."
         }
 
         let appearance = PTTabBarAppearance(normalColor: .secondaryLabel,
@@ -847,24 +968,42 @@ private final class PTTabBarInsetsDemoViewController: PTBaseViewController {
         let configs = [
             PTTabBarItemConfig(title: "Home",
                                content: PTTabBarImageContent(normal: demoImage(systemName: "house"),
-                                                             selected: demoImage(systemName: "house.fill")),
-                               viewController: UIViewController()),
+                                                             selected: demoImage(systemName: "house.fill"),
+                                                             appearance: appearance),
+                               viewController: UIViewController(),
+                               contentInsets: mode == 8 ? itemInsets : nil),
             PTTabBarItemConfig(title: "List",
-                               content: PTTabBarImageContent(normal: demoImage(systemName: "list.bullet"),
-                                                             selected: demoImage(systemName: "list.bullet.rectangle.fill")),
+                               content: lottie
+                                   ? PTTabBarImageContent(normal: "camera", selected: "camera", appearance: appearance)
+                                   : PTTabBarImageContent(normal: demoImage(systemName: "list.bullet"),
+                                                          selected: demoImage(systemName: "list.bullet.rectangle.fill"),
+                                                          appearance: appearance),
                                viewController: UIViewController()),
             PTTabBarItemConfig(title: "Profile",
                                content: PTTabBarImageContent(normal: demoImage(systemName: "person"),
-                                                             selected: demoImage(systemName: "person.fill")),
+                                                             selected: demoImage(systemName: "person.fill"),
+                                                             appearance: appearance),
                                viewController: UIViewController())
         ]
         bar.setup(configs: configs)
-        view.addSubview(bar)
+        previewContainer.addSubview(bar)
         bar.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(24)
-            make.height.equalTo(CGFloat.kTabbarHeight_Total)
+            make.edges.equalToSuperview()
         }
+        previewContainer.layoutIfNeeded()
+        bar.layoutIfNeeded()
+        if let badge {
+            bar.badge(index: 1, content: badge)
+        }
+        if minimized {
+            bar.toggleMinimize(isMinimized: true, selectedIndex: 1)
+            bar.layoutIfNeeded()
+        }
+        let sizes = bar.items.map { item in
+            let size = item.imageContent.bounds.size
+            return String(format: "%d×%d", Int(size.width.rounded()), Int(size.height.rounded()))
+        }.joined(separator: "  /  ")
+        actualSizeLabel.text = "Actual content.view size: " + sizes
         previewBar = bar
     }
 

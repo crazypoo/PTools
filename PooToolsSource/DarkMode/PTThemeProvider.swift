@@ -81,9 +81,9 @@ public struct PTTabBarLayoutAppearance {
     // Español: Insets solo para la superficie seleccionada; nunca participan en el tamaño del elemento.
     // 中文：只作用于选中背景的四边内缩，不参与 Tab 项目尺寸计算。
     public let tabSelectedMetailInsets: UIEdgeInsets
-    // English: Internal content padding for icon, title and custom item views.
-    // Español: Relleno interno para el icono, el título y las vistas personalizadas del elemento.
-    // 中文：图标、标题和自定义内容 View 的内部内边距。
+    // English: Size insets for media or custom item content; the title remains independently sized.
+    // Español: Insets de tamaño para el contenido multimedia o personalizado; el título conserva su tamaño.
+    // 中文：媒体或自定义项目内容的尺寸内边距，标题保持独立尺寸。
     public let tabItemContentInsets: UIEdgeInsets
     // English: Translation for the complete item content without resizing it.
     // Español: Traslación del contenido completo del elemento sin redimensionarlo.

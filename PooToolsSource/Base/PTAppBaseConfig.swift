@@ -142,9 +142,9 @@ public class PTAppBaseConfig: NSObject {
     public var tab26BottomSpacing:CGFloat = 15
     public var tab26Mode:Bool = false
     public var tabSelectedMetail:Bool = false
-    // English: Adds padding inside each tab item's content area without changing the selection surface.
-    // Español: Añade relleno dentro del contenido de cada elemento sin cambiar la superficie seleccionada.
-    // 中文：为每个 Tab 项目的内容区域增加内边距，不改变选中背景。
+    // English: Resizes media or custom content; positive insets shrink it and negative insets expand it.
+    // Español: Cambia el tamaño del contenido multimedia o personalizado; los insets positivos reducen y los negativos amplían.
+    // 中文：调整媒体或自定义内容的实际尺寸；正值缩小，负值放大，不改变选中背景。
     public var tabItemContentInsets: UIEdgeInsets = .zero
     // English: Translates the icon and title together without resizing either one.
     // Español: Desplaza juntos el icono y el título sin cambiar su tamaño.

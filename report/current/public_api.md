@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: 0726ca37b7560eed16d61e69b2835daafa3e2f17
-Generated at: 2026-10-06T03:52:23Z
+Source revision: 535f9ab5b3a5d2cda66e846c8d6ac09178ec7bc8
+Generated at: 2026-10-06T05:04:08Z
 -->
 
 # PTools 当前公开 API 清单
@@ -1109,12 +1109,12 @@ Generated at: 2026-10-06T03:52:23Z
 | PooToolsSource/Base/PTSnapKitEX.swift:116 | func | public | public func distributeViewsAlong(axisType: ConstraintAxis, |
 | PooToolsSource/Base/PTSnapKitEX.swift:156 | func | public | public func distributeSudokuViews(fixedItemWidth: CGFloat, |
 | PooToolsSource/Base/PTSnapKitEX.swift:192 | func | public | public func distributeSudokuViews(fixedLineSpacing: CGFloat, |
-| PooToolsSource/Base/PTTabBarItemView.swift:31 | class | public | public class func itemImageSize() -> CGFloat { |
-| PooToolsSource/Base/PTTabBarItemView.swift:63 | var | public | public var imageContent: UIView { |
-| PooToolsSource/Base/PTTabBarItemView.swift:69 | var | public | public var isSelectedItem = false { |
-| PooToolsSource/Base/PTTabBarItemView.swift:80 | init | public | public init(content: PTTabBarItemContent, title: String) { |
-| PooToolsSource/Base/PTTabBarItemView.swift:92 | init | public | public init(content: PTTabBarItemContent, |
-| PooToolsSource/Base/PTTabBarItemView.swift:145 | func | public | public func restoreIconLayout() { |
+| PooToolsSource/Base/PTTabBarItemView.swift:32 | class | public | public class func itemImageSize() -> CGFloat { |
+| PooToolsSource/Base/PTTabBarItemView.swift:90 | var | public | public var imageContent: UIView { |
+| PooToolsSource/Base/PTTabBarItemView.swift:96 | var | public | public var isSelectedItem = false { |
+| PooToolsSource/Base/PTTabBarItemView.swift:107 | init | public | public init(content: PTTabBarItemContent, title: String) { |
+| PooToolsSource/Base/PTTabBarItemView.swift:119 | init | public | public init(content: PTTabBarItemContent, |
+| PooToolsSource/Base/PTTabBarItemView.swift:171 | func | public | public func restoreIconLayout() { |
 | PooToolsSource/Base/PTTabBarMediaContent.swift:30 | init | public | public init(normal: Any, |
 | PooToolsSource/Base/PTTabBarMediaContent.swift:56 | var | public | public var view: UIView { container } |
 | PooToolsSource/Base/PTTabBarMediaContent.swift:58 | func | public | @MainActor public func setSelected(_ selected: Bool, animated: Bool) { |
@@ -1142,8 +1142,8 @@ Generated at: 2026-10-06T03:52:23Z
 | PooToolsSource/Base/PTTabBarView.swift:355 | func | public | public func setup(configs: [PTTabBarItemConfig], |
 | PooToolsSource/Base/PTTabBarView.swift:523 | func | public | public func badge(index:Int,badgeValue:Any,badgeStyle:PTBadgeStyle = .number,anumationType:PTBadgeAnimType = .none,badgeCanDrag:Bool = false) { |
 | PooToolsSource/Base/PTTabBarView.swift:529 | func | public | public func badge(index: Int, |
-| PooToolsSource/Base/PTTabBarView.swift:559 | func | public | public func removeBadge(index:Int) { |
-| PooToolsSource/Base/PTTabBarView.swift:577 | func | public | public func toggleMinimize(isMinimized: Bool, selectedIndex: Int) { |
+| PooToolsSource/Base/PTTabBarView.swift:560 | func | public | public func removeBadge(index:Int) { |
+| PooToolsSource/Base/PTTabBarView.swift:578 | func | public | public func toggleMinimize(isMinimized: Bool, selectedIndex: Int) { |
 | PooToolsSource/Base/PTTriangleView.swift:11 | enum | public | public enum PTTriangleDirection { |
 | PooToolsSource/Base/PTTriangleView.swift:15 | class | public | public class PTTriangleView: UIView { |
 | PooToolsSource/Base/PTTriangleView.swift:16 | var | public | public var fillColor: UIColor = .systemBlue |

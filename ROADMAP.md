@@ -1,8 +1,18 @@
 # PTools 路线图
 
-> 当前代码基线：`5.62.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.62.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.62.1` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.62.2` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.62.2 TabBar Item Content Insets 实际尺寸修复
+
+- ✅ `PTTabBarLayoutEngine.contentSize` 统一解析基础尺寸、正负 Insets、非有限值和最大扩展倍率。
+- ✅ `PTTabBarItemView` 移除初始化阶段固定 `content.view` 尺寸，改为直接约束真实媒体/自定义内容 View；标题仍独立布局。
+- ✅ `PTTabBarView` 的 Badge 定位和 Mini 模式复用 `resolvedContentSize`，恢复布局重新应用同一尺寸。
+- ✅ 保持 per-item override、Appearance snapshot、`.zero` 默认行为和 `tabItemContentOffset` 兼容语义。
+- ✅ Demo Catalog 增加 Legacy、Selection、正/负 Content、Vertical、Horizontal、Offset、Combined、Per-item、Badge、Mini、Lottie 十二种场景，并显示实际尺寸。
+- ✅ 补充 5.62.2 迁移文档、Layout Engine / Item View 回归测试和中英文西班牙文说明。
+- ⬜ 完整 Xcode Simulator Debug / Release、真机视觉、iPad、多窗口、Dynamic Type、VoiceOver 和自定义 Content 宿主回归仍待环境/集成方验证；未完成前不创建正式 tag。
 
 ## 5.62.1 TabBar Insets 解耦 / 内容型渐变修复
 

@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.62.1`，真机/宿主回归与发布证据完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.62.2`，真机/宿主回归与发布证据完成前不创建正式 tag。
 
 DebugNetwork 2.0 是只读观测工具，支持 immutable capture、Timeline、过滤、脱敏 cURL/HAR/Text 导出和多 Scene presentation。使用方式见 [DebugNetwork 指南](docs/debug/DEBUG_NETWORK.md)。
 
@@ -29,6 +29,10 @@ WKWebView Bridge、MapKit、App Attest/DeviceCheck、远程配置和 SSE/WebSock
 5.62.1 解耦 TabBar 的选中背景 Insets、Item 内容 Insets 和内容 Offset，并修复 `UILabel` / `UIImageView`
 使用 `backgroundGradient` 时渐变层遮挡文字或图片的问题。迁移方式见
 [5.62.1 TabBar 与渐变迁移说明](docs/migration/5.62.1_TABBAR_CONTENT_SELECTION.md)。
+
+5.62.2 修复 `tabItemContentInsets` 不改变真实 `content.view` 尺寸的问题：正值缩小内容、有限负值扩展内容，
+并让 Badge、Mini、UIImage、Lottie 和自定义 Content 复用同一份尺寸计算。迁移方式见
+[5.62.2 TabBar Content Size 修正](docs/migration/5.62.2_TABBAR_CONTENT_SIZE_FIX.md)。
 
 ## Requirements
 
