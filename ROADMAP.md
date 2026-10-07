@@ -14,6 +14,14 @@
 - ✅ 补充 5.62.2 迁移文档、Layout Engine / Item View 回归测试和中英文西班牙文说明。
 - ⬜ 完整 Xcode Simulator Debug / Release、真机视觉、iPad、多窗口、Dynamic Type、VoiceOver 和自定义 Content 宿主回归仍待环境/集成方验证；未完成前不创建正式 tag。
 
+## Unreleased PTCollectionView Diffable Content Refresh 修复
+
+- ✅ 用 `PTCollectionUpdateCoordinator` 串行执行更新操作，取消 busy → return 丢更新路径，并在执行时读取最新 Snapshot。
+- ✅ 新增内容刷新与布局失效 API，保留原有 `showCollectionDetail`、`reloadSections`、`reloadRows` 和 `PTSection/PTRows` 兼容入口。
+- ✅ 新增 `PTCollectionModelStore`、稳定身份类型、Debug 更新诊断和 identity churn 提示，Cell、Supplementary、Layout 和查询入口优先读取最新模型。
+- ✅ 增加 Diffable Refresh Lab、列表更新指南、快速更新与稳定身份回归测试。
+- ⬜ YDSearchSideController 真正宿主迁移、真机/滚动/拖放/骨架/预取视觉回归和完整 Xcode Debug/Release 仍需外部环境验证；当前 `Harbeth` Metal Toolchain 缺失，未创建版本 tag。
+
 ## 5.62.1 TabBar Insets 解耦 / 内容型渐变修复
 
 - ✅ 新增 `tabItemContentInsets`、`tabItemContentOffset` 和 `tabSelectedMetailInsets`，分别表达内容边界、内容平移和选中背景边界。

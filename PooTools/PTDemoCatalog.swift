@@ -165,6 +165,7 @@ enum PTDemoRegistry {
         make("media.blur-image-list", "PooToolsMediaViewer", "BlurImageList", .mediaGraphics, .interactive, .push, .runnable, legacy: "BlurImageList", tags: ["image", "blur"]),
         make("ui.cycle-banner", "PooToolsScrollBanner", "CycleBanner", .uiComponents, .interactive, .sheet, .runnable, legacy: "CycleBanner", tags: ["banner"]),
         make("ui.collection-tag", "PToolsForm", "CollectionTag", .inputForm, .interactive, .sheet, .runnable, legacy: "CollectionTag", tags: ["collection", "tag"]),
+        make("ui.collection-refresh-lab", "PToolsUIFoundation", "Diffable Refresh Lab", .uiComponents, .interactive, .push, .runnable, legacy: "Diffable Refresh Lab", tags: ["collection", "diffable", "content-refresh", "stress"]),
         make("input.input-box", "PooToolsInput", "InputBox", .inputForm, .interactive, .sheet, .runnable, legacy: "InputBox", tags: ["input"]),
         make("input.stepper", "PooToolsStepper", "Stepper", .inputForm, .interactive, .sheet, .runnable, legacy: "Stepper", tags: ["input"]),
         make("input.login-description", "PooToolsCustomerLabel", "LoginDesc", .inputForm, .interactive, .sheet, .runnable, legacy: "LoginDesc", tags: ["button", "rich-text"]),
@@ -286,6 +287,8 @@ final class PTDemoCoordinator {
             return PTTabBarInsetsDemoViewController()
         case "ui.gradient-rendering":
             return PTGradientRenderingDemoViewController()
+        case "ui.collection-refresh-lab":
+            return PTCollectionRefreshLabViewController()
         case "infrastructure.database":
             return PTDatabaseInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
         case "infrastructure.auth":
@@ -1067,5 +1070,190 @@ private final class PTGradientRenderingDemoViewController: PTBaseViewController 
                                 borderColors: borderWidth > 0 ? [.white, .systemYellow] : nil,
                                 borderWidth: borderWidth,
                                 radius: 20)
+    }
+}
+
+// English: This lab compares structural and content-only Diffable refreshes with stable identities.
+// Español: Este laboratorio compara refrescos estructurales y de contenido con identidades Diffable estables.
+// 中文：这个实验页使用稳定身份对比结构刷新和纯内容刷新。
+@MainActor
+private final class PTCollectionRefreshDemoModel {
+    let id: String
+    let title: String
+    var isSelected = false
+
+    init(id: String, title: String) {
+        self.id = id
+        self.title = title
+    }
+}
+
+// English: A tiny native cell keeps the refresh lab independent from business cell implementations.
+// Español: Una celda nativa pequeña mantiene el laboratorio independiente de las celdas de negocio.
+// 中文：使用轻量原生 Cell，让实验页不依赖业务 Cell。
+@MainActor
+private final class PTCollectionRefreshLabCell: UICollectionViewCell {
+    private let titleLabel = UILabel()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.layer.cornerRadius = 10
+        contentView.layer.masksToBounds = true
+        titleLabel.numberOfLines = 1
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(titleLabel)
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { nil }
+
+    func render(_ model: PTCollectionRefreshDemoModel) {
+        titleLabel.text = model.isSelected ? "✓  (model.title)" : model.title
+        titleLabel.textColor = model.isSelected ? .white : .label
+        contentView.backgroundColor = model.isSelected ? .systemBlue : .secondarySystemBackground
+    }
+}
+
+// English: The Refresh Lab provides a reproducible path for content, section, row and structure updates.
+// Español: El laboratorio ofrece un flujo reproducible para actualizar contenido, secciones, filas y estructura.
+// 中文：Refresh Lab 提供内容、Section、Row 和结构更新的固定复现路径。
+@MainActor
+private final class PTCollectionRefreshLabViewController: PTBaseViewController {
+    private enum RefreshMode: Int, CaseIterable {
+        case replace
+        case sections
+        case rows
+        case reconfigure
+        case item
+        case sectionContent
+
+        var title: String {
+            switch self {
+            case .replace: return "Replace"
+            case .sections: return "Sections"
+            case .rows: return "Rows"
+            case .reconfigure: return "Reconfigure"
+            case .item: return "Item"
+            case .sectionContent: return "Section Content"
+            }
+        }
+    }
+
+    private let modeControl = UISegmentedControl(items: RefreshMode.allCases.map(\.title))
+    private let collectionView: PTCollectionView
+    private var models: [[PTCollectionRefreshDemoModel]] = (0..<3).map { section in
+        (0..<3).map { row in
+            PTCollectionRefreshDemoModel(id: "refresh-\(section)-\(row)", title: "Section \(section) · Item \(row)")
+        }
+    }
+
+    init() {
+        let configuration = PTCollectionViewConfig()
+        configuration.viewType = .Normal
+        configuration.itemHeight = 56
+        configuration.cellLeadingSpace = 12
+        configuration.cellTrailingSpace = 8
+        configuration.contentTopSpace = 12
+        configuration.contentBottomSpace = 12
+        collectionView = PTCollectionView(viewConfig: configuration)
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { nil }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = "Diffable Refresh Lab"
+        view.backgroundColor = .systemBackground
+        modeControl.selectedSegmentIndex = RefreshMode.item.rawValue
+        modeControl.addTarget(self, action: #selector(modeChanged), for: .valueChanged)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Stress", style: .plain, target: self, action: #selector(runStress))
+
+        view.addSubview(modeControl)
+        view.addSubview(collectionView)
+        modeControl.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            modeControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 12),
+            modeControl.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -12),
+            modeControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: modeControl.bottomAnchor, constant: 8),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+
+        collectionView.contentCollectionView.register(PTCollectionRefreshLabCell.self, forCellWithReuseIdentifier: "PTCollectionRefreshLabCell")
+        collectionView.cellInCollection = { collectionView, section, indexPath in
+            guard let row = section.rows?[safe: indexPath.item],
+                  let model = row.dataModel as? PTCollectionRefreshDemoModel,
+                  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PTCollectionRefreshLabCell", for: indexPath) as? PTCollectionRefreshLabCell else {
+                return nil
+            }
+            cell.render(model)
+            return cell
+        }
+        collectionView.collectionDidSelect = { [weak self] _, _, indexPath in
+            self?.select(indexPath)
+        }
+        collectionView.showCollectionDetail(collectionData: makeSections(), animated: false)
+    }
+
+    private func makeSections() -> [PTSection] {
+        models.enumerated().map { sectionIndex, sectionModels in
+            let rows = sectionModels.map { model in
+                let row = PTRows(title: model.title,
+                                 ID: "PTCollectionRefreshLabCell",
+                                 diffId: model.id,
+                                 dataModel: model)
+                row.cellClass = PTCollectionRefreshLabCell.self
+                return row
+            }
+            return PTSection(identifier: "refresh-section-\(sectionIndex)", rows: rows)
+        }
+    }
+
+    private func select(_ indexPath: IndexPath) {
+        guard models.indices.contains(indexPath.section),
+              models[indexPath.section].indices.contains(indexPath.item) else { return }
+        let selectedModel = models[indexPath.section][indexPath.item]
+        let wasSelected = selectedModel.isSelected
+        models[indexPath.section].forEach { $0.isSelected = false }
+        selectedModel.isSelected = !wasSelected
+
+        let mode = RefreshMode(rawValue: modeControl.selectedSegmentIndex) ?? .item
+        switch mode {
+        case .replace:
+            collectionView.showCollectionDetail(collectionData: makeSections())
+        case .sections:
+            collectionView.reloadSections(at: [indexPath.section])
+        case .rows:
+            let row = makeSections()[indexPath.section].rows?[indexPath.item]
+            if let row { collectionView.reloadRows([row], in: indexPath.section) }
+        case .reconfigure:
+            collectionView.reconfigureSections(at: [indexPath.section])
+        case .item:
+            collectionView.reloadItemContent(at: [indexPath])
+        case .sectionContent:
+            collectionView.reloadSectionContent(at: [indexPath.section])
+        }
+    }
+
+    @objc private func modeChanged() { }
+
+    @objc private func runStress() {
+        for step in 0..<12 {
+            let section = step % models.count
+            let row = step % models[section].count
+            models[section].forEach { $0.isSelected = false }
+            models[section][row].isSelected = true
+            collectionView.reloadItemContent(at: [IndexPath(item: row, section: section)])
+        }
     }
 }

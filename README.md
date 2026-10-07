@@ -34,6 +34,9 @@ WKWebView Bridge、MapKit、App Attest/DeviceCheck、远程配置和 SSE/WebSock
 并让 Badge、Mini、UIImage、Lottie 和自定义 Content 复用同一份尺寸计算。迁移方式见
 [5.62.2 TabBar Content Size 修正](docs/migration/5.62.2_TABBAR_CONTENT_SIZE_FIX.md)。
 
+`PTCollectionView` 的 Diffable 内容刷新、稳定身份、布局失效和快速更新用法见
+[PTCollectionView Diffable 更新指南](docs/guides/PTCOLLECTIONVIEW_UPDATE_GUIDE.md)。
+
 ## Requirements
 
 - iOS 17.0+

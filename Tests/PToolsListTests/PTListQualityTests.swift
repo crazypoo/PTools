@@ -56,6 +56,76 @@ final class PTListQualityTests: XCTestCase {
         XCTAssertEqual(snapshot.itemIdentifiers.map(\.diffId), rows.map(\.diffId))
     }
 
+    // English: The compatibility store must return the latest mutable model for an unchanged identity.
+    // Español: El almacén compatible debe devolver el modelo mutable más reciente con la misma identidad.
+    // 中文：兼容模型仓库必须在身份不变时返回最新的可变模型。
+    func testModelStoreResolvesLatestRowForStableIdentity() {
+        let first = PTRows(title: "Old", diffId: "stable-row")
+        let section = PTSection(identifier: "stable-section", rows: [first])
+        let store = PTCollectionModelStore()
+        store.replace([section])
+
+        let latest = PTRows(title: "Latest", diffId: "stable-row")
+        store.update(rows: [latest])
+
+        XCTAssertTrue(store.resolvedRow(first) === latest)
+        XCTAssertTrue(store.resolvedSection(section).rows?.first === latest)
+    }
+
+    // English: Every queued update must execute in order instead of being dropped while a snapshot is applying.
+    // Español: Cada actualización encolada debe ejecutarse en orden y no descartarse durante un apply.
+    // 中文：每个排队更新都必须按顺序执行，不能在快照应用期间被丢弃。
+    func testUpdateCoordinatorExecutesAllQueuedOperations() async {
+        let expectation = expectation(description: "all collection updates finish")
+        expectation.expectedFulfillmentCount = 3
+        var executionOrder: [Int] = []
+        let diagnostics = PTCollectionUpdateDiagnostics { (sections: 0, items: 0) }
+        let coordinator = PTCollectionUpdateCoordinator(diagnostics: diagnostics)
+
+        for value in 0..<3 {
+            coordinator.enqueue(name: "test-\(value)") { finish in
+                executionOrder.append(value)
+                finish()
+                expectation.fulfill()
+            }
+        }
+
+        await fulfillment(of: [expectation], timeout: 2)
+        XCTAssertEqual(executionOrder, [0, 1, 2])
+    }
+
+    // English: Content refresh keeps the Diffable structure and stable identities unchanged.
+    // Español: El refresco de contenido conserva la estructura Diffable y las identidades estables.
+    // 中文：内容刷新必须保持 Diffable 结构和稳定身份不变。
+    func testContentRefreshPreservesSnapshotIdentities() async {
+        let configuration = PTCollectionViewConfig()
+        configuration.refreshWithoutAnimation = true
+        let list = PTCollectionView(viewConfig: configuration)
+        let row = PTRows(title: "Before", diffId: "content-row")
+        let section = PTSection(identifier: "content-section", rows: [row])
+
+        let loadExpectation = expectation(description: "initial content loaded")
+        list.showCollectionDetail(collectionData: [section], animated: false) { _ in
+            loadExpectation.fulfill()
+        }
+        await fulfillment(of: [loadExpectation], timeout: 2)
+
+        let sectionIDsBefore = list.diffableDataSource.snapshot().sectionIdentifiers.map(\.identifier)
+        let rowIDsBefore = list.diffableDataSource.snapshot().itemIdentifiers.map(\.diffId)
+        row.title = "After"
+
+        let refreshExpectation = expectation(description: "content refreshed")
+        list.reloadItemContent(at: [IndexPath(item: 0, section: 0)]) {
+            refreshExpectation.fulfill()
+        }
+        await fulfillment(of: [refreshExpectation], timeout: 2)
+
+        let snapshot = list.diffableDataSource.snapshot()
+        XCTAssertEqual(snapshot.sectionIdentifiers.map(\.identifier), sectionIDsBefore)
+        XCTAssertEqual(snapshot.itemIdentifiers.map(\.diffId), rowIDsBefore)
+        XCTAssertEqual(list.getRow(at: IndexPath(item: 0, section: 0))?.title, "After")
+    }
+
     func testMeasureFullSnapshotForOneThousandRows() {
         let rows = makeRows(count: 1_000, prefix: "full-1k")
         let section = PTSection(identifier: "full-1k-section", rows: rows)

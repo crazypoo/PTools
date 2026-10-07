@@ -73,8 +73,10 @@ extension PTCollectionView {
     private func scrollToSection(_ section: Int) {
         let snapshot = diffableDataSource.snapshot()
         guard section >= 0, section < snapshot.sectionIdentifiers.count else { return }
-        let sectionModel = snapshot.sectionIdentifiers[section]
-        guard !snapshot.itemIdentifiers(inSection: sectionModel).isEmpty else {
+        let sectionIdentifier = snapshot.sectionIdentifiers[section]
+        let sectionModel = resolvedSection(sectionIdentifier)
+        guard !snapshot.itemIdentifiers(inSection: sectionIdentifier).isEmpty,
+              !(sectionModel.rows ?? []).isEmpty else {
             isTouched = false
             return
         }

@@ -17,6 +17,7 @@
 - [5.61.0 Storage 指南](storage/PTStorage_5_61.md)
 - [5.62.0 应用基础设施指南](guides/PTOOLS_APPLICATION_INFRASTRUCTURE_5_62.md)
 - [5.62.1 TabBar 与渐变迁移说明](migration/5.62.1_TABBAR_CONTENT_SELECTION.md)
+- [PTCollectionView Diffable 更新指南](guides/PTCOLLECTIONVIEW_UPDATE_GUIDE.md)
 
 ## 架构
 

@@ -4,6 +4,11 @@
 
 版本唯一来源为根目录 `VERSION`；外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
 
+- 修复 `PTCollectionView` 在 Diffable 快照应用期间直接丢弃后续更新的问题，所有结构和内容更新现在按 `MainActor` 串行执行，并在执行时读取最新快照。
+- 新增 `reloadItemContent`、`reloadSectionContent`、`reloadVisibleContent`、`reconfigureSections`、`invalidateSectionLayout` 和 `invalidateItemLayout`，明确区分内容刷新与布局刷新。
+- 新增稳定身份兼容仓库、Debug 更新诊断、Diffable Refresh Lab、列表更新指南和列表质量回归测试；保留 `PTSection`、`PTRows` 及原有公开入口。
+- 完整 Xcode Simulator 构建仍受外部 Harbeth Metal Toolchain 缺失阻断，未据此宣称全量构建通过。
+
 ## 5.62.2 — 2026-10-06
 
 - 修复 `tabItemContentInsets` 只改变外围容器而不改变 `content.view` 实际尺寸的问题。

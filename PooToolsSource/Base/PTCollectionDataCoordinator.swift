@@ -74,21 +74,22 @@ extension PTCollectionView {
                 return collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath)
             }
 
-            let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
+            let sectionModel = self.resolvedSection(snapshot.sectionIdentifiers[indexPath.section])
+            let currentRowModel = self.resolvedRow(rowModel)
             
             let cell: UICollectionViewCell
             if let configuredCell = self.cellInCollection?(collectionView, sectionModel, indexPath) {
                 cell = configuredCell
-            } else if let cellClass = rowModel.cellClass,
-                      !rowModel.reuseID.isEmpty {
-                self.registerCellIfNeeded(cellClass, reuseID: rowModel.reuseID)
-                cell = collectionView.dequeueReusableCell(withReuseIdentifier: rowModel.reuseID, for: indexPath)
+            } else if let cellClass = currentRowModel.cellClass,
+                      !currentRowModel.reuseID.isEmpty {
+                self.registerCellIfNeeded(cellClass, reuseID: currentRowModel.reuseID)
+                cell = collectionView.dequeueReusableCell(withReuseIdentifier: currentRowModel.reuseID, for: indexPath)
 
                 if let fusionCell = cell as? PTFusionCellProtocol,
-                   let fusionModel = rowModel.dataModel as? PTFusionCellModel {
+                   let fusionModel = currentRowModel.dataModel as? PTFusionCellModel {
                     fusionCell.cellModel = fusionModel
                 } else if let bindableCell = cell as? PTAnyCellBindable,
-                          let dataModel = rowModel.dataModel {
+                          let dataModel = currentRowModel.dataModel {
                     bindableCell.pt_bindAny(dataModel)
                 }
             } else {
@@ -111,7 +112,7 @@ extension PTCollectionView {
             guard indexPath.section < snapshot.sectionIdentifiers.count else {
                 return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self), for: indexPath)
             }
-            let sectionModel = snapshot.sectionIdentifiers[indexPath.section]
+            let sectionModel = self.resolvedSection(snapshot.sectionIdentifiers[indexPath.section])
             
             if kind == UICollectionView.elementKindSectionHeader,
                !(sectionModel.headerReuseID ?? "").stringIsEmpty(),
