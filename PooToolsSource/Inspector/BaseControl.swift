@@ -68,6 +68,14 @@ class BaseControl: UIControl, InternalViewProtocol {
 
     open func setup() {}
 
+    // English: Route Inspector controls through the shared PTools menu provider.
+    // Español: Dirige los controles del Inspector al proveedor de menús compartido de PTools.
+    // 中文：让 Inspector 控件统一复用 PTools 菜单提供器。
+    override func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                         configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        PTControlMenuCoordinator.configuration(for: self, location: location)
+    }
+
     private(set) lazy var contentView = UIStackView.horizontal(
         .spacing(defaultSpacing)
     ).then {
@@ -146,6 +154,9 @@ class BaseControl: UIControl, InternalViewProtocol {
         return self
     }
 }
+
+@MainActor
+extension BaseControl: PTNativeControlMenuHost {}
 
 extension BaseControl: @MainActor ElementInspectorAppearanceProviding {}
 

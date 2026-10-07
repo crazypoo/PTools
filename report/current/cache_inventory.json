@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "535f9ab5b3a5d2cda66e846c8d6ac09178ec7bc8",
-  "generated_at": "2026-10-06T05:04:09Z",
+  "source_revision": "e56b376ef91456b11a81d1082765dcb5c0a2bdeb",
+  "generated_at": "2026-10-07T15:11:48Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -60,39 +60,45 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 547,
+      "line": 570,
       "kind": "disk or custom cache",
       "text": "if let cache = heightCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 548,
+      "line": 571,
       "kind": "disk or custom cache",
       "text": "return cache.doubleValue"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1097,
+      "line": 1172,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1098,
+      "line": 1173,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1191,
+      "line": 1266,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1192,
+      "line": 1267,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
+    },
+    {
+      "path": "PooToolsSource/Base/PTCollectionView.swift",
+      "line": 1910,
+      "kind": "disk or custom cache",
+      "text": "// English: Invalidate only the geometry cache for the requested rows."
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewLayoutSupport.swift",

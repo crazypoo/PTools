@@ -1,8 +1,15 @@
 # PTools 路线图
 
-> 当前代码基线：`5.62.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.62.4`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.62.2` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.62.4` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## Unreleased UIControl Native UIMenu / Selection Menu
+
+- ✅ 为任意 `UIControl` 增加原生 `UIMenu`、动态菜单和 Selection Menu 入口，统一由 `selectedID` 驱动选中态。
+- ✅ `UIButton` / `PTBaseButton` 复用 UIKit 原生 `menu` 与 `showsMenuAsPrimaryAction`，不重复实现系统菜单行为。
+- ✅ `PTActionLayoutButton`、Inspector 选择控件和 Example Demo 接入统一菜单能力，并保留长按与主点击触发语义。
+- ✅ 增加三语使用指南、选择菜单回归测试和 iOS 17+ / Swift 6 构建验证；版本事实保持 `5.62.4`，不创建新 tag。
 
 ## 5.62.2 TabBar Item Content Insets 实际尺寸修复
 

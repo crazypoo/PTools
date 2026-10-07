@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "535f9ab5b3a5d2cda66e846c8d6ac09178ec7bc8",
-  "generated_at": "2026-10-06T05:04:09Z",
+  "source_revision": "e56b376ef91456b11a81d1082765dcb5c0a2bdeb",
+  "generated_at": "2026-10-07T15:11:47Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",

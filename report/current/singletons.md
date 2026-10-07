@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_singletons.rb
-Source revision: 535f9ab5b3a5d2cda66e846c8d6ac09178ec7bc8
-Generated at: 2026-10-06T05:04:09Z
+Source revision: e56b376ef91456b11a81d1082765dcb5c0a2bdeb
+Generated at: 2026-10-07T15:11:48Z
 -->
 
 # PTools 当前单例范围盘点

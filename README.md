@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.62.2`，真机/宿主回归与发布证据完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.62.4`，真机/宿主回归与发布证据完成前不创建正式 tag。
 
 DebugNetwork 2.0 是只读观测工具，支持 immutable capture、Timeline、过滤、脱敏 cURL/HAR/Text 导出和多 Scene presentation。使用方式见 [DebugNetwork 指南](docs/debug/DEBUG_NETWORK.md)。
 
@@ -36,6 +36,9 @@ WKWebView Bridge、MapKit、App Attest/DeviceCheck、远程配置和 SSE/WebSock
 
 `PTCollectionView` 的 Diffable 内容刷新、稳定身份、布局失效和快速更新用法见
 [PTCollectionView Diffable 更新指南](docs/guides/PTCOLLECTIONVIEW_UPDATE_GUIDE.md)。
+
+Core 的 `UIControl` 原生菜单、动态菜单和 Selection Menu 用法见
+[UIControl Menu 指南](docs/guides/PTCONTROL_MENU_GUIDE.md)。
 
 ## Requirements
 

@@ -10,6 +10,7 @@ protocol OptionListControlDelegate: AnyObject {
     func optionListControlDidChangeSelectedIndex(_ optionListControl: OptionListControl)
 }
 
+@MainActor
 final class OptionListControl: BaseFormControl {
     // MARK: - Properties
 
@@ -89,8 +90,25 @@ final class OptionListControl: BaseFormControl {
 
         updateViews()
 
-        showsMenuAsPrimaryAction = true
-        isContextMenuInteractionEnabled = true
+        // English: Reuse the shared selection menu so the current index is read at presentation time.
+        // Español: Reutiliza el menú de selección compartido para leer el índice actual al presentarlo.
+        // 中文：复用统一选择菜单，在菜单展示时读取最新选中索引。
+        pt_setSelectionMenuProvider(
+            trigger: .primaryAction,
+            items: { [options] in
+                options.enumerated().map { index, option in
+                    PTControlMenuSelectionItem(id: index,
+                                               title: option.title.description,
+                                               selectedImage: option.icon)
+                }
+            },
+            selectedID: { [weak self] in self?.selectedIndex },
+            selectionChanged: { [weak self] index in
+                guard let self else { return }
+                self.updateSelectedIndex(index)
+                self.delegate?.optionListControlDidChangeSelectedIndex(self)
+            }
+        )
     }
 
     func updateSelectedIndex(_ selectedIndex: Int?) {
@@ -121,32 +139,4 @@ final class OptionListControl: BaseFormControl {
         }
     }
 
-    override func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-        let localPoint = convert(location, to: accessoryControl)
-
-        guard accessoryControl.point(inside: localPoint, with: nil) else { return nil }
-
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-            self.makeOptionSelectionMenu()
-        }
-    }
-
-    private func makeOptionSelectionMenu() -> UIMenu {
-        UIMenu(
-            title: title ?? "",
-            children: options
-                .enumerated()
-                .map { index, option in
-                    UIAction(
-                        title: option.title.description,
-                        image: option.icon,
-                        state: index == self.selectedIndex ? .on : .off
-                    ) { [weak self] _ in
-                        guard let self = self else { return }
-                        self.selectedIndex = index
-                        self.delegate?.optionListControlDidChangeSelectedIndex(self)
-                    }
-                }
-        )
-    }
 }

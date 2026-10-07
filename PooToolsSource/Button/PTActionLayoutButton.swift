@@ -162,6 +162,14 @@ public class PTActionLayoutButton: UIControl {
         updateAppearance()
     }
 
+    // English: Let UIKit create the context-menu interaction and reuse the shared provider.
+    // Español: Permite que UIKit cree la interacción de menú contextual y reutiliza el proveedor compartido.
+    // 中文：让 UIKit 创建 context-menu interaction，并复用统一的菜单提供器。
+    public override func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                                configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        PTControlMenuCoordinator.configuration(for: self, location: location)
+    }
+
     /// English: Hides only the action content and keeps the existing layout constraints intact.
     /// Español: Oculta solo el contenido de acción y conserva las restricciones existentes.
     /// 中文：只隐藏动作内容，保持现有布局约束不变。
@@ -674,6 +682,9 @@ public extension PTActionLayoutButton {
         updateAppearance()
     }
 }
+
+@MainActor
+extension PTActionLayoutButton: PTNativeControlMenuHost {}
 
 extension NSAttributedString {
     func containsAction() -> Bool {

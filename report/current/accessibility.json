@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "535f9ab5b3a5d2cda66e846c8d6ac09178ec7bc8",
-  "generated_at": "2026-10-06T05:04:09Z",
+  "source_revision": "e56b376ef91456b11a81d1082765dcb5c0a2bdeb",
+  "generated_at": "2026-10-07T15:11:48Z",
   "counts": {
     "reduce_motion": 60,
     "accessibility": 269,
@@ -428,16 +428,6 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Button/PTActionLayoutButton.swift",
-      "line": 179
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Button/PTActionLayoutButton.swift",
-      "line": 180
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Button/PTActionLayoutButton.swift",
       "line": 187
     },
     {
@@ -448,12 +438,22 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Button/PTActionLayoutButton.swift",
-      "line": 509
+      "line": 195
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Button/PTActionLayoutButton.swift",
-      "line": 510
+      "line": 196
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Button/PTActionLayoutButton.swift",
+      "line": 517
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Button/PTActionLayoutButton.swift",
+      "line": 518
     },
     {
       "rule": "accessibility",

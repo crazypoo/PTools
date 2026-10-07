@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "535f9ab5b3a5d2cda66e846c8d6ac09178ec7bc8",
-  "generated_at": "2026-10-06T05:04:08Z",
+  "source_revision": "e56b376ef91456b11a81d1082765dcb5c0a2bdeb",
+  "generated_at": "2026-10-07T15:11:46Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -331,17 +331,22 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionDataCoordinator.swift",
-      "lines": 197,
+      "lines": 198,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Base/PTCollectionIdentifiers.swift",
+      "lines": 100,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionIndexCoordinator.swift",
-      "lines": 161,
+      "lines": 163,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionInteractionCoordinator.swift",
-      "lines": 244,
+      "lines": 283,
       "classification": "ok"
     },
     {
@@ -360,8 +365,18 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/Base/PTCollectionUpdateCoordinator.swift",
+      "lines": 103,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Base/PTCollectionUpdateDiagnostics.swift",
+      "lines": 46,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "lines": 1549,
+      "lines": 1981,
       "classification": "architecture_exception"
     },
     {
@@ -471,7 +486,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
-      "lines": 260,
+      "lines": 242,
       "classification": "ok"
     },
     {
@@ -556,7 +571,7 @@
     },
     {
       "path": "PooToolsSource/Button/PTActionLayoutButton.swift",
-      "lines": 713,
+      "lines": 724,
       "classification": "ok"
     },
     {
@@ -910,6 +925,11 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/Category/PTControlMenuCoordinator.swift",
+      "lines": 205,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/Category/PTJson+PTEX.swift",
       "lines": 24,
       "classification": "ok"
@@ -992,6 +1012,11 @@
     {
       "path": "PooToolsSource/Category/UIControl+PTEX.swift",
       "lines": 141,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Category/UIControl+PTMenu.swift",
+      "lines": 122,
       "classification": "ok"
     },
     {
@@ -2301,7 +2326,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/BaseControl.swift",
-      "lines": 186,
+      "lines": 197,
       "classification": "ok"
     },
     {
@@ -3146,7 +3171,7 @@
     },
     {
       "path": "PooToolsSource/Inspector/OptionListControl.swift",
-      "lines": 152,
+      "lines": 142,
       "classification": "ok"
     },
     {

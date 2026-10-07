@@ -149,6 +149,7 @@ enum PTDemoRegistry {
         make("ui.alert", "PooToolsBanner", "Alert", .uiComponents, .interactive, .sheet, .runnable, legacy: "Alert", tags: ["alert", "action-sheet"]),
         make("ui.tabbar-insets", "PToolsUIFoundation", "TabBar Item Insets", .uiComponents, .interactive, .push, .runnable, legacy: "TabBar Item Insets", tags: ["tabbar", "selection", "insets", "offset"]),
         make("ui.gradient-rendering", "PToolsUIFoundation", "Gradient Rendering", .uiComponents, .interactive, .push, .runnable, legacy: "Gradient Rendering", tags: ["gradient", "label", "image-view"]),
+        make("ui.control-menu", "PooToolsCore", "UIControl Menu", .uiComponents, .interactive, .push, .runnable, legacy: "UIControl Menu", tags: ["menu", "uicontrol", "selection", "swift6"]),
         make("ui.menu", "PToolsUIFoundation", "Menu", .uiComponents, .interactive, .sheet, .runnable, legacy: "Menu", tags: ["menu"]),
         make("ui.loading", "PooToolsLoading", "Loading", .uiComponents, .interactive, .sheet, .runnable, legacy: "Loading", tags: ["loading"]),
         make("permissions.overview", "PToolsPermissionUI", "Permission", .permissionsDevice, .hostRequired, .push, .runnable, legacy: "Permission", tags: ["permission"]),
@@ -289,6 +290,8 @@ final class PTDemoCoordinator {
             return PTGradientRenderingDemoViewController()
         case "ui.collection-refresh-lab":
             return PTCollectionRefreshLabViewController()
+        case "ui.control-menu":
+            return PTControlMenuDemoViewController()
         case "infrastructure.database":
             return PTDatabaseInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
         case "infrastructure.auth":
@@ -337,6 +340,130 @@ final class PTDemoCoordinator {
             host.present(viewController, animated: true)
         case .sheet, .inline, .action:
             UIViewController.currentPresentToSheet(vc: viewController, sizes: sizes)
+        }
+    }
+}
+
+// English: Demonstrates native menus for PTools UIControls without recreating UIKit menu UI.
+// Español: Demuestra menús nativos para UIControls de PTools sin recrear la interfaz de UIKit.
+// 中文：演示 PTools UIControl 的原生菜单能力，不重复实现 UIKit 菜单界面。
+@MainActor
+private final class PTControlMenuDemoViewController: PTBaseViewController {
+    private enum Sort: String, CaseIterable, Hashable {
+        case all = "综合"
+        case sales = "销量"
+        case price = "价格"
+        case latest = "最新"
+    }
+
+    private var currentSort: Sort = .all
+    private let statusLabel = UILabel()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = "UIControl Menu"
+        configureView()
+    }
+
+    private func configureView() {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 12
+        stack.alignment = .fill
+
+        let longPressButton = PTActionLayoutButton()
+        longPressButton.layoutStyle = .title
+        longPressButton.setTitle("长按：普通菜单", state: .normal)
+        longPressButton.setTitleColor(.label, state: .normal)
+        longPressButton.pt_setMenu(
+            UIMenu(children: [
+                UIAction(title: "复制", image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
+                    self?.statusLabel.text = "已选择：复制"
+                },
+                UIAction(title: "分享", image: UIImage(systemName: "square.and.arrow.up")) { [weak self] _ in
+                    self?.statusLabel.text = "已选择：分享"
+                }
+            ]),
+            trigger: .longPress
+        )
+        longPressButton.addActionHandlers { [weak self] _ in
+            self?.statusLabel.text = "普通点击仍然可用"
+        }
+
+        let selectionButton = PTActionLayoutButton()
+        selectionButton.layoutStyle = .title
+        selectionButton.setTitle("排序：综合", state: .normal)
+        selectionButton.setTitleColor(.label, state: .normal)
+        selectionButton.pt_setSelectionMenuProvider(
+            trigger: .primaryAction,
+            items: { [weak self] in
+                guard let self else { return [] }
+                return Sort.allCases.map { sort in
+                    PTControlMenuSelectionItem(
+                        id: sort,
+                        title: sort.rawValue,
+                        selectedImage: sort == .sales ? UIImage(systemName: "chart.bar.fill") : nil
+                    )
+                }
+            },
+            selectedID: { [weak self] in self?.currentSort },
+            selectionChanged: { [weak self, weak selectionButton] sort in
+                self?.currentSort = sort
+                selectionButton?.setTitle("排序：\(sort.rawValue)", state: .normal)
+                self?.statusLabel.text = "当前排序：\(sort.rawValue)"
+            }
+        )
+
+        let nativeButton = PTBaseButton(type: .system)
+        nativeButton.setTitle("UIButton 原生 Primary Menu", for: .normal)
+        nativeButton.menu = UIMenu(children: [
+            UIAction(title: "系统菜单", image: UIImage(systemName: "checkmark.circle")) { [weak self] _ in
+                self?.statusLabel.text = "UIButton 使用 UIKit 原生 menu"
+            }
+        ])
+        nativeButton.showsMenuAsPrimaryAction = true
+
+        let loadingButton = PTActionLayoutButton()
+        loadingButton.layoutStyle = .title
+        loadingButton.setTitle("点击后进入 Loading", state: .normal)
+        loadingButton.setTitleColor(.label, state: .normal)
+        loadingButton.pt_setMenu(
+            UIMenu(children: [
+                UIAction(title: "长按菜单仍受 loading 状态控制") { [weak self] _ in
+                    self?.statusLabel.text = "Loading 已结束"
+                }
+            ]),
+            trigger: .longPress
+        )
+        loadingButton.addActionHandlers { [weak self] sender in
+            sender.startLoading()
+            self?.statusLabel.text = "Loading 中：菜单暂时不可用"
+            PTGCDManager.shared.delayOnMain(time: 1) {
+                sender.stopLoading()
+                self?.statusLabel.text = "Loading 结束：菜单已恢复"
+            }
+        }
+
+        statusLabel.numberOfLines = 0
+        statusLabel.textColor = .secondaryLabel
+        statusLabel.text = "UIControl 原生菜单能力"
+
+        let descriptionLabel = UILabel()
+        descriptionLabel.numberOfLines = 0
+        descriptionLabel.textColor = .secondaryLabel
+        descriptionLabel.text = "PTActionLayoutButton 支持长按和主点击；UIButton / PTBaseButton 直接使用 UIKit 原生 menu。"
+
+        [descriptionLabel, longPressButton, selectionButton, nativeButton, loadingButton, statusLabel].forEach {
+            stack.addArrangedSubview($0)
+            $0.snp.makeConstraints { make in
+                make.height.greaterThanOrEqualTo(44)
+            }
+        }
+
+        view.addSubview(stack)
+        stack.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
         }
     }
 }

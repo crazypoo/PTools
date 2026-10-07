@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: 535f9ab5b3a5d2cda66e846c8d6ac09178ec7bc8
-Generated at: 2026-10-06T05:04:08Z
+Source revision: e56b376ef91456b11a81d1082765dcb5c0a2bdeb
+Generated at: 2026-10-07T15:11:46Z
 -->
 
 # 当前文件尺寸门禁
@@ -18,7 +18,7 @@ Generated at: 2026-10-06T05:04:08Z
 | 文件 | 行数 | 分类 |
 | --- | ---: | --- |
 | `PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift` | 1145 | warning |
-| `PooToolsSource/Base/PTCollectionView.swift` | 1549 | architecture_exception |
+| `PooToolsSource/Base/PTCollectionView.swift` | 1981 | architecture_exception |
 | `PooToolsSource/Category/String+PTEX.swift` | 1878 | architecture_exception |
 | `PooToolsSource/Category/UIImage+PTEX.swift` | 1433 | warning |
 | `PooToolsSource/Category/UIScrollView+PTRefreshEX.swift` | 1446 | warning |

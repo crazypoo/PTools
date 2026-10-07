@@ -7,7 +7,14 @@
 - 修复 `PTCollectionView` 在 Diffable 快照应用期间直接丢弃后续更新的问题，所有结构和内容更新现在按 `MainActor` 串行执行，并在执行时读取最新快照。
 - 新增 `reloadItemContent`、`reloadSectionContent`、`reloadVisibleContent`、`reconfigureSections`、`invalidateSectionLayout` 和 `invalidateItemLayout`，明确区分内容刷新与布局刷新。
 - 新增稳定身份兼容仓库、Debug 更新诊断、Diffable Refresh Lab、列表更新指南和列表质量回归测试；保留 `PTSection`、`PTRows` 及原有公开入口。
-- 完整 Xcode Simulator 构建仍受外部 Harbeth Metal Toolchain 缺失阻断，未据此宣称全量构建通过。
+- 新增 `UIControl` 原生 `UIMenu` Bridge 和 Selection Menu；`PTActionLayoutButton` 支持长按/主点击，选中项使用 `selectedID` 与选中态图片，UIButton 继续复用 UIKit 原生 menu。
+- `PooTools` 与 `PooTools-Example` 已完成 iOS Simulator Debug / Release 完整 Xcode 构建；外部 Pods 仅保留既有警告，不计入 PTools 源码结果。
+- 版本事实保持 `5.62.4`，本轮不修改 `VERSION`、podspec 版本或 Git tag。
+
+## 5.62.3 — 2026-10-07
+
+- 修复 `PTTabBarItemView` 的命中测试：图标、Lottie、标题和其他装饰内容统一回传到 Item 控件，Badge 独立交互区域仍保留原命中结果。
+- 同步该版本的 CocoaPods 锁定依赖。
 
 ## 5.62.2 — 2026-10-06
 
