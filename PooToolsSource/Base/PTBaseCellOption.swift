@@ -125,6 +125,13 @@ open class PTBaseNormalCell: UICollectionViewCell,@MainActor PTCellRegisterable 
 
     open func resetContent() {}
 
+    // English: Reconfigure visible content without entering the reuse lifecycle.
+    // Español: Reconfigura el contenido visible sin entrar en el ciclo de reutilización.
+    // 中文：在不进入复用生命周期的情况下刷新可见内容。
+    open func reconfigureContent(with context: PTCollectionCellContext) -> Bool {
+        false
+    }
+
     open override func prepareForReuse() {
         super.prepareForReuse()
         cancelAsyncWork()

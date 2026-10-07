@@ -94,6 +94,48 @@ final class PTListQualityTests: XCTestCase {
         XCTAssertEqual(executionOrder, [0, 1, 2])
     }
 
+    // English: Queued content updates must merge their ranges and preserve every completion.
+    // Español: Las actualizaciones de contenido en cola deben combinar sus rangos y conservar cada completion.
+    // 中文：排队中的内容刷新必须合并范围，同时保留每一个 completion。
+    func testContentUpdatesCoalesceWithoutDroppingCompletions() async {
+        let contentExpectation = expectation(description: "both content completions")
+        contentExpectation.expectedFulfillmentCount = 2
+        let bodyExpectation = expectation(description: "one coalesced content body")
+        let diagnostics = PTCollectionUpdateDiagnostics { (sections: 0, items: 0) }
+        let coordinator = PTCollectionUpdateCoordinator(diagnostics: diagnostics)
+        var releaseStructure: (() -> Void)?
+        var contentBodyCount = 0
+
+        coordinator.enqueue(name: "hold") { finish in
+            releaseStructure = finish
+        }
+        coordinator.enqueueContent(name: "content-a",
+                                   sections: [1],
+                                   items: [IndexPath(item: 0, section: 1)],
+                                   body: { sections, items, invalidatesLayout, finish in
+            contentBodyCount += 1
+            XCTAssertEqual(Set(sections), Set([1, 2]))
+            XCTAssertEqual(Set(items), Set([IndexPath(item: 0, section: 1), IndexPath(item: 1, section: 2)]))
+            XCTAssertFalse(invalidatesLayout)
+            bodyExpectation.fulfill()
+            finish()
+        }, completion: {
+            contentExpectation.fulfill()
+        })
+        coordinator.enqueueContent(name: "content-b",
+                                   sections: [2],
+                                   items: [IndexPath(item: 1, section: 2)],
+                                   body: { _, _, _, finish in
+            finish()
+        }, completion: {
+            contentExpectation.fulfill()
+        })
+
+        releaseStructure?()
+        await fulfillment(of: [bodyExpectation, contentExpectation], timeout: 2)
+        XCTAssertEqual(contentBodyCount, 1)
+    }
+
     // English: Content refresh keeps the Diffable structure and stable identities unchanged.
     // Español: El refresco de contenido conserva la estructura Diffable y las identidades estables.
     // 中文：内容刷新必须保持 Diffable 结构和稳定身份不变。
@@ -124,6 +166,72 @@ final class PTListQualityTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers.map(\.identifier), sectionIDsBefore)
         XCTAssertEqual(snapshot.itemIdentifiers.map(\.diffId), rowIDsBefore)
         XCTAssertEqual(list.getRow(at: IndexPath(item: 0, section: 0))?.title, "After")
+    }
+
+    // English: Value-model updates replace content without changing the identity-only order.
+    // Español: Las actualizaciones de modelos de valor reemplazan el contenido sin cambiar el orden basado en identidad.
+    // 中文：值模型更新只替换内容，不改变纯身份列表的顺序。
+    func testModelStoreValueUpdatePreservesIdentityOrder() {
+        let first = PTRows(title: "First", diffId: "value-0")
+        let second = PTRows(title: "Second", diffId: "value-1")
+        let section = PTSection(identifier: "value-section", rows: [first, second])
+        let store = PTCollectionModelStore()
+        store.replace([section])
+
+        let latest = PTRows(title: "Updated", diffId: "value-1")
+        store.updateItemContent(at: IndexPath(item: 1, section: 0), using: latest)
+
+        XCTAssertEqual(store.sectionIdentifiers(), [PTSectionIdentifier("value-section")])
+        XCTAssertEqual(store.rowIdentifiers(in: PTSectionIdentifier("value-section")),
+                       [PTRowIdentifier("value-0"), PTRowIdentifier("value-1")])
+        XCTAssertTrue(store.resolvedRow(second) === latest)
+    }
+
+    // English: Content coalescing must stop at a structural operation barrier.
+    // Español: La combinación de contenido debe detenerse ante una barrera estructural.
+    // 中文：内容合并必须在结构操作屏障处停止。
+    func testContentCoalescingStopsAtStructureBarrier() async {
+        let bodyExpectation = expectation(description: "two content bodies")
+        bodyExpectation.expectedFulfillmentCount = 2
+        let diagnostics = PTCollectionUpdateDiagnostics { (sections: 0, items: 0) }
+        let coordinator = PTCollectionUpdateCoordinator(diagnostics: diagnostics)
+        var releaseStructure: (() -> Void)?
+        var bodyCount = 0
+
+        coordinator.enqueue(name: "hold") { finish in
+            releaseStructure = finish
+        }
+        coordinator.enqueueContent(name: "content-before-structure", body: { _, _, _, finish in
+            bodyCount += 1
+            bodyExpectation.fulfill()
+            finish()
+        })
+        coordinator.enqueue(name: "structure") { finish in
+            finish()
+        }
+        coordinator.enqueueContent(name: "content-after-structure", body: { _, _, _, finish in
+            bodyCount += 1
+            bodyExpectation.fulfill()
+            finish()
+        })
+
+        releaseStructure?()
+        await fulfillment(of: [bodyExpectation], timeout: 2)
+        XCTAssertEqual(bodyCount, 2)
+    }
+
+    // English: The identity-only adapter keeps legacy model call sites source-compatible.
+    // Español: El adaptador basado solo en identidad mantiene compatibles los call sites heredados.
+    // 中文：纯身份适配器保持旧模型调用方的源码兼容性。
+    func testIdentitySnapshotAdapterPreservesLegacyArguments() {
+        let row = PTRows(title: "Legacy", diffId: "legacy-row")
+        let section = PTSection(identifier: "legacy-section", rows: [row])
+        var snapshot = PTCollectionIDSnapshot()
+        snapshot.appendSections([section])
+        snapshot.appendItems([row], toSection: section)
+
+        XCTAssertEqual(snapshot.sectionIdentifiers, [PTSectionIdentifier("legacy-section")])
+        XCTAssertEqual(snapshot.itemIdentifiers, [PTRowIdentifier("legacy-row")])
     }
 
     func testMeasureFullSnapshotForOneThousandRows() {

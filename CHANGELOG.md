@@ -4,12 +4,15 @@
 
 版本唯一来源为根目录 `VERSION`；外部依赖构建阻断解决并完成宿主回归后再创建正式 tag。
 
-- 修复 `PTCollectionView` 在 Diffable 快照应用期间直接丢弃后续更新的问题，所有结构和内容更新现在按 `MainActor` 串行执行，并在执行时读取最新快照。
-- 新增 `reloadItemContent`、`reloadSectionContent`、`reloadVisibleContent`、`reconfigureSections`、`invalidateSectionLayout` 和 `invalidateItemLayout`，明确区分内容刷新与布局刷新。
-- 新增稳定身份兼容仓库、Debug 更新诊断、Diffable Refresh Lab、列表更新指南和列表质量回归测试；保留 `PTSection`、`PTRows` 及原有公开入口。
-- 新增 `UIControl` 原生 `UIMenu` Bridge 和 Selection Menu；`PTActionLayoutButton` 支持长按/主点击，选中项使用 `selectedID` 与选中态图片，UIButton 继续复用 UIKit 原生 menu。
-- `PooTools` 与 `PooTools-Example` 已完成 iOS Simulator Debug / Release 完整 Xcode 构建；外部 Pods 仅保留既有警告，不计入 PTools 源码结果。
-- 版本事实保持 `5.62.4`，本轮不修改 `VERSION`、podspec 版本或 Git tag。
+- 后续变更记录继续写入新的正式版本章节。
+
+## 5.62.5 — 2026-10-07
+
+- `PTCollectionView` 内部 Diffable 数据源改为只保存稳定的 Section/Row ID；保留 `PTSection`、`PTRows` 和旧快照别名作为兼容入口。
+- 新增 ModelStore 更新入口、`PTCollectionCellContext`、`cellInCollectionV2`、`configureCell` 和可见 Cell 原地重配置。
+- 内容刷新改为可合并的 `reconfigureItems` 路径，默认不做结构动画；新增 `reloadItemCell`、`reloadSectionCells`、`updateRow`、`updateRows` 和 `updateItemContent`。
+- Refresh Lab 增加 Ref、Value、External、Store 数据来源模式；补充内容刷新诊断、稳定身份、性能和兼容迁移指南。
+- 完整 Xcode 验证结果以当前构建日志和外部 Pods 阻断分类为准；本版本不创建 Git tag，直到发布门禁全部通过。
 
 ## 5.62.3 — 2026-10-07
 

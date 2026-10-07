@@ -1215,11 +1215,31 @@ private final class PTCollectionRefreshDemoModel {
     }
 }
 
+// English: A Sendable value snapshot lets the lab exercise value and external data ownership.
+// Español: Un snapshot de valor Sendable permite probar propiedad de datos por valor y externa.
+// 中文：Sendable 值快照用于演示值类型和外部数据源所有权。
+private struct PTCollectionRefreshValueModel: Sendable {
+    let id: String
+    let title: String
+    var isSelected: Bool
+}
+
+// English: Box the Sendable value for PTRows' legacy AnyObject dataModel slot.
+// Español: Envuelve el valor Sendable para el campo heredado AnyObject de PTRows.
+// 中文：将 Sendable 值包装进 PTRows 旧版 AnyObject dataModel 槽位。
+private final class PTCollectionRefreshValueBox: NSObject {
+    let value: PTCollectionRefreshValueModel
+
+    init(_ value: PTCollectionRefreshValueModel) {
+        self.value = value
+    }
+}
+
 // English: A tiny native cell keeps the refresh lab independent from business cell implementations.
 // Español: Una celda nativa pequeña mantiene el laboratorio independiente de las celdas de negocio.
 // 中文：使用轻量原生 Cell，让实验页不依赖业务 Cell。
 @MainActor
-private final class PTCollectionRefreshLabCell: UICollectionViewCell {
+private final class PTCollectionRefreshLabCell: PTBaseNormalCell {
     private let titleLabel = UILabel()
 
     override init(frame: CGRect) {
@@ -1239,10 +1259,19 @@ private final class PTCollectionRefreshLabCell: UICollectionViewCell {
     @available(*, unavailable)
     required init?(coder: NSCoder) { nil }
 
-    func render(_ model: PTCollectionRefreshDemoModel) {
-        titleLabel.text = model.isSelected ? "✓  (model.title)" : model.title
-        titleLabel.textColor = model.isSelected ? .white : .label
-        contentView.backgroundColor = model.isSelected ? .systemBlue : .secondarySystemBackground
+    // English: Render a value snapshot so visible-cell reconfiguration does not need a new cell.
+    // Español: Renderiza un snapshot de valor para que la reconfiguración visible no cree otra celda.
+    // 中文：渲染值快照，让可见 Cell 更新时无需重新创建。
+    func render(title: String, isSelected: Bool) {
+        titleLabel.text = isSelected ? "✓  \(title)" : title
+        titleLabel.textColor = isSelected ? .white : .label
+        contentView.backgroundColor = isSelected ? .systemBlue : .secondarySystemBackground
+    }
+
+    override func reconfigureContent(with context: PTCollectionCellContext) -> Bool {
+        guard let model = context.row.dataModel as? PTCollectionRefreshValueBox else { return false }
+        render(title: model.value.title, isSelected: model.value.isSelected)
+        return true
     }
 }
 
@@ -1258,6 +1287,7 @@ private final class PTCollectionRefreshLabViewController: PTBaseViewController {
         case reconfigure
         case item
         case sectionContent
+        case replaceCell
 
         var title: String {
             switch self {
@@ -1267,17 +1297,48 @@ private final class PTCollectionRefreshLabViewController: PTBaseViewController {
             case .reconfigure: return "Reconfigure"
             case .item: return "Item"
             case .sectionContent: return "Section Content"
+            case .replaceCell: return "Replace Cell"
+            }
+        }
+    }
+
+    private enum DataMode: Int, CaseIterable {
+        case reference
+        case value
+        case external
+        case store
+
+        var title: String {
+            switch self {
+            case .reference: return "Ref"
+            case .value: return "Value"
+            case .external: return "External"
+            case .store: return "Store"
             }
         }
     }
 
     private let modeControl = UISegmentedControl(items: RefreshMode.allCases.map(\.title))
+    private let dataModeControl = UISegmentedControl(items: DataMode.allCases.map(\.title))
+    private let statusLabel = UILabel()
     private let collectionView: PTCollectionView
     private var models: [[PTCollectionRefreshDemoModel]] = (0..<3).map { section in
         (0..<3).map { row in
             PTCollectionRefreshDemoModel(id: "refresh-\(section)-\(row)", title: "Section \(section) · Item \(row)")
         }
     }
+    private var valueModels: [[PTCollectionRefreshValueModel]] = (0..<3).map { section in
+        (0..<3).map { row in
+            PTCollectionRefreshValueModel(id: "refresh-\(section)-\(row)",
+                                          title: "Section \(section) · Item \(row)",
+                                          isSelected: false)
+        }
+    }
+    private var externalSelection = Set<String>()
+    private var providerCallCount = 0
+    private var configureCallCount = 0
+    private var operationStartedAt: CFTimeInterval?
+    private var lastOperationLatency: TimeInterval = 0
 
     init() {
         let configuration = PTCollectionViewConfig()
@@ -1300,45 +1361,99 @@ private final class PTCollectionRefreshLabViewController: PTBaseViewController {
         view.backgroundColor = .systemBackground
         modeControl.selectedSegmentIndex = RefreshMode.item.rawValue
         modeControl.addTarget(self, action: #selector(modeChanged), for: .valueChanged)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Stress", style: .plain, target: self, action: #selector(runStress))
+        dataModeControl.selectedSegmentIndex = DataMode.reference.rawValue
+        dataModeControl.addTarget(self, action: #selector(dataModeChanged), for: .valueChanged)
+        navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(title: "Stress", style: .plain, target: self, action: #selector(runStress)),
+            UIBarButtonItem(title: "YD Sequence", style: .plain, target: self, action: #selector(runYDSearchSideSequence))
+        ]
+        statusLabel.font = .monospacedSystemFont(ofSize: 10, weight: .regular)
+        statusLabel.textColor = .secondaryLabel
+        statusLabel.numberOfLines = 2
+        statusLabel.accessibilityTraits = .updatesFrequently
 
         view.addSubview(modeControl)
+        view.addSubview(dataModeControl)
+        view.addSubview(statusLabel)
         view.addSubview(collectionView)
         modeControl.translatesAutoresizingMaskIntoConstraints = false
+        dataModeControl.translatesAutoresizingMaskIntoConstraints = false
+        statusLabel.translatesAutoresizingMaskIntoConstraints = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             modeControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 12),
             modeControl.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -12),
             modeControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+            dataModeControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 12),
+            dataModeControl.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -12),
+            dataModeControl.topAnchor.constraint(equalTo: modeControl.bottomAnchor, constant: 8),
+            statusLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 12),
+            statusLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -12),
+            statusLabel.topAnchor.constraint(equalTo: dataModeControl.bottomAnchor, constant: 6),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.topAnchor.constraint(equalTo: modeControl.bottomAnchor, constant: 8),
+            collectionView.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: 6),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
         collectionView.contentCollectionView.register(PTCollectionRefreshLabCell.self, forCellWithReuseIdentifier: "PTCollectionRefreshLabCell")
-        collectionView.cellInCollection = { collectionView, section, indexPath in
-            guard let row = section.rows?[safe: indexPath.item],
-                  let model = row.dataModel as? PTCollectionRefreshDemoModel,
-                  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PTCollectionRefreshLabCell", for: indexPath) as? PTCollectionRefreshLabCell else {
+        collectionView.cellInCollectionV2 = { [weak self] collectionView, context in
+            self?.providerCallCount += 1
+            self?.updateStatus()
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PTCollectionRefreshLabCell", for: context.indexPath) as? PTCollectionRefreshLabCell else {
                 return nil
             }
-            cell.render(model)
             return cell
+        }
+        collectionView.configureCell = { [weak self] _, cell, context in
+            guard let self,
+                  let cell = cell as? PTCollectionRefreshLabCell,
+                  let model = self.displayModel(for: context) else { return }
+            self.configureCallCount += 1
+            self.updateStatus()
+            cell.render(title: model.title, isSelected: model.isSelected)
         }
         collectionView.collectionDidSelect = { [weak self] _, _, indexPath in
             self?.select(indexPath)
         }
+        updateStatus()
+        beginLabOperation()
         collectionView.showCollectionDetail(collectionData: makeSections(), animated: false)
+        scheduleLabCompletion()
+    }
+
+    private func updateStatus() {
+        statusLabel.text = "Provider: \(providerCallCount)  Configure: \(configureCallCount)\n" +
+            "Apply: \(collectionView.snapshotApplyCount)  Pending: \(collectionView.pendingUpdateCount)  " +
+            "Latency: \(String(format: "%.3f", lastOperationLatency))s"
+    }
+
+    private func beginLabOperation() {
+        operationStartedAt = CACurrentMediaTime()
+        updateStatus()
+    }
+
+    private func finishLabOperation() {
+        if let operationStartedAt {
+            lastOperationLatency = max(0, CACurrentMediaTime() - operationStartedAt)
+        }
+        self.operationStartedAt = nil
+        updateStatus()
+    }
+
+    private func scheduleLabCompletion() {
+        PTMainActorBridge.after(0.15) { [weak self] in
+            self?.finishLabOperation()
+        }
     }
 
     private func makeSections() -> [PTSection] {
-        models.enumerated().map { sectionIndex, sectionModels in
+        valueSnapshots().enumerated().map { sectionIndex, sectionModels in
             let rows = sectionModels.map { model in
                 let row = PTRows(title: model.title,
                                  ID: "PTCollectionRefreshLabCell",
                                  diffId: model.id,
-                                 dataModel: model)
+                                 dataModel: PTCollectionRefreshValueBox(model))
                 row.cellClass = PTCollectionRefreshLabCell.self
                 return row
             }
@@ -1346,41 +1461,164 @@ private final class PTCollectionRefreshLabViewController: PTBaseViewController {
         }
     }
 
+    private func valueSnapshots() -> [[PTCollectionRefreshValueModel]] {
+        let mode = DataMode(rawValue: dataModeControl.selectedSegmentIndex) ?? .reference
+        switch mode {
+        case .reference:
+            return models.map { section in
+                section.map {
+                    PTCollectionRefreshValueModel(id: $0.id,
+                                                  title: $0.title,
+                                                  isSelected: $0.isSelected)
+                }
+            }
+        case .value, .store:
+            return valueModels
+        case .external:
+            return (0..<3).map { section in
+                (0..<3).map { row in
+                    let id = "refresh-\(section)-\(row)"
+                    return PTCollectionRefreshValueModel(id: id,
+                                                         title: "Section \(section) · Item \(row)",
+                                                         isSelected: externalSelection.contains(id))
+                }
+            }
+        }
+    }
+
+    private func currentRow(at indexPath: IndexPath) -> PTRows? {
+        guard valueSnapshots().indices.contains(indexPath.section) else { return nil }
+        return makeSections()[indexPath.section].rows?[safe: indexPath.item]
+    }
+
+    // English: Read external selection state at configuration time instead of copying it into the row first.
+    // Español: Lee el estado externo al configurar la celda en lugar de copiarlo primero en la fila.
+    // 中文：在配置 Cell 时直接读取外部选中状态，不先复制进 Row。
+    private func displayModel(for context: PTCollectionCellContext) -> PTCollectionRefreshValueModel? {
+        let mode = DataMode(rawValue: dataModeControl.selectedSegmentIndex) ?? .reference
+        if mode == .external {
+            return PTCollectionRefreshValueModel(id: context.row.diffId,
+                                                  title: context.row.title,
+                                                  isSelected: externalSelection.contains(context.row.diffId))
+        }
+        return (context.row.dataModel as? PTCollectionRefreshValueBox)?.value
+    }
+
+    private func syncSelection(at indexPath: IndexPath) {
+        let snapshots = valueSnapshots()
+        guard snapshots.indices.contains(indexPath.section),
+              snapshots[indexPath.section].indices.contains(indexPath.item) else { return }
+        let selectedID = snapshots[indexPath.section][indexPath.item].id
+        let isSelected = !snapshots[indexPath.section][indexPath.item].isSelected
+        let mode = DataMode(rawValue: dataModeControl.selectedSegmentIndex) ?? .reference
+        switch mode {
+        case .reference:
+            models[indexPath.section].forEach { $0.isSelected = false }
+            models[indexPath.section][indexPath.item].isSelected = isSelected
+        case .value, .store:
+            valueModels[indexPath.section] = valueModels[indexPath.section].enumerated().map { index, model in
+                PTCollectionRefreshValueModel(id: model.id,
+                                              title: model.title,
+                                              isSelected: index == indexPath.item ? isSelected : false)
+            }
+        case .external:
+            externalSelection.subtract(snapshots[indexPath.section].map(\.id))
+            if isSelected { externalSelection.insert(selectedID) }
+        }
+    }
+
     private func select(_ indexPath: IndexPath) {
-        guard models.indices.contains(indexPath.section),
-              models[indexPath.section].indices.contains(indexPath.item) else { return }
-        let selectedModel = models[indexPath.section][indexPath.item]
-        let wasSelected = selectedModel.isSelected
-        models[indexPath.section].forEach { $0.isSelected = false }
-        selectedModel.isSelected = !wasSelected
+        let snapshots = valueSnapshots()
+        guard snapshots.indices.contains(indexPath.section),
+              snapshots[indexPath.section].indices.contains(indexPath.item) else { return }
+        syncSelection(at: indexPath)
+        beginLabOperation()
 
         let mode = RefreshMode(rawValue: modeControl.selectedSegmentIndex) ?? .item
+        let dataMode = DataMode(rawValue: dataModeControl.selectedSegmentIndex) ?? .reference
         switch mode {
         case .replace:
             collectionView.showCollectionDetail(collectionData: makeSections())
         case .sections:
             collectionView.reloadSections(at: [indexPath.section])
         case .rows:
-            let row = makeSections()[indexPath.section].rows?[indexPath.item]
+            let row = currentRow(at: indexPath)
             if let row { collectionView.reloadRows([row], in: indexPath.section) }
         case .reconfigure:
-            collectionView.reconfigureSections(at: [indexPath.section])
+            if dataMode == .external {
+                collectionView.reconfigureSections(at: [indexPath.section])
+            } else {
+                collectionView.updateRows(makeSections()[indexPath.section].rows ?? [], reload: false)
+                collectionView.reconfigureSections(at: [indexPath.section])
+            }
         case .item:
-            collectionView.reloadItemContent(at: [indexPath])
+            if dataMode == .external {
+                collectionView.reloadItemContent(at: [indexPath])
+            } else if let row = currentRow(at: indexPath) {
+                collectionView.updateItemContent(at: indexPath, using: row)
+            }
         case .sectionContent:
-            collectionView.reloadSectionContent(at: [indexPath.section])
+            if dataMode == .external {
+                collectionView.reloadSectionContent(at: [indexPath.section])
+            } else {
+                collectionView.updateRows(makeSections()[indexPath.section].rows ?? [], reload: false)
+                collectionView.reloadSectionContent(at: [indexPath.section])
+            }
+        case .replaceCell:
+            collectionView.reloadItemCell(at: [indexPath])
         }
+        scheduleLabCompletion()
     }
 
     @objc private func modeChanged() { }
 
+    @objc private func dataModeChanged() {
+        beginLabOperation()
+        collectionView.showCollectionDetail(collectionData: makeSections(), animated: false)
+        scheduleLabCompletion()
+    }
+
     @objc private func runStress() {
+        beginLabOperation()
         for step in 0..<12 {
-            let section = step % models.count
-            let row = step % models[section].count
-            models[section].forEach { $0.isSelected = false }
-            models[section][row].isSelected = true
-            collectionView.reloadItemContent(at: [IndexPath(item: row, section: section)])
+            let snapshots = valueSnapshots()
+            let section = step % snapshots.count
+            let row = step % snapshots[section].count
+            let indexPath = IndexPath(item: row, section: section)
+            syncSelection(at: indexPath)
+            if DataMode(rawValue: dataModeControl.selectedSegmentIndex) == .external {
+                collectionView.reloadItemContent(at: [indexPath])
+            } else if let currentRow = currentRow(at: indexPath) {
+                collectionView.updateItemContent(at: indexPath, using: currentRow)
+            }
+        }
+        scheduleLabCompletion()
+    }
+
+    @objc private func runYDSearchSideSequence() {
+        beginLabOperation()
+        let sequence = [
+            IndexPath(item: 0, section: 0),
+            IndexPath(item: 0, section: 1),
+            IndexPath(item: 0, section: 2),
+            IndexPath(item: 1, section: 2)
+        ]
+        for (offset, indexPath) in sequence.enumerated() {
+            PTMainActorBridge.after(TimeInterval(offset) * 0.15) { [weak self] in
+                guard let self else { return }
+                let snapshots = self.valueSnapshots()
+                guard snapshots.indices.contains(indexPath.section),
+                      snapshots[indexPath.section].indices.contains(indexPath.item) else { return }
+                self.syncSelection(at: indexPath)
+                if DataMode(rawValue: self.dataModeControl.selectedSegmentIndex) == .external {
+                    self.collectionView.reloadItemContent(at: [indexPath])
+                } else if let row = self.currentRow(at: indexPath) {
+                    self.collectionView.updateItemContent(at: indexPath, using: row)
+                }
+                if offset == sequence.count - 1 {
+                    self.finishLabOperation()
+                }
+            }
         }
     }
 }

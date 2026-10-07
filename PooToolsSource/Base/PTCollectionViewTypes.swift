@@ -115,6 +115,41 @@ public typealias PTReusableViewHandler = @MainActor (_ kind: String,_ collection
 ///Cell设置
 public typealias PTCellInCollectionHandler = @MainActor (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> UICollectionViewCell?
 
+// English: Pass the latest section and row together so custom cells do not have to read stale snapshot objects.
+// Español: Pasa la sección y la fila más recientes juntas para que las celdas no lean objetos obsoletos del snapshot.
+// 中文：同时传递最新 Section 和 Row，避免自定义 Cell 读取过期快照对象。
+@MainActor
+public struct PTCollectionCellContext {
+    public let section: PTSection
+    public let row: PTRows
+    public let indexPath: IndexPath
+
+    public init(section: PTSection, row: PTRows, indexPath: IndexPath) {
+        self.section = section
+        self.row = row
+        self.indexPath = indexPath
+    }
+}
+
+// English: New row-aware provider; the legacy handler remains source-compatible.
+// Español: Nuevo proveedor consciente de la fila; el handler heredado conserva compatibilidad de código.
+// 中文：新增带 Row 上下文的 Provider，同时保留旧 Handler 的源码兼容性。
+public typealias PTCellInCollectionV2Handler = @MainActor (_ collectionView: UICollectionView, _ context: PTCollectionCellContext) -> UICollectionViewCell?
+
+// English: Configure a created or visible cell without forcing Diffable to replace it.
+// Español: Configura una celda creada o visible sin obligar a Diffable a reemplazarla.
+// 中文：配置已创建或可见的 Cell，不强制 Diffable 替换 Cell。
+public typealias PTCellConfigurationHandler = @MainActor (_ collectionView: UICollectionView, _ cell: UICollectionViewCell, _ context: PTCollectionCellContext) -> Void
+
+// English: Separate structural transactions from content and layout work.
+// Español: Separa las transacciones estructurales del contenido y del layout.
+// 中文：将结构事务与内容刷新、布局刷新分开。
+public enum PTCollectionUpdateKind: String, Sendable {
+    case structure
+    case content
+    case layout
+}
+
 ///Cell点击事件
 public typealias PTCellDidSelectedHandler = @MainActor (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void
 
@@ -203,6 +238,11 @@ public class PTCollectionViewConfig: NSObject {
     open var customReuseViews: Bool = false
     ///首是否开启刷新动画
     open var refreshWithoutAnimation: Bool = false
+    // English: Structure and content have different animation semantics; content defaults to immediate updates.
+    // Español: La estructura y el contenido tienen semánticas de animación distintas; el contenido se actualiza de inmediato.
+    // 中文：结构和内容的动画语义不同；内容刷新默认立即完成。
+    open var structureUpdateAnimationEnabled: Bool = true
+    open var contentUpdateAnimationEnabled: Bool = false
     ///索引
     open var sideIndexTitles: [String]?
     ///索引设置

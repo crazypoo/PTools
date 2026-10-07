@@ -9,9 +9,66 @@
 
 import UIKit
 
-// 写在文件顶部或合适的扩展中
+// English: Keep the legacy aliases source-compatible while PTCollectionView uses identity-only Diffable state internally.
+// Español: Conserva los alias heredados compatibles mientras PTCollectionView usa internamente un Diffable basado solo en identidades.
+// 中文：保留旧别名的源码兼容性，同时让 PTCollectionView 内部的 Diffable 只保存稳定身份。
 public typealias PTDataSource = UICollectionViewDiffableDataSource<PTSection, PTRows>
 public typealias PTSnapshot = NSDiffableDataSourceSnapshot<PTSection, PTRows>
+
+// English: Snapshot identifiers carry order and identity; mutable section and row content lives in PTCollectionModelStore.
+// Español: Los identificadores transportan orden e identidad; el contenido mutable vive en PTCollectionModelStore.
+// 中文：快照只承载顺序和身份，可变 Section/Row 内容由 PTCollectionModelStore 保存。
+public typealias PTCollectionIDDataSource = UICollectionViewDiffableDataSource<PTSectionIdentifier, PTRowIdentifier>
+public typealias PTCollectionIDSnapshot = NSDiffableDataSourceSnapshot<PTSectionIdentifier, PTRowIdentifier>
+
+// English: Adapt legacy model arguments to the identity-only snapshot without changing callers.
+// Español: Adapta argumentos de modelos heredados al snapshot basado solo en identidades sin cambiar a los consumidores.
+// 中文：将旧模型参数适配到纯身份快照，不改变现有调用方。
+public extension NSDiffableDataSourceSnapshot where SectionIdentifierType == PTSectionIdentifier, ItemIdentifierType == PTRowIdentifier {
+    mutating func appendSections(_ sections: [PTSection]) {
+        appendSections(sections.map { PTSectionIdentifier($0.identifier) })
+    }
+
+    mutating func insertSections(_ sections: [PTSection], afterSection section: PTSectionIdentifier) {
+        insertSections(sections.map { PTSectionIdentifier($0.identifier) }, afterSection: section)
+    }
+
+    mutating func appendItems(_ rows: [PTRows], toSection section: PTSection) {
+        appendItems(rows.map { PTRowIdentifier($0.diffId) }, toSection: PTSectionIdentifier(section.identifier))
+    }
+
+    mutating func appendItems(_ rows: [PTRows], toSection section: PTSectionIdentifier) {
+        appendItems(rows.map { PTRowIdentifier($0.diffId) }, toSection: section)
+    }
+
+    mutating func insertItems(_ rows: [PTRows], beforeItem item: PTRowIdentifier) {
+        insertItems(rows.map { PTRowIdentifier($0.diffId) }, beforeItem: item)
+    }
+
+    mutating func reloadItems(_ rows: [PTRows]) {
+        reloadItems(rows.map { PTRowIdentifier($0.diffId) })
+    }
+
+    mutating func reconfigureItems(_ rows: [PTRows]) {
+        reconfigureItems(rows.map { PTRowIdentifier($0.diffId) })
+    }
+
+    mutating func deleteItems(_ rows: [PTRows]) {
+        deleteItems(rows.map { PTRowIdentifier($0.diffId) })
+    }
+
+    mutating func reloadSections(_ sections: [PTSection]) {
+        reloadSections(sections.map { PTSectionIdentifier($0.identifier) })
+    }
+
+    mutating func deleteSections(_ sections: [PTSection]) {
+        deleteSections(sections.map { PTSectionIdentifier($0.identifier) })
+    }
+
+    func indexOfSection(_ section: PTSection) -> Int? {
+        indexOfSection(PTSectionIdentifier(section.identifier))
+    }
+}
 
 @MainActor
 final class PTSkeletonOverlayView: UIView {

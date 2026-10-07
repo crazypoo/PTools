@@ -48,6 +48,40 @@ public final class PTCollectionDataCoordinator {
         return nil
     }
 
+    // English: Validate public models against the identity-only snapshot used by PTCollectionView.
+    // Español: Valida los modelos públicos contra el snapshot basado solo en identidades usado por PTCollectionView.
+    // 中文：使用 PTCollectionView 的纯身份快照校验公开模型。
+    public func validationError(for sections: [PTSection],
+                                against snapshot: PTCollectionIDSnapshot) -> PTCollectionViewUpdateError? {
+        var sectionIdentifiers = Set(snapshot.sectionIdentifiers.map(\.rawValue))
+        var rowIdentifiers = Set(snapshot.itemIdentifiers.map(\.rawValue))
+        for section in sections {
+            guard !section.identifier.isEmpty else { return .emptySectionIdentifier }
+            guard sectionIdentifiers.insert(section.identifier).inserted else {
+                return .duplicateSectionIdentifier(section.identifier)
+            }
+            for row in section.rows ?? [] {
+                guard !row.diffId.isEmpty else { return .emptyRowIdentifier }
+                guard rowIdentifiers.insert(row.diffId).inserted else {
+                    return .duplicateRowIdentifier(row.diffId)
+                }
+            }
+        }
+        return nil
+    }
+
+    public func validationError(for rows: [PTRows],
+                                against snapshot: PTCollectionIDSnapshot) -> PTCollectionViewUpdateError? {
+        var rowIdentifiers = Set(snapshot.itemIdentifiers.map(\.rawValue))
+        for row in rows {
+            guard !row.diffId.isEmpty else { return .emptyRowIdentifier }
+            guard rowIdentifiers.insert(row.diffId).inserted else {
+                return .duplicateRowIdentifier(row.diffId)
+            }
+        }
+        return nil
+    }
+
     public func section(at index: Int, in snapshot: PTSnapshot) -> PTSection? {
         guard snapshot.sectionIdentifiers.indices.contains(index) else { return nil }
         return snapshot.sectionIdentifiers[index]
@@ -59,13 +93,25 @@ public final class PTCollectionDataCoordinator {
         guard rows.indices.contains(indexPath.item) else { return nil }
         return rows[indexPath.item]
     }
+
+    public func sectionIdentifier(at index: Int, in snapshot: PTCollectionIDSnapshot) -> PTSectionIdentifier? {
+        guard snapshot.sectionIdentifiers.indices.contains(index) else { return nil }
+        return snapshot.sectionIdentifiers[index]
+    }
+
+    public func rowIdentifier(at indexPath: IndexPath, in snapshot: PTCollectionIDSnapshot) -> PTRowIdentifier? {
+        guard let section = sectionIdentifier(at: indexPath.section, in: snapshot) else { return nil }
+        let rows = snapshot.itemIdentifiers(inSection: section)
+        guard rows.indices.contains(indexPath.item) else { return nil }
+        return rows[indexPath.item]
+    }
 }
 
 extension PTCollectionView {
     
     func setupDiffableDataSource() {
         // 1. 配置 Cell
-        diffableDataSource = PTDataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, rowModel) -> UICollectionViewCell? in
+        diffableDataSource = PTCollectionIDDataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, rowIdentifier) -> UICollectionViewCell? in
             guard let self = self else { return nil }
             
             let snapshot = self.diffableDataSource.snapshot()
@@ -75,10 +121,22 @@ extension PTCollectionView {
             }
 
             let sectionModel = self.resolvedSection(snapshot.sectionIdentifiers[indexPath.section])
-            let currentRowModel = self.resolvedRow(rowModel)
+            let currentRowModel = self.resolvedRow(rowIdentifier)
+            let context = PTCollectionCellContext(section: sectionModel,
+                                                   row: currentRowModel,
+                                                   indexPath: indexPath)
+            self.cellConfigurationDiagnostics.provider(operationID: self.updateCoordinator.activeOperationID,
+                                                       rowID: rowIdentifier,
+                                                       indexPath: indexPath)
+            self.cellConfigurationDiagnostics.fingerprint(operationID: self.updateCoordinator.activeOperationID,
+                                                          row: currentRowModel,
+                                                          indexPath: indexPath,
+                                                          phase: "provider-read")
             
             let cell: UICollectionViewCell
-            if let configuredCell = self.cellInCollection?(collectionView, sectionModel, indexPath) {
+            if let configuredCell = self.cellInCollectionV2?(collectionView, context) {
+                cell = configuredCell
+            } else if let configuredCell = self.cellInCollection?(collectionView, sectionModel, indexPath) {
                 cell = configuredCell
             } else if let cellClass = currentRowModel.cellClass,
                       !currentRowModel.reuseID.isEmpty {
@@ -100,6 +158,12 @@ extension PTCollectionView {
                                     collectionView: collectionView,
                                     sectionModel: sectionModel,
                                     indexPath: indexPath)
+            self.configureCell?(collectionView, cell, context)
+            self.cellConfigurationDiagnostics.configure(operationID: self.updateCoordinator.activeOperationID,
+                                                        rowID: rowIdentifier,
+                                                        indexPath: indexPath,
+                                                        cell: cell,
+                                                        visible: collectionView.indexPathsForVisibleItems.contains(indexPath))
             return cell
         }
         
@@ -131,7 +195,7 @@ extension PTCollectionView {
             return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NSStringFromClass(PTBaseCollectionReusableView.self), for: indexPath)
         }
         
-        let initialSnapshot = PTSnapshot()
+        let initialSnapshot = PTCollectionIDSnapshot()
         diffableDataSource.apply(initialSnapshot, animatingDifferences: false)
     }
 

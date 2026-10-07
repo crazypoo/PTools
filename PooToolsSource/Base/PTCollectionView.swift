@@ -24,8 +24,19 @@ public class PTCollectionView: UIView {
     
     // 声明一个节流任务
     private var scrollDebounceTask: Task<Void, Never>?
-    /// 原生 Diffable 数据源
-    var diffableDataSource: PTDataSource!
+    // English: The native Diffable data source stores stable section and row IDs only.
+    // Español: La fuente Diffable nativa solo almacena IDs estables de sección y fila.
+    // 中文：原生 Diffable 数据源只保存稳定的 Section/Row ID。
+    var diffableDataSource: PTCollectionIDDataSource!
+
+    // English: Expose lightweight refresh diagnostics for the in-app Refresh Lab.
+    // Español: Expone diagnósticos ligeros de actualización para el laboratorio integrado.
+    // 中文：为内置 Refresh Lab 提供轻量级刷新诊断数据。
+    public private(set) var snapshotApplyCount = 0
+
+    public var pendingUpdateCount: Int {
+        updateCoordinator.pendingOperationCount
+    }
     ///Photos
     let photoPrefetchCoordinator = PTCollectionPhotoPrefetchCoordinator()
     var photoAssets: [PHAsset] = []
@@ -108,6 +119,10 @@ public class PTCollectionView: UIView {
     // Español: Mantiene los modelos mutables más recientes fuera de los identificadores Diffable heredados.
     // 中文：将最新可变模型保存在旧版 Diffable 标识之外。
     let modelStore = PTCollectionModelStore()
+    // English: Record whether content refresh reaches the Provider and Configure stages.
+    // Español: Registra si el refresco de contenido alcanza las etapas Provider y Configure.
+    // 中文：记录内容刷新是否真正进入 Provider 和 Configure 阶段。
+    let cellConfigurationDiagnostics = PTCollectionCellConfigurationDiagnostics()
     // English: Queue update operations instead of dropping overlapping snapshots.
     // Español: Encola operaciones de actualización en lugar de descartar snapshots solapados.
     // 中文：排队处理更新操作，不再丢弃重叠快照。
@@ -196,6 +211,8 @@ public class PTCollectionView: UIView {
     open var headerInCollection: PTReusableViewHandler?
     open var footerInCollection: PTReusableViewHandler?
     open var cellInCollection: PTCellInCollectionHandler?
+    open var cellInCollectionV2: PTCellInCollectionV2Handler?
+    open var configureCell: PTCellConfigurationHandler?
     
     //MARK: Cell delegate handler
     open var collectionDidSelect: PTCellDidSelectedHandler?
@@ -423,15 +440,21 @@ extension PTCollectionView {
         collectionUpdateError?(error)
     }
 
-    func validateSections(_ sections: [PTSection], against snapshot: PTSnapshot? = nil) -> Bool {
-        if let error = dataCoordinator.validationError(for: sections, against: snapshot) {
+    func validateSections(_ sections: [PTSection], against snapshot: PTCollectionIDSnapshot? = nil) -> Bool {
+        let error: PTCollectionViewUpdateError?
+        if let snapshot {
+            error = dataCoordinator.validationError(for: sections, against: snapshot)
+        } else {
+            error = dataCoordinator.validationError(for: sections)
+        }
+        if let error {
             reportUpdateError(error)
             return false
         }
         return true
     }
 
-    func validateRows(_ rows: [PTRows], against snapshot: PTSnapshot) -> Bool {
+    func validateRows(_ rows: [PTRows], against snapshot: PTCollectionIDSnapshot) -> Bool {
         if let error = dataCoordinator.validationError(for: rows, against: snapshot) {
             reportUpdateError(error)
             return false
@@ -446,15 +469,23 @@ extension PTCollectionView {
         modelStore.resolvedSection(section)
     }
 
+    func resolvedSection(_ identifier: PTSectionIdentifier) -> PTSection {
+        modelStore.resolvedSection(identifier) ?? PTSection(identifier: identifier.rawValue)
+    }
+
     func resolvedRow(_ row: PTRows) -> PTRows {
         modelStore.resolvedRow(row)
+    }
+
+    func resolvedRow(_ identifier: PTRowIdentifier) -> PTRows {
+        modelStore.resolvedRow(identifier) ?? PTRows(diffId: identifier.rawValue)
     }
 
     // English: Replace the compatibility store after a structural mutation.
     // Español: Reemplaza el almacén compatible después de una mutación estructural.
     // 中文：结构发生变化后同步兼容模型仓库。
-    func synchronizeModelStore(with snapshot: PTSnapshot) {
-        modelStore.replace(snapshot.sectionIdentifiers.map(resolvedSection))
+    func synchronizeModelStore(with snapshot: PTCollectionIDSnapshot) {
+        modelStore.synchronize(with: snapshot)
     }
 
 }
@@ -463,15 +494,184 @@ extension PTCollectionView {
     // English: Apply a snapshot only from the MainActor update coordinator.
     // Español: Aplica un snapshot solo desde el coordinador de actualizaciones de MainActor.
     // 中文：只允许 MainActor 更新协调器提交快照。
-    func applySnapshot(_ snapshot: PTSnapshot,
+    func applySnapshot(_ snapshot: PTCollectionIDSnapshot,
                        animatingDifferences: Bool,
                        completion: (() -> Void)? = nil) {
+        snapshotApplyCount += 1
         diffableDataSource.apply(
             snapshot,
             animatingDifferences: animatingDifferences
         ) { [weak self] in
             self?.setiOS17EmptyDataView()
+            if let self {
+                self.cellConfigurationDiagnostics.finish(operationID: self.updateCoordinator.activeOperationID,
+                                                         kind: self.updateCoordinator.activeOperationKind ?? .structure)
+            }
             completion?()
+        }
+    }
+
+    // English: Keep structural and content animations independently configurable.
+    // Español: Mantiene configurables por separado las animaciones estructurales y de contenido.
+    // 中文：让结构更新和内容刷新分别控制动画。
+    private var structureAnimationEnabled: Bool {
+        viewConfig.structureUpdateAnimationEnabled && !viewConfig.refreshWithoutAnimation
+    }
+
+    private var contentAnimationEnabled: Bool {
+        viewConfig.contentUpdateAnimationEnabled && !viewConfig.refreshWithoutAnimation
+    }
+
+    // English: Resolve requested index paths to stable IDs without reading mutable model objects from Diffable.
+    // Español: Resuelve los index paths solicitados a IDs estables sin leer modelos mutables desde Diffable.
+    // 中文：将请求的 IndexPath 解析成稳定 ID，不从 Diffable 读取可变模型对象。
+    private func rowIdentifiers(for indexPaths: Set<IndexPath>,
+                                in snapshot: PTCollectionIDSnapshot) -> [PTRowIdentifier] {
+        var result: [PTRowIdentifier] = []
+        var seen = Set<PTRowIdentifier>()
+        for indexPath in indexPaths {
+            guard snapshot.sectionIdentifiers.indices.contains(indexPath.section) else { continue }
+            let section = snapshot.sectionIdentifiers[indexPath.section]
+            let rows = snapshot.itemIdentifiers(inSection: section)
+            guard rows.indices.contains(indexPath.item) else { continue }
+            let row = rows[indexPath.item]
+            if seen.insert(row).inserted {
+                result.append(row)
+            }
+        }
+        return result
+    }
+
+    private func rowIdentifiers(for sectionIndexes: Set<Int>,
+                                in snapshot: PTCollectionIDSnapshot) -> [PTRowIdentifier] {
+        var result: [PTRowIdentifier] = []
+        var seen = Set<PTRowIdentifier>()
+        for index in sectionIndexes {
+            guard snapshot.sectionIdentifiers.indices.contains(index) else { continue }
+            let section = snapshot.sectionIdentifiers[index]
+            for row in snapshot.itemIdentifiers(inSection: section) where seen.insert(row).inserted {
+                result.append(row)
+            }
+        }
+        return result
+    }
+
+    // English: Update visible cells in place and let Diffable handle only cells without a direct fast path.
+    // Español: Actualiza las celdas visibles en sitio y deja que Diffable procese las restantes.
+    // 中文：原地更新可见 Cell，其余 Cell 才交给 Diffable 处理。
+    @discardableResult
+    private func reconfigureVisibleCells(for rowIdentifiers: [PTRowIdentifier]) -> Set<PTRowIdentifier> {
+        var configured = Set<PTRowIdentifier>()
+        for rowIdentifier in rowIdentifiers {
+            guard let indexPath = diffableDataSource.indexPath(for: rowIdentifier),
+                  let cell = collectionView.cellForItem(at: indexPath),
+                  snapshotSection(at: indexPath.section) != nil else {
+                continue
+            }
+
+            let section = resolvedSection(diffableDataSource.snapshot().sectionIdentifiers[indexPath.section])
+            let row = resolvedRow(rowIdentifier)
+            let context = PTCollectionCellContext(section: section, row: row, indexPath: indexPath)
+            cellConfigurationDiagnostics.fingerprint(operationID: updateCoordinator.activeOperationID,
+                                                     row: row,
+                                                     indexPath: indexPath,
+                                                     phase: "visible-read")
+            var didConfigure = false
+
+            if let normalCell = cell as? PTBaseNormalCell {
+                didConfigure = normalCell.reconfigureContent(with: context)
+            }
+            if !didConfigure,
+               let fusionCell = cell as? PTFusionCellProtocol,
+               let fusionModel = row.dataModel as? PTFusionCellModel {
+                fusionCell.cellModel = fusionModel
+                didConfigure = true
+            }
+            if !didConfigure,
+               let bindableCell = cell as? PTAnyCellBindable,
+               let dataModel = row.dataModel {
+                bindableCell.pt_bindAny(dataModel)
+                didConfigure = true
+            }
+            if !didConfigure, let configureCell {
+                configureCell(collectionView, cell, context)
+                didConfigure = true
+            }
+
+            if didConfigure {
+                configured.insert(rowIdentifier)
+                cellConfigurationDiagnostics.configure(operationID: updateCoordinator.activeOperationID,
+                                                        rowID: rowIdentifier,
+                                                        indexPath: indexPath,
+                                                        cell: cell,
+                                                        visible: true)
+            }
+        }
+        return configured
+    }
+
+    private func snapshotSection(at index: Int) -> PTSectionIdentifier? {
+        let identifiers = diffableDataSource.snapshot().sectionIdentifiers
+        guard identifiers.indices.contains(index) else { return nil }
+        return identifiers[index]
+    }
+
+    // English: Apply one coalesced content batch without changing Diffable identities.
+    // Español: Aplica un único lote de contenido combinado sin cambiar las identidades Diffable.
+    // 中文：合并执行内容刷新，不改变 Diffable 身份。
+    private func performContentRefresh(sectionIndexes: Set<Int>,
+                                       itemIndexPaths: Set<IndexPath>,
+                                       invalidateLayout: Bool,
+                                       finish: @escaping @MainActor () -> Void) {
+        let snapshot = diffableDataSource.snapshot()
+        let rowIDs = Array(Set(rowIdentifiers(for: itemIndexPaths, in: snapshot)
+                               + rowIdentifiers(for: sectionIndexes, in: snapshot)))
+        let visibleRowIDs = rowIDs.filter { rowID in
+            guard let indexPath = diffableDataSource.indexPath(for: rowID) else { return false }
+            return collectionView.cellForItem(at: indexPath) != nil
+        }
+        cellConfigurationDiagnostics.request(rowIDs, visible: visibleRowIDs)
+
+        var invalidatedSections = sectionIndexes
+        invalidatedSections.formUnion(itemIndexPaths.map(\.section))
+        if invalidateLayout {
+            for section in invalidatedSections where snapshot.sectionIdentifiers.indices.contains(section) {
+                clearWaterfallCache(section: section)
+                markSectionDirty(section)
+            }
+            layoutCache.removeAll()
+            heightCache.removeAll()
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
+
+        guard !rowIDs.isEmpty else {
+            cellConfigurationDiagnostics.finish(operationID: updateCoordinator.activeOperationID, kind: .content)
+            finish()
+            return
+        }
+
+        let directlyConfigured = reconfigureVisibleCells(for: rowIDs)
+        let remainingIDs = rowIDs.filter { !directlyConfigured.contains($0) }
+        guard !remainingIDs.isEmpty else {
+            if invalidateLayout {
+                collectionView.collectionViewLayout.invalidateLayout()
+            }
+            cellConfigurationDiagnostics.finish(operationID: updateCoordinator.activeOperationID, kind: .content)
+            finish()
+            return
+        }
+
+        var contentSnapshot = snapshot
+        contentSnapshot.reconfigureItems(remainingIDs)
+        applySnapshot(contentSnapshot, animatingDifferences: contentAnimationEnabled) { [weak self] in
+            guard let self else {
+                finish()
+                return
+            }
+            if invalidateLayout {
+                self.collectionView.collectionViewLayout.invalidateLayout()
+            }
+            finish()
         }
     }
     
@@ -625,7 +825,7 @@ extension PTCollectionView {
             self.waterfallCache.removeAll()
             self.fallbackLayouts.removeAll()
 
-            var snapshot = PTSnapshot()
+            var snapshot = PTCollectionIDSnapshot()
             snapshot.appendSections(collectionData)
 
             var rowsToReconfigure: [PTRows] = []
@@ -644,7 +844,8 @@ extension PTCollectionView {
                 PTUnavailableManager.render(.content, in: self)
             }
 
-            self.applySnapshot(snapshot, animatingDifferences: animated) {
+            self.applySnapshot(snapshot,
+                               animatingDifferences: animated && self.structureAnimationEnabled) {
                 finishTask?(self.collectionView)
                 finish()
             }
@@ -666,9 +867,9 @@ extension PTCollectionView {
             self.fallbackLayouts.removeAll()
             self.modelStore.replace([])
 
-            var snapshot = PTSnapshot()
+            var snapshot = PTCollectionIDSnapshot()
             snapshot.deleteAllItems()
-            let animated = !self.viewConfig.refreshWithoutAnimation
+            let animated = self.structureAnimationEnabled
             self.applySnapshot(snapshot, animatingDifferences: animated) {
                 finishTask?(self.collectionView)
                 finish()
@@ -724,7 +925,7 @@ extension PTCollectionView {
             }
             self.synchronizeModelStore(with: snapshot)
 
-            let animated = !self.viewConfig.refreshWithoutAnimation
+            let animated = self.structureAnimationEnabled
             self.applySnapshot(snapshot, animatingDifferences: animated) {
                 completion?()
                 finish()
@@ -760,7 +961,7 @@ extension PTCollectionView {
             snapshot.appendItems(rows, toSection: sectionSnapshot)
             self.synchronizeModelStore(with: snapshot)
 
-            let animated = !self.viewConfig.refreshWithoutAnimation
+            let animated = self.structureAnimationEnabled
             self.applySnapshot(snapshot, animatingDifferences: animated) {
                 completion?()
                 finish()
@@ -815,7 +1016,7 @@ extension PTCollectionView {
             }
             self.synchronizeModelStore(with: snapshot)
 
-            let animated = !self.viewConfig.refreshWithoutAnimation
+            let animated = self.structureAnimationEnabled
             self.applySnapshot(snapshot, animatingDifferences: animated) {
                 completion?()
                 finish()
@@ -859,7 +1060,7 @@ extension PTCollectionView {
             }
             self.synchronizeModelStore(with: snapshot)
 
-            let animated = !self.viewConfig.refreshWithoutAnimation
+            let animated = self.structureAnimationEnabled
             self.applySnapshot(snapshot, animatingDifferences: animated) {
                 completion?()
                 finish()
@@ -892,7 +1093,7 @@ extension PTCollectionView {
                 sectionModel.rows?.removeAll(where: { existingRows.contains($0) })
                 allRowsToDelete.append(contentsOf: existingRows)
                 if sectionModel.rows?.isEmpty ?? true {
-                    sectionsToDelete.append(sectionSnapshot)
+                    sectionsToDelete.append(sectionModel)
                 }
             }
 
@@ -909,7 +1110,7 @@ extension PTCollectionView {
             }
             self.synchronizeModelStore(with: snapshot)
 
-            let animated = !self.viewConfig.refreshWithoutAnimation
+            let animated = self.structureAnimationEnabled
             self.applySnapshot(snapshot, animatingDifferences: animated) {
                 if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
                     self.collectionView.collectionViewLayout.invalidateLayout()
@@ -947,7 +1148,7 @@ extension PTCollectionView {
             snapshot.deleteSections(existingSections)
             self.synchronizeModelStore(with: snapshot)
 
-            let animated = !self.viewConfig.refreshWithoutAnimation
+            let animated = self.structureAnimationEnabled
             self.applySnapshot(snapshot, animatingDifferences: animated) {
                 completion?()
                 finish()
@@ -1465,7 +1666,7 @@ extension PTCollectionView {
 
             self.applySnapshot(
                 snapshot,
-                animatingDifferences: animated
+                animatingDifferences: animated && self.structureAnimationEnabled
             ) {
                 completion?()
                 finish()
@@ -1476,7 +1677,7 @@ extension PTCollectionView {
     public func reloadRows(_ rows: [PTRows],
                            in section: Int,
                            completion: PTActionTask? = nil) {
-        updateCoordinator.enqueue(name: "reloadRows") { [weak self] finish in
+        updateCoordinator.enqueue(name: "reloadRows", kind: .content) { [weak self] finish in
             guard let self else {
                 completion?()
                 finish()
@@ -1542,10 +1743,10 @@ extension PTCollectionView {
 
             self.markSectionDirty(section)
 
-            snapshot.reloadItems(existingRows)
+            self.cellConfigurationDiagnostics.request(existingRows.map { PTRowIdentifier($0.diffId) })
+            snapshot.reconfigureItems(existingRows)
 
-            let animated =
-                !self.viewConfig.refreshWithoutAnimation
+            let animated = self.contentAnimationEnabled
 
             self.applySnapshot(
                 snapshot,
@@ -1559,7 +1760,9 @@ extension PTCollectionView {
     
     public func reloadSectionsRows(_ rowsMap: [Int: [PTRows]],
                                    completion: PTActionTask? = nil) {
-        updateCoordinator.enqueue(name: "reloadSectionRows", sections: Array(rowsMap.keys)) { [weak self] finish in
+        updateCoordinator.enqueue(name: "reloadSectionRows",
+                                  kind: .content,
+                                  sections: Array(rowsMap.keys)) { [weak self] finish in
             guard let self else {
                 completion?()
                 finish()
@@ -1636,10 +1839,10 @@ extension PTCollectionView {
             }
 
             self.modelStore.update(rows: allRowsToReload)
-            snapshot.reloadItems(allRowsToReload)
+            self.cellConfigurationDiagnostics.request(allRowsToReload.map { PTRowIdentifier($0.diffId) })
+            snapshot.reconfigureItems(allRowsToReload)
 
-            let animated =
-                !self.viewConfig.refreshWithoutAnimation
+            let animated = self.contentAnimationEnabled
 
             self.applySnapshot(
                 snapshot,
@@ -1708,7 +1911,7 @@ extension PTCollectionView {
 
             self.applySnapshot(
                 snapshot,
-                animatingDifferences: animated
+                animatingDifferences: animated && self.structureAnimationEnabled
             ) { [weak self] in
 
                 guard let self else {
@@ -1732,7 +1935,7 @@ extension PTCollectionView {
     
     public func softReloadAllData(animated: Bool = false,
                                   completion: PTActionTask? = nil) {
-        updateCoordinator.enqueue(name: "softReloadAllData") { [weak self] finish in
+        updateCoordinator.enqueue(name: "softReloadAllData", kind: .content) { [weak self] finish in
             guard let self else {
                 completion?()
                 finish()
@@ -1745,6 +1948,8 @@ extension PTCollectionView {
             let allItems =
                 snapshot.itemIdentifiers
 
+            self.cellConfigurationDiagnostics.request(allItems)
+
             guard !allItems.isEmpty else {
                 completion?()
                 finish()
@@ -1755,7 +1960,7 @@ extension PTCollectionView {
 
             self.applySnapshot(
                 snapshot,
-                animatingDifferences: animated
+                animatingDifferences: animated && self.contentAnimationEnabled
             ) {
                 completion?()
                 finish()
@@ -1767,33 +1972,11 @@ extension PTCollectionView {
     // Español: Recarga solo las celdas cuyos modelos cambiaron y conserva intacta la estructura Diffable.
     // 中文：只刷新模型发生变化的 Cell，不改变 Diffable 结构。
     public func reloadItemContent(at indexPaths: [IndexPath], completion: PTActionTask? = nil) {
-        updateCoordinator.enqueue(name: "reloadItemContent", items: indexPaths) { [weak self] finish in
-            guard let self else {
-                completion?()
-                finish()
-                return
-            }
-
-            var snapshot = self.diffableDataSource.snapshot()
-            var seenIDs = Set<String>()
-            let items = indexPaths.compactMap { indexPath -> PTRows? in
-                guard let row = self.diffableDataSource.itemIdentifier(for: indexPath),
-                      seenIDs.insert(row.diffId).inserted else { return nil }
-                return row
-            }
-            guard !items.isEmpty else {
-                completion?()
-                finish()
-                return
-            }
-
-            snapshot.reloadItems(items)
-            let animated = !self.viewConfig.refreshWithoutAnimation
-            self.applySnapshot(snapshot, animatingDifferences: animated) {
-                completion?()
-                finish()
-            }
-        }
+        enqueueContentRefresh(name: "reloadItemContent",
+                              sections: [],
+                              indexPaths: indexPaths,
+                              invalidateLayout: false,
+                              completion: completion)
     }
 
     // English: Reload every item in selected sections without rebuilding their identities.
@@ -1802,79 +1985,146 @@ extension PTCollectionView {
     public func reloadSectionContent(at indexes: [Int],
                                      invalidateLayout: Bool = false,
                                      completion: PTActionTask? = nil) {
-        updateCoordinator.enqueue(name: "reloadSectionContent", sections: indexes) { [weak self] finish in
-            guard let self else {
-                completion?()
-                finish()
-                return
-            }
-
-            var snapshot = self.diffableDataSource.snapshot()
-            var seenIDs = Set<String>()
-            var items: [PTRows] = []
-            var validIndexes = Set<Int>()
-            for index in indexes where snapshot.sectionIdentifiers.indices.contains(index) {
-                validIndexes.insert(index)
-                let section = snapshot.sectionIdentifiers[index]
-                for row in snapshot.itemIdentifiers(inSection: section) where seenIDs.insert(row.diffId).inserted {
-                    items.append(row)
-                }
-                if invalidateLayout {
-                    self.clearWaterfallCache(section: index)
-                    self.markSectionDirty(index)
-                }
-            }
-            guard !items.isEmpty else {
-                completion?()
-                finish()
-                return
-            }
-
-            if invalidateLayout {
-                self.layoutCache.removeAll()
-                self.heightCache.removeAll()
-            }
-            snapshot.reloadItems(items)
-            let animated = !self.viewConfig.refreshWithoutAnimation
-            self.applySnapshot(snapshot, animatingDifferences: animated) {
-                if invalidateLayout, !validIndexes.isEmpty {
-                    self.collectionView.collectionViewLayout.invalidateLayout()
-                }
-                completion?()
-                finish()
-            }
-        }
+        enqueueContentRefresh(name: "reloadSectionContent",
+                              sections: indexes,
+                              indexPaths: [],
+                              invalidateLayout: invalidateLayout,
+                              completion: completion)
     }
 
     // English: Reconfigure lightweight content using the native Diffable path.
     // Español: Reconfigura contenido ligero usando la ruta Diffable nativa.
     // 中文：使用系统 Diffable 路径重新配置轻量内容。
     public func reconfigureSections(at indexes: [Int], completion: PTActionTask? = nil) {
-        updateCoordinator.enqueue(name: "reconfigureSections", sections: indexes) { [weak self] finish in
+        enqueueContentRefresh(name: "reconfigureSections",
+                              sections: indexes,
+                              indexPaths: [],
+                              invalidateLayout: false,
+                              completion: completion)
+    }
+
+    // English: Replace selected cells explicitly when the cell class or reuse path changed.
+    // Español: Reemplaza explícitamente las celdas seleccionadas cuando cambió su clase o ruta de reuse.
+    // 中文：当 Cell 类型或复用路径变化时，显式替换指定 Cell。
+    public func reloadItemCell(at indexPaths: [IndexPath], completion: PTActionTask? = nil) {
+        updateCoordinator.enqueue(name: "reloadItemCell",
+                                 kind: .structure,
+                                 items: indexPaths) { [weak self] finish in
             guard let self else {
                 completion?()
                 finish()
                 return
             }
-
-            var snapshot = self.diffableDataSource.snapshot()
-            var seenIDs = Set<String>()
-            let items = indexes
-                .filter { snapshot.sectionIdentifiers.indices.contains($0) }
-                .flatMap { snapshot.itemIdentifiers(inSection: snapshot.sectionIdentifiers[$0]) }
-                .filter { seenIDs.insert($0.diffId).inserted }
-            guard !items.isEmpty else {
+            let snapshot = self.diffableDataSource.snapshot()
+            let rowIDs = self.rowIdentifiers(for: Set(indexPaths), in: snapshot)
+            guard !rowIDs.isEmpty else {
                 completion?()
                 finish()
                 return
             }
-
-            snapshot.reconfigureItems(items)
-            self.applySnapshot(snapshot, animatingDifferences: false) {
+            var replacementSnapshot = snapshot
+            replacementSnapshot.reloadItems(rowIDs)
+            self.applySnapshot(replacementSnapshot,
+                               animatingDifferences: self.structureAnimationEnabled) {
                 completion?()
                 finish()
             }
         }
+    }
+
+    // English: Replace all cells in selected sections without rebuilding section identities.
+    // Español: Reemplaza todas las celdas de las secciones seleccionadas sin reconstruir sus identidades.
+    // 中文：替换指定 Section 中的所有 Cell，不重建 Section 身份。
+    public func reloadSectionCells(at indexes: [Int], completion: PTActionTask? = nil) {
+        updateCoordinator.enqueue(name: "reloadSectionCells",
+                                 kind: .structure,
+                                 sections: indexes) { [weak self] finish in
+            guard let self else {
+                completion?()
+                finish()
+                return
+            }
+            let snapshot = self.diffableDataSource.snapshot()
+            let rowIDs = self.rowIdentifiers(for: Set(indexes), in: snapshot)
+            guard !rowIDs.isEmpty else {
+                completion?()
+                finish()
+                return
+            }
+            var replacementSnapshot = snapshot
+            replacementSnapshot.reloadItems(rowIDs)
+            self.applySnapshot(replacementSnapshot,
+                               animatingDifferences: self.structureAnimationEnabled) {
+                completion?()
+                finish()
+            }
+        }
+    }
+
+    // English: Update the ModelStore first, then refresh only the affected item.
+    // Español: Actualiza primero el ModelStore y después refresca solo el elemento afectado.
+    // 中文：先更新 ModelStore，再只刷新受影响的 Item。
+    public func updateRow(_ row: PTRows, completion: PTActionTask? = nil) {
+        modelStore.update(row: row)
+        guard let indexPath = diffableDataSource.indexPath(for: PTRowIdentifier(row.diffId)) else {
+            completion?()
+            return
+        }
+        reloadItemContent(at: [indexPath], completion: completion)
+    }
+
+    public func updateRows(_ rows: [PTRows],
+                           reload: Bool = true,
+                           completion: PTActionTask? = nil) {
+        modelStore.update(rows: rows)
+        guard reload else {
+            completion?()
+            return
+        }
+        let indexPaths = rows.compactMap {
+            diffableDataSource.indexPath(for: PTRowIdentifier($0.diffId))
+        }
+        reloadItemContent(at: indexPaths, completion: completion)
+    }
+
+    public func updateItemContent(at indexPath: IndexPath,
+                                  using row: PTRows,
+                                  invalidateLayout: Bool = false,
+                                  completion: PTActionTask? = nil) {
+        modelStore.updateItemContent(at: indexPath, using: row)
+        enqueueContentRefresh(name: "updateItemContent",
+                              sections: [],
+                              indexPaths: [indexPath],
+                              invalidateLayout: invalidateLayout,
+                              completion: completion)
+    }
+
+    private func enqueueContentRefresh(name: String,
+                                       sections: [Int],
+                                       indexPaths: [IndexPath],
+                                       invalidateLayout: Bool,
+                                       completion: PTActionTask?) {
+        let completionHandler: PTCollectionUpdateCoordinator.Completion?
+        if let completion {
+            completionHandler = { @MainActor in completion() }
+        } else {
+            completionHandler = nil
+        }
+        updateCoordinator.enqueueContent(name: name,
+                                         sections: sections,
+                                         items: indexPaths,
+                                         invalidateLayout: invalidateLayout,
+                                         body: { [weak self] sectionSet, itemSet, invalidatesLayout, finish in
+            guard let self else {
+                finish()
+                return
+            }
+            self.performContentRefresh(sectionIndexes: sectionSet,
+                                       itemIndexPaths: itemSet,
+                                       invalidateLayout: invalidatesLayout,
+                                       finish: finish)
+        },
+                                         completion: completionHandler)
     }
 
     // English: Reconfigure visible cells for theme, language and presentation-only changes.
@@ -1888,7 +2138,9 @@ extension PTCollectionView {
     // Español: Invalida la geometría de la sección sin fingir que cambió el contenido.
     // 中文：只使 Section 几何失效，不伪造内容变化。
     public func invalidateSectionLayout(at indexes: [Int], completion: PTActionTask? = nil) {
-        updateCoordinator.enqueue(name: "invalidateSectionLayout", sections: indexes) { [weak self] finish in
+        updateCoordinator.enqueue(name: "invalidateSectionLayout",
+                                  kind: .layout,
+                                  sections: indexes) { [weak self] finish in
             guard let self else {
                 completion?()
                 finish()
@@ -1911,7 +2163,9 @@ extension PTCollectionView {
     // Español: Invalida solo la caché geométrica de las filas solicitadas.
     // 中文：只清理指定 Row 的几何缓存。
     public func invalidateItemLayout(at indexPaths: [IndexPath], completion: PTActionTask? = nil) {
-        updateCoordinator.enqueue(name: "invalidateItemLayout", items: indexPaths) { [weak self] finish in
+        updateCoordinator.enqueue(name: "invalidateItemLayout",
+                                  kind: .layout,
+                                  items: indexPaths) { [weak self] finish in
             guard let self else {
                 completion?()
                 finish()

@@ -13,8 +13,8 @@ import UIKit
 extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
     private func getSafeSectionModel(at index: Int) -> PTSection? {
         let snapshot = self.diffableDataSource.snapshot()
-        guard let section = dataCoordinator.section(at: index, in: snapshot) else { return nil }
-        return resolvedSection(section)
+        guard snapshot.sectionIdentifiers.indices.contains(index) else { return nil }
+        return resolvedSection(snapshot.sectionIdentifiers[index])
     }
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
