@@ -108,6 +108,11 @@ public class PTCollectionView: UIView {
     // Español: Serializa las aplicaciones de snapshots Diffable para evitar aserciones anidadas.
     // 中文：串行化 Diffable 快照提交，避免嵌套更新触发系统断言。
     private var snapshotApplyInFlight = false
+    /// 当前 snapshot apply 尚未结束时收到的最新更新。
+    /// 不直接丢弃，而是在当前 apply 完成后继续执行。
+    private var pendingSnapshot: PTSnapshot?
+    private var pendingSnapshotAnimated = false
+    private var pendingSnapshotCompletions: [() -> Void] = []
     let scrollObserverMultiplexer = PTCollectionScrollObserverMultiplexer()
     
     private var fallbackLayouts: [Int: NSCollectionLayoutSection] = [:]
@@ -435,20 +440,74 @@ extension PTCollectionView {
     internal func applySnapshot(_ snapshot: PTSnapshot,
                                 animatingDifferences: Bool,
                                 completion: (() -> Void)? = nil) {
-        guard !snapshotApplyInFlight else {
-            reportUpdateError(.snapshotApplyInProgress)
-            completion?()
+        // 当前 Diffable 正在执行动画/更新时，
+        // 不允许再次直接 apply，但也绝对不能丢掉刷新。
+        if snapshotApplyInFlight {
+            // latest-wins：
+            // 连续多个 UI 更新时，只需要最终 snapshot，
+            // 避免几十个 snapshot 排队导致 UI 延迟。
+            pendingSnapshot = snapshot
+            pendingSnapshotAnimated = animatingDifferences
+
+            if let completion {
+                pendingSnapshotCompletions.append(completion)
+            }
+
             return
         }
 
+        let completions: [() -> Void]
+
+        if let completion {
+            completions = [completion]
+        } else {
+            completions = []
+        }
+
+        performSnapshotApply(snapshot,
+                             animatingDifferences: animatingDifferences,
+                             completions: completions)
+    }
+    
+    private func performSnapshotApply(_ snapshot: PTSnapshot,
+                                      animatingDifferences: Bool,
+                                      completions: [() -> Void]) {
         snapshotApplyInFlight = true
-        diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences) { [weak self] in
+
+        diffableDataSource.apply(snapshot,
+                                 animatingDifferences: animatingDifferences) { [weak self] in
             guard let self else {
-                completion?()
+                completions.forEach { $0() }
                 return
             }
+
             self.snapshotApplyInFlight = false
-            completion?()
+
+            /*
+             先取出 pending，再调用业务 completion。
+
+             这个顺序很重要：
+             如果 completion 里面再次触发 reload，
+             此时新的 apply 已经被标记为 in-flight，
+             新请求就会继续进入 pending，而不会产生重入。
+             */
+            if let pendingSnapshot = self.pendingSnapshot {
+
+                let pendingAnimated = self.pendingSnapshotAnimated
+                let pendingCompletions = self.pendingSnapshotCompletions
+
+                self.pendingSnapshot = nil
+                self.pendingSnapshotAnimated = false
+                self.pendingSnapshotCompletions.removeAll(
+                    keepingCapacity: true
+                )
+
+                self.performSnapshotApply(pendingSnapshot,
+                                          animatingDifferences: pendingAnimated,
+                                          completions: pendingCompletions)
+            }
+
+            completions.forEach { $0() }
         }
     }
 
