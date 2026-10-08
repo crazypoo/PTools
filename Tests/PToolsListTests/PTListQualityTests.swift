@@ -168,6 +168,43 @@ final class PTListQualityTests: XCTestCase {
         XCTAssertEqual(list.getRow(at: IndexPath(item: 0, section: 0))?.title, "After")
     }
 
+    // English: Structural insertions must keep the newly inserted models available to the cell provider.
+    // Español: Las inserciones estructurales deben conservar los modelos nuevos para el proveedor de celdas.
+    // 中文：结构插入后必须保留新模型，确保 Cell Provider 能读取到它们。
+    func testInsertSectionAndRowsKeepInsertedModels() async {
+        let configuration = PTCollectionViewConfig()
+        configuration.refreshWithoutAnimation = true
+        let list = PTCollectionView(viewConfig: configuration)
+        let initialSection = PTSection(identifier: "insert-initial",
+                                       rows: [PTRows(title: "Initial", diffId: "insert-initial-row")])
+
+        let loadExpectation = expectation(description: "initial content loaded")
+        list.showCollectionDetail(collectionData: [initialSection], animated: false) { _ in
+            loadExpectation.fulfill()
+        }
+        await fulfillment(of: [loadExpectation], timeout: 2)
+
+        let insertedRow = PTRows(title: "Inserted section row", diffId: "insert-section-row")
+        let insertedSection = PTSection(identifier: "inserted-section", rows: [insertedRow])
+        let sectionExpectation = expectation(description: "section inserted")
+        list.insertSection([insertedSection], afterIndex: 0) {
+            sectionExpectation.fulfill()
+        }
+        await fulfillment(of: [sectionExpectation], timeout: 2)
+
+        XCTAssertEqual(list.collectionSectionDatas.map(\.identifier), ["insert-initial", "inserted-section"])
+        XCTAssertTrue(list.getRow(at: IndexPath(item: 0, section: 1)) === insertedRow)
+
+        let appendedRow = PTRows(title: "Inserted row", diffId: "insert-appended-row")
+        let rowExpectation = expectation(description: "row inserted")
+        list.insertRows([appendedRow], section: 1) {
+            rowExpectation.fulfill()
+        }
+        await fulfillment(of: [rowExpectation], timeout: 2)
+
+        XCTAssertTrue(list.getRow(at: IndexPath(item: 1, section: 1)) === appendedRow)
+    }
+
     // English: Value-model updates replace content without changing the identity-only order.
     // Español: Las actualizaciones de modelos de valor reemplazan el contenido sin cambiar el orden basado en identidad.
     // 中文：值模型更新只替换内容，不改变纯身份列表的顺序。

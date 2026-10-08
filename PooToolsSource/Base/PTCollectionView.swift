@@ -923,6 +923,9 @@ extension PTCollectionView {
             } else {
                 snapshot.appendItems(rows, toSection: sectionSnapshot)
             }
+            self.modelStore.insert(rows: rows,
+                                   in: PTSectionIdentifier(sectionSnapshot.rawValue),
+                                   at: insertIndex)
             self.synchronizeModelStore(with: snapshot)
 
             let animated = self.structureAnimationEnabled
@@ -959,6 +962,9 @@ extension PTCollectionView {
                 self.clearWaterfallCache(section: section)
             }
             snapshot.appendItems(rows, toSection: sectionSnapshot)
+            self.modelStore.insert(rows: rows,
+                                   in: PTSectionIdentifier(sectionSnapshot.rawValue),
+                                   at: nil)
             self.synchronizeModelStore(with: snapshot)
 
             let animated = self.structureAnimationEnabled
@@ -1014,6 +1020,7 @@ extension PTCollectionView {
                     snapshot.appendItems(rows, toSection: sections[i])
                 }
             }
+            self.modelStore.insert(sections: sections, at: insertIndex)
             self.synchronizeModelStore(with: snapshot)
 
             let animated = self.structureAnimationEnabled
