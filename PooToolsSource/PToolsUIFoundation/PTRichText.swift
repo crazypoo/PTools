@@ -70,7 +70,7 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
     }
 
     public init(_ attributedString: NSAttributedString) {
-        storage = Foundation.AttributedString(attributedString)
+        storage = Self.makeStorage(from: attributedString)
     }
 
     public init(string text: String, _ attributes: PTTextAttribute...) {
@@ -83,7 +83,7 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
                    to: value,
                    range: NSRange(location: 0, length: value.length),
                    policy: .keepNew)
-        storage = Foundation.AttributedString(value)
+        storage = Self.makeStorage(from: value)
     }
 
     public init(_ text: String, _ attributes: PTTextAttribute...) {
@@ -108,7 +108,7 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
                    to: value,
                    range: NSRange(location: 0, length: value.length),
                    policy: .keepNew)
-        storage = Foundation.AttributedString(value)
+        storage = Self.makeStorage(from: value)
     }
 
     public init(wrap mode: PTTextWrapMode, _ attributes: PTTextAttribute...) {
@@ -132,7 +132,7 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
                    to: value,
                    range: NSRange(location: 0, length: value.length),
                    policy: policy)
-        storage = Foundation.AttributedString(value)
+        storage = Self.makeStorage(from: value)
     }
 
     public init(markdown: String) throws {
@@ -148,7 +148,7 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
     }
 
     public var value: NSAttributedString {
-        NSAttributedString(storage)
+        Self.makeUIKitValue(from: storage)
     }
 
     public var nsAttributedString: NSAttributedString {
@@ -256,7 +256,7 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
         guard let safeRange = validatedNSRange(range) else { return }
         let value = NSMutableAttributedString(attributedString: self.value)
         Self.apply(attributes, to: value, range: safeRange, policy: policy)
-        storage = Foundation.AttributedString(value)
+        storage = Self.makeStorage(from: value)
     }
 
     // English: Keep semantic action metadata typed at the API boundary and mirror it to the UIKit bridge.
@@ -272,7 +272,7 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
         let nsRange = NSRange(range, in: storage)
         guard nsRange.length > 0 else { return }
         value.addAttribute(Self.actionAttributeKey, value: actionID.rawValue, range: nsRange)
-        storage = Foundation.AttributedString(value)
+        storage = Self.makeStorage(from: value)
     }
 
     // English: Keep attachment identifiers typed at the API boundary and retain the UIKit compatibility attribute.
@@ -288,7 +288,7 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
         let nsRange = NSRange(range, in: storage)
         guard nsRange.length > 0 else { return }
         value.addAttribute(Self.attachmentAttributeKey, value: identifier, range: nsRange)
-        storage = Foundation.AttributedString(value)
+        storage = Self.makeStorage(from: value)
     }
 
     public mutating func replaceAttributes(_ attributes: [PTTextAttribute],
@@ -557,6 +557,59 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
                 value.addAttributes(missing, range: subrange)
             }
         }
+    }
+
+    // English: Preserve semantic identifiers across the Foundation/UIKit attributed-string bridge.
+    // Español: Conserva los identificadores semánticos al cruzar el puente de texto atribuido Foundation/UIKit.
+    // 中文：跨越 Foundation/UIKit 富文本桥接时保留语义标识。
+    private static func makeStorage(from value: NSAttributedString) -> Foundation.AttributedString {
+        var storage = Foundation.AttributedString(value)
+        let fullRange = NSRange(location: 0, length: value.length)
+
+        value.enumerateAttribute(actionAttributeKey,
+                                  in: fullRange,
+                                  options: []) { rawValue, range, _ in
+            guard let actionID = rawValue as? String,
+                  let storageRange = Range(range, in: storage) else {
+                return
+            }
+            var slice = storage[storageRange]
+            slice[PTTextActionAttribute.self] = actionID
+            storage.replaceSubrange(storageRange, with: slice)
+        }
+
+        value.enumerateAttribute(attachmentAttributeKey,
+                                  in: fullRange,
+                                  options: []) { rawValue, range, _ in
+            guard let attachmentID = rawValue as? String,
+                  let storageRange = Range(range, in: storage) else {
+                return
+            }
+            var slice = storage[storageRange]
+            slice[PTTextAttachmentAttribute.self] = attachmentID
+            storage.replaceSubrange(storageRange, with: slice)
+        }
+
+        return storage
+    }
+
+    // English: Rehydrate semantic identifiers only at the UIKit rendering boundary.
+    // Español: Rehidrata los identificadores semánticos únicamente en el límite de renderizado UIKit.
+    // 中文：仅在 UIKit 渲染边界恢复语义标识。
+    private static func makeUIKitValue(from storage: Foundation.AttributedString) -> NSAttributedString {
+        let value = NSMutableAttributedString(storage)
+
+        for run in storage.runs {
+            let range = NSRange(run.range, in: storage)
+            if let actionID = run[PTTextActionAttribute.self] {
+                value.addAttribute(actionAttributeKey, value: actionID, range: range)
+            }
+            if let attachmentID = run[PTTextAttachmentAttribute.self] {
+                value.addAttribute(attachmentAttributeKey, value: attachmentID, range: range)
+            }
+        }
+
+        return value
     }
 
     private static func resolve(matches: [PTTextMatch],

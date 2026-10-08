@@ -16,6 +16,29 @@ final class PTRichTextCoreTests: XCTestCase {
         XCTAssertGreaterThan(value.value.length, value.plainText.count)
     }
 
+    // English: Verify that multiple action identifiers survive the Foundation/UIKit bridge.
+    // Español: Verifica que varios identificadores de acción sobrevivan al puente Foundation/UIKit.
+    // 中文：验证多个 action 标识在 Foundation/UIKit 桥接后仍然保留。
+    func testMultipleActionAttributesSurviveUIKitBridge() {
+        let loginID = PTTextActionID("login")
+        let forgetID = PTTextActionID("forgetPassword")
+        let loginText = "Sign in"
+        let forgetText = "Forgot password"
+        let value: PTRichText = "\(loginText, .action(loginID)) | \(forgetText, .action(forgetID))"
+
+        let attributedText = value.value
+        XCTAssertEqual(attributedText.attribute(PTRichText.actionAttributeKey,
+                                                at: 0,
+                                                effectiveRange: nil) as? String,
+                       loginID.rawValue)
+        let forgetRange = (attributedText.string as NSString).range(of: "Forgot")
+        XCTAssertNotEqual(forgetRange.location, NSNotFound)
+        XCTAssertEqual(attributedText.attribute(PTRichText.actionAttributeKey,
+                                                at: forgetRange.location,
+                                                effectiveRange: nil) as? String,
+                       forgetID.rawValue)
+    }
+
     func testUnicodeRangeRejectsGraphemeSplits() {
         let family = "👨‍👩‍👧‍👦"
         let value = PTRichText(family + "中文")

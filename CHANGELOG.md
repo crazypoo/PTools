@@ -6,6 +6,12 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.62.7 — 2026-10-08
+
+- 修复 `PTRichText` 的 action 标识在 Foundation/UIKit 富文本桥接时丢失的问题。
+- 保持 `PTTextActionRegistry` 和 `UILabel.pt_apply` 现有用法不变，支持同一段富文本中的多个 action。
+- 增加多 action 富文本桥接回归测试。
+
 ## 5.62.5 — 2026-10-07
 
 - `PTCollectionView` 内部 Diffable 数据源改为只保存稳定的 Section/Row ID；保留 `PTSection`、`PTRows` 和旧快照别名作为兼容入口。
