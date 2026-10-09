@@ -287,6 +287,36 @@ public extension UIButton {
         }
         setBackgroundImage(colorImage, for: forState)
     }
+
+    // English: Configure a gradient background independently for each UIButton control state.
+    // Español: Configura el fondo degradado de forma independiente para cada estado del UIButton.
+    // 中文：为 UIButton 的每个控件状态独立配置渐变背景。
+    @MainActor
+    func backgroundGradient(type: Imagegradien,
+                            colors: [UIColor],
+                            radius: CGFloat = 0,
+                            topLeft: CGFloat = 0,
+                            topRight: CGFloat = 0,
+                            bottomLeft: CGFloat = 0,
+                            bottomRight: CGFloat = 0,
+                            borderWidth: CGFloat = 0,
+                            borderColor: UIColor = .clear,
+                            corner: UIRectCorner = .allCorners,
+                            capsule: Bool = false,
+                            for state: UIControl.State) {
+        let style = PTButtonGradientStyle(type: type,
+                                          colors: colors,
+                                          radius: radius,
+                                          topLeft: topLeft,
+                                          topRight: topRight,
+                                          bottomLeft: bottomLeft,
+                                          bottomRight: bottomRight,
+                                          borderWidth: borderWidth,
+                                          borderColor: borderColor,
+                                          corner: corner,
+                                          capsule: capsule)
+        pt_setButtonGradientStyle(colors.isEmpty ? nil : style, for: state)
+    }
 }
 
 /// Custom button that pauses console window swizzling to allow the console menu's presenting view controller to remain the top view controller.

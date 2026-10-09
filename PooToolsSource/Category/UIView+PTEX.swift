@@ -103,10 +103,41 @@ private enum PTGradientBackgroundRenderer {
     }
 }
 
+// English: Keep one immutable gradient description for each UIButton control state.
+// Español: Conserva una descripción inmutable del degradado para cada estado del UIButton.
+// 中文：为 UIButton 的每个控件状态保存一份不可变的渐变描述。
+@MainActor
+struct PTButtonGradientStyle {
+    let type: Imagegradien
+    let colors: [UIColor]
+    let radius: CGFloat
+    let topLeft: CGFloat
+    let topRight: CGFloat
+    let bottomLeft: CGFloat
+    let bottomRight: CGFloat
+    let borderWidth: CGFloat
+    let borderColor: UIColor
+    let corner: UIRectCorner
+    let capsule: Bool
+}
+
+// English: Associated state keeps UIButton rendering isolated from the public UIView API.
+// Español: El estado asociado mantiene el renderizado de UIButton separado de la API pública de UIView.
+// 中文：关联状态将 UIButton 渲染与 UIView 公共 API 隔离开来。
+@MainActor
+private final class PTButtonGradientStateStore: NSObject {
+    var styles: [UInt: PTButtonGradientStyle] = [:]
+    var renderedStates: Set<UInt> = []
+    var originalBackgroundImages: [UInt: UIImage] = [:]
+    var statesWithoutOriginalBackgroundImage: Set<UInt> = []
+    var configurationHandlerInstalled = false
+}
+
 @MainActor
 private final class PTCornerTrackerView: UIView {
     var cornerAction: ((CGRect) -> Void)?
     var gradientAction: ((CGRect) -> Void)?
+    var buttonGradientAction: ((CGRect) -> Void)?
     var progressAction: ((CGRect) -> Void)?
 
     private var lastRenderedBounds: CGRect = .null
@@ -141,6 +172,7 @@ private final class PTCornerTrackerView: UIView {
 
         lastRenderedBounds = currentBounds
         gradientAction?(currentBounds)
+        buttonGradientAction?(currentBounds)
         cornerAction?(currentBounds)
         progressAction?(currentBounds)
     }
@@ -498,7 +530,10 @@ public extension UIView {
 
     private func removeTrackerIfUnused() {
         guard let tracker = self.subviews.first(where: { $0 is PTCornerTrackerView }) as? PTCornerTrackerView else { return }
-        guard tracker.cornerAction == nil, tracker.gradientAction == nil, tracker.progressAction == nil else { return }
+        guard tracker.cornerAction == nil,
+              tracker.gradientAction == nil,
+              tracker.buttonGradientAction == nil,
+              tracker.progressAction == nil else { return }
         tracker.removeFromSuperview()
     }
 
@@ -1181,12 +1216,185 @@ public extension UIView {
         static var viewCapturing: UInt8 = 0
         static var borderTracker: UInt8 = 0 // 新增用于绑定 Tracker
         static var cornerRenderState: UInt8 = 0
+        static var buttonGradientStateStore: UInt8 = 0
     }
 
     @MainActor
     private struct PTImageLoadKeys {
         static var ptLoadTask: UInt8 = 0
         static var ptLoadUUID: UInt8 = 0
+    }
+
+    @MainActor
+    private var ptButtonGradientStateStore: PTButtonGradientStateStore? {
+        get {
+            objc_getAssociatedObject(self, &AssociatedKeys.buttonGradientStateStore) as? PTButtonGradientStateStore
+        }
+        set {
+            objc_setAssociatedObject(self,
+                                     &AssociatedKeys.buttonGradientStateStore,
+                                     newValue,
+                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+
+    // English: Configure a state-specific gradient without exposing the internal renderer.
+    // Español: Configura un degradado por estado sin exponer el renderizador interno.
+    // 中文：配置指定状态的渐变，同时不暴露内部渲染器。
+    @MainActor
+    internal func pt_setButtonGradientStyle(_ style: PTButtonGradientStyle?, for state: UIControl.State) {
+        guard let button = self as? UIButton else { return }
+
+        let store = ptButtonGradientStateStore ?? {
+            let newStore = PTButtonGradientStateStore()
+            ptButtonGradientStateStore = newStore
+            return newStore
+        }()
+        let rawState = state.rawValue
+
+        if let style, !style.colors.isEmpty {
+            if !store.styles.keys.contains(rawState) {
+                if let image = button.backgroundImage(for: state) {
+                    store.originalBackgroundImages[rawState] = image
+                } else {
+                    store.statesWithoutOriginalBackgroundImage.insert(rawState)
+                }
+            }
+            store.styles[rawState] = style
+        } else {
+            store.styles.removeValue(forKey: rawState)
+            store.renderedStates.remove(rawState)
+            if let originalImage = store.originalBackgroundImages.removeValue(forKey: rawState) {
+                button.setBackgroundImage(originalImage, for: state)
+            } else if store.statesWithoutOriginalBackgroundImage.remove(rawState) != nil {
+                button.setBackgroundImage(nil, for: state)
+            }
+        }
+
+        let tracker = getOrCreateTracker()
+        if store.styles.isEmpty {
+            tracker.buttonGradientAction = nil
+            tracker.invalidateLayout()
+            removeTrackerIfUnused()
+        } else {
+            tracker.buttonGradientAction = { [weak self] currentBounds in
+                self?.pt_renderButtonGradientStates(in: currentBounds)
+            }
+            tracker.invalidateLayout()
+            tracker.applyCurrentLayout()
+        }
+
+        if button.configuration != nil {
+            pt_installButtonGradientConfigurationHandlerIfNeeded(for: button, store: store)
+            button.setNeedsUpdateConfiguration()
+            button.pt_applyButtonGradientConfiguration()
+        }
+    }
+
+    // English: Re-render every configured state when bounds or traits change.
+    // Español: Vuelve a renderizar cada estado configurado cuando cambian los límites o los traits.
+    // 中文：当 bounds 或 trait 变化时重新渲染所有已配置状态。
+    @MainActor
+    private func pt_renderButtonGradientStates(in bounds: CGRect) {
+        guard let button = self as? UIButton,
+              bounds.width > 0,
+              bounds.height > 0,
+              let store = ptButtonGradientStateStore else { return }
+
+        for rawState in store.renderedStates.subtracting(store.styles.keys) {
+            button.setBackgroundImage(nil, for: UIControl.State(rawValue: rawState))
+        }
+
+        for (rawState, style) in store.styles {
+            let image = pt_makeButtonGradientImage(style: style, bounds: bounds)
+            button.setBackgroundImage(image, for: UIControl.State(rawValue: rawState))
+        }
+        store.renderedStates = Set(store.styles.keys)
+
+        if button.configuration != nil {
+            pt_installButtonGradientConfigurationHandlerIfNeeded(for: button, store: store)
+            button.pt_applyButtonGradientConfiguration()
+        }
+    }
+
+    // English: Render through the existing UIView gradient path so corner and border behavior stays identical.
+    // Español: Renderiza mediante la ruta existente de UIView para mantener idénticos los bordes y las esquinas.
+    // 中文：复用现有 UIView 渐变路径，确保圆角和边框行为保持一致。
+    @MainActor
+    private func pt_makeButtonGradientImage(style: PTButtonGradientStyle, bounds: CGRect) -> UIImage? {
+        let rendererView = UIView(frame: CGRect(origin: .zero, size: bounds.size))
+        rendererView.overrideUserInterfaceStyle = traitCollection.userInterfaceStyle
+        rendererView.backgroundGradient(type: style.type,
+                                         colors: style.colors,
+                                         radius: style.radius,
+                                         topLeft: style.topLeft,
+                                         topRight: style.topRight,
+                                         bottomLeft: style.bottomLeft,
+                                         bottomRight: style.bottomRight,
+                                         borderWidth: style.borderWidth,
+                                         borderColor: style.borderColor,
+                                         corner: style.corner,
+                                         capsule: style.capsule)
+        rendererView.layoutIfNeeded()
+        return rendererView.screenshot
+    }
+
+    // English: Preserve an existing configuration update handler and append the gradient state update.
+    // Español: Conserva el handler de configuración existente y añade la actualización del degradado por estado.
+    // 中文：保留已有 configuration 更新回调，再追加状态渐变更新。
+    @MainActor
+    private func pt_installButtonGradientConfigurationHandlerIfNeeded(for button: UIButton,
+                                                                       store: PTButtonGradientStateStore) {
+        guard !store.configurationHandlerInstalled else { return }
+        let previousHandler = button.configurationUpdateHandler
+        store.configurationHandlerInstalled = true
+        button.configurationUpdateHandler = { currentButton in
+            previousHandler?(currentButton)
+            currentButton.pt_applyButtonGradientConfiguration()
+        }
+    }
+
+    @MainActor
+    private func pt_buttonGradientStyleEntry(for state: UIControl.State,
+                                             store: PTButtonGradientStateStore) -> (UInt, PTButtonGradientStyle)? {
+        let rawState = state.rawValue
+        if let exactStyle = store.styles[rawState] {
+            return (rawState, exactStyle)
+        }
+
+        let matchingStates = store.styles.keys.filter { rawValue in
+            rawValue != UIControl.State.normal.rawValue && (rawState & rawValue) == rawValue
+        }
+        guard let matchingState = matchingStates.max(by: { lhs, rhs in
+            if lhs.nonzeroBitCount == rhs.nonzeroBitCount {
+                return lhs < rhs
+            }
+            return lhs.nonzeroBitCount < rhs.nonzeroBitCount
+        }), let style = store.styles[matchingState] else {
+            return store.styles[UIControl.State.normal.rawValue].map {
+                (UIControl.State.normal.rawValue, $0)
+            }
+        }
+        return (matchingState, style)
+    }
+
+    // English: Apply the rendered image to configuration-based buttons for the current control state.
+    // Español: Aplica la imagen renderizada a botones basados en configuración para el estado actual.
+    // 中文：为使用 UIButton.Configuration 的按钮应用当前状态对应的渐变图片。
+    @MainActor
+    fileprivate func pt_applyButtonGradientConfiguration() {
+        guard let button = self as? UIButton,
+              let store = ptButtonGradientStateStore,
+              !store.styles.isEmpty,
+              var configuration = button.configuration,
+              let (_, style) = pt_buttonGradientStyleEntry(for: button.state, store: store),
+              let image = pt_makeButtonGradientImage(style: style,
+                                                     bounds: CGRect(origin: .zero, size: button.bounds.size)) else {
+            return
+        }
+        configuration.background.image = image
+        configuration.background.imageContentMode = .scaleToFill
+        button.configuration = configuration
     }
 
     // English: Store corner state without changing UIView's public API.

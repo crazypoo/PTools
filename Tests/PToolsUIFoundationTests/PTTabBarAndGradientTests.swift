@@ -184,6 +184,39 @@ final class PTTabBarAndGradientTests: XCTestCase {
         XCTAssertTrue(button.image(for: .normal) === image)
     }
 
+    // English: Each UIButton state receives its own gradient image without changing title or image content.
+    // Español: Cada estado del UIButton recibe su propia imagen degradada sin cambiar el título ni la imagen.
+    // 中文：每个 UIButton 状态都拥有独立渐变图片，同时不改变标题和图片内容。
+    func testButtonSupportsStateSpecificGradients() {
+        let button = UIButton(type: .system)
+        button.frame = CGRect(x: 0, y: 0, width: 160, height: 50)
+        button.setTitle("PTools", for: .normal)
+
+        button.backgroundGradient(type: .LeftToRight,
+                                   colors: [.systemBlue, .systemPurple],
+                                   radius: 12,
+                                   for: .normal)
+        button.backgroundGradient(type: .TopToBottom,
+                                   colors: [.systemGreen, .systemTeal],
+                                   radius: 12,
+                                   for: .selected)
+        button.backgroundGradient(type: .LeftToRight,
+                                   colors: [.systemGray, .systemGray2],
+                                   radius: 12,
+                                   for: .disabled)
+        button.backgroundGradient(type: .RightToLeft,
+                                   colors: [.systemOrange, .systemRed],
+                                   radius: 12,
+                                   for: .highlighted)
+        button.layoutIfNeeded()
+
+        XCTAssertNotNil(button.backgroundImage(for: .normal))
+        XCTAssertNotNil(button.backgroundImage(for: .selected))
+        XCTAssertNotNil(button.backgroundImage(for: .disabled))
+        XCTAssertNotNil(button.backgroundImage(for: .highlighted))
+        XCTAssertEqual(button.title(for: .normal), "PTools")
+    }
+
     func testPlainViewRetainsSublayerGradientPath() {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 120, height: 50))
         view.backgroundGradient(type: .LeftToRight,

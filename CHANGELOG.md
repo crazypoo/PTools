@@ -10,7 +10,9 @@
 
 - 修复 `UIButton` 使用 `backgroundGradient` 时的内容渲染路径：标题和图片保持在渐变背景之上。
 - 支持通过 `UIView` 引用调用渐变方法时根据运行时按钮类型选择正确的 backing background 路径。
-- 增加 UIButton 渐变内容保留回归测试。
+- 新增 `UIButton.backgroundGradient(..., for:)`，支持 `.normal`、`.highlighted`、`.selected` 和 `.disabled` 等状态分别配置渐变。
+- 按钮尺寸或界面样式变化时自动重新生成状态背景，并兼容已有 `UIButton.Configuration` 更新回调。
+- 增加 UIButton 渐变内容保留和状态渐变回归测试。
 
 ## 5.62.7 — 2026-10-08
 

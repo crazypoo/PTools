@@ -9,7 +9,9 @@
 - ✅ `backgroundGradient` 根据运行时类型识别 `UIButton`，使用 backing background 绘制渐变，避免覆盖标题和图片。
 - ✅ 保持普通 `UIView` 的 CAGradientLayer 路径，以及 `UILabel` / `UIImageView` 的现有内容保护行为。
 - ✅ 增加通过 `UIView` 引用调用 UIButton 渐变的回归测试；保留现有 API 和调用方式。
-- ⬜ 真机视觉回归、按钮 `UIButton.Configuration` 复杂状态组合仍待宿主项目验证。
+- ✅ 新增 `UIButton.backgroundGradient(..., for:)` 状态入口，支持不同状态独立生成背景，并在 bounds / trait 变化后刷新。
+- ✅ 保留已有 `UIButton.Configuration` 更新回调，状态渐变可应用到配置型按钮。
+- ⬜ 真机视觉回归、复杂按钮配置与宿主项目组合仍待集成方验证。
 
 ## Unreleased UIControl Native UIMenu / Selection Menu
 
