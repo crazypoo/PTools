@@ -163,6 +163,27 @@ final class PTTabBarAndGradientTests: XCTestCase {
         XCTAssertTrue(imageView.image === image)
     }
 
+    // English: A UIButton keeps its title and image when the UIView API is called through a UIView reference.
+    // Español: Un UIButton conserva su título e imagen cuando la API de UIView se invoca mediante una referencia UIView.
+    // 中文：通过 UIView 引用调用渐变 API 时，UIButton 仍需保留标题和图片内容。
+    func testButtonUsesBackingBackgroundThroughUIViewReference() {
+        let button = UIButton(type: .system)
+        button.frame = CGRect(x: 0, y: 0, width: 160, height: 50)
+        button.setTitle("PTools", for: .normal)
+        let image = UIImage(systemName: "star")
+        button.setImage(image, for: .normal)
+
+        let view: UIView = button
+        view.backgroundGradient(type: .LeftToRight,
+                                colors: [.systemBlue, .systemPurple],
+                                radius: 12)
+        view.layoutIfNeeded()
+
+        XCTAssertFalse(button.layer.sublayers?.contains(where: { $0.name == "PTSuperBg" }) ?? false)
+        XCTAssertEqual(button.title(for: .normal), "PTools")
+        XCTAssertTrue(button.image(for: .normal) === image)
+    }
+
     func testPlainViewRetainsSublayerGradientPath() {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 120, height: 50))
         view.backgroundGradient(type: .LeftToRight,

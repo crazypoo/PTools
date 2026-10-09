@@ -6,6 +6,12 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.62.8 — 2026-10-09
+
+- 修复 `UIButton` 使用 `backgroundGradient` 时的内容渲染路径：标题和图片保持在渐变背景之上。
+- 支持通过 `UIView` 引用调用渐变方法时根据运行时按钮类型选择正确的 backing background 路径。
+- 增加 UIButton 渐变内容保留回归测试。
+
 ## 5.62.7 — 2026-10-08
 
 - 修复 `PTRichText` 的 action 标识在 Foundation/UIKit 富文本桥接时丢失的问题。

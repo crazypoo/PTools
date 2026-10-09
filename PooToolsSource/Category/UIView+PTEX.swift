@@ -33,7 +33,10 @@ private enum PTGradientBackgroundRenderingMode {
 
     @MainActor
     static func forView(_ view: UIView) -> Self {
-        view is UILabel || view is UIImageView ? .backingBackground : .sublayer
+        // English: Buttons also own title and image content, so their gradient must stay in the backing background.
+        // Español: Los botones también contienen título e imagen; su degradado debe permanecer en el fondo de respaldo.
+        // 中文：按钮同样包含标题和图片内容，因此渐变必须绘制到 backing background 中。
+        view is UILabel || view is UIImageView || view is UIButton ? .backingBackground : .sublayer
     }
 }
 

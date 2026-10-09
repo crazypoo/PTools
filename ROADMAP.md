@@ -1,8 +1,15 @@
 # PTools 路线图
 
-> 当前代码基线：`5.62.7`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.62.8`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.62.7` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.62.8` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.62.8 UIButton 渐变多态支持
+
+- ✅ `backgroundGradient` 根据运行时类型识别 `UIButton`，使用 backing background 绘制渐变，避免覆盖标题和图片。
+- ✅ 保持普通 `UIView` 的 CAGradientLayer 路径，以及 `UILabel` / `UIImageView` 的现有内容保护行为。
+- ✅ 增加通过 `UIView` 引用调用 UIButton 渐变的回归测试；保留现有 API 和调用方式。
+- ⬜ 真机视觉回归、按钮 `UIButton.Configuration` 复杂状态组合仍待宿主项目验证。
 
 ## Unreleased UIControl Native UIMenu / Selection Menu
 
