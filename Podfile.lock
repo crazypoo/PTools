@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (5.12.0)
+  - Alamofire (5.12.2)
   - Appz (3.2.0)
   - BlueCryptor (1.0.32)
   - BlueECC (1.2.201)
@@ -575,7 +575,7 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
-  Alamofire: ddb8d5201667b256dbc225f3fc6e835a0753186f
+  Alamofire: c5f37d8f438dc1d7fd3ff767f2f80fd01ca381d7
   Appz: 9afca8060886b75002092f4b5b5c238a0ab19bf0
   BlueCryptor: b0aee3d9b8f367b49b30de11cda90e1735571c24
   BlueECC: c9662360a702839aa4d324f9f4cc8b899f6f7dd6
