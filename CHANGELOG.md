@@ -6,6 +6,19 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.63.0 — 2026-10-11
+
+- 新增 Scene-aware 的 `PTAdaptiveBarLayoutContext`、纯值类型几何 Resolver 和 MainActor Coordinator，支持非对称 safe area、iOS 27.1+ vertical bar edge 与 active reserved regions。
+- `PTBaseNavControl`、`PTBaseTabBarViewController` 和 `PTNavigationBarManager` 统一系统/自定义 Bar 的几何所有权；默认 automatic 在系统具备垂直 Bar 能力时交给 UIKit，iOS 17+ 旧横向路径保持兼容。
+- TabBar 继续保留 Badge、Center Raised、Mini、Lottie、选中状态和原有 Insets 语义；空间不足时保留当前 Tab 并提供 overflow 数据。
+- 新增 iPhone Duo Adaptive Bars Demo、12 项可观察场景、DEBUG 几何 overlay、纯几何回归测试和 `validate_duo_adaptive_bars.sh` 门禁。
+- 完成 `PooTools.podspec` / `Podfile.lock` / README / ROADMAP 的 5.63.0 版本同步；真实 Duo 硬件折叠和视觉验收仍需设备或官方 Duo Simulator 证据。
+
+## 5.62.10 — 2026-10-10
+
+- 将 Network 成功响应日志收敛到传输边界，覆盖缓存、普通请求和上传回调，并统一正文截断与隐藏策略。
+- TestFlight 沙盒回执不再被误判为生产环境，保持测试环境的可观察日志行为。
+
 ## 5.62.8 — 2026-10-09
 
 - 修复 `UIButton` 使用 `backgroundGradient` 时的内容渲染路径：标题和图片保持在渐变背景之上。

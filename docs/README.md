@@ -20,6 +20,7 @@
 - [PTCollectionView Diffable 更新指南](guides/PTCOLLECTIONVIEW_UPDATE_GUIDE.md)
 - [PTCollectionView 运行时 Layout 切换指南](guides/PTCOLLECTIONVIEW_LAYOUT_SWITCH_GUIDE.md)
 - [UIControl 原生菜单与 Selection Menu](guides/PTCONTROL_MENU_GUIDE.md)
+- [iPhone Duo 自适应 Navigation / TabBar](guides/PTIPHONE_DUO_ADAPTIVE_BARS.md)
 
 ## 架构
 

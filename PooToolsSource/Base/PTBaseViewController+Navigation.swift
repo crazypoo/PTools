@@ -83,8 +83,8 @@ open class PTNavigationBarContainer: UIView {
         largeTitleContainer.backgroundColor = .clear
         topBarContainer.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            if let findCurrent = PTUtils.getCurrentVC(),let sheet = findCurrent.sheetViewController {
-                let offset = sheet.options.useFullScreenMode ? CGFloat.statusBarHeight() : sheet.options.pullBarHeight
+            if let findCurrent = PTUtils.getCurrentVC(), let sheet = findCurrent.sheetViewController {
+                let offset = sheet.options.useFullScreenMode ? 0 : sheet.options.pullBarHeight
                 make.top.equalToSuperview().offset(-offset)
             } else {
                 make.top.equalToSuperview()
@@ -129,6 +129,18 @@ open class PTNavigationBarContainer: UIView {
         ownerNavigationController = navigationController
         navigationController.navigationBar.clipsToBounds = false
         setNeedsLayout()
+    }
+
+    // English: Expose only local host geometry to PTNavBar; never infer layout from a global status-bar constant.
+    // Español: Expone solo la geometría local al PTNavBar; nunca infiere el layout desde una constante global.
+    // 中文：只向 PTNavBar 提供当前宿主几何，不再使用全局状态栏常量推算布局。
+    var navigationHostTopInset: CGFloat {
+        guard let navigationController = ownerNavigationController else {
+            return max(0, safeAreaInsets.top)
+        }
+        let navigationBar = navigationController.navigationBar
+        let convertedTop = navigationBar.convert(.zero, to: navigationController.view).y
+        return max(0, convertedTop)
     }
     
     public func apply(style: PTNavigationBarStyle) {
@@ -176,7 +188,7 @@ extension PTNavigationBarContainer {
 
     private var navigationBarTopExtension: CGFloat {
         guard let navigationController = ownerNavigationController else {
-            return CGFloat.statusBarHeight()
+            return max(0, safeAreaInsets.top)
         }
 
         let navigationBar = navigationController.navigationBar
@@ -185,8 +197,7 @@ extension PTNavigationBarContainer {
             return topInNavigationView
         }
 
-        let safeAreaTop = navigationController.view.safeAreaInsets.top
-        return safeAreaTop > 0 ? safeAreaTop : CGFloat.statusBarHeight()
+        return max(0, navigationController.view.safeAreaInsets.top)
     }
 
     private var backgroundRenderSize: CGSize {

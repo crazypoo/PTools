@@ -1,0 +1,10 @@
+# English: Carry forward the reviewed compatibility changes already released before the 5.63.0 Duo work.
+# Español: Mantiene los cambios de compatibilidad revisados y publicados antes del trabajo Duo de 5.63.0.
+# 中文：延续 5.63.0 Duo 工作之前已经发布并审核过的兼容性变更。
+public|class|mappingForKey
+public|class|public class-based decoder API can migrate to immutable snapshot structs.
+public|func|public func performCodableRequest<T: SmartCodableX & Sendable>(
+public|func|public func captureDevice() -> AVCaptureDevice
+open|func|open func kj_modelKey(from property: KakaJSON.Property) -> ModelPropertyKey
+open|func|open func kj_modelValue(from jsonValue:Any?,_ property:KakaJSON.Property) -> Any?
+public|class|PTHeartRateViewController

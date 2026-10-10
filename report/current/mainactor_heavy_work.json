@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_mainactor_heavy_work.rb",
-  "source_revision": "709b16be6083e89fafa73181bef6d4902013cbcb",
-  "generated_at": "2026-10-06T02:28:57Z",
+  "source_revision": "aa4f1fca1a9f03b73abba39ea1fee3b7ff201ee3",
+  "generated_at": "2026-10-10T18:32:48Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
@@ -167,14 +167,14 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 451,
+      "line": 453,
       "operation": "JSONDecoder",
       "classification": "INTENTIONAL",
       "text": "if let statusModel = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) {"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 626,
+      "line": 622,
       "operation": "JSONDecoder",
       "classification": "INTENTIONAL",
       "text": "let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {"

@@ -138,4 +138,17 @@ enum PTTabBarLayoutEngine {
         return CGSize(width: contentSize.width * scale,
                       height: contentSize.height * scale)
     }
+
+    // English: Keep vertical slots above the interaction minimum without using the legacy bottom-bar height.
+    // Español: Mantiene los slots verticales por encima del mínimo interactivo sin usar la altura heredada inferior.
+    // 中文：垂直 Slot 使用独立算法并保持最小触摸尺寸，不复用底部 TabBar 高度。
+    static func verticalItemLength(availableLength: CGFloat,
+                                   itemCount: Int,
+                                   minimumTouchTarget: CGFloat = 44,
+                                   preferredTouchTarget: CGFloat = 52) -> CGFloat {
+        guard availableLength.isFinite, availableLength > 0, itemCount > 0 else { return 0 }
+        let minimum = max(44, minimumTouchTarget.isFinite ? minimumTouchTarget : 44)
+        let preferred = max(minimum, preferredTouchTarget.isFinite ? preferredTouchTarget : minimum)
+        return min(preferred, max(minimum, availableLength / CGFloat(itemCount)))
+    }
 }

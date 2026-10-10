@@ -24,7 +24,9 @@ extension PTBaseTabBarViewController {
             tab.userInfo = identifier
             return self.configViewController(viewController: viewController, title: title)
         }
-        tab.preferredPlacement = .sidebarOnly
+        // English: Leave placement automatic so UIKit can choose the correct axis for the current scene.
+        // Español: Mantiene la colocación automática para que UIKit elija el eje correcto de la escena.
+        // 中文：保持系统自动选择位置，让 UIKit 根据当前 Scene 决定布局轴。
         return tab
     }
 

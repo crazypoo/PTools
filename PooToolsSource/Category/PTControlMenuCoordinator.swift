@@ -194,7 +194,7 @@ internal enum PTControlMenuFactory {
 
         let actions = items.map { item in
             let image = item.id == selectedID
-                ? (item.selectedImage ?? UIImage(systemName: "checkmark"))
+                ? (item.selectedImage ?? PTSymbolResolver.image(.checkmark))
                 : nil
             return UIAction(title: item.title, image: image) { _ in
                 selectionChanged(item.id)

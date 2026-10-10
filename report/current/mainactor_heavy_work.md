@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_mainactor_heavy_work.rb
-Source revision: 709b16be6083e89fafa73181bef6d4902013cbcb
-Generated at: 2026-10-06T02:28:57Z
+Source revision: aa4f1fca1a9f03b73abba39ea1fee3b7ff201ee3
+Generated at: 2026-10-10T18:32:48Z
 -->
 
 # MainActor 重活盘点
@@ -40,8 +40,8 @@ Generated at: 2026-10-06T02:28:57Z
 | `PooToolsSource/Core/PTLoadImageFunction.swift` | 677 | `CGImageSourceCreate` | INTENTIONAL | `guard let source = CGImageSourceCreateWithData(data as CFData, nil),` |
 | `PooToolsSource/Core/PTLoadImageFunction.swift` | 678 | `CGImageSourceCreate` | INTENTIONAL | `let cgImage = CGImageSourceCreateImageAtIndex(source, 0, [` |
 | `PooToolsSource/Core/PTLoadImageFunction.swift` | 682 | `UIImage\(data:` | INTENTIONAL | `return UIImage(data: data)` |
-| `PooToolsSource/NetWork/Network.swift` | 451 | `JSONDecoder` | INTENTIONAL | `if let statusModel = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) {` |
-| `PooToolsSource/NetWork/Network.swift` | 626 | `JSONDecoder` | INTENTIONAL | `let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {` |
+| `PooToolsSource/NetWork/Network.swift` | 453 | `JSONDecoder` | INTENTIONAL | `if let statusModel = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) {` |
+| `PooToolsSource/NetWork/Network.swift` | 622 | `JSONDecoder` | INTENTIONAL | `let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {` |
 | `PooToolsSource/NetWork/NetworkSupport.swift` | 266 | `FileManager.default` | MIGRATED | `?? FileManager.default.temporaryDirectory.path` |
 | `PooToolsSource/NetWork/NetworkSupport.swift` | 268 | `FileManager.default` | MIGRATED | `try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)` |
 | `PooToolsSource/NetWork/NetworkSupport.swift` | 374 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.removeItem(atPath: path)` |

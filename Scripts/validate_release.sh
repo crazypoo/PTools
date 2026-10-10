@@ -97,5 +97,6 @@ bash Scripts/validate_517_ui.sh
 bash Scripts/validate_debug_instruments_5_18.sh
 bash Scripts/validate_swifterswift_removal.sh
 bash Scripts/validate_symbols_5_24.sh
+bash Scripts/validate_duo_adaptive_bars.sh
 
 printf 'Release metadata OK: development=%s\n' "$version"

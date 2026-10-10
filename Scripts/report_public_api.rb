@@ -12,13 +12,33 @@ FileUtils.mkdir_p(report_dir)
 pattern = /^\s*(?:(?:@[A-Za-z_][A-Za-z0-9_]*(?:\([^)]*\))?)\s*)*(public|open)\s+(?:(?:final|nonisolated)\s+)*(class|struct|enum|protocol|actor|func|init|var|let|typealias|subscript)\b/
 declarations = []
 
+# English: Join multiline function signatures before comparison so formatting cannot look like an API removal.
+# Español: Une las firmas de funciones multilínea antes de compararlas para que el formato no parezca una eliminación.
+# 中文：比较前合并多行函数签名，避免仅因换行格式被误判为 API 删除。
 Dir.glob(File.join(source_root, "**", "*.swift")).sort.each do |file|
   relative = file.delete_prefix("#{repo_root}/")
-  File.foreach(file).with_index do |line, index|
+  lines = File.readlines(file)
+  index = 0
+  while index < lines.length
+    line = lines[index]
     match = line.match(pattern)
-    next unless match
+    unless match
+      index += 1
+      next
+    end
 
-    declaration = line.strip.gsub(/\s+/, " ")
+    declaration_lines = [line.strip]
+    if %w[func init subscript].include?(match[2])
+      parenthesis_depth = line.count("(") - line.count(")")
+      while parenthesis_depth.positive? && index + 1 < lines.length
+        index += 1
+        continuation = lines[index].strip
+        declaration_lines << continuation
+        parenthesis_depth += continuation.count("(") - continuation.count(")")
+      end
+    end
+
+    declaration = declaration_lines.join(" ").gsub(/\s+/, " ")
     signature = declaration.sub(/[\{;].*$/, "").strip
     declarations << {
       "key" => [relative, match[1], match[2], signature].join("|"),
@@ -28,6 +48,8 @@ Dir.glob(File.join(source_root, "**", "*.swift")).sort.each do |file|
       "kind" => match[2],
       "declaration" => declaration
     }
+
+    index += 1
   end
 end
 

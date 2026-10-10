@@ -3,26 +3,27 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: e56b376ef91456b11a81d1082765dcb5c0a2bdeb
-Generated at: 2026-10-07T15:11:46Z
+Source revision: aa4f1fca1a9f03b73abba39ea1fee3b7ff201ee3
+Generated at: 2026-10-10T18:32:47Z
 -->
 
 # 当前文件尺寸门禁
 
 阈值：超过 1000 行警告，超过 1500 行需要架构例外，超过 2000 行必须登记历史例外，否则失败。
 
-- Warning：14
+- Warning：15
 - Architecture exception：10
-- Hard-limit allowlisted：4
+- Hard-limit allowlisted：5
 
 | 文件 | 行数 | 分类 |
 | --- | ---: | --- |
 | `PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift` | 1145 | warning |
-| `PooToolsSource/Base/PTCollectionView.swift` | 1981 | architecture_exception |
+| `PooToolsSource/Base/PTCollectionView.swift` | 2262 | hard_limit_allowlisted |
+| `PooToolsSource/Base/PTNavigationBarManager.swift` | 1049 | warning |
 | `PooToolsSource/Category/String+PTEX.swift` | 1878 | architecture_exception |
 | `PooToolsSource/Category/UIImage+PTEX.swift` | 1433 | warning |
 | `PooToolsSource/Category/UIScrollView+PTRefreshEX.swift` | 1446 | warning |
-| `PooToolsSource/Category/UIView+PTEX.swift` | 2037 | hard_limit_allowlisted |
+| `PooToolsSource/Category/UIView+PTEX.swift` | 2248 | hard_limit_allowlisted |
 | `PooToolsSource/Debug/CwlDemangle.swift` | 4627 | hard_limit_allowlisted |
 | `PooToolsSource/Debug/PTInstruments.swift` | 1459 | warning |
 | `PooToolsSource/FloatPanel/PTSheetViewController.swift` | 1030 | warning |

@@ -1,8 +1,17 @@
 # PTools 路线图
 
-> 当前代码基线：`5.62.8`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.63.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.62.8` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.63.0` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.63.0 iPhone Duo 自适应 Navigation / TabBar
+
+- ✅ 新增基于当前 Scene/View bounds、四边 safe area、`verticalBarEdge` 和 reserved regions 的值类型布局上下文与纯函数解算器。
+- ✅ 新增 per-controller policy、MainActor coordinator、系统 Bar bridge、自定义 rail 宿主、overflow 适配器和 DEBUG 几何 overlay。
+- ✅ 默认 automatic 在 iOS 27.1+ 垂直 Bar 能力可用时由 UIKit 统一拥有系统导航与 Tab 几何；iOS 17～27.0 和 unspecified edge 保持原有横向自定义路径。
+- ✅ 保留 `PTBaseViewController`、`PTBaseNavControl`、`PTBaseTabBarViewController`、`configure(items:)`、`ptCustomBar.setup`、Badge/Lottie/Center/Mini 和 Insets 兼容行为。
+- ✅ Example 增加 iPhone Duo Adaptive Bars 入口和 12 项场景；新增纯几何回归测试与 Duo 专项静态门禁。
+- ⬜ 外屏/内屏/折叠/分屏/硬件触控和真实视觉截图仍需官方 Duo Simulator、Device Hub 或实体设备验收；当前不以普通 iPhone 模拟器替代。
 
 ## 5.62.8 UIButton 渐变多态支持
 

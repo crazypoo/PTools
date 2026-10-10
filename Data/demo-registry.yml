@@ -1070,6 +1070,7 @@ modules:
     - "ui.gradient-rendering"
     - "ui.collection-refresh-lab"
     - "ui.collection-layout-switch-lab"
+    - "navigation.duo-adaptive-bars"
 -
   module_id: "ptools-widget-core"
   coverage: "extension_required"

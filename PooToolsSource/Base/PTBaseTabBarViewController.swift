@@ -13,10 +13,56 @@ import SnapKit
 open class PTBaseTabBarViewController: UITabBarController {
     
     public var ptCustomBar = PTTabBarView()
+
+    // English: Keep adaptive presentation state on this controller instead of the global configuration singleton.
+    // Español: Mantiene el estado adaptativo en este controlador y no en el singleton de configuración global.
+    // 中文：将自适应展示状态保存在当前控制器，不依赖全局单例的实时状态。
+    public var adaptiveBarConfiguration: PTAdaptiveBarConfiguration = .init(
+        presentationPolicy: PTAppBaseConfig.share.adaptiveBarPresentationPolicy,
+        minimumTouchTarget: PTAppBaseConfig.share.adaptiveBarMinimumTouchTarget
+    ) {
+        didSet {
+            adaptiveBarCoordinator?.configuration = adaptiveBarConfiguration
+            viewIfLoaded?.setNeedsLayout()
+        }
+    }
+
+    public var adaptiveBarPresentationPolicy: PTAdaptiveBarPresentationPolicy {
+        get { adaptiveBarConfiguration.presentationPolicy }
+        set { adaptiveBarConfiguration.presentationPolicy = newValue }
+    }
+
+    public var adaptiveBarMinimumTouchTarget: CGFloat {
+        get { adaptiveBarConfiguration.minimumTouchTarget }
+        set {
+            adaptiveBarConfiguration.minimumTouchTarget = newValue
+            adaptiveBarCoordinator?.configuration = adaptiveBarConfiguration
+            viewIfLoaded?.setNeedsLayout()
+        }
+    }
+
+    // English: The overlay is opt-in and never participates in hit testing.
+    // Español: La superposición es opcional y nunca participa en la detección de toques.
+    // 中文：调试覆盖层默认关闭，且永远不参与触摸命中。
+    public var showsAdaptiveBarDebugOverlay: Bool = false {
+        didSet {
+            adaptiveHostView?.isHidden = !showsAdaptiveBarDebugOverlay
+            viewIfLoaded?.setNeedsLayout()
+        }
+    }
+
+    private var adaptiveBarCoordinator: PTAdaptiveBarCoordinator?
+    private var adaptiveHostView: PTAdaptiveBarHostView?
+    public private(set) var adaptiveBarGeometry: PTAdaptiveBarGeometry?
+    private var adaptiveTabItemConfigs: [PTTabBarItemConfig] = []
     
     public var centerRaisedSet:Bool = false {
         didSet {
             guard accessoryContainerInstalled else { return }
+            if adaptiveBarGeometry?.axis == .verticalEdge {
+                viewIfLoaded?.setNeedsLayout()
+                return
+            }
             accessoryContainerView.snp.updateConstraints { make in
                 make.bottom.equalTo(ptCustomBar.snp.top).offset(-(PTAppBaseConfig.share.tabBarAccessoryBottomSpacing + (centerRaisedSet ? PTAppBaseConfig.share.tabbarCenterButtonSize / 2 : 0)))
             }
@@ -90,6 +136,16 @@ open class PTBaseTabBarViewController: UITabBarController {
          //如果想要类似iPad的展示形式需要在scene或者appdelegate上设置
          //tabBarController.mode = .tabSidebar
          */
+        let coordinator = PTAdaptiveBarCoordinator(hostView: view,
+                                                   configuration: adaptiveBarConfiguration)
+        adaptiveBarCoordinator = coordinator
+        let hostView = PTAdaptiveBarHostView(frame: .zero)
+        hostView.isHidden = !showsAdaptiveBarDebugOverlay
+        hostView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(hostView)
+        hostView.frame = view.bounds
+        adaptiveHostView = hostView
+
         setupTabBar()
         setupAccessoryContainer() // 🌟 初始化容器
 
@@ -103,14 +159,22 @@ open class PTBaseTabBarViewController: UITabBarController {
     
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        // 系统 TabBar 只作为 UITabBarController 的承载对象，不参与绘制。
-        if !tabBar.isHidden {
-            tabBar.isHidden = true
+
+        updateAdaptiveBarLayout()
+        if isUsingSystemAdaptiveRenderer {
+            tabBar.isHidden = isTabBarGloballyHidden
+            tabBar.alpha = isTabBarGloballyHidden ? 0 : 1
+            ptCustomBar.isHidden = true
+            applySystemTabItemsIfNeeded()
+            return
         }
-        if !tabBar.frame.equalTo(.zero) {
-            tabBar.frame = .zero
-        }
+
+        // English: The legacy custom renderer owns the horizontal surface; the system bar stays out of hit testing.
+        // Español: El renderizador personalizado heredado posee la superficie horizontal; la barra del sistema no recibe toques.
+        // 中文：旧自定义渲染器负责横向 Bar，系统 TabBar 不参与绘制和触摸。
+        if !tabBar.isHidden { tabBar.isHidden = true }
+        tabBar.alpha = 0
+        if !tabBar.frame.equalTo(.zero) { tabBar.frame = .zero }
     }
 
     // English: Recalculate custom bar and accessory geometry after safe-area changes.
@@ -118,6 +182,7 @@ open class PTBaseTabBarViewController: UITabBarController {
     // 中文：安全区变化后重新计算自定义 TabBar 和附属视图布局。
     open override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
+        updateAdaptiveBarLayout()
         ptCustomBar.invalidateLayout()
         accessoryContainerView.setNeedsLayout()
     }
@@ -130,6 +195,7 @@ open class PTBaseTabBarViewController: UITabBarController {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate(alongsideTransition: { [weak self] _ in
             self?.ptCustomBar.invalidateLayout()
+            self?.updateAdaptiveBarLayout()
             self?.accessoryContainerView.setNeedsLayout()
             self?.view.layoutIfNeeded()
         }, completion: { [weak self] _ in
@@ -185,6 +251,85 @@ open class PTBaseTabBarViewController: UITabBarController {
             self.syncInitialTabBarState()
         }
     }
+
+    private var isUsingSystemAdaptiveRenderer: Bool {
+        guard let adaptiveBarGeometry else { return false }
+        return adaptiveBarGeometry.axis == .verticalEdge && adaptiveBarGeometry.renderer == .systemAdaptive
+    }
+
+    // English: Resolve geometry once per real context change and apply it to the selected renderer.
+    // Español: Resuelve la geometría una vez por cambio real de contexto y la aplica al renderizador elegido.
+    // 中文：只在上下文真正变化时重新解算，并把结果交给当前渲染器。
+    private func updateAdaptiveBarLayout() {
+        guard isViewLoaded, let adaptiveBarCoordinator else { return }
+        let tabIDs = (viewControllers ?? []).indices.map { String($0) }
+        let selectedID = viewControllers?.indices.contains(selectedIndex) == true ? String(selectedIndex) : nil
+        let current = currentContentViewController()
+        let navigationActionCount = (current?.navigationItem.leftBarButtonItems?.count ?? 0)
+            + (current?.navigationItem.rightBarButtonItems?.count ?? 0)
+        let accessoryHeight = current?.pt_tabBarAccessoryView == nil ? 0 : PTAppBaseConfig.share.tabBarAccessoryHeight
+        guard let geometry = adaptiveBarCoordinator.update(navigationActionCount: navigationActionCount,
+                                                           tabItemIDs: tabIDs,
+                                                           selectedTabID: selectedID,
+                                                           accessoryHeight: accessoryHeight) else { return }
+
+        guard geometry != adaptiveBarGeometry else {
+            adaptiveHostView?.apply(geometry: geometry, showDebugOverlay: showsAdaptiveBarDebugOverlay)
+            return
+        }
+        adaptiveBarGeometry = geometry
+        adaptiveHostView?.apply(geometry: geometry, showDebugOverlay: showsAdaptiveBarDebugOverlay)
+        adaptiveHostView?.isHidden = !showsAdaptiveBarDebugOverlay
+        ptCustomBar.setAdaptiveAxis(geometry.axis)
+
+        if isUsingSystemAdaptiveRenderer {
+            ptCustomBar.isHidden = true
+            ptCustomBar.alpha = 0
+            tabBar.isHidden = isTabBarGloballyHidden
+            tabBar.alpha = isTabBarGloballyHidden ? 0 : 1
+            accessoryContainerView.isHidden = true
+            applySystemTabItemsIfNeeded()
+        } else {
+            ptCustomBar.isHidden = isTabBarGloballyHidden
+            ptCustomBar.alpha = isTabBarGloballyHidden ? 0 : 1
+            applyCustomAdaptiveGeometry(geometry)
+        }
+    }
+
+    private func applyCustomAdaptiveGeometry(_ geometry: PTAdaptiveBarGeometry) {
+        guard !isTabBarMinimized else { return }
+        if geometry.axis == .verticalEdge, !geometry.customRailRect.isEmpty {
+            let rail = geometry.customRailRect
+            ptCustomBar.snp.remakeConstraints { make in
+                make.left.equalToSuperview().offset(rail.minX)
+                make.top.equalToSuperview().offset(rail.minY)
+                make.width.equalTo(rail.width)
+                make.height.equalTo(rail.height)
+            }
+            if geometry.accessoryRect.isEmpty {
+                accessoryContainerView.isHidden = true
+            } else {
+                let accessory = geometry.accessoryRect
+                accessoryContainerView.snp.remakeConstraints { make in
+                    make.left.equalToSuperview().offset(accessory.minX)
+                    make.top.equalToSuperview().offset(accessory.minY)
+                    make.width.equalTo(accessory.width)
+                    make.height.equalTo(accessory.height)
+                }
+            }
+        } else {
+            ptCustomBar.snp.remakeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.bottom.equalToSuperview()
+                make.height.equalTo(CGFloat.kTabbarHeight_Total)
+            }
+            accessoryContainerView.snp.remakeConstraints { make in
+                make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.tabbarBar26LRSpacing)
+                make.bottom.equalTo(ptCustomBar.snp.top).offset(-(PTAppBaseConfig.share.tabBarAccessoryBottomSpacing + (centerRaisedSet ? PTAppBaseConfig.share.tabbarCenterButtonSize / 2 : 0)))
+                make.height.equalTo(currentAccessoryContentView == nil ? 0 : PTAppBaseConfig.share.tabBarAccessoryHeight)
+            }
+        }
+    }
     
     // 🌟 新增：设置卡槽容器的初始布局
     private func setupAccessoryContainer() {
@@ -234,6 +379,7 @@ open class PTBaseTabBarViewController: UITabBarController {
     }
 
     open func configure(items: [PTTabBarItemConfig]) {
+        adaptiveTabItemConfigs = items
         let vcs = items.map { item -> UIViewController in
             return item.viewController
         }
@@ -241,6 +387,26 @@ open class PTBaseTabBarViewController: UITabBarController {
         Task { @MainActor [weak self] in
             await Task.yield()
             self?.syncInitialTabBarState()
+        }
+    }
+
+    // English: Give UIKit semantic titles and a safe fallback image only when it owns the adaptive bar.
+    // Español: Entrega a UIKit títulos semánticos y una imagen de respaldo segura solo cuando posee la barra adaptativa.
+    // 中文：仅在 UIKit 接管自适应 Bar 时提供语义标题和安全图标兜底。
+    private func applySystemTabItemsIfNeeded() {
+        guard adaptiveBarGeometry?.renderer == .systemAdaptive else { return }
+        for (index, config) in adaptiveTabItemConfigs.enumerated() {
+            guard viewControllers?.indices.contains(index) == true else { continue }
+            let item = viewControllers?[index].tabBarItem
+            let title = config.title.isEmpty ? "Tab \(index + 1)" : config.title
+            item?.title = title
+            if item?.image == nil {
+                item?.image = PTSymbolResolver.image(.circle)
+            }
+            if item?.selectedImage == nil {
+                item?.selectedImage = item?.image
+            }
+            item?.accessibilityLabel = title
         }
     }
 
@@ -373,8 +539,21 @@ open class PTBaseTabBarViewController: UITabBarController {
             // 🌟 将更新约束的逻辑单独提取出来
             let updateConstraints = {
                 self.ptCustomBar.snp.remakeConstraints { make in
-                    if shouldMinimize {
-                        let safeBottom = deviceInfo.isFaceIDCapable ? PTAppBaseConfig.share.tab26BottomSpacing : 16
+                    if let geometry = self.adaptiveBarGeometry,
+                       geometry.axis == .verticalEdge,
+                       !geometry.customRailRect.isEmpty,
+                       shouldMinimize {
+                        let rail = geometry.customRailRect
+                        let size = min(self.minimizedCircleSize, min(rail.width, rail.height))
+                        let x = geometry.edge == .trailing ? rail.maxX - size : rail.minX
+                        make.left.equalToSuperview().offset(x)
+                        make.top.equalToSuperview().offset(max(rail.minY, rail.maxY - size))
+                        make.width.height.equalTo(size)
+                    } else if shouldMinimize {
+                        // English: Use the host view's current safe area instead of device-family inference.
+                        // Español: Usa el área segura actual del host en lugar de inferir la familia del dispositivo.
+                        // 中文：使用宿主当前 safe area，不再通过设备类型推断底部间距。
+                        let safeBottom = max(16, self.view.safeAreaInsets.bottom)
                         make.left.equalToSuperview().offset(20)
                         make.bottom.equalToSuperview().offset(-safeBottom)
                         make.width.height.equalTo(self.minimizedCircleSize)
@@ -452,6 +631,15 @@ extension PTBaseTabBarViewController {
     public func setTabBar(hidden: Bool, animated: Bool) {
         tabBarVisibilityGeneration &+= 1
         let generation = tabBarVisibilityGeneration
+
+        if isUsingSystemAdaptiveRenderer {
+            tabBar.isHidden = hidden
+            tabBar.alpha = hidden ? 0 : 1
+            ptCustomBar.isHidden = true
+            ptCustomBar.alpha = 0
+            return
+        }
+
         tabBar.isHidden = true
                 
         let height = CGFloat.kTabbarHeight_Total

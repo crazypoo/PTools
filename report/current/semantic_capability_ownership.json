@@ -199,6 +199,7 @@
         "PooToolsSource/Base/PTBaseTabBarViewController.swift",
         "PooToolsSource/Base/PTBaseViewController.swift",
         "PooToolsSource/Base/PTBaseWebViewController.swift",
+        "PooToolsSource/Base/PTCollectionLayoutTransition.swift",
         "PooToolsSource/Base/PTCollectionUpdateDiagnostics.swift",
         "PooToolsSource/Base/PTCollectionView.swift",
         "PooToolsSource/BlackMagic/PTSwiftMethodSwizzle.swift",
@@ -306,7 +307,7 @@
         "PooToolsSource/iCloud/PTiCloudKeychainService.swift",
         "PooToolsSource/iOS17Tips/PTTip.swift"
       ],
-      "match_count": 116
+      "match_count": 117
     },
     {
       "capability": "routing",
@@ -703,7 +704,6 @@
       ],
       "matches": [
         "PooToolsSource/Animation/PTListAnimation.swift",
-        "PooToolsSource/Base/PTCollectionUpdateCoordinator.swift",
         "PooToolsSource/Base/PTTabBarItemView.swift",
         "PooToolsSource/Base/PTTabBarView.swift",
         "PooToolsSource/Category/PHAsset+PTEX.swift",
@@ -743,7 +743,7 @@
         "PooToolsSource/ScreenShot/UIWindow+PTSnapShot.swift",
         "PooToolsSource/VideoEditor/CropPickerView.swift"
       ],
-      "match_count": 40
+      "match_count": 39
     },
     {
       "capability": "overlay_host",
@@ -835,7 +835,7 @@
     }
   ],
   "generator": "Scripts/report_semantic_capability_ownership.sh",
-  "source_revision": "e56b376ef91456b11a81d1082765dcb5c0a2bdeb",
-  "generated_at": "2026-10-07T15:11:41Z",
-  "source_file_count": 1171
+  "source_revision": "aa4f1fca1a9f03b73abba39ea1fee3b7ff201ee3",
+  "generated_at": "2026-10-10T18:31:48Z",
+  "source_file_count": 1182
 }

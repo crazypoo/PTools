@@ -13,8 +13,8 @@ import SnapKit
 open class PTNavBar: PTNavigationBarContainer {
     
     fileprivate func navOffset() -> CGFloat {
-        let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
-        return offsetHeight
+        guard let current = PTUtils.getCurrentVC(), let sheet = current.sheetViewController else { return 0 }
+        return sheet.options.useFullScreenMode ? 0 : max(0, sheet.options.pullBarHeight)
     }
     
     // ✅ 标记是否为普通的 View（不接管系统状态栏）
@@ -43,7 +43,7 @@ open class PTNavBar: PTNavigationBarContainer {
 
     private var lastWidthLayoutSignature: WidthLayoutSignature?
     
-    fileprivate var titleViewMAxWidth: CGFloat = (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2) {
+    fileprivate var titleViewMAxWidth: CGFloat = 0 {
         didSet {
             switch titleViewMode {
             case .auto:
@@ -153,17 +153,13 @@ open class PTNavBar: PTNavigationBarContainer {
                 make.top.equalToSuperview()
                 make.height.equalToSuperview() // 或者 equalTo(CGFloat.kNavBarHeight)
             } else {
-                // 父类原始逻辑：需要扣减 statusBar 的偏移量
-                var offsetHeight: CGFloat = 0
-                if let findCurrent = PTUtils.getCurrentVC(), let sheet = findCurrent.sheetViewController {
-                    let offset = sheet.options.useFullScreenMode ? CGFloat.statusBarHeight() * 2 : sheet.options.pullBarHeight
-                    make.top.equalToSuperview().offset(-offset)
-                    offsetHeight = offset
-                } else {
-                    make.top.equalToSuperview()
-                    offsetHeight = CGFloat.statusBarHeight()
-                }
-                make.height.equalTo(offsetHeight + CGFloat.kNavBarHeight)
+                // English: Use the navigation host's local safe-area position and sheet pull distance.
+                // Español: Usa la posición local del área segura del host y la distancia de la hoja.
+                // 中文：使用导航宿主的局部安全区位置和 Sheet 拉手距离。
+                let sheetOffset = navOffset()
+                let hostTopInset = navigationHostTopInset
+                make.top.equalToSuperview().offset(-sheetOffset)
+                make.height.equalTo(hostTopInset + sheetOffset + CGFloat.kNavBarHeight)
             }
         }
     }
@@ -184,9 +180,10 @@ open class PTNavBar: PTNavigationBarContainer {
                 make.centerY.equalToSuperview()
                 make.height.equalTo(CGFloat.kNavBarHeight)
             } else {
-                // 父类系统接管模式：扣去 statusBar 高度往下顶
-                let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + offsetHeight)
+                // English: Keep button groups inside the local host geometry.
+                // Español: Mantiene los grupos de botones dentro de la geometría local del host.
+                // 中文：让按钮组始终落在当前宿主的局部几何区域内。
+                make.top.equalToSuperview().inset(navigationHostTopInset + navOffset())
                 make.bottom.equalToSuperview()
             }
             
@@ -291,7 +288,9 @@ open class PTNavBar: PTNavigationBarContainer {
         let rightWidthTotal: CGFloat = stackTotalWidth(rightContainer)
         let leftWidthTotal: CGFloat = stackTotalWidth(leftContainer)
 
-        let containerWidth = bounds.width > 0 ? bounds.width : CGFloat.kSCREEN_WIDTH
+        let containerWidth = bounds.width > 0
+            ? bounds.width
+            : (superview?.bounds.width ?? window?.bounds.width ?? 0)
         let navigationSpacing = PTAppBaseConfig.share.navContainerSpacing
         let defaultSpace = PTAppBaseConfig.share.defaultViewSpace
         // English: Use the wider button group on both sides so a centered title never conflicts with an edge button.

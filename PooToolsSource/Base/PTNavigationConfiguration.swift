@@ -29,6 +29,21 @@ public extension PTNavigationConfigurable {
     func allowControlNavBar() -> Bool { true }
 }
 
+// English: Optional metadata lets non-base controllers describe adaptive navigation without adding requirements to the legacy protocol.
+// Español: Los metadatos opcionales permiten describir navegación adaptativa sin cambiar los requisitos del protocolo heredado.
+// 中文：可选元数据让非基类控制器也能提供自适应导航信息，同时不改变旧协议要求。
+@MainActor
+public protocol PTAdaptiveNavigationMetadataProviding: AnyObject {
+    var ptAdaptiveNavigationTitle: String? { get }
+    var ptAdaptiveNavigationAxisPreference: PTAdaptiveBarAxis? { get }
+}
+
+@MainActor
+public extension PTAdaptiveNavigationMetadataProviding {
+    var ptAdaptiveNavigationTitle: String? { nil }
+    var ptAdaptiveNavigationAxisPreference: PTAdaptiveBarAxis? { nil }
+}
+
 @MainActor
 public extension PTNavigationBarManager {
     // English: Apply a configuration without requiring PTBaseViewController inheritance.

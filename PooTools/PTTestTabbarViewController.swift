@@ -13,6 +13,9 @@ import PToolsSymbols
 import PooTools
 
 class PTTestTabbarViewController: PTBaseTabBarViewController {
+    #if DEBUG
+    private var lastAdaptiveDebugSummary = ""
+    #endif
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         // 🌟 深度 Debug：打印具体类型
@@ -82,6 +85,25 @@ class PTTestTabbarViewController: PTBaseTabBarViewController {
         }
         ptCustomBar.select(0)
     }
+
+    #if DEBUG
+    // English: Log local scene geometry only when the adaptive-bar layout changes.
+    // Español: Registra la geometría local de la escena solo cuando cambia el layout adaptativo.
+    // 中文：仅在自适应 Bar 布局变化时记录当前场景的本地几何信息。
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard let geometry = adaptiveBarGeometry,
+              let window = viewIfLoaded?.window else { return }
+
+        let windowSceneID = window.windowScene?.session.persistentIdentifier ?? "nil"
+        let summary = "scene=\(windowSceneID) bounds=\(view.bounds.integral) safe=\(view.safeAreaInsets) "
+            + "tabBar=\(tabBar.frame.integral) customBar=\(ptCustomBar.frame.integral) "
+            + geometry.debugSummary
+        guard summary != lastAdaptiveDebugSummary else { return }
+        lastAdaptiveDebugSummary = summary
+        PTNSLogConsole("[PTAdaptiveBar][DEBUG] \(summary)")
+    }
+    #endif
         
     // MARK: 设置UITab
     @available(iOS 18.0, *)

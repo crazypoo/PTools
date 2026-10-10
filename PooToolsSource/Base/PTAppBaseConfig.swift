@@ -199,4 +199,10 @@ public class PTAppBaseConfig: NSObject {
     
     public var tabBarAccessoryHeight: CGFloat = 44
     public var tabBarAccessoryBottomSpacing: CGFloat = 10
+
+    // English: New tab-bar controllers start with automatic UIKit capability detection.
+    // Español: Los nuevos controladores TabBar comienzan con detección automática de capacidades de UIKit.
+    // 中文：新的 TabBar 控制器默认使用 UIKit 能力自动检测。
+    public var adaptiveBarPresentationPolicy: PTAdaptiveBarPresentationPolicy = .automatic
+    public var adaptiveBarMinimumTouchTarget: CGFloat = 44
 }

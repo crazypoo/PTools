@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: 709b16be6083e89fafa73181bef6d4902013cbcb
-Generated at: 2026-10-06T02:28:31Z
+Source revision: aa4f1fca1a9f03b73abba39ea1fee3b7ff201ee3
+Generated at: 2026-10-10T18:32:30Z
 -->
 
 # PTools 当前弃用入口清单
@@ -21,10 +21,11 @@ Generated at: 2026-10-06T02:28:31Z
 | `PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift:118` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Base/PTAppBaseConfig.swift:114` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Base/PTAppBaseConfig.swift:115` | `gobalWebImageLoadOption` | `webImageLoadOptions` |
-| `PooToolsSource/Base/PTBaseNavControl.swift:165` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/Base/PTBaseNavControl.swift:166` | `GobalNavControl` | `globalNavControl` |
-| `PooToolsSource/Base/PTBaseViewController.swift:211` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/Button/PTActionLayoutButton.swift:709` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Base/PTAppBaseConfig.swift:165` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Base/PTBaseNavControl.swift:210` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Base/PTBaseNavControl.swift:211` | `GobalNavControl` | `globalNavControl` |
+| `PooToolsSource/Base/PTBaseViewController.swift:231` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Button/PTActionLayoutButton.swift:720` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Category/PHAsset+PTEX.swift:251` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Category/PHAsset+PTEX.swift:272` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Category/PHPhotoLibrary+PTEX.swift:15` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
@@ -391,11 +392,11 @@ Generated at: 2026-10-06T02:28:31Z
 | `PooToolsSource/NetWork/Network+LegacyCompatibility.swift:74` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/NetWork/Network+LegacyCompatibility.swift:88` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/NetWork/Network+LegacyCompatibility.swift:101` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/NetWork/Network.swift:303` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/NetWork/Network.swift:312` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/NetWork/Network.swift:323` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/NetWork/Network.swift:373` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/NetWork/Network.swift:378` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/NetWork/Network.swift:306` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/NetWork/Network.swift:315` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/NetWork/Network.swift:326` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/NetWork/Network.swift:376` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/NetWork/Network.swift:381` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/NetWork/NetworkTypes.swift:74` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/NetWork/NetworkTypes.swift:77` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/NetWork/NetworkTypes.swift:80` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
@@ -436,4 +437,4 @@ Generated at: 2026-10-06T02:28:31Z
 | `PooToolsSource/SegmentControl/PTSegmentedTypes.swift:214` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/SignView/PTSignView.swift:162` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 
-扫描数量：`422`。该数量用于发现漂移，不代表可以自动删除公开 API。
+扫描数量：`423`。该数量用于发现漂移，不代表可以自动删除公开 API。

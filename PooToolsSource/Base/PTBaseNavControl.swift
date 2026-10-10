@@ -14,6 +14,31 @@ import PToolsCore
 @objcMembers
 @MainActor
 open class PTBaseNavControl: UINavigationController {
+
+    // English: The navigation controller exposes one stable vertical-bar policy for its whole stack.
+    // Español: El controlador de navegación expone una política vertical estable para toda su pila.
+    // 中文：导航控制器为整个导航栈提供稳定的垂直 Bar 策略。
+    open var adaptiveBarPresentationPolicy: PTAdaptiveBarPresentationPolicy = PTAppBaseConfig.share.adaptiveBarPresentationPolicy {
+        didSet {
+            guard #available(iOS 27.1, *) else { return }
+            setNeedsUpdateOfVerticalBarConfiguration()
+        }
+    }
+
+    @available(iOS 27.1, *)
+    open override var preferredVerticalBarBehavior: UIVerticalBarBehavior {
+        switch adaptiveBarPresentationPolicy {
+        case .legacyClassic, .preferClassicBarsForWideContent, .customAdaptive:
+            return .disabled
+        case .automatic, .preferSystemAdaptive:
+            return .automatic
+        }
+    }
+
+    @available(iOS 27.1, *)
+    open override var childForPreferredVerticalBarBehavior: UIViewController? {
+        visibleViewController
+    }
     
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         let mask = visibleViewController?.supportedInterfaceOrientations ?? .portrait
@@ -25,6 +50,7 @@ open class PTBaseNavControl: UINavigationController {
         PTBaseNavControl.globalNavControl(nav: self)
         PTNavigationBarManager.shared.bind(to: self)
         PTNavigationBarManager.shared.installIfNeeded(in: self)
+        PTAdaptiveSystemBarBridge.apply(policy: adaptiveBarPresentationPolicy, to: self)
     }
     
     open override func viewDidLoad() {
@@ -32,6 +58,7 @@ open class PTBaseNavControl: UINavigationController {
         pushStatusBars(for: viewControllers)
         PTNavigationBarManager.shared.bind(to: self)
         PTNavigationBarManager.shared.installIfNeeded(in: self)
+        PTAdaptiveSystemBarBridge.apply(policy: adaptiveBarPresentationPolicy, to: self)
         // English: Keep the navigation-controller backing transparent; the child controller owns the content surface.
         // Español: Mantiene transparente el fondo del controlador de navegación; el controlador hijo posee la superficie de contenido.
         // 中文：保持导航控制器底层背景透明，由子控制器负责内容背景。
@@ -43,8 +70,26 @@ open class PTBaseNavControl: UINavigationController {
             self.baseTraitCollectionDidChange(style: style)
             self.setNeedsStatusBarAppearanceUpdate()
         }
+
+        if #available(iOS 27.1, *) {
+            registerForTraitChanges(UITraitCollection.systemTraitsAffectingVerticalBarEdge) { (self: Self, previousTraitCollection: UITraitCollection) in
+                guard previousTraitCollection.verticalBarEdge != self.traitCollection.verticalBarEdge else { return }
+                PTNavigationBarManager.shared.installIfNeeded(in: self)
+                PTAdaptiveSystemBarBridge.apply(policy: self.adaptiveBarPresentationPolicy, to: self)
+            }
+        }
     }
-    
+
+    // English: Re-evaluate bar ownership after a scene resize or vertical-bar trait change.
+    // Español: Reevalúa el propietario de la barra después de redimensionar la escena o cambiar el trait vertical.
+    // 中文：场景尺寸或垂直 Bar trait 变化后重新判断 Bar 的唯一拥有者。
+    open override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        guard isViewLoaded else { return }
+        PTNavigationBarManager.shared.installIfNeeded(in: self)
+        PTAdaptiveSystemBarBridge.apply(policy: adaptiveBarPresentationPolicy, to: self)
+    }
+
     open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) { }
     
     open override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {

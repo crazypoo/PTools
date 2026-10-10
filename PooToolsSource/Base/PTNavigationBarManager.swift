@@ -234,9 +234,34 @@ public final class PTNavigationBarManager:NSObject {
     private var navigationContextsBySceneID: [String: NavigationContextBox] = [:]
     
     public var tabBarHandler: ((UINavigationController, UIViewController, Bool, UIViewControllerTransitionCoordinator?) -> Void)?
+
+    // English: Let UIKit own vertical navigation bars when the stack requests the system renderer.
+    // Español: Deja que UIKit controle la barra de navegación vertical cuando la pila solicita el renderizador del sistema.
+    // 中文：当导航栈使用系统渲染器时，让 UIKit 独占垂直导航栏。
+    private func usesNativeVerticalBar(_ nav: UINavigationController) -> Bool {
+        let policy = (nav as? PTBaseNavControl)?.adaptiveBarPresentationPolicy
+            ?? PTAppBaseConfig.share.adaptiveBarPresentationPolicy
+        guard policy == .automatic || policy == .preferSystemAdaptive else { return false }
+        guard #available(iOS 27.1, *), nav.isViewLoaded else { return false }
+        let edge = nav.view.traitCollection.verticalBarEdge
+        return edge == .leading || edge == .trailing
+    }
+
+    private func setCustomContainer(_ container: PTNavigationBarContainer?, visible: Bool) {
+        container?.isHidden = !visible
+        container?.isUserInteractionEnabled = visible
+    }
     
     public func installIfNeeded(in nav: UINavigationController) {
-        if containerMap.object(forKey: nav) != nil { return }
+        if usesNativeVerticalBar(nav) {
+            setCustomContainer(containerMap.object(forKey: nav), visible: false)
+            applyAdaptiveSystemPolicy(to: nav)
+            return
+        }
+        if let existingContainer = containerMap.object(forKey: nav) {
+            setCustomContainer(existingContainer, visible: true)
+            return
+        }
 
         let navBar = nav.navigationBar
         resetSystemNavBarAppearance(nav)
@@ -258,6 +283,10 @@ public final class PTNavigationBarManager:NSObject {
         installIfNeeded(in: nav)
         rememberCurrent(nav, viewController: nav.topViewController)
         styleCache.setObject(NavigationStyleBox(style: style), forKey: nav)
+        if usesNativeVerticalBar(nav) {
+            applyAdaptiveSystemPolicy(to: nav)
+            return
+        }
         let container = containerMap.object(forKey: nav)
         container?.apply(style: style)
         
@@ -376,6 +405,7 @@ public final class PTNavigationBarManager:NSObject {
                 }
                 nav.delegate = proxy
             }
+            applyAdaptiveSystemPolicy(to: nav)
             return
         }
 
@@ -383,6 +413,16 @@ public final class PTNavigationBarManager:NSObject {
         let proxy = PTNavigationDelegateProxy(manager: self, hostDelegate: hostDelegate)
         delegateProxyMap.setObject(proxy, forKey: nav)
         nav.delegate = proxy
+        applyAdaptiveSystemPolicy(to: nav)
+    }
+
+    // English: Keep UIKit vertical-bar behavior aligned with the navigation stack policy.
+    // Español: Mantiene el comportamiento de la barra vertical de UIKit alineado con la política de la pila.
+    // 中文：让 UIKit 垂直 Bar 行为与当前导航栈策略保持一致。
+    private func applyAdaptiveSystemPolicy(to nav: UINavigationController) {
+        let policy = (nav as? PTBaseNavControl)?.adaptiveBarPresentationPolicy
+            ?? PTAppBaseConfig.share.adaptiveBarPresentationPolicy
+        PTAdaptiveSystemBarBridge.apply(policy: policy, to: nav)
     }
 
     func setTabBarHandler(_ handler: @escaping (UINavigationController, UIViewController, Bool, UIViewControllerTransitionCoordinator?) -> Void,
@@ -449,15 +489,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         
         installIfNeeded(in: navigationController)
         rememberNavigationController(navigationController)
-        resetSystemNavBarAppearance(navigationController)
-        
-        // 安全准备默认返回按钮数据（来自我们上一步的优化）
-        if let baseVC = viewController as? PTBaseViewController {
-            baseVC.prepareDefaultNavigationBarItem()
-        }
-        
-        guard let container = containerMap.object(forKey: navigationController) else { return }
-        
+
         let toStyle: PTNavigationBarStyle
         if let configurable = viewController as? PTNavigationConfigurable {
             toStyle = configurable.preferredNavigationBarStyle()
@@ -466,6 +498,30 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         } else {
             toStyle = .default
         }
+
+        if usesNativeVerticalBar(navigationController) {
+            // English: Map the existing navigation item into UIKit instead of overlaying a second custom bar.
+            // Español: Mapea el elemento de navegación existente a UIKit en lugar de superponer otra barra personalizada.
+            // 中文：把现有导航项映射到 UIKit，避免叠加第二套自定义导航栏。
+            let item = itemCache.object(forKey: viewController) ?? PTNavBarItem()
+            applyNativeItem(item, in: navigationController, viewController: viewController)
+            StatusBarManager.shared.update(with: toStyle)
+            if let handler = tabBarHandlerCache.object(forKey: navigationController)?.handler {
+                handler(navigationController, viewController, animated, navigationController.transitionCoordinator)
+            } else {
+                tabBarHandler?(navigationController, viewController, animated, navigationController.transitionCoordinator)
+            }
+            return
+        }
+
+        resetSystemNavBarAppearance(navigationController)
+
+        // 安全准备默认返回按钮数据（来自我们上一步的优化）
+        if let baseVC = viewController as? PTBaseViewController {
+            baseVC.prepareDefaultNavigationBarItem()
+        }
+
+        guard let container = containerMap.object(forKey: navigationController) else { return }
 
         StatusBarManager.shared.update(with: toStyle)
         
@@ -628,6 +684,11 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
     private func apply(item: PTNavBarItem,
                        in navigationController: UINavigationController,
                        viewController: UIViewController) {
+        if usesNativeVerticalBar(navigationController) {
+            applyNativeItem(item, in: navigationController, viewController: viewController)
+            return
+        }
+
         setLeftView(item.leftView, spacing: item.leftItemSpacing, in: navigationController)
         setRightViews(item.rightViews, spacing: item.rightItemSpacing, in: navigationController)
         if let findTitleView = item.titleView {
@@ -689,6 +750,32 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         }
 
         container.rerenderCurrentStyle()
+    }
+
+    // English: Preserve the public navigation-item content when UIKit owns the vertical bar.
+    // Español: Conserva el contenido público del elemento de navegación cuando UIKit controla la barra vertical.
+    // 中文：当 UIKit 独占垂直导航栏时，继续保留公开导航项内容。
+    private func applyNativeItem(_ item: PTNavBarItem,
+                                 in navigationController: UINavigationController,
+                                 viewController: UIViewController) {
+        let navigationItem = viewController.navigationItem
+        navigationItem.leftBarButtonItems = item.leftView.map { UIBarButtonItem(customView: $0) }
+        navigationItem.rightBarButtonItems = item.rightViews.map { UIBarButtonItem(customView: $0) }
+
+        if let titleView = item.titleView {
+            navigationItem.title = nil
+            navigationItem.titleView = titleView
+        } else {
+            navigationItem.titleView = nil
+            navigationItem.title = item.navTitle.isEmpty ? viewController.title : item.navTitle
+        }
+
+        if let configurable = viewController as? PTNavigationConfigurable {
+            navigationItem.largeTitleDisplayMode = configurable.prefersLargeTitle() ? .always : .never
+        }
+        PTAdaptiveSystemBarBridge.apply(policy: (navigationController as? PTBaseNavControl)?.adaptiveBarPresentationPolicy
+                                         ?? PTAppBaseConfig.share.adaptiveBarPresentationPolicy,
+                                         to: navigationController)
     }
 
     private func clear() {

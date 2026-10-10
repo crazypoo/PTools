@@ -61,6 +61,17 @@ final public class PTTabBarItemView: UIControl {
         titleLabel.superview == contentStackView ? titleLabel : nil
     }
 
+    // English: Vertical rails keep the title available to accessibility while showing the icon as the compact visual.
+    // Español: Las rails verticales conservan el título para accesibilidad y muestran el icono como visual compacto.
+    // 中文：垂直 Rail 保留标题供无障碍使用，视觉上只突出图标。
+    func setAdaptiveAxis(_ axis: PTAdaptiveBarAxis) {
+        let isVertical = axis == .verticalEdge
+        titleLabel.isHidden = isVertical
+        contentStackView.spacing = isVertical ? 0 : appearance.layout.tabContentSpacing
+        accessibilityLabel = titleLabel.text
+        setNeedsLayout()
+    }
+
     // English: Resolve only the media/custom-content size insets; the title remains independently sized.
     // Español: Resuelve solo los insets del contenido multimedia/personalizado; el título conserva su tamaño independiente.
     // 中文：只解析媒体/自定义内容的尺寸内边距，标题仍由自身字体独立决定尺寸。

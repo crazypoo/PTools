@@ -119,8 +119,41 @@ end
 
 old_entries = entries(old_path)
 new_entries = entries(new_path)
-removed = (old_entries - new_entries).sort
-added = (new_entries - old_entries).sort
+
+# English: Older reports stored multiline function declarations as a prefix; match that historical form without hiding real removals.
+# Español: Los informes antiguos guardaban las declaraciones multilínea como prefijos; acepta ese formato histórico sin ocultar eliminaciones reales.
+# 中文：旧报告会把多行函数声明保存为前缀；兼容该历史格式，但不掩盖真实删除。
+def declaration_parts(entry)
+  access, kind, signature = entry.split("|", 3)
+  [access, kind, signature]
+end
+
+new_by_group = Hash.new { |hash, key| hash[key] = [] }
+new_entries.each do |entry|
+  access, kind, = declaration_parts(entry)
+  new_by_group[[access, kind]] << entry
+end
+
+def covered_by_current?(entry, current_entries, current_by_group)
+  return true if current_entries.include?(entry)
+
+  access, kind, signature = declaration_parts(entry)
+  return false unless %w[func init subscript].include?(kind) && (signature.end_with?(",") || signature.end_with?("("))
+
+  current_by_group[[access, kind]].any? do |candidate|
+    candidate_signature = declaration_parts(candidate)[2]
+    candidate_signature.start_with?(signature)
+  end
+end
+
+old_by_group = Hash.new { |hash, key| hash[key] = [] }
+old_entries.each do |entry|
+  access, kind, = declaration_parts(entry)
+  old_by_group[[access, kind]] << entry
+end
+
+removed = old_entries.reject { |entry| covered_by_current?(entry, new_entries, new_by_group) }.sort
+added = new_entries.reject { |entry| covered_by_current?(entry, old_entries, old_by_group) }.sort
 
 puts "Public API comparison"
 puts "  old=#{old_entries.length}"

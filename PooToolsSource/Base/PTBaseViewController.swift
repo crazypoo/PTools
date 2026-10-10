@@ -25,7 +25,7 @@ public typealias PTScreenShotOnlyGetImageHandle = (UIImage?) -> Void
 
 @objcMembers
 @MainActor
-open class PTBaseViewController: UIViewController, PTNavigationConfigurable {
+open class PTBaseViewController: UIViewController, PTNavigationConfigurable, PTAdaptiveNavigationMetadataProviding {
 
     private var hidesBaseNavigationBarOnLoad = false
                    
@@ -43,6 +43,26 @@ open class PTBaseViewController: UIViewController, PTNavigationConfigurable {
     
     open func allowControlNavBar() -> Bool {
         return true
+    }
+
+    // English: Child controllers may opt out of UIKit's vertical bar without changing the legacy navigation API.
+    // Español: Los controladores hijos pueden desactivar la barra vertical de UIKit sin cambiar la API de navegación heredada.
+    // 中文：子控制器可以选择退出 UIKit 垂直 Bar，同时不改变旧导航 API。
+    open var ptAdaptiveNavigationTitle: String? { pt_Title }
+    open var ptAdaptiveNavigationAxisPreference: PTAdaptiveBarAxis? { nil }
+
+    @available(iOS 27.1, *)
+    open override var preferredVerticalBarBehavior: UIVerticalBarBehavior {
+        let policy = (navigationController as? PTBaseNavControl)?.adaptiveBarPresentationPolicy
+            ?? PTAppBaseConfig.share.adaptiveBarPresentationPolicy
+        switch policy {
+        case .legacyClassic, .preferClassicBarsForWideContent:
+            return .disabled
+        case .automatic, .preferSystemAdaptive:
+            return .automatic
+        case .customAdaptive:
+            return .disabled
+        }
     }
     
     open var pt_Title:String? {

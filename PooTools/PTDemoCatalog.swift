@@ -178,6 +178,7 @@ enum PTDemoRegistry {
         make("navigation.split-view", "PooToolsSplitView", "Adaptive SplitView — iPhone / iPad", .navigationRouting, .interactive, .rootContainer, .runnable, legacy: "AdaptiveSplitView", tags: ["split-view", "iphone", "ipad", "compact", "regular", "adaptive", "router", "state-restoration", "inspector"]),
         make("navigation.segment-paging-regression", "PooToolsSegmented", "Segmented / JX Parity & Paging", .navigationRouting, .interactive, .push, .runnable, legacy: "SegmentedPagingRegression", tags: ["segment", "paging", "badge", "jx-parity", "regression"]),
         make("navigation.segment-item-separator", "PooToolsSegmented", "Segmented / Item Separator", .navigationRouting, .interactive, .push, .runnable, legacy: "SegmentedItemSeparator", tags: ["segment", "separator", "rtl", "reuse"]),
+        make("navigation.duo-adaptive-bars", "PToolsUIFoundation", "iPhone Duo Adaptive Bars", .navigationRouting, .interactive, .push, .runnable, legacy: "iPhone Duo Adaptive Bars", tags: ["iphone-duo", "navigation", "tabbar", "adaptive", "iOS27.1"]),
         make("security.encryption", "PooToolsDataEncrypt", "Encryption", .securityPrivacy, .interactive, .sheet, .runnable, legacy: "Encryption", tags: ["crypto"]),
         make("network.speed-test", "PooToolsNetworkSpeedTest", "Network Speed Test", .networkConnectivity, .interactive, .push, .runnable, legacy: "NetworkSpeedTest", tags: ["network", "speed", "endpoint"]),
         make("network.ping", "PooToolsPing", "Ping Session", .networkConnectivity, .interactive, .push, .runnable, legacy: "PingSession", tags: ["network", "ping", "state-machine"]),
@@ -279,6 +280,8 @@ final class PTDemoCoordinator {
         switch descriptor.id.rawValue {
         case "navigation.split-view":
             return PT5_61SplitViewDemoViewController()
+        case "navigation.duo-adaptive-bars":
+            return PTDuoAdaptiveBarDemoViewController()
         case "network.speed-test":
             return PT5_61NetworkSpeedDemoViewController()
         case "network.ping":
@@ -347,6 +350,133 @@ final class PTDemoCoordinator {
     }
 }
 
+// English: Show all adaptive navigation and tab-bar scenarios without changing the production defaults.
+// Español: Muestra todos los escenarios de navegación y tab-bar adaptativos sin cambiar los valores de producción.
+// 中文：展示全部自适应导航栏和 TabBar 场景，同时不改变生产默认配置。
+@MainActor
+private final class PTDuoAdaptiveBarDemoViewController: PTBaseTabBarViewController {
+    private let scenarios: [(String, String)] = [
+        ("Outer / Vertical Nav + Tabs", "Back、Save、More、4–6 个 Tab、Badge，以及同一侧 rail 的分段布局。"),
+        ("Inner Portrait / Classic", "展开直向时保留传统顶部标题、左右操作和底部图文 TabBar。"),
+        ("Inner Landscape / Auto Edge", "横向由系统 verticalBarEdge 决定侧边，比较可用内容高度。"),
+        ("Expanded / Prefer Classic", "显式 classic policy 只作为稳定 opt-out，不用宽度猜测设备类型。"),
+        ("Center Raised + Lottie", "中央操作和动态媒体保留同一个 content 实例，切轴不重建。"),
+        ("Badge + Selection + Mini", "无标题、长标题、Badge、Mini 和选中背景沿用同一选择状态。"),
+        ("Push / Pop / Interactive Pop", "根页面、二级隐藏、返回恢复与交互式返回不重置选中 Tab。"),
+        ("Search + Keyboard + Overflow", "内容区承载输入，空间不足时保留核心入口并转入 overflow。"),
+        ("Accessibility", "Dynamic Type、VoiceOver、粗体、Reduce Motion 和 Reduce Transparency。"),
+        ("Multi Scene / Split View", "每个 Scene 使用自己的 bounds、safe area、策略和选中状态。"),
+        ("FakeNav / Modal / Sheet / Alert", "特殊容器不覆盖关闭入口，系统和自定义层级保持单一所有权。"),
+        ("Rapid Fold / Resize Stress", "连续尺寸变化只刷新值类型几何，不清空导航栈、Badge 或输入状态。")
+    ]
+
+    override func viewDidLoad() {
+        // English: Use automatic mode so iOS 27.1+ UIKit owns vertical-bar geometry and older systems stay classic.
+        // Español: Usa el modo automático para que UIKit gestione la geometría vertical en iOS 27.1+ y los sistemas antiguos sigan clásicos.
+        // 中文：使用 automatic，让 iOS 27.1+ 由 UIKit 统一管理垂直 Bar，旧系统保持经典布局。
+        adaptiveBarConfiguration = .init(presentationPolicy: .automatic,
+                                         minimumTouchTarget: 44,
+                                         favorsTabVisibility: true,
+                                         enablesCustomEffects: true)
+        showsAdaptiveBarDebugOverlay = true
+        super.viewDidLoad()
+
+        let configs = [
+            makeTab(title: "Duo", symbol: "rectangle.split.2x1", scenarios: scenarios),
+            makeTab(title: "Classic", symbol: "iphone", scenarios: Array(scenarios.prefix(4))),
+            makeTab(title: "Stress", symbol: "arrow.triangle.2.circlepath", scenarios: Array(scenarios.suffix(4)))
+        ]
+        configure(items: configs)
+        ptCustomBar.setup(configs: configs,
+                          layoutStyle: .centerRaised,
+                          centerContent: PTTabBarImageContent(normal: PTSymbolResolver.image(.sparkles) ?? UIImage()))
+        ptCustomBar.badge(index: 0, badgeValue: "12")
+        centerRaisedSet = true
+    }
+
+    private func makeTab(title: String,
+                         symbol: String,
+                         scenarios: [(String, String)]) -> PTTabBarItemConfig {
+        let content = PTTabBarImageContent(normal: PTSymbolResolver.image(PTSymbol(rawValue: symbol)) ?? UIImage(),
+                                            selected: PTSymbolResolver.image(PTSymbol(rawValue: symbol).appending("fill")))
+        let scenarioController = PTDuoAdaptiveScenarioViewController(title: title,
+                                                                       scenarios: scenarios)
+        return PTTabBarItemConfig(title: title,
+                                  content: content,
+                                  viewController: PTBaseNavControl(rootViewController: scenarioController))
+    }
+}
+
+// English: Keep the scenario body in a normal PTools base controller so push/pop behavior is exercised.
+// Español: Mantiene el cuerpo del escenario en un controlador base normal de PTools para ejercitar push/pop.
+// 中文：使用普通 PTools 基类承载场景内容，以真实验证 push/pop 行为。
+@MainActor
+private final class PTDuoAdaptiveScenarioViewController: PTBaseViewController {
+    private let scenarioTitle: String
+    private let scenarios: [(String, String)]
+
+    init(title: String, scenarios: [(String, String)]) {
+        scenarioTitle = title
+        self.scenarios = scenarios
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        scenarioTitle = ""
+        scenarios = []
+        super.init(coder: coder)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        pt_Title = scenarioTitle
+        navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(systemItem: .save),
+            UIBarButtonItem(systemItem: .organize)
+        ]
+
+        let scrollView = UIScrollView()
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 16
+        stack.alignment = .fill
+
+        let heading = UILabel()
+        heading.font = .preferredFont(forTextStyle: .title2)
+        heading.textColor = .label
+        heading.numberOfLines = 0
+        heading.text = "PTools iPhone Duo\n\(scenarioTitle)"
+        stack.addArrangedSubview(heading)
+
+        let hint = UILabel()
+        hint.font = .preferredFont(forTextStyle: .subheadline)
+        hint.textColor = .secondaryLabel
+        hint.numberOfLines = 0
+        hint.text = "布局由当前 Scene 的 bounds、safe area、verticalBarEdge 和 reserved regions 决定。"
+        stack.addArrangedSubview(hint)
+
+        for (index, scenario) in scenarios.enumerated() {
+            let label = UILabel()
+            label.font = .preferredFont(forTextStyle: .body)
+            label.textColor = .label
+            label.numberOfLines = 0
+            label.text = "\(index + 1). \(scenario.0)\n\(scenario.1)"
+            label.accessibilityLabel = "\(scenario.0)：\(scenario.1)"
+            stack.addArrangedSubview(label)
+        }
+
+        view.addSubview(scrollView)
+        scrollView.addSubview(stack)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide).inset(20)
+        }
+        stack.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView.contentLayoutGuide)
+            make.width.equalTo(scrollView.frameLayoutGuide)
+        }
+    }
+}
+
 // English: Demonstrates native menus for PTools UIControls without recreating UIKit menu UI.
 // Español: Demuestra menús nativos para UIControls de PTools sin recrear la interfaz de UIKit.
 // 中文：演示 PTools UIControl 的原生菜单能力，不重复实现 UIKit 菜单界面。
@@ -380,10 +510,10 @@ private final class PTControlMenuDemoViewController: PTBaseViewController {
         longPressButton.setTitleColor(.label, state: .normal)
         longPressButton.pt_setMenu(
             UIMenu(children: [
-                UIAction(title: "复制", image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
+                UIAction(title: "复制", image: PTSymbolResolver.image(.docOnDoc)) { [weak self] _ in
                     self?.statusLabel.text = "已选择：复制"
                 },
-                UIAction(title: "分享", image: UIImage(systemName: "square.and.arrow.up")) { [weak self] _ in
+                UIAction(title: "分享", image: PTSymbolResolver.image(.squareAndArrowUp)) { [weak self] _ in
                     self?.statusLabel.text = "已选择：分享"
                 }
             ]),
@@ -404,7 +534,7 @@ private final class PTControlMenuDemoViewController: PTBaseViewController {
                     PTControlMenuSelectionItem(
                         id: sort,
                         title: sort.rawValue,
-                        selectedImage: sort == .sales ? UIImage(systemName: "chart.bar.fill") : nil
+                        selectedImage: sort == .sales ? PTSymbolResolver.image(PTSymbol(rawValue: "chart.bar.fill")) : nil
                     )
                 }
             },
@@ -419,7 +549,7 @@ private final class PTControlMenuDemoViewController: PTBaseViewController {
         let nativeButton = PTBaseButton(type: .system)
         nativeButton.setTitle("UIButton 原生 Primary Menu", for: .normal)
         nativeButton.menu = UIMenu(children: [
-            UIAction(title: "系统菜单", image: UIImage(systemName: "checkmark.circle")) { [weak self] _ in
+            UIAction(title: "系统菜单", image: PTSymbolResolver.image(.checkmarkCircle)) { [weak self] _ in
                 self?.statusLabel.text = "UIButton 使用 UIKit 原生 menu"
             }
         ])
@@ -1160,7 +1290,7 @@ private final class PTGradientRenderingDemoViewController: PTBaseViewController 
         label.text = "Visible UILabel text"
         label.textAlignment = .center
         label.textColor = .white
-        imageView.image = UIImage(systemName: "photo")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        imageView.image = PTSymbolResolver.image(.photo)?.withTintColor(.white, renderingMode: .alwaysOriginal)
         imageView.contentMode = .scaleAspectFit
 
         let borderLabel = UILabel()

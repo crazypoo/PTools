@@ -118,6 +118,11 @@ final public class PTTabBarView: UIView {
             layoutStyle
         }
     }
+
+    // English: The coordinator changes only the presentation axis; item identity and content instances remain intact.
+    // Español: El coordinador cambia solo el eje de presentación; conserva la identidad y el contenido de cada elemento.
+    // 中文：协调器只切换展示轴，不重建 Tab 项身份和内容实例。
+    public private(set) var adaptiveAxis: PTAdaptiveBarAxis = .horizontalClassic
     
     // 🌟 新增：用于最小化时展示当前 Icon 的容器
     lazy var minimizedCenterView: UIView = {
@@ -217,11 +222,10 @@ final public class PTTabBarView: UIView {
         var tabContainerHeight:CGFloat = 0
         
         if appearanceSnapshot.layout.tab26Mode {
-            if deviceInfo.isFaceIDCapable {
-                tabContainerHeight = CGFloat.kTabbarHeight_Total - appearanceSnapshot.layout.tab26BottomSpacing
-            } else {
-                tabContainerHeight = CGFloat.kTabbarHeight_Total
-            }
+            // English: Keep the configured iOS 26 surface size without guessing the device family.
+            // Español: Conserva el tamaño configurado de la superficie iOS 26 sin adivinar la familia del dispositivo.
+            // 中文：保留 iOS 26 配置的表面尺寸，不再猜测设备类型。
+            tabContainerHeight = max(0, CGFloat.kTabbarHeight_Total - appearanceSnapshot.layout.tab26BottomSpacing)
         } else {
             if appearanceSnapshot.layout.tabbarMetailMode {
                 tabContainerHeight = CGFloat.kTabbarHeight_Total
@@ -352,6 +356,20 @@ final public class PTTabBarView: UIView {
         }
     }
 
+    // English: Re-layout the existing stacks for a vertical rail without rebuilding badges, Lottie or callbacks.
+    // Español: Reorganiza los stacks existentes para una rail vertical sin reconstruir badges, Lottie ni callbacks.
+    // 中文：将现有 Stack 切换为垂直 Rail，保留角标、Lottie 和回调。
+    public func setAdaptiveAxis(_ axis: PTAdaptiveBarAxis) {
+        guard adaptiveAxis != axis else {
+            applyAdaptiveAxisLayout()
+            return
+        }
+        adaptiveAxis = axis
+        items.forEach { $0.setAdaptiveAxis(axis) }
+        applyAdaptiveAxisLayout()
+        setNeedsLayout()
+    }
+
     public func setup(configs: [PTTabBarItemConfig],
                       layoutStyle: PTTabBarLayoutStyle = .normal,
                       centerContent:PTTabBarItemContent? = nil) {
@@ -439,7 +457,94 @@ final public class PTTabBarView: UIView {
         }
 
         currentIndex = min(max(currentIndex, 0), max(items.count - 1, 0))
+        applyAdaptiveAxisLayout()
         select(currentIndex)
+    }
+
+    @MainActor
+    private func applyAdaptiveAxisLayout() {
+        let vertical = adaptiveAxis == .verticalEdge
+        let stacks = [leftStackView, rightStackView]
+        stacks.forEach {
+            $0.axis = vertical ? .vertical : .horizontal
+            $0.distribution = .fillEqually
+            $0.alignment = .fill
+        }
+        items.forEach { $0.setAdaptiveAxis(adaptiveAxis) }
+
+        if vertical {
+            if layoutStyle == .centerRaised && !centerButton.isHidden {
+                rightStackView.isHidden = false
+                centerNameLabel.isHidden = true
+                let leftHeight = CGFloat(max(1, leftStackView.arrangedSubviews.count)) * 44
+                let rightHeight = CGFloat(max(1, rightStackView.arrangedSubviews.count)) * 44
+                leftStackView.snp.remakeConstraints { make in
+                    make.left.right.equalToSuperview()
+                    make.top.equalToSuperview()
+                    make.height.equalTo(leftHeight)
+                }
+                centerButton.snp.remakeConstraints { make in
+                    make.centerX.equalToSuperview()
+                    make.centerY.equalToSuperview()
+                    make.size.equalTo(appearanceSnapshot.layout.tabbarCenterButtonSize)
+                }
+                rightStackView.snp.remakeConstraints { make in
+                    make.left.right.equalToSuperview()
+                    make.bottom.equalToSuperview()
+                    make.height.equalTo(rightHeight)
+                }
+            } else {
+                rightStackView.isHidden = true
+                centerButton.isHidden = true
+                centerNameLabel.isHidden = true
+                leftStackView.snp.remakeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
+            }
+            return
+        }
+
+        centerNameLabel.isHidden = centerTitle.isEmpty
+        if layoutStyle == .normal || centerButton.isHidden {
+            rightStackView.isHidden = true
+            centerButton.isHidden = true
+            leftStackView.snp.remakeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.top.equalToSuperview().inset(appearanceSnapshot.layout.tabTopSpacing)
+                if appearanceSnapshot.layout.tab26Mode {
+                    make.bottom.equalToSuperview().inset(appearanceSnapshot.layout.tabBottomSpacing)
+                } else {
+                    make.height.equalTo(CGFloat.kTabbarHeight)
+                }
+            }
+        } else {
+            rightStackView.isHidden = false
+            leftStackView.snp.remakeConstraints {
+                $0.left.equalToSuperview()
+                $0.top.equalToSuperview().inset(appearanceSnapshot.layout.tabTopSpacing)
+                if appearanceSnapshot.layout.tab26Mode {
+                    $0.bottom.equalToSuperview().inset(appearanceSnapshot.layout.tabBottomSpacing)
+                } else {
+                    $0.height.equalTo(CGFloat.kTabbarHeight)
+                }
+                $0.width.equalTo(self.barItemWidth() * CGFloat(self.leftStackView.arrangedSubviews.count))
+            }
+            centerButton.snp.remakeConstraints {
+                $0.left.equalTo(self.leftStackView.snp.right)
+                if usesGlassSurfaceContainer || appearanceSnapshot.layout.tabbarMetailMode {
+                    $0.centerY.equalTo(glassBackgroundView.snp.top)
+                } else {
+                    $0.centerY.equalTo(self.snp.top)
+                }
+                $0.size.equalTo(appearanceSnapshot.layout.tabbarCenterButtonSize)
+            }
+            rightStackView.snp.remakeConstraints {
+                $0.right.equalToSuperview()
+                $0.top.equalTo(self.leftStackView)
+                $0.height.equalTo(self.leftStackView)
+                $0.left.equalTo(self.centerButton.snp.right)
+            }
+        }
     }
 
     private func normalCaseStack(configs: [PTTabBarItemConfig]) {
