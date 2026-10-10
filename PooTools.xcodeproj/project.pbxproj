@@ -61,6 +61,7 @@
 		55E96E312B0D0FBE00AB8ADE /* icon_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */; };
 		55EA23D52B9AB5B500468F00 /* PTTestNewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */; };
 		55F0D0010000000000000001 /* PTDemoCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0D0020000000000000001 /* PTDemoCatalog.swift */; };
+		55F0D0090000000000000001 /* PTCollectionLayoutSwitchLabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0D00A0000000000000001 /* PTCollectionLayoutSwitchLabViewController.swift */; };
 		55F0D0030000000000000001 /* PTDemoSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0D0040000000000000001 /* PTDemoSelectionCoordinator.swift */; };
 		55F0D0050000000000000001 /* PTModelNetworkDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0D0060000000000000001 /* PTModelNetworkDemoViewController.swift */; };
 		55F0D0070000000000000001 /* PTSplitViewDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0D0080000000000000001 /* PTSplitViewDemo.swift */; };
@@ -1007,6 +1008,7 @@
 		55ED0D252B1183E200391136 /* PTHeartRateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHeartRateManager.swift; sourceTree = "<group>"; };
 		55F0B97C2F95C37F00066311 /* PTEditImageToolEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditImageToolEngine.swift; sourceTree = "<group>"; };
 		55F0D0020000000000000001 /* PTDemoCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDemoCatalog.swift; sourceTree = "<group>"; };
+		55F0D00A0000000000000001 /* PTCollectionLayoutSwitchLabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCollectionLayoutSwitchLabViewController.swift; sourceTree = "<group>"; };
 		55F0D0040000000000000001 /* PTDemoSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDemoSelectionCoordinator.swift; sourceTree = "<group>"; };
 		55F0D0060000000000000001 /* PTModelNetworkDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTModelNetworkDemoViewController.swift; sourceTree = "<group>"; };
 		55F0D0080000000000000001 /* PTSplitViewDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSplitViewDemo.swift; sourceTree = "<group>"; };
@@ -3314,6 +3316,7 @@
 				231D14D6272CDEE9003D6F62 /* PooToolsSource */,
 				550CE4AB2AF1B3D60052539D /* PTFuncDetailViewController.swift */,
 				55F0D0020000000000000001 /* PTDemoCatalog.swift */,
+				55F0D00A0000000000000001 /* PTCollectionLayoutSwitchLabViewController.swift */,
 				55F0D0040000000000000001 /* PTDemoSelectionCoordinator.swift */,
 				55F0D0060000000000000001 /* PTModelNetworkDemoViewController.swift */,
 				55F0D0080000000000000001 /* PTSplitViewDemo.swift */,
@@ -3671,6 +3674,7 @@
 			files = (
 				550CE4AC2AF1B3D60052539D /* PTFuncDetailViewController.swift in Sources */,
 				55F0D0010000000000000001 /* PTDemoCatalog.swift in Sources */,
+				55F0D0090000000000000001 /* PTCollectionLayoutSwitchLabViewController.swift in Sources */,
 				55F0D0030000000000000001 /* PTDemoSelectionCoordinator.swift in Sources */,
 				55F0D0050000000000000001 /* PTModelNetworkDemoViewController.swift in Sources */,
 				55F0D0070000000000000001 /* PTSplitViewDemo.swift in Sources */,

@@ -902,6 +902,7 @@ modules:
   canonical_module_id: null
   demos:
     - "theme.language"
+    - "ui.control-menu"
 -
   module_id: "ptools-date"
   coverage: "runnable"
@@ -1067,6 +1068,8 @@ modules:
     - "ui.swipe"
     - "ui.tabbar-insets"
     - "ui.gradient-rendering"
+    - "ui.collection-refresh-lab"
+    - "ui.collection-layout-switch-lab"
 -
   module_id: "ptools-widget-core"
   coverage: "extension_required"
@@ -1233,7 +1236,7 @@ modules:
   canonical_module_id: null
   demos: []
 -
-  module_id: "web-kit"
+  module_id: "webkit"
   coverage: "documentation"
   canonical_module_id: null
   demos: []

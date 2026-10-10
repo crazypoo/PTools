@@ -313,4 +313,131 @@ final class PTListQualityTests: XCTestCase {
 
         XCTAssertEqual(scenarios.count, 4)
     }
+
+    // English: Runtime layout transactions preserve stable identities and reuse the same collection view.
+    // Español: Las transacciones de layout conservan las identidades estables y reutilizan la misma colección.
+    // 中文：运行时布局事务必须保留稳定身份，并复用同一个 CollectionView。
+    func testRuntimeLayoutSwitchPreservesCollectionViewAndStableIDs() async {
+        let configuration = PTCollectionViewConfig()
+        configuration.refreshWithoutAnimation = true
+        let list = PTCollectionView(viewConfig: configuration)
+        let rows = makeRows(count: 4, prefix: "layout-switch")
+        let section = PTSection(identifier: "layout-switch-section", rows: rows)
+        let loadExpectation = expectation(description: "layout switch data loaded")
+
+        list.showCollectionDetail(collectionData: [section], animated: false) { _ in
+            loadExpectation.fulfill()
+        }
+        await fulfillment(of: [loadExpectation], timeout: 2)
+
+        let collectionView = list.contentCollectionView
+        let identifiersBefore = list.diffableDataSource.snapshot().itemIdentifiers.map(\.diffId)
+        let switchExpectation = expectation(description: "layout switch completed")
+        list.switchLayout(to: .Gird, animated: false) { success in
+            XCTAssertTrue(success)
+            switchExpectation.fulfill()
+        }
+        await fulfillment(of: [switchExpectation], timeout: 2)
+
+        XCTAssertTrue(collectionView === list.contentCollectionView)
+        XCTAssertEqual(list.viewConfig.viewType, .Gird)
+        XCTAssertEqual(list.diffableDataSource.snapshot().itemIdentifiers.map(\.diffId), identifiersBefore)
+    }
+
+    // English: Every public layout mode must complete a queued switch without rebuilding Diffable data.
+    // Español: Cada modo público debe completar un cambio en cola sin reconstruir los datos Diffable.
+    // 中文：每种公开布局都必须完成排队切换，且不能重建 Diffable 数据。
+    func testAllLayoutModesCompleteQueuedSwitches() async {
+        let configuration = PTCollectionViewConfig()
+        configuration.refreshWithoutAnimation = true
+        let list = PTCollectionView(viewConfig: configuration)
+        list.customerLayout = { _, _ in
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                  heightDimension: .absolute(44))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            let group = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .absolute(44))
+            return NSCollectionLayoutGroup.vertical(layoutSize: group, subitems: [item])
+        }
+        // English: Exercise the runtime waterfall custom-item path in the seven-mode matrix.
+        // Español: Prueba la ruta de elementos personalizados waterfall dentro de la matriz de siete modos.
+        // 中文：在七种布局矩阵中覆盖运行时瀑布流自定义 Item 路径。
+        list.waterFallLayout = { index, _ in
+            CGFloat(44 + (index % 3) * 8)
+        }
+        let row = PTRows(title: "Layout", ID: "CELL", diffId: "all-layout-row")
+        let section = PTSection(identifier: "all-layout-section", rows: [row])
+        let loadExpectation = expectation(description: "all layout data loaded")
+        list.showCollectionDetail(collectionData: [section], animated: false) { _ in
+            loadExpectation.fulfill()
+        }
+        await fulfillment(of: [loadExpectation], timeout: 2)
+
+        let modes: [PTCollectionViewType] = [.Normal, .Gird, .WaterFall, .Custom,
+                                              .Horizontal, .HorizontalLayoutSystem, .Tag]
+        let switchExpectation = expectation(description: "all layout switches completed")
+        switchExpectation.expectedFulfillmentCount = modes.count * modes.count
+        for source in modes {
+            for destination in modes {
+                list.viewConfig.viewType = source
+                list.switchLayout(to: destination, animated: false) { success in
+                    XCTAssertTrue(success)
+                    switchExpectation.fulfill()
+                }
+            }
+        }
+        await fulfillment(of: [switchExpectation], timeout: 4)
+        XCTAssertEqual(list.pendingUpdateCount, 0)
+    }
+
+    // English: Revision-aware cache keys prevent row-count and spacing changes from reusing old geometry.
+    // Español: Las claves con revisión impiden reutilizar geometría antigua tras cambiar filas o espacios.
+    // 中文：带修订号的缓存键可防止列数和间距变化命中旧几何缓存。
+    func testRuntimeLayoutCacheKeysIncludeRevision() {
+        let oldLayout = LayoutCacheKey(section: 0, width: 320, version: 1, layoutRevision: 1)
+        let newLayout = LayoutCacheKey(section: 0, width: 320, version: 1, layoutRevision: 2)
+        let oldWaterfall = PTCollectionWaterfallCacheKey(section: 0, width: 320, version: 1, layoutRevision: 1)
+        let newWaterfall = PTCollectionWaterfallCacheKey(section: 0, width: 320, version: 1, layoutRevision: 2)
+
+        XCTAssertNotEqual(oldLayout, newLayout)
+        XCTAssertNotEqual(oldWaterfall, newWaterfall)
+    }
+
+    // English: Invalid custom configuration fails safely and never replaces the active layout.
+    // Español: Una configuración custom inválida falla de forma segura y no reemplaza el layout activo.
+    // 中文：无效的 Custom 配置必须安全失败，不能替换当前布局。
+    func testCustomLayoutWithoutProviderFailsSafely() async {
+        let configuration = PTCollectionViewConfig()
+        configuration.refreshWithoutAnimation = true
+        let list = PTCollectionView(viewConfig: configuration)
+        let expectation = expectation(description: "custom layout rejected")
+
+        list.switchLayout(to: .Custom, animated: false) { success in
+            XCTAssertFalse(success)
+            expectation.fulfill()
+        }
+        await fulfillment(of: [expectation], timeout: 2)
+        XCTAssertEqual(list.viewConfig.viewType, .Normal)
+    }
+
+    // English: Waterfall geometry must preserve a one-to-one frame mapping for Diffable rows.
+    // Español: La geometría waterfall debe conservar una correspondencia uno a uno con las filas Diffable.
+    // 中文：瀑布流几何计算必须保持 Diffable 行与布局 Frame 一一对应。
+    func testWaterfallGeometryPreservesRowCount() {
+        let rows: [AnyObject] = [NSObject(), NSObject(), NSObject()]
+        let result = PTCollectionLayoutGeometry.waterfall(data: rows,
+                                                          width: 320,
+                                                          rowCount: 2,
+                                                          itemOriginalX: 8,
+                                                          topContentSpace: 8,
+                                                          bottomContentSpace: 8,
+                                                          itemSpace: 8,
+                                                          itemTrailingSpace: 8) { index, _ in
+            CGFloat(48 + index * 8)
+        }
+
+        XCTAssertEqual(result.frames.count, rows.count)
+        XCTAssertTrue(result.frames.allSatisfy { $0.width > 0 && $0.height > 0 })
+        XCTAssertTrue(result.contentHeight > 0)
+    }
 }

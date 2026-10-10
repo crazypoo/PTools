@@ -33,7 +33,7 @@ Demo 身份由 `PooTools/PTDemoCatalog.swift` 中的 `PTDemoID` 和 `PTDemoDescr
 | Navigation | `PTTestTabbarViewController`、`PTTestVC`、`PTRouteViewController` | push/pop、interactive-pop、场景解析 | `PTBaseNavControl`、`PTSceneContext` |
 | Segmented / JX Parity & Paging | `PTDemoCatalog` → `Segmented / JX Parity & Paging` | JX 兼容标题过渡、平均间距、类型化角标、Indicator、手动标题滚动和页面滑动 | `PTSegmentedView`、`PTPagingView`、`PTSegmentedPagingCoordinator` |
 | TabBar | `PTTestTabbarViewController`、`PTTabBarTestOneViewController` | 外观快照、徽标、Accessory 和选择 | `PTBaseTabBarViewController` |
-| Collection | `PTFuncNameViewController`、`PTImageListViewController`、`PTTestVC` | Diffable、预取、骨架、空状态和分页 | `PTCollectionView`、`PTListViewController` |
+| Collection | `PTFuncNameViewController`、`PTImageListViewController`、`PTTestVC`、`Collection Layout Switch Lab` | Diffable、预取、骨架、空状态、分页和运行时布局切换 | `PTCollectionView`、`PTListViewController` |
 | Search | 暂无固定展厅页面 | debounce、竞态取消、History、Suggestion、分页、刷新和导航栏恢复 | `PTSearchViewController`、`PooTools/Search` |
 | Network | 网络和局域网传送示例 | 状态、请求日志、上传/下载和取消 | `PooToolsNetWork` |
 | Media | 图片、视频、签名、识字和媒体选择示例 | 图片加载、视频缩略图、保存和权限 | `PTLoadImageFunction`、`PTVideoThumbnailService`、`PTMediaSaveService` |
@@ -125,6 +125,7 @@ console.isVisiable = true
 - [ ] Scene 冷启动、主页面和 Tab 均可进入。
 - [ ] A → B → C push 后，点击返回和 interactive-pop 都恢复上一页导航栏样式。
 - [ ] Collection 快速滚动、预取、骨架和空状态不会回写旧 Cell。
+- [ ] Collection Layout Switch Lab 验证七种布局、位置/选中恢复、Header/Footer、Decoration、Index、Skeleton 和连续压力更新。
 - [ ] ImagePicker/PhotoPicker 验证取消、无权限、单选、多选和 iCloud 资源。
 - [ ] Alert/ActionSheet 长按钮列表可滚动，取消按钮位于底部且只回调一次。
 - [ ] Language、DarkMode、Reduce Motion、Reduce Transparency 和 Dynamic Type 即时生效。

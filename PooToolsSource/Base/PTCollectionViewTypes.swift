@@ -150,6 +150,17 @@ public enum PTCollectionUpdateKind: String, Sendable {
     case layout
 }
 
+// English: Describe how a runtime layout switch restores the user's viewport.
+// Español: Describe cómo un cambio de layout en tiempo de ejecución restaura el viewport del usuario.
+// 中文：描述运行时切换布局后如何恢复用户的可视区域。
+@MainActor
+public enum PTCollectionLayoutScrollPolicy: Sendable {
+    case firstVisibleItem
+    case contentOffset
+    case top
+    case none
+}
+
 ///Cell点击事件
 public typealias PTCellDidSelectedHandler = @MainActor (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void
 
@@ -338,11 +349,26 @@ struct LayoutCacheKey: Hashable {
     let section: Int
     let width: CGFloat
     let version: Int
+    let layoutRevision: UInt64
+
+    init(section: Int, width: CGFloat, version: Int, layoutRevision: UInt64 = 0) {
+        self.section = section
+        self.width = width
+        self.version = version
+        self.layoutRevision = layoutRevision
+    }
 }
 
 struct HeightCacheKey: Hashable {
     let id: String
     let width: CGFloat
+    let layoutRevision: UInt64
+
+    init(id: String, width: CGFloat, layoutRevision: UInt64 = 0) {
+        self.id = id
+        self.width = width
+        self.layoutRevision = layoutRevision
+    }
 }
 
 // English: Own list layout caches outside PTCollectionView so cache policy can evolve independently.

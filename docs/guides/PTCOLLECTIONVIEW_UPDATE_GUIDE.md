@@ -20,6 +20,8 @@
 | 替换 Row 内容并可选使布局失效 | `updateItemContent(at:using:invalidateLayout:)` |
 | Section 几何变化 | `invalidateSectionLayout(at:)` |
 | 单个 Item 的高度或瀑布流几何变化 | `invalidateItemLayout(at:)` |
+| 运行中切换布局类型 | `switchLayout(to:animated:scrollPolicy:completion:)` |
+| 运行中修改布局配置 | `updateLayoutConfiguration(animated:scrollPolicy:completion:_:)` |
 
 ### 稳定身份
 
@@ -40,6 +42,21 @@ collectionView.reloadSectionContent(at: [indexPath.section], invalidateLayout: t
 ```
 
 普通内容刷新不需要重新创建整个 `PTSection` / `PTRows` 数组，也不需要调用 `dataList()` 作为刷新手段。旧的 `showCollectionDetail`、`reloadSections` 和 `reloadRows` 仍然保留，用于兼容结构型调用。
+
+### 布局变化不是内容刷新
+
+布局类型、列数、item 高度、间距、Header/Footer pin、索引和 Decoration 会影响几何结果，
+应进入布局事务；标题、选中态、图片和 Badge 不改变几何时只做内容刷新：
+
+| 变化 | 推荐入口 | 是否改变 Diffable 身份 |
+| --- | --- | --- |
+| 标题、图片、选中态、Badge | `reloadItemContent(at:)` | 否 |
+| Row/Section 数量或顺序 | `insertRows`、`deleteRows`、`insertSection`、`deleteSections` | 是业务结构变化 |
+| Normal / Gird / WaterFall / Horizontal 等类型 | `switchLayout(to:)` | 否 |
+| rowCount、itemHeight、spacing、pin/index/Decoration | `updateLayoutConfiguration` | 否 |
+
+切换入口、四种滚动策略和 `.Gird` 的兼容说明见
+[PTCollectionView 运行时 Layout 切换指南](PTCOLLECTIONVIEW_LAYOUT_SWITCH_GUIDE.md)。
 
 ### 内容刷新规则
 
@@ -89,3 +106,5 @@ For replacing model objects use `updateRow(_:)` or `updateRows(_:)`; use `reload
 Debug 构建会输出 `[PTCollection]` 操作编号、入队/执行/完成状态、时间、快照数量、待处理数量以及刷新范围。Release 构建不输出这类诊断。/ Debug builds log operation ID, enqueue/execute/finish timestamps, snapshot counts, pending count, and refresh ranges; Release builds omit these diagnostics. / Las compilaciones Debug registran el ID, los tiempos, los conteos y los rangos; Release no muestra estos diagnósticos.
 
 固定复现页面为 Example Catalog 中的 **Diffable Refresh Lab**，覆盖整体替换、Section、Row、Reconfigure、单 Item、Section 内容刷新和快速 Stress 更新。/ The Example Catalog includes **Diffable Refresh Lab** for replacement, section, row, reconfigure, item, section-content, and rapid stress paths. / El catálogo Example incluye **Diffable Refresh Lab** para todos esos recorridos.
+
+布局回归使用 **Collection Layout Switch Lab**，覆盖七种布局、配置切换、位置/选中恢复、Header/Footer、Decoration、Index、Skeleton 和连续压力操作。/ Layout regression uses **Collection Layout Switch Lab** for all seven layouts, configuration changes, anchor/selection restoration, supplementary views, decorations, index, skeleton, and queued stress. / La regresión de layout usa **Collection Layout Switch Lab** para las siete variantes y las operaciones de estrés.

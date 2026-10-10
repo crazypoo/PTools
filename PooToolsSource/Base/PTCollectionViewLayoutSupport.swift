@@ -24,4 +24,12 @@ struct PTCollectionWaterfallCacheKey: Hashable {
     let section: Int
     let width: CGFloat
     let version: Int
+    let layoutRevision: UInt64
+
+    init(section: Int, width: CGFloat, version: Int, layoutRevision: UInt64 = 0) {
+        self.section = section
+        self.width = width
+        self.version = version
+        self.layoutRevision = layoutRevision
+    }
 }

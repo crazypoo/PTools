@@ -37,6 +37,9 @@ WKWebView Bridge、MapKit、App Attest/DeviceCheck、远程配置和 SSE/WebSock
 `PTCollectionView` 的 Diffable 内容刷新、稳定身份、布局失效和快速更新用法见
 [PTCollectionView Diffable 更新指南](docs/guides/PTCOLLECTIONVIEW_UPDATE_GUIDE.md)。
 
+运行中切换 Normal、Gird、WaterFall、Horizontal、Tag 和 Custom 布局，以及保留位置、选中状态和配置同步，
+见 [PTCollectionView Runtime Layout 切换指南](docs/guides/PTCOLLECTIONVIEW_LAYOUT_SWITCH_GUIDE.md)。
+
 Core 的 `UIControl` 原生菜单、动态菜单和 Selection Menu 用法见
 [UIControl Menu 指南](docs/guides/PTCONTROL_MENU_GUIDE.md)。
 
@@ -170,7 +173,7 @@ final class ExampleViewController: PTBaseViewController {
 ### 列表页面
 
 `PTListViewController` 只承载一个 `PTCollectionView`，`.Normal` 可用于类表格纵向列表，其他
-布局类型继续提供 Grid、Waterfall、Tag、Horizontal 和 Custom。
+布局类型继续提供 Gird（网格）、Waterfall、Tag、Horizontal 和 Custom；公开枚举使用历史拼写 `.Gird`。
 
 ```swift
 @MainActor
@@ -181,6 +184,19 @@ final class ExampleListViewController: PTListViewController {
         return configuration
     }
 }
+```
+
+已展示的列表也可以安全切换布局；`.Gird` 是当前公开 case 的历史拼写：
+
+```swift
+list.updateLayoutConfiguration(animated: true) { config in
+    config.viewType = .Gird
+    config.rowCount = 2
+    config.cellLeadingSpace = 8
+    config.cellTrailingSpace = 8
+}
+
+list.switchLayout(to: .Normal, scrollPolicy: .firstVisibleItem)
 ```
 
 ### 图片和媒体

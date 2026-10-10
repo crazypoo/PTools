@@ -18,6 +18,7 @@
 - [5.62.0 应用基础设施指南](guides/PTOOLS_APPLICATION_INFRASTRUCTURE_5_62.md)
 - [5.62.1 TabBar 与渐变迁移说明](migration/5.62.1_TABBAR_CONTENT_SELECTION.md)
 - [PTCollectionView Diffable 更新指南](guides/PTCOLLECTIONVIEW_UPDATE_GUIDE.md)
+- [PTCollectionView 运行时 Layout 切换指南](guides/PTCOLLECTIONVIEW_LAYOUT_SWITCH_GUIDE.md)
 - [UIControl 原生菜单与 Selection Menu](guides/PTCONTROL_MENU_GUIDE.md)
 
 ## 架构

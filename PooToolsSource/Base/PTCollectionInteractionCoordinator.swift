@@ -260,7 +260,9 @@ extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDe
             }
 
             self.layoutCache.removeAll()
-            self.heightCache.remove(forKey: HeightCacheKey(id: sourceItem.diffId, width: collectionView.bounds.width))
+            self.heightCache.remove(forKey: HeightCacheKey(id: sourceItem.diffId,
+                                                           width: collectionView.bounds.width,
+                                                           layoutRevision: self.runtimeLayoutRevision))
             sourceSection.layoutVersion += 1
             if !isSameSection {
                 destinationSection.layoutVersion += 1

@@ -167,6 +167,7 @@ enum PTDemoRegistry {
         make("ui.cycle-banner", "PooToolsScrollBanner", "CycleBanner", .uiComponents, .interactive, .sheet, .runnable, legacy: "CycleBanner", tags: ["banner"]),
         make("ui.collection-tag", "PToolsForm", "CollectionTag", .inputForm, .interactive, .sheet, .runnable, legacy: "CollectionTag", tags: ["collection", "tag"]),
         make("ui.collection-refresh-lab", "PToolsUIFoundation", "Diffable Refresh Lab", .uiComponents, .interactive, .push, .runnable, legacy: "Diffable Refresh Lab", tags: ["collection", "diffable", "content-refresh", "stress"]),
+        make("ui.collection-layout-switch-lab", "PToolsUIFoundation", "Collection Layout Switch Lab", .uiComponents, .interactive, .push, .runnable, legacy: "Collection Layout Switch Lab", tags: ["collection", "layout", "runtime-switch", "stress"]),
         make("input.input-box", "PooToolsInput", "InputBox", .inputForm, .interactive, .sheet, .runnable, legacy: "InputBox", tags: ["input"]),
         make("input.stepper", "PooToolsStepper", "Stepper", .inputForm, .interactive, .sheet, .runnable, legacy: "Stepper", tags: ["input"]),
         make("input.login-description", "PooToolsCustomerLabel", "LoginDesc", .inputForm, .interactive, .sheet, .runnable, legacy: "LoginDesc", tags: ["button", "rich-text"]),
@@ -290,6 +291,8 @@ final class PTDemoCoordinator {
             return PTGradientRenderingDemoViewController()
         case "ui.collection-refresh-lab":
             return PTCollectionRefreshLabViewController()
+        case "ui.collection-layout-switch-lab":
+            return PTCollectionLayoutSwitchLabViewController()
         case "ui.control-menu":
             return PTControlMenuDemoViewController()
         case "infrastructure.database":
@@ -396,9 +399,8 @@ private final class PTControlMenuDemoViewController: PTBaseViewController {
         selectionButton.setTitleColor(.label, state: .normal)
         selectionButton.pt_setSelectionMenuProvider(
             trigger: .primaryAction,
-            items: { [weak self] in
-                guard let self else { return [] }
-                return Sort.allCases.map { sort in
+            items: {
+                Sort.allCases.map { sort in
                     PTControlMenuSelectionItem(
                         id: sort,
                         title: sort.rawValue,

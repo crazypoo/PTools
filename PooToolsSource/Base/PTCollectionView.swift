@@ -37,6 +37,10 @@ public class PTCollectionView: UIView {
     public var pendingUpdateCount: Int {
         updateCoordinator.pendingOperationCount
     }
+
+    public var activeUpdateKind: PTCollectionUpdateKind? {
+        updateCoordinator.activeOperationKind
+    }
     ///Photos
     let photoPrefetchCoordinator = PTCollectionPhotoPrefetchCoordinator()
     var photoAssets: [PHAsset] = []
@@ -106,6 +110,12 @@ public class PTCollectionView: UIView {
     var lastPrefetchItemCount: Int?
     var indexPanGesture: UIPanGestureRecognizer?
     private var lastLayoutBoundsSize: CGSize = .zero
+    // English: Invalidate every geometry cache when a runtime layout contract changes.
+    // Español: Invalida todas las cachés geométricas cuando cambia el contrato de layout en tiempo de ejecución.
+    // 中文：运行时布局契约变化时使全部几何缓存失效。
+    var runtimeLayoutRevision: UInt64 = 0
+    var isApplyingRuntimeLayoutConfiguration = false
+    var isLayoutTransitionActive = false
     
     let layoutCacheCoordinator = PTCollectionLayoutCacheCoordinator()
     var heightCache: PTLRUCache<HeightCacheKey, NSNumber> { layoutCacheCoordinator.height }
@@ -138,9 +148,10 @@ public class PTCollectionView: UIView {
     
     private var fallbackLayouts: [Int: NSCollectionLayoutSection] = [:]
     private var didReportFallbackLayout = false
+    private var didReportWaterfallFallbackLayout = false
     private var memoryWarningRegistration: UUID?
     private let waterfallCacheLimit = 50
-    private let refreshCoordinator = PTCollectionRefreshCoordinator()
+    let refreshCoordinator = PTCollectionRefreshCoordinator()
     
     lazy var collectionView : PTBaseCollectionView = {
         var view = PTBaseCollectionView(frame: .zero, collectionViewLayout: self.comboLayout())
@@ -289,51 +300,15 @@ public class PTCollectionView: UIView {
     public var viewConfig: PTCollectionViewConfig! {
         didSet {
             guard let config = viewConfig else { return }
-            // 配置对象被替换后，滚动方向和交互能力必须同步到内部列表。
-            let view = collectionView
-            view.showsVerticalScrollIndicator = config.showsVerticalScrollIndicator
-            view.showsHorizontalScrollIndicator = config.showsHorizontalScrollIndicator
-            view.contentInsetAdjustmentBehavior = config.contentInsetAdjustmentBehavior
-            view.contentOffSetZero = config.contentOffSetZero
-            view.dragInteractionEnabled = config.canMoveItem
-            view.prefetchDataSource = config.viewForPhoto ? self : nil
-
-            switch config.viewType {
-            case .Normal, .Gird, .WaterFall, .Tag:
-                view.alwaysBounceHorizontal = false
-                view.alwaysBounceVertical = true
-            case .Custom:
-                view.alwaysBounceHorizontal = config.alwaysBounceHorizontal
-                view.alwaysBounceVertical = config.alwaysBounceVertical
-            case .Horizontal, .HorizontalLayoutSystem:
-                view.alwaysBounceHorizontal = true
-                view.alwaysBounceVertical = false
-            }
-
-            if config.canMoveItem {
-                view.allowsMoveItem()
-            }
-            
-            if config.sideIndexTitles?.isEmpty == false && config.indexConfig != nil {
-                if view.superview == nil {
-                    addSubview(view)
-                    view.snp.makeConstraints { make in
-                        make.edges.equalToSuperview()
-                    }
-                }
-                setIndexViews()
-            } else {
-                indicator.removeFromSuperview()
-                indexContainerView.removeFromSuperview()
-            }
-            
-            if view.superview != nil {
-                view.collectionViewLayout.invalidateLayout()
-            }
-
-            if isSkeletonVisible {
-                updateSkeletonLayout()
-            }
+            guard oldValue != nil, !isApplyingRuntimeLayoutConfiguration else { return }
+            // English: Route legacy config replacement through the same serialized layout transaction.
+            // Español: Dirige el reemplazo heredado de configuración por la misma transacción serializada.
+            // 中文：旧版配置替换也必须进入同一个串行布局事务。
+            enqueueRuntimeLayoutTransition(candidate: config.pt_runtimeCopy(),
+                                            sourceType: oldValue?.viewType ?? config.viewType,
+                                            animated: false,
+                                            scrollPolicy: .firstVisibleItem,
+                                            completion: nil)
         }
     }
     
@@ -367,8 +342,9 @@ public class PTCollectionView: UIView {
         setIndexViews()
 
         scrollObserverMultiplexer.add { [weak self] collectionView in
-            self?.listControllerDidScroll?(collectionView)
-            self?.collectionViewDidScroll?(collectionView)
+            guard let self, !self.isLayoutTransitionActive else { return }
+            self.listControllerDidScroll?(collectionView)
+            self.collectionViewDidScroll?(collectionView)
         }
         
         // English: Use one Core-level memory warning fan-out instead of one NotificationCenter observer per list.
@@ -424,6 +400,8 @@ public class PTCollectionView: UIView {
         let layoutSize = collectionView.bounds.size
         if layoutSize != .zero, layoutSize != lastLayoutBoundsSize {
             lastLayoutBoundsSize = layoutSize
+            runtimeLayoutRevision &+= 1
+            clearLayoutCaches()
             // English: Rebuild custom groups only when the real container size changes.
             // Español: Reconstruye los grupos personalizados solo cuando cambia el tamaño real del contenedor.
             // 中文：仅在真实容器尺寸变化时重新生成自定义布局分组。
@@ -765,7 +743,9 @@ extension PTCollectionView {
             return calculator(indexPath.section, model)
         }
 
-        let key = HeightCacheKey(id: row.diffId, width: collectionView.bounds.width)
+        let key = HeightCacheKey(id: row.diffId,
+                                 width: collectionView.bounds.width,
+                                 layoutRevision: runtimeLayoutRevision)
         
         if let cache = heightCache.get(forKey: key) {
             return cache.doubleValue
@@ -1166,9 +1146,12 @@ extension PTCollectionView {
 
 //MARK: Layout
 extension PTCollectionView {
-    fileprivate func comboLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { section, environment in
-            self.generateSection(section: section,environment:environment)
+    func comboLayout() -> UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout { [weak self] section, environment in
+            guard let self else {
+                return PTCollectionView.makeFallbackLayoutSection()
+            }
+            return self.generateSection(section: section, environment: environment)
         }
         switch viewConfig.decorationItemsType {
         case .Custom:
@@ -1245,7 +1228,10 @@ extension PTCollectionView {
             if let waterFall = waterFallLayout {
                 let result = buildWaterfallItems(
                     section: sectionIndex,
-                    data: sectionModel.rows?.compactMap { $0.dataModel } ?? [],
+                    // English: Keep one geometry item per Diffable row while preserving the legacy data-model callback.
+                    // Español: Mantiene un elemento geométrico por fila Diffable y conserva el callback heredado del modelo.
+                    // 中文：每个 Diffable 行都必须对应一个几何项，同时保留旧版回调接收数据模型的约定。
+                    data: sectionModel.rows?.map { $0.dataModel ?? $0 } ?? [],
                     width: screenWidth,
                     config: viewConfig,
                     version: sectionModel.layoutVersion,
@@ -1253,14 +1239,18 @@ extension PTCollectionView {
                 )
 
                 let groupSize = NSCollectionLayoutSize(
-                    widthDimension: .absolute(screenWidth),
-                    heightDimension: .absolute(result.height)
+                    widthDimension: .absolute(PTCollectionLayoutGeometry.dimension(screenWidth)),
+                    heightDimension: .absolute(max(PTCollectionLayoutGeometry.minimumDimension, result.height))
                 )
 
                 group = NSCollectionLayoutGroup.custom(layoutSize: groupSize) { _ in
                     result.items
                 }
             } else {
+                if !didReportWaterfallFallbackLayout {
+                    didReportWaterfallFallbackLayout = true
+                    PTNSLogConsole("Warning: Waterfall layout requires waterFallLayout. Falling back to a safe group.")
+                }
                 group = oneSquareGroup()
             }
         case .Horizontal:
@@ -1376,7 +1366,8 @@ extension PTCollectionView {
         let sectionModel = resolvedSection(snapshot.sectionIdentifiers[section])
         let key = LayoutCacheKey(section: section,
                                  width: environment.container.contentSize.width,
-                                 version: sectionModel.layoutVersion)
+                                 version: sectionModel.layoutVersion,
+                                 layoutRevision: runtimeLayoutRevision)
         if let cache = layoutCache.get(forKey: key) {
             return cache
         }
@@ -1395,8 +1386,28 @@ extension PTCollectionView {
             // 中文：只记录一次兜底布局，避免每次布局都重复输出日志。
             PTNSLogConsole("Warning: CustomerLayout is nil. Fallback to 1x1 group.")
         }
-        let size = NSCollectionLayoutSize(widthDimension: .absolute(1), heightDimension: .absolute(1))
-        return NSCollectionLayoutGroup(layoutSize: size)
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .absolute(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .absolute(1))
+        return NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+    }
+
+    // English: Provide a detached fallback when the compositional provider outlives its owner.
+    // Español: Proporciona un fallback independiente cuando el provider composicional sobrevive a su propietario.
+    // 中文：布局 Provider 生命周期超过列表对象时，返回独立的安全兜底布局。
+    fileprivate static func makeFallbackLayoutSection() -> NSCollectionLayoutSection {
+        // English: The detached fallback must still contain one valid item; an empty group can crash UIKit during layout resolution.
+        // Español: El fallback separado debe contener un elemento válido; un grupo vacío puede hacer que UIKit falle al resolver el layout.
+        // 中文：脱离宿主后的兜底布局仍必须包含一个有效 Item，空分组可能让 UIKit 在解析布局时崩溃。
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .absolute(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .absolute(1))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        return NSCollectionLayoutSection(group: group)
     }
 
     private func generateSupplementaryItems(section: NSInteger, sectionModel: PTSection, sectionWidth: CGFloat, screenWidth: CGFloat) -> [NSCollectionLayoutBoundarySupplementaryItem] {
@@ -1469,7 +1480,10 @@ extension PTCollectionView {
                              version: Int,
                              itemHeight: (Int, AnyObject) -> CGFloat) -> (items: [NSCollectionLayoutGroupCustomItem], height: CGFloat) {
         
-        let key = PTCollectionWaterfallCacheKey(section: section, width: width, version: version)
+        let key = PTCollectionWaterfallCacheKey(section: section,
+                                                width: width,
+                                                version: version,
+                                                layoutRevision: runtimeLayoutRevision)
         
         if let cache = waterfallCache[key] {
             return (cache.items, cache.contentHeight)
@@ -1503,7 +1517,7 @@ extension PTCollectionView {
 
 //MARK: EmptyDataView
 extension PTCollectionView {
-    fileprivate func setiOS17EmptyDataView() {
+    func setiOS17EmptyDataView() {
         switch self.viewConfig.emptyShowType {
         case .Auto:
             self.showEmptyConfig()
@@ -1730,7 +1744,8 @@ extension PTCollectionView {
                 self.heightCache.remove(
                     forKey: HeightCacheKey(
                         id: row.diffId,
-                        width: width
+                        width: width,
+                        layoutRevision: self.runtimeLayoutRevision
                     )
                 )
             }
@@ -1739,7 +1754,8 @@ extension PTCollectionView {
                 forKey: LayoutCacheKey(
                     section: section,
                     width: width,
-                    version: sectionModel.layoutVersion
+                    version: sectionModel.layoutVersion,
+                    layoutRevision: self.runtimeLayoutRevision
                 )
             )
 
@@ -1812,7 +1828,8 @@ extension PTCollectionView {
                     self.heightCache.remove(
                         forKey: HeightCacheKey(
                             id: row.diffId,
-                            width: containerWidth
+                            width: containerWidth,
+                            layoutRevision: self.runtimeLayoutRevision
                         )
                     )
                 }
@@ -1821,7 +1838,8 @@ extension PTCollectionView {
                     forKey: LayoutCacheKey(
                         section: sectionIndex,
                         width: containerWidth,
-                        version: sectionModel.layoutVersion
+                        version: sectionModel.layoutVersion,
+                        layoutRevision: self.runtimeLayoutRevision
                     )
                 )
 
@@ -2182,7 +2200,9 @@ extension PTCollectionView {
             let width = self.collectionView.bounds.width
             for indexPath in indexPaths {
                 guard let row = self.diffableDataSource.itemIdentifier(for: indexPath) else { continue }
-                self.heightCache.remove(forKey: HeightCacheKey(id: row.diffId, width: width))
+                self.heightCache.remove(forKey: HeightCacheKey(id: row.diffId,
+                                                               width: width,
+                                                               layoutRevision: self.runtimeLayoutRevision))
                 sections.insert(indexPath.section)
             }
             for section in sections {

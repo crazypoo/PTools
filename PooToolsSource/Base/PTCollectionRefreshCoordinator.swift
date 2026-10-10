@@ -23,9 +23,14 @@ final class PTCollectionRefreshCoordinator {
             targetCollectionView.pt.header = PTRefreshHeader {
                 onHeader()
             }
+        } else {
+            targetCollectionView.pt.header = nil
         }
 
-        guard config.footerRefresh else { return }
+        guard config.footerRefresh else {
+            targetCollectionView.pt.autoFooter = nil
+            return
+        }
         let footer = PTRefreshAutoFooter {
             onFooter()
         }
