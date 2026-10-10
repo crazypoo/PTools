@@ -235,6 +235,9 @@ public final class Network: @unchecked Sendable {
 #if DEBUG
         return false
 #else
+        if Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" {
+            return false
+        }
         // 业界标准方案：App Store 正式包在苹果后台处理后，会剥离 embedded.mobileprovision 文件。
         // 而 TestFlight、AdHoc 或企业包都会保留这个文件。我们通过判断这个文件是否存在来区分。
         let hasProvision = Bundle.main.path(forResource: "embedded", ofType: "mobileprovision") != nil
@@ -439,7 +442,6 @@ public final class Network: @unchecked Sendable {
             var originalText = ""
             if shouldLogResponseDetails {
                 originalText = String(decoding: data, as: UTF8.self)
-                logRequestSuccess(url: snapshot.url, jsonStr: originalText)
             }
             result.originalString = originalText
             return (result, "")
@@ -460,18 +462,6 @@ public final class Network: @unchecked Sendable {
             }
         }
         
-        if shouldLogResponseDetails {
-            let maxLen = Int(Network.share.config.logMaxCount)
-            // 大响应不进入完整 JSON 格式化，避免调试日志制造额外 CPU 和内存峰值。
-            let prettyStr: String
-            if data.count > maxLen * 4 {
-                prettyStr = String(decoding: data.prefix(maxLen), as: UTF8.self)
-            } else {
-                prettyStr = prettyPrintedJSONString(from: data)
-            }
-            let printStr = prettyStr.count > maxLen ? String(prettyStr.prefix(maxLen)) + "\n\n...[JSON过大，为保护控制台已截断]..." : prettyStr
-            logRequestSuccess(url: snapshot.url, jsonStr: printStr)
-        }
         return (result, rawJsonString)
     }
     
@@ -525,10 +515,12 @@ public final class Network: @unchecked Sendable {
 
         if request.isMock,
            let cached = await NetworkCache.shared.readEntry(request: request) {
-            return PTNetworkResponseSnapshot(url: url,
-                                              data: cached.data,
-                                              metadata: PTResponseMetadata(statusCode: cached.statusCode,
-                                                                           headers: cached.headers))
+            let snapshot = PTNetworkResponseSnapshot(url: url,
+                                                     data: cached.data,
+                                                     metadata: PTResponseMetadata(statusCode: cached.statusCode,
+                                                                                  headers: cached.headers))
+            Network.logResponseSnapshot(snapshot)
+            return snapshot
         }
 
         let policy = request.dedupPolicy
@@ -601,12 +593,16 @@ public final class Network: @unchecked Sendable {
                 response.response?.allHeaderFields.forEach { key, value in
                     headers[String(describing: key)] = String(describing: value)
                 }
-                return PTNetworkResponseSnapshot(url: url,
-                                                  data: cached.data,
-                                                  metadata: PTResponseMetadata(statusCode: cached.statusCode ?? 200,
-                                                                               headers: headers))
+                let snapshot = PTNetworkResponseSnapshot(url: url,
+                                                         data: cached.data,
+                                                         metadata: PTResponseMetadata(statusCode: cached.statusCode ?? 200,
+                                                                                      headers: headers))
+                Network.logResponseSnapshot(snapshot)
+                return snapshot
             }
-            return Network.responseSnapshot(url: url, response: response.response, data: data)
+            let snapshot = Network.responseSnapshot(url: url, response: response.response, data: data)
+            Network.logResponseSnapshot(snapshot)
+            return snapshot
         case .failure(let error):
             if request.cachePolicyType == .networkElseCache,
                let cached = await NetworkCache.shared.readEntry(request: request) {
@@ -657,7 +653,9 @@ public final class Network: @unchecked Sendable {
 
         if request.isMock,
            let mockData = await NetworkCache.shared.read(request: request) {
-            return Network.responseSnapshot(url: url, response: nil, data: mockData)
+            let snapshot = Network.responseSnapshot(url: url, response: nil, data: mockData)
+            Network.logResponseSnapshot(snapshot)
+            return snapshot
         }
 
         let finalRequest = request
@@ -679,7 +677,9 @@ public final class Network: @unchecked Sendable {
 
         switch response.result {
         case .success(let data):
-            return Network.responseSnapshot(url: url, response: response.response, data: data)
+            let snapshot = Network.responseSnapshot(url: url, response: response.response, data: data)
+            Network.logResponseSnapshot(snapshot)
+            return snapshot
         case .failure(let error):
             Network.logRequestFailure(url: url, error: error)
             throw error

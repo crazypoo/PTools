@@ -82,6 +82,35 @@ extension Network {
         PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(printStr)🌐", levelType: PTLogMode, loggerType: .network)
     }
 
+    /// English: Log every successful response at the transport boundary while keeping the body policy centralized.
+    /// Español: Registra cada respuesta exitosa en el límite de transporte y mantiene centralizada la política del cuerpo.
+    /// 中文：在传输层成功边界统一记录响应，同时集中控制响应正文的输出策略。
+    static func logResponseSnapshot(_ snapshot: PTNetworkResponseSnapshot) {
+        guard let data = snapshot.data, !data.isEmpty else {
+            logRequestSuccess(url: snapshot.url, jsonStr: "")
+            return
+        }
+
+        guard shouldLogResponseDetails else {
+            PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(snapshot.url)\n💛2.result:已隐藏（响应长度：\(data.count) bytes）🌐",
+                           levelType: PTLogMode,
+                           loggerType: .network)
+            return
+        }
+
+        let maxLen = max(Int(Network.share.config.logMaxCount), 1)
+        let prettyString: String
+        if data.count > maxLen * 4 {
+            prettyString = String(decoding: data.prefix(maxLen), as: UTF8.self)
+        } else {
+            prettyString = prettyPrintedJSONString(from: data)
+        }
+        let output = prettyString.count > maxLen
+            ? String(prettyString.prefix(maxLen)) + "\n\n...[JSON过大，为保护控制台已截断 / JSON demasiado grande; se truncó para proteger la consola]..."
+            : prettyString
+        logRequestSuccess(url: snapshot.url, jsonStr: output)
+    }
+
     static func logRequestFailure(url: String, error: AFError) {
         PTNSLogConsole("❌接口:\(url)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .error, loggerType: .network)
     }

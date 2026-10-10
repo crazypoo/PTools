@@ -134,6 +134,7 @@ extension Network {
                                 let response = responseSnapshot(url: pathUrl,
                                                                  response: resp.response,
                                                                  data: resp.data)
+                                logResponseSnapshot(response)
                                 let progress = PTProgressSnapshot(completedUnitCount: 1,
                                                                    totalUnitCount: 1,
                                                                    fractionCompleted: 1)
@@ -297,6 +298,7 @@ extension Network {
                             let response = responseSnapshot(url: pathUrl,
                                                              response: resp.response,
                                                              data: resp.data)
+                            logResponseSnapshot(response)
                             let progress = PTProgressSnapshot(completedUnitCount: 1,
                                                                totalUnitCount: 1,
                                                                fractionCompleted: 1)
