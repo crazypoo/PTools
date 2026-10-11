@@ -71,12 +71,35 @@ final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
         imageSet(media: selected ? (selectedImage ?? normalImage) : normalImage)
     }
 
+    // English: Native UIKit bars may tint automatic raster images; preserve ordinary assets while keeping explicit symbol modes.
+    // Español: Las barras nativas de UIKit pueden teñir imágenes rasterizadas automáticas; conserva los recursos normales y respeta los modos explícitos de los símbolos.
+    // 中文：UIKit 原生 Bar 可能会给 automatic 位图重新着色；保留普通资源原色，同时保留符号的显式渲染模式。
     private func resolveSystemImage(_ media: Any) -> UIImage? {
         if let image = media as? UIImage {
-            return image
+            return normalizedSystemBarImage(image)
         }
         guard let name = media as? String, !name.isEmpty else { return nil }
-        return UIImage(named: name) ?? UIImage(systemName: name)
+        if let namedImage = UIImage(named: name) {
+            return normalizedSystemBarImage(namedImage)
+        }
+        // English: SF Symbols remain template images so the system bar can apply its selected-state tint.
+        // Español: Los SF Symbols siguen siendo imágenes de plantilla para que la barra aplique el tinte del estado seleccionado.
+        // 中文：SF Symbols 保持模板图片，让系统 Bar 继续应用选中态颜色。
+        return UIImage(systemName: name)
+    }
+
+    // English: Only automatic images are converted; caller-selected template/original rendering remains authoritative.
+    // Español: Solo se convierten las imágenes automáticas; el modo de plantilla/original elegido por el llamador sigue siendo prioritario.
+    // 中文：只转换 automatic 图片；调用方明确指定的 template/original 渲染模式保持不变。
+    private func normalizedSystemBarImage(_ image: UIImage) -> UIImage {
+        switch image.renderingMode {
+        case .automatic:
+            return image.withRenderingMode(.alwaysOriginal)
+        case .alwaysOriginal, .alwaysTemplate:
+            return image
+        @unknown default:
+            return image.withRenderingMode(.alwaysOriginal)
+        }
     }
 
     @MainActor private func imageSet(media: Any) {
