@@ -55,6 +55,8 @@ open class PTBaseTabBarViewController: UITabBarController {
     private var adaptiveHostView: PTAdaptiveBarHostView?
     public private(set) var adaptiveBarGeometry: PTAdaptiveBarGeometry?
     private var adaptiveTabItemConfigs: [PTTabBarItemConfig] = []
+    private var lastAppliedSystemAdaptiveRenderer: Bool?
+    var systemCenterIndex: Int?
     
     public var centerRaisedSet:Bool = false {
         didSet {
@@ -161,20 +163,7 @@ open class PTBaseTabBarViewController: UITabBarController {
         super.viewDidLayoutSubviews()
 
         updateAdaptiveBarLayout()
-        if isUsingSystemAdaptiveRenderer {
-            tabBar.isHidden = isTabBarGloballyHidden
-            tabBar.alpha = isTabBarGloballyHidden ? 0 : 1
-            ptCustomBar.isHidden = true
-            applySystemTabItemsIfNeeded()
-            return
-        }
-
-        // English: The legacy custom renderer owns the horizontal surface; the system bar stays out of hit testing.
-        // Español: El renderizador personalizado heredado posee la superficie horizontal; la barra del sistema no recibe toques.
-        // 中文：旧自定义渲染器负责横向 Bar，系统 TabBar 不参与绘制和触摸。
-        if !tabBar.isHidden { tabBar.isHidden = true }
-        tabBar.alpha = 0
-        if !tabBar.frame.equalTo(.zero) { tabBar.frame = .zero }
+        applyAdaptiveRendererVisibility()
     }
 
     // English: Recalculate custom bar and accessory geometry after safe-area changes.
@@ -231,6 +220,7 @@ open class PTBaseTabBarViewController: UITabBarController {
         
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
+        delegate = self
 
         view.addSubview(ptCustomBar)
         ptCustomBar.snp.makeConstraints {
@@ -255,8 +245,7 @@ open class PTBaseTabBarViewController: UITabBarController {
     private var isUsingSystemAdaptiveRenderer: Bool {
         guard let adaptiveBarGeometry else { return false }
         return adaptiveBarGeometry.axis == .verticalEdge &&
-            adaptiveBarGeometry.renderer == .systemAdaptive &&
-            !ptCustomBar.hasCenterAction
+            adaptiveBarGeometry.renderer == .systemAdaptive
     }
 
     // English: Resolve geometry once per real context change and apply it to the selected renderer.
@@ -277,14 +266,28 @@ open class PTBaseTabBarViewController: UITabBarController {
 
         guard geometry != adaptiveBarGeometry else {
             adaptiveHostView?.apply(geometry: geometry, showDebugOverlay: showsAdaptiveBarDebugOverlay)
+            if lastAppliedSystemAdaptiveRenderer != isUsingSystemAdaptiveRenderer {
+                applyAdaptiveRenderer(geometry)
+            } else {
+                applyAdaptiveRendererVisibility()
+            }
             return
         }
         adaptiveBarGeometry = geometry
         adaptiveHostView?.apply(geometry: geometry, showDebugOverlay: showsAdaptiveBarDebugOverlay)
         adaptiveHostView?.isHidden = !showsAdaptiveBarDebugOverlay
-        ptCustomBar.setAdaptiveAxis(geometry.axis)
+        applyAdaptiveRenderer(geometry)
+    }
 
-        if isUsingSystemAdaptiveRenderer {
+    // English: Switch ownership between UIKit and the custom bar without changing item or controller identity.
+    // Español: Cambia la propiedad entre UIKit y la barra personalizada sin cambiar la identidad de elementos o controladores.
+    // 中文：在 UIKit 与自定义 Bar 之间切换所有权，不改变项目和控制器身份。
+    private func applyAdaptiveRenderer(_ geometry: PTAdaptiveBarGeometry) {
+        ptCustomBar.setAdaptiveAxis(geometry.axis)
+        let useSystem = isUsingSystemAdaptiveRenderer
+        lastAppliedSystemAdaptiveRenderer = useSystem
+
+        if useSystem {
             ptCustomBar.isHidden = true
             ptCustomBar.alpha = 0
             tabBar.isHidden = isTabBarGloballyHidden
@@ -292,9 +295,29 @@ open class PTBaseTabBarViewController: UITabBarController {
             accessoryContainerView.isHidden = true
             applySystemTabItemsIfNeeded()
         } else {
+            systemCenterIndex = nil
             ptCustomBar.isHidden = isTabBarGloballyHidden
             ptCustomBar.alpha = isTabBarGloballyHidden ? 0 : 1
             applyCustomAdaptiveGeometry(geometry)
+            applyAdaptiveRendererVisibility()
+        }
+    }
+
+    // English: Keep the inactive renderer out of hit testing after visibility or state changes.
+    // Español: Mantiene el renderizador inactivo fuera de los toques tras cambios de visibilidad o estado.
+    // 中文：可见性或状态变化后，让未使用的渲染器不参与触摸命中。
+    private func applyAdaptiveRendererVisibility() {
+        guard adaptiveBarGeometry != nil else { return }
+        if isUsingSystemAdaptiveRenderer {
+            tabBar.isHidden = isTabBarGloballyHidden
+            tabBar.alpha = isTabBarGloballyHidden ? 0 : 1
+            ptCustomBar.isHidden = true
+            ptCustomBar.alpha = 0
+            applySystemTabItemsIfNeeded()
+        } else {
+            if !tabBar.isHidden { tabBar.isHidden = true }
+            tabBar.alpha = 0
+            if !tabBar.frame.equalTo(.zero) { tabBar.frame = .zero }
         }
     }
 
@@ -410,19 +433,51 @@ open class PTBaseTabBarViewController: UITabBarController {
     // 中文：仅在 UIKit 接管自适应 Bar 时提供语义标题和安全图标兜底。
     private func applySystemTabItemsIfNeeded() {
         guard adaptiveBarGeometry?.renderer == .systemAdaptive else { return }
+        systemCenterIndex = nil
+        guard let viewControllers else { return }
         for (index, config) in adaptiveTabItemConfigs.enumerated() {
-            guard viewControllers?.indices.contains(index) == true else { continue }
-            let item = viewControllers?[index].tabBarItem
+            guard viewControllers.indices.contains(index),
+                  let item = viewControllers[index].tabBarItem else { continue }
             let title = config.title.isEmpty ? "Tab \(index + 1)" : config.title
-            item?.title = title
-            if item?.image == nil {
-                item?.image = PTSymbolResolver.image(.circle)
+            item.title = title
+            if let image = config.content.systemImage {
+                item.image = image
             }
-            if item?.selectedImage == nil {
-                item?.selectedImage = item?.image
+            if let selectedImage = config.content.systemSelectedImage {
+                item.selectedImage = selectedImage
             }
-            item?.accessibilityLabel = title
+            if item.image == nil {
+                item.image = PTSymbolResolver.image(.circle)
+            }
+            if item.selectedImage == nil {
+                item.selectedImage = item.image
+            }
+            item.accessibilityLabel = title
         }
+
+        guard ptCustomBar.hasCenterAction,
+              !viewControllers.isEmpty else { return }
+
+        let index = min(viewControllers.count / 2, viewControllers.count - 1)
+        systemCenterIndex = index
+        guard let item = viewControllers[index].tabBarItem else { return }
+        let configuredTitle = adaptiveTabItemConfigs.indices.contains(index)
+            ? adaptiveTabItemConfigs[index].title
+            : "Tab \(index + 1)"
+        let title = ptCustomBar.centerTitle.isEmpty ? configuredTitle : ptCustomBar.centerTitle
+        item.title = title.isEmpty ? "Tab \(index + 1)" : title
+        if let image = ptCustomBar.systemCenterImage {
+            item.image = image
+        }
+        if item.image == nil {
+            item.image = PTSymbolResolver.image(.circle)
+        }
+        if let selectedImage = ptCustomBar.systemCenterSelectedImage {
+            item.selectedImage = selectedImage
+        } else if item.selectedImage == nil {
+            item.selectedImage = item.image
+        }
+        item.accessibilityLabel = item.title
     }
 
     private func registerNavigationControllers(from viewControllers: [UIViewController]?) {

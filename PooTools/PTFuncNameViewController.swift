@@ -172,6 +172,11 @@ class PTFuncNameViewController: PTBaseViewController {
     // Español: Mantén el estado del filtro separado de la identidad estable del Demo.
     // 中文：将目录筛选状态与稳定 Demo 身份分开保存。
     private var demoSearchText = ""
+
+    // English: Remember the active bar renderer so Duo insets are applied only when ownership changes.
+    // Español: Recuerda el renderizador activo para aplicar los insets de Duo solo cuando cambia la propiedad.
+    // 中文：记录当前 Bar 渲染器，只在所有权变化时更新 Duo 的 inset。
+    private var catalogUsesSystemAdaptiveBars: Bool?
     
     fileprivate lazy var outputURL :URL = {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -632,17 +637,15 @@ class PTFuncNameViewController: PTBaseViewController {
         let collectionInset:CGFloat = CGFloat.kTabbarHeight_Total
         let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
         
-        collectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
-        collectionView.contentCollectionView.contentInset.top = collectionInset_Top
-        collectionView.contentCollectionView.contentInset.bottom = collectionInset
-        collectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
-
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.right.bottom.equalToSuperview()
             make.left.right.equalToSuperview()
         }
+
+        updateCatalogScrollInsets(classicTopInset: collectionInset_Top,
+                                  classicBottomInset: collectionInset)
 
         // English: Populate the initial snapshot so every registered Demo is visible without an extra tap.
         // Español: Carga el snapshot inicial para mostrar todos los Demos registrados sin otro toque.
@@ -811,6 +814,58 @@ class PTFuncNameViewController: PTBaseViewController {
        pt_observerLanguage(didChanged: {
             PTNSLogConsole("Language changed")
         })
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateCatalogScrollInsets(classicTopInset: CGFloat.kNavBarHeight_Total,
+                                  classicBottomInset: CGFloat.kTabbarHeight_Total)
+    }
+
+    // English: UIKit owns the safe area when Duo renders navigation and tabs on an edge.
+    // Español: UIKit controla el área segura cuando Duo dibuja navegación y pestañas en un borde.
+    // 中文：Duo 将导航和 Tab 放到屏幕边缘时，由 UIKit 负责安全区域，避免重复添加固定高度。
+    private var usesSystemAdaptiveBarsForCatalog: Bool {
+        if #available(iOS 27.1, *) {
+            if let tabBarController = tabBarController as? PTBaseTabBarViewController,
+               tabBarController.adaptiveBarGeometry?.axis == .verticalEdge {
+                return true
+            }
+
+            if let edge = navigationController?.viewIfLoaded?.traitCollection.verticalBarEdge,
+               edge == .leading || edge == .trailing {
+                return true
+            }
+        }
+        return false
+    }
+
+    // English: Keep the legacy overlay insets on classic devices and use automatic adjustment for system bars.
+    // Español: Conserva los insets heredados en dispositivos clásicos y usa el ajuste automático para barras del sistema.
+    // 中文：经典设备继续使用旧的覆盖 inset，系统 Bar 则交给 UIKit 自动调整。
+    private func updateCatalogScrollInsets(classicTopInset: CGFloat,
+                                           classicBottomInset: CGFloat) {
+        guard isViewLoaded else { return }
+        let usesSystemAdaptiveBars = usesSystemAdaptiveBarsForCatalog
+        guard catalogUsesSystemAdaptiveBars != usesSystemAdaptiveBars else { return }
+        catalogUsesSystemAdaptiveBars = usesSystemAdaptiveBars
+
+        let scrollView = collectionView.contentCollectionView
+        if usesSystemAdaptiveBars {
+            scrollView.contentInsetAdjustmentBehavior = .automatic
+            scrollView.contentInset = .zero
+            scrollView.verticalScrollIndicatorInsets = .zero
+        } else {
+            scrollView.contentInsetAdjustmentBehavior = .never
+            scrollView.contentInset = UIEdgeInsets(top: classicTopInset,
+                                                    left: 0,
+                                                    bottom: classicBottomInset,
+                                                    right: 0)
+            scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0,
+                                                                     left: 0,
+                                                                     bottom: classicBottomInset,
+                                                                     right: 0)
+        }
     }
     
     override func viewControllerOrientation(_ orientationMask: UIInterfaceOrientationMask) {

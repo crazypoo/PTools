@@ -7,6 +7,21 @@ import XCTest
 // 中文：覆盖 TabBar 选中背景几何与项目内容几何的解耦。
 @MainActor
 final class PTTabBarAndGradientTests: XCTestCase {
+    // English: Native TabBar integration can read local raster content without changing the custom renderer.
+    // Español: La integración con el TabBar nativo puede leer contenido rasterizado local sin cambiar el renderizador personalizado.
+    // 中文：系统 TabBar 可以读取本地位图内容，同时不改变自定义渲染器。
+    func testTabBarImageContentExposesNativeImages() {
+        guard let normal = UIImage(systemName: "house"),
+              let selected = UIImage(systemName: "house.fill") else {
+            return XCTFail("System images are unavailable")
+        }
+        let content = PTTabBarImageContent(normal: normal as Any,
+                                           selected: selected as Any)
+
+        XCTAssertTrue(content.systemImage === normal)
+        XCTAssertTrue(content.systemSelectedImage === selected)
+    }
+
     func testSelectionInsetsClampToTheItemBounds() {
         let frame = CGRect(x: 0, y: 0, width: 100, height: 50)
         let result = PTTabBarLayoutEngine.selectionFrame(

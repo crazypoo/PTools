@@ -52,6 +52,36 @@ extension PTBaseTabBarViewController {
 // Español: Mantiene la compatibilidad de código de los hooks de delegado existentes.
 // 中文：保留现有控制器的代理钩子源码兼容性。
 extension PTBaseTabBarViewController: UITabBarControllerDelegate {
+    // English: Bridge native TabBar selection to the existing custom callbacks.
+    // Español: Conecta la selección del TabBar nativo con los callbacks personalizados existentes.
+    // 中文：将系统 TabBar 的选择事件桥接到现有自定义回调。
+    open func tabBarController(_ tabBarController: UITabBarController,
+                               shouldSelect viewController: UIViewController) -> Bool {
+        guard let index = tabBarController.viewControllers?.firstIndex(where: { $0 === viewController }) else {
+            return true
+        }
+        guard ptCustomBar.shouldSelectIndex?(index) ?? true else { return false }
+        if index != selectedIndex {
+            ptCustomBar.willSelectIndex?(index)
+        }
+        return true
+    }
+
+    // English: Keep selection callbacks and the merged center action working on the native bar.
+    // Español: Mantiene los callbacks de selección y la acción central integrada en la barra nativa.
+    // 中文：让系统 Bar 上的选择回调和合并后的中间操作继续生效。
+    open func tabBarController(_ tabBarController: UITabBarController,
+                               didSelect viewController: UIViewController) {
+        guard let index = tabBarController.viewControllers?.firstIndex(where: { $0 === viewController }) else {
+            return
+        }
+        ptCustomBar.didSelectIndex?(index)
+        ptCustomBar.didSelectInsideIndex?(index)
+        if index == systemCenterIndex {
+            ptCustomBar.triggerCenterAction()
+        }
+    }
+
     // English: Allow the selected system Tab to be changed.
     // Español: Permite cambiar el Tab del sistema seleccionado.
     // 中文：允许切换选中的系统 Tab。

@@ -290,6 +290,13 @@ final class PTDemoCoordinator {
             return registered
         }
 
+        // English: Every Duo descriptor gets a visible host even when its real module needs hardware or permissions.
+        // Español: Cada descriptor Duo obtiene un host visible aunque el módulo real necesite hardware o permisos.
+        // 中文：即使真实模块需要硬件或权限，每个 Duo 描述符也必须先展示可用宿主页面。
+        if descriptor.id.rawValue.hasPrefix("duo.") {
+            return PTDuoRegressionDemoViewController(descriptor: descriptor)
+        }
+
         switch descriptor.id.rawValue {
         case "navigation.split-view":
             return PT5_61SplitViewDemoViewController()
@@ -359,6 +366,157 @@ final class PTDemoCoordinator {
             host.present(viewController, animated: true)
         case .sheet, .inline, .action:
             UIViewController.currentPresentToSheet(vc: viewController, sizes: sizes)
+        }
+    }
+}
+
+// English: Keep every Duo regression route visible and actionable instead of falling through to an empty legacy page.
+// Español: Mantiene visible y accionable cada ruta de regresión Duo en lugar de caer en una página heredada vacía.
+// 中文：让每个 Duo 回归路由都有可见内容和可执行入口，不再落入空白旧页面。
+@MainActor
+private final class PTDuoRegressionDemoViewController: PTBaseViewController {
+    private let descriptor: PTDemoDescriptor
+    private let statusLabel = UILabel()
+
+    init(descriptor: PTDemoDescriptor) {
+        self.descriptor = descriptor
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) is unavailable")
+    }
+
+    override func prefersLargeTitle() -> Bool {
+        descriptor.id.rawValue == "duo.large-title-navigation"
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = descriptor.titleKey
+        view.backgroundColor = .systemBackground
+        configureContent()
+    }
+
+    private func configureContent() {
+        let scrollView = UIScrollView()
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.alignment = .fill
+        stack.spacing = 16
+
+        let titleLabel = UILabel()
+        titleLabel.font = .preferredFont(forTextStyle: .title2)
+        titleLabel.textColor = .label
+        titleLabel.numberOfLines = 0
+        titleLabel.text = descriptor.titleKey
+
+        let summaryLabel = UILabel()
+        summaryLabel.font = .preferredFont(forTextStyle: .body)
+        summaryLabel.textColor = .secondaryLabel
+        summaryLabel.numberOfLines = 0
+        summaryLabel.text = summaryText
+
+        let contractLabel = UILabel()
+        contractLabel.font = .preferredFont(forTextStyle: .footnote)
+        contractLabel.textColor = .secondaryLabel
+        contractLabel.numberOfLines = 0
+        contractLabel.text = "iPhone Duo / iOS 27.1\n布局读取当前 Scene 的 bounds、safe area 和 vertical bar edge。"
+
+        statusLabel.font = .preferredFont(forTextStyle: .footnote)
+        statusLabel.textColor = .secondaryLabel
+        statusLabel.numberOfLines = 0
+        statusLabel.text = "Demo 已加载 / Demo cargado / Demo loaded"
+
+        stack.addArrangedSubview(titleLabel)
+        stack.addArrangedSubview(summaryLabel)
+        stack.addArrangedSubview(contractLabel)
+
+        if let actionTitle {
+            let actionButton = UIButton(type: .system)
+            actionButton.setTitle(actionTitle, for: .normal)
+            actionButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+            actionButton.addTarget(self, action: #selector(runAction), for: .primaryActionTriggered)
+            actionButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+            stack.addArrangedSubview(actionButton)
+        }
+
+        stack.addArrangedSubview(statusLabel)
+        view.addSubview(scrollView)
+        scrollView.addSubview(stack)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        stack.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView.contentLayoutGuide).inset(20)
+            make.width.equalTo(scrollView.frameLayoutGuide).offset(-40)
+        }
+    }
+
+    private var summaryText: String {
+        switch descriptor.id.rawValue {
+        case "duo.photo-picker-grid":
+            return "验证 PhotoPicker 在 Duo 局部安全区域中的网格、完成按钮和滚动区域。"
+        case "duo.image-editor-controls":
+            return "验证 ImageEditor 的编辑画布、工具栏和底部控制不会被系统区域遮挡。"
+        case "duo.video-editor-controls":
+            return "验证 VideoEditor 时间轴和导出控制；真实视频导出需要真机媒体资源。"
+        case "duo.media-viewer-paging":
+            return "验证 MediaViewer 翻页时媒体内容和页码状态不会被 Duo 保留区域截断。"
+        case "duo.media-viewer-bottom":
+            return "验证 MediaViewer 底部工具栏在 Duo 场景中保持可操作。"
+        case "duo.message-kit-chat":
+            return "验证 MessageKit 聊天列表、头像、发信人信息和输入区域的安全边距。"
+        case "duo.large-title-navigation":
+            return "验证大标题导航在经典布局和 Duo 系统导航栏之间的所有权切换。"
+        case "duo.tab-accessory-search":
+            return "验证 Tab accessory 和搜索入口不会占用或遮挡主内容区域。"
+        case "duo.paging-segmented":
+            return "验证 Segmented、Paging 和嵌套滚动在宽度变化时保持状态。"
+        case "duo.unified-collision-stress":
+            return "验证导航、Tab、Accessory 和 reserved region 同时出现时的碰撞处理。"
+        default:
+            return "Duo 回归场景已注册，当前页面提供安全区域和状态连续性检查。"
+        }
+    }
+
+    private var actionTitle: String? {
+        switch descriptor.id.rawValue {
+        case "duo.photo-picker-grid": return "打开 PhotoPicker"
+        case "duo.image-editor-controls": return "打开 ImageEditor"
+        case "duo.media-viewer-paging", "duo.media-viewer-bottom": return "打开 MediaViewer"
+        case "duo.message-kit-chat": return "打开 MessageKit"
+        case "duo.paging-segmented": return "打开 Segmented / Paging"
+        default: return nil
+        }
+    }
+
+    @objc private func runAction() {
+        switch descriptor.id.rawValue {
+        case "duo.photo-picker-grid":
+            let picker = PTMediaLibViewController()
+            picker.mediaLibShow()
+            statusLabel.text = "PhotoPicker 已打开 / PhotoPicker abierto / PhotoPicker opened"
+        case "duo.image-editor-controls":
+            let image = UIImage(named: "DemoImage") ?? UIImage()
+            let editor = PTEditImageViewController(readyEditImage: image)
+            let navigationController = PTBaseNavControl(rootViewController: editor)
+            navigationController.modalPresentationStyle = .fullScreen
+            present(navigationController, animated: true)
+        case "duo.media-viewer-paging", "duo.media-viewer-bottom":
+            let model = PTMediaBrowserModel()
+            model.imageURL = UIImage(named: "DemoImage")
+            let viewer = PTMediaBrowserController(mediaData: [model])
+            viewer.modalPresentationStyle = .fullScreen
+            present(viewer, animated: true)
+        case "duo.message-kit-chat":
+            navigationController?.pushViewController(PTTestChatViewController(), animated: true)
+        case "duo.paging-segmented":
+            guard let descriptor = PTDemoRegistry.descriptor(forRawID: "navigation.segment-paging-regression") else { return }
+            navigationController?.pushViewController(PTFuncDetailViewController(descriptor: descriptor), animated: true)
+        default:
+            break
         }
     }
 }

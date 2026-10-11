@@ -55,8 +55,28 @@ final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
 
     public var view: UIView { container }
 
+    // English: Resolve only local raster assets; remote URLs and Lottie remain in the custom renderer.
+    // Español: Resuelve solo recursos rasterizados locales; las URL remotas y Lottie permanecen en el renderizador personalizado.
+    // 中文：这里只解析本地位图资源；远程 URL 和 Lottie 继续由自定义渲染器处理。
+    public var systemImage: UIImage? {
+        resolveSystemImage(normalImage)
+    }
+
+    public var systemSelectedImage: UIImage? {
+        guard let selectedImage else { return nil }
+        return resolveSystemImage(selectedImage)
+    }
+
     @MainActor public func setSelected(_ selected: Bool, animated: Bool) {
         imageSet(media: selected ? (selectedImage ?? normalImage) : normalImage)
+    }
+
+    private func resolveSystemImage(_ media: Any) -> UIImage? {
+        if let image = media as? UIImage {
+            return image
+        }
+        guard let name = media as? String, !name.isEmpty else { return nil }
+        return UIImage(named: name) ?? UIImage(systemName: name)
     }
 
     @MainActor private func imageSet(media: Any) {

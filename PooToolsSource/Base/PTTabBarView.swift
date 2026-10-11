@@ -23,6 +23,23 @@ public enum PTTabBarLayoutStyle {
 public protocol PTTabBarItemContent {
     var view: UIView { get }
     func setSelected(_ selected: Bool, animated: Bool)
+    // English: Expose an optional raster image for UIKit's native TabBar item.
+    // Español: Expone una imagen rasterizada opcional para el elemento nativo de TabBar de UIKit.
+    // 中文：为 UIKit 原生 TabBar 项目提供可选的位图图标。
+    var systemImage: UIImage? { get }
+    // English: Expose an optional selected-state image for UIKit's native TabBar item.
+    // Español: Expone una imagen opcional del estado seleccionado para el elemento nativo de TabBar de UIKit.
+    // 中文：为 UIKit 原生 TabBar 项目提供可选的选中状态图标。
+    var systemSelectedImage: UIImage? { get }
+}
+
+@MainActor
+public extension PTTabBarItemContent {
+    // English: Custom content remains compatible; non-raster content uses UIKit's fallback image.
+    // Español: El contenido personalizado sigue siendo compatible; el contenido no rasterizado usa la imagen de respaldo de UIKit.
+    // 中文：保持自定义内容兼容；非位图内容由 UIKit 使用安全兜底图标。
+    var systemImage: UIImage? { nil }
+    var systemSelectedImage: UIImage? { nil }
 }
 
 @MainActor
@@ -126,6 +143,24 @@ final public class PTTabBarView: UIView {
 
     public var hasCenterAction: Bool {
         centerContent != nil && !centerButton.isHidden
+    }
+
+    // English: Reuse raster center content in a native TabBar without creating a fake controller.
+    // Español: Reutiliza el contenido rasterizado central en un TabBar nativo sin crear un controlador falso.
+    // 中文：在系统 TabBar 中复用中间位图内容，不创建伪造控制器。
+    var systemCenterImage: UIImage? {
+        centerContent?.systemImage
+    }
+
+    var systemCenterSelectedImage: UIImage? {
+        centerContent?.systemSelectedImage
+    }
+
+    // English: Preserve the existing center action when the center item is merged into a native item.
+    // Español: Conserva la acción central existente cuando el elemento central se integra en un elemento nativo.
+    // 中文：中间项目合并到系统项目后继续保留原有中间操作。
+    func triggerCenterAction() {
+        didTapCenter?()
     }
     
     // 🌟 新增：用于最小化时展示当前 Icon 的容器
