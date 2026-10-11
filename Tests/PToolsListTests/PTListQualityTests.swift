@@ -314,6 +314,21 @@ final class PTListQualityTests: XCTestCase {
         XCTAssertEqual(scenarios.count, 4)
     }
 
+    // English: A configured index without titles must not constrain a detached index view during layout.
+    // Español: Un índice configurado sin títulos no debe restringir una vista separada durante el layout.
+    // 中文：只有索引配置但没有索引标题时，布局阶段不能给脱离层级的索引视图添加约束。
+    func testCollectionWithoutSideIndexSkipsDetachedIndexConstraints() {
+        let configuration = PTCollectionViewConfig()
+        configuration.indexConfig = PTCollectionIndexViewConfiguration()
+        configuration.sideIndexTitles = nil
+        let list = PTCollectionView(viewConfig: configuration)
+        list.frame = CGRect(x: 0, y: 0, width: 320, height: 480)
+
+        list.layoutIfNeeded()
+
+        XCTAssertNil(list.indexContainerView.superview)
+    }
+
     // English: Runtime layout transactions preserve stable identities and reuse the same collection view.
     // Español: Las transacciones de layout conservan las identidades estables y reutilizan la misma colección.
     // 中文：运行时布局事务必须保留稳定身份，并复用同一个 CollectionView。

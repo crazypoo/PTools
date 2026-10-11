@@ -38,7 +38,12 @@ extension PTCollectionView {
     // Español: Mantiene el índice lateral dentro de la región visible segura del host.
     // 中文：将侧边索引限制在宿主的安全可视区域内。
     func updateIndexPlacementIfNeeded() {
-        guard let config = viewConfig.indexConfig,
+        // English: Do not create constraints until the index view is attached to this host.
+        // Español: No crees restricciones hasta que la vista del índice esté unida a este host.
+        // 中文：侧边索引加入当前宿主前，不创建任何约束。
+        guard viewConfig.sideIndexTitles?.isEmpty == false,
+              let config = viewConfig.indexConfig,
+              indexContainerView.superview === self,
               !indexContainerView.isHidden,
               bounds.width > 0,
               bounds.height > 0 else { return }
