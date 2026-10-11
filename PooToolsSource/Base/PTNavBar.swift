@@ -39,9 +39,11 @@ open class PTNavBar: PTNavigationBarContainer {
         let rightWidth: CGFloat
         let navigationSpacing: CGFloat
         let defaultSpace: CGFloat
+        let visibleRect: CGRect
     }
 
     private var lastWidthLayoutSignature: WidthLayoutSignature?
+    private var lastVisibleLayoutRect: CGRect = .null
     
     fileprivate var titleViewMAxWidth: CGFloat = 0 {
         didSet {
@@ -118,6 +120,12 @@ open class PTNavBar: PTNavigationBarContainer {
     
     open override func layoutSubviews() {
         super.layoutSubviews()
+        let visibleRect = adaptiveVisibleRect()
+        if visibleRect != lastVisibleLayoutRect {
+            lastVisibleLayoutRect = visibleRect
+            updateContainerConstraints(leftContainer, isLeft: true)
+            updateContainerConstraints(rightContainer, isLeft: false)
+        }
         calculateMaxWidth()
     }
     
@@ -167,12 +175,17 @@ open class PTNavBar: PTNavigationBarContainer {
     // 🔥 核心逻辑 2：调整内部按钮组相对于 topBarContainer 的 Y 轴布局
     private func updateContainerConstraints(_ container: UIStackView, isLeft: Bool) {
         let widthTotal = stackTotalWidth(container)
+        let visibleRect = adaptiveVisibleRect()
+        let fallbackRect = bounds.isEmpty ? CGRect(x: 0, y: 0, width: 0, height: 0) : bounds
+        let layoutRect = visibleRect.isEmpty ? fallbackRect : visibleRect
+        let leadingInset = layoutRect.minX + PTAppBaseConfig.share.defaultViewSpace
+        let trailingInset = max(0, bounds.width - layoutRect.maxX) + PTAppBaseConfig.share.defaultViewSpace
         
         container.snp.remakeConstraints { make in
             if isLeft {
-                make.left.equalToSuperview().offset(PTAppBaseConfig.share.defaultViewSpace)
+                make.left.equalToSuperview().offset(leadingInset)
             } else {
-                make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.right.equalToSuperview().inset(trailingInset)
             }
             
             if isFakeNav {
@@ -189,6 +202,16 @@ open class PTNavBar: PTNavigationBarContainer {
             
             make.width.equalTo(widthTotal)
         }
+    }
+
+    // English: Resolve button and title positions from the bar's own visible pane, not the full Duo host width.
+    // Español: Resuelve los botones y el título desde el panel visible de la barra, no desde todo el ancho del host Duo.
+    // 中文：根据导航栏自身的可视面板布局按钮和标题，不再使用 Duo 宿主的完整宽度。
+    private func adaptiveVisibleRect() -> CGRect {
+        guard !bounds.isEmpty else { return .zero }
+        let region = PTAdaptiveVisibleRegionResolver.region(for: self)
+        let visible = region.visibleRect.intersection(bounds)
+        return visible.isEmpty ? bounds : visible
     }
 
     private func applyTitleViewConstraints(_ view: UIView) {
@@ -288,9 +311,8 @@ open class PTNavBar: PTNavigationBarContainer {
         let rightWidthTotal: CGFloat = stackTotalWidth(rightContainer)
         let leftWidthTotal: CGFloat = stackTotalWidth(leftContainer)
 
-        let containerWidth = bounds.width > 0
-            ? bounds.width
-            : (superview?.bounds.width ?? window?.bounds.width ?? 0)
+        let visibleRect = adaptiveVisibleRect()
+        let containerWidth = visibleRect.width > 0 ? visibleRect.width : bounds.width
         let navigationSpacing = PTAppBaseConfig.share.navContainerSpacing
         let defaultSpace = PTAppBaseConfig.share.defaultViewSpace
         // English: Use the wider button group on both sides so a centered title never conflicts with an edge button.
@@ -302,13 +324,14 @@ open class PTNavBar: PTNavigationBarContainer {
                                               leftWidth: leftWidthTotal,
                                               rightWidth: rightWidthTotal,
                                               navigationSpacing: navigationSpacing,
-                                              defaultSpace: defaultSpace)
+                                              defaultSpace: defaultSpace,
+                                              visibleRect: visibleRect)
         guard lastWidthLayoutSignature != signature else { return }
         lastWidthLayoutSignature = signature
 
         titleContainer.snp.remakeConstraints { make in
             make.centerY.equalToSuperview()
-            make.centerX.equalToSuperview()
+            make.centerX.equalToSuperview().offset(visibleRect.midX - bounds.midX)
             make.left.greaterThanOrEqualTo(leftContainer.snp.right).offset(navigationSpacing)
             make.right.lessThanOrEqualTo(rightContainer.snp.left).offset(-navigationSpacing)
             // English: Give the title container an explicit width so Auto Layout cannot reuse an old ambiguous frame.

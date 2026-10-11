@@ -70,6 +70,7 @@ public class PTMediaLibView: UIView {
     }
 
     private var lastGridWidth: CGFloat = 0
+    private var lastAdaptiveLayoutSignature: String?
 
     // English: Restrict camera media kinds to the picker policy before presenting the camera.
     // Español: Limita los tipos de medios de la cámara a la política del selector antes de mostrar la cámara.
@@ -127,6 +128,24 @@ public class PTMediaLibView: UIView {
 
     override public func layoutSubviews() {
         super.layoutSubviews()
+        let region = PTAdaptiveVisibleRegionResolver.region(for: self)
+        let horizontalVisibleRect = CGRect(x: region.visibleRect.minX,
+                                            y: bounds.minY,
+                                            width: region.visibleRect.width,
+                                            height: bounds.height).intersection(bounds)
+        let visibleRect = horizontalVisibleRect.isEmpty ? bounds : horizontalVisibleRect
+        let layoutSignature = "\(region.signature)|\(visibleRect.integral)"
+        if layoutSignature != lastAdaptiveLayoutSignature {
+            lastAdaptiveLayoutSignature = layoutSignature
+            // English: Keep the photo grid inside the local visible pane while retaining the full-height sheet background.
+            // Español: Mantiene la cuadrícula dentro del panel visible local y conserva el fondo de altura completa.
+            // 中文：让照片网格保持在当前可视面板内，同时保留全高度的 Sheet 背景。
+            collectionView.snp.remakeConstraints { make in
+                make.left.equalToSuperview().offset(visibleRect.minX)
+                make.right.equalToSuperview().inset(max(0, bounds.width - visibleRect.maxX))
+                make.top.bottom.equalToSuperview()
+            }
+        }
         let width = collectionView.contentCollectionView.bounds.width
         guard width > 0, abs(width - lastGridWidth) > 0.5 else { return }
         lastGridWidth = width
@@ -748,6 +767,7 @@ public class PTMediaLibViewController: PTBaseViewController {
 
     private var isSelectOriginal = false
     fileprivate var selectedMediaCount: Int = 0
+    private var lastAdaptiveNavigationLayoutSignature: String?
 
     // MARK: - UI
     private lazy var fakeNav: PTNavBar = {
@@ -878,6 +898,25 @@ public class PTMediaLibViewController: PTBaseViewController {
 
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        let region = PTAdaptiveVisibleRegionResolver.region(for: view)
+        let horizontalVisibleRect = CGRect(x: region.visibleRect.minX,
+                                            y: view.bounds.minY,
+                                            width: region.visibleRect.width,
+                                            height: view.bounds.height).intersection(view.bounds)
+        let visibleRect = horizontalVisibleRect.isEmpty ? view.bounds : horizontalVisibleRect
+        let layoutSignature = "\(region.signature)|\(visibleRect.integral)"
+        if layoutSignature != lastAdaptiveNavigationLayoutSignature {
+            lastAdaptiveNavigationLayoutSignature = layoutSignature
+            // English: Keep the fake navigation controls inside the local visible pane so the Done button avoids the Duo rail.
+            // Español: Mantiene los controles de la barra falsa dentro del panel visible local para evitar la rail Duo.
+            // 中文：让伪导航栏控件位于局部可视面板内，避免完成按钮进入 Duo 系统区域。
+            fakeNav.snp.remakeConstraints { make in
+                make.left.equalToSuperview().offset(visibleRect.minX)
+                make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
+                make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+                make.height.equalTo(CGFloat.kNavBarHeight)
+            }
+        }
         let cv = mediaListView.collectionView.contentCollectionView
         let topInset = max(fakeNav.frame.maxY, view.safeAreaInsets.top)
         let bottomInset = max(0, view.safeAreaInsets.bottom)

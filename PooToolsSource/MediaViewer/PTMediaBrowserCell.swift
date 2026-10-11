@@ -119,6 +119,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     }()
     
     var gifImage:UIImage? = nil
+    private var lastAdaptiveViewportSignature: String?
 
     //MARK: 视频相关
     fileprivate lazy var playBtn:UIButton = {
@@ -181,6 +182,48 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         loading.isHidden = true
         reloadButton.isHidden = true
         setupGestureOnce()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateAdaptiveViewportLayout()
+    }
+
+    // English: Keep media and overlay controls inside the host's horizontal visible pane after Duo resizing.
+    // Español: Mantiene el contenido multimedia y los controles dentro del panel horizontal visible tras un cambio de tamaño Duo.
+    // 中文：Duo 尺寸变化后，让媒体内容和覆盖控件保持在宿主的水平可视面板内。
+    private func updateAdaptiveViewportLayout() {
+        guard !contentView.bounds.isEmpty else { return }
+        let region = PTAdaptiveVisibleRegionResolver.region(for: contentView)
+        let horizontalRect = CGRect(x: region.visibleRect.minX,
+                                    y: contentView.bounds.minY,
+                                    width: region.visibleRect.width,
+                                    height: contentView.bounds.height).intersection(contentView.bounds)
+        let visibleRect = horizontalRect.isEmpty ? contentView.bounds : horizontalRect
+        let signature = "\(region.signature)|\(visibleRect.integral)"
+        guard signature != lastAdaptiveViewportSignature else { return }
+        lastAdaptiveViewportSignature = signature
+
+        contentScrolView.snp.remakeConstraints { make in
+            make.left.equalToSuperview().offset(visibleRect.minX)
+            make.right.equalToSuperview().inset(max(0, contentView.bounds.width - visibleRect.maxX))
+            make.top.bottom.equalToSuperview()
+        }
+        [playBtn, loading, reloadButton].forEach { view in
+            view.snp.remakeConstraints { make in
+                make.center.equalTo(contentScrolView)
+                if view === playBtn {
+                    make.size.equalTo(viewConfig.playButtonImageSize)
+                } else if view === loading {
+                    make.size.equalTo(50)
+                }
+            }
+        }
+
+        contentView.layoutIfNeeded()
+        if gifImage != nil, contentScrolView.zoomScale <= 1.01 {
+            adjustFrame()
+        }
     }
     
     private func setupGestureOnce() {
@@ -279,6 +322,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         loadTask?.cancel()
         loadTask = nil
         loadIdentifier = UUID()
+        lastAdaptiveViewportSignature = nil
         imageView.kf.cancelDownloadTask()
         imageView.stopAnimating()
         livePhoto.stopPlayback()
@@ -289,24 +333,37 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     }
     
     func adjustFrame(normal:Bool = true,fixed:PTActionTask? = nil) {
+        // English: Scroll-view bounds may carry a content offset; media frames must use zero-origin content coordinates.
+        // Español: Los bounds del scroll pueden incluir contentOffset; los frames multimedia deben empezar en cero.
+        // 中文：ScrollView 的 bounds 可能带有 contentOffset，媒体 frame 必须使用零起点内容坐标。
+        let viewportBounds = CGRect(origin: .zero, size: contentScrolView.bounds.size)
+        guard viewportBounds.width > 0, viewportBounds.height > 0 else {
+            // English: Defer scale math until Auto Layout provides a real viewport size.
+            // Español: Aplaza el cálculo de escala hasta que Auto Layout proporcione un tamaño real.
+            // 中文：等 Auto Layout 提供有效尺寸后再计算缩放，避免首帧产生无效比例。
+            imageView.frame = viewportBounds
+            livePhoto.frame = viewportBounds
+            contentScrolView.contentSize = viewportBounds.size
+            return
+        }
         guard let image = gifImage else {
-            imageView.frame = bounds
-            livePhoto.frame = bounds
-            contentScrolView.contentSize = bounds.size
+            imageView.frame = viewportBounds
+            livePhoto.frame = viewportBounds
+            contentScrolView.contentSize = viewportBounds.size
             return
         }
         guard image.size.width > 0, image.size.height > 0 else {
-            imageView.frame = bounds
-            livePhoto.frame = bounds
-            contentScrolView.contentSize = bounds.size
+            imageView.frame = viewportBounds
+            livePhoto.frame = viewportBounds
+            contentScrolView.contentSize = viewportBounds.size
             return
         }
 
-        let width = bounds.width
+        let width = viewportBounds.width
         let height = width * (image.size.height / image.size.width)
 
         let frame = CGRect(x: 0,
-                           y: max(0, (bounds.height - height) / 2),
+                           y: max(0, (viewportBounds.height - height) / 2),
                            width: width,
                            height: height)
 
@@ -314,7 +371,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         livePhoto.frame = frame
         contentScrolView.contentSize = frame.size
 
-        let maxScale = max(bounds.height / height, bounds.width / width, maxZoomSale)
+        let maxScale = max(viewportBounds.height / height, viewportBounds.width / width, maxZoomSale)
 
         contentScrolView.minimumZoomScale = minZoomSale
         contentScrolView.maximumZoomScale = maxScale
@@ -673,7 +730,8 @@ extension PTMediaBrowserCell {
         bringSubviewToFront(reloadButton)
         playBtn.isHidden = true
         
-        let reloadMaxWidth = max(1, bounds.width - PTAppBaseConfig.share.defaultViewSpace * 2)
+        let viewportWidth = contentScrolView.bounds.width > 0 ? contentScrolView.bounds.width : contentView.bounds.width
+        let reloadMaxWidth = max(1, viewportWidth - PTAppBaseConfig.share.defaultViewSpace * 2)
         reloadButton.setTitle(self.viewConfig.imageReloadButton, for: .normal)
         var reloadWidth = reloadButton.sizeFor(height: 34).width + 16
         var baseHeight:CGFloat = 34
@@ -684,7 +742,7 @@ extension PTMediaBrowserCell {
         reloadButton.snp.remakeConstraints { make in
             make.width.equalTo(reloadWidth)
             make.height.equalTo(baseHeight)
-            make.center.equalToSuperview()
+            make.center.equalTo(contentScrolView)
         }
     }
 }

@@ -42,7 +42,12 @@ public enum PTAdaptiveVisibleRegionResolver {
                               minimumMargin: CGFloat = 0) -> PTAdaptiveVisibleRegion {
         let safeRect = context.bounds.inset(by: normalizedInsets(context.safeAreaInsets))
         let activeRegions = context.reservedRegions.filter(\.isActive)
-        let divisionRects = activeRegions.filter { $0.kind == .division }.map(\.frame)
+        // English: Both divisions and occlusions remove usable content space; only active regions participate.
+        // Español: Las divisiones y las oclusiones eliminan espacio utilizable; solo participan regiones activas.
+        // 中文：分割区和遮挡区都会减少可用内容空间，只有激活的区域参与计算。
+        let excludedRects = activeRegions
+            .filter { $0.kind == .division || $0.kind == .occlusion }
+            .map(\.frame)
         let reserved = (context.reservedRegions + additionalReservedRects.map {
             PTAdaptiveReservedRegion(frame: $0,
                                       kind: .occlusion,
@@ -52,10 +57,10 @@ public enum PTAdaptiveVisibleRegionResolver {
         .map { expandedFrame($0.frame, margins: $0.margins, extra: minimumMargin) }
         .filter { !$0.isNull && !$0.isEmpty }
 
-        // English: Keep the largest safe pane when a division splits the host.
-        // Español: Conserva el panel seguro más grande cuando una división separa el host.
-        // 中文：当分割区域把宿主切开时，选择最大的安全内容面板。
-        let visible = largestPane(in: safeRect, excluding: divisionRects)
+        // English: Keep the largest pane that is not covered by a system reserved region.
+        // Español: Conserva el panel más grande que no esté cubierto por una región reservada del sistema.
+        // 中文：选择没有被系统保留区域覆盖的最大内容面板。
+        let visible = largestPane(in: safeRect, excluding: excludedRects)
         let signature = [
             String(describing: context.bounds.integral),
             String(describing: context.safeAreaInsets),

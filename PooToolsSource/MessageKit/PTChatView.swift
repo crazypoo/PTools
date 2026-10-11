@@ -22,6 +22,7 @@ public typealias PTCellMenuItemsTapCallBack = (_ indexPath:IndexPath,_ cellModel
 public class PTChatView: UIView {
 
     private let chatSectionIdentifier = "PTChatView.messages"
+    private var lastAdaptiveLayoutSignature: String?
 
     ///消息数组
     public var chatDataArr:[PTChatListModel] = [PTChatListModel]()
@@ -75,7 +76,12 @@ public class PTChatView: UIView {
         view.registerClassCells(classs: [PTChatSystemMessageCell.ID:PTChatSystemMessageCell.self,PTChatTextCell.ID:PTChatTextCell.self,PTChatMediaCell.ID:PTChatMediaCell.self,PTChatMapCell.ID:PTChatMapCell.self,PTChatVoiceCell.ID:PTChatVoiceCell.self,PTChatTypingIndicatorCell.ID:PTChatTypingIndicatorCell.self,PTChatFileCell.ID:PTChatFileCell.self])
         view.customerLayout = { [weak self] sectionIndex, sectionModel in
             let customerCellHeightHandler = self?.customerCellHeightHandler
-            let containerWidth = self?.listCollection.contentCollectionView.bounds.width ?? 320
+            let containerWidth: CGFloat
+            if let collectionView = self?.listCollection.contentCollectionView {
+                containerWidth = PTChatBaseCell.adaptiveContainerWidth(for: collectionView)
+            } else {
+                containerWidth = 320
+            }
             let contentMaxWidth = PTChatConfig.contentMaxWidth(containerWidth: containerWidth)
             return UICollectionView.waterFallLayout(data: sectionModel.rows,rowCount:1,itemOriginalX: 0,topContentSpace:PTChatConfig.share.chatTopFixel, bottomContentSpace: PTChatConfig.share.chatBottomFixel,itemSpace: 0) { index, model in
                 guard let rowModel = model as? PTRows,
@@ -313,6 +319,30 @@ public class PTChatView: UIView {
         listCollection.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        guard !bounds.isEmpty else { return }
+        let region = PTAdaptiveVisibleRegionResolver.region(for: self)
+        let horizontalVisibleRect = CGRect(x: region.visibleRect.minX,
+                                            y: bounds.minY,
+                                            width: region.visibleRect.width,
+                                            height: bounds.height).intersection(bounds)
+        let visibleRect = horizontalVisibleRect.isEmpty ? bounds : horizontalVisibleRect
+        let signature = "\(region.signature)|\(visibleRect.integral)"
+        guard signature != lastAdaptiveLayoutSignature else { return }
+        lastAdaptiveLayoutSignature = signature
+
+        // English: Size the message list to the local visible pane so cells and sender metadata share one coordinate space.
+        // Español: Ajusta la lista de mensajes al panel visible local para compartir un solo sistema de coordenadas.
+        // 中文：让消息列表使用局部可视面板，使 Cell 和发送者信息处于同一坐标系。
+        listCollection.snp.remakeConstraints { make in
+            make.left.equalToSuperview().offset(visibleRect.minX)
+            make.right.equalToSuperview().inset(max(0, bounds.width - visibleRect.maxX))
+            make.top.bottom.equalToSuperview()
+        }
+        listCollection.contentCollectionView.collectionViewLayout.invalidateLayout()
     }
     
     public required init?(coder: NSCoder) {

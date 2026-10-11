@@ -318,10 +318,11 @@ open class PTBaseTabBarViewController: UITabBarController {
                 let content = geometry.contentSafeRect
                 let accessoryIntrinsicWidth = currentAccessoryContentView?.intrinsicContentSize.width ?? 0
                 let isWideAccessory = accessoryIntrinsicWidth > geometry.customRailRect.width
+                let accessoryWidth = min(content.width, max(geometry.customRailRect.width, accessoryIntrinsicWidth > 0 ? accessoryIntrinsicWidth : 360))
                 let accessory = isWideAccessory && content.width > geometry.customRailRect.width
-                    ? CGRect(x: content.minX,
+                    ? CGRect(x: content.midX - accessoryWidth / 2,
                              y: max(content.minY, content.maxY - accessoryHeight - PTAppBaseConfig.share.tabBarAccessoryBottomSpacing),
-                             width: min(content.width, 360),
+                             width: accessoryWidth,
                              height: accessoryHeight)
                     : geometry.accessoryRect
                 accessoryContainerView.snp.remakeConstraints { make in

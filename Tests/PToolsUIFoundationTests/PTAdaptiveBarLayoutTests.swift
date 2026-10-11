@@ -171,6 +171,10 @@ final class PTAdaptiveBarLayoutTests: XCTestCase {
                                                                   preferred: .trailing,
                                                                   margin: 4)
 
+        // English: The visible pane itself must exclude the active Duo occlusion, not only the final control frame.
+        // Español: El panel visible también debe excluir la oclusión Duo activa, no solo el frame final del control.
+        // 中文：可视面板本身必须排除 Duo 遮挡区，而不只是让最终控件 Frame 避开它。
+        XCTAssertEqual(region.visibleRect.maxX, 320)
         XCTAssertFalse(frame.intersects(occlusion.frame))
         XCTAssertGreaterThanOrEqual(frame.minX, 4)
         XCTAssertLessThanOrEqual(frame.maxX, 320)

@@ -28,6 +28,7 @@ public typealias PTScreenShotOnlyGetImageHandle = (UIImage?) -> Void
 open class PTBaseViewController: UIViewController, PTNavigationConfigurable, PTAdaptiveNavigationMetadataProviding {
 
     private var hidesBaseNavigationBarOnLoad = false
+    private weak var boundCollectionView: PTCollectionView?
                    
     // MARK: - Custom Back Button
 
@@ -433,7 +434,43 @@ open class PTBaseViewController: UIViewController, PTNavigationConfigurable, PTA
 
 extension PTBaseViewController: UIScrollViewDelegate {
     open func bindScrollView(_ scrollView: UIScrollView) {
+        if let listView = pt_collectionView(containing: scrollView) {
+            // English: Keep PTCollectionView as the delegate and bridge only the callbacks needed by the base controller.
+            // Español: Mantiene PTCollectionView como delegate y puentea solo los callbacks necesarios para la base.
+            // 中文：保留 PTCollectionView 的 delegate，只桥接基类需要的回调。
+            boundCollectionView?.listControllerDidScroll = nil
+            boundCollectionView?.listControllerDidEndDragging = nil
+            boundCollectionView = listView
+            pt_prepareScrollViewForLargeTitle(scrollView, assignsDelegate: false)
+            listView.listControllerDidScroll = { [weak self] collectionView in
+                guard let self else { return }
+                self.pt_updateLargeTitleTransition(for: collectionView)
+            }
+            listView.listControllerDidEndDragging = { [weak self] collectionView, willDecelerate in
+                guard let self else { return }
+                self.pt_finishLargeTitleDrag(for: collectionView)
+            }
+            return
+        }
+        boundCollectionView?.listControllerDidScroll = nil
+        boundCollectionView?.listControllerDidEndDragging = nil
+        boundCollectionView = nil
         pt_prepareScrollViewForLargeTitle(scrollView, assignsDelegate: true)
+    }
+
+    // English: Find only the PTCollectionView that owns this exact collection view.
+    // Español: Busca únicamente el PTCollectionView que posee esta collection view concreta.
+    // 中文：只查找真正拥有当前 collection view 的 PTCollectionView。
+    private func pt_collectionView(containing scrollView: UIScrollView) -> PTCollectionView? {
+        var current: UIView? = scrollView
+        while let view = current {
+            if let listView = view as? PTCollectionView,
+               listView.contentCollectionView === scrollView {
+                return listView
+            }
+            current = view.superview
+        }
+        return nil
     }
     
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {

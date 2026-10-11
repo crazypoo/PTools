@@ -97,6 +97,7 @@ class PTMediaBrowserBottom: UIView {
     }()
     
     fileprivate var viewConfig = PTMediaBrowserConfig.share
+    private var lastAdaptiveLayoutSignature: String?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -152,6 +153,59 @@ class PTMediaBrowserBottom: UIView {
                 }
                 make.top.equalTo(self.moreActionButton)
                 make.right.equalTo(self.moreActionButton.snp.left).offset(-ContentMoreSpacing)
+            }
+        }
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateAdaptiveHorizontalLayout()
+    }
+
+    // English: Keep bottom controls inside the visible horizontal pane while preserving the system bottom safe area.
+    // Español: Mantiene los controles inferiores dentro del panel horizontal visible y conserva el área segura inferior.
+    // 中文：让底部控件位于水平可视面板内，同时保留系统底部安全区。
+    private func updateAdaptiveHorizontalLayout() {
+        guard !bounds.isEmpty else { return }
+        let region = PTAdaptiveVisibleRegionResolver.region(for: self)
+        let horizontalRect = CGRect(x: region.visibleRect.minX,
+                                    y: bounds.minY,
+                                    width: region.visibleRect.width,
+                                    height: bounds.height).intersection(bounds)
+        let visibleRect = horizontalRect.isEmpty ? bounds : horizontalRect
+        let signature = "\(region.signature)|\(visibleRect.integral)"
+        guard signature != lastAdaptiveLayoutSignature else { return }
+        lastAdaptiveLayoutSignature = signature
+
+        let leadingInset = visibleRect.minX + PTAppBaseConfig.share.defaultViewSpace
+        let trailingInset = max(0, bounds.width - visibleRect.maxX) + PTAppBaseConfig.share.defaultViewSpace
+        if viewConfig.pageControlShow {
+            pageControlView.snp.remakeConstraints { make in
+                make.left.equalToSuperview().offset(leadingInset)
+                make.right.equalToSuperview().inset(trailingInset)
+                make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(PageControlBottomSpace)
+                make.height.equalTo(PageControlHeight)
+            }
+        }
+
+        moreActionButton.snp.remakeConstraints { make in
+            make.width.height.equalTo(BottomMoreHeight)
+            make.right.equalToSuperview().inset(trailingInset)
+            make.top.equalToSuperview().inset(BottomTopSpacing)
+        }
+
+        titleLabel.snp.remakeConstraints { make in
+            make.left.equalToSuperview().offset(leadingInset)
+            if viewConfig.pageControlShow {
+                make.bottom.equalTo(pageControlView.snp.top).offset(-BottomItemSpacing)
+            } else {
+                make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
+            }
+            make.top.equalTo(moreActionButton)
+            if viewConfig.actionType == .Empty || moreActionButton.isHidden {
+                make.right.equalToSuperview().inset(trailingInset)
+            } else {
+                make.right.equalTo(moreActionButton.snp.left).offset(-ContentMoreSpacing)
             }
         }
     }

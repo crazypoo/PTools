@@ -231,7 +231,10 @@ class PTTestChatViewController: PTBaseViewController {
         view.addSubviews([chatContent])
         chatContent.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+            // English: Let UIKit own the top safe area so large and compact titles share the same scroll origin.
+            // Español: Deja que UIKit controle el área segura superior para compartir el mismo origen con títulos grandes y compactos.
+            // 中文：让 UIKit 管理顶部安全区，使大标题和收起后的普通标题使用同一个滚动起点。
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
         
         chatContent.chatDataArr = testModel()

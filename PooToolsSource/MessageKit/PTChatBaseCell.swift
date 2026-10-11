@@ -20,12 +20,21 @@ open class PTChatBaseCell: PTBaseNormalCell {
     public static let waitImageRightInset: CGFloat = 10
     public static let dataContentWaitImageInset: CGFloat = 5
     public static let dataContentUserIconInset: CGFloat = 5.5
+
+    // English: Return the width available to message content in the consuming view's visible pane.
+    // Español: Devuelve el ancho disponible para el contenido del mensaje en el panel visible de la vista consumidora.
+    // 中文：返回消息内容在实际宿主可视面板中的可用宽度。
+    public class func adaptiveContainerWidth(for view: UIView) -> CGFloat {
+        let region = PTAdaptiveVisibleRegionResolver.region(for: view)
+        return region.visibleRect.width > 0 ? region.visibleRect.width : max(1, view.bounds.width)
+    }
     
     // Handlers
     public var sendExp: PTChatBaseCellHandler?
     public var sendMessageError: PTChatBaseCellHandler?
     
     private var expirationTask: Task<Void, Never>?
+    private var lastAdaptiveLayoutSignature: String?
     
     // Data model
     public var outputModel: PTChatListModel!
@@ -87,6 +96,18 @@ open class PTChatBaseCell: PTBaseNormalCell {
         expirationTask?.cancel()
     }
 
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        guard let model = outputModel, !contentView.bounds.isEmpty else { return }
+        let region = PTAdaptiveVisibleRegionResolver.region(for: contentView)
+        let signature = "\(region.signature)|\(contentView.bounds.integral)"
+        guard signature != lastAdaptiveLayoutSignature else { return }
+        lastAdaptiveLayoutSignature = signature
+        setupUserIconConstraints(cellModel: model)
+        setupSenderNameConstraints(cellModel: model)
+        setupReadStatusLabelConstraints(cellModel: model)
+    }
+
     open override func prepareForReuse() {
         super.prepareForReuse()
         expirationTask?.cancel()
@@ -133,6 +154,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
     
     private func setupUIWithModel(cellModel: PTChatListModel) {
         // Configure UI elements based on the data model
+        lastAdaptiveLayoutSignature = nil
         userIcon.loadImage(contentData: cellModel.senderCover)
         messageTimeLabel.text = cellModel.messageTimeStamp.conversationTimeSet(yesterdayString: PTChatConfig.share.yesterDayName)
         
@@ -157,10 +179,17 @@ open class PTChatBaseCell: PTBaseNormalCell {
     }
     
     private func setupUserIconConstraints(cellModel: PTChatListModel) {
+        let visibleRect = adaptiveVisibleRect()
+        let leadingInset = visibleRect.minX + PTChatConfig.share.userIconFixelSpace
+        let trailingInset = max(0, contentView.bounds.width - visibleRect.maxX) + PTChatConfig.share.userIconFixelSpace
         userIcon.snp.remakeConstraints { make in
             make.size.equalTo(PTChatConfig.share.messageUserIconSize)
             make.top.equalTo(messageTimeLabel.snp.bottom).offset(PTChatConfig.share.userIconTopSpacing)
-            make.rightOrLeftEqualToSuperView(belongToMe: cellModel.belongToMe, inset: PTChatConfig.share.userIconFixelSpace)
+            if cellModel.belongToMe {
+                make.right.equalToSuperview().inset(trailingInset)
+            } else {
+                make.left.equalToSuperview().offset(leadingInset)
+            }
         }
     }
     
@@ -177,13 +206,30 @@ open class PTChatBaseCell: PTBaseNormalCell {
     }
     
     private func setupReadStatusLabelConstraints(cellModel: PTChatListModel) {
+        let visibleRect = adaptiveVisibleRect()
+        let leadingInset = visibleRect.minX + PTChatBaseCell.dataContentUserIconInset
+        let trailingInset = max(0, contentView.bounds.width - visibleRect.maxX) + PTChatBaseCell.dataContentUserIconInset
         readStatusLabel.isSelected = cellModel.isRead
         readStatusLabel.titleLabel?.textAlignment = cellModel.belongToMe ? .right : .left
         readStatusLabel.snp.remakeConstraints { make in
             make.top.equalTo(dataContent.snp.bottom)
-            make.rightOrLeftEqualToSuperView(belongToMe: cellModel.belongToMe, inset: PTChatBaseCell.dataContentUserIconInset)
+            if cellModel.belongToMe {
+                make.right.equalToSuperview().inset(trailingInset)
+            } else {
+                make.left.equalToSuperview().offset(leadingInset)
+            }
             make.height.equalTo(PTChatConfig.share.showReadStatus ? (PTChatConfig.share.readStatusFont.pointSize + 10) : 0)
         }
+    }
+
+    // English: Resolve the cell-local visible pane and keep normal devices unchanged.
+    // Español: Resuelve el panel visible local de la celda y mantiene sin cambios los dispositivos normales.
+    // 中文：解析 Cell 的局部可视面板，普通设备仍保持原有布局。
+    private func adaptiveVisibleRect() -> CGRect {
+        guard !contentView.bounds.isEmpty else { return contentView.bounds }
+        let region = PTAdaptiveVisibleRegionResolver.region(for: contentView)
+        let visible = region.visibleRect.intersection(contentView.bounds)
+        return visible.isEmpty ? contentView.bounds : visible
     }
     
     private func setupWaitImageViewConstraints(cellModel: PTChatListModel) {

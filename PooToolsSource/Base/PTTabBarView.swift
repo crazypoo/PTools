@@ -166,6 +166,13 @@ final public class PTTabBarView: UIView {
         }
     }
 
+    private var glassSurfaceHeight: CGFloat {
+        if appearanceSnapshot.layout.tab26Mode {
+            return max(0, CGFloat.kTabbarHeight_Total - appearanceSnapshot.layout.tab26BottomSpacing)
+        }
+        return CGFloat.kTabbarHeight_Total
+    }
+
     // MARK: - Init
     public override init(frame: CGRect) {
         self.appearanceSnapshot = .legacyDefault
@@ -349,6 +356,13 @@ final public class PTTabBarView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         if usesGlassSurfaceContainer {
+            if adaptiveAxis == .verticalEdge, !bounds.isEmpty {
+                // English: A vertical rail needs a full-height glass surface so its items are not compressed into the classic bar height.
+                // Español: Una rail vertical necesita una superficie de vidrio de altura completa para no comprimir sus elementos.
+                // 中文：垂直 Rail 必须使用完整高度的玻璃背景，避免项目被压缩到传统 TabBar 高度。
+                glassBackgroundView.layer.cornerRadius = min(bounds.width, bounds.height) / 2
+                highlightLayer.cornerRadius = glassBackgroundView.layer.cornerRadius
+            }
             if highlightLayer.frame != glassBackgroundView.bounds {
                 highlightLayer.frame = glassBackgroundView.bounds
             }
@@ -468,6 +482,21 @@ final public class PTTabBarView: UIView {
     @MainActor
     private func applyAdaptiveAxisLayout() {
         let vertical = adaptiveAxis == .verticalEdge
+        if usesGlassSurfaceContainer, glassBackgroundView.superview != nil {
+            glassBackgroundView.snp.remakeConstraints { make in
+                if vertical {
+                    make.edges.equalToSuperview()
+                } else {
+                    make.top.equalToSuperview()
+                    if appearanceSnapshot.layout.tab26Mode {
+                        make.left.right.equalToSuperview().inset(appearanceSnapshot.layout.tabbarBar26LRSpacing)
+                    } else {
+                        make.left.right.equalToSuperview()
+                    }
+                    make.height.equalTo(glassSurfaceHeight)
+                }
+            }
+        }
         let stacks = [leftStackView, rightStackView]
         stacks.forEach {
             $0.axis = vertical ? .vertical : .horizontal

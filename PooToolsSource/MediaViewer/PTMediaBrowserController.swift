@@ -38,6 +38,7 @@ public class PTMediaBrowserController: PTBaseViewController {
     fileprivate var firstLoad:Bool = false
     fileprivate var hideToolBar:Bool = false
     fileprivate var currentIndex:Int = 0
+    private var lastAdaptiveContentLayoutSignature: String?
 
     fileprivate var actionSheetTitle:[String] = []
 
@@ -358,6 +359,26 @@ public class PTMediaBrowserController: PTBaseViewController {
 
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        guard !view.bounds.isEmpty else { return }
+        let region = PTAdaptiveVisibleRegionResolver.region(for: view)
+        let horizontalVisibleRect = CGRect(x: region.visibleRect.minX,
+                                            y: view.bounds.minY,
+                                            width: region.visibleRect.width,
+                                            height: view.bounds.height).intersection(view.bounds)
+        let visibleRect = horizontalVisibleRect.isEmpty ? view.bounds : horizontalVisibleRect
+        let layoutSignature = "\(region.signature)|\(visibleRect.integral)"
+        if layoutSignature != lastAdaptiveContentLayoutSignature {
+            lastAdaptiveContentLayoutSignature = layoutSignature
+            // English: Keep the paging container inside the local visible pane; overlays may still cover the full background.
+            // Español: Mantiene el contenedor paginado dentro del panel visible local; las capas superpuestas conservan el fondo completo.
+            // 中文：让分页容器位于局部可视面板内，覆盖层仍可保留完整背景。
+            newCollectionView.snp.remakeConstraints { make in
+                make.left.equalToSuperview().offset(visibleRect.minX)
+                make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
+                make.top.bottom.equalToSuperview()
+            }
+            newCollectionView.contentCollectionView.collectionViewLayout.invalidateLayout()
+        }
         // English: Re-resolve the bottom surface after safe-area or reserved-region changes.
         // Español: Vuelve a resolver la superficie inferior tras cambios del área segura o regiones reservadas.
         // 中文：安全区或保留区域变化后重新计算底部工具栏位置。
@@ -793,7 +814,13 @@ fileprivate extension PTMediaBrowserController {
     }
 
     func labelContentWidth() -> CGFloat {
-        let hostWidth = viewIfLoaded?.bounds.width ?? 320
+        let hostWidth: CGFloat
+        if bottomControl.bounds.width > 0 {
+            let region = PTAdaptiveVisibleRegionResolver.region(for: bottomControl)
+            hostWidth = region.visibleRect.width > 0 ? region.visibleRect.width : bottomControl.bounds.width
+        } else {
+            hostWidth = viewIfLoaded?.bounds.width ?? 320
+        }
         var labelW:CGFloat = hostWidth - PTAppBaseConfig.share.defaultViewSpace * 2
 
         guard viewConfig.actionType != .Empty else { return labelW }
