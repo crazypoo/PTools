@@ -47,6 +47,7 @@ public class PTDarkModeControl: PTListViewController {
     }()
     
     var mSections = [PTSection]()
+    private var lastAdaptiveLayoutSignature: String?
     
     public override func makeListViewConfiguration() -> PTCollectionViewConfig {
         let cConfig = PTCollectionViewConfig()
@@ -56,14 +57,18 @@ public class PTDarkModeControl: PTListViewController {
     }
 
     public override func configureListView(_ listView: PTCollectionView) {
-        listView.customerLayout = { sectionIndex,sectionModel in
+        listView.customerLayout = { [weak listView] _, sectionModel in
             var cellHeight:CGFloat = 0
             if deviceInfo.isPad {
                 cellHeight = 64
             } else {
                 cellHeight = 44.adapter
             }
-            return UICollectionView.girdCollectionLayout(data: sectionModel.rows,groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: cellHeight,cellRowCount: 1,originalX: PTAppBaseConfig.share.defaultViewSpace)
+            // English: Resolve the row width from the collection view that owns the layout.
+            // Español: Resuelve el ancho de la fila desde la collection view que posee el layout.
+            // 中文：从实际承载布局的 collection view 获取行宽，避免使用整机屏幕宽度。
+            let groupWidth = max(1, listView?.contentCollectionView.bounds.width ?? 1)
+            return UICollectionView.girdCollectionLayout(data: sectionModel.rows,groupWidth: groupWidth, itemHeight: cellHeight,cellRowCount: 1,originalX: PTAppBaseConfig.share.defaultViewSpace)
         }
         listView.headerInCollection = { [weak self] kind,collectionView,model,index in
             if let headerID = model.headerReuseID {
@@ -198,6 +203,45 @@ public class PTDarkModeControl: PTListViewController {
 
         themeProvider.register(observer: self)
         apply()
+    }
+
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard !view.bounds.isEmpty else { return }
+
+        let context = PTAdaptiveBarLayoutContext.make(for: view)
+        let region = PTAdaptiveVisibleRegionResolver.region(for: context)
+        let horizontalVisibleRect = CGRect(x: region.visibleRect.minX,
+                                            y: view.bounds.minY,
+                                            width: region.visibleRect.width,
+                                            height: view.bounds.height).intersection(view.bounds)
+        let hasSystemVerticalPane = context.verticalBarEdge != .unspecified || !region.reservedRects.isEmpty
+        let visibleRect = hasSystemVerticalPane && !horizontalVisibleRect.isEmpty ? horizontalVisibleRect : view.bounds
+        let signature = "\(region.signature)|\(hasSystemVerticalPane)|\(visibleRect.integral)"
+        guard signature != lastAdaptiveLayoutSignature else { return }
+        lastAdaptiveLayoutSignature = signature
+
+        if hasSystemVerticalPane {
+            // English: Keep the list inside the local usable pane while the controller background remains full bleed.
+            // Español: Mantiene la lista dentro del panel local utilizable y conserva el fondo a pantalla completa.
+            // 中文：列表只占用本地可用面板，控制器背景仍保持全屏铺开。
+            listView.snp.remakeConstraints { make in
+                make.left.equalToSuperview().offset(visibleRect.minX)
+                make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
+                make.top.bottom.equalToSuperview()
+            }
+            listView.contentCollectionView.collectionViewLayout.invalidateLayout()
+
+            // English: Re-read safe-area values after Duo reports its final geometry.
+            // Español: Vuelve a leer el área segura después de que Duo informe su geometría final.
+            // 中文：Duo 完成最终几何布局后重新读取安全区数值。
+            let collectionView = listView.contentCollectionView
+            var contentInset = collectionView.contentInset
+            contentInset.top = max(CGFloat.kNavBarHeight_Total, view.safeAreaInsets.top)
+            contentInset.bottom = max(CGFloat.kTabbarSaveAreaHeight, view.safeAreaInsets.bottom)
+            collectionView.contentInset = contentInset
+            collectionView.verticalScrollIndicatorInsets.bottom = contentInset.bottom
+        }
     }
     
     func showDetail() {

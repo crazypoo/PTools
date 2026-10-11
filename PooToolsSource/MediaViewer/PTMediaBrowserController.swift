@@ -17,6 +17,14 @@ let numberOfVisibleLines = 2
 @objcMembers
 public class PTMediaBrowserController: PTBaseViewController {
 
+    // English: MediaViewer owns the full-screen canvas so the iOS 27 vertical system rail cannot shrink paging cells.
+    // Español: MediaViewer controla el lienzo de pantalla completa para que la barra vertical de iOS 27 no reduzca las celdas paginadas.
+    // 中文：MediaViewer 使用完整屏幕画布，避免 iOS 27 系统纵向栏缩小分页 Cell 的宽度。
+    @available(iOS 27.1, *)
+    public override var preferredVerticalBarBehavior: UIVerticalBarBehavior {
+        .disabled
+    }
+
     ///界面消失后回调
     public var viewDismissBlock:PTActionTask?
 
@@ -360,23 +368,38 @@ public class PTMediaBrowserController: PTBaseViewController {
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         guard !view.bounds.isEmpty else { return }
-        let region = PTAdaptiveVisibleRegionResolver.region(for: view)
+        let context = PTAdaptiveBarLayoutContext.make(for: view)
+        let region = PTAdaptiveVisibleRegionResolver.region(for: context)
         let horizontalVisibleRect = CGRect(x: region.visibleRect.minX,
                                             y: view.bounds.minY,
                                             width: region.visibleRect.width,
                                             height: view.bounds.height).intersection(view.bounds)
-        let visibleRect = horizontalVisibleRect.isEmpty ? view.bounds : horizontalVisibleRect
-        let layoutSignature = "\(region.signature)|\(visibleRect.integral)"
+        let hasSystemVerticalPane = context.verticalBarEdge != .unspecified || !region.reservedRects.isEmpty
+        let visibleRect: CGRect
+        if hasSystemVerticalPane {
+            // English: Media is a full-bleed surface on Duo; only foreground controls avoid the reserved rail.
+            // Español: El multimedia ocupa toda la superficie en Duo; solo los controles en primer plano evitan la rail reservada.
+            // 中文：Duo 上媒体内容使用全屏铺底，只有前景操作控件避开系统保留栏。
+            visibleRect = view.bounds
+        } else {
+            visibleRect = horizontalVisibleRect.isEmpty ? view.bounds : horizontalVisibleRect
+        }
+        let layoutSignature = "\(region.signature)|\(hasSystemVerticalPane)|\(visibleRect.integral)"
         if layoutSignature != lastAdaptiveContentLayoutSignature {
             lastAdaptiveContentLayoutSignature = layoutSignature
-            // English: Keep the paging container inside the local visible pane; overlays may still cover the full background.
-            // Español: Mantiene el contenedor paginado dentro del panel visible local; las capas superpuestas conservan el fondo completo.
-            // 中文：让分页容器位于局部可视面板内，覆盖层仍可保留完整背景。
+            // English: Keep normal paging behavior while allowing Duo media to fill the host bounds.
+            // Español: Conserva el paginado normal y permite que el multimedia Duo llene los límites del host.
+            // 中文：普通设备保持原分页行为，Duo 媒体允许铺满宿主边界。
             newCollectionView.snp.remakeConstraints { make in
                 make.left.equalToSuperview().offset(visibleRect.minX)
                 make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
                 make.top.bottom.equalToSuperview()
             }
+            // English: Resolve the new host frame before invalidating the custom page geometry.
+            // Español: Resuelve el nuevo frame del host antes de invalidar la geometría personalizada de las páginas.
+            // 中文：先解析新的宿主 frame，再让自定义分页几何失效，避免沿用旧面板宽度。
+            view.layoutIfNeeded()
+            newCollectionView.clearLayoutCaches()
             newCollectionView.contentCollectionView.collectionViewLayout.invalidateLayout()
         }
         // English: Re-resolve the bottom surface after safe-area or reserved-region changes.

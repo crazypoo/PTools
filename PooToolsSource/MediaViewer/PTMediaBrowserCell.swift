@@ -189,18 +189,28 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         updateAdaptiveViewportLayout()
     }
 
-    // English: Keep media and overlay controls inside the host's horizontal visible pane after Duo resizing.
-    // Español: Mantiene el contenido multimedia y los controles dentro del panel horizontal visible tras un cambio de tamaño Duo.
-    // 中文：Duo 尺寸变化后，让媒体内容和覆盖控件保持在宿主的水平可视面板内。
+    // English: Use the full host for Duo media while keeping the legacy visible-pane behavior elsewhere.
+    // Español: Usa todo el host para el multimedia Duo y conserva el panel visible heredado en los demás casos.
+    // 中文：Duo 媒体使用完整宿主区域，其他设备继续使用原有可视面板逻辑。
     private func updateAdaptiveViewportLayout() {
         guard !contentView.bounds.isEmpty else { return }
-        let region = PTAdaptiveVisibleRegionResolver.region(for: contentView)
+        let context = PTAdaptiveBarLayoutContext.make(for: contentView)
+        let region = PTAdaptiveVisibleRegionResolver.region(for: context)
         let horizontalRect = CGRect(x: region.visibleRect.minX,
                                     y: contentView.bounds.minY,
                                     width: region.visibleRect.width,
                                     height: contentView.bounds.height).intersection(contentView.bounds)
-        let visibleRect = horizontalRect.isEmpty ? contentView.bounds : horizontalRect
-        let signature = "\(region.signature)|\(visibleRect.integral)"
+        let hasSystemVerticalPane = context.verticalBarEdge != .unspecified || !region.reservedRects.isEmpty
+        let visibleRect: CGRect
+        if hasSystemVerticalPane {
+            // English: The media viewport may render beneath the system rail; play and loading states share it.
+            // Español: El viewport multimedia puede dibujarse bajo la rail del sistema; reproducción y carga comparten el mismo espacio.
+            // 中文：媒体视口允许铺到系统保留栏下方，播放和加载状态共用同一完整区域。
+            visibleRect = contentView.bounds
+        } else {
+            visibleRect = horizontalRect.isEmpty ? contentView.bounds : horizontalRect
+        }
+        let signature = "\(region.signature)|\(hasSystemVerticalPane)|\(visibleRect.integral)"
         guard signature != lastAdaptiveViewportSignature else { return }
         lastAdaptiveViewportSignature = signature
 

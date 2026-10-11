@@ -118,13 +118,10 @@ class PTDarkModeHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryR
     override init(frame: CGRect) {
         super.init(frame: frame)
                 
-        let screenW:CGFloat = CGFloat.kSCREEN_WIDTH
-
         addSubviews([contentView])
         contentView.snp.makeConstraints { make in
             make.bottom.equalToSuperview()
-            make.width.equalTo(screenW - PTAppBaseConfig.share.defaultViewSpace * 2)
-            make.centerX.equalToSuperview()
+            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(10)
         }
         contentView.viewCornerRectCorner(topLeft: 5,topRight: 5, corner: [.topLeft,.topRight])
