@@ -1040,7 +1040,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInva
 
         view.addSubviews([imageContent,playContent,bottomContent,timeLineContent])
         imageContent.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(10)
             make.left.right.equalToSuperview()
             make.height.equalTo(self.imageContent.snp.width)
         }
@@ -1071,7 +1071,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInva
         bottomContent.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(60)
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
         PTGCDManager.shared.delayOnMain(time: 0.35) {
@@ -1188,7 +1188,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInva
         timeLineScroll.addSubview(timeLineView)
         timeLineView.snp.makeConstraints { make in
             make.height.equalTo(64)
-            make.width.equalTo(CGFloat.kSCREEN_WIDTH)
+            make.width.equalTo(self.timeLineContent.snp.width)
             make.centerY.centerX.equalTo(timeLineScroll)
         }
         

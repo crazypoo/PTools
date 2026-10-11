@@ -79,6 +79,19 @@ public struct CountdownItem<T: Sendable> : Sendable{
     let end: TimeInterval
 }
 
+// English: Notify the launch-ad owner when the host's local geometry changes.
+// Español: Notifica al propietario del anuncio cuando cambia la geometría local del host.
+// 中文：宿主局部几何变化时通知启动广告管理器重新定位控件。
+@MainActor
+private final class PTLaunchAdContentView: UIView {
+    var layoutHandler: (() -> Void)?
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layoutHandler?()
+    }
+}
+
 /*
  启动页面广告管理器 (优化版)
  针对冷启动场景优化了内存释放与渲染性能
@@ -148,9 +161,18 @@ public class PTLaunchAdMonitor: NSObject {
     private var currentAdIndex = -1
     private var hasInstalledActionHandlers = false
     
-    private lazy var contentView: UIView = {
-        let view = UIView()
+    private var preferredSkipWidth: CGFloat = 44
+    private var skipPlacementSignature: String?
+    private var companyPlacementSignature: String?
+    private var isUpdatingSkipPlacement = false
+
+    private lazy var contentView: PTLaunchAdContentView = {
+        let view = PTLaunchAdContentView()
         view.backgroundColor = .lightGray
+        view.layoutHandler = { [weak self] in
+            self?.updateSkipButtonPlacement()
+            self?.updateCompanyLabelPlacement()
+        }
         return view
     }()
 
@@ -232,16 +254,11 @@ public class PTLaunchAdMonitor: NSObject {
         }
         
         let comLabelExists = !ltdString.stringIsEmpty()
-        let device = UIDevice.current
         bottomViewHeight = 0
         
         if comLabelExists {
-            switch device.orientation {
-            case .landscapeLeft, .landscapeRight:
-                bottomViewHeight = 50
-            default:
-                bottomViewHeight = 100
-            }
+            let hostSize = hostView?.bounds.size ?? .zero
+            bottomViewHeight = hostSize.width > hostSize.height && hostSize.width > 0 ? 50 : 100
             
             if companyLabel.superview !== contentView {
                 contentView.addSubview(companyLabel)
@@ -254,7 +271,10 @@ public class PTLaunchAdMonitor: NSObject {
                 make.left.right.bottom.equalToSuperview()
                 make.height.equalTo(bottomViewHeight)
             }
+            companyPlacementSignature = nil
+            updateCompanyLabelPlacement()
         } else {
+            companyPlacementSignature = nil
             companyLabel.removeFromSuperview()
         }
         
@@ -280,15 +300,59 @@ public class PTLaunchAdMonitor: NSObject {
         
         skipButton.snp.remakeConstraints { make in
             make.height.equalTo(self.baseSkipButtonSize)
-            make.width.equalTo(self.baseSkipButtonSize)
-            make.right.equalToSuperview().inset(10)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+            make.width.equalTo(self.preferredSkipWidth)
+            make.left.top.equalToSuperview()
         }
         
         self.skipButton.layoutIfNeeded()
         self.skipButton.viewCorner(radius: baseSkipButtonSize / 2,capsule: true)
         contentView.layoutIfNeeded()
+        updateSkipButtonPlacement()
         self.playerLayer.frame = self.loadImageView.frame
+    }
+
+    // English: Place Skip inside the current host-local visible region, including active reserved areas.
+    // Español: Coloca Skip dentro de la región visible local actual, incluidas las áreas reservadas activas.
+    // 中文：根据当前宿主局部可视区域和活动保留区放置 Skip 按钮。
+    private func updateSkipButtonPlacement() {
+        guard !isUpdatingSkipPlacement, contentView.bounds.width > 0, contentView.bounds.height > 0 else { return }
+        let region = PTAdaptiveVisibleRegionResolver.region(for: contentView, minimumMargin: 4)
+        let size = CGSize(width: max(baseSkipButtonSize, preferredSkipWidth), height: baseSkipButtonSize)
+        let frame = PTAdaptiveVisibleRegionResolver.controlFrame(size: size,
+                                                                 in: region,
+                                                                 preferred: region.visibleRect.maxX >= contentView.bounds.midX ? .trailing : .leading,
+                                                                 margin: 10)
+        guard !frame.isEmpty else { return }
+        let signature = region.signature + "|\(frame.integral)"
+        guard signature != skipPlacementSignature else { return }
+
+        isUpdatingSkipPlacement = true
+        skipPlacementSignature = signature
+        skipButton.snp.remakeConstraints { make in
+            make.left.equalToSuperview().offset(frame.minX)
+            make.top.equalToSuperview().offset(frame.minY)
+            make.width.equalTo(frame.width)
+            make.height.equalTo(frame.height)
+        }
+        isUpdatingSkipPlacement = false
+    }
+
+    // English: Keep the optional copyright label above the host's bottom safe area.
+    // Español: Mantiene la etiqueta opcional de copyright por encima del área segura inferior del host.
+    // 中文：让可选版权标签始终位于宿主底部安全区之上。
+    private func updateCompanyLabelPlacement() {
+        guard companyLabel.superview === contentView,
+              contentView.bounds.width > 0,
+              contentView.bounds.height > 0 else { return }
+        let bottomInset = max(0, contentView.safeAreaInsets.bottom)
+        let signature = "\(contentView.bounds.integral)|\(bottomInset)|\(bottomViewHeight)"
+        guard signature != companyPlacementSignature else { return }
+        companyPlacementSignature = signature
+        companyLabel.snp.remakeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.bottom.equalTo(contentView.safeAreaLayoutGuide.snp.bottom)
+            make.height.equalTo(bottomViewHeight)
+        }
     }
     
     private func resetSkipWidth() {
@@ -296,9 +360,9 @@ public class PTLaunchAdMonitor: NSObject {
         if baseSkipButtonSize > buttonWidth {
             buttonWidth = baseSkipButtonSize
         }
-        skipButton.snp.updateConstraints { make in
-            make.width.equalTo(buttonWidth)
-        }
+        preferredSkipWidth = buttonWidth
+        skipPlacementSignature = nil
+        updateSkipButtonPlacement()
     }
     
     // MARK: - 私有方法：启动广告序列

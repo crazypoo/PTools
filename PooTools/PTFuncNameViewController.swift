@@ -551,7 +551,10 @@ class PTFuncNameViewController: PTBaseViewController {
         setCustomRightButtons(buttons: [more])
         
         var config = PTBadgeConfiguration()
-        config.centerOffset = CGPointMake(20, 0)
+        // English: Use the new host-local anchor for the Duo regression demo.
+        // Español: Usa el nuevo anclaje local del host para la demostración de regresión Duo.
+        // 中文：Duo 回归 Demo 使用新的宿主局部锚点。
+        config.anchor = .topTrailing
         config.bgColor = .systemBlue
         config.canDragToDelete = true
         more.badgeConfig = config

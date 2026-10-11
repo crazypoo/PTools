@@ -155,6 +155,40 @@ final class PTAdaptiveBarLayoutTests: XCTestCase {
         XCTAssertGreaterThan(classic.tabItemsRect.width, classic.tabItemsRect.height)
     }
 
+    func testVisibleRegionMovesControlsAwayFromActiveOcclusion() {
+        let occlusion = PTAdaptiveReservedRegion(frame: CGRect(x: 320, y: 0, width: 70, height: 844),
+                                                  margins: .zero,
+                                                  kind: .occlusion,
+                                                  isActive: true)
+        let region = PTAdaptiveVisibleRegionResolver.region(
+            for: context(bounds: CGRect(x: 0, y: 0, width: 390, height: 844),
+                          insets: UIEdgeInsets(top: 44, left: 0, bottom: 34, right: 0),
+                          regions: [occlusion]),
+            minimumMargin: 4
+        )
+        let frame = PTAdaptiveVisibleRegionResolver.controlFrame(size: CGSize(width: 80, height: 44),
+                                                                  in: region,
+                                                                  preferred: .trailing,
+                                                                  margin: 4)
+
+        XCTAssertFalse(frame.intersects(occlusion.frame))
+        XCTAssertGreaterThanOrEqual(frame.minX, 4)
+        XCTAssertLessThanOrEqual(frame.maxX, 320)
+    }
+
+    func testVisibleRegionUsesLargestPaneAcrossDivision() {
+        let division = PTAdaptiveReservedRegion(frame: CGRect(x: 0, y: 400, width: 390, height: 44),
+                                                  kind: .division,
+                                                  isActive: true)
+        let region = PTAdaptiveVisibleRegionResolver.region(
+            for: context(bounds: CGRect(x: 0, y: 0, width: 390, height: 844),
+                          regions: [division])
+        )
+
+        XCTAssertEqual(region.visibleRect.minY, 0)
+        XCTAssertEqual(region.visibleRect.maxY, 400)
+    }
+
     func testAccessoryDoesNotBlockScrollOrInput() {
         let geometry = PTAdaptiveBarLayoutResolver.resolve(context: context(),
                                                             configuration: .init(),

@@ -379,7 +379,7 @@ class PTCutViewController: PTBaseViewController {
         
         bottomToolView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
             make.height.equalTo(54)
         }
         

@@ -110,6 +110,7 @@ public class PTCollectionView: UIView {
     var lastPrefetchItemCount: Int?
     var indexPanGesture: UIPanGestureRecognizer?
     private var lastLayoutBoundsSize: CGSize = .zero
+    var indexLayoutSignature: String?
     // English: Invalidate every geometry cache when a runtime layout contract changes.
     // Español: Invalida todas las cachés geométricas cuando cambia el contrato de layout en tiempo de ejecución.
     // 中文：运行时布局契约变化时使全部几何缓存失效。
@@ -407,6 +408,7 @@ public class PTCollectionView: UIView {
             // 中文：仅在真实容器尺寸变化时重新生成自定义布局分组。
             collectionView.collectionViewLayout.invalidateLayout()
         }
+        updateIndexPlacementIfNeeded()
         updateSkeletonLayout()
     }
 
@@ -1416,18 +1418,17 @@ extension PTCollectionView {
         let footerSpacing = sectionModel.layoutConfiguration?.footerSpacing ?? 0
         
         if !(sectionModel.headerReuseID ?? "").stringIsEmpty() {
-            let headerWidth = max(1, screenWidth - viewConfig.headerWidthOffset - sectionWidth)
             let headerSize = NSCollectionLayoutSize(
-                widthDimension: .absolute(headerWidth),
+                widthDimension: .fractionalWidth(1),
                 heightDimension: .absolute(sectionModel.headerHeight ?? .leastNormalMagnitude)
             )
             
             let headerItem = NSCollectionLayoutBoundarySupplementaryItem(
                 layoutSize: headerSize,
                 elementKind: UICollectionView.elementKindSectionHeader,
-                alignment: .topTrailing,
-                absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading,
-                                        y: viewConfig.decorationItemsEdges.top + headerSpacing + (sectionModel.headerHeight ?? .leastNormalMagnitude))
+                alignment: .top,
+                absoluteOffset: CGPoint(x: 0,
+                                        y: viewConfig.decorationItemsEdges.top + headerSpacing)
             )
             headerItem.contentInsets = .zero
             headerItem.pinToVisibleBounds = viewConfig.pinHeaderToVisibleBounds
@@ -1435,9 +1436,8 @@ extension PTCollectionView {
         }
         
         if !(sectionModel.footerReuseID ?? "").stringIsEmpty() {
-            let footerWidth = max(1, screenWidth - viewConfig.footerWidthOffset - sectionWidth)
             let footerSize = NSCollectionLayoutSize(
-                widthDimension: .absolute(footerWidth),
+                widthDimension: .fractionalWidth(1),
                 heightDimension: .absolute(sectionModel.footerHeight ?? .leastNormalMagnitude)
             )
 
@@ -1445,7 +1445,7 @@ extension PTCollectionView {
                 layoutSize: footerSize,
                 elementKind: UICollectionView.elementKindSectionFooter,
                 alignment: .bottom,
-                absoluteOffset: CGPoint(x: -viewConfig.decorationItemsEdges.leading, y: footerSpacing)
+                absoluteOffset: CGPoint(x: 0, y: -footerSpacing)
             )
             footerItem.pinToVisibleBounds = viewConfig.pinFooterToVisibleBounds
             supplementaryItems.append(footerItem)

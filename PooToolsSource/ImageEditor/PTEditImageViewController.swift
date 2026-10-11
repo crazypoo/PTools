@@ -726,7 +726,7 @@ public class PTEditImageViewController: PTBaseViewController {
         
         toolCollectionView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.height.equalTo(self.toolCollectionHeight)
         }
         
@@ -738,7 +738,7 @@ public class PTEditImageViewController: PTBaseViewController {
             make.width.equalTo(stringW)
             make.height.equalTo(ashBinViewHeight)
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarHeight_Total + 100)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(CGFloat.kTabbarHeight + 100)
         }
         
         let asbinTipLabel = UILabel()
@@ -1018,7 +1018,7 @@ extension PTEditImageViewController {
             drawDismissButton.snp.makeConstraints { make in
                 make.size.equalTo(PTAppBaseConfig.share.navBarButtonSize)
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (CGFloat.kNavBarHeight - PTAppBaseConfig.share.navBarButtonSize) / 2)
+                make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset((CGFloat.kNavBarHeight - PTAppBaseConfig.share.navBarButtonSize) / 2)
             }
             drawBar.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()

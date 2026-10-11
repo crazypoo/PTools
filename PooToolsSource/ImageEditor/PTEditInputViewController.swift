@@ -210,12 +210,12 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
         textView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             textViewHeightConstraint = make.height.equalTo(200).constraint
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(10)
         }
         
         toolView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            toolViewBottomConstraint = make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight).constraint
+            toolViewBottomConstraint = make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).constraint
             make.height.equalTo(54)
         }
         toolView.addSubviews([textStyleBtn,drawColorButton])
@@ -380,7 +380,7 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
     }
     
     @objc private func keyboardWillHide(_ notify: Notification) {
-        updateKeyboardLayout(bottomInset: CGFloat.kTabbarSaveAreaHeight,
+        updateKeyboardLayout(bottomInset: defaultBottomInset,
                              duration: animationDuration(from: notify))
     }
 
@@ -389,15 +389,23 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
     // 中文：先把键盘区域转换到当前控制器坐标系，再更新约束，避免直接修改受 SnapKit 管理的 frame。
     private func keyboardBottomInset(from notification: Notification) -> CGFloat {
         guard let value = notification.userInfo?[UIApplication.keyboardFrameEndUserInfoKey] as? NSValue else {
-            return CGFloat.kTabbarSaveAreaHeight
+            return defaultBottomInset
         }
         let keyboardFrame = view.convert(value.cgRectValue, from: nil)
         guard keyboardFrame.isNull == false,
               keyboardFrame.isInfinite == false,
               keyboardFrame.intersects(view.bounds) else {
-            return CGFloat.kTabbarSaveAreaHeight
+            return defaultBottomInset
         }
-        return max(CGFloat.kTabbarSaveAreaHeight, view.bounds.maxY - keyboardFrame.minY)
+        return max(defaultBottomInset, view.bounds.maxY - keyboardFrame.minY)
+    }
+
+    // English: Prefer the controller's current safe area and use the legacy inset only before UIKit has laid it out.
+    // Español: Prefiere el área segura actual del controlador y usa el inset heredado solo antes del layout de UIKit.
+    // 中文：优先使用当前控制器安全区，仅在 UIKit 尚未完成布局时回退到旧 inset。
+    private var defaultBottomInset: CGFloat {
+        let safeInset = view.safeAreaInsets.bottom
+        return safeInset.isFinite && safeInset > 0 ? safeInset : CGFloat.kTabbarSaveAreaHeight
     }
 
     // English: Update the stored constraints instead of fighting Auto Layout with frame mutations.
@@ -405,7 +413,7 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
     // 中文：更新已保存的约束，而不是直接修改 frame 与 Auto Layout 发生冲突。
     private func updateKeyboardLayout(bottomInset: CGFloat, duration: TimeInterval) {
         guard view.bounds.width > 0, view.bounds.height > 0 else { return }
-        let safeInset = max(0, bottomInset.isFinite ? bottomInset : CGFloat.kTabbarSaveAreaHeight)
+        let safeInset = max(0, bottomInset.isFinite ? bottomInset : defaultBottomInset)
         let textTop = textView.frame.minY
         let targetToolMinY = view.bounds.maxY - safeInset - Self.toolViewHeight
         let targetTextHeight = max(1, targetToolMinY - textTop - 20)

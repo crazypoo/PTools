@@ -247,6 +247,14 @@ public final class PTNavigationBarManager:NSObject {
         return edge == .leading || edge == .trailing
     }
 
+    // English: Expose the renderer ownership decision to scroll-view adapters without duplicating Duo checks.
+    // Español: Expone la decisión del propietario del renderizador a los adaptadores de scroll sin duplicar comprobaciones de Duo.
+    // 中文：向滚动视图适配层提供 Bar 所有权判断，避免重复实现 Duo 检测。
+    func isSystemVerticalBarOwned(by navigationController: UINavigationController?) -> Bool {
+        guard let navigationController else { return false }
+        return usesNativeVerticalBar(navigationController)
+    }
+
     private func setCustomContainer(_ container: PTNavigationBarContainer?, visible: Bool) {
         container?.isHidden = !visible
         container?.isUserInteractionEnabled = visible
@@ -771,6 +779,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         }
 
         if let configurable = viewController as? PTNavigationConfigurable {
+            navigationController.navigationBar.prefersLargeTitles = configurable.prefersLargeTitle()
             navigationItem.largeTitleDisplayMode = configurable.prefersLargeTitle() ? .always : .never
         }
         PTAdaptiveSystemBarBridge.apply(policy: (navigationController as? PTBaseNavControl)?.adaptiveBarPresentationPolicy

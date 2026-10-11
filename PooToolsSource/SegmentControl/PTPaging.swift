@@ -176,6 +176,8 @@ open class PTPagingView: UIView, UIScrollViewDelegate {
     private var headerHeight: CGFloat = 0
     private var currentCollapseProgress: CGFloat = 0
     private var isUpdatingLayout = false
+    private var visibleRegionSignature: String?
+    private var visibleContentRect: CGRect = .zero
 
     public init(pageContainer: PTPageContainer = PTPageContainer(frame: .zero)) {
         self.pageContainer = pageContainer
@@ -218,19 +220,28 @@ open class PTPagingView: UIView, UIScrollViewDelegate {
         guard !isUpdatingLayout else { return }
         isUpdatingLayout = true
         outerScrollView.frame = bounds
-        headerHeight = resolvedHeaderHeight()
+        let visibleRegionContext = PTAdaptiveVisibleRegionResolver.region(for: self)
+        let visibleRegion = visibleRegionContext.visibleRect
+        visibleContentRect = visibleRegion
+        headerHeight = resolvedHeaderHeight(width: visibleRegion.width)
         let pinnedHeight = pinnedConfiguration?.height ?? 0
-        headerHost.frame = CGRect(x: 0, y: 0, width: bounds.width, height: headerHeight)
+        visibleRegionSignature = visibleRegionContext.signature
+        headerHost.frame = CGRect(x: visibleRegion.minX,
+                                  y: visibleRegion.minY,
+                                  width: visibleRegion.width,
+                                  height: headerHeight)
         headerHost.subviews.first?.frame = headerHost.bounds
-        pageContainer.frame = CGRect(x: 0,
-                                     y: headerHeight + pinnedHeight,
-                                     width: bounds.width,
-                                     height: bounds.height)
-        outerScrollView.contentSize = CGSize(width: bounds.width,
-                                             height: headerHeight + pinnedHeight + bounds.height)
-        pinnedHeaderHost.frame = CGRect(x: 0,
-                                        y: safeAreaInsets.top,
-                                        width: bounds.width,
+        let pageY = visibleRegion.minY + headerHeight + pinnedHeight
+        let pageHeight = max(0, visibleRegion.maxY - pageY)
+        pageContainer.frame = CGRect(x: visibleRegion.minX,
+                                     y: pageY,
+                                     width: visibleRegion.width,
+                                     height: pageHeight)
+        outerScrollView.contentSize = CGSize(width: max(bounds.width, visibleRegion.maxX),
+                                             height: max(bounds.height, visibleRegion.maxY))
+        pinnedHeaderHost.frame = CGRect(x: visibleRegion.minX,
+                                        y: visibleRegion.minY,
+                                        width: visibleRegion.width,
                                         height: pinnedHeight)
         pinnedHeaderHost.subviews.first?.frame = pinnedHeaderHost.bounds
         nestedScrollCoordinator.collapseLimit = headerHeight
@@ -283,15 +294,15 @@ open class PTPagingView: UIView, UIScrollViewDelegate {
         }
     }
 
-    private func resolvedHeaderHeight() -> CGFloat {
+    private func resolvedHeaderHeight(width: CGFloat) -> CGFloat {
         guard let header = headerConfiguration else { return 0 }
         switch header.height {
         case .fixed(let height):
             return max(0, height)
         case .custom(let resolver):
-            return max(0, resolver(bounds.width))
+            return max(0, resolver(width))
         case .automatic:
-            let fitting = headerHost.systemLayoutSizeFitting(CGSize(width: bounds.width,
+            let fitting = headerHost.systemLayoutSizeFitting(CGSize(width: width,
                                                                     height: UIView.layoutFittingCompressedSize.height),
                                                              withHorizontalFittingPriority: .required,
                                                              verticalFittingPriority: .fittingSizeLevel)
@@ -332,8 +343,11 @@ open class PTPagingView: UIView, UIScrollViewDelegate {
         let pinnedHeight = pinnedConfiguration?.height ?? 0
         // 初始：Header 下方
         // Header 收起后：固定在顶部
-        let y = safeAreaInsets.top + max(0, headerHeight - clampedOffset)
-        pinnedHeaderHost.frame = CGRect(x: 0, y: y, width: bounds.width, height: pinnedHeight)
+        let y = visibleContentRect.minY + max(0, headerHeight - clampedOffset)
+        pinnedHeaderHost.frame = CGRect(x: visibleContentRect.minX,
+                                        y: y,
+                                        width: visibleContentRect.width,
+                                        height: pinnedHeight)
         pinnedHeaderHost.subviews.first?.frame = pinnedHeaderHost.bounds
         onCollapseProgress?(progress)
     }

@@ -99,9 +99,9 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
         self.view.backgroundColor = .black
         self.view.addSubview(self.cropView)
         self.cropView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(10)
             make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-10)
         }
 
         Task { @MainActor in

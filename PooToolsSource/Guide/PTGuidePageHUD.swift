@@ -80,6 +80,9 @@ public class PTGuidePageHUD: UIView {
     fileprivate var imageArray: [Any]?
     fileprivate var imagePageControl: UIView?
     fileprivate var player = AVPlayerViewController()
+    private var contentImageViews: [UIImageView] = []
+    private var pageLayoutSignature: String?
+    private var isUpdatingPageLayout = false
     
     // 记录右滑跳过的状态
     fileprivate var isSlidingOut: Bool = false
@@ -157,7 +160,7 @@ public class PTGuidePageHUD: UIView {
 fileprivate extension PTGuidePageHUD {
     
     func setupViews() {
-        guidePageView.contentSize = CGSize(width: CGFloat.kSCREEN_WIDTH * CGFloat(viewModel.imageArrays.count), height: CGFloat.kSCREEN_HEIGHT)
+        guidePageView.contentSize = .zero
         addSubviews([guidePageView, skipButton])
         
         guidePageView.snp.makeConstraints { make in
@@ -202,7 +205,7 @@ fileprivate extension PTGuidePageHUD {
             make.width.equalTo(movieStartButton.sizeFor(height: 50).width + 10)
             make.height.equalTo(50)
             make.centerX.equalTo(self.player.view)
-            make.bottom.equalTo(self.player.view).inset(CGFloat.kTabbarSaveAreaHeight + 20)
+            make.bottom.equalTo(self.player.view.safeAreaLayoutGuide.snp.bottom).offset(-20)
         }
     }
     
@@ -217,8 +220,7 @@ fileprivate extension PTGuidePageHUD {
         skipButton.snp.makeConstraints { make in
             make.width.equalTo(skipButtonWidth)
             make.height.equalTo(44)
-            make.right.equalToSuperview().inset(10)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 10)
+            make.left.top.equalToSuperview()
         }
         
         skipButton.isHidden = !viewModel.skipShow
@@ -249,13 +251,13 @@ fileprivate extension PTGuidePageHUD {
         
         forwardButton.snp.makeConstraints { make in
             make.width.height.equalTo(44)
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).offset(-10)
+            make.left.equalTo(self.safeAreaLayoutGuide.snp.left).offset(PTAppBaseConfig.share.defaultViewSpace)
         }
         
         nextButton.snp.makeConstraints { make in
             make.width.height.bottom.equalTo(self.forwardButton)
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.right.equalTo(self.safeAreaLayoutGuide.snp.right).inset(PTAppBaseConfig.share.defaultViewSpace)
         }
 
         if let control = imagePageControl {
@@ -274,11 +276,13 @@ fileprivate extension PTGuidePageHUD {
             imageView.contentMode = .scaleAspectFit
             imageView.loadImage(contentData: value, iCloudDocumentName: viewModel.iCloudDocumentName)
             guidePageView.addSubview(imageView)
+            contentImageViews.append(imageView)
             
             imageView.snp.makeConstraints { make in
-                make.width.equalTo(CGFloat.kSCREEN_WIDTH)
-                make.height.equalTo(CGFloat.kSCREEN_HEIGHT)
-                make.left.equalToSuperview().inset(CGFloat.kSCREEN_WIDTH * CGFloat(index))
+                make.top.equalToSuperview()
+                make.width.equalTo(1)
+                make.height.equalTo(1)
+                make.left.equalToSuperview()
             }
             
             if index == (viewModel.imageArrays.count - 1) && !viewModel.tapHidden {
@@ -356,6 +360,75 @@ fileprivate extension PTGuidePageHUD {
             forwardButton.isUserInteractionEnabled = false
         }
     }
+
+    // English: Recalculate pages and controls from the actual HUD bounds after folding, rotation, or safe-area changes.
+    // Español: Recalcula páginas y controles usando los bounds reales tras plegado, rotación o cambios del área segura.
+    // 中文：在折叠、旋转或安全区变化后，根据 HUD 实际 bounds 重新计算页面和控件。
+    private func updatePageLayoutIfNeeded() {
+        guard !isUpdatingPageLayout,
+              bounds.width > 0,
+              bounds.height > 0 else { return }
+
+        let pageWidth = guidePageView.bounds.width
+        let pageHeight = guidePageView.bounds.height
+        guard pageWidth > 0, pageHeight > 0 else { return }
+
+        let region = PTAdaptiveVisibleRegionResolver.region(for: self, minimumMargin: 4)
+        let signature = region.signature + "|\(pageWidth)|\(pageHeight)|\(contentImageViews.count)"
+        guard signature != pageLayoutSignature else { return }
+
+        isUpdatingPageLayout = true
+        let currentPage = pageWidth > 0
+            ? min(max(Int((guidePageView.contentOffset.x / pageWidth).rounded()), 0), max(0, contentImageViews.count - 1))
+            : 0
+        guidePageView.contentSize = CGSize(width: pageWidth * CGFloat(contentImageViews.count), height: pageHeight)
+        for (index, imageView) in contentImageViews.enumerated() {
+            imageView.snp.updateConstraints { make in
+                make.top.equalToSuperview()
+                make.left.equalToSuperview().offset(pageWidth * CGFloat(index))
+                make.width.equalTo(pageWidth)
+                make.height.equalTo(pageHeight)
+            }
+        }
+
+        let visibleRect = region.visibleRect
+        skipButton.snp.remakeConstraints { make in
+            let frame = PTAdaptiveVisibleRegionResolver.controlFrame(size: CGSize(width: skipButtonWidth(), height: 44),
+                                                                     in: region,
+                                                                     preferred: .trailing,
+                                                                     margin: 10)
+            make.left.equalToSuperview().offset(frame.minX)
+            make.top.equalToSuperview().offset(frame.minY)
+            make.width.equalTo(frame.width)
+            make.height.equalTo(frame.height)
+        }
+        forwardButton.snp.remakeConstraints { make in
+            make.width.height.equalTo(44)
+            make.left.equalToSuperview().offset(visibleRect.minX + PTAppBaseConfig.share.defaultViewSpace)
+            make.bottom.equalToSuperview().offset(-(bounds.height - visibleRect.maxY + 10))
+        }
+        nextButton.snp.remakeConstraints { make in
+            make.width.height.equalTo(44)
+            make.right.equalToSuperview().offset(-(bounds.width - visibleRect.maxX + PTAppBaseConfig.share.defaultViewSpace))
+            make.bottom.equalTo(forwardButton)
+        }
+        if let control = imagePageControl {
+            control.snp.remakeConstraints { make in
+                make.height.equalTo(20)
+                make.centerY.equalTo(forwardButton)
+                make.left.equalTo(forwardButton.snp.right).offset(10)
+                make.right.equalTo(nextButton.snp.left).offset(-10)
+            }
+        }
+        guidePageView.layoutIfNeeded()
+        guidePageView.setContentOffset(CGPoint(x: pageWidth * CGFloat(currentPage), y: 0), animated: false)
+        pageLayoutSignature = signature
+        isUpdatingPageLayout = false
+    }
+
+    private func skipButtonWidth() -> CGFloat {
+        max(44, UIView.sizeFor(string: viewModel.skipName, font: viewModel.skipFont, height: 44).width + 25)
+    }
 }
 
 // MARK: - Actions & Public Methods
@@ -407,6 +480,19 @@ extension PTGuidePageHUD {
             forwardButton.isHidden = true
             forwardButton.isUserInteractionEnabled = false
         }
+    }
+}
+
+extension PTGuidePageHUD {
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        updatePageLayoutIfNeeded()
+    }
+
+    public override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        pageLayoutSignature = nil
+        setNeedsLayout()
     }
 }
 

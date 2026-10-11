@@ -77,8 +77,8 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         let tempImageW = safeSize.width
         var tempImageH = safeSize.height
         
-        let orientation = UIDevice.current.orientation
-        if orientation.isLandscape {
+        let isLandscape = bounds.width > bounds.height
+        if isLandscape {
             if tempImageH > self.frame.size.height {
                 tempImageH = tempImageH > (tempImageW * 1.5) ? (tempImageW * 1.5) : tempImageH
                 if abs(tempImageY) > tempImageH {
@@ -673,7 +673,7 @@ extension PTMediaBrowserCell {
         bringSubviewToFront(reloadButton)
         playBtn.isHidden = true
         
-        let reloadMaxWidth = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
+        let reloadMaxWidth = max(1, bounds.width - PTAppBaseConfig.share.defaultViewSpace * 2)
         reloadButton.setTitle(self.viewConfig.imageReloadButton, for: .normal)
         var reloadWidth = reloadButton.sizeFor(height: 34).width + 16
         var baseHeight:CGFloat = 34

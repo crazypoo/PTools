@@ -254,7 +254,9 @@ open class PTBaseTabBarViewController: UITabBarController {
 
     private var isUsingSystemAdaptiveRenderer: Bool {
         guard let adaptiveBarGeometry else { return false }
-        return adaptiveBarGeometry.axis == .verticalEdge && adaptiveBarGeometry.renderer == .systemAdaptive
+        return adaptiveBarGeometry.axis == .verticalEdge &&
+            adaptiveBarGeometry.renderer == .systemAdaptive &&
+            !ptCustomBar.hasCenterAction
     }
 
     // English: Resolve geometry once per real context change and apply it to the selected renderer.
@@ -309,7 +311,19 @@ open class PTBaseTabBarViewController: UITabBarController {
             if geometry.accessoryRect.isEmpty {
                 accessoryContainerView.isHidden = true
             } else {
-                let accessory = geometry.accessoryRect
+                // English: A wide accessory belongs in the content pane, not inside a narrow vertical rail.
+                // Español: Un accessory ancho pertenece al panel de contenido, no dentro de una rail vertical estrecha.
+                // 中文：宽型 Accessory 放在内容面板，不挤进狭窄的垂直 Rail。
+                let accessoryHeight = geometry.accessoryRect.height
+                let content = geometry.contentSafeRect
+                let accessoryIntrinsicWidth = currentAccessoryContentView?.intrinsicContentSize.width ?? 0
+                let isWideAccessory = accessoryIntrinsicWidth > geometry.customRailRect.width
+                let accessory = isWideAccessory && content.width > geometry.customRailRect.width
+                    ? CGRect(x: content.minX,
+                             y: max(content.minY, content.maxY - accessoryHeight - PTAppBaseConfig.share.tabBarAccessoryBottomSpacing),
+                             width: min(content.width, 360),
+                             height: accessoryHeight)
+                    : geometry.accessoryRect
                 accessoryContainerView.snp.remakeConstraints { make in
                     make.left.equalToSuperview().offset(accessory.minX)
                     make.top.equalToSuperview().offset(accessory.minY)
@@ -590,10 +604,11 @@ extension PTBaseTabBarViewController {
     private func updateTabBar(to viewController: UIViewController,
                               animated: Bool) {
         let hidden = viewController.pt_prefersTabBarHidden
+        let targetAccessoryView = hidden ? nil : viewController.pt_tabBarAccessoryView
         // 🌟 第一时间上锁，告诉全局：“我要进入二级页面了，谁也别动 TabBar 的约束！”
         isTabBarGloballyHidden = hidden
         
-        if hidden {
+        if hidden || targetAccessoryView == nil {
             accessoryContainerView.isHidden = true
             accessoryContainerView.isUserInteractionEnabled = false
         } else {
@@ -610,7 +625,6 @@ extension PTBaseTabBarViewController {
         
         // 2. 🌟 切换 AccessoryView 逻辑
         // 如果整体 TabBar 都要隐藏，Accessory 自然也要强制隐藏
-        let targetAccessoryView = hidden ? nil : viewController.pt_tabBarAccessoryView
         switchAccessoryView(to: targetAccessoryView, animated: animated)
 
         // 🌟 新增：更新 TabBar 状态的同时，监听新页面的 ScrollView 滑动状态
@@ -692,9 +706,9 @@ extension PTBaseTabBarViewController {
     // 🌟 新增：执行 Accessory 视图的无缝插拔动画
     private func switchAccessoryView(to newContentView: UIView?, animated: Bool) {
         guard newContentView !== currentAccessoryContentView else {
-            if isTabBarGloballyHidden {
+            if isTabBarGloballyHidden || newContentView == nil || isUsingSystemAdaptiveRenderer {
                 accessoryContainerView.isHidden = true
-            } else if newContentView != nil {
+            } else {
                 accessoryContainerView.isHidden = false
             }
             return
@@ -714,7 +728,7 @@ extension PTBaseTabBarViewController {
                 make.top.equalToSuperview().offset(0.5)
                 make.left.right.bottom.equalToSuperview()
             }
-            if !isTabBarGloballyHidden {
+            if !isTabBarGloballyHidden && !isUsingSystemAdaptiveRenderer {
                 accessoryContainerView.isHidden = false
             }
         }
@@ -747,7 +761,7 @@ extension PTBaseTabBarViewController {
                 .forEach { $0.removeFromSuperview() }
 
             // 🌟 闭环保护：如果收缩为 0，立刻彻底物理隐藏
-            if targetHeight == 0 || self.isTabBarGloballyHidden {
+            if targetHeight == 0 || self.isTabBarGloballyHidden || self.isUsingSystemAdaptiveRenderer {
                 self.accessoryContainerView.isHidden = true
             } else {
                 self.accessoryContainerView.isHidden = false

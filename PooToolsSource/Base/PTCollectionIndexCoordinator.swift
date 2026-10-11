@@ -13,6 +13,7 @@ import SnapKit
 //MARK: 索引设置
 extension PTCollectionView {
     func setIndexViews() {
+        indexLayoutSignature = nil
         if let indexPanGesture {
             indexContainerView.removeGestureRecognizer(indexPanGesture)
             self.indexPanGesture = nil
@@ -28,15 +29,33 @@ extension PTCollectionView {
         
         addSubviews([indexContainerView,indicator])
         
-        indexContainerView.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(viewConfig.indexConfig?.indexContainerRightOffset ?? 0)
-            make.top.equalToSuperview().inset(viewConfig.indexConfig?.containerTopOffset ?? 0)
-            make.bottom.equalToSuperview().inset(viewConfig.indexConfig?.containerBottomOffset ?? 0)
-            make.width.equalTo(viewConfig.indexConfig?.itemSize.width ?? 20)
-        }
-        
         setupIndexUI()
         addIndexGesture()
+        updateIndexPlacementIfNeeded()
+    }
+
+    // English: Keep the side index inside the host's safe visible region.
+    // Español: Mantiene el índice lateral dentro de la región visible segura del host.
+    // 中文：将侧边索引限制在宿主的安全可视区域内。
+    func updateIndexPlacementIfNeeded() {
+        guard let config = viewConfig.indexConfig,
+              !indexContainerView.isHidden,
+              bounds.width > 0,
+              bounds.height > 0 else { return }
+
+        let region = PTAdaptiveVisibleRegionResolver.region(for: self)
+        let signature = "\(region.signature)|\(config.itemSize)|\(config.containerTopOffset)|\(config.containerBottomOffset)|\(config.indexContainerRightOffset)"
+        guard signature != indexLayoutSignature else { return }
+        indexLayoutSignature = signature
+
+        let visible = region.visibleRect
+        indexContainerView.snp.remakeConstraints { make in
+            make.right.equalToSuperview().offset(-(bounds.width - visible.maxX + config.indexContainerRightOffset))
+            make.top.equalToSuperview().offset(visible.minY + config.containerTopOffset)
+            make.bottom.equalToSuperview().offset(-(bounds.height - visible.maxY + config.containerBottomOffset))
+            make.width.equalTo(max(config.itemSize.width, 44))
+        }
+        setNeedsLayout()
     }
 
     private func addIndexGesture() {
@@ -99,7 +118,9 @@ extension PTCollectionView {
             if targetView.index == index {
                 let targetFrame = targetView.convert(targetView.bounds, to: self)
                 let centerY = targetFrame.midY
-                let indicatorX = bounds.width - indicator.bounds.width / 2 - (config.itemSize.width)
+                let visibleRect = PTAdaptiveVisibleRegionResolver.region(for: self).visibleRect
+                let indicatorX = max(visibleRect.minX + indicator.bounds.width / 2,
+                                     indexContainerView.frame.minX - indicator.bounds.width / 2)
                 
                 UIView.animate(withDuration: PTUIAccessibility.animationDuration(0.15)) {
                     self.indicator.center = CGPoint(x: indicatorX, y: centerY)

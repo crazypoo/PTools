@@ -34,6 +34,27 @@ final class MyTabBarController: PTBaseTabBarViewController {
 
 `PTAppBaseConfig.share.adaptiveBarPresentationPolicy` 只作为新控制器的默认值；不要在多个 Scene 运行中修改它来共享状态。已有 `tabItemContentInsets`、`tabSelectedMetailInsets`、`tabItemContentOffset` 的语义不变。
 
+## 通用可视区域与业务控件
+
+`PTAdaptiveVisibleRegionResolver` 是浮层、索引、分页和内容控件共用的轻量适配器。它只读取当前宿主 View 的 `bounds`、`safeAreaInsets`、`reservedRegions` 和布局方向，不创建全局单例，也不按设备名称分支：
+
+```swift
+let region = PTAdaptiveVisibleRegionResolver.region(for: hostView, minimumMargin: 4)
+let frame = PTAdaptiveVisibleRegionResolver.controlFrame(
+    size: CGSize(width: 80, height: 44),
+    in: region,
+    preferred: .trailing
+)
+```
+
+背景媒体可以继续铺满宿主；Skip、Done、Badge、Index bubble、分享卡片、聊天气泡和分页 Segment 等交互内容应使用该适配器或同一 `contentSafeRect`。当当前形态存在 active occlusion / division 时，控件必须留在可视区域内，触摸尺寸保持至少 44 pt。旧 API 的绝对坐标语义继续保留；Badge 新代码可使用 `PTBadgeConfiguration.anchor` 与 `offset`。
+
+English: Keep immersive backgrounds full bleed, but resolve interactive controls from the host-local visible region.
+
+Español: Mantén los fondos inmersivos a pantalla completa, pero resuelve los controles interactivos desde la región visible local del host.
+
+中文：沉浸式背景可以全幅显示，但交互控件必须基于宿主局部可视区域定位。
+
 ## 自定义导航页
 
 `PTBaseViewController` 仍可覆写 `pt_Title`、`preferredNavigationBarStyle()`、`prefersLargeTitle()` 等旧 API。非基类控制器可以实现 `PTAdaptiveNavigationMetadataProviding`，只提供标题或轴偏好，不必改变旧的 `PTNavigationConfigurable`。
@@ -60,7 +81,22 @@ showsAdaptiveBarDebugOverlay = true
 
 ## Demo 入口
 
-Example 的 `Navigation & Routing` 分类新增 `iPhone Duo Adaptive Bars`，覆盖：
+Example 的 `Navigation & Routing` 分类新增 `iPhone Duo Adaptive Bars`，并在普通 Demo Catalog 中登记 10 个专项入口：
+
+- `Duo · PhotoPicker Adaptive Grid`
+- `Duo · ImageEditor Safe Controls`
+- `Duo · VideoEditor Timeline Safe Controls`
+- `Duo · MediaViewer Paging Integrity`
+- `Duo · MediaViewer Bottom Controls`
+- `Duo · MessageKit Safe Chat`
+- `Duo · LargeTitle Nav Ownership`
+- `Duo · Tab Accessory Search`
+- `Duo · Paging + Segmented + Nested Scroll`
+- `Duo · Unified Region Collision Stress`
+
+这些入口复用现有 PhotoPicker、ImageEditor、VideoEditor、MediaViewer、MessageKit、TabBar 和 Paging Demo，不额外复制业务控制器。
+
+`iPhone Duo Adaptive Bars` 覆盖：
 
 1. Outer / Vertical Nav + Tabs
 2. Inner Portrait / Classic
@@ -77,7 +113,7 @@ Example 的 `Navigation & Routing` 分类新增 `iPhone Duo Adaptive Bars`，覆
 
 ## 验证边界
 
-几何单测使用可注入的 bounds、safe area、edge 和 reserved region，不要求实体设备。完整 Xcode Simulator Debug / Release 构建用于验证 iOS 17+ 编译、旧横向回归和 Example 入口。
+几何单测使用可注入的 bounds、safe area、edge 和 reserved region，不要求实体设备；同时覆盖可视区域避让和 hinge division 的最大安全 pane。脚本 `Scripts/validate_duo_adaptive_bars.sh` 会检查共享 Bar、媒体、分享、MessageKit、Paging 操作层不得新增全局屏幕尺寸定位，并校验 10 个 Demo 登记。完整 Xcode Simulator Debug / Release 构建用于验证 iOS 17+ 编译、旧横向回归和 Example 入口。
 
 真实 iPhone Duo 的外屏、内屏、折叠转场、相机遮挡区、Live Activity、PiP、分屏和硬件触控仍需要在 Apple 提供的 Duo Simulator / Device Hub 或实体设备上验收；普通 iPhone 模拟器不能证明真实折叠行为。
 

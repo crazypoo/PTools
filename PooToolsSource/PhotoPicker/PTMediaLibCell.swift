@@ -136,8 +136,8 @@ class PTMediaLibCell: PTBaseNormalCell {
         guard let cellModel else { return }
         let asset = cellModel.asset
         let ident = cellModel.ident
-        let scale = UIScreen.main.scale
-        let targetWidth = bounds.width * scale
+        let scale = window?.screen.scale ?? 1
+        let targetWidth = max(1, bounds.width) * scale
         guard cellModel.whRatio.isFinite, cellModel.whRatio > 0 else {
             imageView.image = PTAppBaseConfig.share.defaultEmptyImage
             return
@@ -331,7 +331,7 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
         
         if let asset = albumModel.headImageAsset {
             let ident = asset.localIdentifier
-            let side = bounds.height * UIScreen.main.scale
+            let side = bounds.height * (window?.screen.scale ?? 1)
 
             let requestID = PTMediaLibManager.requestImage(for: asset,
                                                            targetSize: CGSize(width: side, height: side),

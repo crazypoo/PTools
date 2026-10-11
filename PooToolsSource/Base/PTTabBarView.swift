@@ -123,6 +123,10 @@ final public class PTTabBarView: UIView {
     // Español: El coordinador cambia solo el eje de presentación; conserva la identidad y el contenido de cada elemento.
     // 中文：协调器只切换展示轴，不重建 Tab 项身份和内容实例。
     public private(set) var adaptiveAxis: PTAdaptiveBarAxis = .horizontalClassic
+
+    public var hasCenterAction: Bool {
+        centerContent != nil && !centerButton.isHidden
+    }
     
     // 🌟 新增：用于最小化时展示当前 Icon 的容器
     lazy var minimizedCenterView: UIView = {
@@ -423,11 +427,11 @@ final public class PTTabBarView: UIView {
                     } else {
                         $0.height.equalTo(CGFloat.kTabbarHeight)
                     }
-                    $0.width.equalTo(self.barItemWidth() * CGFloat(self.leftStackView.arrangedSubviews.count))
+                    $0.right.equalTo(self.centerButton.snp.left)
                 }
 
                 centerButton.snp.remakeConstraints {
-                    $0.left.equalTo(self.leftStackView.snp.right)
+                    $0.centerX.equalToSuperview()
                     if usesGlassSurfaceContainer || appearanceSnapshot.layout.tabbarMetailMode {
                         $0.centerY.equalTo(glassBackgroundView.snp.top)
                     } else {
@@ -527,10 +531,10 @@ final public class PTTabBarView: UIView {
                 } else {
                     $0.height.equalTo(CGFloat.kTabbarHeight)
                 }
-                $0.width.equalTo(self.barItemWidth() * CGFloat(self.leftStackView.arrangedSubviews.count))
+                    $0.right.equalTo(self.centerButton.snp.left)
             }
             centerButton.snp.remakeConstraints {
-                $0.left.equalTo(self.leftStackView.snp.right)
+                $0.centerX.equalToSuperview()
                 if usesGlassSurfaceContainer || appearanceSnapshot.layout.tabbarMetailMode {
                     $0.centerY.equalTo(glassBackgroundView.snp.top)
                 } else {

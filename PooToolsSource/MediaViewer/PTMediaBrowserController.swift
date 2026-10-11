@@ -185,8 +185,8 @@ public class PTMediaBrowserController: PTBaseViewController {
         
         collectionView.customerLayout = { [weak collectionView] _, sectionModel in
             let effectiveSize = collectionView?.contentCollectionView.bounds.size ?? .zero
-            let width = effectiveSize.width > 0 ? effectiveSize.width : CGFloat.kSCREEN_WIDTH
-            let height = effectiveSize.height > 0 ? effectiveSize.height : CGFloat.kSCREEN_HEIGHT
+            let width = max(1, effectiveSize.width)
+            let height = max(1, effectiveSize.height)
             return UICollectionView.horizontalLayoutSystem(data: sectionModel.rows,
                                                            itemOriginalX: 0,
                                                            itemWidth: width,
@@ -198,11 +198,11 @@ public class PTMediaBrowserController: PTBaseViewController {
         
         collectionView.collectionDidEndDisplay = { [weak self] collectionView, cell, sectionModel, indexPath in
             guard let self = self else { return }
-            if let currentCell = collectionView.visibleCells.first as? PTMediaBrowserCell, let currentIndex = collectionView.indexPath(for: currentCell) {
-                if let _ = sectionModel.rows?[currentIndex.row], let endCell = cell as? PTMediaBrowserCell {
+            if let currentIndex = self.settledPageIndex(in: collectionView) {
+                if let _ = sectionModel.rows?[currentIndex], let endCell = cell as? PTMediaBrowserCell {
                     
-                    guard currentIndex.row < self.mediaData.count else { return }
-                    let cellModel = self.mediaData[currentIndex.row]
+                    guard currentIndex < self.mediaData.count else { return }
+                    let cellModel = self.mediaData[currentIndex]
                     switch endCell.currentCellType {
                     case .GIF:
                         endCell.imageView.stopAnimating()
@@ -211,12 +211,12 @@ public class PTMediaBrowserController: PTBaseViewController {
                     endCell.invalidateMediaResources()
                     
                     if self.viewConfig.pageControlShow {
-                        self.pageControlProgressSet(indexPath: currentIndex)
+                        self.pageControlProgressSet(indexPath: IndexPath(item: currentIndex, section: 0))
                     }
-                    self.currentIndex = currentIndex.row
+                    self.currentIndex = currentIndex
                     
                     if !self.navControl.titleLabel.isHidden {
-                        self.navControl.titleLabel.text = "\(currentIndex.row + 1)/\(self.mediaData.count)"
+                        self.navControl.titleLabel.text = "\(currentIndex + 1)/\(self.mediaData.count)"
                     }
                     self.updateBottom(models: cellModel)
                 }
@@ -252,7 +252,8 @@ public class PTMediaBrowserController: PTBaseViewController {
             let currentPageControlValue = self.getPageControlCurrentValue()
             guard currentPageControlValue < self.mediaData.count else { return }
             
-            if let currentCell = collectionViewScrol.visibleCells.first as? PTMediaBrowserCell {
+            if let currentIndex = self.settledPageIndex(in: collectionViewScrol),
+               let currentCell = collectionViewScrol.cellForItem(at: IndexPath(item: currentIndex, section: 0)) as? PTMediaBrowserCell {
                 if abs(collectionViewScrol.contentOffset.y) > 0 {
                     currentCell.contentScrolView.isUserInteractionEnabled = false
                     currentCell.contentScrolView.isScrollEnabled = false
@@ -342,7 +343,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         let pageControlHeight = viewConfig.pageControlShow ? (PageControlBottomSpace + PageControlHeight + BottomItemSpacing) : 0
         bottomControl.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.height.equalTo(CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing + BottomMoreHeight)
+            make.height.equalTo(bottomSafeAreaInset + pageControlHeight + BottomTopSpacing + BottomMoreHeight)
         }
                 
         // MARK: -  取消不必要的硬编码延时，提早设置初始状态
@@ -353,6 +354,22 @@ public class PTMediaBrowserController: PTBaseViewController {
         }
         
         self.showCollectionViewData()
+    }
+
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        // English: Re-resolve the bottom surface after safe-area or reserved-region changes.
+        // Español: Vuelve a resolver la superficie inferior tras cambios del área segura o regiones reservadas.
+        // 中文：安全区或保留区域变化后重新计算底部工具栏位置。
+        let pageControlHeight = viewConfig.pageControlShow ? (PageControlBottomSpace + PageControlHeight + BottomItemSpacing) : 0
+        let safeBottom = max(0, view.safeAreaInsets.bottom)
+        let currentHeight = bottomControl.frame.height
+        let minimumHeight = safeBottom + pageControlHeight + BottomTopSpacing + BottomMoreHeight
+        if currentHeight > 0, currentHeight < minimumHeight {
+            bottomControl.snp.updateConstraints { make in
+                make.height.equalTo(minimumHeight)
+            }
+        }
     }
     
     func showCollectionViewData(loadedTask:PTCollectionCallback? = nil) {
@@ -579,7 +596,8 @@ fileprivate extension PTMediaBrowserController {
     func saveVideoAction(url:String) {
         if let urlReal = URL(string: url) {
             let loadingView = PTMediaBrowserLoadingView(type: .LoopDiagram)
-            loadingView.hudShow(hudSize: .init(width: CGFloat.kSCREEN_WIDTH * 0.5, height: CGFloat.kSCREEN_WIDTH * 0.5))
+            let side = max(1, min(view.bounds.width, view.bounds.height) * 0.5)
+            loadingView.hudShow(hudSize: .init(width: side, height: side))
             
             if let findCurrentLocal = PTVideoFileCache.shared.cachedFileURL(for: urlReal) {
                 loadingView.removeFromSuperview()
@@ -722,14 +740,14 @@ fileprivate extension PTMediaBrowserController {
         let pageControlHeight = viewConfig.pageControlShow ? (PageControlBottomSpace + PageControlHeight + BottomItemSpacing) : 0
         bottomControl.snp.updateConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.height.equalTo(heightForString(models.imageInfo) + CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing)
+            make.height.equalTo(heightForString(models.imageInfo) + bottomSafeAreaInset + pageControlHeight + BottomTopSpacing)
         }
     }
     
     func updateBottom(models:PTMediaBrowserModel) {
                 
         let pageControlHeight = self.viewConfig.pageControlShow ? (PageControlBottomSpace + PageControlHeight + BottomItemSpacing) : 0
-        var bottomH:CGFloat = CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing
+        var bottomH:CGFloat = bottomSafeAreaInset + pageControlHeight + BottomTopSpacing
         if models.imageInfo.stringIsEmpty() {
             bottomControl.titleTapCallback = nil
             bottomControl.setLabelAtt(att: PTRichText(stringLiteral: ""))
@@ -743,7 +761,7 @@ fileprivate extension PTMediaBrowserController {
                 bottomControl.titleTapCallback = { [weak self] in
                     self?.showFullInfo(for: models)
                 }
-                bottomH = heightForString(truncatedText(fullText:models.imageInfo) + viewConfig.showMore) + CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing
+                bottomH = heightForString(truncatedText(fullText:models.imageInfo) + viewConfig.showMore) + bottomSafeAreaInset + pageControlHeight + BottomTopSpacing
                 bottomControl.setLabelAtt(att: labelMoreAtt(models: models))
             } else {
                 bottomControl.titleTapCallback = nil
@@ -759,7 +777,7 @@ fileprivate extension PTMediaBrowserController {
                 """
 
                 bottomControl.setLabelAtt(att: atts)
-                bottomH = textH + CGFloat.kTabbarSaveAreaHeight + pageControlHeight + BottomTopSpacing
+                bottomH = textH + bottomSafeAreaInset + pageControlHeight + BottomTopSpacing
             }
         }
         
@@ -775,11 +793,34 @@ fileprivate extension PTMediaBrowserController {
     }
 
     func labelContentWidth() -> CGFloat {
-        var labelW:CGFloat = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
+        let hostWidth = viewIfLoaded?.bounds.width ?? 320
+        var labelW:CGFloat = hostWidth - PTAppBaseConfig.share.defaultViewSpace * 2
 
         guard viewConfig.actionType != .Empty else { return labelW }
         labelW -= ContentMoreSpacing + BottomMoreHeight
         return labelW
+    }
+
+    // English: Use the settled page nearest the viewport center instead of the first visible cell during paging.
+    // Español: Usa la página estable más cercana al centro del viewport en lugar de la primera celda visible.
+    // 中文：翻页过程中以最接近可视区域中心的页面作为当前页，避免双页残影误判。
+    private func settledPageIndex(in collectionView: UICollectionView) -> Int? {
+        let viewport = CGRect(origin: collectionView.contentOffset, size: collectionView.bounds.size)
+        let attributes = collectionView.collectionViewLayout.layoutAttributesForElements(in: viewport) ?? []
+        let center = CGPoint(x: viewport.midX, y: viewport.midY)
+        let cellIndexPath = attributes
+            .filter { $0.representedElementCategory == .cell }
+            .min { lhs, rhs in
+                let leftDistance = abs(lhs.center.x - center.x) + abs(lhs.center.y - center.y)
+                let rightDistance = abs(rhs.center.x - center.x) + abs(rhs.center.y - center.y)
+                return leftDistance < rightDistance
+            }?.indexPath
+        return cellIndexPath?.item ?? collectionView.indexPathsForVisibleItems
+            .min { abs($0.item - currentIndex) < abs($1.item - currentIndex) }?.item
+    }
+
+    private var bottomSafeAreaInset: CGFloat {
+        max(0, viewIfLoaded?.safeAreaInsets.bottom ?? 0)
     }
     
      func numberOfLines(_ string: String) -> Int {

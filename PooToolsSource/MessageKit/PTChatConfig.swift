@@ -46,7 +46,15 @@ public class PTChatConfig: NSObject {
     // 中文：所有消息 Cell 共用的基础聊天配置。
     ///文本內容實際顯示最大的Width
     @MainActor public static var ChatContentShowMaxWidth: CGFloat {
-        max(1, CGFloat.kSCREEN_WIDTH - PTChatConfig.share.messageUserIconSize - PTChatConfig.share.userIconFixelSpace - PTChatBaseCell.dataContentWaitImageInset - PTChatBaseCell.waitImageRightInset - PTChatBaseCell.waitImageSize - PTChatBaseCell.dataContentUserIconInset)
+        contentMaxWidth(containerWidth: 320)
+    }
+
+    // English: Calculate bubble width from the actual collection container, not the main screen.
+    // Español: Calcula el ancho de la burbuja usando el contenedor real de la colección, no la pantalla principal.
+    // 中文：根据 CollectionView 的真实容器宽度计算气泡最大宽度，不再读取主屏幕尺寸。
+    public static func contentMaxWidth(containerWidth: CGFloat) -> CGFloat {
+        let width = containerWidth.isFinite && containerWidth > 0 ? containerWidth : 320
+        return max(1, width - PTChatConfig.share.messageUserIconSize - PTChatConfig.share.userIconFixelSpace - PTChatBaseCell.dataContentWaitImageInset - PTChatBaseCell.waitImageRightInset - PTChatBaseCell.waitImageSize - PTChatBaseCell.dataContentUserIconInset)
     }
     ///設置持有人ID
     public var imOwnerId:String = ""

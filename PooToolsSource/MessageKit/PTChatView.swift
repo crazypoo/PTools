@@ -75,6 +75,8 @@ public class PTChatView: UIView {
         view.registerClassCells(classs: [PTChatSystemMessageCell.ID:PTChatSystemMessageCell.self,PTChatTextCell.ID:PTChatTextCell.self,PTChatMediaCell.ID:PTChatMediaCell.self,PTChatMapCell.ID:PTChatMapCell.self,PTChatVoiceCell.ID:PTChatVoiceCell.self,PTChatTypingIndicatorCell.ID:PTChatTypingIndicatorCell.self,PTChatFileCell.ID:PTChatFileCell.self])
         view.customerLayout = { [weak self] sectionIndex, sectionModel in
             let customerCellHeightHandler = self?.customerCellHeightHandler
+            let containerWidth = self?.listCollection.contentCollectionView.bounds.width ?? 320
+            let contentMaxWidth = PTChatConfig.contentMaxWidth(containerWidth: containerWidth)
             return UICollectionView.waterFallLayout(data: sectionModel.rows,rowCount:1,itemOriginalX: 0,topContentSpace:PTChatConfig.share.chatTopFixel, bottomContentSpace: PTChatConfig.share.chatBottomFixel,itemSpace: 0) { index, model in
                 guard let rowModel = model as? PTRows,
                       let cellModel = rowModel.dataModel as? PTChatListModel else {
@@ -98,9 +100,9 @@ public class PTChatView: UIView {
                             dataContentFont = PTChatConfig.share.textOtherMessageFont
                         }
                         
-                        var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont,lineSpacing: PTChatConfig.share.textLineSpace,width: PTChatConfig.ChatContentShowMaxWidth).height + 40
+                        var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont,lineSpacing: PTChatConfig.share.textLineSpace,width: contentMaxWidth).height + 40
                         
-                        let contentNumberOfLines = msgContent.numberOfLines(font: dataContentFont, labelShowWidth: PTChatConfig.ChatContentShowMaxWidth,lineSpacing: PTChatConfig.share.textLineSpace)
+                        let contentNumberOfLines = msgContent.numberOfLines(font: dataContentFont, labelShowWidth: contentMaxWidth,lineSpacing: PTChatConfig.share.textLineSpace)
                         if contentNumberOfLines <= 1 {
                             contentHeight = PTChatConfig.share.contentBaseHeight
                         }
@@ -168,10 +170,10 @@ public class PTChatView: UIView {
                     }
                     cellHeight = timeHeight + contentHeight + nameHeight + PTChatBaseCell.timeTopSpace * 3 + readStatusHeight + PTChatConfig.share.userIconTopSpacing
                 case .SystemMessage:
-                    let timeHeight = UIView.sizeFor(string: cellModel.messageTimeStamp.timeToDate().dateFormat(formatString: "yyyy-MM-dd HH:mm:ss"), font: PTChatConfig.share.chatTimeFont,lineSpacing: 2,width: CGFloat.kSCREEN_WIDTH).height
+                    let timeHeight = UIView.sizeFor(string: cellModel.messageTimeStamp.timeToDate().dateFormat(formatString: "yyyy-MM-dd HH:mm:ss"), font: PTChatConfig.share.chatTimeFont,lineSpacing: 2,width: contentMaxWidth).height
                     var contentHeight:CGFloat = 0
                     if let contentString = cellModel.msgContent as? String {
-                        contentHeight = UIView.sizeFor(string: contentString, font: PTChatConfig.share.chatSystemMessageFont,lineSpacing: 2,width: CGFloat.kSCREEN_WIDTH).height
+                        contentHeight = UIView.sizeFor(string: contentString, font: PTChatConfig.share.chatSystemMessageFont,lineSpacing: 2,width: contentMaxWidth).height
                     }
                     cellHeight = timeHeight + contentHeight + 20
                 case .Typing:

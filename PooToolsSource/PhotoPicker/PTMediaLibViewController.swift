@@ -30,7 +30,9 @@ public class PTMediaLibView: UIView {
     var selectedModelDidUpdate: PTActionTask?
     var selectedCount: ((Int) -> Void)?
     
-    // 使用弱引用防止循环引用，并尽量避免强制解包
+    // English: Keep the controller reference weak and avoid force-unwrapping during cell reuse.
+    // Español: Mantiene débil la referencia al controlador y evita desempaquetados forzados durante la reutilización.
+    // 中文：控制器引用使用弱引用，避免 Cell 复用期间发生循环引用和强制解包崩溃。
     fileprivate weak var currentVc: PTMediaLibViewController?
     
     fileprivate var totalModels: [PTMediaModel] = []
@@ -67,6 +69,8 @@ public class PTMediaLibView: UIView {
         currentVc?.effectiveSelectionOptions ?? selectionOptionsSnapshot
     }
 
+    private var lastGridWidth: CGFloat = 0
+
     // English: Restrict camera media kinds to the picker policy before presenting the camera.
     // Español: Limita los tipos de medios de la cámara a la política del selector antes de mostrar la cámara.
     // 中文：展示相机前，先用当前选择器策略限制可拍摄的媒体类型。
@@ -85,8 +89,7 @@ public class PTMediaLibView: UIView {
         configs.cellLeadingSpace = 1
         configs.cellTrailingSpace = 1
         configs.rowCount = 3
-        let itemWidth = (CGFloat.kSCREEN_WIDTH - CGFloat(configs.rowCount - 1) * configs.cellLeadingSpace) / CGFloat(configs.rowCount)
-        configs.itemHeight = itemWidth
+        configs.itemHeight = 1
 
         let view = PTCollectionView(viewConfig: configs)
         view.registerClassCells(classs: [
@@ -120,6 +123,20 @@ public class PTMediaLibView: UIView {
     private func setupUI() {
         addSubview(collectionView)
         collectionView.snp.makeConstraints { $0.edges.equalToSuperview() }
+    }
+
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        let width = collectionView.contentCollectionView.bounds.width
+        guard width > 0, abs(width - lastGridWidth) > 0.5 else { return }
+        lastGridWidth = width
+        guard let config = collectionView.viewConfig else { return }
+        let itemWidth = max(1, (width - CGFloat(config.rowCount - 1) * config.cellLeadingSpace) / CGFloat(max(1, config.rowCount)))
+        guard abs(config.itemHeight - itemWidth) > 0.5 else { return }
+        config.itemHeight = itemWidth
+        collectionView.runtimeLayoutRevision &+= 1
+        collectionView.clearLayoutCaches()
+        collectionView.contentCollectionView.collectionViewLayout.invalidateLayout()
     }
 }
 
@@ -857,6 +874,16 @@ public class PTMediaLibViewController: PTBaseViewController {
         fakeNav.setRightButtons([submitButton])
 
         resetTitleSelectBounds()
+    }
+
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let cv = mediaListView.collectionView.contentCollectionView
+        let topInset = max(fakeNav.frame.maxY, view.safeAreaInsets.top)
+        let bottomInset = max(0, view.safeAreaInsets.bottom)
+        cv.contentInset.top = topInset
+        cv.contentInset.bottom = bottomInset
+        cv.verticalScrollIndicatorInsets.bottom = bottomInset
     }
 
     // MARK: - Album

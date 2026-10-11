@@ -60,9 +60,9 @@ open class PTVideoEditorBaseFloatingViewController: PTBaseViewController {
             make.centerX.equalToSuperview()
         }
         doneButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.right.equalTo(self.view.safeAreaLayoutGuide.snp.right).inset(PTAppBaseConfig.share.defaultViewSpace)
             make.size.equalTo(PTAppBaseConfig.share.navBarButtonSize)
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + (CGFloat.kTabbarHeight - PTAppBaseConfig.share.navBarButtonSize) / 2)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset((CGFloat.kTabbarHeight - PTAppBaseConfig.share.navBarButtonSize) / 2)
         }
 
     }

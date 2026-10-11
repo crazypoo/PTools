@@ -40,6 +40,7 @@ for file in \
   PooToolsSource/Base/PTAdaptiveBarOverflowController.swift \
   PooToolsSource/Base/PTAdaptiveSystemBarBridge.swift \
   PooToolsSource/Base/PTAdaptiveBarDebugOverlay.swift \
+  PooToolsSource/Base/PTAdaptiveVisibleRegionResolver.swift \
   Tests/PToolsUIFoundationTests/PTAdaptiveBarLayoutTests.swift; do
   require_file "$file"
 done
@@ -48,6 +49,20 @@ require_fixed "if #available(iOS 27.1, *)" PooToolsSource/Base/PTAdaptiveBarLayo
 require_fixed "guard #available(iOS 27.1, *)" PooToolsSource/Base/PTAdaptiveSystemBarBridge.swift
 require_fixed "navigation.duo-adaptive-bars" PooTools/PTDemoCatalog.swift
 require_fixed "navigation.duo-adaptive-bars" Data/demo-registry.yml
+for demo_id in \
+  "duo.photo-picker-grid" \
+  "duo.image-editor-controls" \
+  "duo.video-editor-controls" \
+  "duo.media-viewer-paging" \
+  "duo.media-viewer-bottom" \
+  "duo.message-kit-chat" \
+  "duo.large-title-navigation" \
+  "duo.tab-accessory-search" \
+  "duo.paging-segmented" \
+  "duo.unified-collision-stress"; do
+  require_fixed "$demo_id" PooTools/PTDemoCatalog.swift
+  require_fixed "$demo_id" Data/demo-registry.yml
+done
 require_fixed "testVerticalNavAndTabsNeverOverlap" Tests/PToolsUIFoundationTests/PTAdaptiveBarLayoutTests.swift
 require_fixed "testMultiSceneStateDoesNotLeak" Tests/PToolsUIFoundationTests/PTAdaptiveBarLayoutTests.swift
 
@@ -58,8 +73,27 @@ for file in \
   PooToolsSource/Base/PTBaseTabBarViewController.swift \
   PooToolsSource/Base/PTNavBar.swift \
   PooToolsSource/Base/PTBaseViewController+Navigation.swift \
-  PooToolsSource/Base/PTTabBarView.swift; do
-  for forbidden in "UIScreen.main" "kSCREEN_WIDTH" "isFaceIDCapable"; do
+  PooToolsSource/Base/PTTabBarView.swift \
+  PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift \
+  PooToolsSource/Guide/PTGuidePageHUD.swift \
+  PooToolsSource/Base/PTCollectionView.swift \
+  PooToolsSource/Base/PTCollectionIndexCoordinator.swift \
+  PooToolsSource/Share/PTActivityViewController.swift \
+  PooToolsSource/MediaViewer/PTMediaBrowserController.swift \
+  PooToolsSource/MediaViewer/PTMediaBrowserBottom.swift \
+  PooToolsSource/MessageKit/PTChatConfig.swift \
+  PooToolsSource/MessageKit/PTChatView.swift \
+  PooToolsSource/MessageKit/PTChatTextCell.swift \
+  PooToolsSource/PhotoPicker/PTMediaLibViewController.swift \
+  PooToolsSource/PhotoPicker/PTMediaLibCell.swift \
+  PooToolsSource/ImageEditor/PTEditImageViewController.swift \
+  PooToolsSource/ImageEditor/PTCutViewController.swift \
+  PooToolsSource/VideoEditor/PTVideoEditorToolsCropControl.swift \
+  PooToolsSource/VideoEditor/PTVideoEditorBaseFloatingViewController.swift \
+  PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift \
+  PooToolsSource/MediaViewer/PTMediaBrowserCell.swift \
+  PooToolsSource/SegmentControl/PTPaging.swift; do
+  for forbidden in "UIScreen.main" "kSCREEN_WIDTH" "isFaceIDCapable" "UIDevice.current.orientation"; do
     if has_fixed "$forbidden" "$repo_root/$file"; then
       printf 'FAIL: forbidden %s in %s\n' "$forbidden" "$file" >&2
       exit 1

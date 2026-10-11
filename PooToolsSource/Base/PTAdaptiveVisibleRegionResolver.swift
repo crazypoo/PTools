@@ -1,0 +1,166 @@
+//
+//  PTAdaptiveVisibleRegionResolver.swift
+//  PooTools
+//
+//  English: Resolve interactive frames from one host view's local geometry.
+//  Español: Resuelve los frames interactivos usando la geometría local de una sola vista anfitriona.
+//  中文：使用单个宿主视图的局部几何计算交互控件的安全位置。
+//
+
+import UIKit
+
+public struct PTAdaptiveVisibleRegion: Sendable, Equatable {
+    public let visibleRect: CGRect
+    public let reservedRects: [CGRect]
+    public let signature: String
+
+    public init(visibleRect: CGRect,
+                reservedRects: [CGRect],
+                signature: String) {
+        self.visibleRect = visibleRect
+        self.reservedRects = reservedRects
+        self.signature = signature
+    }
+}
+
+public enum PTAdaptiveVisibleRegionResolver {
+    // English: Build a host-local region; never use a global screen or window as the source of truth.
+    // Español: Construye una región local del host; nunca usa una pantalla o ventana global como fuente.
+    // 中文：构建宿主局部可视区域，不以全局屏幕或 Window 作为数据来源。
+    @MainActor
+    public static func region(for view: UIView,
+                              additionalReservedRects: [CGRect] = [],
+                              minimumMargin: CGFloat = 0) -> PTAdaptiveVisibleRegion {
+        let context = PTAdaptiveBarLayoutContext.make(for: view)
+        return region(for: context,
+                      additionalReservedRects: additionalReservedRects,
+                      minimumMargin: minimumMargin)
+    }
+
+    public static func region(for context: PTAdaptiveBarLayoutContext,
+                              additionalReservedRects: [CGRect] = [],
+                              minimumMargin: CGFloat = 0) -> PTAdaptiveVisibleRegion {
+        let safeRect = context.bounds.inset(by: normalizedInsets(context.safeAreaInsets))
+        let activeRegions = context.reservedRegions.filter(\.isActive)
+        let divisionRects = activeRegions.filter { $0.kind == .division }.map(\.frame)
+        let reserved = (context.reservedRegions + additionalReservedRects.map {
+            PTAdaptiveReservedRegion(frame: $0,
+                                      kind: .occlusion,
+                                      isActive: true)
+        })
+        .filter(\.isActive)
+        .map { expandedFrame($0.frame, margins: $0.margins, extra: minimumMargin) }
+        .filter { !$0.isNull && !$0.isEmpty }
+
+        // English: Keep the largest safe pane when a division splits the host.
+        // Español: Conserva el panel seguro más grande cuando una división separa el host.
+        // 中文：当分割区域把宿主切开时，选择最大的安全内容面板。
+        let visible = largestPane(in: safeRect, excluding: divisionRects)
+        let signature = [
+            String(describing: context.bounds.integral),
+            String(describing: context.safeAreaInsets),
+            context.layoutDirection.rawValue,
+            context.verticalBarEdge.rawValue,
+            String(describing: visible.integral),
+            reserved.map { String(describing: $0.integral) }.joined(separator: ";")
+        ].joined(separator: "|")
+        return PTAdaptiveVisibleRegion(visibleRect: visible,
+                                       reservedRects: reserved,
+                                       signature: signature)
+    }
+
+    public static func clamped(_ frame: CGRect,
+                               to region: PTAdaptiveVisibleRegion,
+                               minimumMargin: CGFloat = 0) -> CGRect {
+        let area = region.visibleRect.insetBy(dx: max(0, minimumMargin), dy: max(0, minimumMargin))
+        guard !area.isEmpty else { return .zero }
+        var result = frame
+        if result.width > area.width { result.size.width = area.width }
+        if result.height > area.height { result.size.height = area.height }
+        result.origin.x = min(max(result.minX, area.minX), area.maxX - result.width)
+        result.origin.y = min(max(result.minY, area.minY), area.maxY - result.height)
+        return result
+    }
+
+    public static func controlFrame(size: CGSize,
+                                    in region: PTAdaptiveVisibleRegion,
+                                    preferred: PTAdaptiveBarEdge = .trailing,
+                                    margin: CGFloat = 10) -> CGRect {
+        let width = max(0, size.width)
+        let height = max(0, size.height)
+        let area = region.visibleRect.insetBy(dx: max(0, margin), dy: max(0, margin))
+        guard !area.isEmpty else { return .zero }
+
+        let candidates: [CGRect]
+        switch preferred {
+        case .leading:
+            candidates = [
+                CGRect(x: area.minX, y: area.minY, width: width, height: height),
+                CGRect(x: area.maxX - width, y: area.minY, width: width, height: height),
+                CGRect(x: area.midX - width / 2, y: area.minY, width: width, height: height)
+            ]
+        case .trailing, .unspecified:
+            candidates = [
+                CGRect(x: area.maxX - width, y: area.minY, width: width, height: height),
+                CGRect(x: area.minX, y: area.minY, width: width, height: height),
+                CGRect(x: area.midX - width / 2, y: area.minY, width: width, height: height)
+            ]
+        }
+
+        for candidate in candidates {
+            let frame = clamped(candidate, to: region, minimumMargin: margin)
+            if !region.reservedRects.contains(where: { $0.intersects(frame) }) {
+                return frame
+            }
+        }
+        return clamped(candidates[0], to: region, minimumMargin: margin)
+    }
+
+    private static func normalizedInsets(_ insets: UIEdgeInsets) -> UIEdgeInsets {
+        UIEdgeInsets(top: max(0, insets.top),
+                     left: max(0, insets.left),
+                     bottom: max(0, insets.bottom),
+                     right: max(0, insets.right))
+    }
+
+    private static func expandedFrame(_ frame: CGRect,
+                                      margins: UIEdgeInsets,
+                                      extra: CGFloat) -> CGRect {
+        frame.inset(by: UIEdgeInsets(top: -(max(0, margins.top) + extra),
+                                     left: -(max(0, margins.left) + extra),
+                                     bottom: -(max(0, margins.bottom) + extra),
+                                     right: -(max(0, margins.right) + extra)))
+    }
+
+    private static func largestPane(in safeRect: CGRect,
+                                    excluding divisions: [CGRect]) -> CGRect {
+        guard !divisions.isEmpty else { return safeRect }
+        var panes = [safeRect]
+        for division in divisions {
+            var next: [CGRect] = []
+            for pane in panes {
+                guard pane.intersects(division) else {
+                    next.append(pane)
+                    continue
+                }
+                if division.width >= division.height {
+                    let upper = CGRect(x: pane.minX, y: pane.minY, width: pane.width,
+                                       height: max(0, division.minY - pane.minY))
+                    let lower = CGRect(x: pane.minX, y: division.maxY, width: pane.width,
+                                       height: max(0, pane.maxY - division.maxY))
+                    if !upper.isEmpty { next.append(upper) }
+                    if !lower.isEmpty { next.append(lower) }
+                } else {
+                    let leading = CGRect(x: pane.minX, y: pane.minY,
+                                         width: max(0, division.minX - pane.minX), height: pane.height)
+                    let trailing = CGRect(x: division.maxX, y: pane.minY,
+                                          width: max(0, pane.maxX - division.maxX), height: pane.height)
+                    if !leading.isEmpty { next.append(leading) }
+                    if !trailing.isEmpty { next.append(trailing) }
+                }
+            }
+            panes = next
+        }
+        return panes.max { $0.width * $0.height < $1.width * $1.height } ?? safeRect
+    }
+}

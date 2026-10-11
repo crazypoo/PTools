@@ -8,6 +8,9 @@
 
 ## 5.63.0 — 2026-10-11
 
+- 完成 iPhone Duo UI 自适应第二轮：Launch Ad、Guide、Collection Header/Index、Share Preview、Badge、3 Tab + Center Action、PhotoPicker、ImageEditor、VideoEditor、MediaViewer、MessageKit、Accessory 和 Paging 共用宿主局部可视区域与 active reserved-region 约束。
+- 新增 `PTAdaptiveVisibleRegionResolver`、10 个 Duo 专项 Demo 登记、PhotoPicker/MediaViewer/MessageKit/Paging 的局部几何回归，以及 Duo 布局静态门禁；旧公开 API 和 iOS 17+ 经典布局保持兼容。
+- 5.63.0 仍需官方 iPhone Duo Simulator 或实体设备完成外屏、内屏、hinge、系统 vertical rail 和视觉交互验收；普通 Simulator 只作为编译与可注入几何验证环境。
 - 新增 Scene-aware 的 `PTAdaptiveBarLayoutContext`、纯值类型几何 Resolver 和 MainActor Coordinator，支持非对称 safe area、iOS 27.1+ vertical bar edge 与 active reserved regions。
 - `PTBaseNavControl`、`PTBaseTabBarViewController` 和 `PTNavigationBarManager` 统一系统/自定义 Bar 的几何所有权；默认 automatic 在系统具备垂直 Bar 能力时交给 UIKit，iOS 17+ 旧横向路径保持兼容。
 - TabBar 继续保留 Badge、Center Raised、Mini、Lottie、选中状态和原有 Insets 语义；空间不足时保留当前 Tab 并提供 overflow 数据。

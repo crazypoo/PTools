@@ -179,6 +179,19 @@ enum PTDemoRegistry {
         make("navigation.segment-paging-regression", "PooToolsSegmented", "Segmented / JX Parity & Paging", .navigationRouting, .interactive, .push, .runnable, legacy: "SegmentedPagingRegression", tags: ["segment", "paging", "badge", "jx-parity", "regression"]),
         make("navigation.segment-item-separator", "PooToolsSegmented", "Segmented / Item Separator", .navigationRouting, .interactive, .push, .runnable, legacy: "SegmentedItemSeparator", tags: ["segment", "separator", "rtl", "reuse"]),
         make("navigation.duo-adaptive-bars", "PToolsUIFoundation", "iPhone Duo Adaptive Bars", .navigationRouting, .interactive, .push, .runnable, legacy: "iPhone Duo Adaptive Bars", tags: ["iphone-duo", "navigation", "tabbar", "adaptive", "iOS27.1"]),
+        // English: Keep each Duo regression surface directly discoverable in the normal catalog.
+        // Español: Mantiene cada superficie de regresión Duo accesible desde el catálogo normal.
+        // 中文：让每个 Duo 回归场景都能从常规目录直接进入。
+        make("duo.photo-picker-grid", "PooToolsPhotoPicker", "Duo · PhotoPicker Adaptive Grid", .mediaGraphics, .interactive, .fullScreen, .runnable, [.photoLibrary], legacy: "媒體選擇", tags: ["iphone-duo", "photo-picker", "grid"]),
+        make("duo.image-editor-controls", "PooToolsImageEditor", "Duo · ImageEditor Safe Controls", .mediaGraphics, .interactive, .fullScreen, .runnable, [.photoLibrary], legacy: "EditImage", tags: ["iphone-duo", "image-editor", "safe-area"]),
+        make("duo.video-editor-controls", "PooToolsVideoEditor", "Duo · VideoEditor Timeline Safe Controls", .mediaGraphics, .hostRequired, .fullScreen, .physicalDeviceRequired, [.photoLibrary, .physicalDevice], legacy: "视频编辑", tags: ["iphone-duo", "video-editor", "timeline"]),
+        make("duo.media-viewer-paging", "PooToolsMediaViewer", "Duo · MediaViewer Paging Integrity", .mediaGraphics, .interactive, .fullScreen, .runnable, legacy: "图片展示", tags: ["iphone-duo", "media-viewer", "paging"]),
+        make("duo.media-viewer-bottom", "PooToolsMediaViewer", "Duo · MediaViewer Bottom Controls", .mediaGraphics, .interactive, .fullScreen, .runnable, legacy: "图片展示", tags: ["iphone-duo", "media-viewer", "bottom-controls"]),
+        make("duo.message-kit-chat", "PooToolsMessageKit", "Duo · MessageKit Safe Chat", .uiComponents, .hostRequired, .push, .runnable, legacy: "MessageKit", tags: ["iphone-duo", "message-kit", "chat"]),
+        make("duo.large-title-navigation", "PToolsUIFoundation", "Duo · LargeTitle Nav Ownership", .navigationRouting, .interactive, .push, .runnable, legacy: "MessageKit", tags: ["iphone-duo", "navigation", "large-title"]),
+        make("duo.tab-accessory-search", "PToolsUIFoundation", "Duo · Tab Accessory Search", .navigationRouting, .interactive, .push, .runnable, legacy: "iPhone Duo Adaptive Bars", tags: ["iphone-duo", "tabbar", "accessory"]),
+        make("duo.paging-segmented", "PooToolsSegmented", "Duo · Paging + Segmented + Nested Scroll", .navigationRouting, .interactive, .push, .runnable, legacy: "SegmentedPagingRegression", tags: ["iphone-duo", "paging", "segmented", "nested-scroll"]),
+        make("duo.unified-collision-stress", "PToolsUIFoundation", "Duo · Unified Region Collision Stress", .navigationRouting, .interactive, .push, .runnable, legacy: "iPhone Duo Adaptive Bars", tags: ["iphone-duo", "collision", "reserved-region", "stress"]),
         make("security.encryption", "PooToolsDataEncrypt", "Encryption", .securityPrivacy, .interactive, .sheet, .runnable, legacy: "Encryption", tags: ["crypto"]),
         make("network.speed-test", "PooToolsNetworkSpeedTest", "Network Speed Test", .networkConnectivity, .interactive, .push, .runnable, legacy: "NetworkSpeedTest", tags: ["network", "speed", "endpoint"]),
         make("network.ping", "PooToolsPing", "Ping Session", .networkConnectivity, .interactive, .push, .runnable, legacy: "PingSession", tags: ["network", "ping", "state-machine"]),

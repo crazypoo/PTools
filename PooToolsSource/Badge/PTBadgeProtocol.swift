@@ -44,6 +44,17 @@ public enum PTBadgeContent: Sendable, Equatable {
     case text(String)
 }
 
+// English: Describes a host-local badge anchor without changing the legacy absolute-center default.
+// Español: Describe un anclaje local del badge sin cambiar el valor heredado de centro absoluto.
+// 中文：描述宿主局部角标锚点，同时保持旧版绝对中心点默认行为。
+public enum PTBadgeAnchor: Sendable, Equatable {
+    case absolute
+    case topLeading
+    case topTrailing
+    case bottomLeading
+    case bottomTrailing
+}
+
 // MARK: - 配置
 
 /// 角标的统一配置。
@@ -55,6 +66,12 @@ public struct PTBadgeConfiguration {
     public var frame: CGRect = .zero
     /// 兼容历史行为：这是宿主坐标系中的绝对中心点，而不是相对位移。
     public var centerOffset: CGPoint = .zero
+    /// 新布局使用宿主可视区锚点；absolute 保持旧版 centerOffset 语义。
+    public var anchor: PTBadgeAnchor = .absolute
+    // English: Offset an opt-in anchor without changing the legacy absolute center point.
+    // Español: Desplaza un anclaje optativo sin cambiar el centro absoluto heredado.
+    // 中文：在不改变旧版绝对中心点的前提下，微调可选锚点位置。
+    public var offset: CGPoint = .zero
     public var maximumNumber: Int = 99
     /// 红点的默认半径；对数字和文本角标，只有显式赋值后才作为圆角覆盖值。
     public var radius: CGFloat {

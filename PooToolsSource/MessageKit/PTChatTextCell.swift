@@ -52,6 +52,7 @@ public class PTChatTextCell: PTChatBaseCell {
     }
     
     private func setupConstraints(for cellModel: PTChatListModel, contentHeight: CGFloat, contentWidth: CGFloat, contentNumberOfLines: Int) {
+        let maxContentWidth = PTChatConfig.contentMaxWidth(containerWidth: contentView.bounds.width)
         dataContent.snp.remakeConstraints { make in
             make.top.equalTo(senderNameLabel.snp.bottom)
             make.height.equalTo(contentHeight)
@@ -60,10 +61,10 @@ public class PTChatTextCell: PTChatBaseCell {
             } else {
                 make.left.equalTo(userIcon.snp.right).offset(PTChatBaseCell.dataContentUserIconInset)
             }
-            if contentNumberOfLines <= 1 && contentWidth <= PTChatConfig.ChatContentShowMaxWidth {
+            if contentNumberOfLines <= 1 && contentWidth <= maxContentWidth {
                 make.width.equalTo(contentWidth)
             } else {
-                make.width.equalTo(PTChatConfig.ChatContentShowMaxWidth)
+                make.width.equalTo(maxContentWidth)
             }
         }
 
@@ -132,9 +133,10 @@ public class PTChatTextCell: PTChatBaseCell {
         let isOwner = cellModel.belongToMe
         let dataContentFont = isOwner ? PTChatConfig.share.textMeMessageFont : PTChatConfig.share.textOtherMessageFont
         let textEdges = isOwner ? PTChatConfig.share.textOwnerContentEdges.left + PTChatConfig.share.textOwnerContentEdges.right : PTChatConfig.share.textOtherContentEdges.left + PTChatConfig.share.textOtherContentEdges.right
+        let maxContentWidth = PTChatConfig.contentMaxWidth(containerWidth: contentView.bounds.width)
         
-        let contentNumberOfLines = msgContent.numberOfLines(font: dataContentFont, labelShowWidth: PTChatConfig.ChatContentShowMaxWidth, lineSpacing: PTChatConfig.share.textLineSpace)
-        var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont, lineSpacing: PTChatConfig.share.textLineSpace, width: PTChatConfig.ChatContentShowMaxWidth).height + 40
+        let contentNumberOfLines = msgContent.numberOfLines(font: dataContentFont, labelShowWidth: maxContentWidth, lineSpacing: PTChatConfig.share.textLineSpace)
+        var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont, lineSpacing: PTChatConfig.share.textLineSpace, width: maxContentWidth).height + 40
         if contentNumberOfLines <= 1 {
             contentHeight = PTChatConfig.share.contentBaseHeight
         }

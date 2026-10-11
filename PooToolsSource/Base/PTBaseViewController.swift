@@ -454,6 +454,13 @@ extension PTBaseViewController: UIScrollViewDelegate {
         }
         guard prefersLargeTitle() else { return }
 
+        // English: UIKit owns large-title behavior when the navigation stack uses its vertical bar.
+        // Español: UIKit controla el título grande cuando la pila usa su barra vertical.
+        // 中文：导航栈使用系统垂直 Bar 时，大标题行为由 UIKit 独占。
+        if PTNavigationBarManager.shared.isSystemVerticalBarOwned(by: navigationController) {
+            return
+        }
+
         let topHeight = scrollView.frame.origin.y + PTAppBaseConfig.share.navLargeTitleBarHeight
         scrollView.contentInset.top = topHeight
         scrollView.verticalScrollIndicatorInsets.top = topHeight
@@ -465,6 +472,13 @@ extension PTBaseViewController: UIScrollViewDelegate {
     // 中文：直接绑定和包装后的滚动视图统一使用同一套进度计算。
     func pt_updateLargeTitleTransition(for scrollView: UIScrollView) {
         guard prefersLargeTitle() else { return }
+
+        // English: Do not drive the custom transition while UIKit renders the native vertical bar.
+        // Español: No conduzcas la transición personalizada mientras UIKit renderiza la barra vertical nativa.
+        // 中文：UIKit 渲染原生垂直 Bar 时，不再驱动自定义大标题转场。
+        if PTNavigationBarManager.shared.isSystemVerticalBarOwned(by: navigationController) {
+            return
+        }
 
         let offset = scrollView.contentOffset.y
         let insetTop = scrollView.contentInset.top

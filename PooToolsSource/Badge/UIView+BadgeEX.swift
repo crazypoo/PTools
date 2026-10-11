@@ -247,7 +247,7 @@ extension UIView: @MainActor PTBadgeProtocol {
             label.frame = configuration.frame
         } else {
             label.bounds.size = size
-            label.center = safeBadgeCenter(configuration.centerOffset)
+            label.center = badgeCenter(for: size, configuration: configuration)
         }
 
         label.layer.cornerRadius = PTBadgeMetrics.cornerRadius(for: label.bounds.size,
@@ -279,6 +279,31 @@ extension UIView: @MainActor PTBadgeProtocol {
     private func safeBadgeCenter(_ center: CGPoint) -> CGPoint {
         guard center.x.isFinite, center.y.isFinite else { return .zero }
         return center
+    }
+
+    // English: Resolve opt-in anchors in the host's local visible region; legacy absolute placement is unchanged.
+    // Español: Resuelve los anclajes optativos en la región visible local; la posición absoluta heredada no cambia.
+    // 中文：将可选锚点解析到宿主局部可视区域，旧版绝对定位保持不变。
+    private func badgeCenter(for size: CGSize, configuration: PTBadgeConfiguration) -> CGPoint {
+        guard configuration.anchor != .absolute else {
+            return safeBadgeCenter(configuration.centerOffset)
+        }
+        let region = PTAdaptiveVisibleRegionResolver.region(for: self, minimumMargin: 2)
+        let preferred: PTAdaptiveBarEdge = {
+            switch configuration.anchor {
+            case .topLeading, .bottomLeading: return .leading
+            case .topTrailing, .bottomTrailing, .absolute: return .trailing
+            }
+        }()
+        let frame = PTAdaptiveVisibleRegionResolver.controlFrame(size: size,
+                                                                  in: region,
+                                                                  preferred: preferred,
+                                                                  margin: 2)
+        let y = configuration.anchor == .bottomLeading || configuration.anchor == .bottomTrailing
+            ? region.visibleRect.maxY - 2 - size.height / 2
+            : region.visibleRect.minY + 2 + size.height / 2
+        return safeBadgeCenter(CGPoint(x: frame.midX + configuration.offset.x,
+                                       y: y + configuration.offset.y))
     }
 
     // MARK: - 长按拖拽

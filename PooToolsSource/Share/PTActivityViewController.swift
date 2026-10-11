@@ -213,10 +213,14 @@ open class PTActivityViewController:UIActivityViewController {
     open var previewBottomMargin: CGFloat = 8
         
     private var haveImage:Bool = false
-    private lazy var fullContentHeight:CGFloat = {
-        let value:CGFloat = (CGFloat.kSCREEN_HEIGHT / 2) - previewBottomMargin * 5 - (CGFloat.kNavBarHeight_Total + previewTopMargin)
-        return value
-    }()
+    private var previewLayoutSignature: String?
+
+    private var fullContentHeight: CGFloat {
+        let hostHeight = viewIfLoaded?.bounds.height ?? 0
+        let fallbackHeight = max(320, previewImageSideLength + previewPadding * 2)
+        let availableHeight = hostHeight > 0 ? hostHeight : fallbackHeight
+        return max(1, availableHeight / 2 - previewBottomMargin * 5 - previewTopMargin)
+    }
     
     private lazy var contentAtt:NSMutableAttributedString = {
         let attributedString = NSMutableAttributedString()
@@ -297,29 +301,44 @@ open class PTActivityViewController:UIActivityViewController {
         UIView.animate(withDuration: fadeInDuration) {
             self.previewContainer.alpha = 1
         }
-        guard let appWindow = AppWindows else { return }
-        appWindow.addSubviews([previewContainer])
+        view.addSubview(previewContainer)
         previewContainer.snp.makeConstraints { make in
-//            make.edges.equalToSuperview()
-            make.left.right.top.equalToSuperview()
-            make.bottom.equalTo(self.view.snp.top)
+            make.edges.equalToSuperview()
         }
         
         previewContainer.addSubviews([previewInfoContainer])
         previewInfoContainer.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
-//            make.left.right.top.equalToSuperview()
-//            make.bottom.equalTo(self.view.snp.top)
+            make.edges.equalTo(self.view.safeAreaLayoutGuide)
         }
 
         previewInfoContainer.addSubviews([preview])
-        self.preview.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-//            make.bottom.equalToSuperview().inset(self.previewBottomMargin)
+        updatePreviewLayoutIfNeeded(force: true)
+    }
+
+    // English: Resolve the share preview from the activity controller's local safe region.
+    // Español: Resuelve la vista previa desde la región segura local del controlador de actividad.
+    // 中文：根据分享控制器自身的安全可视区域定位预览卡片。
+    private func updatePreviewLayoutIfNeeded(force: Bool = false) {
+        guard previewInfoContainer.superview != nil,
+              view.bounds.width > 0,
+              view.bounds.height > 0 else { return }
+        let region = PTAdaptiveVisibleRegionResolver.region(for: view)
+        let contentHeight = min(fullContentHeight,
+                                max(1, region.visibleRect.height - previewPadding * 2))
+        let signature = "\(region.signature)|\(contentHeight)|\(previewPadding)"
+        guard force || signature != previewLayoutSignature else { return }
+        previewLayoutSignature = signature
+        preview.snp.remakeConstraints { make in
+            make.left.equalToSuperview().offset(region.visibleRect.minX - previewInfoContainer.frame.minX + PTAppBaseConfig.share.defaultViewSpace)
+            make.right.equalToSuperview().offset(-(view.bounds.width - region.visibleRect.maxX - previewInfoContainer.frame.minX + PTAppBaseConfig.share.defaultViewSpace))
             make.centerY.equalToSuperview()
-            make.height.equalTo(self.fullContentHeight)
+            make.height.equalTo(contentHeight)
         }
+    }
+
+    open override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updatePreviewLayoutIfNeeded()
     }
     
     open override func viewWillDisappear(_ animated: Bool) {
@@ -389,7 +408,8 @@ open class PTActivityViewController:UIActivityViewController {
     }
     
     func labelContentWidth() -> CGFloat {
-        var labelW:CGFloat = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
+        let hostWidth = viewIfLoaded?.bounds.width ?? 320
+        var labelW:CGFloat = hostWidth - PTAppBaseConfig.share.defaultViewSpace * 2
         if haveImage {
             labelW = (labelW - previewImageSideLength - previewPadding * 3)
         } else {

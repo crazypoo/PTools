@@ -60,7 +60,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         config.itemHeight = 88
         config.showEmptyAlert = true
         config.emptyViewConfig = emptyConfig
-        config.contentBottomSpace = CGFloat.kTabbarSaveAreaHeight
+        config.contentBottomSpace = max(0, view.safeAreaInsets.bottom)
 
         let view = PTCollectionView(viewConfig: config)
         view.cellInCollection = { collection,sectionModel,indexPath in
@@ -123,7 +123,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
                         
         view.addSubviews([collectionView,fakeNav])
         let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
-        let collectionInset_Bottom:CGFloat = CGFloat.kTabbarSaveAreaHeight
+        let collectionInset_Bottom:CGFloat = max(0, view.safeAreaInsets.bottom)
         
         collectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
         collectionView.contentCollectionView.contentInset.top = collectionInset_Top
@@ -172,6 +172,23 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         fakeNav.titleViewMode = .auto
         navTitle.text = PTMediaLibUIConfig.share.albumListNavName
         fakeNav.titleView = navTitle
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let topInset = max(0, fakeNav.frame.maxY)
+        let bottomInset = max(0, view.safeAreaInsets.bottom)
+        var inset = collectionView.contentCollectionView.contentInset
+        var indicatorInset = collectionView.contentCollectionView.verticalScrollIndicatorInsets
+        if inset.top != topInset || inset.bottom != bottomInset {
+            inset.top = topInset
+            inset.bottom = bottomInset
+            collectionView.contentCollectionView.contentInset = inset
+        }
+        if indicatorInset.bottom != bottomInset {
+            indicatorInset.bottom = bottomInset
+            collectionView.contentCollectionView.verticalScrollIndicatorInsets = indicatorInset
+        }
     }
     
     func loadAlbumList() {
