@@ -177,6 +177,8 @@ open class PTBaseViewController: UIViewController, PTNavigationConfigurable, PTA
                 }
                 
                 self.setCustomBackButtonView(backBtn,size: backBtn.bounds.size)
+                item.usesFrameworkDefaultBackAction = true
+                PTNavigationBarManager.shared.update(item: item, for: self)
             }
         }
     }
@@ -256,6 +258,7 @@ open class PTBaseViewController: UIViewController, PTNavigationConfigurable, PTA
         let item = PTNavigationBarManager.shared.item(for: self)
         item.leftView = [backButton]
         item.leftItemSpacing = leftPadding
+        item.usesFrameworkDefaultBackAction = false
         PTNavigationBarManager.shared.update(item: item, for: self)
     }
     
@@ -298,6 +301,7 @@ open class PTBaseViewController: UIViewController, PTNavigationConfigurable, PTA
         
         let item = PTNavigationBarManager.shared.item(for: self)
         item.leftView = [container]
+        item.usesFrameworkDefaultBackAction = false
         
         PTNavigationBarManager.shared.update(item: item, for: self)
     }
@@ -358,12 +362,14 @@ open class PTBaseViewController: UIViewController, PTNavigationConfigurable, PTA
         guard !views.isEmpty else {
             let item = PTNavigationBarManager.shared.item(for: self)
             item.leftView = []
+            item.usesFrameworkDefaultBackAction = false
             PTNavigationBarManager.shared.update(item: item, for: self)
             return
         }
         let item = PTNavigationBarManager.shared.item(for: self)
         item.leftView = views
         item.leftItemSpacing = buttonSpacing
+        item.usesFrameworkDefaultBackAction = false
         PTNavigationBarManager.shared.update(item: item, for: self)
     }
 

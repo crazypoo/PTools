@@ -51,6 +51,15 @@ open class PTBaseNavControl: UINavigationController {
         PTNavigationBarManager.shared.bind(to: self)
         PTNavigationBarManager.shared.installIfNeeded(in: self)
         PTAdaptiveSystemBarBridge.apply(policy: adaptiveBarPresentationPolicy, to: self)
+
+        // English: Prime the visible root item because a presented navigation stack may not emit willShow after binding.
+        // Español: Prepara el elemento visible porque una pila presentada puede no emitir willShow después de enlazarse.
+        // 中文：预先配置当前可见页面，因为 modal 导航栈绑定 delegate 后可能不会再次触发 willShow。
+        if let baseViewController = visibleViewController as? PTBaseViewController,
+           baseViewController.allowControlNavBar() {
+            baseViewController.prepareDefaultNavigationBarItem()
+            PTNavigationBarManager.shared.restoreIfNeeded(for: baseViewController)
+        }
     }
     
     open override func viewDidLoad() {

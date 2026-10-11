@@ -18,10 +18,58 @@ public enum PTScreenShotActionType {
     case Dark,Light,Auto
 }
 
+// English: Give UIKit-native bar-button custom views a stable intrinsic size.
+// Español: Proporciona un tamaño intrínseco estable a las vistas personalizadas de los botones nativos de UIKit.
+// 中文：为 UIKit 原生导航按钮的自定义视图提供稳定的固有尺寸。
+@MainActor
+private final class PTNativeNavigationItemView: UIView {
+    private let contentView: UIView
+    private let preferredSize: CGSize
+
+    init(contentView: UIView) {
+        self.contentView = contentView
+        let boundsSize = contentView.bounds.size
+        let intrinsicSize = contentView.intrinsicContentSize
+        let width = boundsSize.width > 0 ? boundsSize.width : intrinsicSize.width
+        let height = boundsSize.height > 0 ? boundsSize.height : intrinsicSize.height
+        self.preferredSize = CGSize(
+            width: width > 0 && width.isFinite ? width : PTAppBaseConfig.share.navBarButtonSize,
+            height: height > 0 && height.isFinite ? height : PTAppBaseConfig.share.navBarButtonSize
+        )
+        super.init(frame: CGRect(origin: .zero, size: self.preferredSize))
+        isUserInteractionEnabled = contentView.isUserInteractionEnabled
+        contentView.removeFromSuperview()
+        addSubview(contentView)
+        contentView.translatesAutoresizingMaskIntoConstraints = true
+        setContentHuggingPriority(.required, for: .horizontal)
+        setContentHuggingPriority(.required, for: .vertical)
+        setContentCompressionResistancePriority(.required, for: .horizontal)
+        setContentCompressionResistancePriority(.required, for: .vertical)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) is unavailable")
+    }
+
+    override var intrinsicContentSize: CGSize {
+        preferredSize
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.frame = bounds
+    }
+}
+
 
 @MainActor
 public final class PTNavBarItem {
     public var isConfigured = false   // ✅ 新增
+    // English: Track framework-generated back items so modal native bars can use UIKit's system back action.
+    // Español: Identifica los elementos de retroceso creados por el framework para que las barras modales nativas usen la acción de UIKit.
+    // 中文：标记框架生成的返回项，让原生 modal Bar 使用 UIKit 的系统返回动作。
+    var usesFrameworkDefaultBackAction = false
     public var leftView: [UIView] = []
     public var leftItemSpacing:CGFloat = 0
     public var rightViews: [UIView] = []
@@ -507,11 +555,18 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             toStyle = .default
         }
 
+        // English: Prepare the default back item before either UIKit or the custom renderer reads the cached item.
+        // Español: Prepara el elemento de retroceso predeterminado antes de que UIKit o el renderizador personalizado lean la caché.
+        // 中文：在 UIKit 或自定义渲染器读取缓存项之前，先准备默认返回按钮。
+        if let baseVC = viewController as? PTBaseViewController {
+            baseVC.prepareDefaultNavigationBarItem()
+        }
+        let item = itemCache.object(forKey: viewController) ?? PTNavBarItem()
+
         if usesNativeVerticalBar(navigationController) {
             // English: Map the existing navigation item into UIKit instead of overlaying a second custom bar.
             // Español: Mapea el elemento de navegación existente a UIKit en lugar de superponer otra barra personalizada.
             // 中文：把现有导航项映射到 UIKit，避免叠加第二套自定义导航栏。
-            let item = itemCache.object(forKey: viewController) ?? PTNavBarItem()
             applyNativeItem(item, in: navigationController, viewController: viewController)
             StatusBarManager.shared.update(with: toStyle)
             if let handler = tabBarHandlerCache.object(forKey: navigationController)?.handler {
@@ -524,11 +579,6 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
 
         resetSystemNavBarAppearance(navigationController)
 
-        // 安全准备默认返回按钮数据（来自我们上一步的优化）
-        if let baseVC = viewController as? PTBaseViewController {
-            baseVC.prepareDefaultNavigationBarItem()
-        }
-
         guard let container = containerMap.object(forKey: navigationController) else { return }
 
         StatusBarManager.shared.update(with: toStyle)
@@ -538,8 +588,6 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
 
         // 预设起点，准备动画
         container.prepareTransition(from: fromStyle, to: toStyle)
-        let item = itemCache.object(forKey: viewController) ?? PTNavBarItem()
-
         // 🌟 判断这是否是导航栈的“根视图”（代表是新 Present 出来的）
         let isRoot = navigationController.viewControllers.first == viewController
 
@@ -623,7 +671,13 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             tabBarHandler?(navigationController, viewController, animated, navigationController.transitionCoordinator)
         }
 
-        viewController.navigationItem.hidesBackButton = true
+        let isPresentedRoot = usesNativeVerticalBar(navigationController) &&
+            navigationController.viewControllers.first === viewController &&
+            (navigationController.presentingViewController != nil ||
+             viewController.presentingViewController != nil ||
+             navigationController.isBeingPresented ||
+             viewController.isBeingPresented)
+        viewController.navigationItem.hidesBackButton = !(isPresentedRoot && item.usesFrameworkDefaultBackAction)
         viewController.title = nil
         viewController.navigationItem.titleView = nil
     }
@@ -767,8 +821,60 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                                  in navigationController: UINavigationController,
                                  viewController: UIViewController) {
         let navigationItem = viewController.navigationItem
-        navigationItem.leftBarButtonItems = item.leftView.map { UIBarButtonItem(customView: $0) }
-        navigationItem.rightBarButtonItems = item.rightViews.map { UIBarButtonItem(customView: $0) }
+        let isPresentedRoot = navigationController.viewControllers.first === viewController &&
+            (navigationController.presentingViewController != nil ||
+             viewController.presentingViewController != nil ||
+             navigationController.isBeingPresented ||
+             viewController.isBeingPresented)
+
+        if isPresentedRoot, item.usesFrameworkDefaultBackAction, #available(iOS 16.0, *) {
+            // English: A presented root has no natural stack back item, so expose UIKit's synthesized system back action.
+            // Español: Una raíz presentada no tiene un elemento de retroceso natural de la pila; expone la acción de retroceso sintetizada por UIKit.
+            // 中文：modal 根页面没有天然的栈返回项，因此使用 UIKit 合成的系统返回动作。
+            navigationItem.leftBarButtonItems = nil
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.leadingItemGroups = []
+            navigationItem.leftItemsSupplementBackButton = false
+            navigationItem.backAction = UIAction(title: "Back",
+                                                 image: PTAppBaseConfig.share.viewControllerBackItemImage) { [weak viewController, weak navigationController] _ in
+                if let baseViewController = viewController as? PTBaseViewController {
+                    baseViewController.returnFrontVC()
+                } else {
+                    navigationController?.dismiss(animated: true)
+                }
+            }
+            navigationItem.hidesBackButton = false
+        } else {
+            // English: Wrap custom views only when UIKit will actually display them, preserving the original container for renderer changes.
+            // Español: Envuelve las vistas personalizadas solo cuando UIKit realmente las mostrará, conservando el contenedor original para cambios de renderizador.
+            // 中文：仅在 UIKit 确实要显示自定义视图时创建 wrapper，保留原容器以支持渲染器切换。
+            let leftBarButtonItems = item.leftView.map {
+                UIBarButtonItem(customView: PTNativeNavigationItemView(contentView: $0))
+            }
+
+            if isPresentedRoot, !leftBarButtonItems.isEmpty, #available(iOS 16.0, *) {
+            // English: Keep an explicitly supplied modal close button in the system leading group.
+            // Español: Mantiene el botón de cierre modal explícito dentro del grupo leading del sistema.
+            // 中文：将调用方显式提供的 modal 关闭按钮放入系统 leading group。
+            navigationItem.backAction = nil
+            navigationItem.leftBarButtonItems = nil
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.leadingItemGroups = [
+                UIBarButtonItemGroup.fixedGroup(representativeItem: nil,
+                                                items: leftBarButtonItems)
+            ]
+            navigationItem.leftItemsSupplementBackButton = false
+            navigationItem.hidesBackButton = true
+            } else {
+                navigationItem.backAction = nil
+                navigationItem.leadingItemGroups = []
+                navigationItem.leftBarButtonItems = leftBarButtonItems
+            }
+        }
+
+        navigationItem.rightBarButtonItems = item.rightViews.map {
+            UIBarButtonItem(customView: PTNativeNavigationItemView(contentView: $0))
+        }
 
         if let titleView = item.titleView {
             navigationItem.title = nil
