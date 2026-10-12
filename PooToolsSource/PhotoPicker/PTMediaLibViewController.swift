@@ -425,7 +425,10 @@ extension PTMediaLibView {
     
     #if POOTOOLS_IMAGEEDITOR
     func handleImageEdit(model: PTMediaModel) {
-        PTMediaLibManager.requestImage(for: model.asset, targetSize: model.previewSize) { [weak self] result in
+        let container = collectionView.contentCollectionView
+        let targetSize = model.previewSize(in: container.bounds,
+                                           scale: container.window?.screen.scale ?? container.traitCollection.displayScale)
+        PTMediaLibManager.requestImage(for: model.asset, targetSize: targetSize) { [weak self] result in
             PTGCDManager.shared.runOnMain { [weak self] in
                 guard !result.isDegraded, let image = result.image else { return }
                 
@@ -869,7 +872,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     private func setupUI() {
         view.addSubviews([mediaListView,fakeNav])
         let topInset = CGFloat.kNavBarHeight
-        let bottomInset = CGFloat.kTabbarSaveAreaHeight
+        let bottomInset = max(0, viewIfLoaded?.safeAreaInsets.bottom ?? 0)
 
         let cv = mediaListView.collectionView.contentCollectionView
         cv.contentInsetAdjustmentBehavior = .never
@@ -1076,7 +1079,13 @@ public class PTMediaLibViewController: PTBaseViewController {
     
     public func mediaLibShow() {
         let nav = PTBaseNavControl(rootViewController: self)
-        self.currentPresentToSheet(vc: nav,sizes: [.fixed(CGFloat.kSCREEN_HEIGHT - CGFloat.statusBarHeight())])
+        // English: Derive the sheet height from the current scene host, not a process-wide screen constant.
+        // Español: Calcula la altura desde el host de la escena actual, no desde una constante global de pantalla.
+        // 中文：根据当前场景宿主计算 Sheet 高度，不再依赖进程级屏幕常量。
+        let hostBounds = viewIfLoaded?.bounds ?? PTSceneContext.activeWindow()?.bounds ?? .zero
+        let topInset = viewIfLoaded?.safeAreaInsets.top ?? 0
+        let sheetHeight = max(1, hostBounds.height - topInset)
+        self.currentPresentToSheet(vc: nav, sizes: [.fixed(sheetHeight)])
     }
 }
 
@@ -1086,9 +1095,12 @@ extension PTMediaLibViewController {
     private func fetchMediaResultAsync(model: PTMediaModel, index: Int, isOriginal: Bool) async -> (result: PTResultModel?, errorAsset: PHAsset?, index: Int) {
         let selectionOptions = effectiveSelectionOptions
         return await withCheckedContinuation { continuation in
+            let previewContainer = mediaListView.collectionView.contentCollectionView
             let operation = PTFetchImageOperation(model: model,
                                                   isOriginal: isOriginal,
-                                                  selectionOptions: selectionOptions) { image, asset in
+                                                  selectionOptions: selectionOptions,
+                                                  previewBounds: previewContainer.bounds,
+                                                  previewScale: previewContainer.window?.screen.scale ?? previewContainer.traitCollection.displayScale) { image, asset in
                 Task { @MainActor in
                     if let image = image {
                         let isEdited = model.editImage != nil && !selectionOptions.saveNewImageAfterEdit

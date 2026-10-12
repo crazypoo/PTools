@@ -26,9 +26,10 @@ public final class PTHTMLHeightCalculator: NSObject {
     // ✅ 在初始化时直接构建 WebView，消除 initWebView() 样板代码和强制解包(!)
     public override init() {
         let configuration = WKWebViewConfiguration()
-        // 使用 UIScreen 的替代安全方案或传入确定宽度，避免强制依赖隐式全局变量
-        let screenWidth = UIScreen.main.bounds.width
-        self.webView = WKWebView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1), configuration: configuration)
+        // English: Start without a guessed screen width; callers can provide their container width.
+        // Español: Empieza sin adivinar el ancho de la pantalla; el llamador puede aportar el ancho del contenedor.
+        // 中文：初始化时不猜测屏幕宽度，由调用方提供实际容器宽度。
+        self.webView = WKWebView(frame: .zero, configuration: configuration)
         self.webView.scrollView.isScrollEnabled = false
         super.init()
         // 设置代理
@@ -49,7 +50,10 @@ public final class PTHTMLHeightCalculator: NSObject {
     /// 现代化的 Swift 6 异步计算接口
     /// - Parameter html: 原始 HTML 字符串
     /// - Returns: 计算出的实际渲染高度
-    public func calculateHeight(for html: String) async -> CGFloat {
+    public func calculateHeight(for html: String, containerWidth: CGFloat? = nil) async -> CGFloat {
+        if let containerWidth, containerWidth.isFinite, containerWidth > 0 {
+            webView.frame.size.width = containerWidth
+        }
         webView.stopLoading()
         // 确保上一个未完成的任务安全释放（防止重复调用挂起）
         activeContinuation?.resume(returning: 0)

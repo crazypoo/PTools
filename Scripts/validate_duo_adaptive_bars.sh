@@ -4,6 +4,11 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+# English: Generate the full UIKit inventory before validating the shared Duo contract.
+# Español: Genera el inventario UIKit completo antes de validar el contrato Duo compartido.
+# 中文：在验证共享 Duo 契约前，先生成完整 UIKit 清单。
+python3 "$repo_root/Scripts/audit_duo_uikit_coverage.py" "$repo_root"
+
 # English: Keep the Duo gate portable on machines that do not install ripgrep.
 # Español: Mantiene la puerta Duo portátil en máquinas sin ripgrep instalado.
 # 中文：让 Duo 门禁在未安装 ripgrep 的机器上也能运行。
@@ -20,6 +25,13 @@ require_file() {
     exit 1
   }
 }
+
+for report in \
+  report/current/duo_uikit_inventory.csv \
+  report/current/duo_global_geometry_hits.json \
+  report/current/duo_coverage.md; do
+  require_file "$report"
+done
 
 require_fixed() {
   local needle="$1"
@@ -65,6 +77,22 @@ for demo_id in \
 done
 require_fixed "testVerticalNavAndTabsNeverOverlap" Tests/PToolsUIFoundationTests/PTAdaptiveBarLayoutTests.swift
 require_fixed "testMultiSceneStateDoesNotLeak" Tests/PToolsUIFoundationTests/PTAdaptiveBarLayoutTests.swift
+for test_name in \
+  "testVisiblePanesExcludeEveryActiveReservedRegion" \
+  "testNoInteractiveFrameOverlapsReservedRegion" \
+  "testVerticalRailNavTabAccessoryOverflowNoCollision" \
+  "testLayoutSignatureChangesOnlyWithGeometry" \
+  "testNoInfiniteLayoutInvalidationOnResize" \
+  "testPhotoGridItemFramesStayWithinUsablePanes" \
+  "testPagingFourMediaAfterResizePreservesItemIdentity" \
+  "testEditorCropCoordinatesAfterResize" \
+  "testKeyboardFormFooterAndPopoverAvoidOcclusion" \
+  "testSplitViewCollapseExpandRetainsSelection" \
+  "testRTLVerticalEdgeFollowsSystem" \
+  "testMultiSceneDoesNotReuseStaleGeometry"; do
+  require_fixed "$test_name" Tests/PToolsUIFoundationTests/PTAdaptiveBarLayoutTests.swift
+done
+require_fixed "availablePanes" PooToolsSource/Base/PTAdaptiveVisibleRegionResolver.swift
 
 # English: These shared bar files must use local geometry rather than screen or device heuristics.
 # Español: Estos archivos compartidos deben usar geometría local y no heurísticas de pantalla o dispositivo.

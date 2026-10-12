@@ -325,7 +325,13 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
             }
         }
         fontPicker.modalPresentationStyle = .pageSheet
-        UIViewController.currentPresentToSheet(vc: fontPicker,sizes: [.fixed(CGFloat.kSCREEN_HEIGHT - CGFloat.kNavBarHeight_Total)])
+        // English: Size the font sheet from the current controller's scene-local bounds.
+        // Español: Dimensiona la hoja de fuentes con los límites locales de la escena del controlador.
+        // 中文：根据当前控制器所在场景的局部 bounds 计算字体 Sheet 高度。
+        let hostBounds = viewIfLoaded?.bounds ?? PTSceneContext.activeWindow()?.bounds ?? .zero
+        let topInset = viewIfLoaded?.safeAreaInsets.top ?? 0
+        let sheetHeight = max(1, hostBounds.height - topInset)
+        UIViewController.currentPresentToSheet(vc: fontPicker, sizes: [.fixed(sheetHeight)])
     }
 
     private func refreshTextViewUI() {

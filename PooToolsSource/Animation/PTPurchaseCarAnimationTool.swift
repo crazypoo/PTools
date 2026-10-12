@@ -51,8 +51,10 @@ public enum PTPurchaseCarAnimationTool {
         // 3. 创建贝塞尔抛物线路径
         let path = UIBezierPath()
         path.move(to: animLayer.position)
-        // 控制点计算：X轴位于屏幕中间，Y轴向上偏移以形成抛物线的弧度
-        let controlPoint = CGPoint(x: UIScreen.main.bounds.width / 2, y: startRect.origin.y - 80)
+        // English: Use the host window's local midpoint for the control point.
+        // Español: Usa el punto medio local de la ventana anfitriona para el control.
+        // 中文：使用宿主窗口的局部中心点计算抛物线控制点。
+        let controlPoint = CGPoint(x: keyWindow.bounds.midX, y: startRect.origin.y - 80)
         path.addQuadCurve(to: finishPoint, controlPoint: controlPoint)
         
         // 4. 组装动画

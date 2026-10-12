@@ -191,8 +191,11 @@ public class PTEmptyDataSetView: UIView {
             make.centerY.equalToSuperview().offset(verticalOffset)
         }
         
-        let width = self.frame.width > 0 ? self.frame.width : UIScreen.main.bounds.width
-        let padding = roundf(Float(width / 16.0))
+        // English: Resolve padding from this view or its immediate host, never from a process-wide screen.
+        // Español: Resuelve el margen desde esta vista o su anfitrión inmediato, nunca desde una pantalla global.
+        // 中文：从当前 View 或直接宿主读取边距，不再依赖进程级屏幕尺寸。
+        let width = max(bounds.width, superview?.bounds.width ?? 0)
+        let padding = roundf(Float(max(width / 16.0, 16)))
         
         stackView.snp.remakeConstraints { make in
             make.top.bottom.equalToSuperview()

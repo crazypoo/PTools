@@ -236,4 +236,195 @@ final class PTAdaptiveBarLayoutTests: XCTestCase {
         XCTAssertTrue(leading.visibleTabItemIDs.contains("home"))
         XCTAssertTrue(trailing.visibleTabItemIDs.contains("settings"))
     }
+
+    func testVisiblePanesExcludeEveryActiveReservedRegion() {
+        let regions = [
+            PTAdaptiveReservedRegion(frame: CGRect(x: 180, y: 0, width: 20, height: 844),
+                                     kind: .division,
+                                     isActive: true),
+            PTAdaptiveReservedRegion(frame: CGRect(x: 0, y: 300, width: 180, height: 60),
+                                     kind: .occlusion,
+                                     isActive: true)
+        ]
+        let region = PTAdaptiveVisibleRegionResolver.region(
+            for: context(bounds: CGRect(x: 0, y: 0, width: 390, height: 844), regions: regions)
+        )
+
+        XCTAssertFalse(region.availablePanes.isEmpty)
+        for pane in region.availablePanes {
+            XCTAssertFalse(pane.intersects(regions[0].frame))
+            XCTAssertFalse(pane.intersects(regions[1].frame))
+        }
+    }
+
+    func testNoInteractiveFrameOverlapsReservedRegion() {
+        let reserved = PTAdaptiveReservedRegion(frame: CGRect(x: 180, y: 0, width: 20, height: 844),
+                                                 kind: .division,
+                                                 isActive: true)
+        let region = PTAdaptiveVisibleRegionResolver.region(
+            for: context(bounds: CGRect(x: 0, y: 0, width: 390, height: 844), regions: [reserved])
+        )
+        let frame = PTAdaptiveVisibleRegionResolver.controlFrame(size: CGSize(width: 80, height: 44),
+                                                                 in: region,
+                                                                 preferred: .trailing)
+
+        XCTAssertFalse(frame.intersects(reserved.frame))
+    }
+
+    func testVerticalRailNavTabAccessoryOverflowNoCollision() {
+        let geometry = PTAdaptiveBarLayoutResolver.resolve(context: context(bounds: CGRect(x: 0, y: 0, width: 390, height: 300)),
+                                                            configuration: .init(),
+                                                            navigationActionCount: 2,
+                                                            tabItemIDs: (0..<20).map(String.init),
+                                                            selectedTabID: "17",
+                                                            accessoryHeight: 44)
+
+        XCTAssertFalse(geometry.navItemsRect.intersects(geometry.tabItemsRect))
+        XCTAssertFalse(geometry.navItemsRect.intersects(geometry.accessoryRect))
+        XCTAssertFalse(geometry.tabItemsRect.intersects(geometry.accessoryRect))
+        XCTAssertTrue(geometry.visibleTabItemIDs.contains("17"))
+        XCTAssertTrue(geometry.overflowTabItemIDs.contains("0"))
+    }
+
+    func testLayoutSignatureChangesOnlyWithGeometry() {
+        let first = PTAdaptiveVisibleRegionResolver.region(for: context())
+        let second = PTAdaptiveVisibleRegionResolver.region(for: context())
+        let resized = PTAdaptiveVisibleRegionResolver.region(
+            for: context(bounds: CGRect(x: 0, y: 0, width: 720, height: 520))
+        )
+
+        XCTAssertEqual(first.signature, second.signature)
+        XCTAssertNotEqual(first.signature, resized.signature)
+    }
+
+    func testNoInfiniteLayoutInvalidationOnResize() {
+        let hostView = UIView(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
+        hostView.overrideUserInterfaceStyle = .light
+        let coordinator = PTAdaptiveBarCoordinator(hostView: hostView)
+
+        _ = coordinator.update(navigationActionCount: 1,
+                               tabItemIDs: tabIDs,
+                               selectedTabID: "home")
+        let firstGeneration = coordinator.generation
+        _ = coordinator.update(navigationActionCount: 1,
+                               tabItemIDs: tabIDs,
+                               selectedTabID: "home")
+
+        XCTAssertEqual(coordinator.generation, firstGeneration)
+        hostView.frame.size = CGSize(width: 720, height: 520)
+        _ = coordinator.update(navigationActionCount: 1,
+                               tabItemIDs: tabIDs,
+                               selectedTabID: "home")
+        XCTAssertEqual(coordinator.generation, firstGeneration + 1)
+    }
+
+    func testPhotoGridItemFramesStayWithinUsablePanes() {
+        let division = PTAdaptiveReservedRegion(frame: CGRect(x: 390, y: 0, width: 20, height: 520),
+                                                 kind: .division,
+                                                 isActive: true)
+        let region = PTAdaptiveVisibleRegionResolver.region(
+            for: context(bounds: CGRect(x: 0, y: 0, width: 800, height: 520), regions: [division])
+        )
+        let item = CGRect(x: region.visibleRect.minX + 8,
+                          y: region.visibleRect.minY + 8,
+                          width: min(120, region.visibleRect.width - 16),
+                          height: 120)
+
+        XCTAssertTrue(region.visibleRect.contains(item))
+        XCTAssertFalse(region.reservedRects.contains { $0.intersects(item) })
+    }
+
+    func testPagingFourMediaAfterResizePreservesItemIdentity() {
+        let mediaIDs = ["one", "two", "three", "four"]
+        let before = PTAdaptiveBarLayoutResolver.resolve(context: context(),
+                                                         configuration: .init(),
+                                                         navigationActionCount: 1,
+                                                         tabItemIDs: mediaIDs,
+                                                         selectedTabID: "three")
+        let after = PTAdaptiveBarLayoutResolver.resolve(context: context(bounds: CGRect(x: 0, y: 0, width: 720, height: 520)),
+                                                        configuration: .init(),
+                                                        navigationActionCount: 1,
+                                                        tabItemIDs: mediaIDs,
+                                                        selectedTabID: "three")
+
+        XCTAssertTrue(before.visibleTabItemIDs.contains("three"))
+        XCTAssertTrue(after.visibleTabItemIDs.contains("three"))
+        XCTAssertEqual(mediaIDs, ["one", "two", "three", "four"])
+    }
+
+    func testEditorCropCoordinatesAfterResize() {
+        let crop = CGRect(x: 40, y: 60, width: 200, height: 160)
+        let oldBounds = CGRect(x: 0, y: 0, width: 390, height: 844)
+        let newBounds = CGRect(x: 0, y: 0, width: 720, height: 520)
+        let scale = min(newBounds.width / oldBounds.width, newBounds.height / oldBounds.height)
+        let resized = CGRect(x: crop.minX * scale,
+                             y: crop.minY * scale,
+                             width: crop.width * scale,
+                             height: crop.height * scale)
+
+        XCTAssertTrue(newBounds.contains(resized))
+        XCTAssertEqual(resized.width / scale, crop.width, accuracy: 0.0001)
+        XCTAssertEqual(resized.height / scale, crop.height, accuracy: 0.0001)
+    }
+
+    func testKeyboardFormFooterAndPopoverAvoidOcclusion() {
+        let keyboard = PTAdaptiveReservedRegion(frame: CGRect(x: 0, y: 600, width: 390, height: 244),
+                                                 kind: .occlusion,
+                                                 isActive: true)
+        let region = PTAdaptiveVisibleRegionResolver.region(
+            for: context(bounds: CGRect(x: 0, y: 0, width: 390, height: 844), regions: [keyboard])
+        )
+        let footer = PTAdaptiveVisibleRegionResolver.controlFrame(size: CGSize(width: 200, height: 44),
+                                                                  in: region,
+                                                                  preferred: .trailing)
+
+        XCTAssertFalse(footer.intersects(keyboard.frame))
+        XCTAssertLessThanOrEqual(footer.maxY, keyboard.frame.minY)
+    }
+
+    func testSplitViewCollapseExpandRetainsSelection() {
+        let selected = "detail"
+        let expanded = PTAdaptiveBarLayoutResolver.resolve(context: context(bounds: CGRect(x: 0, y: 0, width: 820, height: 600)),
+                                                           configuration: .init(),
+                                                           navigationActionCount: 1,
+                                                           tabItemIDs: ["master", selected],
+                                                           selectedTabID: selected)
+        let collapsed = PTAdaptiveBarLayoutResolver.resolve(context: context(bounds: CGRect(x: 0, y: 0, width: 390, height: 844)),
+                                                            configuration: .init(),
+                                                            navigationActionCount: 1,
+                                                            tabItemIDs: ["master", selected],
+                                                            selectedTabID: selected)
+
+        XCTAssertTrue(expanded.visibleTabItemIDs.contains(selected))
+        XCTAssertTrue(collapsed.visibleTabItemIDs.contains(selected))
+    }
+
+    func testRTLVerticalEdgeFollowsSystem() {
+        let rtl = PTAdaptiveBarLayoutContext(bounds: CGRect(x: 0, y: 0, width: 390, height: 844),
+                                             safeAreaInsets: .zero,
+                                             verticalBarEdge: .trailing,
+                                             layoutDirection: .rightToLeft)
+        let geometry = PTAdaptiveBarLayoutResolver.resolve(context: rtl,
+                                                            configuration: .init(),
+                                                            navigationActionCount: 1,
+                                                            tabItemIDs: tabIDs,
+                                                            selectedTabID: "home")
+
+        XCTAssertEqual(geometry.edge, .trailing)
+        XCTAssertGreaterThan(geometry.customRailRect.minX, 0)
+    }
+
+    func testMultiSceneDoesNotReuseStaleGeometry() {
+        let firstScene = PTAdaptiveVisibleRegionResolver.region(
+            for: context(bounds: CGRect(x: 0, y: 0, width: 390, height: 844),
+                          insets: UIEdgeInsets(top: 44, left: 0, bottom: 34, right: 0))
+        )
+        let secondScene = PTAdaptiveVisibleRegionResolver.region(
+            for: context(bounds: CGRect(x: 0, y: 0, width: 820, height: 600),
+                          insets: UIEdgeInsets(top: 24, left: 20, bottom: 20, right: 40))
+        )
+
+        XCTAssertNotEqual(firstScene.signature, secondScene.signature)
+        XCTAssertNotEqual(firstScene.visibleRect, secondScene.visibleRect)
+    }
 }

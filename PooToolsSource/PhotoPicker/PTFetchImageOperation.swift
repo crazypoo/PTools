@@ -24,6 +24,11 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
     // Español: Mantiene el comportamiento multimedia como una instantánea de valor para esta operación.
     // 中文：将媒体行为作为当前 Operation 的值快照保存。
     private let selectionOptions: PTMediaLibSelectionOptions
+    // English: Keep the consuming collection's local geometry instead of reading a global screen size.
+    // Español: Conserva la geometría local de la colección consumidora en lugar de leer un tamaño de pantalla global.
+    // 中文：保存实际使用的列表局部几何，避免读取全局屏幕尺寸。
+    private let previewBounds: CGRect
+    private let previewScale: CGFloat
     private let progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)?
     private let completion: @Sendable (UIImage?, PHAsset?) -> Void
 
@@ -59,11 +64,15 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
     init(model: PTMediaModel,
          isOriginal: Bool,
          selectionOptions: PTMediaLibSelectionOptions,
+         previewBounds: CGRect,
+         previewScale: CGFloat,
          progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil,
          completion: @escaping @Sendable (UIImage?, PHAsset?) -> Void) {
         self.model = model
         self.isOriginal = isOriginal
         self.selectionOptions = selectionOptions
+        self.previewBounds = previewBounds
+        self.previewScale = max(1, previewScale.isFinite ? previewScale : 1)
         self.progress = progress
         self.completion = completion
         super.init()
@@ -126,7 +135,7 @@ final class PTFetchImageOperation: Operation, @unchecked Sendable {
             }
 
             // 4. 处理普通照片
-            let size = model.previewSize
+            let size = model.previewSize(in: previewBounds, scale: previewScale)
             let asset = model.asset
             
             let resultHandler: @MainActor @Sendable (PTMediaImageRequestResult) -> Void = { [weak self = self] result in

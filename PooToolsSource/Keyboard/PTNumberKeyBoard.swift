@@ -34,7 +34,7 @@ public class PTNumberKeyBoard: UIView {
     private static let kNumCols = 3
 
     private var keyWidth: CGFloat {
-        (bounds.width - CGFloat(Self.kLineWidth * 2) - CGFloat(Self.kButtonSpaceLeft * 4)) / 3
+        max(1, (bounds.width - CGFloat(Self.kLineWidth * 2) - CGFloat(Self.kButtonSpaceLeft * 4)) / 3)
     }
 
     required public init(type: PTKeyboardType,
@@ -42,8 +42,6 @@ public class PTNumberKeyBoard: UIView {
                 returnSTH: @escaping PTNumberKeyBoardReturnSTH) {
 
         super.init(frame: .zero)
-
-        self.bounds = CGRect(x: 0, y: 0, width: CGFloat.kSCREEN_WIDTH, height: Self.kKeyBoardH + CGFloat.kTabbarSaveAreaHeight)
 
         let colorNormal = UIColor(red: 252/255, green: 252/255, blue: 252/255, alpha: 1)
         let colorHighlighted = UIColor(red: 186/255, green: 189/255, blue: 194/255, alpha: 1)
@@ -75,15 +73,6 @@ public class PTNumberKeyBoard: UIView {
                 }
 
                 addSubview(button)
-
-                button.snp.makeConstraints { make in
-                    let topOffset = Self.kKeyH * CGFloat(row) + CGFloat(row) * Self.kLineWidth + Self.kButtonSpaceTop * CGFloat(row + 1)
-                    let leftOffset = self.keyWidth * CGFloat(col) + CGFloat(col) * Self.kLineWidth + Self.kButtonSpaceLeft * CGFloat(col + 1)
-                    make.height.equalTo(Self.kKeyH)
-                    make.width.equalTo(self.keyWidth)
-                    make.top.equalToSuperview().inset(topOffset)
-                    make.left.equalToSuperview().inset(leftOffset)
-                }
 
                 button.viewCorner(radius: 5)
 
@@ -125,16 +114,27 @@ public class PTNumberKeyBoard: UIView {
         for row in 0..<Self.kNumRows {
             for col in 0..<Self.kNumCols {
                 guard let button = viewWithTag(col + Self.kNumCols * row + 1) else { continue }
-                button.snp.updateConstraints { make in
-                    let topOffset = Self.kKeyH * CGFloat(row) + CGFloat(row) * Self.kLineWidth + Self.kButtonSpaceTop * CGFloat(row + 1)
-                    let leftOffset = self.keyWidth * CGFloat(col) + CGFloat(col) * Self.kLineWidth + Self.kButtonSpaceLeft * CGFloat(col + 1)
-                    make.height.equalTo(Self.kKeyH)
-                    make.width.equalTo(self.keyWidth)
-                    make.top.equalToSuperview().inset(topOffset)
-                    make.left.equalToSuperview().inset(leftOffset)
-                }
+                let topOffset = Self.kKeyH * CGFloat(row) + CGFloat(row) * Self.kLineWidth + Self.kButtonSpaceTop * CGFloat(row + 1)
+                let leftOffset = self.keyWidth * CGFloat(col) + CGFloat(col) * Self.kLineWidth + Self.kButtonSpaceLeft * CGFloat(col + 1)
+                button.frame = CGRect(x: leftOffset,
+                                      y: topOffset,
+                                      width: keyWidth,
+                                      height: Self.kKeyH)
             }
         }
+    }
+
+    // English: Let the host view determine width while exposing the keyboard's intrinsic height.
+    // Español: Deja que la vista anfitriona determine el ancho y expone solo la altura intrínseca.
+    // 中文：宽度交给宿主 View 决定，只提供键盘的固有高度。
+    public override var intrinsicContentSize: CGSize {
+        CGSize(width: UIView.noIntrinsicMetric,
+               height: Self.kKeyBoardH + max(0, safeAreaInsets.bottom))
+    }
+
+    public override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        invalidateIntrinsicContentSize()
     }
 
     private static var kKeyH: CGFloat {

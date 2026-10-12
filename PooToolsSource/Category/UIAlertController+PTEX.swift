@@ -442,11 +442,14 @@ private extension UIAlertController {
         let availableWidths = [
             presenter?.viewIfLoaded?.bounds.width,
             presenter?.viewIfLoaded?.window?.bounds.width,
-            PTSceneContext.activeWindow()?.bounds.width,
-            CGFloat.kSCREEN_WIDTH
+            PTSceneContext.activeWindow()?.bounds.width
         ].compactMap { $0 }.filter { $0.isFinite && $0 > 0 }
+        // English: Use the alert's canonical maximum as a measurement fallback, not another scene's screen width.
+        // Español: Usa el máximo canónico de la alerta como respaldo de medida, no el ancho de otra pantalla.
+        // 中文：测量兜底使用 Alert 的标准最大宽度，不再读取其他场景的屏幕宽度。
+        let fallbackWidth = PTCustomerAlertController.defaultMaximumContentWidth + contentSpace * 2
         return PTCustomerAlertController.resolvedContentWidth(
-            containerWidth: availableWidths.first ?? CGFloat.kSCREEN_WIDTH,
+            containerWidth: availableWidths.first ?? fallbackWidth,
             contentSpace: contentSpace
         )
     }

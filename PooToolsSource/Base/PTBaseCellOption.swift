@@ -91,7 +91,10 @@ open class PTBaseNormalCell: UICollectionViewCell,@MainActor PTCellRegisterable 
         isUserInteractionEnabled = true
         contentView.isOpaque = true
         layer.shouldRasterize = isStaticCell
-        layer.rasterizationScale = UIScreen.main.scale
+        // English: Match the layer to its own window scale instead of the process-wide main screen.
+        // Español: Usa la escala de la ventana propia de la capa en lugar de la pantalla principal global.
+        // 中文：使用图层所属窗口的缩放比例，不再读取进程级主屏幕缩放比例。
+        layer.rasterizationScale = window?.screen.scale ?? traitCollection.displayScale
     }
     
     open class func cellSize() -> CGSize {

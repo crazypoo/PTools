@@ -11,7 +11,10 @@ public class PTMainSegmentDataSource: NSObject {
     open var change: PTSegmentControlModelType? = .ImageTitle(type: .Normal)
     open var titleNormalColor: UIColor = .black
     open var titleSelectedColor: UIColor = .black
-    open var itemWidths: CGFloat = UIScreen.main.bounds.width / 4
+    // English: Zero means that the segmented view measures each item from its own container width.
+    // Español: Cero indica que la vista segmentada mide cada elemento con el ancho de su propio contenedor.
+    // 中文：值为 0 时由分段控件根据自身容器宽度测量每个条目。
+    open var itemWidths: CGFloat = 0
     open var itemWidthIncrement: CGFloat = 20
     open var itemSpacing: CGFloat = 0
     public private(set) var items = [PTSegmentItem]()

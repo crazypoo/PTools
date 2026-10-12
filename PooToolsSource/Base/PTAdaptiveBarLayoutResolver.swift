@@ -100,7 +100,9 @@ public enum PTAdaptiveBarLayoutResolver {
                              y: usableRail.minY,
                              width: usableRail.width,
                              height: max(0, usableRail.height - tabRect.height - accessory))
-        let contentRect = contentRect(safeRect: safeRect,
+        let visibleContentRect = PTAdaptiveVisibleRegionResolver.region(for: context).visibleRect
+        let contentBaseRect = visibleContentRect.isEmpty ? safeRect : visibleContentRect
+        let contentRect = contentRect(safeRect: contentBaseRect,
                                       rail: usableRail,
                                       edge: context.verticalBarEdge)
 

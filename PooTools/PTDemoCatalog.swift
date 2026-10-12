@@ -192,6 +192,14 @@ enum PTDemoRegistry {
         make("duo.tab-accessory-search", "PToolsUIFoundation", "Duo · Tab Accessory Search", .navigationRouting, .interactive, .push, .runnable, legacy: "iPhone Duo Adaptive Bars", tags: ["iphone-duo", "tabbar", "accessory"]),
         make("duo.paging-segmented", "PooToolsSegmented", "Duo · Paging + Segmented + Nested Scroll", .navigationRouting, .interactive, .push, .runnable, legacy: "SegmentedPagingRegression", tags: ["iphone-duo", "paging", "segmented", "nested-scroll"]),
         make("duo.unified-collision-stress", "PToolsUIFoundation", "Duo · Unified Region Collision Stress", .navigationRouting, .interactive, .push, .runnable, legacy: "iPhone Duo Adaptive Bars", tags: ["iphone-duo", "collision", "reserved-region", "stress"]),
+        make("duo.alert-action-sheet", "PToolsUIFoundation", "Duo · Alert / ActionSheet", .uiComponents, .interactive, .push, .runnable, tags: ["iphone-duo", "alert", "action-sheet", "dynamic-type"]),
+        make("duo.overlay-popover-banner", "PToolsOverlay", "Duo · Overlay / Popover / Banner", .uiComponents, .interactive, .push, .runnable, tags: ["iphone-duo", "overlay", "popover", "banner"]),
+        make("duo.form-keyboard-search", "PToolsForm", "Duo · Form / Keyboard / Search", .inputForm, .interactive, .push, .runnable, tags: ["iphone-duo", "form", "keyboard", "search"]),
+        make("duo.collection-all-layouts", "PToolsUIFoundation", "Duo · Collection All Layouts", .uiComponents, .interactive, .push, .runnable, tags: ["iphone-duo", "collection", "layouts", "runtime-switch"]),
+        make("duo.split-page-container", "PooToolsSplitView", "Duo · Split Page Container", .navigationRouting, .interactive, .push, .runnable, tags: ["iphone-duo", "split-view", "page-container"]),
+        make("duo.picker-permission-system", "PooToolsPhotoPicker", "Duo · Picker / Permission / System", .permissionsDevice, .interactive, .push, .runnable, [.photoLibrary], tags: ["iphone-duo", "picker", "permission", "system"]),
+        make("duo.debug-overlay-guide", "PooToolsDEBUG", "Duo · Debug Overlay / Guide", .debugDiagnostics, .interactive, .push, .runnable, tags: ["iphone-duo", "debug", "overlay", "guide"]),
+        make("duo.rtl-dynamic-type", "PToolsUIFoundation", "Duo · RTL / Dynamic Type", .themeAccessibility, .interactive, .push, .runnable, tags: ["iphone-duo", "rtl", "dynamic-type", "voiceover"]),
         make("security.encryption", "PooToolsDataEncrypt", "Encryption", .securityPrivacy, .interactive, .sheet, .runnable, legacy: "Encryption", tags: ["crypto"]),
         make("network.speed-test", "PooToolsNetworkSpeedTest", "Network Speed Test", .networkConnectivity, .interactive, .push, .runnable, legacy: "NetworkSpeedTest", tags: ["network", "speed", "endpoint"]),
         make("network.ping", "PooToolsPing", "Ping Session", .networkConnectivity, .interactive, .push, .runnable, legacy: "PingSession", tags: ["network", "ping", "state-machine"]),
@@ -476,6 +484,22 @@ private final class PTDuoRegressionDemoViewController: PTBaseViewController {
             return "验证 Segmented、Paging 和嵌套滚动在宽度变化时保持状态。"
         case "duo.unified-collision-stress":
             return "验证导航、Tab、Accessory 和 reserved region 同时出现时的碰撞处理。"
+        case "duo.alert-action-sheet":
+            return "验证多按钮、长文本、Dynamic Type 和键盘出现时，Alert / ActionSheet 的操作区域仍然可达。"
+        case "duo.overlay-popover-banner":
+            return "验证多方向 anchor、Popover、Banner 和 Scene 尺寸变化时，浮层不会进入保留区域。"
+        case "duo.form-keyboard-search":
+            return "验证表单 footer、搜索取消按钮、自定义数字键盘和键盘避让。"
+        case "duo.collection-all-layouts":
+            return "验证 Normal、Grid、Waterfall、Tag、Horizontal、Custom 布局切换和滚动状态连续性。"
+        case "duo.split-page-container":
+            return "验证 SplitView / PageContainer 展开、折叠以及 child selection 和滚动状态保留。"
+        case "duo.picker-permission-system":
+            return "验证 ImagePicker、PhotoPicker、权限提示和系统选择器的安全区域与返回入口。"
+        case "duo.debug-overlay-guide":
+            return "验证 Debug Console、Inspector、Guide spotlight 和 LaunchAd skip 在当前 Scene 中可移动、可关闭。"
+        case "duo.rtl-dynamic-type":
+            return "验证 RTL、超大字体、VoiceOver、Reduce Motion 和垂直系统 Bar 的可访问性。"
         default:
             return "Duo 回归场景已注册，当前页面提供安全区域和状态连续性检查。"
         }
@@ -488,6 +512,14 @@ private final class PTDuoRegressionDemoViewController: PTBaseViewController {
         case "duo.media-viewer-paging", "duo.media-viewer-bottom": return "打开 MediaViewer"
         case "duo.message-kit-chat": return "打开 MessageKit"
         case "duo.paging-segmented": return "打开 Segmented / Paging"
+        case "duo.alert-action-sheet": return "打开 Alert / ActionSheet"
+        case "duo.overlay-popover-banner": return "打开 Overlay / Popover / Banner"
+        case "duo.form-keyboard-search": return "打开 Form / Keyboard / Search"
+        case "duo.collection-all-layouts": return "打开 Collection Layouts"
+        case "duo.split-page-container": return "打开 Split Page Container"
+        case "duo.picker-permission-system": return "打开 Picker / Permission"
+        case "duo.debug-overlay-guide": return "打开 Debug Overlay / Guide"
+        case "duo.rtl-dynamic-type": return "切换 RTL / Dynamic Type"
         default: return nil
         }
     }
@@ -515,8 +547,76 @@ private final class PTDuoRegressionDemoViewController: PTBaseViewController {
         case "duo.paging-segmented":
             guard let descriptor = PTDemoRegistry.descriptor(forRawID: "navigation.segment-paging-regression") else { return }
             navigationController?.pushViewController(PTFuncDetailViewController(descriptor: descriptor), animated: true)
+        case "duo.alert-action-sheet":
+            UIAlertController.base_alertVC(title: "Duo Alert",
+                                           msg: "长文本、多按钮和 Dynamic Type 会根据当前 Scene 重新测量。",
+                                           okBtns: ["继续", "更多操作"],
+                                           cancelBtn: "取消")
+        case "duo.overlay-popover-banner":
+            let banner = PTBanner.success(title: "Duo Banner",
+                                          subtitle: "浮层会跟随宿主 Scene 的可视区域重新定位")
+            PTBannerCenter.shared.show(banner)
+        case "duo.form-keyboard-search":
+            let controller = PTDuoFormKeyboardSearchDemoViewController()
+            navigationController?.pushViewController(controller, animated: true)
+        case "duo.collection-all-layouts":
+            navigationController?.pushViewController(PTCollectionLayoutSwitchLabViewController(), animated: true)
+        case "duo.split-page-container":
+            navigationController?.pushViewController(PT5_61SplitViewDemoViewController(), animated: true)
+        case "duo.picker-permission-system":
+            let picker = PTMediaLibViewController()
+            picker.mediaLibShow()
+            statusLabel.text = "Picker 已打开 / Picker abierto / Picker opened"
+        case "duo.debug-overlay-guide":
+            statusLabel.text = "请从 Debug 菜单打开 Console / Inspector / Guide。"
+        case "duo.rtl-dynamic-type":
+            // English: Scope RTL to this demo instead of mutating process-wide appearance state.
+            // Español: Limita RTL a este demo en vez de mutar el estado global de apariencia.
+            // 中文：仅对当前 Demo 设置 RTL，避免修改进程级外观状态。
+            view.semanticContentAttribute = .forceRightToLeft
+            view.setNeedsLayout()
+            statusLabel.text = "RTL 已启用 / RTL activado / RTL enabled"
         default:
             break
+        }
+    }
+}
+
+// English: Keep the form regression demo self-contained so keyboard and search behavior can be exercised from the catalog.
+// Español: Mantiene autónomo el demo de formulario para probar teclado y búsqueda desde el catálogo.
+// 中文：让表单回归 Demo 自包含，用户可以直接从目录验证键盘和搜索行为。
+@MainActor
+private final class PTDuoFormKeyboardSearchDemoViewController: PTBaseViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        pt_Title = "Duo Form / Search"
+        let scrollView = UIScrollView()
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 16
+
+        let search = UISearchBar()
+        search.placeholder = "搜索 / Buscar / Search"
+        let input = UITextField()
+        input.borderStyle = .roundedRect
+        input.placeholder = "输入内容"
+        input.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+        let footer = UILabel()
+        footer.numberOfLines = 0
+        footer.textColor = .secondaryLabel
+        footer.text = "键盘出现时，滚动内容和 footer 应保持在当前可视区域内。"
+        stack.addArrangedSubview(search)
+        stack.addArrangedSubview(input)
+        stack.addArrangedSubview(footer)
+
+        view.addSubview(scrollView)
+        scrollView.addSubview(stack)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        stack.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView.contentLayoutGuide).inset(20)
+            make.width.equalTo(scrollView.frameLayoutGuide).offset(-40)
         }
     }
 }

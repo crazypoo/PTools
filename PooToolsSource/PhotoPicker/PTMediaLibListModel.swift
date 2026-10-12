@@ -148,17 +148,33 @@ public final class PTMediaModel: NSObject {
         return CGFloat(asset.pixelWidth) / CGFloat(asset.pixelHeight)
     }
     
-    @MainActor public var previewSize: CGSize {
-        let scale: CGFloat = UIScreen.main.scale
+    /// English: Resolves an image request size from the consuming view's local bounds.
+    /// Español: Resuelve el tamaño de la solicitud desde los límites locales de la vista consumidora.
+    /// 中文：根据实际使用 View 的局部 bounds 计算图片请求尺寸。
+    @MainActor
+    public func previewSize(in containerBounds: CGRect,
+                            scale: CGFloat? = nil) -> CGSize {
+        let localWidth = max(1, containerBounds.width.isFinite ? containerBounds.width : 0)
+        let localHeight = max(1, containerBounds.height.isFinite ? containerBounds.height : 0)
+        let resolvedScale = max(1, scale ?? PTSceneContext.activeWindow()?.screen.scale ?? 1)
+        let referenceLength = min(whRatio > 1 ? localHeight : localWidth, PTMaxImageWidth)
+        let baseLength = max(1, referenceLength) * resolvedScale
+
         if whRatio > 1 {
-            let h = min(UIScreen.main.bounds.height, PTMaxImageWidth) * scale
-            let w = h * whRatio
-            return CGSize(width: w, height: h)
-        } else {
-            let w = min(UIScreen.main.bounds.width, PTMaxImageWidth) * scale
-            let h = w / whRatio
-            return CGSize(width: w, height: h)
+            return CGSize(width: baseLength * whRatio, height: baseLength)
         }
+        return CGSize(width: baseLength, height: baseLength / whRatio)
+    }
+
+    /// English: Legacy request-size access remains available, using the active scene only as a fallback.
+    /// Español: El acceso heredado sigue disponible y usa la escena activa únicamente como respaldo.
+    /// 中文：保留旧的尺寸属性，仅在没有显式容器时使用活动场景作为兜底。
+    @available(*, deprecated, message: "Use previewSize(in:scale:) with the consuming view bounds.")
+    @MainActor public var previewSize: CGSize {
+        let fallbackBounds = PTSceneContext.activeWindow()?.bounds ??
+            CGRect(x: 0, y: 0, width: PTMaxImageWidth, height: PTMaxImageWidth)
+        return previewSize(in: fallbackBounds,
+                           scale: PTSceneContext.activeWindow()?.screen.scale)
     }
     
 #if POOTOOLS_IMAGEEDITOR

@@ -11,13 +11,16 @@ import UIKit
 
 public struct PTAdaptiveVisibleRegion: Sendable, Equatable {
     public let visibleRect: CGRect
+    public let availablePanes: [CGRect]
     public let reservedRects: [CGRect]
     public let signature: String
 
     public init(visibleRect: CGRect,
+                availablePanes: [CGRect] = [],
                 reservedRects: [CGRect],
                 signature: String) {
         self.visibleRect = visibleRect
+        self.availablePanes = availablePanes.isEmpty && !visibleRect.isEmpty ? [visibleRect] : availablePanes
         self.reservedRects = reservedRects
         self.signature = signature
     }
@@ -47,7 +50,10 @@ public enum PTAdaptiveVisibleRegionResolver {
         // 中文：分割区和遮挡区都会减少可用内容空间，只有激活的区域参与计算。
         let excludedRects = activeRegions
             .filter { $0.kind == .division || $0.kind == .occlusion }
-            .map(\.frame)
+            .map { expandedFrame($0.frame, margins: $0.margins, extra: minimumMargin) }
+            + additionalReservedRects.map {
+                expandedFrame($0, margins: .zero, extra: minimumMargin)
+            }
         let reserved = (context.reservedRegions + additionalReservedRects.map {
             PTAdaptiveReservedRegion(frame: $0,
                                       kind: .occlusion,
@@ -60,16 +66,18 @@ public enum PTAdaptiveVisibleRegionResolver {
         // English: Keep the largest pane that is not covered by a system reserved region.
         // Español: Conserva el panel más grande que no esté cubierto por una región reservada del sistema.
         // 中文：选择没有被系统保留区域覆盖的最大内容面板。
-        let visible = largestPane(in: safeRect, excluding: excludedRects)
+        let panes = availablePanes(in: safeRect, excluding: excludedRects)
+        let visible = panes.max { $0.width * $0.height < $1.width * $1.height } ?? .zero
         let signature = [
             String(describing: context.bounds.integral),
             String(describing: context.safeAreaInsets),
             context.layoutDirection.rawValue,
             context.verticalBarEdge.rawValue,
-            String(describing: visible.integral),
+            panes.map { String(describing: $0.integral) }.joined(separator: ";"),
             reserved.map { String(describing: $0.integral) }.joined(separator: ";")
         ].joined(separator: "|")
         return PTAdaptiveVisibleRegion(visibleRect: visible,
+                                       availablePanes: panes,
                                        reservedRects: reserved,
                                        signature: signature)
     }
@@ -93,32 +101,41 @@ public enum PTAdaptiveVisibleRegionResolver {
                                     margin: CGFloat = 10) -> CGRect {
         let width = max(0, size.width)
         let height = max(0, size.height)
-        let area = region.visibleRect.insetBy(dx: max(0, margin), dy: max(0, margin))
-        guard !area.isEmpty else { return .zero }
+        guard width.isFinite, height.isFinite else { return .zero }
 
-        let candidates: [CGRect]
+        let panes = region.availablePanes.isEmpty ? [region.visibleRect] : region.availablePanes
+        let orderedPanes: [CGRect]
         switch preferred {
         case .leading:
-            candidates = [
-                CGRect(x: area.minX, y: area.minY, width: width, height: height),
-                CGRect(x: area.maxX - width, y: area.minY, width: width, height: height),
-                CGRect(x: area.midX - width / 2, y: area.minY, width: width, height: height)
-            ]
+            orderedPanes = panes.sorted { $0.minX < $1.minX }
         case .trailing, .unspecified:
-            candidates = [
-                CGRect(x: area.maxX - width, y: area.minY, width: width, height: height),
-                CGRect(x: area.minX, y: area.minY, width: width, height: height),
-                CGRect(x: area.midX - width / 2, y: area.minY, width: width, height: height)
-            ]
+            orderedPanes = panes.sorted { $0.maxX > $1.maxX }
         }
 
-        for candidate in candidates {
-            let frame = clamped(candidate, to: region, minimumMargin: margin)
-            if !region.reservedRects.contains(where: { $0.intersects(frame) }) {
-                return frame
+        for pane in orderedPanes {
+            let paneArea = pane.insetBy(dx: max(0, margin), dy: max(0, margin))
+            guard !paneArea.isEmpty, paneArea.width >= width, paneArea.height >= height else { continue }
+            let candidates = preferred == .leading
+                ? [
+                    CGRect(x: paneArea.minX, y: paneArea.minY, width: width, height: height),
+                    CGRect(x: paneArea.maxX - width, y: paneArea.minY, width: width, height: height),
+                    CGRect(x: paneArea.midX - width / 2, y: paneArea.minY, width: width, height: height)
+                ]
+                : [
+                    CGRect(x: paneArea.maxX - width, y: paneArea.minY, width: width, height: height),
+                    CGRect(x: paneArea.minX, y: paneArea.minY, width: width, height: height),
+                    CGRect(x: paneArea.midX - width / 2, y: paneArea.minY, width: width, height: height)
+                ]
+            for candidate in candidates {
+                // English: Keep the candidate inside its own pane; clamping to the largest pane could cross a hinge.
+                // Español: Mantén el candidato dentro de su propio panel; limitarlo al panel mayor podría cruzar la bisagra.
+                // 中文：候选框必须保持在所属 pane 内，不能再裁剪到最大 pane 后跨过折叠区。
+                if !region.reservedRects.contains(where: { $0.intersects(candidate) }) {
+                    return candidate
+                }
             }
         }
-        return clamped(candidates[0], to: region, minimumMargin: margin)
+        return .zero
     }
 
     private static func normalizedInsets(_ insets: UIEdgeInsets) -> UIEdgeInsets {
@@ -137,9 +154,9 @@ public enum PTAdaptiveVisibleRegionResolver {
                                      right: -(max(0, margins.right) + extra)))
     }
 
-    private static func largestPane(in safeRect: CGRect,
-                                    excluding divisions: [CGRect]) -> CGRect {
-        guard !divisions.isEmpty else { return safeRect }
+    private static func availablePanes(in safeRect: CGRect,
+                                       excluding divisions: [CGRect]) -> [CGRect] {
+        guard !divisions.isEmpty else { return safeRect.isEmpty ? [] : [safeRect] }
         var panes = [safeRect]
         for division in divisions {
             var next: [CGRect] = []
@@ -166,6 +183,6 @@ public enum PTAdaptiveVisibleRegionResolver {
             }
             panes = next
         }
-        return panes.max { $0.width * $0.height < $1.width * $1.height } ?? safeRect
+        return panes.filter { !$0.isEmpty }
     }
 }

@@ -457,7 +457,8 @@ modules:
   module_id: "poo-tools-debug"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "duo.debug-overlay-guide"
 -
   module_id: "poo-tools-debugtracking-eyes"
   coverage: "runnable"
@@ -628,6 +629,7 @@ modules:
   canonical_module_id: null
   demos:
     - "media.photo-picker"
+    - "duo.picker-permission-system"
 -
   module_id: "poo-tools-picker"
   coverage: "runnable"
@@ -643,7 +645,8 @@ modules:
   module_id: "poo-tools-popover"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "duo.overlay-popover-banner"
 -
   module_id: "poo-tools-progress-bar"
   coverage: "runnable"
@@ -940,6 +943,7 @@ modules:
     - "ui.collection-tag"
     - "input.stepper-list"
     - "input.login-description"
+    - "duo.form-keyboard-search"
 -
   module_id: "ptools-httpfile-portal"
   coverage: "runnable"
@@ -1081,6 +1085,9 @@ modules:
     - "duo.tab-accessory-search"
     - "duo.paging-segmented"
     - "duo.unified-collision-stress"
+    - "duo.alert-action-sheet"
+    - "duo.collection-all-layouts"
+    - "duo.rtl-dynamic-type"
 -
   module_id: "ptools-widget-core"
   coverage: "extension_required"
@@ -1373,6 +1380,7 @@ modules:
   canonical_module_id: null
   demos:
     - "navigation.split-view"
+    - "duo.split-page-container"
 -
   module_id: "split-view"
   coverage: "compatibility_alias"
