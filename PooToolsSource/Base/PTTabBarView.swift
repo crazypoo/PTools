@@ -836,6 +836,13 @@ final public class PTTabBarView: UIView {
     }
     
     // 🌟 新增方法：配置全局共享底色遮罩
+    // English: Resolves the selected surface independently from the TabBar container style.
+    // Español: Resuelve la superficie seleccionada de forma independiente del estilo del contenedor del TabBar.
+    // 中文：让选中背景样式独立于 TabBar 容器样式解析。
+    private var selectedSurfaceVisualStyle: PTVisualStyle {
+        appearanceSnapshot.layout.tabSelectedMetailStyle ?? appearanceSnapshot.visualStyle.coreStyle
+    }
+
     private func setupSharedSelectionMask() {
         guard appearanceSnapshot.layout.tabSelectedMetail else { return }
         
@@ -843,7 +850,7 @@ final public class PTTabBarView: UIView {
         sharedSelectionMaskView.clipsToBounds = true
         
         PTVisualStyleResolver.apply(to: sharedMaskGlassView,
-                                    style: appearanceSnapshot.visualStyle.coreStyle,
+                                    style: selectedSurfaceVisualStyle,
                                     blurStyle: .systemUltraThinMaterialDark,
                                     fallbackColor: appearanceSnapshot.layout.tabSelectedMetailColor)
         sharedSelectionMaskView.addSubview(sharedMaskGlassView)
@@ -866,7 +873,7 @@ final public class PTTabBarView: UIView {
                                     blurStyle: appearanceSnapshot.layout.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
                                     fallbackColor: .secondarySystemBackground)
         PTVisualStyleResolver.apply(to: sharedMaskGlassView,
-                                    style: appearanceSnapshot.visualStyle.coreStyle,
+                                    style: selectedSurfaceVisualStyle,
                                     blurStyle: .systemUltraThinMaterialDark,
                                     fallbackColor: appearanceSnapshot.layout.tabSelectedMetailColor)
     }

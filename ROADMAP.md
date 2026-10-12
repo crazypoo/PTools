@@ -1,8 +1,17 @@
 # PTools 路线图
 
-> 当前代码基线：`5.63.4`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.63.5`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.63.4` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.63.5` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.63.5 TabBar 选中背景样式覆盖
+
+- ✅ 保留 `tabSelectedMetail` 旧开关和默认继承行为，不改变既有项目的材质/玻璃效果。
+- ✅ 新增 `tabSelectedMetailStyle`，支持 `.classic` 普通纯色、`.material` 材质和 `.glass` 玻璃效果。
+- ✅ 全局 `PTAppBaseConfig`、`PTTabBarLayoutAppearance` 和单个 TabBar 外观快照共用同一配置路径。
+- ✅ `.classic` 只关闭选中背景的视觉效果，不改变选中背景颜色、尺寸 Insets、动画和点击逻辑。
+- ✅ 增加单元回归覆盖并完成 Swift 语法、Package manifest 和格式检查。
+- ⬜ 仍需真实 iPhone Duo、iOS 17～27 模拟器和宿主项目完成视觉回归。
 
 ## 5.63.4 图片加载占位图一致性
 

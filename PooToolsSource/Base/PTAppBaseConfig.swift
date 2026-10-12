@@ -159,6 +159,10 @@ public class PTAppBaseConfig: NSObject {
     // 中文：选择统一的 TabBar 表面策略；automatic 会跟随当前系统外观。
     @nonobjc public var tabBarVisualStyle: PTVisualStyle = .automatic
     public var tabSelectedMetailColor:UIColor = .lightGray
+    // English: Overrides the selected surface style; nil keeps the legacy TabBar visual style inheritance.
+    // Español: Sobrescribe el estilo de la superficie seleccionada; nil conserva la herencia visual heredada del TabBar.
+    // 中文：覆盖选中背景的表面样式；nil 保持旧版跟随 TabBar 整体视觉样式的行为。
+    public var tabSelectedMetailStyle: PTVisualStyle? = nil
     // English: Legacy alias for the horizontal selection inset; kept source-compatible during 5.x.
     // Español: Alias heredado para el inset horizontal de selección; conserva la compatibilidad durante 5.x.
     // 中文：选中背景水平内缩的旧别名，5.x 期间保持源码兼容。

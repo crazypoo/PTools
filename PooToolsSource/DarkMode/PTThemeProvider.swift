@@ -73,6 +73,10 @@ public struct PTTabBarLayoutAppearance {
     public let tabSelectedFont: UIFont
     public let tabSelectedMetail: Bool
     public let tabSelectedMetailColor: UIColor
+    // English: An optional selected-surface override keeps legacy inheritance while allowing a solid color.
+    // Español: Un reemplazo opcional de la superficie seleccionada conserva la herencia heredada y permite un color sólido.
+    // 中文：可选的选中背景样式覆盖既保持旧版继承逻辑，也支持普通纯色背景。
+    public let tabSelectedMetailStyle: PTVisualStyle?
     // English: Preserve the legacy read-only snapshot field for source compatibility.
     // Español: Conserva el campo de instantánea de solo lectura heredado para compatibilidad de código.
     // 中文：保留旧的只读快照字段，兼容已有源码。
@@ -147,7 +151,8 @@ public struct PTTabBarLayoutAppearance {
                 tabbarValueLabelColor: UIColor = .systemBlue,
                 tabItemContentInsets: UIEdgeInsets = .zero,
                 tabItemContentOffset: UIOffset = .zero,
-                tabSelectedMetailInsets: UIEdgeInsets? = nil) {
+                tabSelectedMetailInsets: UIEdgeInsets? = nil,
+                tabSelectedMetailStyle: PTVisualStyle? = nil) {
         self.loadImageShowValueFont = loadImageShowValueFont
         self.tab26BottomSpacing = tab26BottomSpacing
         self.tab26Mode = tab26Mode
@@ -156,6 +161,7 @@ public struct PTTabBarLayoutAppearance {
         self.tabSelectedFont = tabSelectedFont
         self.tabSelectedMetail = tabSelectedMetail
         self.tabSelectedMetailColor = tabSelectedMetailColor
+        self.tabSelectedMetailStyle = tabSelectedMetailStyle
         self.tabSelectedMetailLRSpacing = tabSelectedMetailLRSpacing
         self.tabSelectedMetailInsets = tabSelectedMetailInsets ?? UIEdgeInsets(top: 0,
                                                                                   left: tabSelectedMetailLRSpacing,
@@ -224,7 +230,8 @@ public struct PTTabBarLayoutAppearance {
                                         tabbarValueLabelColor: config.tabbarValueLabelColor,
                                         tabItemContentInsets: config.tabItemContentInsets,
                                         tabItemContentOffset: config.tabItemContentOffset,
-                                        tabSelectedMetailInsets: config.tabSelectedMetailInsets)
+                                        tabSelectedMetailInsets: config.tabSelectedMetailInsets,
+                                        tabSelectedMetailStyle: config.tabSelectedMetailStyle)
     }
 }
 

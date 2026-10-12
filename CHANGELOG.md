@@ -6,6 +6,13 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.63.5 — 2026-10-12
+
+- 为 `tabSelectedMetail` 增加 `tabSelectedMetailStyle` 样式覆盖，保留原有 `nil` 继承行为。
+- 设置 `tabSelectedMetailStyle: .classic` 时，选中项只使用 `tabSelectedMetailColor` 普通纯色，不再叠加材质或玻璃效果。
+- 支持 `.material`、`.glass` 和全局 `PTAppBaseConfig.share.tabSelectedMetailStyle` 配置；保留原有公开初始化方法和默认参数。
+- 增加 TabBar 选中背景样式回归覆盖，验证纯色模式与旧版默认模式互不影响。
+
 ## 5.63.4 — 2026-10-12
 
 - 修复 `UIView.pt_loadCoreImage` 开始新图片请求时未立即显示 `emptyImage` 的问题。

@@ -11,7 +11,20 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.63.4`，真机/宿主回归与发布证据完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.63.5`，真机/宿主回归与发布证据完成前不创建正式 tag。
+
+5.63.5 为 TabBar 选中背景增加独立样式覆盖。旧配置保持原有材质继承行为；需要普通颜色时，可以这样配置：
+
+```swift
+let layout = PTTabBarLayoutAppearance(
+    tabSelectedMetail: true,
+    tabSelectedMetailColor: .systemBlue,
+    tabSelectedMetailStyle: .classic
+)
+let appearance = PTTabBarAppearance(layout: layout)
+```
+
+`tabSelectedMetailStyle` 使用 `nil` 时继续继承 TabBar 的整体样式；`.classic` 为纯色，`.material` 和 `.glass` 分别使用系统材质或玻璃效果。
 
 5.63.4 修复 `pt_loadCoreImage` 在异步加载开始前未显示 `emptyImage` 的问题，避免图片视图在请求期间继续展示旧内容。
 

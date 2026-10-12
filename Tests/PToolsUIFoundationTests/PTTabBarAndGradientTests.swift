@@ -78,6 +78,17 @@ final class PTTabBarAndGradientTests: XCTestCase {
         XCTAssertEqual(imageSize, 29)
     }
 
+    // English: A selected surface can use a plain color without changing the legacy inherited default.
+    // Español: La superficie seleccionada puede usar un color sólido sin cambiar el valor heredado predeterminado.
+    // 中文：选中背景可以使用普通纯色，同时不改变旧版默认继承行为。
+    func testSelectedSurfaceStyleSupportsPlainColorOverride() {
+        let inherited = PTTabBarLayoutAppearance()
+        let plainColor = PTTabBarLayoutAppearance(tabSelectedMetailStyle: .classic)
+
+        XCTAssertNil(inherited.tabSelectedMetailStyle)
+        XCTAssertEqual(plainColor.tabSelectedMetailStyle, .classic)
+    }
+
     // English: Selection and offset inputs do not participate in content-size resolution.
     // Español: La selección y el offset no participan en el cálculo del tamaño del contenido.
     // 中文：选中背景和内容偏移不会参与真实内容尺寸计算。
