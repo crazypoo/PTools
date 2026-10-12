@@ -6,6 +6,12 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.63.4 — 2026-10-12
+
+- 修复 `UIView.pt_loadCoreImage` 开始新图片请求时未立即显示 `emptyImage` 的问题。
+- 图片、视频首帧、PhotoKit 和远程资源加载期间会先清理旧内容并显示占位图，加载成功后再替换为结果。
+- 保持旧的 `UIImageView`、`UIButton` 和动态 `Any` 入口兼容，不改变取消和 generation 校验逻辑。
+
 ## 5.63.3 — 2026-10-12
 
 - 修复 `PTCollectionView` Header 高度同时进入 Boundary Supplementary 和 Section 内边距，导致 Header/Cell 顶部间距重复的问题。

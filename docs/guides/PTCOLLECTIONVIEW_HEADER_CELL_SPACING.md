@@ -2,7 +2,7 @@
 
 ## 适用范围
 
-本指南适用于 iOS 17+ / Swift 6+ 的 `PTCollectionView`。5.63.3 起，Header 的高度只由
+本指南适用于 iOS 17+ / Swift 6+ 的 `PTCollectionView`。5.63.4 起，Header 的高度只由
 `NSCollectionLayoutBoundarySupplementaryItem` 承担，不会再次被隐式加入 Section 顶部内边距。
 
 ## 推荐配置

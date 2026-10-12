@@ -15,7 +15,7 @@ Generated at: 2026-10-10T18:32:30Z
 - SwiftPM product 数量：`155`
 - CocoaPods subspec 数量：`162`
 - CocoaPods 默认 subspec：`Core`
-- 当前 podspec 版本：`5.63.3`
+- 当前 podspec 版本：`5.63.4`
 
 ## 机器报告
 

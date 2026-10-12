@@ -1852,6 +1852,11 @@ public extension UIView {
             setImageBlock(placeholder)
         }
 
+        // English: Show the placeholder before any asynchronous source starts so stale content is never exposed.
+        // Español: Muestra el marcador antes de iniciar cualquier fuente asíncrona para no exponer contenido obsoleto.
+        // 中文：在启动任何异步来源前先显示占位图，避免暴露已经过期的内容。
+        setEmpty()
+
         let showImage: @MainActor @Sendable (UIImage) -> Void = { [weak self] image in
             guard let self = self, isValid() else { return }
             

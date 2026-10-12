@@ -1,8 +1,14 @@
 # PTools 路线图
 
-> 当前代码基线：`5.63.3`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.63.4`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.63.3` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.63.4` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.63.4 图片加载占位图一致性
+
+- ✅ `UIView.pt_loadCoreImage` 在每次新请求开始时立即显示 `emptyImage` 或默认占位图。
+- ✅ 保留旧内容清理、请求取消、generation 校验和最终结果回调行为。
+- ⬜ 真机/宿主项目仍需验证自定义占位图、GIF、视频首帧和 PhotoKit iCloud 资源的视觉表现。
 
 ## 5.63.0 iPhone Duo 自适应 Navigation / TabBar
 

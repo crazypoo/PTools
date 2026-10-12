@@ -10,7 +10,7 @@ Generated at: 2026-10-10T18:33:46Z
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.63.3`
+- Podspec: `PooTools` `5.63.4`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`

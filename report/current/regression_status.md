@@ -11,7 +11,7 @@ Generated at: 2026-10-10T18:32:30Z
 
 本报告只记录当前基线和验证边界；静态通过不等于真机或真实宿主通过。
 
-- 当前 podspec 版本：`5.63.3`
+- 当前 podspec 版本：`5.63.4`
 - 最新正式 Git tag：`5.62.10`
 - 当前提交：`aa4f1fca1a9f03b73abba39ea1fee3b7ff201ee3`
 - 当前状态：`static_and_build_evidence_required`
