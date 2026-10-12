@@ -266,6 +266,10 @@ public class PTCollectionView: UIView {
     //MARK: Cell layout (仅仅限于在瀑布流或者自定义的情况下使用)
     open var waterFallLayout: ((Int, AnyObject) -> CGFloat)?
     open var customerLayout: ((Int,PTSection) -> NSCollectionLayoutGroup)?
+    // English: Prefer this callback when a custom group depends on the current container size.
+    // Español: Prefiere este callback cuando un grupo personalizado depende del tamaño actual del contenedor.
+    // 中文：当自定义分组依赖当前容器尺寸时，优先使用这个回调。
+    open var customerLayoutWithEnvironment: ((Int, PTSection, NSCollectionLayoutEnvironment) -> NSCollectionLayoutGroup)?
     open var customerReuseViews: ((Int,PTSection) -> [NSCollectionLayoutBoundarySupplementaryItem])?
 
     ///当空数据View展示的时候,点击回调
@@ -1186,7 +1190,10 @@ extension PTCollectionView {
         }()
         let topContentSpace = sectionLayout?.topSpacing ?? viewConfig.contentTopSpace
         let bottomContentSpace = sectionLayout?.bottomSpacing ?? viewConfig.contentBottomSpace
-        let itemLeadingSpace = sectionLayout?.contentInsets?.leading ?? viewConfig.cellLeadingSpace
+        // English: Section content insets are outer edges; cellLeadingSpace remains item spacing.
+        // Español: Los insets de sección son bordes exteriores; cellLeadingSpace conserva el espaciado del item.
+        // 中文：Section contentInsets 只表示外边距，cellLeadingSpace 继续表示 Cell 间距。
+        let itemLeadingSpace = viewConfig.cellLeadingSpace
         let itemTrailingSpace = sectionLayout?.interGroupSpacing ?? viewConfig.cellTrailingSpace
         let group: NSCollectionLayoutGroup
         
@@ -1296,7 +1303,9 @@ extension PTCollectionView {
                 group = oneSquareGroup()
             }
         case .Custom:
-            if let customerLayout {
+            if let customerLayoutWithEnvironment {
+                group = customerLayoutWithEnvironment(sectionIndex, sectionModel, environment)
+            } else if let customerLayout {
                 group = customerLayout(sectionIndex, sectionModel)
             } else {
                 group = oneSquareGroup()
@@ -1304,38 +1313,66 @@ extension PTCollectionView {
         }
         
         var sectionInsets = sectionLayout?.contentInsets ?? viewConfig.sectionEdges
-        let sectionWidth: CGFloat
-        switch viewConfig.decorationItemsType {
-        case .Normal,.Corner,.NoItems:
-            if sectionLayout == nil {
-                sectionInsets = NSDirectionalEdgeInsets(top: (sectionModel.headerHeight ?? .leastNormalMagnitude) + viewConfig.contentTopSpace + viewConfig.decorationItemsEdges.top,
-                                                         leading: sectionInsets.leading,
-                                                         bottom: viewConfig.contentBottomSpace,
-                                                         trailing: sectionInsets.trailing)
-            } else {
-                sectionInsets.top += (sectionModel.headerHeight ?? 0) + viewConfig.decorationItemsEdges.top
-                sectionInsets.bottom += bottomContentSpace
+        let hasExplicitSectionInsets = sectionLayout?.contentInsets != nil
+        let groupOwnsContentSpacing: Bool = {
+            switch viewConfig.viewType {
+            case .Normal:
+                return !usesEstimatedItemHeight
+            case .Gird, .WaterFall, .Horizontal, .HorizontalLayoutSystem, .Tag:
+                return true
+            case .Custom:
+                return false
             }
-        default:
-            sectionInsets = decorationCustomLayoutInsetReset?(sectionIndex, sectionModel) ?? .zero
+        }()
+
+        // English: Apply content spacing once; supplementary height is never section padding.
+        // Español: Aplica el espaciado de contenido una sola vez; la altura supplementary nunca es padding de sección.
+        // 中文：内容间距只应用一次；Supplementary 高度不能再次充当 section 内边距。
+        if !hasExplicitSectionInsets && !groupOwnsContentSpacing {
+            sectionInsets.top += topContentSpace
+            sectionInsets.bottom += bottomContentSpace
         }
-        
+
         switch viewConfig.decorationItemsType {
-        case .Normal,.Corner:
-            sectionWidth = viewConfig.decorationItemsEdges.leading + viewConfig.decorationItemsEdges.trailing
-        case .NoItems,.Custom:
-            sectionWidth = 0
+        case .Custom:
+            if let resetInsets = decorationCustomLayoutInsetReset?(sectionIndex, sectionModel) {
+                sectionInsets = resetInsets
+            }
+        case .Normal, .Corner, .NoItems:
+            break
         }
-                
+
+        let supplementaryItems: [NSCollectionLayoutBoundarySupplementaryItem]
+        if viewConfig.customReuseViews, let items = customerReuseViews?(sectionIndex, sectionModel) {
+            supplementaryItems = items
+        } else {
+            supplementaryItems = generateSupplementaryItems(sectionModel: sectionModel)
+        }
+
+        // English: Reserve header and footer spacing in the section itself so the gap is measurable.
+        // Español: Reserva el espacio del header y footer dentro de la sección para que el hueco sea medible.
+        // 中文：在 Section 本身预留 Header 和 Footer 间距，让间隔可被真实测量。
+        let headerOwnsOffset = supplementaryItems.contains {
+            $0.elementKind == UICollectionView.elementKindSectionHeader && abs($0.offset.y) > .ulpOfOne
+        }
+        let footerOwnsOffset = supplementaryItems.contains {
+            $0.elementKind == UICollectionView.elementKindSectionFooter && abs($0.offset.y) > .ulpOfOne
+        }
+
+        // English: A custom supplementary offset is treated as caller-owned spacing, never stacked with the policy inset.
+        // Español: Un offset supplementary personalizado pertenece al caller y nunca se acumula con el inset de política.
+        // 中文：自定义 Supplementary 的 offset 由调用方负责，不能再与策略 inset 叠加。
+        if supplementaryItems.contains(where: { $0.elementKind == UICollectionView.elementKindSectionHeader }) && !headerOwnsOffset {
+            sectionInsets.top += max(0, sectionModel.layoutConfiguration?.headerSpacing ?? 0)
+        }
+        if supplementaryItems.contains(where: { $0.elementKind == UICollectionView.elementKindSectionFooter }) && !footerOwnsOffset {
+            sectionInsets.bottom += max(0, sectionModel.layoutConfiguration?.footerSpacing ?? 0)
+        }
+
         let laySection = NSCollectionLayoutSection(group: group)
         laySection.orthogonalScrollingBehavior = behavior
         laySection.contentInsets = sectionInsets
-        
-        if viewConfig.customReuseViews,let items = customerReuseViews?(sectionIndex,sectionModel) {
-            laySection.boundarySupplementaryItems = items
-        } else {
-            laySection.boundarySupplementaryItems = generateSupplementaryItems(section: sectionIndex, sectionModel: sectionModel, sectionWidth: sectionWidth, screenWidth: screenWidth)
-        }
+        laySection.boundarySupplementaryItems = supplementaryItems
         
         laySection.decorationItems = generateDecorationItems(section: sectionIndex, sectionModel: sectionModel)
         
@@ -1412,11 +1449,8 @@ extension PTCollectionView {
         return NSCollectionLayoutSection(group: group)
     }
 
-    private func generateSupplementaryItems(section: NSInteger, sectionModel: PTSection, sectionWidth: CGFloat, screenWidth: CGFloat) -> [NSCollectionLayoutBoundarySupplementaryItem] {
+    private func generateSupplementaryItems(sectionModel: PTSection) -> [NSCollectionLayoutBoundarySupplementaryItem] {
         var supplementaryItems = [NSCollectionLayoutBoundarySupplementaryItem]()
-        let headerSpacing = sectionModel.layoutConfiguration?.headerSpacing ?? 0
-        let footerSpacing = sectionModel.layoutConfiguration?.footerSpacing ?? 0
-        
         if !(sectionModel.headerReuseID ?? "").stringIsEmpty() {
             let headerSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
@@ -1427,8 +1461,7 @@ extension PTCollectionView {
                 layoutSize: headerSize,
                 elementKind: UICollectionView.elementKindSectionHeader,
                 alignment: .top,
-                absoluteOffset: CGPoint(x: 0,
-                                        y: viewConfig.decorationItemsEdges.top + headerSpacing)
+                absoluteOffset: .zero
             )
             headerItem.contentInsets = .zero
             headerItem.pinToVisibleBounds = viewConfig.pinHeaderToVisibleBounds
@@ -1445,7 +1478,7 @@ extension PTCollectionView {
                 layoutSize: footerSize,
                 elementKind: UICollectionView.elementKindSectionFooter,
                 alignment: .bottom,
-                absoluteOffset: CGPoint(x: 0, y: -footerSpacing)
+                absoluteOffset: .zero
             )
             footerItem.pinToVisibleBounds = viewConfig.pinFooterToVisibleBounds
             supplementaryItems.append(footerItem)
@@ -2159,9 +2192,9 @@ extension PTCollectionView {
         reloadItemContent(at: collectionView.indexPathsForVisibleItems, completion: completion)
     }
 
-    // English: Invalidate section geometry without pretending that content changed.
-    // Español: Invalida la geometría de la sección sin fingir que cambió el contenido.
-    // 中文：只使 Section 几何失效，不伪造内容变化。
+    // English: Invalidate section geometry after direct header, footer, or layout-configuration mutation.
+    // Español: Invalida la geometría tras mutar directamente el header, footer o la configuración de layout.
+    // 中文：直接修改 Header、Footer 或布局配置后，调用此方法使 Section 几何失效。
     public func invalidateSectionLayout(at indexes: [Int], completion: PTActionTask? = nil) {
         updateCoordinator.enqueue(name: "invalidateSectionLayout",
                                   kind: .layout,

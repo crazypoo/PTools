@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "aa4f1fca1a9f03b73abba39ea1fee3b7ff201ee3",
-  "generated_at": "2026-10-10T18:31:55Z",
+  "source_revision": "5ca3f5435cebea32083b8351ac00229f89f8a4e4",
+  "generated_at": "2026-10-12T06:02:01Z",
   "counts": {
     "reduce_motion": 61,
-    "accessibility": 272,
+    "accessibility": 273,
     "reduce_transparency": 12,
     "dynamic_type": 21
   },
@@ -263,17 +263,22 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTBaseTabBarViewController.swift",
-      "line": 366
+      "line": 404
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTBaseTabBarViewController.swift",
-      "line": 374
+      "line": 412
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTBaseTabBarViewController.swift",
-      "line": 409
+      "line": 455
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Base/PTBaseTabBarViewController.swift",
+      "line": 480
     },
     {
       "rule": "reduce_motion",
@@ -338,12 +343,12 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
-      "line": 151
+      "line": 199
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
-      "line": 166
+      "line": 214
     },
     {
       "rule": "accessibility",
@@ -378,7 +383,7 @@
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTTabBarMediaContent.swift",
-      "line": 136
+      "line": 179
     },
     {
       "rule": "reduce_motion",
@@ -388,32 +393,32 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 198
+      "line": 244
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 203
+      "line": 249
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 791
+      "line": 859
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 927
+      "line": 995
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 938
+      "line": 1006
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 981
+      "line": 1049
     },
     {
       "rule": "accessibility",

@@ -6,6 +6,12 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.63.3 — 2026-10-12
+
+- 修复 `PTCollectionView` Header 高度同时进入 Boundary Supplementary 和 Section 内边距，导致 Header/Cell 顶部间距重复的问题。
+- 统一 Section contentInsets、内容上下间距和 decoration 边距的职责；保留旧 `customerLayout`，新增感知 `NSCollectionLayoutEnvironment` 的 Custom 布局入口。
+- 增加 Header/Cell 实际布局测量、嵌套列表和多布局切换 Demo，并补充 iOS 17+ / Swift 6 的间距回归覆盖。
+
 ## 5.63.0 — 2026-10-11
 
 - 完成 iPhone Duo UI 自适应第二轮：Launch Ad、Guide、Collection Header/Index、Share Preview、Badge、3 Tab + Center Action、PhotoPicker、ImageEditor、VideoEditor、MediaViewer、MessageKit、Accessory 和 Paging 共用宿主局部可视区域与 active reserved-region 约束。

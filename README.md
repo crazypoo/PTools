@@ -11,7 +11,7 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.63.0`，真机/宿主回归与发布证据完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.63.3`，真机/宿主回归与发布证据完成前不创建正式 tag。
 
 5.63.0 增加 iPhone Duo 自适应 Navigation / TabBar：默认复用 UIKit 的 Scene-aware 垂直 Bar 能力，旧系统和未提供 vertical edge 的场景保持横向 PTools 外观；几何、overflow、reserved region 和 DEBUG overlay 说明见 [iPhone Duo 自适应 Bar 指南](docs/guides/PTIPHONE_DUO_ADAPTIVE_BARS.md)。
 
@@ -38,6 +38,9 @@ WKWebView Bridge、MapKit、App Attest/DeviceCheck、远程配置和 SSE/WebSock
 
 `PTCollectionView` 的 Diffable 内容刷新、稳定身份、布局失效和快速更新用法见
 [PTCollectionView Diffable 更新指南](docs/guides/PTCOLLECTIONVIEW_UPDATE_GUIDE.md)。
+
+5.63.3 修复 Header / Cell 重复间距，补充 Section 外边距、Header spacing、嵌套 Grid 宽度和
+真实 layout attributes 测量方式，详见 [PTCollectionView Header / Cell 间距指南](docs/guides/PTCOLLECTIONVIEW_HEADER_CELL_SPACING.md)。
 
 运行中切换 Normal、Gird、WaterFall、Horizontal、Tag 和 Custom 布局，以及保留位置、选中状态和配置同步，
 见 [PTCollectionView Runtime Layout 切换指南](docs/guides/PTCOLLECTIONVIEW_LAYOUT_SWITCH_GUIDE.md)。

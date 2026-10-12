@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "aa4f1fca1a9f03b73abba39ea1fee3b7ff201ee3",
-  "generated_at": "2026-10-10T18:32:47Z",
+  "source_revision": "5ca3f5435cebea32083b8351ac00229f89f8a4e4",
+  "generated_at": "2026-10-12T05:54:10Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -146,7 +146,7 @@
     },
     {
       "path": "PooToolsSource/Animation/PTPurchaseCarAnimationTool.swift",
-      "lines": 104,
+      "lines": 106,
       "classification": "ok"
     },
     {
@@ -186,7 +186,7 @@
     },
     {
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "lines": 507,
+      "lines": 571,
       "classification": "ok"
     },
     {
@@ -206,7 +206,7 @@
     },
     {
       "path": "PooToolsSource/Badge/PTBadgeProtocol.swift",
-      "lines": 325,
+      "lines": 342,
       "classification": "ok"
     },
     {
@@ -221,7 +221,7 @@
     },
     {
       "path": "PooToolsSource/Badge/UIView+BadgeEX.swift",
-      "lines": 322,
+      "lines": 347,
       "classification": "ok"
     },
     {
@@ -276,7 +276,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAdaptiveBarLayoutResolver.swift",
-      "lines": 211,
+      "lines": 213,
       "classification": "ok"
     },
     {
@@ -292,6 +292,11 @@
     {
       "path": "PooToolsSource/Base/PTAdaptiveSystemBarBridge.swift",
       "lines": 27,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Base/PTAdaptiveVisibleRegionResolver.swift",
+      "lines": 188,
       "classification": "ok"
     },
     {
@@ -311,7 +316,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseCellOption.swift",
-      "lines": 428,
+      "lines": 431,
       "classification": "ok"
     },
     {
@@ -331,7 +336,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseNavControl.swift",
-      "lines": 216,
+      "lines": 225,
       "classification": "ok"
     },
     {
@@ -341,12 +346,12 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseTabBarViewController+SystemTabs.swift",
-      "lines": 92,
+      "lines": 122,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Base/PTBaseTabBarViewController.swift",
-      "lines": 885,
+      "lines": 955,
       "classification": "ok"
     },
     {
@@ -361,7 +366,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "lines": 874,
+      "lines": 931,
       "classification": "ok"
     },
     {
@@ -381,7 +386,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionIndexCoordinator.swift",
-      "lines": 163,
+      "lines": 189,
       "classification": "ok"
     },
     {
@@ -426,7 +431,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "lines": 2262,
+      "lines": 2285,
       "classification": "hard_limit_allowlisted"
     },
     {
@@ -466,7 +471,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTEmptyDataSetView.swift",
-      "lines": 403,
+      "lines": 406,
       "classification": "ok"
     },
     {
@@ -511,12 +516,12 @@
     },
     {
       "path": "PooToolsSource/Base/PTNavBar.swift",
-      "lines": 326,
+      "lines": 349,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
-      "lines": 1049,
+      "lines": 1164,
       "classification": "warning"
     },
     {
@@ -546,7 +551,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTTabBarMediaContent.swift",
-      "lines": 153,
+      "lines": 196,
       "classification": "ok"
     },
     {
@@ -561,8 +566,8 @@
     },
     {
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "lines": 983,
-      "classification": "ok"
+      "lines": 1051,
+      "classification": "warning"
     },
     {
       "path": "PooToolsSource/Base/PTTriangleView.swift",
@@ -996,7 +1001,7 @@
     },
     {
       "path": "PooToolsSource/Category/PTList+EX.swift",
-      "lines": 295,
+      "lines": 298,
       "classification": "ok"
     },
     {
@@ -1036,7 +1041,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIAlertController+PTEX.swift",
-      "lines": 458,
+      "lines": 461,
       "classification": "ok"
     },
     {
@@ -1056,7 +1061,7 @@
     },
     {
       "path": "PooToolsSource/Category/UICollectionView+PTEX.swift",
-      "lines": 690,
+      "lines": 699,
       "classification": "ok"
     },
     {
@@ -1541,12 +1546,12 @@
     },
     {
       "path": "PooToolsSource/DarkMode/PTDarkModeControl.swift",
-      "lines": 267,
+      "lines": 311,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/DarkMode/PTDarkModeHeader.swift",
-      "lines": 179,
+      "lines": 176,
       "classification": "ok"
     },
     {
@@ -2096,7 +2101,7 @@
     },
     {
       "path": "PooToolsSource/Guide/PTGuidePageHUD.swift",
-      "lines": 562,
+      "lines": 648,
       "classification": "ok"
     },
     {
@@ -2171,7 +2176,7 @@
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditInputViewController.swift",
-      "lines": 645,
+      "lines": 659,
       "classification": "ok"
     },
     {
@@ -4041,12 +4046,12 @@
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserBottom.swift",
-      "lines": 164,
+      "lines": 220,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "lines": 690,
+      "lines": 758,
       "classification": "ok"
     },
     {
@@ -4061,7 +4066,7 @@
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "lines": 792,
+      "lines": 883,
       "classification": "ok"
     },
     {
@@ -4081,7 +4086,7 @@
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatBaseCell.swift",
-      "lines": 328,
+      "lines": 374,
       "classification": "ok"
     },
     {
@@ -4091,7 +4096,7 @@
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "lines": 218,
+      "lines": 226,
       "classification": "ok"
     },
     {
@@ -4121,7 +4126,7 @@
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatTextCell.swift",
-      "lines": 156,
+      "lines": 158,
       "classification": "ok"
     },
     {
@@ -4141,7 +4146,7 @@
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatView.swift",
-      "lines": 422,
+      "lines": 454,
       "classification": "ok"
     },
     {
@@ -5086,12 +5091,12 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
-      "lines": 229,
+      "lines": 238,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibAlbumListViewController.swift",
-      "lines": 192,
+      "lines": 238,
       "classification": "ok"
     },
     {
@@ -5111,7 +5116,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibListModel.swift",
-      "lines": 280,
+      "lines": 296,
       "classification": "ok"
     },
     {
@@ -5121,7 +5126,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "lines": 1199,
+      "lines": 1277,
       "classification": "warning"
     },
     {
@@ -5476,7 +5481,7 @@
     },
     {
       "path": "PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift",
-      "lines": 75,
+      "lines": 78,
       "classification": "ok"
     },
     {
@@ -5496,7 +5501,7 @@
     },
     {
       "path": "PooToolsSource/SegmentControl/PTPaging.swift",
-      "lines": 432,
+      "lines": 446,
       "classification": "ok"
     },
     {
@@ -5536,7 +5541,7 @@
     },
     {
       "path": "PooToolsSource/Share/PTActivityViewController.swift",
-      "lines": 404,
+      "lines": 424,
       "classification": "ok"
     },
     {
@@ -5866,7 +5871,7 @@
     },
     {
       "path": "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift",
-      "lines": 148,
+      "lines": 152,
       "classification": "ok"
     },
     {
@@ -5920,7 +5925,7 @@
       "classification": "ok"
     }
   ],
-  "warning_count": 15,
+  "warning_count": 16,
   "architecture_exception_count": 10,
   "hard_limit_allowlisted_count": 5
 }

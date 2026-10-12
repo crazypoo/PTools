@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "aa4f1fca1a9f03b73abba39ea1fee3b7ff201ee3",
-  "generated_at": "2026-10-10T18:31:53Z",
+  "source_revision": "5ca3f5435cebea32083b8351ac00229f89f8a4e4",
+  "generated_at": "2026-10-12T05:54:10Z",
   "counts": {
     "main_queue_async": 26,
     "task_detached": 31,
@@ -43,7 +43,7 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 754,
+      "line": 822,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -553,13 +553,13 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 913,
+      "line": 982,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 1001,
+      "line": 1070,
       "text": "DispatchQueue.main.async {"
     },
     {

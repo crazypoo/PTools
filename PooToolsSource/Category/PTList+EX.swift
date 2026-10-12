@@ -13,6 +13,9 @@ import UIKit
 // 中文：逐 Section 布局覆盖让功能模块复用 PTCollectionView，而不需要重复创建布局引擎。
 @MainActor
 public final class PTSectionLayoutConfiguration {
+    // English: These insets are the section's outer edges, not item spacing.
+    // Español: Estos insets son los bordes exteriores de la sección, no el espaciado de los items.
+    // 中文：这些 inset 表示 Section 外边距，不表示 Cell 间距。
     public var contentInsets: NSDirectionalEdgeInsets?
     public var interGroupSpacing: CGFloat?
     public var topSpacing: CGFloat?

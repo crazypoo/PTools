@@ -399,6 +399,15 @@ public extension UICollectionView {
         return (result.contentHeight, makeCustomItems(from: result.frames))
     }
     
+    /// Builds the legacy grid group. `sectionContentInsets` is retained for source compatibility,
+    /// but section insets belong to `PTSectionLayoutConfiguration.contentInsets` or
+    /// `PTCollectionViewConfig.sectionEdges` so the same spacing is not applied twice.
+    /// Construye el grupo de cuadrícula heredado. `sectionContentInsets` se conserva por compatibilidad,
+    /// pero los insets de sección pertenecen a `PTSectionLayoutConfiguration.contentInsets` o
+    /// `PTCollectionViewConfig.sectionEdges` para no aplicar el mismo espaciado dos veces.
+    /// 构建兼容旧代码的网格分组。`sectionContentInsets` 为保持源码兼容而保留，
+    /// 但 section 内边距应配置在 `PTSectionLayoutConfiguration.contentInsets` 或
+    /// `PTCollectionViewConfig.sectionEdges`，避免同一间距被重复应用。
     class func girdCollectionLayout(data: [AnyObject]?,
                                           groupWidth: CGFloat? = nil,
                                           itemHeight: CGFloat,

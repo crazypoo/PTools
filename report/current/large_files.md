@@ -3,23 +3,24 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: aa4f1fca1a9f03b73abba39ea1fee3b7ff201ee3
-Generated at: 2026-10-10T18:32:47Z
+Source revision: 5ca3f5435cebea32083b8351ac00229f89f8a4e4
+Generated at: 2026-10-12T05:54:10Z
 -->
 
 # 当前文件尺寸门禁
 
 阈值：超过 1000 行警告，超过 1500 行需要架构例外，超过 2000 行必须登记历史例外，否则失败。
 
-- Warning：15
+- Warning：16
 - Architecture exception：10
 - Hard-limit allowlisted：5
 
 | 文件 | 行数 | 分类 |
 | --- | ---: | --- |
 | `PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift` | 1145 | warning |
-| `PooToolsSource/Base/PTCollectionView.swift` | 2262 | hard_limit_allowlisted |
-| `PooToolsSource/Base/PTNavigationBarManager.swift` | 1049 | warning |
+| `PooToolsSource/Base/PTCollectionView.swift` | 2285 | hard_limit_allowlisted |
+| `PooToolsSource/Base/PTNavigationBarManager.swift` | 1164 | warning |
+| `PooToolsSource/Base/PTTabBarView.swift` | 1051 | warning |
 | `PooToolsSource/Category/String+PTEX.swift` | 1878 | architecture_exception |
 | `PooToolsSource/Category/UIImage+PTEX.swift` | 1433 | warning |
 | `PooToolsSource/Category/UIScrollView+PTRefreshEX.swift` | 1446 | warning |
@@ -36,7 +37,7 @@ Generated at: 2026-10-10T18:32:47Z
 | `PooToolsSource/LocalConsole/LocalConsole.swift` | 1848 | architecture_exception |
 | `PooToolsSource/PToolsForm/PTForm.swift` | 1174 | warning |
 | `PooToolsSource/PToolsModelCore/PTModelCodec.swift` | 1027 | warning |
-| `PooToolsSource/PhotoPicker/PTMediaLibViewController.swift` | 1199 | warning |
+| `PooToolsSource/PhotoPicker/PTMediaLibViewController.swift` | 1277 | warning |
 | `PooToolsSource/Picker/PTBasePickerView.swift` | 1399 | warning |
 | `PooToolsSource/ScrollBanner/PTBannerView.swift` | 1177 | warning |
 | `PooToolsSource/SideMenuControl/PTSideMenuControl.swift` | 1179 | warning |

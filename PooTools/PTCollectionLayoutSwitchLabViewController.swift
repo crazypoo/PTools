@@ -14,10 +14,12 @@ import PooTools
 private final class PTCollectionLayoutSwitchTagModel: PTTagLayoutModel {
     let stableID: String
     var isSelected = false
+    var isNested = false
 
-    init(stableID: String, title: String, selected: Bool) {
+    init(stableID: String, title: String, selected: Bool, nested: Bool = false) {
         self.stableID = stableID
         self.isSelected = selected
+        self.isNested = nested
         super.init()
         name = title
     }
@@ -63,14 +65,102 @@ private final class PTCollectionLayoutSwitchCell: PTBaseNormalCell {
     }
 }
 
+// English: Demonstrate a PTCollectionView embedded in another PTCollectionView cell.
+// Español: Demuestra un PTCollectionView incrustado dentro de una celda de otro PTCollectionView.
+// 中文：演示在 PTCollectionView Cell 内嵌套另一个 PTCollectionView。
+@MainActor
+private final class PTCollectionLayoutSwitchNestedItemCell: UICollectionViewCell {
+    static let reuseID = "PTCollectionLayoutSwitchNestedItemCell"
+    private let titleLabel = UILabel()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        titleLabel.textAlignment = .center
+        titleLabel.font = .preferredFont(forTextStyle: .caption1)
+        titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.textColor = .secondaryLabel
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(titleLabel)
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 2),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -2)
+        ])
+        contentView.backgroundColor = .tertiarySystemBackground
+        contentView.layer.cornerRadius = 6
+        contentView.layer.masksToBounds = true
+    }
+
+    required init?(coder: NSCoder) { nil }
+
+    func render(row: PTRows) {
+        titleLabel.text = row.title
+    }
+}
+
+// English: Keep nested-list sizing inside the actual cell hierarchy instead of using screen width.
+// Español: Mantiene el tamaño de la lista anidada dentro de la jerarquía real de la celda, no del ancho de pantalla.
+// 中文：嵌套列表尺寸必须基于真实 Cell 层级，而不是整机屏幕宽度。
+@MainActor
+private final class PTCollectionLayoutSwitchNestedCell: UICollectionViewCell {
+    static let reuseID = "PTCollectionLayoutSwitchNestedCell"
+    private let nestedList: PTCollectionView
+
+    override init(frame: CGRect) {
+        let config = PTCollectionViewConfig()
+        config.viewType = .Gird
+        config.rowCount = 2
+        config.itemHeight = 34
+        config.cellLeadingSpace = 4
+        config.cellTrailingSpace = 4
+        nestedList = PTCollectionView(viewConfig: config)
+        super.init(frame: frame)
+
+        nestedList.registerClassCells(classs: [PTCollectionLayoutSwitchNestedItemCell.reuseID: PTCollectionLayoutSwitchNestedItemCell.self])
+        nestedList.cellInCollectionV2 = { collectionView, context in
+            collectionView.dequeueReusableCell(withReuseIdentifier: PTCollectionLayoutSwitchNestedItemCell.reuseID,
+                                                for: context.indexPath)
+        }
+        nestedList.configureCell = { _, cell, context in
+            (cell as? PTCollectionLayoutSwitchNestedItemCell)?.render(row: context.row)
+        }
+        nestedList.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(nestedList)
+        NSLayoutConstraint.activate([
+            nestedList.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            nestedList.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            nestedList.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            nestedList.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
+        ])
+    }
+
+    required init?(coder: NSCoder) { nil }
+
+    func render() {
+        let rows = (0..<4).map { index in
+            PTRows(title: "Nested \(index + 1)",
+                   ID: PTCollectionLayoutSwitchNestedItemCell.reuseID,
+                   diffId: "nested-\(index)")
+        }
+        nestedList.showCollectionDetail(collectionData: [PTSection(identifier: "nested-section", rows: rows)],
+                                        animated: false)
+    }
+}
+
 @MainActor
 final class PTCollectionLayoutSwitchLabViewController: PTBaseViewController {
     private let layoutControl = UISegmentedControl(items: ["Normal", "Gird", "Water", "Custom", "H", "H Sys", "Tag"])
     private let rowStepper = UIStepper()
     private let heightStepper = UIStepper()
     private let spacingStepper = UIStepper()
+    private let headerHeightStepper = UIStepper()
+    private let headerSpacingStepper = UIStepper()
+    private let footerSpacingStepper = UIStepper()
+    private let sectionInsetStepper = UIStepper()
     private let headerSwitch = UISwitch()
     private let footerSwitch = UISwitch()
+    private let nestedSwitch = UISwitch()
     private let pinHeaderSwitch = UISwitch()
     private let indexSwitch = UISwitch()
     private let decorationControl = UISegmentedControl(items: ["None", "Normal", "Corner"])
@@ -91,6 +181,7 @@ final class PTCollectionLayoutSwitchLabViewController: PTBaseViewController {
         config.cellTrailingSpace = 8
         config.contentTopSpace = 8
         config.contentBottomSpace = 8
+        config.sectionEdges = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
         config.indexConfig = PTCollectionIndexViewConfiguration()
         list = PTCollectionView(viewConfig: config)
         super.init(nibName: nil, bundle: nil)
@@ -134,11 +225,33 @@ final class PTCollectionLayoutSwitchLabViewController: PTBaseViewController {
         spacingStepper.value = 8
         spacingStepper.addTarget(self, action: #selector(configurationChanged), for: .valueChanged)
 
-        [headerSwitch, footerSwitch, pinHeaderSwitch, indexSwitch].forEach {
+        headerHeightStepper.minimumValue = 44
+        headerHeightStepper.maximumValue = 64
+        headerHeightStepper.stepValue = 20
+        headerHeightStepper.value = 44
+        headerHeightStepper.addTarget(self, action: #selector(dataConfigurationChanged), for: .valueChanged)
+        headerSpacingStepper.minimumValue = 0
+        headerSpacingStepper.maximumValue = 24
+        headerSpacingStepper.stepValue = 8
+        headerSpacingStepper.value = 0
+        headerSpacingStepper.addTarget(self, action: #selector(dataConfigurationChanged), for: .valueChanged)
+        footerSpacingStepper.minimumValue = 0
+        footerSpacingStepper.maximumValue = 24
+        footerSpacingStepper.stepValue = 8
+        footerSpacingStepper.value = 0
+        footerSpacingStepper.addTarget(self, action: #selector(dataConfigurationChanged), for: .valueChanged)
+        sectionInsetStepper.minimumValue = 0
+        sectionInsetStepper.maximumValue = 24
+        sectionInsetStepper.stepValue = 12
+        sectionInsetStepper.value = 12
+        sectionInsetStepper.addTarget(self, action: #selector(configurationChanged), for: .valueChanged)
+
+        [headerSwitch, footerSwitch, pinHeaderSwitch, indexSwitch, nestedSwitch].forEach {
             $0.addTarget(self, action: #selector(configurationChanged), for: .valueChanged)
         }
         headerSwitch.addTarget(self, action: #selector(dataConfigurationChanged), for: .valueChanged)
         footerSwitch.addTarget(self, action: #selector(dataConfigurationChanged), for: .valueChanged)
+        nestedSwitch.addTarget(self, action: #selector(dataConfigurationChanged), for: .valueChanged)
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(title: "Stress", style: .plain, target: self, action: #selector(runStress)),
             UIBarButtonItem(title: "Skeleton", style: .plain, target: self, action: #selector(toggleSkeleton))
@@ -146,7 +259,7 @@ final class PTCollectionLayoutSwitchLabViewController: PTBaseViewController {
 
         statusLabel.font = .monospacedSystemFont(ofSize: 10, weight: .regular)
         statusLabel.textColor = .secondaryLabel
-        statusLabel.numberOfLines = 3
+        statusLabel.numberOfLines = 4
         statusLabel.adjustsFontForContentSizeCategory = true
 
         let controls = UIStackView(arrangedSubviews: [
@@ -154,8 +267,13 @@ final class PTCollectionLayoutSwitchLabViewController: PTBaseViewController {
             makeControlRow("Rows", rowStepper),
             makeControlRow("Height", heightStepper),
             makeControlRow("Space", spacingStepper),
+            makeControlRow("Header height", headerHeightStepper),
+            makeControlRow("Header gap", headerSpacingStepper),
+            makeControlRow("Footer gap", footerSpacingStepper),
+            makeControlRow("Section inset", sectionInsetStepper),
             makeControlRow("Header", headerSwitch),
             makeControlRow("Footer", footerSwitch),
+            makeControlRow("Nested list", nestedSwitch),
             makeControlRow("Pin header", pinHeaderSwitch),
             makeControlRow("Index", indexSwitch),
             decorationControl,
@@ -196,12 +314,15 @@ final class PTCollectionLayoutSwitchLabViewController: PTBaseViewController {
 
     private func configureList() {
         list.registerClassCells(classs: [PTCollectionLayoutSwitchCell.reuseID: PTCollectionLayoutSwitchCell.self])
+        list.registerClassCells(classs: [PTCollectionLayoutSwitchNestedCell.reuseID: PTCollectionLayoutSwitchNestedCell.self])
         list.registerSupplementaryView(classs: [PTTestHeader.ID: PTTestHeader.self], kind: UICollectionView.elementKindSectionHeader)
         list.registerSupplementaryView(classs: [PTTestFooter.ID: PTTestFooter.self], kind: UICollectionView.elementKindSectionFooter)
-        list.customerLayout = { _, _ in
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(56))
+        list.customerLayoutWithEnvironment = { _, _, environment in
+            let groupWidth = max(1, environment.container.contentSize.width - 24)
+            let itemHeight: CGFloat = groupWidth > 600 ? 64 : 56
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(itemHeight))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            let group = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(56))
+            let group = NSCollectionLayoutSize(widthDimension: .absolute(groupWidth), heightDimension: .estimated(itemHeight))
             return NSCollectionLayoutGroup.vertical(layoutSize: group, subitems: [item])
         }
         // English: Exercise the real waterfall callback so the layout lab covers runtime custom-item geometry.
@@ -225,11 +346,18 @@ final class PTCollectionLayoutSwitchLabViewController: PTBaseViewController {
             return footer
         }
         list.cellInCollectionV2 = { collectionView, context in
-            collectionView.dequeueReusableCell(withReuseIdentifier: PTCollectionLayoutSwitchCell.reuseID,
-                                                for: context.indexPath)
+            let reuseID = (context.row.dataModel as? PTCollectionLayoutSwitchTagModel)?.isNested == true
+                ? PTCollectionLayoutSwitchNestedCell.reuseID
+                : PTCollectionLayoutSwitchCell.reuseID
+            return collectionView.dequeueReusableCell(withReuseIdentifier: reuseID,
+                                                      for: context.indexPath)
         }
         list.configureCell = { _, cell, context in
-            (cell as? PTCollectionLayoutSwitchCell)?.render(row: context.row)
+            if let nestedCell = cell as? PTCollectionLayoutSwitchNestedCell {
+                nestedCell.render()
+            } else {
+                (cell as? PTCollectionLayoutSwitchCell)?.render(row: context.row)
+            }
         }
         list.collectionDidSelect = { [weak self] _, _, indexPath in
             self?.toggleSelection(at: indexPath)
@@ -252,9 +380,10 @@ final class PTCollectionLayoutSwitchLabViewController: PTBaseViewController {
                 let id = "layout-switch-\(sectionIndex)-\(rowIndex)"
                 let model = PTCollectionLayoutSwitchTagModel(stableID: id,
                                                               title: "\(sectionIndex + 1)-\(rowIndex + 1)",
-                                                              selected: selectedIDs.contains(id))
+                                                              selected: selectedIDs.contains(id),
+                                                              nested: nestedSwitch.isOn && sectionIndex == 0 && rowIndex == 0)
                 return PTRows(title: model.name,
-                              ID: PTCollectionLayoutSwitchCell.reuseID,
+                              ID: model.isNested ? PTCollectionLayoutSwitchNestedCell.reuseID : PTCollectionLayoutSwitchCell.reuseID,
                               diffId: id,
                               diffHash: rowIndex,
                               dataModel: model)
@@ -264,8 +393,10 @@ final class PTCollectionLayoutSwitchLabViewController: PTBaseViewController {
                                     headerID: headerSwitch.isOn ? PTTestHeader.ID : "",
                                     footerID: footerSwitch.isOn ? PTTestFooter.ID : "",
                                     footerHeight: footerSwitch.isOn ? 28 : .leastNormalMagnitude,
-                                    headerHeight: headerSwitch.isOn ? 32 : .leastNormalMagnitude,
+                                    headerHeight: headerSwitch.isOn ? CGFloat(headerHeightStepper.value) : .leastNormalMagnitude,
                                     rows: rows)
+            section.layoutConfiguration = PTSectionLayoutConfiguration(headerSpacing: CGFloat(headerSpacingStepper.value),
+                                                                        footerSpacing: CGFloat(footerSpacingStepper.value))
             return section
         }
         return sections
@@ -328,7 +459,12 @@ final class PTCollectionLayoutSwitchLabViewController: PTBaseViewController {
                                        }) { [weak self] config in
             guard let self else { return }
             config.rowCount = rowCount
-            config.itemHeight = height
+            config.itemHeight = self.nestedSwitch.isOn ? max(height, 140) : height
+            let sectionInset = CGFloat(self.sectionInsetStepper.value)
+            config.sectionEdges = NSDirectionalEdgeInsets(top: sectionInset,
+                                                           leading: 0,
+                                                           bottom: sectionInset,
+                                                           trailing: 0)
             config.cellLeadingSpace = spacing
             config.cellTrailingSpace = spacing
             config.pinHeaderToVisibleBounds = self.pinHeaderSwitch.isOn
@@ -422,9 +558,28 @@ final class PTCollectionLayoutSwitchLabViewController: PTBaseViewController {
                             list.contentCollectionView.contentOffset.x,
                             list.contentCollectionView.contentOffset.y)
         let kind = list.activeUpdateKind?.rawValue ?? "idle"
+        let spacing = layoutMeasurement()
         statusLabel.text = "type: \(selectedLayout())  visible: \(visibleDisplay)\n" +
             "offset: \(offset)  " +
             "apply: \(list.snapshotApplyCount) pending: \(list.pendingUpdateCount) kind: \(kind)\n" +
+            "\(spacing)\n" +
             (message ?? "ready")
+    }
+
+    private func layoutMeasurement() -> String {
+        let collectionView = list.contentCollectionView
+        collectionView.layoutIfNeeded()
+        guard headerSwitch.isOn,
+              let header = collectionView.layoutAttributesForSupplementaryElement(ofKind: UICollectionView.elementKindSectionHeader,
+                                                                                   at: IndexPath(item: 0, section: 0)),
+              let cell = collectionView.layoutAttributesForItem(at: IndexPath(item: 0, section: 0)) else {
+            return "header/cell: -"
+        }
+        let gap = cell.frame.minY - header.frame.maxY
+        return String(format: "header: %.1f  cell: %.1f  gap: %.1f  width: %.1f",
+                      header.frame.height,
+                      cell.frame.height,
+                      gap,
+                      collectionView.bounds.width)
     }
 }
