@@ -57,6 +57,25 @@ final class PTNavigationRegressionTests: XCTestCase {
         XCTAssertNotNil(navigationController.interactivePopGestureRecognizer)
     }
 
+    func testFakeNavigationBarUsesHostHeightAndPreservesButtonBounds() {
+        let bar = PTNavBar(frame: CGRect(x: 0, y: 0, width: 320, height: 72))
+        bar.isFakeNav = true
+
+        let leftButton = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 56))
+        let rightButton = UIView(frame: CGRect(x: 0, y: 0, width: 48, height: 40))
+        bar.setLeftButtons([leftButton])
+        bar.setRightButtons([rightButton])
+        bar.layoutIfNeeded()
+
+        XCTAssertEqual(bar.bounds.height, 72, accuracy: 0.5)
+        XCTAssertEqual(bar.leftContainer.bounds.height, 72, accuracy: 0.5)
+        XCTAssertEqual(bar.rightContainer.bounds.height, 72, accuracy: 0.5)
+        XCTAssertEqual(leftButton.bounds.size.width, 80, accuracy: 0.5)
+        XCTAssertEqual(leftButton.bounds.size.height, 56, accuracy: 0.5)
+        XCTAssertEqual(rightButton.bounds.size.width, 48, accuracy: 0.5)
+        XCTAssertEqual(rightButton.bounds.size.height, 40, accuracy: 0.5)
+    }
+
     func testHostDelegateCanRemainAttachedToNavigationController() {
         final class HostDelegate: NSObject, UINavigationControllerDelegate {}
 

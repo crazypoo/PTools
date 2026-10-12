@@ -17,13 +17,19 @@ open class PTNavBar: PTNavigationBarContainer {
         return sheet.options.useFullScreenMode ? 0 : max(0, sheet.options.pullBarHeight)
     }
     
-    // ✅ 标记是否为普通的 View（不接管系统状态栏）
+    // English: Mark this instance as a standalone view that does not own the system status bar.
+    // Español: Marca esta instancia como una vista independiente que no controla la barra de estado del sistema.
+    // 中文：标记当前实例为独立 View，不接管系统状态栏。
     public var isFakeNav: Bool = false {
         didSet {
-            // 模式改变时，必须立刻重置外层容器的约束！
+            // English: Rebuild the host constraints immediately when the rendering mode changes.
+            // Español: Reconstruye inmediatamente las restricciones del host cuando cambia el modo.
+            // 中文：模式变化后立即重建外层容器约束。
             updateTopBarContainerConstraints()
             
-            // 触发内部按钮的重新布局
+            // English: Reapply the cached item sizes after the host geometry changes.
+            // Español: Vuelve a aplicar los tamaños guardados después de cambiar la geometría del host.
+            // 中文：宿主几何变化后重新应用已缓存的按钮尺寸。
             if !leftContainer.arrangedSubviews.isEmpty {
                 setLeftButtons(leftContainer.arrangedSubviews)
             }
@@ -157,9 +163,10 @@ open class PTNavBar: PTNavigationBarContainer {
             make.left.right.equalToSuperview()
             
             if isFakeNav {
-                // 如果是假导航栏，完全贴紧边界，不需要 statusBar 偏移
-                make.top.equalToSuperview()
-                make.height.equalToSuperview() // 或者 equalTo(CGFloat.kNavBarHeight)
+                // English: A standalone bar must occupy exactly the height supplied by its host view.
+                // Español: Una barra independiente debe ocupar exactamente la altura de su vista anfitriona.
+                // 中文：伪导航栏必须严格使用宿主 View 提供的实际高度。
+                make.top.bottom.equalToSuperview()
             } else {
                 // English: Use the navigation host's local safe-area position and sheet pull distance.
                 // Español: Usa la posición local del área segura del host y la distancia de la hoja.
@@ -189,9 +196,11 @@ open class PTNavBar: PTNavigationBarContainer {
             }
             
             if isFakeNav {
-                // FakeNav 模式：绝对居中
+                // English: Center standalone controls in the bar's own content row.
+                // Español: Centra los controles independientes en la fila de contenido de la barra.
+                // 中文：让伪导航栏按钮在自身内容行内垂直居中。
                 make.centerY.equalToSuperview()
-                make.height.equalTo(CGFloat.kNavBarHeight)
+                make.height.equalToSuperview()
             } else {
                 // English: Keep button groups inside the local host geometry.
                 // Español: Mantiene los grupos de botones dentro de la geometría local del host.
@@ -209,7 +218,21 @@ open class PTNavBar: PTNavigationBarContainer {
     // 中文：根据导航栏自身的可视面板布局按钮和标题，不再使用 Duo 宿主的完整宽度。
     private func adaptiveVisibleRect() -> CGRect {
         guard !bounds.isEmpty else { return .zero }
-        let region = PTAdaptiveVisibleRegionResolver.region(for: self)
+        let context = PTAdaptiveBarLayoutContext.make(for: self)
+        let localInsets = isFakeNav
+            ? UIEdgeInsets(top: 0,
+                           left: context.safeAreaInsets.left,
+                           bottom: 0,
+                           right: context.safeAreaInsets.right)
+            : context.safeAreaInsets
+        let localContext = PTAdaptiveBarLayoutContext(bounds: context.bounds,
+                                                       safeAreaInsets: localInsets,
+                                                       verticalBarEdge: context.verticalBarEdge,
+                                                       reservedRegions: context.reservedRegions,
+                                                       layoutDirection: context.layoutDirection,
+                                                       isHorizontalRegular: context.isHorizontalRegular,
+                                                       isVerticalRegular: context.isVerticalRegular)
+        let region = PTAdaptiveVisibleRegionResolver.region(for: localContext)
         let visible = region.visibleRect.intersection(bounds)
         return visible.isEmpty ? bounds : visible
     }
@@ -236,75 +259,33 @@ open class PTNavBar: PTNavigationBarContainer {
     // MARK: - Public API
     
     public func setLeftButtons(_ buttons: [UIView]) {
-        leftContainer.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        guard !buttons.isEmpty else {
-            leftContainer.isHidden = true
-            self.leftContainerWidth = 0
-            updateContainerConstraints(leftContainer, isLeft: true)
-            calculateMaxWidth()
-            return
-        }
-        leftContainer.isHidden = false
-        buttons.forEach { value in
-            leftContainer.addArrangedSubview(value)
-            if let switchV = value as? UISwitch {
-                switchV.snp.makeConstraints { make in
-                    make.size.equalTo(value.bounds.size.width > 0 ? value.bounds.size : CGSize(width: 51, height: 31))
-                    make.centerY.equalToSuperview()
-                }
-            } else {
-                value.snp.makeConstraints { make in
-                    make.size.equalTo(value.bounds.size)
-                    make.centerY.equalToSuperview()
-                }
-            }
-        }
-        self.leftContainerWidth = stackTotalWidth(leftContainer)
+        // English: Measure before reparenting so custom bounds remain the source of truth.
+        // Español: Mide antes de cambiar la supervista para conservar los bounds personalizados.
+        // 中文：在重新挂载按钮前完成测量，确保自定义 bounds 是唯一尺寸依据。
+        self.leftContainerWidth = configureNavigationBarItems(buttons,
+                                                               in: leftContainer,
+                                                               spacing: PTAppBaseConfig.share.navBarButtonSpacing)
         updateContainerConstraints(leftContainer, isLeft: true)
         calculateMaxWidth()
     }
     
     public func setRightButtons(_ buttons: [UIView]) {
-        rightContainer.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        guard !buttons.isEmpty else {
-            rightContainer.isHidden = true
-            self.rightContainerWidth = 0
-            updateContainerConstraints(rightContainer, isLeft: false)
-            calculateMaxWidth()
-            return
-        }
-        
-        rightContainer.isHidden = false
-
-        buttons.forEach { value in
-            rightContainer.addArrangedSubview(value)
-            if let switchV = value as? UISwitch {
-                switchV.snp.makeConstraints { make in
-                    make.size.equalTo(value.bounds.size.width > 0 ? value.bounds.size : CGSize(width: 51, height: 31))
-                    make.centerY.equalToSuperview()
-                }
-            } else {
-                value.snp.makeConstraints { make in
-                    make.size.equalTo(value.bounds.size)
-                    make.centerY.equalToSuperview()
-                }
-            }
-        }
-        self.rightContainerWidth = stackTotalWidth(rightContainer)
+        // English: Use the same measured layout path as the system navigation container.
+        // Español: Usa la misma ruta de layout medido que el contenedor de navegación del sistema.
+        // 中文：复用系统导航容器使用的统一测量布局路径。
+        self.rightContainerWidth = configureNavigationBarItems(buttons,
+                                                                in: rightContainer,
+                                                                spacing: PTAppBaseConfig.share.navBarButtonSpacing)
         updateContainerConstraints(rightContainer, isLeft: false)
         calculateMaxWidth()
     }
     
     private func stackTotalWidth(_ stack: UIStackView) -> CGFloat {
-        var total: CGFloat = 0
-        stack.arrangedSubviews.forEach {
-            if $0 is UISwitch {
-                total += $0.bounds.width > 0 ? $0.bounds.width : 51
-            } else {
-                total += $0.bounds.width > 0 ? $0.bounds.width : 34
-            }
-        }
-        return total + CGFloat(max(0, stack.arrangedSubviews.count - 1)) * PTAppBaseConfig.share.navBarButtonSpacing
+        if stack === leftContainer { return leftContainerWidth }
+        if stack === rightContainer { return rightContainerWidth }
+        return stack.arrangedSubviews.reduce(0) { partialResult, view in
+            partialResult + navigationBarItemSize(for: view).width
+        } + CGFloat(max(0, stack.arrangedSubviews.count - 1)) * stack.spacing
     }
     
     private func calculateMaxWidth() {

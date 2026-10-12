@@ -163,6 +163,64 @@ open class PTNavigationBarContainer: UIView {
 }
 
 extension PTNavigationBarContainer {
+    // English: Snapshot custom item sizes before reparenting them into a navigation stack.
+    // Español: Captura el tamaño de cada elemento antes de cambiarlo a la jerarquía de la barra.
+    // 中文：在把自定义按钮重新加入导航栏层级前，先快照它们的尺寸。
+    func navigationBarItemSize(for view: UIView) -> CGSize {
+        let boundsSize = view.bounds.size
+        let frameSize = view.frame.size
+        let intrinsicSize = view.intrinsicContentSize
+        let defaultSize = PTAppBaseConfig.share.navBarButtonSize
+        let fallbackSize = view is UISwitch ? CGSize(width: 51, height: 31) : CGSize(width: defaultSize, height: defaultSize)
+
+        func resolvedDimension(bounds: CGFloat,
+                               frame: CGFloat,
+                               intrinsic: CGFloat,
+                               fallback: CGFloat) -> CGFloat {
+            if bounds.isFinite, bounds > 0 { return bounds }
+            if frame.isFinite, frame > 0 { return frame }
+            if intrinsic.isFinite, intrinsic > 0 { return intrinsic }
+            return fallback
+        }
+
+        return CGSize(width: resolvedDimension(bounds: boundsSize.width,
+                                               frame: frameSize.width,
+                                               intrinsic: intrinsicSize.width,
+                                               fallback: fallbackSize.width),
+                      height: resolvedDimension(bounds: boundsSize.height,
+                                                frame: frameSize.height,
+                                                intrinsic: intrinsicSize.height,
+                                                fallback: fallbackSize.height))
+    }
+
+    // English: Apply one deterministic item layout to both native navigation content and PTNavBar.
+    // Español: Aplica un único layout determinista a los contenidos nativos y a PTNavBar.
+    // 中文：让系统导航栏内容和 PTNavBar 共用同一套确定性布局。
+    @discardableResult
+    func configureNavigationBarItems(_ views: [UIView],
+                                    in stack: UIStackView,
+                                    spacing: CGFloat) -> CGFloat {
+        let measuredViews = views.map { ($0, navigationBarItemSize(for: $0)) }
+
+        stack.spacing = max(0, spacing)
+        stack.alignment = .center
+        stack.distribution = .fill
+        stack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        stack.isHidden = measuredViews.isEmpty
+
+        for (view, size) in measuredViews {
+            stack.addArrangedSubview(view)
+            view.snp.remakeConstraints { make in
+                make.width.equalTo(size.width)
+                make.height.equalTo(size.height)
+            }
+        }
+
+        return measuredViews.reduce(0) { partialResult, element in
+            partialResult + element.1.width
+        } + CGFloat(max(0, measuredViews.count - 1)) * stack.spacing
+    }
+
     // English: Keep one background surface continuous through the status bar and navigation bar.
     // Español: Mantiene una única superficie de fondo continua entre la barra de estado y la barra de navegación.
     // 中文：让同一个背景层连续覆盖状态栏和导航栏，避免渐变重新起算。

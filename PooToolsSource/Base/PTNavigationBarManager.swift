@@ -1029,33 +1029,13 @@ extension PTNavigationBarManager {
     // 中文：显式传入导航控制器的重载保持私有，避免误更新其他导航栈。
     private func setLeftView(_ views: [UIView], spacing: CGFloat, in nav: UINavigationController) {
         guard let container = containerMap.object(forKey: nav) else { return }
-        container.leftContainer.spacing = spacing
-        container.leftContainer.arrangedSubviews.forEach({ $0.removeFromSuperview() })
-        container.leftContainer.isHidden = true
-        var containerWidth: CGFloat = 0
-
-        guard !views.isEmpty else {
-            container.leftContainerWidth = 0 // 👈 记录宽度为 0
-            container.leftContainer.snp.remakeConstraints { make in
-                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.equalToSuperview()
-                make.bottom.equalToSuperview()
-                make.width.equalTo(0)
-            }
-            return
-        }
-        
-        container.leftContainer.isHidden = false
-        views.forEach { value in
-            container.leftContainer.addArrangedSubview(value)
-            value.snp.remakeConstraints { make in
-                make.size.equalTo(value.bounds.size)
-            }
-            containerWidth += value.bounds.size.width
-        }
-        containerWidth += CGFloat(views.count - 1) * spacing
-        
-        container.leftContainerWidth = containerWidth // 👈 记录真实宽度
+        // English: Reuse the same pre-reparenting measurement path as PTNavBar.
+        // Español: Reutiliza la misma medición previa al cambio de supervista que PTNavBar.
+        // 中文：复用 PTNavBar 使用的重新挂载前统一测量路径。
+        let containerWidth = container.configureNavigationBarItems(views,
+                                                                    in: container.leftContainer,
+                                                                    spacing: spacing)
+        container.leftContainerWidth = containerWidth
         
         container.leftContainer.snp.remakeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -1072,33 +1052,13 @@ extension PTNavigationBarManager {
 
     private func setRightViews(_ views: [UIView], spacing: CGFloat, in nav: UINavigationController) {
         guard let container = containerMap.object(forKey: nav) else { return }
-        container.rightContainer.spacing = spacing
-        container.rightContainer.arrangedSubviews.forEach({ $0.removeFromSuperview() })
-        container.rightContainer.isHidden = true
-        var containerWidth: CGFloat = 0
-                
-        guard !views.isEmpty else {
-            container.rightContainerWidth = 0 // 👈 记录宽度为 0
-            container.rightContainer.snp.remakeConstraints { make in
-                make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.equalToSuperview()
-                make.bottom.equalToSuperview()
-                make.width.equalTo(0)
-            }
-            return
-        }
-        
-        container.rightContainer.isHidden = false
-        views.forEach { value in
-            container.rightContainer.addArrangedSubview(value)
-            value.snp.remakeConstraints { make in
-                make.size.equalTo(value.bounds.size)
-            }
-            containerWidth += value.bounds.size.width
-        }
-        containerWidth += CGFloat(views.count - 1) * spacing
-        
-        container.rightContainerWidth = containerWidth // 👈 记录真实宽度
+        // English: Keep right-side items on the same deterministic sizing path.
+        // Español: Mantiene los elementos derechos en la misma ruta de tamaño determinista.
+        // 中文：右侧按钮也使用同一套确定性尺寸布局。
+        let containerWidth = container.configureNavigationBarItems(views,
+                                                                    in: container.rightContainer,
+                                                                    spacing: spacing)
+        container.rightContainerWidth = containerWidth
         
         container.rightContainer.snp.remakeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
