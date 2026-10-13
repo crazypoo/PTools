@@ -14,6 +14,7 @@ extension PTCustomerAlertController {
         ]) { [weak self] (_: PTCustomerAlertController, _: UITraitCollection) in
             guard let self else { return }
             self.updateSurfaceAppearance()
+            self.updateActionAppearance()
             self.invalidateContentLayout()
         }
 
@@ -35,6 +36,7 @@ extension PTCustomerAlertController {
     @objc
     private func accessibilityAppearanceDidChange() {
         updateSurfaceAppearance()
+        updateActionAppearance()
         invalidateContentLayout()
     }
 }

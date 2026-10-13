@@ -39,7 +39,7 @@ Demo 身份由 `PooTools/PTDemoCatalog.swift` 中的 `PTDemoID` 和 `PTDemoDescr
 | Media | 图片、视频、签名、识字和媒体选择示例 | 图片加载、视频缩略图、保存和权限 | `PTLoadImageFunction`、`PTVideoThumbnailService`、`PTMediaSaveService` |
 | Rich Text Media | `PTRichText` 媒体示例（见下方代码） | URL/String/UIImage/Data 图片、视频封面、时长、点击和取消 | `PTRichText.image(source:)`、`PTRichText.video(source:)` |
 | Picker | 媒体选择和 `PTImageListViewController` | 系统 ImagePicker、PhotoPicker、取消和结果状态 | `PTSystemMediaPicker` 或 `PTMediaLibViewController` |
-| Alert | Alert、反馈和 Menu 示例 | 系统样式、按钮顺序、长按钮、键盘和无障碍 | `UIAlertController+PTEX`、`PTCustomerAlertController` |
+| Alert | Alert、反馈、Menu 和 Alert Capsule Lab 示例 | 系统样式、胶囊按钮顺序、长按钮、滚动、键盘和无障碍 | `UIAlertController+PTEX`、`PTCustomerAlertController`、[胶囊操作指南](PTCUSTOMER_ALERT_CAPSULE_ACTIONS.md) |
 | Permission | `PTPermissionViewController`、`PTPermissionSettingViewController` | 授权、拒绝、受限和 MainActor completion | `PTPermission` |
 | Theme | 语言、DarkMode 和 `PTDarkModeControl` | trait、动态颜色、透明度和 String Catalog | `PTTheme`、`PTLanguage` |
 | Debug | `PTSideController` 的调试入口 | Scene-scoped Console、Inspector 和诊断 | `PooToolsDEBUG` |
@@ -128,6 +128,7 @@ console.isVisiable = true
 - [ ] Collection Layout Switch Lab 验证七种布局、位置/选中恢复、Header/Footer、Decoration、Index、Skeleton 和连续压力更新。
 - [ ] ImagePicker/PhotoPicker 验证取消、无权限、单选、多选和 iCloud 资源。
 - [ ] Alert/ActionSheet 长按钮列表可滚动，取消按钮位于底部且只回调一次。
+- [ ] Alert Capsule Lab 验证单按钮、双按钮、长标题、20 按钮滚动、Glass 回退和原始索引回调。
 - [ ] Language、DarkMode、Reduce Motion、Reduce Transparency 和 Dynamic Type 即时生效。
 - [ ] LocalConsole、Inspector 和 PTInstruments 在多 Scene 显示到发起它们的窗口。
 - [ ] Release 不输出 token、Cookie、Authorization 或完整响应体。

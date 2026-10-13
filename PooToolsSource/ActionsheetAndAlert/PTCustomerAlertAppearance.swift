@@ -29,10 +29,47 @@ public enum PTCustomerAlertCornerStyle: Sendable {
 /// English: Describes the semantic role of an alert action.
 /// Español: Describe el papel semántico de una acción de alerta.
 /// 中文：描述 Alert 操作按钮的语义角色。
-public enum PTCustomerAlertActionStyle: Sendable {
+public enum PTCustomerAlertActionStyle: Sendable, Equatable {
     case `default`
     case cancel
     case destructive
+}
+
+// English: Selects how alert action capsules should use the available system material.
+// Español: Selecciona cómo las cápsulas de acciones deben usar el material del sistema disponible.
+// 中文：选择 Alert 操作胶囊如何使用当前系统支持的材质。
+public enum PTCustomerAlertButtonVisualStyle: Sendable, Equatable {
+    case automatic
+    case capsule
+    case glassPreferred
+}
+
+// English: Keeps capsule spacing and action priority as a small Sendable value configuration.
+// Español: Mantiene el espaciado y la prioridad de las acciones como una configuración Sendable pequeña.
+// 中文：将胶囊间距和操作优先级集中为轻量的 Sendable 值配置。
+public struct PTCustomerAlertButtonAppearance: Sendable, Equatable {
+    public var visualStyle: PTCustomerAlertButtonVisualStyle
+    public var horizontalSpacing: CGFloat
+    public var verticalSpacing: CGFloat
+    public var sectionInsets: UIEdgeInsets
+    public var titleHorizontalInsets: CGFloat
+    public var primaryActionIndex: Int?
+
+    public init(
+        visualStyle: PTCustomerAlertButtonVisualStyle = .automatic,
+        horizontalSpacing: CGFloat = 12,
+        verticalSpacing: CGFloat = 8,
+        sectionInsets: UIEdgeInsets = .init(top: 10, left: 18, bottom: 18, right: 18),
+        titleHorizontalInsets: CGFloat = 16,
+        primaryActionIndex: Int? = nil
+    ) {
+        self.visualStyle = visualStyle
+        self.horizontalSpacing = horizontalSpacing
+        self.verticalSpacing = verticalSpacing
+        self.sectionInsets = sectionInsets
+        self.titleHorizontalInsets = titleHorizontalInsets
+        self.primaryActionIndex = primaryActionIndex
+    }
 }
 
 /// English: Appearance is intentionally value-based so callers can configure an alert before presentation.
@@ -52,6 +89,7 @@ public struct PTCustomerAlertAppearance: Sendable {
     public var dimmingAlpha: CGFloat
     public var maximumWidth: CGFloat
     public var maximumHeightRatio: CGFloat
+    public var buttonAppearance: PTCustomerAlertButtonAppearance
 
     public init(
         glassEnabled: Bool = true,
@@ -66,7 +104,8 @@ public struct PTCustomerAlertAppearance: Sendable {
         separatorAlpha: CGFloat = 0.35,
         dimmingAlpha: CGFloat = 0.28,
         maximumWidth: CGFloat = 340,
-        maximumHeightRatio: CGFloat = 0.82
+        maximumHeightRatio: CGFloat = 0.82,
+        buttonAppearance: PTCustomerAlertButtonAppearance = .init()
     ) {
         self.glassEnabled = glassEnabled
         self.glassStyle = glassStyle
@@ -81,6 +120,7 @@ public struct PTCustomerAlertAppearance: Sendable {
         self.dimmingAlpha = dimmingAlpha
         self.maximumWidth = maximumWidth
         self.maximumHeightRatio = maximumHeightRatio
+        self.buttonAppearance = buttonAppearance
     }
 
     public static let `default` = Self()

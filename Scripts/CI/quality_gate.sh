@@ -231,12 +231,12 @@ require "fileutils"
 
 report_dir, version_path = ARGV
 required = %w[VERSION DOCS EXAMPLE FONT ARCHITECTURE TESTS CONCURRENCY GOVERNANCE PODS XCODE RELEASE]
-results = Dir.glob(File.join(report_dir, "**", "*.json")).filter_map do |path|
+results = Dir.glob(File.join(report_dir, "**", "*.json")).map do |path|
   next if File.basename(path) == "quality-report.json"
   JSON.parse(File.read(path))
 rescue JSON::ParserError
   nil
-end
+end.compact
 by_gate = results.to_h { |result| [result.fetch("gate"), result] }
 rows = required.map do |gate|
   result = by_gate[gate]

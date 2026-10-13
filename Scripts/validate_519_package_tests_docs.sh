@@ -31,10 +31,10 @@ for matrix in docs/architecture/PACKAGE_MATRIX.md docs/architecture/DEPENDENCY_M
 done
 ruby - "docs/architecture/PACKAGE_MATRIX.md" <<'RUBY'
 path = ARGV.fetch(0)
-rows = File.readlines(path).filter_map do |line|
+rows = File.readlines(path).map do |line|
   match = line.match(/^\| `[^`]+` \| ([A-F]) \|/)
   match && match[1]
-end
+end.compact
 abort "FAIL: package matrix has no module rows" if rows.empty?
 invalid = rows.reject { |status| ("A".."F").include?(status) }
 abort "FAIL: package matrix contains an invalid status: #{invalid.inspect}" unless invalid.empty?

@@ -1,8 +1,17 @@
 # PTools 路线图
 
-> 当前代码基线：`5.63.6`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.64.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.63.6` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.64.0` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.64.0 PTCustomerAlertController iOS 26 胶囊操作升级
+
+- ✅ 新增统一的 1、2、3+ 按钮胶囊布局，长文案、多行标题和多按钮滚动使用同一套测量入口。
+- ✅ 新增主操作索引、取消/主操作视觉排序、Dynamic Type、Reduce Transparency 和无障碍状态适配。
+- ✅ iOS 26 原生 Glass 仅在非原生玻璃外层按需启用；iOS 17+ 和辅助功能场景保留稳定回退。
+- ✅ 保留旧公开初始化器、颜色、字体、操作样式、回调索引和 UIAlertController+PTEX 兼容入口。
+- ✅ 新增 Alert Capsule Lab、使用指南和布局测量回归覆盖。
+- ⬜ 仍需在 iOS 17～27 模拟器、iPhone Duo 和真实宿主中完成视觉、键盘和 VoiceOver 回归。
 
 ## 5.63.6 PTNavBar 伪导航栏尺寸与布局统一
 

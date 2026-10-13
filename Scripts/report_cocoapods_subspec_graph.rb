@@ -38,10 +38,10 @@ end
 
 def source_directories(source_files)
   patterns = Array(source_files).flat_map { |value| value.to_s.split }
-  patterns.filter_map do |pattern|
+  patterns.map do |pattern|
     match = pattern.match(%r{PooToolsSource/([^/]+)/})
     match && match[1]
-  end.uniq.sort
+  end.compact.uniq.sort
 end
 
 subspec_records = all_subspecs(specification).map do |subspec|

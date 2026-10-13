@@ -106,10 +106,6 @@ public class PTCustomerAlertController: PTAlertController {
 
     private let minimumAlertVerticalMargin: CGFloat = 16
 
-    private var separatorThickness: CGFloat {
-        1 / max(UIScreen.main.scale, 1)
-    }
-
     // MARK: Input
 
     fileprivate let alertTitle: String
@@ -135,8 +131,8 @@ public class PTCustomerAlertController: PTAlertController {
     @PTClampedPropertyWrapper(range: 25...100)
     fileprivate var contentSpace: CGFloat = 25
 
-    @PTClampedPropertyWrapper(range: 0...15)
-    fileprivate var cornerSize: CGFloat = 15
+    @PTClampedPropertyWrapper(range: 0...25)
+    fileprivate var cornerSize: CGFloat = 25
 
     fileprivate var canTapBackground: Bool = false
 
@@ -147,10 +143,10 @@ public class PTCustomerAlertController: PTAlertController {
 
     private var actionButtons = [UIButton]()
     private var actionButtonHeightConstraints = [Constraint]()
-    private var actionSeparatorViews = [UIView]()
-
-    private var compactHorizontalDividerConstraints = [Constraint]()
-    private var compactVerticalDividerConstraints = [Constraint]()
+    private var compactActionTopConstraint: Constraint?
+    private var compactActionLeadingConstraint: Constraint?
+    private var compactActionBottomConstraint: Constraint?
+    private var compactActionTrailingConstraint: Constraint?
 
     private var contentWidthConstraint: Constraint?
     private var contentHeightConstraint: Constraint?
@@ -295,18 +291,6 @@ public class PTCustomerAlertController: PTAlertController {
         return view
     }()
 
-    private let compactTopSeparatorView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .separator
-        return view
-    }()
-
-    private let compactDividerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .separator
-        return view
-    }()
-
     // MARK: Computed
 
     var hasTitle: Bool {
@@ -315,6 +299,55 @@ public class PTCustomerAlertController: PTAlertController {
 
     var hasCustomContent: Bool {
         customerViewCallback != nil
+    }
+
+    // English: Normalize capsule metrics once so every layout path uses the same safe values.
+    // Español: Normaliza una vez las métricas de las cápsulas para que todas las rutas usen valores seguros.
+    // 中文：统一规范胶囊布局参数，确保所有布局路径使用安全值。
+    private var actionSectionInsets: UIEdgeInsets {
+        let insets = appearance.buttonAppearance.sectionInsets
+        return UIEdgeInsets(
+            top: max(0, insets.top.isFinite ? insets.top : 10),
+            left: max(0, insets.left.isFinite ? insets.left : 18),
+            bottom: max(0, insets.bottom.isFinite ? insets.bottom : 18),
+            right: max(0, insets.right.isFinite ? insets.right : 18)
+        )
+    }
+
+    private var actionHorizontalSpacing: CGFloat {
+        let value = appearance.buttonAppearance.horizontalSpacing
+        return min(48, max(0, value.isFinite ? value : 12))
+    }
+
+    private var actionVerticalSpacing: CGFloat {
+        let value = appearance.buttonAppearance.verticalSpacing
+        return min(48, max(0, value.isFinite ? value : 8))
+    }
+
+    private var actionTitleHorizontalInsets: CGFloat {
+        let value = appearance.buttonAppearance.titleHorizontalInsets
+        return min(40, max(8, value.isFinite ? value : 16))
+    }
+
+    private var primaryActionIndex: Int? {
+        if let configured = appearance.buttonAppearance.primaryActionIndex,
+           buttons.indices.contains(configured) {
+            return configured
+        }
+
+        if buttons.count == 1 {
+            return 0
+        }
+
+        let primaryCandidates = buttons.indices.filter {
+            let style = actionStyle(at: $0)
+            return style == .default || style == .destructive
+        }
+        return primaryCandidates.count == 1 ? primaryCandidates[0] : nil
+    }
+
+    private func isPrimaryAction(at index: Int) -> Bool {
+        primaryActionIndex == index
     }
 
     var minimumBodyHeight: CGFloat {
@@ -339,7 +372,7 @@ public class PTCustomerAlertController: PTAlertController {
         buttons: [String],
         buttonsColors: [UIColor],
         buttonsFont: UIFont = .appfont(size: 15),
-        cornerSize: CGFloat = 15,
+        cornerSize: CGFloat = 25,
         contentSpace: CGFloat = 25,
         canTapBackground: Bool = false,
         actionStyles: [PTCustomerAlertActionStyle] = [],
@@ -659,6 +692,13 @@ public class PTCustomerAlertController: PTAlertController {
             make.width.equalTo(actionScrollView.frameLayoutGuide.snp.width)
         }
 
+        // English: Use spacing and margins instead of separator views so long titles remain measurable.
+        // Español: Usa espaciado y márgenes en lugar de separadores para medir correctamente los títulos largos.
+        // 中文：使用间距和边距替代分割线，保证长标题能够被正确测量。
+        actionStackView.isLayoutMarginsRelativeArrangement = true
+        actionStackView.layoutMargins = actionSectionInsets
+        actionStackView.spacing = actionVerticalSpacing
+
         buttonModels.enumerated().forEach { index, model in
             let button = makeActionButton(model: model, index: index)
             actionButtons.append(button)
@@ -669,18 +709,6 @@ public class PTCustomerAlertController: PTAlertController {
                     make.height.equalTo(minimumButtonRowHeight).constraint
                 )
             }
-
-            guard index < buttonModels.count - 1 else { return }
-
-            let separator = UIView()
-            separator.backgroundColor = .separator
-            actionStackView.addArrangedSubview(separator)
-
-            separator.snp.makeConstraints { make in
-                make.height.equalTo(separatorThickness)
-            }
-
-            actionSeparatorViews.append(separator)
         }
     }
 
@@ -694,22 +722,29 @@ public class PTCustomerAlertController: PTAlertController {
             make.top.equalTo(bodyScrollView.snp.bottom)
             compactActionHeightConstraint = make
                 .height
-                .equalTo(minimumButtonRowHeight + separatorThickness)
+                .equalTo(minimumButtonRowHeight + actionSectionInsets.top + actionSectionInsets.bottom)
                 .constraint
         }
 
-        compactActionView.addSubview(compactTopSeparatorView)
         compactActionView.addSubview(compactActionStackView)
-        compactActionView.addSubview(compactDividerView)
-
-        compactTopSeparatorView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(separatorThickness)
-        }
 
         compactActionStackView.snp.makeConstraints { make in
-            make.top.equalTo(compactTopSeparatorView.snp.bottom)
-            make.leading.trailing.bottom.equalToSuperview()
+            compactActionTopConstraint = make.top
+                .equalToSuperview()
+                .offset(actionSectionInsets.top)
+                .constraint
+            compactActionLeadingConstraint = make.leading
+                .equalToSuperview()
+                .offset(actionSectionInsets.left)
+                .constraint
+            compactActionBottomConstraint = make.bottom
+                .equalToSuperview()
+                .offset(-actionSectionInsets.bottom)
+                .constraint
+            compactActionTrailingConstraint = make.trailing
+                .equalToSuperview()
+                .offset(-actionSectionInsets.right)
+                .constraint
         }
 
         buttonModels.enumerated().forEach { index, model in
@@ -723,31 +758,6 @@ public class PTCustomerAlertController: PTAlertController {
                 )
             }
         }
-
-        configureCompactDivider()
-    }
-
-    private func configureCompactDivider() {
-        guard buttonModels.count == 2, actionButtons.count == 2 else {
-            compactDividerView.isHidden = true
-            return
-        }
-
-        compactDividerView.isHidden = false
-
-        compactHorizontalDividerConstraints = compactDividerView.snp.prepareConstraints { make in
-            make.width.equalTo(separatorThickness)
-            make.top.bottom.equalTo(compactActionStackView)
-            make.centerX.equalTo(compactActionStackView.snp.centerX)
-        }
-
-        compactVerticalDividerConstraints = compactDividerView.snp.prepareConstraints { make in
-            make.height.equalTo(separatorThickness)
-            make.leading.trailing.equalTo(compactActionStackView)
-            make.top.equalTo(actionButtons[0].snp.bottom)
-        }
-
-        compactHorizontalDividerConstraints.forEach { $0.activate() }
     }
 
     // MARK: Button
@@ -755,25 +765,24 @@ public class PTCustomerAlertController: PTAlertController {
     private func makeActionButton(
         model: PTCustomBottomButtonModel,
         index: Int
-    ) -> UIButton {
+    ) -> PTBaseButton {
         let title = model.titleName ?? ""
-        let button = UIButton(type: .custom)
+        let button = PTBaseButton(frame: .zero)
+        let titleColor = model.titleColor ?? (
+            actionStyle(at: index) == .destructive ? .systemRed : .systemBlue
+        )
 
         PTUIAccessibility.applyDynamicType(to: button, font: buttonsFont)
-
-        button.setTitleColor(model.titleColor, for: .normal)
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(.systemGray, for: .highlighted)
-        button.titleLabel?.textAlignment = .center
-        button.titleLabel?.numberOfLines = 0
-        button.titleLabel?.lineBreakMode = .byWordWrapping
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.titleLabel?.setContentCompressionResistancePriority(.required, for: .vertical)
-        button.contentHorizontalAlignment = .center
-        button.accessibilityTraits = .button
-        if actionStyle(at: index) == .destructive {
-            button.accessibilityHint = "Destructive action"
-        }
+        PTCustomerAlertButtonStyler.configure(
+            button,
+            title: title,
+            titleColor: titleColor,
+            role: actionStyle(at: index),
+            isPrimary: isPrimaryAction(at: index),
+            appearance: appearance.buttonAppearance,
+            font: buttonsFont,
+            usesNativeGlassSurface: surfaceBackgroundView.usesNativeGlassSurface
+        )
         button.tag = 100 + index
 
         button.addAction(
@@ -807,25 +816,44 @@ public class PTCustomerAlertController: PTAlertController {
     // MARK: Compact Layout
 
     private func applyCompactActionLayout(_ layout: PTCustomerAlertCompactActionLayout) {
-        guard buttons.count == 2 else {
-            compactActionStackView.axis = .horizontal
-            compactActionStackView.spacing = 0
-            compactDividerView.isHidden = true
-            return
-        }
-
         compactActionStackView.axis = layout == .horizontal ? .horizontal : .vertical
-        compactActionStackView.spacing = layout == .vertical ? separatorThickness : 0
+        compactActionStackView.distribution = layout == .horizontal
+            ? .fillEqually
+            : .fill
+        compactActionStackView.spacing = layout == .horizontal
+            ? actionHorizontalSpacing
+            : actionVerticalSpacing
+        reorderCompactActionButtons(for: layout)
+    }
 
-        if layout == .horizontal {
-            compactVerticalDividerConstraints.forEach { $0.deactivate() }
-            compactHorizontalDividerConstraints.forEach { $0.activate() }
-        } else {
-            compactHorizontalDividerConstraints.forEach { $0.deactivate() }
-            compactVerticalDividerConstraints.forEach { $0.activate() }
+    // English: Keep cancellation leading in a horizontal pair and below the primary action vertically.
+    // Español: Mantiene la cancelación a la izquierda en horizontal y debajo de la acción principal en vertical.
+    // 中文：双按钮横排时取消按钮在左，竖排时主操作在上、取消操作在下。
+    private func reorderCompactActionButtons(
+        for layout: PTCustomerAlertCompactActionLayout
+    ) {
+        guard actionButtons.count == 2 else { return }
+
+        var order = [0, 1]
+        let cancelIndex = actionStyles.firstIndex(of: .cancel)
+        if let primaryActionIndex, let cancelIndex, primaryActionIndex != cancelIndex {
+            if layout == .horizontal {
+                let isRightToLeft = view.effectiveUserInterfaceLayoutDirection == .rightToLeft
+                order = isRightToLeft
+                    ? [primaryActionIndex, cancelIndex]
+                    : [cancelIndex, primaryActionIndex]
+            } else {
+                order = [primaryActionIndex, cancelIndex]
+            }
         }
 
-        compactDividerView.isHidden = false
+        compactActionStackView.arrangedSubviews.forEach {
+            compactActionStackView.removeArrangedSubview($0)
+        }
+        order.forEach { index in
+            guard actionButtons.indices.contains(index) else { return }
+            compactActionStackView.addArrangedSubview(actionButtons[index])
+        }
     }
 
     // MARK: Main Layout
@@ -877,29 +905,35 @@ public class PTCustomerAlertController: PTAlertController {
         let compactLayout = PTCustomerAlertMeasurement.compactActionLayout(
             buttons: buttons,
             width: width,
-            separatorThickness: separatorThickness,
+            sectionInsets: actionSectionInsets,
+            horizontalSpacing: actionHorizontalSpacing,
+            titleHorizontalInsets: actionTitleHorizontalInsets,
             font: actualFont,
             isAccessibilityCategory: traitCollection.preferredContentSizeCategory.isAccessibilityCategory
         )
-        let rowHeight = PTCustomerAlertMeasurement.buttonRowHeight(
+        let rowHeights = PTCustomerAlertMeasurement.buttonRowHeights(
             buttons: buttons,
             width: width,
             layout: buttons.count > 2 ? .vertical : compactLayout,
-            separatorThickness: separatorThickness,
+            sectionInsets: actionSectionInsets,
+            horizontalSpacing: actionHorizontalSpacing,
+            titleHorizontalInsets: actionTitleHorizontalInsets,
             minimumButtonRowHeight: minimumButtonRowHeight,
             font: actualFont
         )
         let verticalButtonsHeight = PTCustomerAlertMeasurement.actionsContentHeight(
-            buttonCount: buttons.count,
-            rowHeight: rowHeight,
-            separatorThickness: separatorThickness
+            rowHeights: rowHeights,
+            sectionInsets: actionSectionInsets,
+            verticalSpacing: actionVerticalSpacing
         )
         let compactButtonsHeight = PTCustomerAlertMeasurement.compactActionHeight(
             buttonCount: buttons.count,
             layout: compactLayout,
-            rowHeight: rowHeight,
-            separatorThickness: separatorThickness
+            rowHeights: rowHeights,
+            sectionInsets: actionSectionInsets,
+            verticalSpacing: actionVerticalSpacing
         )
+        let rowHeight = rowHeights.max() ?? minimumButtonRowHeight
 
         let mode: PTCustomerAlertActionLayoutMode
         let contentHeight: CGFloat
@@ -943,8 +977,14 @@ public class PTCustomerAlertController: PTAlertController {
             safeHeight: safeHeight,
             bodyHeight: bodyHeight,
             buttonCount: buttons.count,
-            rowHeight: rowHeight,
-            compactLayout: compactLayout
+            rowHeights: rowHeights,
+            compactLayout: compactLayout,
+            sectionInsets: actionSectionInsets,
+            horizontalSpacing: actionHorizontalSpacing,
+            verticalSpacing: actionVerticalSpacing,
+            titleHorizontalInsets: actionTitleHorizontalInsets,
+            contentSizeCategory: traitCollection.preferredContentSizeCategory,
+            reduceTransparency: UIAccessibility.isReduceTransparencyEnabled
         )
 
         guard signature != layoutSignature ||
@@ -961,8 +1001,11 @@ public class PTCustomerAlertController: PTAlertController {
         contentHeightConstraint?.update(offset: contentHeight)
         actionViewportHeightConstraint?.update(offset: actionViewportHeight)
 
-        actionButtonHeightConstraints.forEach { constraint in
-            constraint.update(offset: rowHeight)
+        actionButtonHeightConstraints.enumerated().forEach { index, constraint in
+            let height = rowHeights.indices.contains(index)
+                ? rowHeights[index]
+                : rowHeight
+            constraint.update(offset: height)
         }
 
         // MARK: Scrolling
@@ -1005,6 +1048,7 @@ public class PTCustomerAlertController: PTAlertController {
         surfaceBackgroundView.legacyCornerRadius = cornerSize
         surfaceBackgroundView.contentBackgroundColor = contentBackgroundColor
         updateSurfaceAppearance()
+        updateActionAppearance()
     }
 
     func updateSurfaceAppearance() {
@@ -1015,13 +1059,41 @@ public class PTCustomerAlertController: PTAlertController {
         surfaceBackgroundView.contentBackgroundColor = contentBackgroundColor
     }
 
-    private func updateActionAppearance() {
-        let separatorColor = UIColor.separator.withAlphaComponent(
-            min(1, max(0, appearance.separatorAlpha))
-        )
-        compactTopSeparatorView.backgroundColor = separatorColor
-        compactDividerView.backgroundColor = separatorColor
-        actionSeparatorViews.forEach { $0.backgroundColor = separatorColor }
+    // Keep this hook visible to the same-module presentation coordinator.
+    // Mantén este punto de actualización visible para el coordinador de presentación del mismo módulo.
+    // 保持该更新入口对同模块展示协调器可见。
+    func updateActionAppearance() {
+        guard isViewLoaded else { return }
+
+        actionStackView.layoutMargins = actionSectionInsets
+        actionStackView.spacing = actionVerticalSpacing
+        compactActionTopConstraint?.update(offset: actionSectionInsets.top)
+        compactActionLeadingConstraint?.update(offset: actionSectionInsets.left)
+        compactActionBottomConstraint?.update(offset: -actionSectionInsets.bottom)
+        compactActionTrailingConstraint?.update(offset: -actionSectionInsets.right)
+
+        actionButtons.enumerated().forEach { index, button in
+            guard buttonModels.indices.contains(index) else { return }
+            let model = buttonModels[index]
+            let title = model.titleName ?? ""
+            let titleColor = model.titleColor ?? (
+                actionStyle(at: index) == .destructive ? .systemRed : .systemBlue
+            )
+            guard let baseButton = button as? PTBaseButton else { return }
+            PTCustomerAlertButtonStyler.configure(
+                baseButton,
+                title: title,
+                titleColor: titleColor,
+                role: actionStyle(at: index),
+                isPrimary: isPrimaryAction(at: index),
+                appearance: appearance.buttonAppearance,
+                font: buttonsFont,
+                usesNativeGlassSurface: surfaceBackgroundView.usesNativeGlassSurface
+            )
+        }
+
+        layoutSignature = nil
+        view.setNeedsLayout()
     }
 
 

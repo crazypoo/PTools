@@ -65,10 +65,10 @@ require "json"
 require "time"
 
 repo_root = Dir.pwd
-rows = ENV.fetch("ROWS").lines(chomp: true).filter_map do |row|
+rows = ENV.fetch("ROWS").lines(chomp: true).each_with_object([]) do |row, parsed_rows|
   path, lines, classification = row.split("|", 3)
   next if path.to_s.empty?
-  { "path" => path, "lines" => lines.to_i, "classification" => classification }
+  parsed_rows << { "path" => path, "lines" => lines.to_i, "classification" => classification }
 end
 payload = {
   "schema_version" => 1,

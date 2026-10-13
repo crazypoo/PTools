@@ -36,12 +36,12 @@ end
 
 failures = []
 
-library_sources = target.source_build_phase.files.filter_map do |build_file|
+library_sources = target.source_build_phase.files.map do |build_file|
   next unless build_file.file_ref
 
   path = relative_path(build_file.file_ref.real_path.to_s, repo_root)
   path if path.start_with?("PooToolsSource/")
-end
+end.compact
 
 unless library_sources.empty?
   failures << "PooTools_Example still compiles #{library_sources.length} PooToolsSource file(s): #{library_sources.first(10).join(', ')}"

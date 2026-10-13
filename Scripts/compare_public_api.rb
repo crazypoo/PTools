@@ -12,9 +12,9 @@ end
 # English: Allow only removals explicitly reviewed for a release migration.
 # Español: Permite solo las eliminaciones revisadas explícitamente para una migración de release.
 # 中文：只允许发布迁移中明确审阅并登记的删除项。
-allowlist_path = options.filter_map do |option|
+allowlist_path = options.map do |option|
   option.delete_prefix("--allow-removals-file=") if option.start_with?("--allow-removals-file=")
-end.first
+end.compact.first
 
 def entries(path)
   JSON.parse(File.read(path)).fetch("declarations", []).map do |entry|

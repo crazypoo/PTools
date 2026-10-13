@@ -24,9 +24,8 @@ owners = manifest.fetch("owners").map do |entry|
   abort "Unknown capability classification: #{classification}" unless allowed_classifications.include?(classification)
   matches = entry.fetch("scan_patterns").flat_map do |pattern|
     regexp = Regexp.new(pattern)
-    source_files.filter_map do |path|
-      next unless File.foreach(path).any? { |line| line.match?(regexp) }
-      path
+    source_files.each_with_object([]) do |path, matching_paths|
+      matching_paths << path if File.foreach(path).any? { |line| line.match?(regexp) }
     end
   end.uniq.sort
   entry.merge("matches" => matches, "match_count" => matches.length)

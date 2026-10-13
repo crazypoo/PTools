@@ -130,12 +130,12 @@ def spm_signature(target)
     "internal_dependencies" => sorted_unique(target.fetch("internal_dependencies", []).map { |dependency| canonical_name(dependency["name"]) }),
     "third_party_dependencies" => sorted_unique(target.fetch("third_party_dependencies", []).map { |dependency| dependency["package"] || dependency["name"] }),
     "swift_settings" => {
-      "defines" => sorted_unique(target.fetch("swift_settings", []).filter_map do |setting|
+      "defines" => sorted_unique(target.fetch("swift_settings", []).map do |setting|
         setting.dig("kind", "define", "_0")
-      end),
-      "upcoming_features" => sorted_unique(target.fetch("swift_settings", []).filter_map do |setting|
+      end.compact),
+      "upcoming_features" => sorted_unique(target.fetch("swift_settings", []).map do |setting|
         setting.dig("kind", "enableUpcomingFeature", "_0")
-      end)
+      end.compact)
     }
   }
 end

@@ -14,10 +14,9 @@ allowlist_path = File.join(repo_root, "Scripts", "unchecked_sendable_allowlist.t
 report_dir = ENV.fetch("PTOOLS_REPORT_DIR", File.join(repo_root, "report", "current"))
 FileUtils.mkdir_p(report_dir)
 
-allowlisted = File.readlines(allowlist_path, chomp: true).filter_map do |line|
+allowlisted = File.readlines(allowlist_path, chomp: true).each_with_object([]) do |line, paths|
   line = line.strip
-  next if line.empty? || line.start_with?("#")
-  line
+  paths << line unless line.empty? || line.start_with?("#")
 end
 
 declarations = []

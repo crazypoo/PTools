@@ -39,16 +39,16 @@ failures = []
 
 def relative_paths(paths, root)
   prefix = "#{File.expand_path(root)}/"
-  paths.filter_map do |path|
+  paths.map do |path|
     expanded = File.expand_path(path)
     expanded.start_with?(prefix) ? expanded.delete_prefix(prefix) : nil
-  end.to_set
+  end.compact.to_set
 end
 
 actual_paths = core_dirs.flat_map do |directory|
-  Dir.glob(File.join(repo_root, "PooToolsSource", directory, "*")).filter_map do |path|
+  Dir.glob(File.join(repo_root, "PooToolsSource", directory, "*")).map do |path|
     File.file?(path) && supported_extensions.include?(File.extname(path)) ? path : nil
-  end
+  end.compact
 end
 actual_paths = relative_paths(actual_paths, repo_root)
 

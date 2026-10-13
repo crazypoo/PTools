@@ -29,6 +29,26 @@ final class PTCustomerAlertBackgroundView: UIView {
         didSet { updateAppearance() }
     }
 
+    // English: Expose only the material fact needed by the action styler.
+    // Español: Expone únicamente el dato material que necesita el estilizador de acciones.
+    // 中文：只向按钮样式器暴露它真正需要的材质状态。
+    var usesNativeGlassSurface: Bool {
+        guard contentBackgroundColor == nil,
+              legacyVisualStyle != .classic,
+              legacyVisualStyle != .material,
+              appearance.glassEnabled,
+              !appearance.respectsReduceTransparency || !UIAccessibility.isReduceTransparencyEnabled else {
+            return false
+        }
+
+        #if compiler(>=6.2)
+        if #available(iOS 26.0, *) {
+            return surfaceView.effect is UIGlassEffect
+        }
+        #endif
+        return false
+    }
+
     private let surfaceView = UIVisualEffectView(frame: .zero)
     private let tintView = UIView(frame: .zero)
     private var traitChangeRegistration: (any UITraitChangeRegistration)?

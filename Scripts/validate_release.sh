@@ -43,9 +43,11 @@ fi
   || fail RELEASE_VERSION_MISMATCH VERSION "$(tr -d '[:space:]' < VERSION)" "$version" 'release input must match VERSION'
 contains_fixed_string "version_path = File.join(__dir__, 'VERSION')" PooTools.podspec \
   || fail RELEASE_PODSPEC_SOURCE PooTools.podspec 'VERSION-backed podspec' 'no VERSION source' 'podspec must use the canonical version source'
-pod_version="$(pod ipc spec PooTools.podspec | ruby -rjson -e 'puts JSON.parse(STDIN.read).fetch("version")')"
-[[ "$pod_version" == "$version" ]] \
-  || fail RELEASE_PODSPEC_MISMATCH PooTools.podspec "$version" "$pod_version" 'resolved podspec version must match VERSION'
+if [[ "$metadata_only" == false ]]; then
+  pod_version="$(pod ipc spec PooTools.podspec | ruby -rjson -e 'puts JSON.parse(STDIN.read).fetch("version")')"
+  [[ "$pod_version" == "$version" ]] \
+    || fail RELEASE_PODSPEC_MISMATCH PooTools.podspec "$version" "$pod_version" 'resolved podspec version must match VERSION'
+fi
 contains_fixed_string "PooTools/Core ($version)" Podfile.lock \
   || fail RELEASE_LOCK_MISMATCH Podfile.lock "PooTools/Core ($version)" 'missing or different resolved version' 'lockfile must match VERSION'
 contains_fixed_string "当前代码基线：\`$version\`" ROADMAP.md \

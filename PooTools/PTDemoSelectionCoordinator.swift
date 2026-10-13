@@ -224,7 +224,7 @@ enum PTDemoSelectionCoordinator {
                 }
             } else if descriptor.id.rawValue == "ui.alert" {
                 PTGCDManager.shared.runOnMain {
-                    UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert,"ActionSheet","CustomActionSheet","new","newActionSheet","Like system"], otherBlock: { sheet,index,title in
+                    UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert,"ActionSheet","CustomActionSheet","Alert Capsule Lab","newActionSheet","Like system"], otherBlock: { sheet,index,title in
                         switch index {
                         case 0:
                             let tips = PTAlertTipsViewController(title: "Job Done!", subtitle: "WOW", icon: .Done)
@@ -267,8 +267,7 @@ enum PTDemoSelectionCoordinator {
                             PTAlertManager.show(actionSheet)
 
                         case 5:
-                            let newAlertController = PTCustomerAlertController(title: "",customerViewHeight:0,buttons: ["11111","33333"],buttonsColors: [.systemBlue],cornerSize: 15)
-                            PTAlertManager.show(newAlertController)
+                            showCustomerAlertCapsuleLab(from: controller)
                         case 6:
                             let titleItem = PTActionSheetTitleItem(title: "Title",subTitle: "SubTitle")
 
@@ -468,5 +467,100 @@ enum PTDemoSelectionCoordinator {
         }
 
 
+    }
+
+    // English: Demonstrate the complete customer-alert capsule matrix without changing legacy alert entry points.
+    // Español: Demuestra la matriz completa de cápsulas sin cambiar las entradas heredadas de las alertas.
+    // 中文：展示完整的 Alert 胶囊按钮场景，同时不改变旧 Alert 入口。
+    private static func showCustomerAlertCapsuleLab(
+        from controller: PTFuncNameViewController
+    ) {
+        UIAlertController.baseActionSheet(
+            title: "Alert Capsule Lab",
+            subTitle: "iOS 26 glass, long titles, scrolling and accessibility",
+            titles: [
+                "One action",
+                "Cancel and primary",
+                "Long action titles",
+                "Destructive / cancel",
+                "20 actions scrolling",
+                "Explicit glass fallback",
+                "Empty content"
+            ],
+            otherBlock: { _, index, _ in
+                let alert: PTCustomerAlertController
+
+                switch index {
+                case 0:
+                    alert = PTCustomerAlertController(
+                        title: "完成",
+                        buttons: ["继续"],
+                        buttonsColors: [.systemBlue],
+                        actionStyles: [.default]
+                    )
+                case 1:
+                    alert = PTCustomerAlertController(
+                        title: "保存更改？",
+                        buttons: ["保存", "取消"],
+                        buttonsColors: [.systemBlue, .secondaryLabel],
+                        actionStyles: [.default, .cancel]
+                    )
+                case 2:
+                    alert = PTCustomerAlertController(
+                        title: "长标题会自动换行，并在按钮空间不足时切换为纵向胶囊布局",
+                        buttons: [
+                            "继续执行这个需要多行展示的操作",
+                            "取消"
+                        ],
+                        buttonsColors: [.systemBlue, .secondaryLabel],
+                        actionStyles: [.default, .cancel]
+                    )
+                case 3:
+                    alert = PTCustomerAlertController(
+                        title: "删除这条记录？",
+                        buttons: ["删除", "取消"],
+                        buttonsColors: [.systemRed, .secondaryLabel],
+                        actionStyles: [.destructive, .cancel]
+                    )
+                case 4:
+                    var titles = (1...20).map { "Action \($0)" }
+                    titles[0] = "Primary action"
+                    let styles = Array(repeating: PTCustomerAlertActionStyle.default, count: titles.count - 1)
+                        + [.cancel]
+                    var appearance = PTCustomerAlertAppearance.default
+                    appearance.buttonAppearance.primaryActionIndex = 0
+                    appearance.buttonAppearance.visualStyle = .capsule
+                    alert = PTCustomerAlertController(
+                        title: "滚动操作",
+                        buttons: titles,
+                        buttonsColors: Array(repeating: .systemBlue, count: titles.count),
+                        actionStyles: styles,
+                        appearance: appearance
+                    )
+                case 5:
+                    var appearance = PTCustomerAlertAppearance.default
+                    appearance.buttonAppearance.visualStyle = .glassPreferred
+                    appearance.buttonAppearance.primaryActionIndex = 0
+                    alert = PTCustomerAlertController(
+                        title: "Explicit Glass",
+                        buttons: ["Continue", "Cancel"],
+                        buttonsColors: [.systemBlue, .secondaryLabel],
+                        actionStyles: [.default, .cancel],
+                        appearance: appearance
+                    )
+                    alert.visualStyle = .classic
+                default:
+                    alert = PTCustomerAlertController(
+                        title: "",
+                        customerViewHeight: 0,
+                        buttons: ["关闭"],
+                        buttonsColors: [.systemBlue],
+                        actionStyles: [.cancel]
+                    )
+                }
+
+                PTAlertManager.show(alert)
+            }
+        )
     }
 }
