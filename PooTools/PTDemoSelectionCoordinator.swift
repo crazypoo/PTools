@@ -457,12 +457,10 @@ enum PTDemoSelectionCoordinator {
                     }
                 }
             } else {
-                PTGCDManager.shared.runOnMain {
-                    let sizes: [PTSheetSize] = [
-                        ["input.stepper-list", "media.live-photo", "media.live-photo-disassemble", "ui.cycle-banner"].contains(descriptor.id.rawValue) ? .percent(0.9) : .percent(0.5)
-                    ]
-                    PTDemoCoordinator.shared.present(descriptor, from: controller, sizes: sizes)
-                }
+                let sizes: [PTSheetSize] = [
+                    ["input.stepper-list", "media.live-photo", "media.live-photo-disassemble", "ui.cycle-banner"].contains(descriptor.id.rawValue) ? .percent(0.9) : .percent(0.5)
+                ]
+                PTDemoCoordinator.shared.present(descriptor, from: controller, sizes: sizes)
             }
         }
 

@@ -2203,7 +2203,7 @@ private final class PTInputStylesDemoViewController: PTBaseViewController {
     }
 
     private func makeNativeHoshiField() -> UIView {
-        let field = PTHoshiTextField(frame: .zero, primaryAction: nil)
+        let field = PTHoshiTextField(frame: .zero)
         field.placeholder = "PTHoshiTextField"
         field.placeholderColor = .secondaryLabel
         field.placeholderFont = .preferredFont(forTextStyle: .footnote)

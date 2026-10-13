@@ -258,7 +258,10 @@ open class PTHoshiTextField: UITextField {
         setup()
     }
 
-    override init(frame: CGRect) {
+    // English: Expose the frame initializer so callers do not select UIKit's iOS 27 primaryAction overload.
+    // Español: Expone el inicializador por frame para evitar que las llamadas elijan la sobrecarga primaryAction de UIKit en iOS 27.
+    // 中文：公开 frame 初始化方法，避免调用方在 iOS 27 误选 UIKit 的 primaryAction 重载。
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
     }
