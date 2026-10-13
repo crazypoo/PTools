@@ -169,6 +169,7 @@ enum PTDemoRegistry {
         make("ui.collection-refresh-lab", "PToolsUIFoundation", "Diffable Refresh Lab", .uiComponents, .interactive, .push, .runnable, legacy: "Diffable Refresh Lab", tags: ["collection", "diffable", "content-refresh", "stress"]),
         make("ui.collection-layout-switch-lab", "PToolsUIFoundation", "Collection Layout Switch Lab", .uiComponents, .interactive, .push, .runnable, legacy: "Collection Layout Switch Lab", tags: ["collection", "layout", "runtime-switch", "stress"]),
         make("input.input-box", "PooToolsInput", "InputBox", .inputForm, .interactive, .sheet, .runnable, legacy: "InputBox", tags: ["input"]),
+        make("input.all-styles", "PooToolsInput", "Input Styles", .inputForm, .interactive, .push, .runnable, legacy: "Input Styles", tags: ["input", "text-field", "text-view", "styles"]),
         make("input.stepper", "PooToolsStepper", "Stepper", .inputForm, .interactive, .sheet, .runnable, legacy: "Stepper", tags: ["input"]),
         make("input.login-description", "PooToolsCustomerLabel", "LoginDesc", .inputForm, .interactive, .sheet, .runnable, legacy: "LoginDesc", tags: ["button", "rich-text"]),
         make("input.stepper-list", "PooToolsStepper", "StepperList", .inputForm, .interactive, .sheet, .runnable, legacy: "StepperList", tags: ["input", "list"]),
@@ -326,6 +327,8 @@ final class PTDemoCoordinator {
             return PTCollectionLayoutSwitchLabViewController()
         case "ui.control-menu":
             return PTControlMenuDemoViewController()
+        case "input.all-styles":
+            return PTInputStylesDemoViewController()
         case "infrastructure.database":
             return PTDatabaseInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
         case "infrastructure.auth":
@@ -2022,6 +2025,293 @@ private final class PTCollectionRefreshLabViewController: PTBaseViewController {
                     self.finishLabOperation()
                 }
             }
+        }
+    }
+}
+
+// English: Demonstrate every public input style without changing the production controls.
+// Español: Demuestra cada estilo de entrada público sin modificar los controles de producción.
+// 中文：展示 Input 模块的全部公开输入样式，不改变生产控件实现。
+@MainActor
+private final class PTInputStylesDemoViewController: PTBaseViewController {
+    private let stackView = UIStackView()
+    private let feedbackLabel = UILabel()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = "Input Styles"
+        view.backgroundColor = .systemBackground
+        configureContent()
+    }
+
+    private func configureContent() {
+        let scrollView = UIScrollView()
+        scrollView.alwaysBounceVertical = true
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.spacing = 18
+
+        let introduction = UILabel()
+        introduction.font = .preferredFont(forTextStyle: .subheadline)
+        introduction.textColor = .secondaryLabel
+        introduction.numberOfLines = 0
+        introduction.text = "TextFieldEffects、Floating、验证码、GrowingText 和通用输入控件的完整样式目录。点击各输入框即可查看激活动画。"
+        stackView.addArrangedSubview(introduction)
+
+        addSectionTitle("TextFieldEffects styles")
+        addFieldRow(title: "Akira · bottom border", field: makeAkiraField())
+        addFieldRow(title: "Hoshi · floating placeholder", field: makeHoshiField())
+        addFieldRow(title: "Isao · animated underline", field: makeIsaoField())
+        addFieldRow(title: "Jiro · expanding background", field: makeJiroField())
+        addFieldRow(title: "Kaede · sliding foreground", field: makeKaedeField())
+        addFieldRow(title: "Madoka · drawing border", field: makeMadokaField())
+        addFieldRow(title: "Minoru · glow border", field: makeMinoruField())
+        addFieldRow(title: "Yoko · 3D background", field: makeYokoField())
+        addFieldRow(title: "Yoshiko · configurable border", field: makeYoshikoField())
+        addFieldRow(title: "Hoshi native variant", field: makeNativeHoshiField())
+
+        addSectionTitle("Input utilities")
+        addFieldRow(title: "PTTextField · custom spacing and right view", field: makePTTextField())
+        addViewRow(title: "PTFloatingPlaseholderTextField", view: makeFloatingField(), height: 62)
+        addGrowingTextRow()
+        addInputBoxRows()
+        addShakeRow()
+
+        feedbackLabel.font = .preferredFont(forTextStyle: .footnote)
+        feedbackLabel.textColor = .secondaryLabel
+        feedbackLabel.numberOfLines = 0
+        feedbackLabel.text = "输入完成状态会显示在这里 / Completion status appears here"
+        stackView.addArrangedSubview(feedbackLabel)
+
+        view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        stackView.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView.contentLayoutGuide).inset(20)
+            make.width.equalTo(scrollView.frameLayoutGuide).offset(-40)
+        }
+    }
+
+    private func addSectionTitle(_ title: String) {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .title3)
+        label.textColor = .label
+        label.text = title
+        label.numberOfLines = 0
+        stackView.addArrangedSubview(label)
+    }
+
+    private func addFieldRow(title: String, field: UIView, height: CGFloat = 60) {
+        let container = UIView()
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .footnote)
+        label.textColor = .secondaryLabel
+        label.text = title
+        label.numberOfLines = 0
+
+        container.addSubview(label)
+        container.addSubview(field)
+        label.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+        }
+        field.snp.makeConstraints { make in
+            make.top.equalTo(label.snp.bottom).offset(8)
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(height)
+        }
+        stackView.addArrangedSubview(container)
+    }
+
+    private func addViewRow(title: String, view: UIView, height: CGFloat) {
+        addFieldRow(title: title, field: view, height: height)
+    }
+
+    private func configure(_ field: TextFieldEffects, placeholder: String) -> TextFieldEffects {
+        field.placeholder = placeholder
+        field.font = .preferredFont(forTextStyle: .body)
+        field.textColor = .label
+        field.backgroundColor = .secondarySystemBackground
+        field.clearButtonMode = .whileEditing
+        return field
+    }
+
+    private func makeAkiraField() -> TextFieldEffects {
+        let field = AkiraTextField(frame: .zero)
+        field.borderColor = .systemBlue
+        field.placeholderColor = .secondaryLabel
+        return configure(field, placeholder: "Akira")
+    }
+
+    private func makeHoshiField() -> TextFieldEffects {
+        let field = HoshiTextField(frame: .zero)
+        field.borderInactiveColor = .systemGray4
+        field.borderActiveColor = .systemBlue
+        field.placeholderColor = .secondaryLabel
+        return configure(field, placeholder: "Hoshi")
+    }
+
+    private func makeIsaoField() -> TextFieldEffects {
+        let field = IsaoTextField(frame: .zero)
+        field.inactiveColor = .systemGray4
+        field.activeColor = .systemBlue
+        return configure(field, placeholder: "Isao")
+    }
+
+    private func makeJiroField() -> TextFieldEffects {
+        let field = JiroTextField(frame: .zero)
+        field.borderColor = .systemOrange
+        field.placeholderColor = .secondaryLabel
+        return configure(field, placeholder: "Jiro")
+    }
+
+    private func makeKaedeField() -> TextFieldEffects {
+        let field = KaedeTextField(frame: .zero)
+        field.foregroundColor = .systemBlue.withAlphaComponent(0.16)
+        field.placeholderColor = .secondaryLabel
+        return configure(field, placeholder: "Kaede")
+    }
+
+    private func makeMadokaField() -> TextFieldEffects {
+        let field = MadokaTextField(frame: .zero)
+        field.borderColor = .systemPurple
+        field.placeholderColor = .secondaryLabel
+        return configure(field, placeholder: "Madoka")
+    }
+
+    private func makeMinoruField() -> TextFieldEffects {
+        let field = MinoruTextField(frame: .zero)
+        field.placeholderColor = .secondaryLabel
+        return configure(field, placeholder: "Minoru")
+    }
+
+    private func makeYokoField() -> TextFieldEffects {
+        let field = YokoTextField(frame: .zero)
+        field.foregroundColor = .systemTeal
+        field.placeholderColor = .secondaryLabel
+        return configure(field, placeholder: "Yoko")
+    }
+
+    private func makeYoshikoField() -> TextFieldEffects {
+        let field = YoshikoTextField(frame: .zero)
+        field.activeBorderColor = .systemGreen
+        field.inactiveBorderColor = .systemGray4
+        field.activeBackgroundColor = .systemGreen.withAlphaComponent(0.08)
+        field.placeholderColor = .secondaryLabel
+        return configure(field, placeholder: "Yoshiko")
+    }
+
+    private func makeNativeHoshiField() -> UIView {
+        let field = PTHoshiTextField(frame: .zero, primaryAction: nil)
+        field.placeholder = "PTHoshiTextField"
+        field.placeholderColor = .secondaryLabel
+        field.placeholderFont = .preferredFont(forTextStyle: .footnote)
+        field.font = .preferredFont(forTextStyle: .body)
+        field.textColor = .label
+        field.leftSpace = 12
+        field.backgroundColor = .secondarySystemBackground
+        return field
+    }
+
+    private func makePTTextField() -> UIView {
+        let field = PTTextField(frame: .zero)
+        field.placeholder = "PTTextField"
+        field.font = .preferredFont(forTextStyle: .body)
+        field.textColor = .label
+        field.borderStyle = .roundedRect
+        field.leftSpace = 10
+
+        let rightConfig = PTTextCustomRightViewConfig()
+        rightConfig.size = CGSize(width: 22, height: 22)
+        rightConfig.rightSpace = 10
+        rightConfig.image = UIImage(systemName: "magnifyingglass")?.withTintColor(.secondaryLabel, renderingMode: .alwaysOriginal)
+        field.rightConfig = rightConfig
+        return field
+    }
+
+    private func makeFloatingField() -> UIView {
+        let config = PTFloatingPlaseholderConfig()
+        config.containerRadius = 12
+        config.borderLayerColor = .systemGray4
+        config.borderLayerFloatingColor = .systemBlue
+        config.normalPlaceholderColor = .secondaryLabel
+        config.floatingPlaceholderColor = .systemBlue
+        config.textColor = .label
+        config.textFont = .preferredFont(forTextStyle: .body)
+        config.normalPlaceholderFont = .preferredFont(forTextStyle: .body)
+        config.floatingPlaceholderFont = .preferredFont(forTextStyle: .footnote)
+        config.insidePadding = 14
+
+        let field = PTFloatingPlaseholderTextField(config: config)
+        field.configure(placeholder: "PTFloatingPlaseholderTextField")
+        return field
+    }
+
+    private func addGrowingTextRow() {
+        let textView = PTGrowingTextView(frame: .zero, textContainer: nil)
+        textView.font = .preferredFont(forTextStyle: .body)
+        textView.textColor = .label
+        textView.placeholder = "PTGrowingTextView"
+        textView.placeholderColor = .secondaryLabel
+        textView.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        textView.minHeight = 96
+        textView.maxHeight = 160
+        textView.backgroundColor = .secondarySystemBackground
+        textView.layer.cornerRadius = 12
+        textView.layer.borderWidth = 1
+        textView.layer.borderColor = UIColor.separator.cgColor
+        addViewRow(title: "PTGrowingTextView · auto height", view: textView, height: 96)
+    }
+
+    private func addInputBoxRows() {
+        let numberConfig = PTInputBoxConfiguration()
+        numberConfig.autoShowKeyboard = false
+        numberConfig.keyboardType = .numberPad
+        numberConfig.inputType = .Number
+        numberConfig.inputBoxHighlightedColor = .systemBlue
+        addInputBoxRow(title: "PTInputBoxView · Number", config: numberConfig)
+
+        let secureConfig = PTInputBoxConfiguration()
+        secureConfig.autoShowKeyboard = false
+        secureConfig.secureTextEntry = true
+        secureConfig.showUnderLine = true
+        secureConfig.inputBoxFinishColor = .systemGreen
+        secureConfig.inputBoxHighlightedColor = .systemOrange
+        addInputBoxRow(title: "PTInputBoxView · Secure + underline", config: secureConfig)
+
+        let alphabetConfig = PTInputBoxConfiguration()
+        alphabetConfig.autoShowKeyboard = false
+        alphabetConfig.keyboardType = .asciiCapable
+        alphabetConfig.inputType = .Alphabet
+        alphabetConfig.inputBoxNumber = 6
+        alphabetConfig.inputBoxWidth = 38
+        alphabetConfig.customInputHolder = "•"
+        addInputBoxRow(title: "PTInputBoxView · Alphabet", config: alphabetConfig)
+    }
+
+    private func addInputBoxRow(title: String, config: PTInputBoxConfiguration) {
+        let inputBox = PTInputBoxView(config: config)
+        inputBox.finishBlock = { [weak self] _, code in
+            self?.feedbackLabel.text = "完成：\(title) → \(code)"
+        }
+        addViewRow(title: title, view: inputBox, height: config.inputBoxHeight + 16)
+    }
+
+    private func addShakeRow() {
+        let button = UIButton(type: .system)
+        button.setTitle("UIView.shake · 点击测试 / Test shake", for: .normal)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
+        button.backgroundColor = .secondarySystemBackground
+        button.layer.cornerRadius = 12
+        button.heightAnchor.constraint(greaterThanOrEqualToConstant: 50).isActive = true
+        button.addTarget(self, action: #selector(shakeDemo), for: .primaryActionTriggered)
+        stackView.addArrangedSubview(button)
+    }
+
+    @objc private func shakeDemo(_ sender: UIButton) {
+        sender.shake(direction: .horizontal) { [weak self] in
+            self?.feedbackLabel.text = "UIView.shake 已完成 / Shake completed"
         }
     }
 }
