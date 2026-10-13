@@ -153,6 +153,7 @@ public struct PTRichTextImageConfiguration {
     public var contentMode: UIView.ContentMode
     public var cornerRadius: CGFloat
     public var alignment: PTRichTextAttachmentAlignment
+    public var baselineOffset: CGFloat
     public var estimatedAspectRatio: CGFloat?
     public var accessibilityLabel: String?
     public var userInfo: [String: String]
@@ -164,6 +165,7 @@ public struct PTRichTextImageConfiguration {
                 contentMode: UIView.ContentMode = .scaleAspectFit,
                 cornerRadius: CGFloat = 0,
                 alignment: PTRichTextAttachmentAlignment = .baseline,
+                baselineOffset: CGFloat = 0,
                 estimatedAspectRatio: CGFloat? = nil,
                 accessibilityLabel: String? = nil,
                 userInfo: [String: String] = [:]) {
@@ -174,6 +176,7 @@ public struct PTRichTextImageConfiguration {
         self.contentMode = contentMode
         self.cornerRadius = max(0, cornerRadius)
         self.alignment = alignment
+        self.baselineOffset = ptNormalizedBaselineOffset(baselineOffset)
         self.estimatedAspectRatio = estimatedAspectRatio
         self.accessibilityLabel = accessibilityLabel
         self.userInfo = userInfo
@@ -378,12 +381,15 @@ public struct PTRichTextVideoLoadResult {
 public final class PTRichTextMediaTextAttachment: NSTextAttachment {
     public let media: PTRichTextMediaAttachment
     public let attachmentSize: CGSize
+    public let baselineOffset: CGFloat
 
     public init(media: PTRichTextMediaAttachment,
                 image: UIImage?,
-                size: CGSize) {
+                size: CGSize,
+                baselineOffset: CGFloat = 0) {
         self.media = media
         self.attachmentSize = ptNormalizedAttachmentSize(size)
+        self.baselineOffset = ptNormalizedBaselineOffset(baselineOffset)
         super.init(data: nil, ofType: nil)
         self.image = image
         bounds = CGRect(origin: .zero, size: attachmentSize)
@@ -397,7 +403,8 @@ public final class PTRichTextMediaTextAttachment: NSTextAttachment {
                                    size: CGSize? = nil) -> PTRichTextMediaTextAttachment {
         PTRichTextMediaTextAttachment(media: media,
                                       image: image,
-                                      size: size ?? attachmentSize)
+                                      size: size ?? attachmentSize,
+                                      baselineOffset: baselineOffset)
     }
 }
 
@@ -409,16 +416,19 @@ public final class PTRemoteImageTextAttachment: NSTextAttachment {
     public let mediaID: UUID
     public let remoteURL: URL
     public let attachmentSize: CGSize
+    public let baselineOffset: CGFloat
 
     public init(identifier: String,
                 url: URL,
                 size: CGSize,
                 placeholder: UIImage? = nil,
-                mediaID: UUID = UUID()) {
+                mediaID: UUID = UUID(),
+                baselineOffset: CGFloat = 0) {
         self.identifier = identifier
         self.mediaID = mediaID
         self.remoteURL = url
         self.attachmentSize = ptNormalizedAttachmentSize(size)
+        self.baselineOffset = ptNormalizedBaselineOffset(baselineOffset)
         super.init(data: nil, ofType: nil)
         image = placeholder ?? PTRichTextMediaPlaceholder.image(video: false)
         bounds = CGRect(origin: .zero, size: attachmentSize)
@@ -473,6 +483,26 @@ enum PTRichTextMediaPlaceholder {
 func ptNormalizedAttachmentSize(_ size: CGSize) -> CGSize {
     CGSize(width: size.width.isFinite && size.width > 0 ? size.width : 1,
            height: size.height.isFinite && size.height > 0 ? size.height : 1)
+}
+
+// English: Normalize image baseline offsets before they enter TextKit attributes.
+// Español: Normaliza los desplazamientos de línea de las imágenes antes de entregarlos a TextKit.
+// 中文：在交给 TextKit 前统一规范图片的基线偏移量。
+func ptNormalizedBaselineOffset(_ offset: CGFloat) -> CGFloat {
+    offset.isFinite ? offset : 0
+}
+
+// English: Keep attachment and baseline attributes together so every image builder uses the same rendering contract.
+// Español: Mantiene juntos los atributos de adjunto y línea para que todos los constructores de imágenes usen el mismo contrato.
+// 中文：统一组合附件和基线属性，确保所有图片构建入口遵循同一渲染约定。
+func ptRichTextAttachmentAttributes(_ attachment: NSTextAttachment,
+                                    baselineOffset: CGFloat) -> [NSAttributedString.Key: Any] {
+    let normalizedOffset = ptNormalizedBaselineOffset(baselineOffset)
+    var values: [NSAttributedString.Key: Any] = [.attachment: attachment]
+    if normalizedOffset != 0 {
+        values[.baselineOffset] = normalizedOffset
+    }
+    return values
 }
 
 // English: The descriptor is a Sendable value; only its view factory executes on MainActor.

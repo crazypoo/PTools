@@ -12,8 +12,12 @@ import ObjectiveC
 @MainActor
 public extension PTRichText {
     static func image(source: Any,
-                      configuration: PTRichTextImageConfiguration = .init()) -> Self {
-        PTRichText(string: "\u{FFFC}", with: [.image(source: source, configuration: configuration)])
+                      configuration: PTRichTextImageConfiguration = .init(),
+                      baselineOffset: CGFloat? = nil) -> Self {
+        PTRichText(string: "\u{FFFC}",
+                   with: [.image(source: source,
+                                 configuration: configuration,
+                                 baselineOffset: baselineOffset)])
     }
 
     static func video(source: Any,
@@ -22,8 +26,11 @@ public extension PTRichText {
     }
 
     func appendingImage(source: Any,
-                        configuration: PTRichTextImageConfiguration = .init()) -> Self {
-        self + .image(source: source, configuration: configuration)
+                        configuration: PTRichTextImageConfiguration = .init(),
+                        baselineOffset: CGFloat? = nil) -> Self {
+        self + .image(source: source,
+                      configuration: configuration,
+                      baselineOffset: baselineOffset)
     }
 
     func appendingVideo(source: Any,

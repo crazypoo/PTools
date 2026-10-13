@@ -6,6 +6,13 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.64.1 — 2026-10-13
+
+- 为 `PTRichText` 的内嵌图片、远程图片和动态图片来源增加 `baselineOffset` 配置。
+- 图片附件在 Foundation/UIKit 富文本桥接、占位图替换和异步加载后保持同一基线偏移。
+- 保留原有 `.image`、`remoteImage`、`PTRichTextImageConfiguration` 和 `PTRichText.image` 调用方式，未配置时行为不变。
+- 增加图片基线偏移回归覆盖；iOS 17+ / Swift 6 API 保持兼容。
+
 ## 5.64.0 — 2026-10-13
 
 - 将 `PTCustomerAlertController` 的 1、2、3+ 按钮路径统一为无分割线的胶囊操作布局，支持长文案、多行标题和按钮区滚动。

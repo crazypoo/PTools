@@ -200,7 +200,8 @@ public struct PTTextAttribute {
     // Español: Crea un adjunto nativo sin almacenar un cierre de acción dentro del valor.
     // 中文：创建原生文本附件，不把动作闭包存入富文本值。
     public static func image(_ image: UIImage,
-                             _ style: PTTextAttachmentStyle) -> Self {
+                             _ style: PTTextAttachmentStyle,
+                             baselineOffset: CGFloat = 0) -> Self {
         let attachment = NSTextAttachment()
         attachment.image = image
         switch style {
@@ -210,11 +211,22 @@ public struct PTTextAttribute {
             let height = size.height.isFinite && size.height > 0 ? size.height : max(1, fallback.height)
             attachment.bounds = CGRect(origin: .zero, size: CGSize(width: width, height: height))
         }
-        return Self(values: [.attachment: attachment])
+        return Self(values: ptRichTextAttachmentAttributes(attachment,
+                                                           baselineOffset: baselineOffset))
     }
 
     public static func image(_ image: UIImage) -> Self {
         Self.image(image, .custom(size: image.size))
+    }
+
+    // English: Offer a direct baseline-only overload for inline images while preserving the original one-argument call.
+    // Español: Ofrece una sobrecarga directa para la línea base y conserva la llamada original de un solo argumento.
+    // 中文：提供仅配置基线偏移的图片重载，同时保留原有单参数调用方式。
+    public static func image(_ image: UIImage,
+                             baselineOffset: CGFloat) -> Self {
+        Self.image(image,
+                   .custom(size: image.size),
+                   baselineOffset: baselineOffset)
     }
 
     // English: Accept the same dynamic image sources as the canonical Core loader at the UI boundary.
@@ -222,7 +234,12 @@ public struct PTTextAttribute {
     // 中文：在 UI 边界接受与 Core 统一加载器相同的动态图片来源。
     @MainActor
     public static func image(source: Any,
-                             configuration: PTRichTextImageConfiguration = .init()) -> Self {
+                             configuration: PTRichTextImageConfiguration = .init(),
+                             baselineOffset: CGFloat? = nil) -> Self {
+        var configuration = configuration
+        if let baselineOffset {
+            configuration.baselineOffset = ptNormalizedBaselineOffset(baselineOffset)
+        }
         let media = PTRichTextMediaAttachment(kind: .image,
                                                source: source,
                                                displayConfiguration: configuration.display,
@@ -230,8 +247,10 @@ public struct PTTextAttribute {
                                                accessibilityLabel: configuration.accessibilityLabel)
         let attachment = PTRichTextMediaTextAttachment(media: media,
                                                         image: configuration.placeholder ?? PTRichTextMediaPlaceholder.image(video: false),
-                                                        size: configuration.display.placeholderSize())
-        return Self(values: [.attachment: attachment])
+                                                        size: configuration.display.placeholderSize(),
+                                                        baselineOffset: configuration.baselineOffset)
+        return Self(values: ptRichTextAttachmentAttributes(attachment,
+                                                           baselineOffset: configuration.baselineOffset))
     }
 
     // English: Keep the convenient URL syntax while rendering the placeholder synchronously.
@@ -240,8 +259,13 @@ public struct PTTextAttribute {
     public static func image(_ url: URL,
                              _ style: PTTextAttachmentStyle,
                              placeholder: UIImage? = nil,
-                             id: String? = nil) -> Self {
-        remoteImage(url, style, placeholder: placeholder, id: id)
+                             id: String? = nil,
+                             baselineOffset: CGFloat = 0) -> Self {
+        remoteImage(url,
+                    style,
+                    placeholder: placeholder,
+                    id: id,
+                    baselineOffset: baselineOffset)
     }
 
     // English: Describe a remote image without starting network work while building the value.
@@ -250,7 +274,8 @@ public struct PTTextAttribute {
     public static func remoteImage(_ url: URL,
                                    _ style: PTTextAttachmentStyle,
                                    placeholder: UIImage? = nil,
-                                   id: String? = nil) -> Self {
+                                   id: String? = nil,
+                                   baselineOffset: CGFloat = 0) -> Self {
         let size: CGSize
         switch style {
         case .custom(let value):
@@ -260,8 +285,10 @@ public struct PTTextAttribute {
         let attachment = PTRemoteImageTextAttachment(identifier: identifier,
                                                       url: url,
                                                       size: size,
-                                                      placeholder: placeholder)
-        return Self(values: [.attachment: attachment])
+                                                      placeholder: placeholder,
+                                                      baselineOffset: baselineOffset)
+        return Self(values: ptRichTextAttachmentAttributes(attachment,
+                                                           baselineOffset: baselineOffset))
     }
 
     // English: Describe a video poster without creating AVPlayer or downloading media during value construction.

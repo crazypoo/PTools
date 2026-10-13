@@ -1,8 +1,16 @@
 # PTools 路线图
 
-> 当前代码基线：`5.64.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.64.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.64.0` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.64.1` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.64.1 PTRichText 图片附件基线偏移
+
+- ✅ `PTTextAttribute.image`、`remoteImage` 和 URL 图片入口支持可选 `baselineOffset`，旧调用保持兼容。
+- ✅ `PTRichTextImageConfiguration` 与 `PTRichText.image(source:)` 支持动态图片来源的基线偏移配置。
+- ✅ 占位附件、Foundation/UIKit 富文本桥接和异步图片替换保持同一基线偏移，不重复叠加。
+- ✅ 增加 UIKit 富文本和远程/动态图片基线偏移回归覆盖。
+- ⬜ 仍需在真实宿主中验证不同字体、Dynamic Type、RTL、图片尺寸和 TextKit 渲染视觉效果。
 
 ## 5.64.0 PTCustomerAlertController iOS 26 胶囊操作升级
 

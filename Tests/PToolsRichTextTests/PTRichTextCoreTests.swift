@@ -99,6 +99,51 @@ final class PTRichTextCoreTests: XCTestCase {
         XCTAssertEqual(descriptor.size, CGSize(width: 1, height: 1))
     }
 
+    // English: Verify that inline image baseline offsets survive the UIKit attributed-string bridge.
+    // Español: Verifica que los desplazamientos de línea de las imágenes sobrevivan al puente UIKit del texto atribuido.
+    // 中文：验证内嵌图片的基线偏移量可以通过 UIKit 富文本桥接保留下来。
+    @MainActor
+    func testInlineImageBaselineOffsetIsApplied() {
+        let image = UIImage()
+        let value = PTRichText(string: "\u{FFFC}",
+                               with: [.image(image,
+                                             .custom(size: CGSize(width: 20, height: 20)),
+                                             baselineOffset: 3.5)])
+
+        let rawOffset = value.value.attribute(.baselineOffset,
+                                              at: 0,
+                                              effectiveRange: nil) as? NSNumber
+        XCTAssertEqual(rawOffset?.doubleValue, 3.5, accuracy: 0.001)
+    }
+
+    // English: Verify both URL and dynamic-source image builders expose the same baseline contract.
+    // Español: Verifica que los constructores de imágenes URL y de fuentes dinámicas expongan el mismo contrato de línea.
+    // 中文：验证 URL 图片和动态来源图片构建器提供一致的基线偏移能力。
+    @MainActor
+    func testRemoteImageBaselineOffsetIsApplied() {
+        let url = URL(string: "https://example.com/image.png")!
+        let remote = PTRichText.image(url,
+                                      .custom(size: CGSize(width: 24, height: 16)),
+                                      baselineOffset: -2)
+        let remoteOffset = remote.value.attribute(.baselineOffset,
+                                                  at: 0,
+                                                  effectiveRange: nil) as? NSNumber
+        XCTAssertEqual(remoteOffset?.doubleValue, -2, accuracy: 0.001)
+
+        let configuration = PTRichTextImageConfiguration(size: CGSize(width: 32, height: 18),
+                                                         baselineOffset: 4)
+        let dynamic = PTRichText.image(source: url, configuration: configuration)
+        let dynamicOffset = dynamic.value.attribute(.baselineOffset,
+                                                    at: 0,
+                                                    effectiveRange: nil) as? NSNumber
+        let dynamicAttachment = dynamic.value.attribute(.attachment,
+                                                        at: 0,
+                                                        effectiveRange: nil) as? PTRichTextMediaTextAttachment
+
+        XCTAssertEqual(dynamicOffset?.doubleValue, 4, accuracy: 0.001)
+        XCTAssertEqual(dynamicAttachment?.baselineOffset, 4)
+    }
+
     // English: Keep image and video media sources on stable placeholder attachments before async loading.
     // Español: Mantiene las fuentes de imagen y vídeo en adjuntos de marcador estables antes de la carga asíncrona.
     // 中文：验证异步加载前图片和视频来源都保存在稳定的占位附件中。

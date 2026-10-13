@@ -11,7 +11,15 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.64.0`，真机/宿主回归与发布证据完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.64.1`，真机/宿主回归与发布证据完成前不创建正式 tag。
+
+5.64.1 为 `PTRichText` 的 `.image`、远程图片和动态图片附件增加 `baselineOffset`。例如：
+
+```swift
+let richText: PTRichText = "图片 \(.image(image, .custom(size: CGSize(width: 24, height: 24)), baselineOffset: -2))"
+let configuration = PTRichTextImageConfiguration(size: CGSize(width: 24, height: 24), baselineOffset: 2)
+let remoteText = PTRichText.image(source: imageURL, configuration: configuration)
+```
 
 5.64.0 将 `PTCustomerAlertController` 的操作按钮统一为 iOS 17+ 可用的胶囊布局：支持长文案、多按钮滚动、主/取消操作排序、Dynamic Type、Reduce Transparency 和 iOS 26 原生 Glass 回退。使用方式见 [PTCustomerAlertController 胶囊操作指南](docs/guides/PTCUSTOMER_ALERT_CAPSULE_ACTIONS.md)。
 
