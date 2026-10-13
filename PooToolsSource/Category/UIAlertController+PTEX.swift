@@ -129,7 +129,7 @@ public extension UIAlertController {
                             cancelBtnColor:UIColor = .systemBlue,
                             doneBtnColors:[UIColor] = [UIColor](),
                             alertBGColor:UIColor = .white,
-                            @PTClampedPropertyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
+                            @PTClampedPropertyWrapper(range:0...25) alertCornerRadius:CGFloat = 25,
                             cancel:PTActionTask? = nil,
                             moreBtn: ((_ index:Int,_ title:String)->Void)? = nil,
                             appearance: PTCustomerAlertAppearance = .default) {
@@ -251,7 +251,7 @@ public extension UIAlertController {
                                       keyboardType:[UIKeyboardType]?,
                                       textFieldDelegate:UITextFieldDelegate,
                                       alertBGColor:UIColor = .white,
-    @PTClampedPropertyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
+    @PTClampedPropertyWrapper(range:0...25) alertCornerRadius:CGFloat = 25,
                                       cancel:PTActionTask? = nil,
                                       doneBtn:((_ result:[String:String]) -> Void)?) {
         let titleColorN = titleColor ?? .label
