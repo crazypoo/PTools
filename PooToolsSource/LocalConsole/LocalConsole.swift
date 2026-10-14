@@ -8,6 +8,10 @@
 
 import UIKit
 #if SWIFT_PACKAGE
+import ptools
+import PooToolsShare
+#endif
+#if SWIFT_PACKAGE
 import PToolsDevice
 #endif
 import CoreFoundation

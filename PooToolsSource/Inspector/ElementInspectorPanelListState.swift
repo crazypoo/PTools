@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 enum ElementInspectorPanelListState: Swift.CaseIterable, MenuContentProtocol {
     case allCollapsed, firstExpanded, mixed, allExpanded

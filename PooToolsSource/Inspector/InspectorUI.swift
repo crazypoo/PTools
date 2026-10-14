@@ -5,6 +5,9 @@
 //
 
 import SwiftUI
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 final class InspectorUI: UIViewControllerRepresentable, @MainActor InspectorSwiftUIHost {
     // MARK: - InspectorSwiftUIHostable

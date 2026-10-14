@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 final class LoaderView: LayerViewComponent {
     // MARK: - Components
@@ -78,7 +81,7 @@ final class LoaderView: LayerViewComponent {
         backgroundColor = colorScheme.value(for: self)
 
         highlightView.borderWidth = 0
-        highlightView.borderColor = HSL(color: colorScheme.value(for: self)).lighter(amount: 0.07).toDynamicColor()
+        highlightView.borderColor = colorScheme.value(for: self).lightened(amount: 0.07)
         
         layer.cornerRadius = frame.height / .pi
     }

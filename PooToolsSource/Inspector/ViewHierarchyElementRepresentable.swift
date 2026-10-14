@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 /// A protocol that represents the public interface of a UIView.
 protocol ViewHierarchyElementRepresentable {

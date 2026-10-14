@@ -20,29 +20,31 @@ public struct PTAlertDebugSnapshot {
     }
 }
 
-/// 弹窗诊断信息视图，保留给可选调试模块使用。
+// English: Public diagnostic overlay kept for the optional debug module.
+// Español: Superposición pública de diagnóstico para el módulo de depuración opcional.
+// 中文：公开弹窗诊断视图，供可选调试模块使用。
 @MainActor
-final class PTAlertDebugView: UIView {
+public final class PTAlertDebugView: UIView {
 
     private let textView = UITextView()
     private let refreshButton = UIButton(type: .system)
     private let closeButton = UIButton(type: .system)
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
         setupGesture()
         refresh()
     }
 
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
         setupGesture()
         refresh()
     }
 
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
 
         let buttonHeight: CGFloat = 30

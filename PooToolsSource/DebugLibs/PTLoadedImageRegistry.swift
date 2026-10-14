@@ -8,6 +8,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 import Darwin
 import MachO
 import os.lock

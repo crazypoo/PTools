@@ -5,6 +5,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 /// Constants describing the possible states of an element inspector section.
 public enum InspectorElementSectionState: Hashable {

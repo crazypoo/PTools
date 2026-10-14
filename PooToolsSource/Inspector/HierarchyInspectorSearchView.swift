@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 final class HierarchyInspectorSearchView: BaseView {
     private lazy var searchIcon = Icon(

@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public protocol InspectorCustomizationProviding {
     /// Command groups act as sections on the Inspector interface. You can have as many groups, with as many actions as you would like.

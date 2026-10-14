@@ -8,6 +8,9 @@
 
 import UIKit
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public let kPTLabelCounterRate: CGFloat = 3
 public typealias PTCountingLabelAttributedFormatBlock = (CGFloat) -> NSAttributedString

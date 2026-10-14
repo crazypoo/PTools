@@ -5,6 +5,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 /// Constants describing the separator styles of a form section.
 public enum InspectorElementItemSeparatorStyle: Hashable {

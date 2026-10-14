@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: 5ca3f5435cebea32083b8351ac00229f89f8a4e4
-Generated at: 2026-10-12T05:54:14Z
+Source revision: aa8a0f957b4b43be8340a53d817cf62c4cbda04e
+Generated at: 2026-10-14T01:27:05Z
 -->
 
 # SwiftPM Dependency Graph
@@ -334,7 +334,7 @@ Generated at: 2026-10-12T05:54:14Z
 | `PooToolsPing` | `PooToolsSource/Ping` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsPopover` | `PooToolsSource/Popover` | PToolsCore, PToolsOverlay, PToolsSymbols | — | 0 source entries / 0 resources |
 | `PooToolsProgressBar` | `PooToolsSource/ProgressBar` | ptools | — | 0 source entries / 0 resources |
-| `PooToolsRateView` | `PooToolsSource/RateView` | — | SnapKit | 0 source entries / 0 resources |
+| `PooToolsRateView` | `PooToolsSource/RateView` | ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsRouter` | `PooToolsSource/Router` | PToolsDeepLink, PToolsRouteCore, ptools | — | 0 source entries / 0 resources |
 | `PooToolsSVG` | `PooToolsSource/KingfisherSVG` | ptools | Kingfisher, PocketSVG | 0 source entries / 0 resources |
 | `PooToolsScanQRCode` | `PooToolsSource/QRCodeScan` | PTCameraPermission, PooToolsImagePicker, PooToolsPhotoPicker, ptools | — | 0 source entries / 0 resources |
@@ -343,10 +343,10 @@ Generated at: 2026-10-12T05:54:14Z
 | `PooToolsSearchBar` | `PooToolsSource/SearchBar` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsSecurity` | `PooToolsSource/Security` | — | — | 0 source entries / 0 resources |
 | `PooToolsSegmented` | `PooToolsSource/Segmented` | ptools | — | 0 source entries / 0 resources |
-| `PooToolsShare` | `PooToolsSource/Share` | PooToolsCustomerLabel | — | 0 source entries / 0 resources |
+| `PooToolsShare` | `PooToolsSource/Share` | PooToolsCustomerLabel, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsSlider` | `PooToolsSource/Slider` | — | SnapKit | 0 source entries / 0 resources |
 | `PooToolsSmartScreenshot` | `PooToolsSource/ScreenShot` | ptools | — | 0 source entries / 0 resources |
-| `PooToolsSocketKit` | `PooToolsSource/SocketKit` | PToolsLogging, ptools | — | 0 source entries / 0 resources |
+| `PooToolsSocketKit` | `PooToolsSource/SocketKit` | PToolsLogging, PooToolsNetWork, ptools | — | 0 source entries / 0 resources |
 | `PooToolsSpeedPanel` | `PooToolsSource/SpeedPanel` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsSplitView` | `PooToolsSource/SplitView` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsStepCount` | `PooToolsSource/HealthKit` | PTHealthPermission, ptools | — | 0 source entries / 0 resources |

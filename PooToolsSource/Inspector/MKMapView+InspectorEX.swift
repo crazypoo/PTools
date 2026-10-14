@@ -7,6 +7,9 @@
 //
 
 import MapKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension MKMapType: @retroactive CaseIterable {
     public typealias AllCases = [MKMapType]

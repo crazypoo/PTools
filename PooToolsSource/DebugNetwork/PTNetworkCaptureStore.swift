@@ -3,6 +3,9 @@
 // 中文：Actor 统一负责抓包身份、淘汰、正文生命周期和变更投递。
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public actor PTNetworkCaptureStore {
     public static let shared = PTNetworkCaptureStore()

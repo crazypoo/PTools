@@ -12,6 +12,9 @@ import Foundation
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public class PTFloatingPlaseholderConfig: NSObject {
     public var containerRadius: CGFloat = 0

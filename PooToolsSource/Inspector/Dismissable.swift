@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public protocol Dismissable: AnyObject {
     var dismissHandler: ((Self) -> Void)? { get set }

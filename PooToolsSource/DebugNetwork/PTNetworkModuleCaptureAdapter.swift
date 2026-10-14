@@ -3,6 +3,9 @@
 // 中文：适配器只读暴露业务元数据，不改变请求策略。
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public enum PTNetworkModuleCaptureAdapter {
     @discardableResult

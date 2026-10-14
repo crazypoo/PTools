@@ -5,6 +5,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 final class SnapshotStore<Snapshot>: NSObject {
     typealias Provider = Inspector.Provider<Void, Snapshot?>

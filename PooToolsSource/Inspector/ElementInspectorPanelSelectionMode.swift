@@ -5,6 +5,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 enum ElementInspectorPanelSelectionMode: Swift.CaseIterable {
     case singleSelection, multipleSelection

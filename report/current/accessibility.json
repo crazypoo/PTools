@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "5ca3f5435cebea32083b8351ac00229f89f8a4e4",
-  "generated_at": "2026-10-12T06:02:01Z",
+  "source_revision": "aa8a0f957b4b43be8340a53d817cf62c4cbda04e",
+  "generated_at": "2026-10-14T01:27:00Z",
   "counts": {
     "reduce_motion": 61,
-    "accessibility": 273,
-    "reduce_transparency": 12,
+    "accessibility": 275,
+    "reduce_transparency": 14,
     "dynamic_type": 21
   },
   "locations": [
@@ -31,24 +31,29 @@
       "line": 5
     },
     {
-      "rule": "accessibility",
+      "rule": "reduce_transparency",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertBackgroundView.swift",
-      "line": 69
+      "line": 40
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertBackgroundView.swift",
-      "line": 90
+      "line": 89
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertBackgroundView.swift",
-      "line": 115
+      "line": 110
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertBackgroundView.swift",
+      "line": 135
     },
     {
       "rule": "reduce_transparency",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertBackgroundView.swift",
-      "line": 138
+      "line": 158
     },
     {
       "rule": "accessibility",
@@ -58,62 +63,52 @@
     {
       "rule": "dynamic_type",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 244
+      "line": 240
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 245
+      "line": 241
     },
     {
-      "rule": "dynamic_type",
+      "rule": "reduce_transparency",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 770
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 773
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 775
+      "line": 987
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1049
+      "line": 1121
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1070
+      "line": 1142
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1073
+      "line": 1145
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1075
+      "line": 1147
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1078
+      "line": 1150
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1081
+      "line": 1153
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 1118
+      "line": 1190
     },
     {
       "rule": "accessibility",
@@ -123,17 +118,42 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertPresentationCoordinator.swift",
-      "line": 22
+      "line": 23
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertPresentationCoordinator.swift",
-      "line": 29
+      "line": 30
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertPresentationCoordinator.swift",
-      "line": 36
+      "line": 37
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertTypes.swift",
+      "line": 45
+    },
+    {
+      "rule": "dynamic_type",
+      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertTypes.swift",
+      "line": 92
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertTypes.swift",
+      "line": 94
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertTypes.swift",
+      "line": 96
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertTypes.swift",
+      "line": 98
     },
     {
       "rule": "reduce_motion",
@@ -263,22 +283,22 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTBaseTabBarViewController.swift",
-      "line": 404
+      "line": 407
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTBaseTabBarViewController.swift",
-      "line": 412
+      "line": 415
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTBaseTabBarViewController.swift",
-      "line": 455
+      "line": 458
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTBaseTabBarViewController.swift",
-      "line": 480
+      "line": 483
     },
     {
       "rule": "reduce_motion",
@@ -403,22 +423,22 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 859
+      "line": 866
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 995
+      "line": 1002
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1006
+      "line": 1013
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 1049
+      "line": 1056
     },
     {
       "rule": "accessibility",
@@ -713,37 +733,32 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/InspectorConfiguration.swift",
-      "line": 62
+      "line": 65
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/InspectorConfiguration.swift",
-      "line": 63
+      "line": 66
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/InspectorConfiguration.swift",
-      "line": 64
+      "line": 67
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/LoaderView.swift",
-      "line": 40
+      "line": 43
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/LoaderView.swift",
-      "line": 42
+      "line": 45
     },
     {
       "rule": "dynamic_type",
       "path": "PooToolsSource/Inspector/TextViewAttributesSectionDataSource.swift",
-      "line": 28
-    },
-    {
-      "rule": "dynamic_type",
-      "path": "PooToolsSource/Inspector/TextViewAttributesSectionDataSource.swift",
-      "line": 93
+      "line": 31
     },
     {
       "rule": "dynamic_type",
@@ -753,47 +768,47 @@
     {
       "rule": "dynamic_type",
       "path": "PooToolsSource/Inspector/TextViewAttributesSectionDataSource.swift",
-      "line": 97
+      "line": 99
     },
     {
       "rule": "dynamic_type",
       "path": "PooToolsSource/Inspector/TextViewAttributesSectionDataSource.swift",
-      "line": 98
+      "line": 100
+    },
+    {
+      "rule": "dynamic_type",
+      "path": "PooToolsSource/Inspector/TextViewAttributesSectionDataSource.swift",
+      "line": 101
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/UIView+InspectorEX.swift",
-      "line": 151
+      "line": 154
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/UIView+InspectorEX.swift",
-      "line": 152
+      "line": 155
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/UIView+InspectorEX.swift",
-      "line": 219
+      "line": 222
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/UIView+InspectorEX.swift",
-      "line": 782
+      "line": 785
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/UIView+InspectorEX.swift",
-      "line": 786
+      "line": 789
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/UIView+InspectorEX.swift",
-      "line": 818
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Inspector/UIView+InspectorEX.swift",
-      "line": 826
+      "line": 821
     },
     {
       "rule": "accessibility",
@@ -802,18 +817,8 @@
     },
     {
       "rule": "accessibility",
-      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
-      "line": 28
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
-      "line": 29
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
-      "line": 30
+      "path": "PooToolsSource/Inspector/UIView+InspectorEX.swift",
+      "line": 832
     },
     {
       "rule": "accessibility",
@@ -828,7 +833,17 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
-      "line": 84
+      "line": 33
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
+      "line": 34
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
+      "line": 35
     },
     {
       "rule": "accessibility",
@@ -838,17 +853,12 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
-      "line": 88
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
-      "line": 89
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
       "line": 90
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
+      "line": 91
     },
     {
       "rule": "accessibility",
@@ -863,11 +873,6 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
-      "line": 94
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
       "line": 95
     },
     {
@@ -878,17 +883,17 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
+      "line": 97
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
+      "line": 98
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
       "line": 99
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
-      "line": 100
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
-      "line": 101
     },
     {
       "rule": "accessibility",
@@ -898,32 +903,42 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
+      "line": 103
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
+      "line": 104
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
       "line": 105
     },
     {
       "rule": "accessibility",
+      "path": "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift",
+      "line": 108
+    },
+    {
+      "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyCoordinator+AsyncOperationProtocol.swift",
-      "line": 68
+      "line": 71
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyElement.swift",
-      "line": 19
+      "line": 22
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyElement.swift",
-      "line": 47
+      "line": 50
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyElement.swift",
-      "line": 341
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Inspector/ViewHierarchyElement.swift",
-      "line": 343
+      "line": 344
     },
     {
       "rule": "accessibility",
@@ -933,52 +948,57 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyElement.swift",
-      "line": 350
+      "line": 349
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Inspector/ViewHierarchyElement.swift",
+      "line": 353
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyElementController.swift",
-      "line": 314
+      "line": 317
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyElementReference.swift",
-      "line": 67
+      "line": 70
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyElementReference.swift",
-      "line": 68
+      "line": 71
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyElementRepresentable.swift",
-      "line": 28
+      "line": 31
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyElementRepresentable.swift",
-      "line": 39
+      "line": 42
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyLayer.swift",
-      "line": 136
+      "line": 139
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyLayer.swift",
-      "line": 137
+      "line": 140
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyLayer.swift",
-      "line": 138
+      "line": 141
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Inspector/ViewHierarchyRoot.swift",
-      "line": 162
+      "line": 165
     },
     {
       "rule": "accessibility",
@@ -1283,12 +1303,12 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextAttributes.swift",
-      "line": 230
+      "line": 247
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextAttributes.swift",
-      "line": 279
+      "line": 306
     },
     {
       "rule": "accessibility",
@@ -1308,62 +1328,62 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 157
+      "line": 158
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 168
+      "line": 170
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 178
+      "line": 181
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 210
+      "line": 213
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 225
+      "line": 228
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 239
+      "line": 242
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 324
+      "line": 327
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 336
+      "line": 339
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 345
+      "line": 348
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 484
+      "line": 514
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 489
+      "line": 519
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 493
+      "line": 523
     },
     {
       "rule": "reduce_motion",
@@ -1633,7 +1653,7 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Share/PTActivityViewController.swift",
-      "line": 176
+      "line": 180
     },
     {
       "rule": "reduce_motion",

@@ -20,7 +20,7 @@ import AVFoundation
     case BottomToTop
 }
 
-@MainActor var GLOBAL_BORDER_TRACKERS: [BorderManager] = []
+@MainActor public var GLOBAL_BORDER_TRACKERS: [BorderManager] = []
 extension UIView: PTProtocolCompatible {}
 public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
 

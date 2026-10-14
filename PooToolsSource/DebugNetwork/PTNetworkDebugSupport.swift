@@ -3,6 +3,9 @@
 // 中文：小型类型化支持对象将展示状态与抓包状态分离。
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public struct PTNetworkTimelinePhase: Sendable, Codable, Equatable {
     public let name: String

@@ -5,6 +5,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public extension Inspector {
     enum ElementPanelType: Swift.CaseIterable {

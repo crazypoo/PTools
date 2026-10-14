@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public extension CALayer {
     /// Applies the appearance options to the layer instance.

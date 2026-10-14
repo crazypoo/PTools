@@ -7,6 +7,10 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsNetWork
+#endif
 import SnapKit
 
 public class PTDebugViewController: PTBaseViewController {

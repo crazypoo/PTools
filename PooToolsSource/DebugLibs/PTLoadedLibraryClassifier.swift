@@ -8,6 +8,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 enum PTLoadedLibraryClassifier {
     static func kind(for snapshot: PTLoadedImageSnapshot) -> PTLoadedLibraryKind {

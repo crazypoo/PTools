@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension UIKeyboardType: @retroactive CaseIterable {
     public typealias AllCases = [UIKeyboardType]

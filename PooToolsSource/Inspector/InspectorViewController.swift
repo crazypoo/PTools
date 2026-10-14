@@ -6,6 +6,9 @@
 
 import GameController
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 protocol InspectorViewControllerDelegate: AnyObject {
     func inspectorViewController(_ viewController: InspectorViewController, didSelect command: InspectorCommand?)

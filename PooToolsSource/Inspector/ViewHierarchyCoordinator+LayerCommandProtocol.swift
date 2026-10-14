@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension ViewHierarchyCoordinator: @MainActor LayerCommandProtocol {
     private var keyCommandSettings: InspectorConfiguration.KeyCommandSettings {

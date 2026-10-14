@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 final class PointControl: StepperPairControl<CGFloat> {
     // English: Expose point components through the existing stepper values.

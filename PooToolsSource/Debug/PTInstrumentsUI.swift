@@ -3,6 +3,9 @@
 // 中文：这些轻量视图只负责渲染 PTInstruments 快照，不新增第二套诊断数据源。
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 // English: The timeline keeps scrolling, zooming, filtering, visibility, and selection in one small adapter.
 // Español: La línea de tiempo concentra desplazamiento, zoom, filtros, visibilidad y selección en un adaptador pequeño.

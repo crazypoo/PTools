@@ -3,6 +3,9 @@
 // 中文：复制、分享、导出和 Debug 事件发布前统一执行脱敏。
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public struct PTNetworkSensitiveKeyRegistry: Sendable, Codable, Equatable {
     public var keys: Set<String>

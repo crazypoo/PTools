@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 final class ElementChildrenPanelViewCode: BaseView {
     private(set) lazy var tableView = UIKeyCommandTableView(

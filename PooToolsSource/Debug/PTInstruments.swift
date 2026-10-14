@@ -3,6 +3,9 @@
 // 中文：PTInstruments 为 Debug 产品提供可选启用的应用内诊断时间线。
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 import UIKit
 import QuartzCore
 import Darwin

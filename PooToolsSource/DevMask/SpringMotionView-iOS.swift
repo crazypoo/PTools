@@ -8,6 +8,9 @@
 #if canImport(UIKit)
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 open class SpringMotionView: UIView {
     

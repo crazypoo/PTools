@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 protocol InspectorViewCoordinatorSwiftUIDelegate: AnyObject {
     func inspectorViewCoordinator(_ coordinator: InspectorViewCoordinator, willFinishWith command: InspectorCommand?)

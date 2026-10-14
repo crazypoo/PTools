@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension SectionHeader {
     private static var elementInspectorAppearance: ElementInspectorAppearance { Inspector.sharedInstance.appearance.elementInspector }

@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 final class EdgeInsetsControl: BaseFormControl {
     var insets: UIEdgeInsets {

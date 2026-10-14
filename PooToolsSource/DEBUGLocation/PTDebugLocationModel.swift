@@ -7,6 +7,9 @@
 //
 
 import CoreLocation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 import Foundation
 
 @MainActor

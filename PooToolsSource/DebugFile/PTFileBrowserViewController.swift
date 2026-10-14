@@ -7,6 +7,10 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsShare
+#endif
 import SnapKit
 import MobileCoreServices
 import QuickLook

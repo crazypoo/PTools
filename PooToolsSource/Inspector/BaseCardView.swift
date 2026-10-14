@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 class BaseCardView: BaseView {
     private(set) lazy var containerView = BaseView().then {

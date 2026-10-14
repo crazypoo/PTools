@@ -4,6 +4,9 @@
 // 中文：负责已解析路由的 UI 副作用，让 PTRouter 专注于解析和兼容入口。
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 @MainActor
 internal enum PTRouterNavigator {

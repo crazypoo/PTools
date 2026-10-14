@@ -8,6 +8,9 @@
 
 import Foundation
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 /// 对于KVO监听，动态创建子类，需要特殊处理
 public let NSKVONotifyingPrefix = "KVONotifying_"
@@ -278,19 +281,20 @@ extension PTRouterManager {
                         registerRouterList.append([PTRouterPath: cls.patternString[s], PTRouterClassName: fullName, PTRouterPriority: "\(cls.priority)"])
                     }
                 }
-            } else if currentClass is PTRouterableProxy.Type {
+            } else if let proxyClass = currentClass as? PTRouterableProxy.Type {
                 let fullName: String = NSStringFromClass(currentClass.self)
                 if fullName.contains(kSADelegateClassSensorsSuffix)  {
                     break
                 }
                 
-                for s in 0 ..< currentClass.patternString.count {
+                let patternStrings = proxyClass.patternString()
+                for s in 0 ..< patternStrings.count {
                     if fullName.contains(NSKVONotifyingPrefix) {
                         let range = fullName.index(fullName.startIndex, offsetBy: NSKVONotifyingPrefix.count)..<fullName.endIndex
                         let subString = fullName[range]
-                        registerRouterList.append([PTRouterPath: currentClass.patternString[s], PTRouterClassName: "\(subString)", PTRouterPriority: "\(String(describing: currentClass.priority))"])
+                        registerRouterList.append([PTRouterPath: patternStrings[s], PTRouterClassName: "\(subString)", PTRouterPriority: "\(proxyClass.priority)"])
                     } else {
-                        registerRouterList.append([PTRouterPath: currentClass.patternString[s], PTRouterClassName: fullName, PTRouterPriority: "\(String(describing: currentClass.priority))"])
+                        registerRouterList.append([PTRouterPath: patternStrings[s], PTRouterClassName: fullName, PTRouterPriority: "\(proxyClass.priority)"])
                     }
                 }
             }

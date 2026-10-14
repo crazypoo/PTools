@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 /// A protocol that maps the public properties of a UIViewController.
 protocol ViewHierarchyControllerProtocol {

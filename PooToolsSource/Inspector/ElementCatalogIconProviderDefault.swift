@@ -9,6 +9,7 @@ import UIKit
 import WebKit
 #if SWIFT_PACKAGE
 import PToolsSymbols
+import ptools
 #endif
 
 extension ViewHierarchyElementIconProvider {

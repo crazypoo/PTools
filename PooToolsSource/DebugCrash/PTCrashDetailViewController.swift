@@ -7,6 +7,10 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsPDF
+#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import PToolsSymbols

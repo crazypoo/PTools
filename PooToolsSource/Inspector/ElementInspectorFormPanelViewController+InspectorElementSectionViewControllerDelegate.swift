@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension ElementInspectorFormPanelViewController: @MainActor InspectorElementSectionViewControllerDelegate {
     func inspectorElementSectionViewController(_ sectionViewController: InspectorElementSectionViewController,

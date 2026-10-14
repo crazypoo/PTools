@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 enum ElementInspectorPanel: Hashable, Swift.CaseIterable, MenuContentProtocol {
     case identity

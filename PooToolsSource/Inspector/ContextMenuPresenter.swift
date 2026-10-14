@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 final class ContextMenuPresenter: NSObject, UIContextMenuInteractionDelegate {
     private let configurationProvider: (UIContextMenuInteraction) -> UIContextMenuConfiguration?

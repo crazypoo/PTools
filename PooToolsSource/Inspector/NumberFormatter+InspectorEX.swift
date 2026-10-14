@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public extension NumberFormatter {
     convenience init(_ options: Option...) {

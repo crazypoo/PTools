@@ -7,6 +7,9 @@
 //
 
 import CoreGraphics
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension CGRect: @retroactive Hashable {
     public func hash(into hasher: inout Hasher) {

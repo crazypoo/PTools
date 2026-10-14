@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 protocol ElementInspectorViewModelProtocol: AnyObject {
     var isFullHeightPresentation: Bool { get set }

@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 final class ScrollingStackView: UIScrollView {
     private(set) lazy var contentView = UIStackView().then {

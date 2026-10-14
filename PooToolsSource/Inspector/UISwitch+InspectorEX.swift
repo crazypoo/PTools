@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension UISwitch.Style: @retroactive CaseIterable {
     public typealias AllCases = [UISwitch.Style]

@@ -8,6 +8,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 import MachO
 
 struct PTMachOSegment: Sendable, Hashable {

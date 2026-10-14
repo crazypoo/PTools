@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 protocol ColorPreviewControlDelegate: AnyObject {
     func colorPreviewControlDidTap(_ colorPreviewControl: ColorPreviewControl)

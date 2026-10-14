@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension ViewHierarchyColorScheme {
     @MainActor static let `default`: ViewHierarchyColorScheme = .init { view in

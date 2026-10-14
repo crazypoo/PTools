@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 // English: The canonical optional collection helper lives in Optional+PTEX.swift.
 // Español: El auxiliar canónico de colecciones opcionales vive en Optional+PTEX.swift.

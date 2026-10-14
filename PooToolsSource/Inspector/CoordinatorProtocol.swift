@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 import UIKit
 
 public typealias CoordinatorStartable = CoordinatorProtocol & Startable

@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 enum DefaultElementIdentityLibrary: Swift.CaseIterable {
     case preview

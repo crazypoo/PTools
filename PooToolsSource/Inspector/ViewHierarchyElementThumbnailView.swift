@@ -5,6 +5,9 @@
 //
 
 import AVFoundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 import UIKit
 
 class ViewHierarchyElementThumbnailView: BaseView {

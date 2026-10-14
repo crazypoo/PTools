@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 protocol LayerViewProtocol: InternalViewProtocol {
     var sourceView: UIView { get }

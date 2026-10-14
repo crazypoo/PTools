@@ -5,6 +5,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 protocol DismissablePresentationProtocol {
     func dismissPresentation(animated: Bool)

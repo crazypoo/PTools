@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 import os.lock
 
 // English: Keep protocol registration thread-safe because URLSession configuration getters are not main-thread APIs.

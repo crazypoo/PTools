@@ -3,6 +3,9 @@
 #if canImport(SwiftUI)
 import SwiftUI
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension UIDevice {
     /// The notification we'll send when a shake gesture happens.

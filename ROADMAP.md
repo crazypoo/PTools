@@ -1,8 +1,14 @@
 # PTools 路线图
 
-> 当前代码基线：`5.64.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.64.4`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.64.1` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.64.4` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.64.4 Target 依赖边界修复
+
+- ✅ 调试诊断文件显式声明 UIKit，避免独立 Target 编译时缺少 UIKit 类型。
+- ✅ Input、Stepper、Router、SocketKit、Share、DEBUG 和权限入口不再依赖 CocoaPods 聚合模块的传递可见性。
+- ✅ CocoaPods 与 SwiftPM 的 SocketKit、Share 依赖图保持一致，继续兼容 iOS 17+ / Swift 6+。
 
 ## 5.64.1 PTRichText 图片附件基线偏移
 

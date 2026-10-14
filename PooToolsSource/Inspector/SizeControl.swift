@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 final class SizeControl: StepperPairControl<CGFloat> {
     // English: Expose the size components through the existing stepper values.

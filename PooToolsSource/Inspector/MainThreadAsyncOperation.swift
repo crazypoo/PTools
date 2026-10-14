@@ -5,6 +5,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 // English: Preserve Foundation Operation's unchecked Sendable compatibility for this UI-bound operation subclass.
 // Español: Conserva la compatibilidad Sendable no verificada de Foundation para esta subclase de operación ligada a la UI.

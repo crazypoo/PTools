@@ -5,6 +5,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 struct ExpirableStore<Value>: ExpirableProtocol {
     private let lifespan: TimeInterval

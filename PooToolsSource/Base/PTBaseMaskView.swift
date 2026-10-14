@@ -17,8 +17,8 @@ open class PTBaseMaskView: UIView {
 
     open var isMask : Bool = false
         
-    public override func hitTest(_ point: CGPoint,
-                                 with event: UIEvent?) -> UIView? {
+    open override func hitTest(_ point: CGPoint,
+                               with event: UIEvent?) -> UIView? {
         if isMask {
             return super.hitTest(point, with: event)
         } else {

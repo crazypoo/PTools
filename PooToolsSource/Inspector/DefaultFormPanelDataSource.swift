@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 struct DefaultFormPanelDataSource: ElementInspectorFormPanelDataSource {
     private let sections: InspectorElementSections

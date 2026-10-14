@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 // 这样自动生成的 Hashable 实现也会隐式处于 @MainActor 下，消除所有并发冲突。
 @MainActor

@@ -8,6 +8,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 @MainActor
 final class PTLoadedLibrariesViewModel {

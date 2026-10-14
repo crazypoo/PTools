@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "5ca3f5435cebea32083b8351ac00229f89f8a4e4",
-  "generated_at": "2026-10-12T05:54:11Z",
+  "source_revision": "aa8a0f957b4b43be8340a53d817cf62c4cbda04e",
+  "generated_at": "2026-10-14T01:26:59Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -118,19 +118,19 @@
     },
     {
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 13,
+      "line": 16,
       "declaration": "private struct PTSafeExceptionBox: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 17,
+      "line": 20,
       "declaration": "private struct PTSafeSignalPointerBox: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 26,
+      "line": 29,
       "declaration": "final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {",
       "allowlisted": true
     },
@@ -142,13 +142,13 @@
     },
     {
       "path": "PooToolsSource/Inspector/MainThreadAsyncOperation.swift",
-      "line": 12,
+      "line": 15,
       "declaration": "final class MainThreadAsyncOperation: MainThreadOperation, @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/Inspector/MainThreadOperation.swift",
-      "line": 12,
+      "line": 15,
       "declaration": "class MainThreadOperation: Operation, @unchecked Sendable {",
       "allowlisted": true
     },
@@ -304,7 +304,7 @@
     },
     {
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 363,
+      "line": 365,
       "declaration": "private final class PTURLSessionWebSocketDelegateProxy: NSObject, URLSessionWebSocketDelegate, URLSessionTaskDelegate, @unchecked Sendable {",
       "allowlisted": true
     },

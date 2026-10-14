@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension NSObjectProtocol where Self: NSObject {
     func debounce(_ aSelector: Selector, after delay: TimeInterval, object: Any? = nil) {

@@ -8,6 +8,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 enum PTSwiftMetadataInspector {
     static func summary(sectionNames: [String], typeSectionSize: UInt64?) -> PTSwiftMetadataSummary {

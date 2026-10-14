@@ -5,6 +5,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 // English: Foundation's Operation is imported with an unchecked Sendable boundary; the work closure is MainActor-isolated and Sendable.
 // Español: Operation de Foundation se importa con un límite Sendable no verificado; el cierre de trabajo está aislado en MainActor y es Sendable.

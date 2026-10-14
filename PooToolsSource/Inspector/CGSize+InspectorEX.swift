@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension CGSize {
     @MainActor static var regularIconSize: CGSize { Inspector.sharedInstance.appearance.regularIconSize }

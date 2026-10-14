@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public final class Weak<Object: AnyObject>: Hashable {
     private let objectIdentifier: ObjectIdentifier

@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 struct PTCrashModel: Codable, Equatable {
     let type: PTCrashType

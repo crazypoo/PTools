@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public protocol InspectorElementFormItemViewDelegate: AnyObject {
     func inspectorElementFormItemView(_ item: InspectorElementSectionView,

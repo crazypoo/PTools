@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension FileHandle {
     private func fdZero(_ set: inout fd_set) {

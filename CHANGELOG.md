@@ -6,6 +6,13 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.64.4 — 2026-10-14
+
+- 修复调试诊断文件缺少 UIKit 显式导入的问题，避免 SwiftPM 与独立 Target 下的类型解析失败。
+- 补齐 Input、Stepper、Router、SocketKit、Share、DEBUG 及权限相关 Target 的显式模块边界，消除对 CocoaPods 聚合模块传递可见性的依赖。
+- 为 SocketKit 显式声明 Network 依赖，为 Share 显式声明 Core 与 SnapKit 依赖，保持 CocoaPods 与 SwiftPM 的依赖图一致。
+- 保留原有公开 API 与 5.64.3 调用方式，版本统一为 5.64.4。
+
 ## 5.64.1 — 2026-10-13
 
 - 为 `PTRichText` 的内嵌图片、远程图片和动态图片来源增加 `baselineOffset` 配置。

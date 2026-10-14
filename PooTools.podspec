@@ -1170,7 +1170,9 @@ Pod::Spec.new do |s|
 #    end
     
     s.subspec 'Share' do |subspec|
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/CustomerLabel'
+        subspec.dependency 'SnapKit'
         subspec.source_files = 'PooToolsSource/Share/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SHARE POOTOOLS_COCOAPODS"
@@ -1367,6 +1369,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'SocketKit' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/Network'
         subspec.dependency 'PooTools/Logging'
         subspec.source_files = 'PooToolsSource/SocketKit/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {

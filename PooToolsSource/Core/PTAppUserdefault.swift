@@ -15,22 +15,22 @@ public let DevSocketKey = "UI_test_socket_url"
 // English: Serialize synchronous UserDefaults reads and writes without changing the public property API.
 // Español: Serializa las lecturas y escrituras síncronas de UserDefaults sin cambiar la API pública de propiedades.
 // 中文：在不改变公开属性 API 的前提下，串行化 UserDefaults 的同步读写。
-internal enum PTUserDefaultsStore {
+public enum PTUserDefaultsStore {
     private static let lock = OSAllocatedUnfairLock(initialState: ())
 
-    static func value<T: Sendable>(_ key: String, default defaultValue: T) -> T {
+    public static func value<T: Sendable>(_ key: String, default defaultValue: T) -> T {
         lock.withLock {
             UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
         }
     }
 
-    static func optionalValue<T: Sendable>(_ key: String) -> T? {
+    public static func optionalValue<T: Sendable>(_ key: String) -> T? {
         lock.withLock {
             UserDefaults.standard.object(forKey: key) as? T
         }
     }
 
-    static func set<T: Sendable>(_ value: T, forKey key: String) {
+    public static func set<T: Sendable>(_ value: T, forKey key: String) {
         lock.withLock {
             UserDefaults.standard.set(value, forKey: key)
         }

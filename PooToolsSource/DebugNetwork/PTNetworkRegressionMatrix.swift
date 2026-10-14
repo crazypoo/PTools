@@ -3,6 +3,9 @@
 // 中文：用机器可读的场景明确 DebugNetwork 最终验收矩阵。
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public enum PTNetworkRegressionScenario: String, CaseIterable, Hashable, Sendable {
     case get

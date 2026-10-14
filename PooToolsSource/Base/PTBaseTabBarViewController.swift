@@ -8,6 +8,9 @@
 
 import UIKit
 import SnapKit
+#if canImport(PToolsSymbols)
+import PToolsSymbols
+#endif
 
 @MainActor
 open class PTBaseTabBarViewController: UITabBarController {

@@ -8,6 +8,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 @available(*, deprecated, message: "Use PTDyldImageProvider through PTLoadedLibrariesViewModel.")
 enum PTLoadedLibsFunction {

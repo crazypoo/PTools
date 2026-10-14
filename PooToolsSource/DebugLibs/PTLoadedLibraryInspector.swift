@@ -8,6 +8,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 struct PTLoadedLibraryInspector: Sendable {
     let configuration: PTLoadedLibsConfiguration

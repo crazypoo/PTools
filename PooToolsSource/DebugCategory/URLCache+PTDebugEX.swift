@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension URLCache {
     // 采用懒加载单例模式保障全局唯一性

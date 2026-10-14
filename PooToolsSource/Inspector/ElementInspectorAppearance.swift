@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 struct ElementInspectorAppearance: Hashable {
     let horizontalMargins: CGFloat = 24

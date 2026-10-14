@@ -3,6 +3,9 @@
 // 中文：导出器只消费不可变记录，并默认执行脱敏。
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public enum PTNetworkCurlExporter {
     public static func string(record: PTNetworkCaptureRecord,

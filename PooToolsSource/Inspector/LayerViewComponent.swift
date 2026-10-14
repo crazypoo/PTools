@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 class LayerViewComponent: BaseView, @MainActor LayerViewProtocol {
     var sourceView: UIView { self }

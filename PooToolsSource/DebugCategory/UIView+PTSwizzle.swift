@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 import UIKit
 
 @MainActor private var UIViewShowsDebugBorderKey: UInt8 = 0

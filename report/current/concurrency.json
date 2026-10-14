@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "5ca3f5435cebea32083b8351ac00229f89f8a4e4",
-  "generated_at": "2026-10-12T05:54:10Z",
+  "source_revision": "aa8a0f957b4b43be8340a53d817cf62c4cbda04e",
+  "generated_at": "2026-10-14T01:26:57Z",
   "counts": {
     "main_queue_async": 26,
     "task_detached": 31,
@@ -217,43 +217,43 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 13,
+      "line": 16,
       "text": "private struct PTSafeExceptionBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
-      "line": 17,
+      "line": 20,
       "text": "private struct PTSafeSignalPointerBox: @unchecked Sendable {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 123,
+      "line": 127,
       "text": "DispatchQueue.main.async {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 250,
+      "line": 254,
       "text": "DispatchQueue.main.async {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/DebugLibs/PTLoadedLibrariesViewModel.swift",
-      "line": 91,
+      "line": 94,
       "text": "let result = await Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/DebugLibs/PTLoadedLibrariesViewModel.swift",
-      "line": 220,
+      "line": 223,
       "text": "let metadata = await Task.detached(priority: .utility) {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 26,
+      "line": 29,
       "text": "final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {"
     },
     {
@@ -295,37 +295,37 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "line": 183,
+      "line": 186,
       "text": "DispatchQueue.main.async {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "line": 214,
+      "line": 217,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: workItem)"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Inspector/InspectorElementSectionViewController.swift",
-      "line": 143,
+      "line": 146,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(30)) {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/Inspector/MainThreadAsyncOperation.swift",
-      "line": 12,
+      "line": 15,
       "text": "final class MainThreadAsyncOperation: MainThreadOperation, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/Inspector/MainThreadOperation.swift",
-      "line": 12,
+      "line": 15,
       "text": "class MainThreadOperation: Operation, @unchecked Sendable {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Inspector/Manager.swift",
-      "line": 35,
+      "line": 38,
       "text": "DispatchQueue.main.async(execute: closure)"
     },
     {
@@ -589,7 +589,7 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/SocketKit/PTWebSocketClient.swift",
-      "line": 363,
+      "line": 365,
       "text": "private final class PTURLSessionWebSocketDelegateProxy: NSObject, URLSessionWebSocketDelegate, URLSessionTaskDelegate, @unchecked Sendable {"
     },
     {

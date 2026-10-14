@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 /// A coordinator is an abstract object that has the sole responsibility to coordinate a fragment of an App's overall navigation.
 ///

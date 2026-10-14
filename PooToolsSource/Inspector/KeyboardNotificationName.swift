@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 /// An alias for a type used to represent the name of a keyboard related notification.
 public enum KeyboardNotificationName {

@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 @available(*, deprecated, renamed: "InspectorElementProperty")
 public typealias InspectorElementViewModelProperty = InspectorElementProperty

@@ -8,6 +8,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 enum PTLoadedImageSource: String, Sendable, Hashable, Codable {
     case initialDyldEnumeration

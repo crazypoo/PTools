@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 final class WireframeView: LayerView {
     private lazy var leadingAnchorConstraint = layoutGuideView.leadingAnchor.constraint(equalTo: leadingAnchor).then { $0.isActive = true }

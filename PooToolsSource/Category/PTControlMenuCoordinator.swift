@@ -3,6 +3,9 @@
 // 中文：为 PTools 控件提供原生 UIKit 菜单协调能力。
 
 import UIKit
+#if canImport(PToolsSymbols)
+import PToolsSymbols
+#endif
 
 /// English: Chooses how a control presents its native menu.
 /// Español: Elige cómo un control presenta su menú nativo.
@@ -23,7 +26,7 @@ public enum PTControlMenuTrigger: Sendable {
 /// Español: Los controles que implementan los callbacks de menú de UIControl pueden usar la ruta nativa.
 /// 中文：实现 UIControl 菜单代理回调的控件可以加入原生路径。
 @MainActor
-internal protocol PTNativeControlMenuHost: AnyObject {}
+public protocol PTNativeControlMenuHost: AnyObject {}
 
 @MainActor
 internal enum PTControlMenuAssociatedKeys {
@@ -34,7 +37,7 @@ internal enum PTControlMenuAssociatedKeys {
 /// Español: Construye y posee un proveedor de menú por control sin mantener un segundo estado de selección.
 /// 中文：为每个控件维护一个菜单提供器，不额外保存第二份选择状态。
 @MainActor
-internal final class PTControlMenuCoordinator: NSObject, UIContextMenuInteractionDelegate {
+public final class PTControlMenuCoordinator: NSObject, UIContextMenuInteractionDelegate {
     typealias Provider = @MainActor () -> UIMenu?
 
     weak var control: UIControl?
@@ -139,8 +142,8 @@ internal final class PTControlMenuCoordinator: NSObject, UIContextMenuInteractio
         provider = nil
     }
 
-    static func configuration(for control: UIControl,
-                              location: CGPoint) -> UIContextMenuConfiguration? {
+    public static func configuration(for control: UIControl,
+                                     location: CGPoint) -> UIContextMenuConfiguration? {
         guard let coordinator = control.pt_controlMenuCoordinator else { return nil }
         return coordinator.configuration(for: location)
     }
@@ -174,8 +177,8 @@ internal final class PTControlMenuCoordinator: NSObject, UIContextMenuInteractio
     // English: Forward the context-menu delegate callback to the installed provider.
     // Español: Reenvía el callback del delegado de menú al proveedor instalado.
     // 中文：将 context-menu 代理回调转发给已安装的菜单提供器。
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
-                                configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+    public func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                       configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         configuration(for: location)
     }
 }

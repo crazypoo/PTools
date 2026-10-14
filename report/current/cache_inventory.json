@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "5ca3f5435cebea32083b8351ac00229f89f8a4e4",
-  "generated_at": "2026-10-12T05:54:11Z",
+  "source_revision": "aa8a0f957b4b43be8340a53d817cf62c4cbda04e",
+  "generated_at": "2026-10-14T01:26:59Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -78,31 +78,31 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1400,
+      "line": 1410,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1401,
+      "line": 1411,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1511,
+      "line": 1521,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1512,
+      "line": 1522,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2210,
+      "line": 2220,
       "kind": "disk or custom cache",
       "text": "// English: Invalidate only the geometry cache for the requested rows."
     },
@@ -414,7 +414,7 @@
     },
     {
       "path": "PooToolsSource/Core/BorderManager.swift",
-      "line": 19,
+      "line": 21,
       "kind": "disk or custom cache",
       "text": "// Previous configuration cache."
     },
@@ -468,31 +468,31 @@
     },
     {
       "path": "PooToolsSource/Debug/CwlDemangle.swift",
-      "line": 3481,
+      "line": 3484,
       "kind": "disk or custom cache",
       "text": "_ = printOptional(name.children.at(0), prefix: \"lazy protocol witness table cache variable for type \")"
     },
     {
       "path": "PooToolsSource/Debug/CwlDemangle.swift",
-      "line": 3548,
+      "line": 3551,
       "kind": "disk or custom cache",
       "text": "case .typeMetadataInstantiationCache: printFirstChild(name, prefix: \"type metadata instantiation cache for \")"
     },
     {
       "path": "PooToolsSource/Debug/CwlDemangle.swift",
-      "line": 3549,
+      "line": 3552,
       "kind": "disk or custom cache",
       "text": "case .typeMetadataInstantiationFunction: printFirstChild(name, prefix: \"type metadata instantiation cache for \")"
     },
     {
       "path": "PooToolsSource/Debug/CwlDemangle.swift",
-      "line": 3551,
+      "line": 3554,
       "kind": "disk or custom cache",
       "text": "case .typeMetadataLazyCache: printFirstChild(name, prefix: \"lazy cache variable for type metadata for \")"
     },
     {
       "path": "PooToolsSource/DebugCategory/HTTPURLResponse+PTEX.swift",
-      "line": 13,
+      "line": 16,
       "kind": "disk or custom cache",
       "text": "if let cc = (allHeaderFields[\"Cache-Control\"] as? String)?.lowercased(),"
     },
@@ -504,73 +504,73 @@
     },
     {
       "path": "PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift",
-      "line": 11,
+      "line": 14,
       "kind": "URLCache",
       "text": "extension URLCache {"
     },
     {
       "path": "PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift",
-      "line": 13,
+      "line": 16,
       "kind": "URLCache",
       "text": "static let customHttp: URLCache = {"
     },
     {
       "path": "PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift",
-      "line": 23,
+      "line": 26,
       "kind": "URLCache",
       "text": "return URLCache("
     },
     {
       "path": "PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift",
-      "line": 42,
+      "line": 45,
       "kind": "URLCache",
       "text": "URLCache.cachedExtensions.contains(ext),"
     },
     {
       "path": "PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift",
-      "line": 57,
+      "line": 60,
       "kind": "URLCache",
       "text": "URLCache.cacheIOQueue.async {"
     },
     {
       "path": "PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift",
-      "line": 65,
+      "line": 68,
       "kind": "URLCache",
       "text": "return URLCache.cacheIOQueue.sync {"
     },
     {
       "path": "PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift",
-      "line": 66,
+      "line": 69,
       "kind": "disk or custom cache",
       "text": "guard let cache = self.cachedResponse(for: request),"
     },
     {
       "path": "PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift",
-      "line": 67,
+      "line": 70,
       "kind": "disk or custom cache",
       "text": "let info = cache.userInfo,"
     },
     {
       "path": "PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift",
-      "line": 74,
+      "line": 77,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift",
-      "line": 29,
+      "line": 32,
       "kind": "disk or custom cache",
       "text": "return \"Shared Cache / System Image\""
     },
     {
       "path": "PooToolsSource/DebugLibs/PTLoadedLibrariesViewModel.swift",
-      "line": 117,
+      "line": 120,
       "kind": "disk or custom cache",
       "text": "report += \"- Shared Cache Candidates: \\(diagnostics.sharedCacheCandidateCount)\\n\""
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTNetworkExporters.swift",
-      "line": 88,
+      "line": 91,
       "kind": "disk or custom cache",
       "text": "\"cache\": [:],"
     },
@@ -930,67 +930,67 @@
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 691,
+      "line": 721,
       "kind": "NSCache",
       "text": "private let imageCache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 692,
+      "line": 722,
       "kind": "NSCache",
       "text": "private let posterCache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 869,
+      "line": 899,
       "kind": "disk or custom cache",
       "text": "// English: The poster renderer uses the bounded rich-text cache contract."
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 875,
+      "line": 905,
       "kind": "NSCache",
       "text": "private static let cache: NSCache<NSString, UIImage> = {"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 876,
+      "line": 906,
       "kind": "NSCache",
       "text": "let cache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 877,
+      "line": 907,
       "kind": "disk or custom cache",
       "text": "cache.countLimit = cachePolicy.countLimit"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 878,
+      "line": 908,
       "kind": "disk or custom cache",
       "text": "cache.totalCostLimit = cachePolicy.costLimit"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 879,
+      "line": 909,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 892,
+      "line": 922,
       "kind": "disk or custom cache",
       "text": "cache.removeAllObjects()"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 901,
+      "line": 931,
       "kind": "disk or custom cache",
       "text": "if let cached = cache.object(forKey: key as NSString) {"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 961,
+      "line": 991,
       "kind": "disk or custom cache",
       "text": "cache.setObject(rendered, forKey: key as NSString)"
     },

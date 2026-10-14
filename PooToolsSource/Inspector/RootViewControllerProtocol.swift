@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 @available(*, deprecated, renamed: "RootViewControllerProtocol")
 typealias ContainerViewControllerProtocol = RootViewControllerProtocol

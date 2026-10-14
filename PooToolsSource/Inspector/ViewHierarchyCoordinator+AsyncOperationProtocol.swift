@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension ViewHierarchyCoordinator: @MainActor AsyncOperationProtocol {
     func asyncOperation(name: String, execute closure: @escaping Closure) {

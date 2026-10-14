@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 class StepperPairControl<FloatingPoint: BinaryFloatingPoint>: BaseFormControl {
     override var isEnabled: Bool {

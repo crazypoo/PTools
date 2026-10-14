@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 enum ViewHierarchyIssue: CustomStringConvertible, Hashable {
     case emptyFrame

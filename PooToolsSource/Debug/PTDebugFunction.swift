@@ -7,6 +7,11 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+import PToolsStorage
+import PooToolsNetWork
+#endif
 import Kingfisher
 import CoreLocation
 

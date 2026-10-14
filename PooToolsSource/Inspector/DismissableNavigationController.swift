@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 open class DismissableNavigationController: UINavigationController, @MainActor Dismissable {
     public var dismissHandler: ((DismissableNavigationController) -> Void)?

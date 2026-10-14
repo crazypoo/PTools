@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public struct SpringConfiguration : Sendable {
     /// Controls how fast the spring motion oscillates.

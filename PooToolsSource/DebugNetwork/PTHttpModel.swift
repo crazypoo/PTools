@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 // 请求序列化格式
 enum RequestSerializer: UInt {

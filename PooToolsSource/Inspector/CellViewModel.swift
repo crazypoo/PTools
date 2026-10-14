@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 protocol ElementChildrenPanelItemViewModelProtocol: AnyObject {
     typealias Parent = ElementChildrenPanelItemViewModelProtocol & ElementChildrenPanelTableViewCellViewModelProtocol

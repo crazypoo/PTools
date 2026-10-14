@@ -8,6 +8,9 @@
 
 import UIKit
 import SnapKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public typealias PTStepperErrorAlert = (_ type:Bool) -> Void
 public typealias PTStepperValue = (_ string:String,_ valueChangeType:PTStepperVahleChangeType) -> Void

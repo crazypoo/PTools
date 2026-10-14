@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public enum InspectorElemenPropertyNoteIcon: ColorStylable {
     case info, warning

@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 protocol ViewHierarchyCoordinatorFactoryProtocol {
     static func makeCoordinator(with windows: [UIWindow],

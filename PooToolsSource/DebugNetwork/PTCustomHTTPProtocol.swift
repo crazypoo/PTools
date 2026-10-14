@@ -3,6 +3,9 @@
 // 中文：URLProtocol 只转发流量并发布不可变观测结果。
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 import os.lock
 
 private enum PTNetworkCaptureState {

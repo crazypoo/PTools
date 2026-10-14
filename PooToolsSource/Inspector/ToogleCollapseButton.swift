@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 final class ToogleCollapseButton: BaseControl {
     private lazy var imageView = UIImageView(image: .expandSymbol, highlightedImage: .collapseSymbol).then {

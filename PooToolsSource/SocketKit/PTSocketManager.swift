@@ -4,6 +4,10 @@
 
 import Foundation
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsNetWork
+#endif
 
 public extension Notification.Name {
     static let ptNetworkStatesChange = Notification.Name("nNetworkStatesChangeNotification")

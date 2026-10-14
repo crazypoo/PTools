@@ -7,6 +7,10 @@
 
 import UIKit
 import SnapKit
+#if SWIFT_PACKAGE
+import ptools
+import PooToolsCustomerLabel
+#endif
 
 open class PTShareItem: NSObject,UIActivityItemSource {
     let title: String

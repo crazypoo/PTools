@@ -7,23 +7,31 @@
 
 import UIKit
 
-/// This class handles enabling and disabling debug borders on a specified view.
+// English: Handles enabling and disabling debug borders on a specified view.
+// Español: Gestiona la activación y desactivación de bordes de depuración en una vista.
+// 中文：负责在指定视图上启用和停用调试边框。
 @MainActor
-class BorderManager {
+public class BorderManager {
     weak var layer: CALayer?
     
-    // Debug configuration defined.
+    // English: Debug configuration for the border overlay.
+    // Español: Configuración de depuración para la superposición de bordes.
+    // 中文：边框覆盖层的调试配置。
     static let outlineWidth = 1 - 1 / UIScreen.main.scale
     let outlineColor: CGColor
     
-    // Previous configuration cache.
+    // English: Cache the previous layer configuration for restoration.
+    // Español: Guarda en caché la configuración anterior de la capa para restaurarla.
+    // 中文：缓存图层之前的配置，以便恢复。
     var cachedWidth: CGFloat?
     var cachedColor: CGColor?
     
-    init(view: UIView) {
+    public init(view: UIView) {
         layer = view.layer
         
-        // Different colors for different UIView types.
+        // English: Use different colors for different UIView types.
+        // Español: Usa colores distintos para cada tipo de UIView.
+        // 中文：为不同 UIView 类型使用不同颜色。
         if "\(view.classForCoder)".contains("UIImageView") {
             outlineColor = UIColor.systemGreen.withAlphaComponent(0.85).cgColor
         } else if "\(view.classForCoder)".contains("UILabel") {
@@ -35,8 +43,10 @@ class BorderManager {
         }
     }
     
-    // Activates debug borders.
-    func activate() {
+    // English: Activate the debug border and preserve the original layer values.
+    // Español: Activa el borde de depuración y conserva los valores originales de la capa.
+    // 中文：启用调试边框并保留图层原始值。
+    public func activate() {
         cachedWidth = layer?.borderWidth
         cachedColor = layer?.borderColor
         
@@ -44,8 +54,10 @@ class BorderManager {
         layer?.borderColor = outlineColor
     }
     
-    // Deactivates debug borders, restoring previous border properties.
-    func deactivate() {
+    // English: Deactivate the debug border and restore the previous layer values.
+    // Español: Desactiva el borde de depuración y restaura los valores anteriores de la capa.
+    // 中文：停用调试边框并恢复图层之前的值。
+    public func deactivate() {
         
         guard let cachedWidth = cachedWidth, let cachedColor = cachedColor else {
             layer?.borderWidth = 0.0
@@ -53,11 +65,15 @@ class BorderManager {
             return
         }
         
-        // If the border width has changed since it was outlined, refrain from reverting it to the previous width.
+        // English: If the width changed after activation, keep the caller's new value.
+        // Español: Si el ancho cambió después de la activación, conserva el nuevo valor del llamador.
+        // 中文：如果启用后宽度发生变化，则保留调用方设置的新值。
         if layer?.borderWidth == Self.outlineWidth {
             layer?.borderWidth = cachedWidth
         }
-        // If the border color has changed since it was outlined, refrain from reverting it to the previous color.
+        // English: If the color changed after activation, keep the caller's new value.
+        // Español: Si el color cambió después de la activación, conserva el nuevo valor del llamador.
+        // 中文：如果启用后颜色发生变化，则保留调用方设置的新值。
         if layer?.borderColor == outlineColor {
             layer?.borderColor = cachedColor
         }

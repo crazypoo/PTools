@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 protocol ViewHierarchyActionableProtocol {
     func canPerform(action: ViewHierarchyElementAction) -> Bool

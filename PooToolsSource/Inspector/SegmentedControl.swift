@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 extension UISegmentedControl {
     static func segmentedControlStyle(items: [Any]? = nil) -> UISegmentedControl {
         let segmentedControl = UISegmentedControl(items: items)

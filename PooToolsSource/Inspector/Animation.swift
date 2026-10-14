@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension TimeInterval {
     static let veryShort: TimeInterval = average / 4

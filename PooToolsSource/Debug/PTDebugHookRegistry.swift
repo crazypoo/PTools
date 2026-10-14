@@ -3,6 +3,9 @@
 // 中文：Hook Registry 统一管理可选的 Debug Hook 安装，并保证卸载过程可逆。
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 // English: A value snapshot lets the Debug UI inspect registrations without receiving hook closures.
 // Español: Un snapshot de valor permite a la UI de Debug inspeccionar registros sin recibir closures de hooks.

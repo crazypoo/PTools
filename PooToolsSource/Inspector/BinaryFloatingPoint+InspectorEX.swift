@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 private let binaryFloatingPointFormatter = NumberFormatter().then {
     $0.maximumFractionDigits = 2

@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 // English: Inspector font choices reuse the canonical PTFontRuntime discovery source.
 // Español: Las opciones de fuente del Inspector reutilizan la fuente canónica PTFontRuntime.

@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension DefaultElementSizeLibrary {
     final class ButtonSizeSectionDataSource: InspectorElementSectionDataSource {

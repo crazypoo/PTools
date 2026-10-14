@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 // MARK: - 文件类型枚举
 public enum PTFileType: String {

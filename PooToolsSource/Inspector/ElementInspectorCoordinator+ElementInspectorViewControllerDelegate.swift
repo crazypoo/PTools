@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension ElementInspectorCoordinator: @MainActor ElementInspectorViewControllerDelegate {
     @MainActor func elementInspectorViewController(_ viewController: ElementInspectorViewController,

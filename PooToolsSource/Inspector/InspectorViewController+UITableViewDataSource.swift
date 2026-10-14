@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 extension InspectorViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {

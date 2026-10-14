@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 // English: PTRows still accepts NSObject data models, so this box carries only the value summary.
 // Español: PTRows todavía acepta modelos NSObject; esta caja transporta únicamente el resumen de valor.

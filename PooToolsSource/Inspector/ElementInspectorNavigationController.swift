@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 protocol ElementInspectorNavigationControllerDismissDelegate: AnyObject {
     func elementInspectorNavigationControllerDidFinish(_ navigationController: ElementInspectorNavigationController)

@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 // English: Keep only Sendable keyboard values across the notification task boundary.
 // Español: Solo cruza el límite de la tarea un valor de teclado que sea Sendable.

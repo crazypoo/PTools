@@ -6,6 +6,9 @@
 
 #if canImport(SwiftUI)
 import SwiftUI
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public extension View {
     func inspect(

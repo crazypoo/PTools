@@ -3,6 +3,9 @@
 // 中文：保留 5.x 服务注册和重定向 API 的源码兼容性，同时让路由核心保持单一职责。
 
 import Foundation
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public extension PTRouter {
     // English: Register a Sendable service creator through the compatibility facade.

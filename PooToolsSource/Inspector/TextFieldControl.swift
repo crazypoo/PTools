@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 final class TextFieldControl: BaseFormControl {
     private let defaultFont: UIFont = .preferredFont(forTextStyle: .footnote)

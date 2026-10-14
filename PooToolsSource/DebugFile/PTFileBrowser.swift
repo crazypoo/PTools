@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 import UniformTypeIdentifiers // iOS 14+ 的文件类型检测框架
 
 @MainActor

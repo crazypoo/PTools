@@ -3,6 +3,9 @@
 // 中文：轻量时间线视图把阶段渲染限制在 UI 边界内。
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 @MainActor
 public final class PTNetworkTimelineView: UIView {

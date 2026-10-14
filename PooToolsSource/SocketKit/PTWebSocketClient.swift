@@ -7,6 +7,8 @@ import Security
 
 #if SWIFT_PACKAGE
 import ptools
+import PooToolsNetWork
+import PToolsLogging
 #endif
 
 public enum PTWebSocketState: Sendable, Equatable {

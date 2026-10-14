@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 /// Conform to this protocol to prevent a view to be inspected.
 public protocol NonInspectableView {}

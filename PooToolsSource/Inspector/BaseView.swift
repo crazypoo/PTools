@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 class BaseView: UIView, InternalViewProtocol, @MainActor InspectorAppearanceProviding, @MainActor ElementInspectorAppearanceProviding {
     private(set) lazy var contentView = UIStackView.vertical().then {

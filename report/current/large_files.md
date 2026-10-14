@@ -3,40 +3,41 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: 5ca3f5435cebea32083b8351ac00229f89f8a4e4
-Generated at: 2026-10-12T05:54:10Z
+Source revision: aa8a0f957b4b43be8340a53d817cf62c4cbda04e
+Generated at: 2026-10-14T01:26:57Z
 -->
 
 # 当前文件尺寸门禁
 
 阈值：超过 1000 行警告，超过 1500 行需要架构例外，超过 2000 行必须登记历史例外，否则失败。
 
-- Warning：16
+- Warning：17
 - Architecture exception：10
 - Hard-limit allowlisted：5
 
 | 文件 | 行数 | 分类 |
 | --- | ---: | --- |
-| `PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift` | 1145 | warning |
-| `PooToolsSource/Base/PTCollectionView.swift` | 2285 | hard_limit_allowlisted |
-| `PooToolsSource/Base/PTNavigationBarManager.swift` | 1164 | warning |
-| `PooToolsSource/Base/PTTabBarView.swift` | 1051 | warning |
+| `PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift` | 1217 | warning |
+| `PooToolsSource/Base/PTCollectionView.swift` | 2295 | hard_limit_allowlisted |
+| `PooToolsSource/Base/PTNavigationBarManager.swift` | 1124 | warning |
+| `PooToolsSource/Base/PTTabBarView.swift` | 1058 | warning |
 | `PooToolsSource/Category/String+PTEX.swift` | 1878 | architecture_exception |
 | `PooToolsSource/Category/UIImage+PTEX.swift` | 1433 | warning |
 | `PooToolsSource/Category/UIScrollView+PTRefreshEX.swift` | 1446 | warning |
-| `PooToolsSource/Category/UIView+PTEX.swift` | 2248 | hard_limit_allowlisted |
-| `PooToolsSource/Debug/CwlDemangle.swift` | 4627 | hard_limit_allowlisted |
-| `PooToolsSource/Debug/PTInstruments.swift` | 1459 | warning |
+| `PooToolsSource/Category/UIView+PTEX.swift` | 2253 | hard_limit_allowlisted |
+| `PooToolsSource/Debug/CwlDemangle.swift` | 4630 | hard_limit_allowlisted |
+| `PooToolsSource/Debug/PTInstruments.swift` | 1462 | warning |
 | `PooToolsSource/FloatPanel/PTSheetViewController.swift` | 1030 | warning |
 | `PooToolsSource/Font/Generated/PTFontCatalog.generated.swift` | 2053 | hard_limit_allowlisted |
 | `PooToolsSource/ImageEditor/PTCutViewController.swift` | 1100 | warning |
 | `PooToolsSource/ImageEditor/PTEditImageToolEngine.swift` | 1704 | architecture_exception |
 | `PooToolsSource/ImageEditor/PTEditImageViewController.swift` | 1586 | architecture_exception |
 | `PooToolsSource/ImageEditor/PTStickerManager.swift` | 1059 | warning |
-| `PooToolsSource/Inspector/IconKit.swift` | 2684 | hard_limit_allowlisted |
-| `PooToolsSource/LocalConsole/LocalConsole.swift` | 1848 | architecture_exception |
+| `PooToolsSource/Inspector/IconKit.swift` | 2687 | hard_limit_allowlisted |
+| `PooToolsSource/LocalConsole/LocalConsole.swift` | 1852 | architecture_exception |
 | `PooToolsSource/PToolsForm/PTForm.swift` | 1174 | warning |
 | `PooToolsSource/PToolsModelCore/PTModelCodec.swift` | 1027 | warning |
+| `PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift` | 1030 | warning |
 | `PooToolsSource/PhotoPicker/PTMediaLibViewController.swift` | 1277 | warning |
 | `PooToolsSource/Picker/PTBasePickerView.swift` | 1399 | warning |
 | `PooToolsSource/ScrollBanner/PTBannerView.swift` | 1177 | warning |

@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 protocol HierarchyInspectorViewCodeDelegate: AnyObject {
     func hierarchyInspectorViewCodeDidTapOutside(_ view: HierarchyInspectorViewCode)

@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 private extension ElementInspectorSlidingPanelAnimator {
     final class BackgroundGestureView: BaseView {

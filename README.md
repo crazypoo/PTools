@@ -11,7 +11,9 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.64.1`，真机/宿主回归与发布证据完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.64.4`，真机/宿主回归与发布证据完成前不创建正式 tag。
+
+5.64.4 修复 SwiftPM 与 CocoaPods 独立 Target 对聚合模块符号的隐式依赖：调试诊断显式导入 UIKit，Input、Stepper、Router、SocketKit、Share、DEBUG 和权限相关入口的模块依赖保持显式且一致。
 
 5.64.1 为 `PTRichText` 的 `.image`、远程图片和动态图片附件增加 `baselineOffset`。例如：
 
