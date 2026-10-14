@@ -6,6 +6,12 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.64.8 — 2026-10-14
+
+- 修复默认 `Core` / `Device` 被动导入 CoreNFC 的问题；未使用 NFC 的宿主不再因为 `PTDeviceCapability.nfc` 检测而携带 NFC 框架。
+- 保留 `PTDeviceCapability.nfc` 兼容枚举；需要 NFC 时必须显式接入 `PooTools/NFCKit`，该入口单独声明 CoreNFC 框架。
+- 补充 NFC opt-in、App Review Notes、Info.plist 和 entitlement 的使用边界说明。
+
 ## 5.64.6 — 2026-10-14
 
 - 统一 Input TextFieldEffects 与独立 `PTHoshiTextField` 的占位符、富文本、字体、间距和编辑区域配置；保留旧拼写 `textAndPlceholderSpace` 作为弃用兼容入口。

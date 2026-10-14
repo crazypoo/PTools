@@ -4,6 +4,8 @@
 
 SwiftPM 选择 `PToolsDevice` product；CocoaPods 选择 `PooTools/Device`。使用完整 Core 时会自动带入 Device subspec。
 
+默认 `PToolsDevice` / `PooTools/Device` 不链接 CoreNFC；`PTDeviceCapability.nfc` 在未显式接入 NFC 时返回 `.unsupported`。只有确实需要读取或写入 NFC 时才添加 `PooTools/NFCKit`，并由宿主自行提供 Apple 要求的 NFC 使用说明和对应能力配置。没有 NFC 功能的 App 不应添加 `NFCReaderUsageDescription` 或 NFC entitlement，并应在 App Review Notes 中明确说明未使用 NFC。
+
 ## 查询设备身份
 
 ```swift

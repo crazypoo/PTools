@@ -1,8 +1,15 @@
 # PTools 路线图
 
-> 当前代码基线：`5.64.6`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.64.8`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.64.6` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.64.7`；`5.64.8` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.64.8 默认 Core 移除隐式 NFC 依赖
+
+- ✅ 默认 `PToolsDevice` / `PooTools/Device` 不再导入或链接 CoreNFC，避免未使用 NFC 的宿主触发 App Review 的 NFC 能力询问。
+- ✅ `PooTools/NFCKit` 保留为显式可选入口并单独声明 CoreNFC；`PTDeviceCapability.nfc` 公共枚举保持兼容。
+- ✅ 补齐 NFC opt-in、Info.plist、entitlement 和 App Review Notes 说明。
+- ⬜ 真实宿主需重新安装 5.64.8 后检查最终 App 二进制链接和审核元数据；未使用 NFC 的宿主仍需移除自身工程里的 NFC 配置。
 
 ## 5.64.6 Input TextFieldEffects 与图片清晰度统一升级
 

@@ -1427,6 +1427,7 @@ Pod::Spec.new do |s|
     s.subspec 'NFCKit' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.source_files = 'PooToolsSource/NFC/*.{h,m,swift}'
+        subspec.frameworks = 'CoreNFC'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_NFC POOTOOLS_COCOAPODS"
         }

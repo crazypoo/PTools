@@ -14,7 +14,7 @@ Apple framework capability checks
 Core compatibility aliases / feature modules
 ```
 
-`PToolsDevice` 位于 `PooToolsSource/PToolsDevice`，只依赖 Foundation；UIKit、AVFoundation、LocalAuthentication、CoreMotion、CoreLocation 和 CoreNFC 仅在平台能力分支中使用。运行时不解析 JSON。
+`PToolsDevice` 位于 `PooToolsSource/PToolsDevice`，默认只依赖 Foundation；默认 Device/Core 不导入或链接 CoreNFC，避免未使用 NFC 的宿主被动携带 NFC 能力。真正的 NFC 读取/写入只由显式 `NFCKit` 入口提供。运行时不解析 JSON。
 
 ## 身份与能力分离
 
@@ -30,7 +30,7 @@ let nfcStatus = await device.status(for: .nfc)
 
 ## 构建边界
 
-- SwiftPM `PToolsDevice` 单独提供 iOS 17、macOS 14、tvOS 17、watchOS 10 和 visionOS 1 的 Foundation-first 能力。
+- SwiftPM `PToolsDevice` 单独提供 iOS 17、macOS 14、tvOS 17、watchOS 10 和 visionOS 1 的 Foundation-first 能力；NFC 不属于默认产品。
 - `ptools`、`PooToolsAll` 和 CocoaPods 根 Pod 仍按 UIKit/iOS 17 约束构建，不能据此宣称所有功能跨平台。
 - CocoaPods 使用 `PooTools/Device` subspec；Core 通过它替代 DeviceKit。
 

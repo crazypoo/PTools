@@ -16,10 +16,6 @@ import CoreMotion
 import CoreLocation
 #endif
 
-#if canImport(CoreNFC)
-import CoreNFC
-#endif
-
 public enum PTDeviceCapabilityResolver {
     public static func status(for capability: PTDeviceCapability, device: PTDevice) async -> PTDeviceCapabilityStatus {
         if device.isSimulator {
@@ -57,11 +53,10 @@ public enum PTDeviceCapabilityResolver {
         case .touchID:
             return device.isTouchIDCapable ? .available : .unsupported
         case .nfc:
-            #if canImport(CoreNFC)
-            return NFCNDEFReaderSession.readingAvailable ? .available : .unsupported
-            #else
+            // English: Keep the NFC framework out of the default Device/Core binary; NFC is an explicit opt-in feature.
+            // Español: Mantiene el framework NFC fuera del binario Device/Core predeterminado; NFC es una función opt-in explícita.
+            // 中文：默认 Device/Core 不链接 NFC 框架；NFC 必须作为显式可选功能接入。
             return .unsupported
-            #endif
         case .motion:
             #if canImport(CoreMotion) && (os(iOS) || os(tvOS) || os(watchOS))
             return CMMotionManager().isDeviceMotionAvailable ? .available : .unsupported
