@@ -159,8 +159,11 @@ import UIKit
     
     /// 更新占位符状态
     private func updatePlaceholder() {
-        placeholderLabel.text = placeholder
-        placeholderLabel.textColor = placeholderColor
+        applyPlaceholder(to: placeholderLabel,
+                         text: placeholder,
+                         font: currentFont,
+                         color: placeholderColor,
+                         scale: placeholderFontScale)
         placeholderLabel.sizeToFit()
         layoutPlaceholderInTextRect()
         
@@ -169,10 +172,18 @@ import UIKit
             animateViewsForTextEntry()
         }
     }
+
+    // English: Refresh Madoka's label without resetting its drawing transform.
+    // Español: Actualiza la etiqueta de Madoka sin reiniciar su transformación de dibujo.
+    // 中文：刷新 Madoka 标签，不重置原有绘制变换。
+    override open func refreshPlaceholderAppearance() {
+        updatePlaceholder()
+    }
     
     /// 计算缩放后的占位符字体
     private func placeholderFontFromFont(_ font: UIFont) -> UIFont {
-        return UIFont(descriptor: font.fontDescriptor, size: font.pointSize * placeholderFontScale)
+        inputAppearance.placeholderFontOverride ?? UIFont(descriptor: font.fontDescriptor,
+                                                           size: font.pointSize * placeholderFontScale)
     }
     
     /// 计算边框应当处于的位置 (为占位符等元素腾出空间)
@@ -208,12 +219,12 @@ import UIKit
     /// 返回处于编辑状态时的文本绘制区域
     override open func editingRect(forBounds bounds: CGRect) -> CGRect {
         let newBounds = rectForBorder(bounds)
-        return newBounds.insetBy(dx: textFieldInsets.x, dy: 0)
+        return applySharedTextRect(newBounds.insetBy(dx: textFieldInsets.x, dy: 0), bounds: bounds)
     }
     
     /// 返回正常的文本绘制区域
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
         let newBounds = rectForBorder(bounds)
-        return newBounds.insetBy(dx: textFieldInsets.x, dy: 0)
+        return applySharedTextRect(newBounds.insetBy(dx: textFieldInsets.x, dy: 0), bounds: bounds)
     }
 }

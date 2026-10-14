@@ -60,7 +60,8 @@ public enum PTImageDownsampler {
         guard let image = CGImageSourceCreateThumbnailAtIndex(source, 0, options) else {
             return nil
         }
-        return UIImage(cgImage: image)
+        let safeScale = scale.isFinite && scale > 0 ? scale : 1
+        return UIImage(cgImage: image, scale: safeScale, orientation: .up)
     }
 
     private nonisolated static func maximumPixelSize(for targetSize: CGSize?,

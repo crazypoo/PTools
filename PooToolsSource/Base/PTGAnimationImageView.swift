@@ -26,31 +26,26 @@ open class PTGAnimationImageView: UIView {
                                 lottieView.animation = findAnimation
                                 lottieView.play()
                             } else {
-                                lottieView.isHidden = true
-                                lottieView.stop()
-                                imageBG.isHidden = false
-                                imageBG.loadImage(contentData: urlString)
+                                imageSet(media: urlString)
                             }
                         }
                     } else {
-                        lottieView.isHidden = true
-                        lottieView.stop()
-                        imageBG.isHidden = false
-                        imageBG.loadImage(contentData: urlString)
+                        imageSet(media: urlString)
                     }
                 default:
-                    lottieView.isHidden = true
-                    lottieView.stop()
-                    imageBG.isHidden = false
-                    imageBG.loadImage(contentData: findAny)
+                    imageSet(media: findAny)
                 }
             } else {
-                lottieView.stop()
-                lottieView.isHidden = true
-                imageBG.isHidden = false
-                imageBG.image = PTAppBaseConfig.share.defaultPlaceholderImage
+                imageSet(media: PTAppBaseConfig.share.defaultPlaceholderImage)
             }
         }
+    }
+    
+    private func imageSet(media:Any) {
+        lottieView.stop()
+        lottieView.isHidden = true
+        imageBG.isHidden = false
+        imageBG.loadImage(contentData: media,emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage)
     }
     
     public override var contentMode: UIView.ContentMode {

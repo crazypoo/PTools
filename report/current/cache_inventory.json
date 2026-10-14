@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29",
-  "generated_at": "2026-10-14T06:07:24Z",
+  "source_revision": "486435925e25155cc3fab847fbe7c076e7f31883",
+  "generated_at": "2026-10-14T08:12:54Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -239,6 +239,12 @@
       "text": "// Keep invalid dimensions out of integer conversion and make the cache key deterministic."
     },
     {
+      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
+      "line": 542,
+      "kind": "disk or custom cache",
+      "text": "// English: Version the key because this cache now stores pixel-bounded covers."
+    },
+    {
       "path": "PooToolsSource/Button/PTActionLayoutButton.swift",
       "line": 103,
       "kind": "disk or custom cache",
@@ -336,79 +342,79 @@
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 192,
+      "line": 193,
       "kind": "NSCache",
       "text": "cache = NSCache()"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 349,
+      "line": 350,
       "kind": "disk or custom cache",
       "text": "/// Update cache for the current imageView."
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 357,
+      "line": 358,
       "kind": "disk or custom cache",
       "text": "cache?.removeAllObjects()"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 384,
+      "line": 385,
       "kind": "disk or custom cache",
       "text": "if haveCache, let image = cache?.object(forKey: displayOrderIndex as AnyObject) as? UIImage {"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 432,
+      "line": 433,
       "kind": "disk or custom cache",
       "text": "cache?.removeAllObjects()"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 464,
+      "line": 465,
       "kind": "NSCache",
       "text": "/// Prepare the cache by adding every images of the gif to an NSCache object."
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 466,
+      "line": 467,
       "kind": "disk or custom cache",
       "text": "guard let cache = self.cache else { return }"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 467,
+      "line": 468,
       "kind": "disk or custom cache",
       "text": "cache.removeAllObjects()"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 475,
+      "line": 476,
       "kind": "disk or custom cache",
       "text": "cache.setObject(UIImage(cgImage: cgImage), forKey: i as AnyObject)"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 491,
+      "line": 492,
       "kind": "disk or custom cache",
       "text": "static var cache: UInt8 = 0"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 577,
+      "line": 578,
       "kind": "NSCache",
       "text": "private var cache: NSCache<AnyObject, AnyObject>? {"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 578,
+      "line": 579,
       "kind": "NSCache",
       "text": "get { objc_getAssociatedObject(self, &AssociatedKeys.cache) as? NSCache }"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 579,
+      "line": 580,
       "kind": "disk or custom cache",
       "text": "set { objc_setAssociatedObject(self, &AssociatedKeys.cache, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }"
     },
@@ -450,7 +456,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 550,
+      "line": 591,
       "kind": "disk or custom cache",
       "text": "// Prefer Kingfisher's embedded original bytes before asking the cache serializer for data."
     },

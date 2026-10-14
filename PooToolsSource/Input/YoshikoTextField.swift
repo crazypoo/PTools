@@ -125,16 +125,19 @@ import UIKit
         placeholderLabel.frame = placeholderRect(forBounds: bounds)
         placeholderLabel.textAlignment = textAlignment
 
-        if isFirstResponder || isTextNotEmpty {
-            // 修复 Bug：正确使用传入的 percentageOfOriginalSize 进行二次缩放计算
-            placeholderLabel.font = placeholderFontFromFont(font: currentFont, percentageOfOriginalSize: placeholderFontScale * 0.8)
-            placeholderLabel.text = placeholder?.uppercased() // 激活时转为大写
-            placeholderLabel.textColor = activeBorderColor
-        } else {
-            placeholderLabel.font = placeholderFontFromFont(font: currentFont, percentageOfOriginalSize: placeholderFontScale)
-            placeholderLabel.text = placeholder
-            placeholderLabel.textColor = placeholderColor
-        }
+        let isActive = isFirstResponder || isTextNotEmpty
+        applyPlaceholder(to: placeholderLabel,
+                         text: isActive ? placeholder?.uppercased() : placeholder,
+                         font: currentFont,
+                         color: isActive ? activeBorderColor : placeholderColor,
+                         scale: isActive ? placeholderFontScale * 0.8 : placeholderFontScale)
+    }
+
+    // English: Refresh Yoshiko with its state-specific uppercase and border rules.
+    // Español: Actualiza Yoshiko respetando sus reglas de mayúsculas y bordes por estado.
+    // 中文：刷新 Yoshiko，同时保留按状态大写和边框规则。
+    override open func refreshPlaceholderAppearance() {
+        updatePlaceholder()
     }
     
     /// 修复 Bug 后的字体缩放计算方法
@@ -223,18 +226,24 @@ import UIKit
     /// 返回正常的文本绘制区域
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
         // 让出顶部的高度，保证输入的文本不会和上浮的占位符重叠
-        return CGRect(x: textFieldInsets.x,
-                      y: placeholderHeight,
-                      width: bounds.width - (textFieldInsets.x * 2),
-                      height: bounds.height - placeholderHeight)
+        return applySharedTextRect(CGRect(x: textFieldInsets.x,
+                                          y: placeholderHeight,
+                                          width: bounds.width - (textFieldInsets.x * 2),
+                                          height: bounds.height - placeholderHeight),
+                                   bounds: bounds)
     }
     
     // MARK: - Interface Builder 支持
     
     /// 支持在 Storyboard 或 XIB 中实时预览时，确保占位符可见
     open override func prepareForInterfaceBuilder() {
+        // English: Interface Builder may call this hook outside the main-actor context.
+        // Español: Interface Builder puede llamar a este método fuera del contexto del actor principal.
+        // 中文：Interface Builder 可能在非主 actor 上下文调用此方法。
         Task { @MainActor [weak self] in
             self?.placeholderLabel.alpha = 1
+            self?.setNeedsLayout()
+            self?.setNeedsDisplay()
         }
     }
 }

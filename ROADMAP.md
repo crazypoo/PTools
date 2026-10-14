@@ -1,8 +1,17 @@
 # PTools 路线图
 
-> 当前代码基线：`5.64.5`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.64.6`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.64.5` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.64.6` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.64.6 Input TextFieldEffects 与图片清晰度统一升级
+
+- ✅ 为九种 TextFieldEffects 样式和 PTHoshiTextField 接入共享外观、占位符渲染、间距、leading 和编辑区域配置，保留旧属性与拼写兼容入口。
+- ✅ 修复绘制初始化、布局重复执行、程序化文本、编辑状态和富文本占位符清理问题；不再依赖重复 NotificationCenter 观察者或直接调用 `layoutSubviews()`。
+- ✅ 补齐 Input 的 SwiftPM/CocoaPods 直接依赖，增加统一 Input 示例、富文本/清空/间距/RTL/Dynamic Type/焦点状态演示和三语指南。
+- ✅ 统一本地、数据、远程、PhotoKit 和视频图片加载的点数/像素/屏幕 scale 处理；保留 placeholder、取消、generation、GIF、视频和 iCloud 行为。
+- ✅ 统一 UIImageView、UIButton、PhotoPicker 和视频封面缓存的目标尺寸与缓存键，增加图片清晰度 Demo、指南和 5.64.6 版本记录。
+- ⬜ 真机、PhotoKit iCloud、GIF/视频和业务宿主的视觉回归仍需外部环境验证。
 
 ## 5.64.5 SwiftPM 全仓跨 target 兼容性闭环
 

@@ -85,7 +85,8 @@ public extension UIImageView {
                                                      valueLabelColor: valueLabelColor,
                                                      uniCount: uniCount,
                                                      emptyImage: emptyImage,
-                                                     targetSize: targetSize)
+                                                     targetSize: targetSize,
+                                                     displayScale: window?.screen.scale ?? UIScreen.main.scale)
         pt_loadCoreImage(
             contentData: contentData,
             configuration: configuration,

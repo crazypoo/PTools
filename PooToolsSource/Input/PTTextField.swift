@@ -19,6 +19,7 @@ public class PTTextCustomRightViewConfig: NSObject {
     open var rightSpace: CGFloat = 5
 }
 
+@MainActor
 @objcMembers
 public class PTTextField: UITextField {
     
@@ -28,6 +29,31 @@ public class PTTextField: UITextField {
         didSet {
             // 当左侧间距改变时，通知系统重新布局文本区域
             setNeedsLayout()
+        }
+    }
+
+    // English: Expose the shared leading inset name while keeping the legacy leftSpace API.
+    // Español: Expone el nombre compartido de margen inicial y conserva la API heredada leftSpace.
+    // 中文：提供统一的 leadingSpace 名称，同时保留旧的 leftSpace API。
+    open var leadingSpace: CGFloat {
+        get { leftSpace }
+        set { leftSpace = max(0, newValue) }
+    }
+
+    // English: Keep the composite field's text geometry compatible with TextFieldEffects.
+    // Español: Mantiene la geometría del texto compatible con TextFieldEffects.
+    // 中文：让复合输入框的文本几何配置与 TextFieldEffects 保持一致。
+    open var textEditingEdges: UIEdgeInsets = .zero {
+        didSet { setNeedsLayout() }
+    }
+
+    // English: Bridge the shared input configuration without changing the right-action contract.
+    // Español: Conecta la configuración compartida sin cambiar el contrato de la acción derecha.
+    // 中文：接入统一输入配置，同时不改变右侧按钮行为契约。
+    open var inputAppearance = PTInputAppearance() {
+        didSet {
+            leadingSpace = inputAppearance.leadingSpace
+            textEditingEdges = inputAppearance.textEditingEdges
         }
     }
     
@@ -96,21 +122,37 @@ public class PTTextField: UITextField {
     
     /// 控制非编辑状态下文字的显示区域（实现 leftSpace）
     public override func textRect(forBounds bounds: CGRect) -> CGRect {
-        var rect = super.textRect(forBounds: bounds)
-        if leftSpace > 0 {
-            rect.origin.x += leftSpace
-            rect.size.width -= leftSpace
-        }
-        return rect
+        let rect = super.textRect(forBounds: bounds)
+        return applyInputInsets(to: rect, bounds: bounds)
     }
     
     /// 控制编辑状态下文字的输入区域（实现 leftSpace）
     public override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        var rect = super.editingRect(forBounds: bounds)
-        if leftSpace > 0 {
-            rect.origin.x += leftSpace
-            rect.size.width -= leftSpace
+        let rect = super.editingRect(forBounds: bounds)
+        return applyInputInsets(to: rect, bounds: bounds)
+    }
+
+    // English: Apply each inset exactly once and keep the result inside valid bounds.
+    // Español: Aplica cada margen una sola vez y mantiene el resultado dentro de límites válidos.
+    // 中文：每个内边距只计算一次，并保证结果始终处于有效边界内。
+    private func applyInputInsets(to rect: CGRect, bounds: CGRect) -> CGRect {
+        var resolved = rect.inset(by: textEditingEdges)
+        let space = max(0, leftSpace)
+        guard space > 0 else {
+            resolved.size.width = max(0, resolved.width)
+            resolved.size.height = max(0, resolved.height)
+            return resolved
         }
-        return rect
+
+        let direction = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute)
+        let safeSpace = min(space, max(0, resolved.width))
+        if direction == .rightToLeft {
+            resolved.size.width = max(0, resolved.width - safeSpace)
+        } else {
+            resolved.origin.x += safeSpace
+            resolved.size.width = max(0, resolved.width - safeSpace)
+        }
+        resolved.size.height = max(0, resolved.height)
+        return resolved
     }
 }

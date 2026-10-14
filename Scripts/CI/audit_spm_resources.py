@@ -50,9 +50,12 @@ def main() -> int:
                     "status": "manual-bundle-review",
                 })
 
+    # English: Keep generated resource audits stable for git diff and CI portability.
+    # Español: Mantén estables las auditorías de recursos generadas para git diff y la portabilidad de CI.
+    # 中文：让资源审计报告在 git diff 和 CI 环境中保持稳定。
     with (output / "resources.csv").open("w", newline="") as handle:
         fields = ["ownerTarget", "kind", "path", "line", "expression", "status"]
-        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
     print(f"resource_entries={len(rows)}")

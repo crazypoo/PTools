@@ -176,18 +176,21 @@ def main() -> int:
 
     (output / "symbol_declarations.json").write_text(json.dumps(declarations, ensure_ascii=False, indent=2) + "\n")
     (output / "symbol_references.json").write_text(json.dumps(references, ensure_ascii=False, indent=2) + "\n")
+    # English: Keep generated CSVs line-ending stable across macOS and CI runners.
+    # Español: Mantén estables los finales de línea de los CSV generados entre macOS y CI.
+    # 中文：确保生成的 CSV 在 macOS 和 CI Runner 上使用一致的换行符。
     with (output / "cross_target_findings.csv").open("w", newline="") as handle:
         columns = ["source", "line", "ownerTarget", "requiredTarget", "currentImport", "symbolName", "severity", "status", "fixStrategy", "fixCommit", "buildEvidence"]
-        writer = csv.DictWriter(handle, fieldnames=columns)
+        writer = csv.DictWriter(handle, fieldnames=columns, lineterminator="\n")
         writer.writeheader()
         writer.writerows(findings)
     with (output / "public_api_contracts.csv").open("w", newline="") as handle:
         columns = ["symbolID", "symbolName", "declarationPath", "line", "ownerTarget", "kind", "accessLevel", "extensionReceiverType", "availability", "conditionalCompilationBranch"]
-        writer = csv.DictWriter(handle, fieldnames=columns)
+        writer = csv.DictWriter(handle, fieldnames=columns, lineterminator="\n")
         writer.writeheader()
         writer.writerows(declarations)
     with (output / "category_public_api_ownership.csv").open("w", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["path", "ownerTarget", "category_extension", "public_member_count"])
+        writer = csv.DictWriter(handle, fieldnames=["path", "ownerTarget", "category_extension", "public_member_count"], lineterminator="\n")
         writer.writeheader()
         for relative in sorted(ownership):
             if "/Category/" not in f"/{relative}" or not relative.endswith(".swift"):

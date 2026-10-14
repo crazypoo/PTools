@@ -46,6 +46,7 @@ public class PTFloatingPlaseholderConfig: NSObject {
     public var textAlignment: NSTextAlignment = .left    
 }
 
+@MainActor
 public class PTFloatingPlaseholderTextField: UIView {
 
     // 【优化】避免使用 !，直接赋初始值，防止 init(coder:) 时崩溃
@@ -58,6 +59,38 @@ public class PTFloatingPlaseholderTextField: UIView {
     // 【优化】缓存富文本，避免每次动画都重新生成字符串（提升性能）
     private var cachedNormalAttString: PTRichText?
     private var cachedFloatingAttString: PTRichText?
+    private var didSetupUI = false
+
+    // English: Bridge the shared appearance into the composite field and its floating label.
+    // Español: Conecta la apariencia compartida con el campo compuesto y su etiqueta flotante.
+    // 中文：把统一外观配置桥接到复合输入框及其浮动标签。
+    public var inputAppearance = PTInputAppearance() {
+        didSet { applyInputAppearance() }
+    }
+
+    public var textAndPlaceholderSpace: CGFloat {
+        get { inputAppearance.textAndPlaceholderSpace }
+        set {
+            var appearance = inputAppearance
+            appearance.textAndPlaceholderSpace = max(0, newValue)
+            inputAppearance = appearance
+        }
+    }
+
+    @available(*, deprecated, message: "Use textAndPlaceholderSpace instead")
+    public var textAndPlceholderSpace: CGFloat {
+        get { textAndPlaceholderSpace }
+        set { textAndPlaceholderSpace = newValue }
+    }
+
+    public var leadingSpace: CGFloat {
+        get { inputAppearance.leadingSpace }
+        set {
+            var appearance = inputAppearance
+            appearance.leadingSpace = max(0, newValue)
+            inputAppearance = appearance
+        }
+    }
     
     public var inputedCallback: ((String) -> Void)?
     public var inputBegainCallback: PTActionTask?
@@ -164,6 +197,56 @@ public class PTFloatingPlaseholderTextField: UIView {
         
         // 初始调用一次绘制
         updateBorderPath()
+        didSetupUI = true
+        applyInputAppearance()
+    }
+
+    // English: Update only installed constraints so repeated configuration stays idempotent.
+    // Español: Actualiza solo las restricciones instaladas para que la configuración repetida sea idempotente.
+    // 中文：只更新已经安装的约束，让重复配置保持幂等。
+    private func applyInputAppearance() {
+        guard didSetupUI else { return }
+
+        if let color = inputAppearance.placeholderColorOverride {
+            viewConfig.normalPlaceholderColor = color
+            viewConfig.floatingPlaceholderColor = color
+        }
+        if let font = inputAppearance.placeholderFontOverride {
+            viewConfig.normalPlaceholderFont = font
+            viewConfig.floatingPlaceholderFont = font
+            textField.font = font
+        }
+
+        placeholderLabel.attributedText = nil
+        setFloating(isFloating || !(textField.text ?? "").isEmpty, animated: false)
+        updateInputConstraints()
+        placeholderLabel.attributedText = resolvedPlaceholder(isNormal: !isFloating)?.value
+        placeholderLabel.invalidateIntrinsicContentSize()
+        updateBorderPath()
+    }
+
+    private func updateInputConstraints() {
+        let leading = max(0, inputAppearance.leadingSpace)
+        let edges = inputAppearance.textEditingEdges
+        let leftInset = max(0, viewConfig.insidePadding + leading + edges.left)
+        let rightInset = max(0, viewConfig.insidePadding + edges.right)
+        let topInset = max(0, viewConfig.floatingPlaceholderFont.pointSize / 2 + edges.top)
+        let bottomInset = max(0, viewConfig.floatingPlaceholderFont.pointSize / 2 + edges.bottom)
+
+        placeholderLabel.snp.updateConstraints { make in
+            make.left.equalToSuperview().offset(leftInset + viewConfig.placeholderPaddingOffset)
+            if !viewConfig.haveAction {
+                make.right.equalToSuperview().inset(rightInset)
+            }
+        }
+        textField.snp.updateConstraints { make in
+            make.left.equalToSuperview().inset(leftInset)
+            if !viewConfig.haveAction {
+                make.right.equalToSuperview().inset(rightInset)
+            }
+            make.top.equalToSuperview().inset(topInset)
+            make.bottom.equalToSuperview().inset(bottomInset)
+        }
     }
 
     public override func layoutSubviews() {
@@ -176,8 +259,10 @@ public class PTFloatingPlaseholderTextField: UIView {
     }
     
     private func getPlaceholderAtt(mainString: String, isNormal: Bool) -> PTRichText {
-        let plaseHolderFont = isNormal ? viewConfig.normalPlaceholderFont : viewConfig.floatingPlaceholderFont
-        let plaseHolderColor = isNormal ? viewConfig.normalPlaceholderColor : viewConfig.floatingPlaceholderColor
+        let plaseHolderFont = inputAppearance.placeholderFontOverride
+            ?? (isNormal ? viewConfig.normalPlaceholderFont : viewConfig.floatingPlaceholderFont)
+        let plaseHolderColor = inputAppearance.placeholderColorOverride
+            ?? (isNormal ? viewConfig.normalPlaceholderColor : viewConfig.floatingPlaceholderColor)
         var placeholderAtt: PTRichText = """
                     \(wrap: .embedding("""
                     \(mainString,.foreground(plaseHolderColor),.font(plaseHolderFont),.paragraph(.alignment(viewConfig.textAlignment)))
@@ -201,7 +286,7 @@ public class PTFloatingPlaseholderTextField: UIView {
         self.cachedNormalAttString = getPlaceholderAtt(mainString: placeholder, isNormal: true)
         self.cachedFloatingAttString = getPlaceholderAtt(mainString: placeholder, isNormal: false)
         
-        placeholderLabel.attributedText = cachedNormalAttString?.value
+        placeholderLabel.attributedText = resolvedPlaceholder(isNormal: true)?.value
         textField.text = text
 
         let textIsNotEmpty = !(text ?? "").stringIsEmpty()
@@ -230,7 +315,7 @@ public class PTFloatingPlaseholderTextField: UIView {
         isFloating = float
 
         placeholderLabel.snp.remakeConstraints { make in
-            make.left.equalToSuperview().offset(self.viewConfig.insidePadding + self.viewConfig.placeholderPaddingOffset)
+            make.left.equalToSuperview().offset(self.viewConfig.insidePadding + self.inputAppearance.leadingSpace + self.viewConfig.placeholderPaddingOffset)
             if float {
                 make.top.equalToSuperview().offset(self.viewConfig.placeholderFloatingTopOffset)
             } else {
@@ -245,7 +330,7 @@ public class PTFloatingPlaseholderTextField: UIView {
 
         let animations = {
             // 【优化】直接使用预先缓存的字符串，不用重复计算
-            self.placeholderLabel.attributedText = (float ? self.cachedFloatingAttString : self.cachedNormalAttString)?.value
+            self.placeholderLabel.attributedText = self.resolvedPlaceholder(isNormal: !float)?.value
             self.layoutIfNeeded()
             self.updateBorderPath()
         }
@@ -257,6 +342,13 @@ public class PTFloatingPlaseholderTextField: UIView {
         }
     }
 
+    // English: Prefer the caller's rich placeholder and keep generated state-specific fallbacks.
+    // Español: Prefiere el marcador enriquecido del llamador y conserva los reemplazos por estado.
+    // 中文：优先使用调用方富文本占位符，同时保留按状态生成的回退内容。
+    private func resolvedPlaceholder(isNormal: Bool) -> PTRichText? {
+        inputAppearance.placeholderAtt ?? (isNormal ? cachedNormalAttString : cachedFloatingAttString)
+    }
+
     // MARK: - Border Path
     private func updateBorderPath() {
         let rect = bounds
@@ -264,8 +356,8 @@ public class PTFloatingPlaseholderTextField: UIView {
 
         let radius: CGFloat = viewConfig.containerRadius
         let labelWidth = placeholderLabel.intrinsicContentSize.width + viewConfig.placeholderWidthOffset
-        let gapStartX = viewConfig.insidePadding
-        let gapEndX = viewConfig.insidePadding + labelWidth
+        let gapStartX = viewConfig.insidePadding + max(0, inputAppearance.leadingSpace)
+        let gapEndX = gapStartX + labelWidth
 
         let path = UIBezierPath()
         path.move(to: CGPoint(x: radius, y: 0))

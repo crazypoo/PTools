@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29",
-  "generated_at": "2026-10-14T06:07:48Z",
+  "source_revision": "486435925e25155cc3fab847fbe7c076e7f31883",
+  "generated_at": "2026-10-14T08:22:39Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -7818,6 +7818,17 @@
           }
         },
         {
+          "name": "PToolsUIFoundation",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsUIFoundation",
+              null
+            ]
+          }
+        },
+        {
           "name": "ptools",
           "kind": "internal",
           "package": null,
@@ -7837,6 +7848,17 @@
           "declaration": {
             "byName": [
               "PhoneNumberKit",
+              null
+            ]
+          }
+        },
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
               null
             ]
           }

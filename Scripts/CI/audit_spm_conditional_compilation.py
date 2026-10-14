@@ -70,9 +70,12 @@ def main() -> int:
                 "review": "compare-cocoapods-macro",
             })
 
+    # English: Emit portable LF records so generated audits pass repository whitespace checks.
+    # Español: Emite registros LF portátiles para que las auditorías generadas pasen los controles de espacios.
+    # 中文：使用可移植的 LF 换行输出生成报告，避免触发仓库空白检查。
     with (output / "conditional_compile_matrix.csv").open("w", newline="") as handle:
         fields = ["ownerTarget", "path", "line", "directive", "condition", "activeBranch", "review"]
-        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
     print(f"conditional_branches={len(rows)}")

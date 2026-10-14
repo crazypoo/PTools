@@ -52,8 +52,7 @@ import UIKit
     
     override open var bounds: CGRect {
         didSet {
-            // 当 bounds 发生变化时，重新布局视图
-            drawViewsForRect(bounds)
+            setNeedsLayout()
         }
     }
     
@@ -147,13 +146,24 @@ import UIKit
     
     /// 更新占位符状态
     private func updatePlaceholder() {
-        placeholderLabel.text = placeholder
-        placeholderLabel.textColor = placeholderColor
+        applyPlaceholder(to: placeholderLabel,
+                         text: placeholder,
+                         font: currentFont,
+                         color: placeholderColor ?? .black,
+                         scale: placeholderFontScale)
+    }
+
+    // English: Refresh Kaede's placeholder while leaving its sliding foreground intact.
+    // Español: Actualiza el marcador de Kaede y conserva su primer plano deslizante.
+    // 中文：刷新 Kaede 占位符，同时保留滑动前景层。
+    override open func refreshPlaceholderAppearance() {
+        updatePlaceholder()
     }
     
     /// 计算缩放后的占位符字体
     private func placeholderFontFromFont(_ font: UIFont) -> UIFont {
-       return UIFont(descriptor: font.fontDescriptor, size: font.pointSize * placeholderFontScale)
+       return inputAppearance.placeholderFontOverride ?? UIFont(descriptor: font.fontDescriptor,
+                                                                  size: font.pointSize * placeholderFontScale)
     }
     
     // MARK: - UITextField 边界区域重写 (Overrides)
@@ -168,7 +178,7 @@ import UIKit
             frame.origin = CGPoint(x: bounds.size.width - frame.size.width, y: frame.origin.y)
         }
 
-        return frame.insetBy(dx: textFieldInsets.x, dy: textFieldInsets.y)
+        return applySharedTextRect(frame.insetBy(dx: textFieldInsets.x, dy: textFieldInsets.y), bounds: bounds)
     }
     
     /// 返回正常的文本绘制区域

@@ -123,6 +123,7 @@ enum PTDemoRegistry {
         make("network.local-network", "PToolsHTTPFilePortal", "局域网传送", .networkConnectivity, .scenario, .sheet, .runnable, legacy: "局域网传送", tags: ["network", "http", "local"]),
         make("network.ptmodel-lab", "PooToolsNetwork", "PTModel + Typed Network", .networkConnectivity, .interactive, .push, .runnable, legacy: "PTModel + Typed Network", tags: ["network", "ptmodel", "nested-json", "model-path"]),
         make("media.image-review", "PooToolsMediaViewer", "图片展示", .mediaGraphics, .interactive, .fullScreen, .runnable, legacy: "图片展示", tags: ["image", "gif", "video"]),
+        make("media.image-clarity", "PooToolsCore", "Image Loading Clarity", .mediaGraphics, .interactive, .push, .runnable, tags: ["image", "placeholder", "downsampling", "scale"]),
         make("media.video-editor", "PooToolsVideoEditor", "视频编辑", .mediaGraphics, .hostRequired, .fullScreen, .physicalDeviceRequired, [.photoLibrary, .physicalDevice], legacy: "视频编辑", tags: ["video", "export"]),
         make("media.signature", "PooToolsHandSign", "签名", .mediaGraphics, .interactive, .sheet, .runnable, legacy: "签名", tags: ["drawing"]),
         make("media.dynamic-code", "PooToolsCodeView", "动态验证码", .mediaGraphics, .interactive, .sheet, .runnable, legacy: "动态验证码", tags: ["code"]),
@@ -329,6 +330,8 @@ final class PTDemoCoordinator {
             return PTControlMenuDemoViewController()
         case "input.all-styles":
             return PTInputStylesDemoViewController()
+        case "media.image-clarity":
+            return PTImageClarityDemoViewController()
         case "infrastructure.database":
             return PTDatabaseInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
         case "infrastructure.auth":
@@ -2029,6 +2032,87 @@ private final class PTCollectionRefreshLabViewController: PTBaseViewController {
     }
 }
 
+// English: Show the shared image placeholder and display-size pipeline with local fixture data.
+// Español: Muestra el placeholder compartido y el canal de tamaño de pantalla con datos locales.
+// 中文：使用本地样例展示统一占位图和显示尺寸图片加载管线。
+@MainActor
+private final class PTImageClarityDemoViewController: PTBaseViewController {
+    private let stackView = UIStackView()
+    private var imageViews: [UIImageView] = []
+    private var didLoadImages = false
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = "Image Clarity"
+        view.backgroundColor = .systemBackground
+
+        let scrollView = UIScrollView()
+        stackView.axis = .vertical
+        stackView.spacing = 16
+        stackView.addArrangedSubview(makeDescription())
+        stackView.addArrangedSubview(makeImageRow(title: "72pt display target", height: 72))
+        stackView.addArrangedSubview(makeImageRow(title: "144pt display target", height: 144))
+        stackView.addArrangedSubview(makeImageRow(title: "216pt display target", height: 216))
+
+        view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        stackView.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView.contentLayoutGuide).inset(20)
+            make.width.equalTo(scrollView.frameLayoutGuide).offset(-40)
+        }
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard !didLoadImages else { return }
+        let imageData = UIImage(named: "DemoImage")?.pngData()
+        guard let imageData else { return }
+        didLoadImages = true
+        imageViews.forEach { imageView in
+            imageView.loadImage(contentData: imageData,
+                                emptyImage: UIImage(systemName: "photo"))
+        }
+    }
+
+    private func makeDescription() -> UILabel {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = .preferredFont(forTextStyle: .subheadline)
+        label.textColor = .secondaryLabel
+        label.text = "占位图立即显示，布局稳定后按实际显示尺寸和屏幕比例解码。\nPlaceholder first, display-sized decoding after layout."
+        return label
+    }
+
+    private func makeImageRow(title: String, height: CGFloat) -> UIView {
+        let container = UIView()
+        let label = UILabel()
+        label.text = title
+        label.font = .preferredFont(forTextStyle: .footnote)
+        label.textColor = .secondaryLabel
+
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.backgroundColor = .secondarySystemBackground
+        imageView.accessibilityLabel = title
+        imageViews.append(imageView)
+
+        container.addSubview(label)
+        container.addSubview(imageView)
+        label.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+        }
+        imageView.snp.makeConstraints { make in
+            make.top.equalTo(label.snp.bottom).offset(8)
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(height)
+        }
+        return container
+    }
+}
+
 // English: Demonstrate every public input style without changing the production controls.
 // Español: Demuestra cada estilo de entrada público sin modificar los controles de producción.
 // 中文：展示 Input 模块的全部公开输入样式，不改变生产控件实现。
@@ -2036,6 +2120,8 @@ private final class PTCollectionRefreshLabViewController: PTBaseViewController {
 private final class PTInputStylesDemoViewController: PTBaseViewController {
     private let stackView = UIStackView()
     private let feedbackLabel = UILabel()
+    private var effectFields: [TextFieldEffects] = []
+    private weak var nativeHoshiField: PTHoshiTextField?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -2057,17 +2143,18 @@ private final class PTInputStylesDemoViewController: PTBaseViewController {
         introduction.numberOfLines = 0
         introduction.text = "TextFieldEffects、Floating、验证码、GrowingText 和通用输入控件的完整样式目录。点击各输入框即可查看激活动画。"
         stackView.addArrangedSubview(introduction)
+        stackView.addArrangedSubview(makeAppearanceControls())
 
         addSectionTitle("TextFieldEffects styles")
-        addFieldRow(title: "Akira · bottom border", field: makeAkiraField())
-        addFieldRow(title: "Hoshi · floating placeholder", field: makeHoshiField())
-        addFieldRow(title: "Isao · animated underline", field: makeIsaoField())
-        addFieldRow(title: "Jiro · expanding background", field: makeJiroField())
-        addFieldRow(title: "Kaede · sliding foreground", field: makeKaedeField())
-        addFieldRow(title: "Madoka · drawing border", field: makeMadokaField())
-        addFieldRow(title: "Minoru · glow border", field: makeMinoruField())
-        addFieldRow(title: "Yoko · 3D background", field: makeYokoField())
-        addFieldRow(title: "Yoshiko · configurable border", field: makeYoshikoField())
+        addEffectFieldRow(title: "Akira · bottom border", field: makeAkiraField())
+        addEffectFieldRow(title: "Hoshi · floating placeholder", field: makeHoshiField())
+        addEffectFieldRow(title: "Isao · animated underline", field: makeIsaoField())
+        addEffectFieldRow(title: "Jiro · expanding background", field: makeJiroField())
+        addEffectFieldRow(title: "Kaede · sliding foreground", field: makeKaedeField())
+        addEffectFieldRow(title: "Madoka · drawing border", field: makeMadokaField())
+        addEffectFieldRow(title: "Minoru · glow border", field: makeMinoruField())
+        addEffectFieldRow(title: "Yoko · 3D background", field: makeYokoField())
+        addEffectFieldRow(title: "Yoshiko · configurable border", field: makeYoshikoField())
         addFieldRow(title: "Hoshi native variant", field: makeNativeHoshiField())
 
         addSectionTitle("Input utilities")
@@ -2124,6 +2211,133 @@ private final class PTInputStylesDemoViewController: PTBaseViewController {
         stackView.addArrangedSubview(container)
     }
 
+    private func addEffectFieldRow(title: String, field: TextFieldEffects) {
+        effectFields.append(field)
+        addFieldRow(title: title, field: field)
+    }
+
+    // English: Expose the shared properties so every input style can be verified in one screen.
+    // Español: Expone las propiedades compartidas para verificar todos los estilos en una sola pantalla.
+    // 中文：在同一页面提供统一属性控制，方便验证所有输入框样式。
+    private func makeAppearanceControls() -> UIView {
+        let container = UIStackView()
+        container.axis = .vertical
+        container.spacing = 8
+
+        let spacing = UISegmentedControl(items: ["space 0", "space 4", "space 8", "space 16"])
+        spacing.selectedSegmentIndex = 2
+        spacing.addTarget(self, action: #selector(inputSpacingChanged(_:)), for: .valueChanged)
+
+        let leading = UISegmentedControl(items: ["leading 0", "leading 12", "leading 24"])
+        leading.selectedSegmentIndex = 1
+        leading.addTarget(self, action: #selector(inputLeadingChanged(_:)), for: .valueChanged)
+
+        let richTextSwitch = UISwitch()
+        richTextSwitch.isOn = true
+        richTextSwitch.addTarget(self, action: #selector(inputRichTextChanged(_:)), for: .valueChanged)
+        let richTextRow = makeSwitchRow(title: "Rich placeholder / 富文本占位符", control: richTextSwitch)
+
+        let rtlSwitch = UISwitch()
+        rtlSwitch.addTarget(self, action: #selector(inputDirectionChanged(_:)), for: .valueChanged)
+        let rtlRow = makeSwitchRow(title: "RTL layout", control: rtlSwitch)
+
+        let fontButton = UIButton(type: .system)
+        fontButton.setTitle("Toggle placeholder font", for: .normal)
+        fontButton.addAction(UIAction { [weak self] _ in self?.togglePlaceholderFont() }, for: .touchUpInside)
+
+        let colorButton = UIButton(type: .system)
+        colorButton.setTitle("Toggle placeholder color", for: .normal)
+        colorButton.addAction(UIAction { [weak self] _ in self?.togglePlaceholderColor() }, for: .touchUpInside)
+
+        let buttonRow = UIStackView(arrangedSubviews: [fontButton, colorButton])
+        buttonRow.axis = .horizontal
+        buttonRow.distribution = .fillEqually
+        buttonRow.spacing = 8
+
+        [spacing, leading, richTextRow, rtlRow, buttonRow].forEach { container.addArrangedSubview($0) }
+        return container
+    }
+
+    private func makeSwitchRow(title: String, control: UISwitch) -> UIView {
+        let row = UIStackView()
+        row.axis = .horizontal
+        row.spacing = 8
+        let label = UILabel()
+        label.text = title
+        label.textColor = .secondaryLabel
+        row.addArrangedSubview(label)
+        row.addArrangedSubview(UIView())
+        row.addArrangedSubview(control)
+        return row
+    }
+
+    @objc private func inputSpacingChanged(_ sender: UISegmentedControl) {
+        let values: [CGFloat] = [0, 4, 8, 16]
+        let value = values[safe: sender.selectedSegmentIndex] ?? 8
+        effectFields.forEach { $0.textAndPlaceholderSpace = value }
+        nativeHoshiField?.textAndPlaceholderSpace = value
+    }
+
+    @objc private func inputLeadingChanged(_ sender: UISegmentedControl) {
+        let values: [CGFloat] = [0, 12, 24]
+        let value = values[safe: sender.selectedSegmentIndex] ?? 12
+        effectFields.forEach { $0.leadingSpace = value }
+        nativeHoshiField?.leadingSpace = value
+    }
+
+    @objc private func inputRichTextChanged(_ sender: UISwitch) {
+        effectFields.forEach { field in
+            field.placeholderAtt = sender.isOn ? richPlaceholder(for: field.placeholder ?? "Input") : nil
+        }
+        if let field = nativeHoshiField {
+            field.placeholderAtt = sender.isOn ? richPlaceholder(for: field.placeholder ?? "PTHoshi") : nil
+        }
+    }
+
+    @objc private func inputDirectionChanged(_ sender: UISwitch) {
+        let direction: UISemanticContentAttribute = sender.isOn ? .forceRightToLeft : .forceLeftToRight
+        effectFields.forEach { $0.semanticContentAttribute = direction }
+        nativeHoshiField?.semanticContentAttribute = direction
+    }
+
+    private func togglePlaceholderFont() {
+        effectFields.forEach { field in
+            var appearance = field.inputAppearance
+            appearance.placeholderFontOverride = appearance.placeholderFontOverride == nil
+                ? .preferredFont(forTextStyle: .title3)
+                : nil
+            field.inputAppearance = appearance
+        }
+        if let field = nativeHoshiField {
+            var appearance = field.inputAppearance
+            appearance.placeholderFontOverride = appearance.placeholderFontOverride == nil
+                ? .preferredFont(forTextStyle: .title3)
+                : nil
+            field.inputAppearance = appearance
+        }
+    }
+
+    private func togglePlaceholderColor() {
+        effectFields.forEach { field in
+            var appearance = field.inputAppearance
+            appearance.placeholderColorOverride = appearance.placeholderColorOverride == nil ? .systemPink : nil
+            field.inputAppearance = appearance
+        }
+        if let field = nativeHoshiField {
+            var appearance = field.inputAppearance
+            appearance.placeholderColorOverride = appearance.placeholderColorOverride == nil ? .systemPink : nil
+            field.inputAppearance = appearance
+        }
+    }
+
+    private func richPlaceholder(for text: String) -> PTRichText {
+        """
+        \(wrap: .embedding("""
+        \(text, .foreground(.systemBlue), .font(.preferredFont(forTextStyle: .footnote)))\(" · rich", .foreground(.systemOrange), .font(.preferredFont(forTextStyle: .caption1)))
+        """))
+        """
+    }
+
     private func addViewRow(title: String, view: UIView, height: CGFloat) {
         addFieldRow(title: title, field: view, height: height)
     }
@@ -2131,6 +2345,10 @@ private final class PTInputStylesDemoViewController: PTBaseViewController {
     private func configure(_ field: TextFieldEffects, placeholder: String) -> TextFieldEffects {
         field.placeholder = placeholder
         field.font = .preferredFont(forTextStyle: .body)
+        field.placeholderFont = .preferredFont(forTextStyle: .footnote)
+        field.leadingSpace = 12
+        field.textAndPlaceholderSpace = 8
+        field.textEditingEdges = UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4)
         field.textColor = .label
         field.backgroundColor = .secondarySystemBackground
         field.clearButtonMode = .whileEditing
@@ -2149,7 +2367,13 @@ private final class PTInputStylesDemoViewController: PTBaseViewController {
         field.borderInactiveColor = .systemGray4
         field.borderActiveColor = .systemBlue
         field.placeholderColor = .secondaryLabel
-        return configure(field, placeholder: "Hoshi")
+        let configured = configure(field, placeholder: "Hoshi")
+        configured.placeholderAtt = """
+        \(wrap: .embedding("""
+        \("Hoshi", .foreground(.systemBlue), .font(.preferredFont(forTextStyle: .footnote)))\(" · rich", .foreground(.systemOrange), .font(.preferredFont(forTextStyle: .footnote)))
+        """))
+        """
+        return configured
     }
 
     private func makeIsaoField() -> TextFieldEffects {
@@ -2204,12 +2428,19 @@ private final class PTInputStylesDemoViewController: PTBaseViewController {
 
     private func makeNativeHoshiField() -> UIView {
         let field = PTHoshiTextField(frame: .zero)
+        nativeHoshiField = field
         field.placeholder = "PTHoshiTextField"
         field.placeholderColor = .secondaryLabel
         field.placeholderFont = .preferredFont(forTextStyle: .footnote)
         field.font = .preferredFont(forTextStyle: .body)
         field.textColor = .label
-        field.leftSpace = 12
+        field.inputAppearance = PTInputAppearance(
+            placeholderColorOverride: .secondaryLabel,
+            placeholderFontOverride: .preferredFont(forTextStyle: .footnote),
+            textAndPlaceholderSpace: 8,
+            leadingSpace: 12,
+            textEditingEdges: UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4)
+        )
         field.backgroundColor = .secondarySystemBackground
         return field
     }

@@ -1,3 +1,11 @@
+<!--
+AUTO-GENERATED FILE.
+
+Generator: manual Duo validation record maintained with the repository gates
+Source revision: 486435925e25155cc3fab847fbe7c076e7f31883
+Generated at: 2026-10-14T08:13:55Z
+-->
+
 # iPhone Duo 设备验收记录 / Aceptación de dispositivo / Device acceptance
 
 ## 运行环境 / Entorno / Environment

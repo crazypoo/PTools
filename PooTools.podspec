@@ -672,7 +672,9 @@ Pod::Spec.new do |s|
     
     s.subspec 'Input' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/PToolsUIFoundation'
         subspec.dependency 'PhoneNumberKit'
+        subspec.dependency 'SnapKit'
         subspec.source_files = 'PooToolsSource/Input/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUT POOTOOLS_COCOAPODS"

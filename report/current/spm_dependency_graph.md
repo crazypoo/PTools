@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: 93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29
-Generated at: 2026-10-14T06:07:48Z
+Source revision: 486435925e25155cc3fab847fbe7c076e7f31883
+Generated at: 2026-10-14T08:22:39Z
 -->
 
 # SwiftPM Dependency Graph
@@ -309,7 +309,7 @@ Generated at: 2026-10-14T06:07:48Z
 | `PooToolsIAP` | `PooToolsSource/IAP` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsImageEditor` | `PooToolsSource/ImageEditor` | PToolsCore, PToolsSymbols, PooToolsHarbethKit, PooToolsMediaCore, PooToolsPhotoPicker, ptools | Harbeth | 0 source entries / 0 resources |
 | `PooToolsImagePicker` | `PooToolsSource/ImagePicker` | PTCameraPermission, ptools | — | 0 source entries / 0 resources |
-| `PooToolsInput` | `PooToolsSource/Input` | PToolsCore, ptools | PhoneNumberKit | 0 source entries / 0 resources |
+| `PooToolsInput` | `PooToolsSource/Input` | PToolsCore, PToolsUIFoundation, ptools | PhoneNumberKit, SnapKit | 0 source entries / 0 resources |
 | `PooToolsInstructions` | `PooToolsSource/Instructions` | PToolsOverlay | — | 0 source entries / 0 resources |
 | `PooToolsKeyChain` | `PooToolsSource/KeyChain` | — | — | 0 source entries / 0 resources |
 | `PooToolsKeyboard` | `PooToolsSource/Keyboard` | ptools | — | 0 source entries / 0 resources |

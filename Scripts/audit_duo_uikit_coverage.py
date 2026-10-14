@@ -13,6 +13,7 @@ import csv
 import json
 import re
 import subprocess
+from datetime import datetime, timezone
 from collections import defaultdict
 from pathlib import Path
 
@@ -190,15 +191,34 @@ def tests_for(module: str, tests: dict[str, list[str]]) -> list[str]:
 def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[str, object]], demos: dict[str, list[str]], tests: dict[str, list[str]]) -> None:
     output = repo / "report" / "current"
     output.mkdir(parents=True, exist_ok=True)
+    # English: Keep generated reports traceable to the source revision and audit run.
+    # Español: Mantén los informes generados vinculados a la revisión fuente y a la ejecución de la auditoría.
+    # 中文：让生成报告能够追溯到源码 revision 和本次审计执行时间。
+    source_revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo, text=True).strip()
+    generated_at = datetime.now(timezone.utc).isoformat()
 
+    # English: Keep the inventory diffable on every platform by using LF records.
+    # Español: Mantén el inventario comparable en todas las plataformas usando registros LF.
+    # 中文：使用 LF 换行，让清单在所有平台上的 diff 保持稳定。
     with (output / "duo_uikit_inventory.csv").open("w", newline="", encoding="utf-8") as handle:
         fields = ["path", "module", "public_api", "ui_type", "ownership", "layout_mode", "risk", "coverage", "demo_id", "test_id", "status"]
-        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(records)
 
     (output / "duo_global_geometry_hits.json").write_text(
-        json.dumps({"generated_by": "Scripts/audit_duo_uikit_coverage.py", "hits": hits}, ensure_ascii=False, indent=2) + "\n",
+        json.dumps(
+            {
+                "generator": "Scripts/audit_duo_uikit_coverage.py",
+                "generated_by": "Scripts/audit_duo_uikit_coverage.py",
+                "source_revision": source_revision,
+                "generated_at": generated_at,
+                "hits": hits,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
         encoding="utf-8",
     )
 
@@ -215,6 +235,14 @@ def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[
             row["risks"] += 1
     missing = [module for module, row in module_rows.items() if row["ui_files"] and not row["demos"] and not row["tests"]]
     lines = [
+        "<!--",
+        "AUTO-GENERATED FILE.",
+        "",
+        "Generator: Scripts/audit_duo_uikit_coverage.py",
+        f"Source revision: {source_revision}",
+        f"Generated at: {generated_at}",
+        "-->",
+        "",
         "# iPhone Duo UIKit 覆盖报告 / Cobertura UIKit / UIKit Coverage",
         "",
         "生成：`Scripts/audit_duo_uikit_coverage.py`。关键字命中只代表候选风险，必须结合调用语义确认。",

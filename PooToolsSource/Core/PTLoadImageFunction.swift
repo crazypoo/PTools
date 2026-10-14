@@ -130,6 +130,10 @@ public struct PTImageLoadConfiguration {
     /// Español: Tamaño máximo opcional para reducir la imagen al decodificarla.
     /// 中文：可选的最大显示尺寸，用于图片解码时降采样。
     public var targetSize: CGSize?
+    /// English: Display scale used to convert point sizes into decode pixels.
+    /// Español: Escala de pantalla usada para convertir puntos en píxeles de decodificación.
+    /// 中文：用于把点尺寸转换为解码像素的显示比例。
+    public var displayScale: CGFloat?
 
     public init(iCloudDocumentName: String = "",
                 radius: CGFloat = 0,
@@ -146,7 +150,8 @@ public struct PTImageLoadConfiguration {
                 valueLabelColor: UIColor? = nil,
                 uniCount: Int? = nil,
                 emptyImage: UIImage? = nil,
-                targetSize: CGSize? = nil) {
+                targetSize: CGSize? = nil,
+                displayScale: CGFloat? = nil) {
         self.iCloudDocumentName = iCloudDocumentName
         self.radius = radius
         self.topLeft = topLeft
@@ -163,6 +168,7 @@ public struct PTImageLoadConfiguration {
         self.uniCount = uniCount
         self.emptyImage = emptyImage
         self.targetSize = targetSize
+        self.displayScale = displayScale
     }
 }
 
@@ -220,28 +226,29 @@ public class PTLoadImageFunction: NSObject {
     @MainActor public static func loadImage(source: PTImageSource,
                                             iCloudDocumentName: String = "",
                                             progressHandle: PTLoadImageProgressBlock? = nil,
-                                            targetSize: CGSize? = nil) async -> PTLoadImageResult {
+                                            targetSize: CGSize? = nil,
+                                            displayScale: CGFloat = 1) async -> PTLoadImageResult {
         switch source {
         case .image(let image):
             return imageResult(image)
         case .data(let data):
-            return await loadImageFromData(data, targetSize: targetSize)
+            return await loadImageFromData(data, targetSize: targetSize, displayScale: displayScale)
         case .asset(let asset):
-            return await handleAssetContent(asset: asset, targetSize: targetSize)
+            return await handleAssetContent(asset: asset, targetSize: targetSize, displayScale: displayScale)
         case .color(let color):
             return imageResult(color.createImageWithColor())
         case .url(let url):
-            return await handleURL(url, iCloudDocumentName, progressHandle, targetSize)
+            return await handleURL(url, iCloudDocumentName, progressHandle, targetSize, displayScale)
         case .named(let name):
-            return await handleStringContent(name, iCloudDocumentName, progressHandle, targetSize)
+            return await handleStringContent(name, iCloudDocumentName, progressHandle, targetSize, displayScale)
         case .videoURL(let url, let frameNumber, let maximumSize):
             return await loadVideo(url: url,
                                    frameNumber: frameNumber,
-                                   maximumSize: maximumSize ?? targetSize)
+                                   maximumSize: maximumSize ?? pixelTargetSize(targetSize, scale: displayScale))
         case .avAsset(let asset, let frameNumber, let maximumSize):
             return await loadVideo(asset: asset,
                                    frameNumber: frameNumber,
-                                   maximumSize: maximumSize ?? targetSize)
+                                   maximumSize: maximumSize ?? pixelTargetSize(targetSize, scale: displayScale))
         }
     }
 
@@ -251,7 +258,8 @@ public class PTLoadImageFunction: NSObject {
     @MainActor public static func loadImage(contentData: Any,
                                             iCloudDocumentName: String = "",
                                             progressHandle: PTLoadImageProgressBlock? = nil,
-                                            targetSize: CGSize? = nil) async -> PTLoadImageResult {
+                                            targetSize: CGSize? = nil,
+                                            displayScale: CGFloat = 1) async -> PTLoadImageResult {
         let source: PTImageSource
         switch contentData {
         case let typedSource as PTImageSource:
@@ -276,22 +284,25 @@ public class PTLoadImageFunction: NSObject {
         return await loadImage(source: source,
                                iCloudDocumentName: iCloudDocumentName,
                                progressHandle: progressHandle,
-                               targetSize: targetSize)
+                               targetSize: targetSize,
+                               displayScale: displayScale)
     }
 
     public static func handleStringContent(_ dataUrlString: String,
                                            _ iCloudDocumentName: String,
                                            _ progressHandle: PTLoadImageProgressBlock? = nil,
-                                           _ targetSize: CGSize? = nil) async -> PTLoadImageResult {
+                                           _ targetSize: CGSize? = nil,
+                                           _ displayScale: CGFloat = 1) async -> PTLoadImageResult {
 
         if FileManager.pt.judgeFileOrFolderExists(filePath: dataUrlString) {
             return await loadLocal(url: URL(fileURLWithPath: dataUrlString),
                                    iCloudDocumentName: iCloudDocumentName,
-                                   targetSize: targetSize)
+                                   targetSize: targetSize,
+                                   displayScale: displayScale)
         }
 
         if dataUrlString.isURL(), let url = URL(string: dataUrlString) {
-            return await handleURL(url, iCloudDocumentName, progressHandle, targetSize)
+            return await handleURL(url, iCloudDocumentName, progressHandle, targetSize, displayScale)
         }
 
         if dataUrlString.isSingleEmoji {
@@ -307,7 +318,8 @@ public class PTLoadImageFunction: NSObject {
     }
 
     public static func handleAssetContent(asset: PHAsset,
-                                          targetSize: CGSize? = nil) async -> PTLoadImageResult {
+                                          targetSize: CGSize? = nil,
+                                          displayScale: CGFloat = 1) async -> PTLoadImageResult {
         guard !asset.localIdentifier.isEmpty else { return emptyResult() }
 
         let manager = PHImageManager.default()
@@ -341,7 +353,8 @@ public class PTLoadImageFunction: NSObject {
                 }
 
                 let requestID = manager.requestImage(for: asset,
-                                                      targetSize: targetSize ?? CGSize(width: 1024, height: 1024),
+                                                      targetSize: pixelTargetSize(targetSize,
+                                                                                  scale: displayScale) ?? CGSize(width: 1024, height: 1024),
                                                       contentMode: .aspectFill,
                                                       options: options) { image, info in
                     let isCancelled = info?[PHImageCancelledKey] as? Bool ?? false
@@ -383,13 +396,16 @@ public class PTLoadImageFunction: NSObject {
     }
 
     private static func loadImageFromData(_ data: Data,
-                                          targetSize: CGSize? = nil) async -> PTLoadImageResult {
+                                          targetSize: CGSize? = nil,
+                                          displayScale: CGFloat = 1) async -> PTLoadImageResult {
         let imageType = detectImageType(from: data)
-        let maximumPixelSize = maximumPixelSize(for: targetSize)
+        let maximumPixelSize = maximumPixelSize(for: targetSize, displayScale: displayScale)
 
         if imageType == .gif {
             let gifResult = await Task.detached(priority: .userInitiated) {
-                PTLoadImageFunction.decodeGIF(data: data, maximumPixelSize: maximumPixelSize)
+                PTLoadImageFunction.decodeGIF(data: data,
+                                              maximumPixelSize: maximumPixelSize,
+                                              displayScale: displayScale)
             }.value
             guard let gifResult, !gifResult.images.isEmpty else {
                 return emptyResult(imageType: .gif)
@@ -401,21 +417,26 @@ public class PTLoadImageFunction: NSObject {
         }
 
         let image = await Task.detached(priority: .userInitiated) {
-            PTLoadImageFunction.decodeImage(data: data, maximumPixelSize: maximumPixelSize)
+            PTLoadImageFunction.decodeImage(data: data,
+                                            targetSize: targetSize,
+                                            maximumPixelSize: maximumPixelSize,
+                                            displayScale: displayScale)
         }.value
         guard let image else { return emptyResult(imageType: .unknown) }
         return imageResult(image, imageType: imageType)
     }
 
     private static func loadFromLocalFileAsync(path: String,
-                                               targetSize: CGSize? = nil) async -> PTLoadImageResult {
-        let maximumPixelSize = maximumPixelSize(for: targetSize)
+                                               targetSize: CGSize? = nil,
+                                               displayScale: CGFloat = 1) async -> PTLoadImageResult {
+        let maximumPixelSize = maximumPixelSize(for: targetSize, displayScale: displayScale)
         let image = await Task.detached(priority: .userInitiated) {
             guard maximumPixelSize != nil else {
                 return UIImage(contentsOfFile: path)
             }
             return PTImageDownsampler.decode(url: URL(fileURLWithPath: path),
-                                             targetSize: targetSize)
+                                             targetSize: targetSize,
+                                             scale: displayScale)
         }.value
         return image.map { imageResult($0) } ?? emptyResult()
     }
@@ -423,45 +444,57 @@ public class PTLoadImageFunction: NSObject {
     public static func handleURLContent(_ dataUrlString: String,
                                         _ iCloudDocumentName: String,
                                         _ progressHandle: PTLoadImageProgressBlock? = nil,
-                                        _ targetSize: CGSize? = nil) async -> PTLoadImageResult {
+                                        _ targetSize: CGSize? = nil,
+                                        _ displayScale: CGFloat = 1) async -> PTLoadImageResult {
 
         guard let url = URL(string: dataUrlString), !url.absoluteString.isEmpty else {
             return emptyResult()
         }
-        return await handleURL(url, iCloudDocumentName, progressHandle, targetSize)
+        return await handleURL(url, iCloudDocumentName, progressHandle, targetSize, displayScale)
     }
 
     private static func handleURL(_ url: URL,
                                   _ iCloudDocumentName: String,
                                   _ progressHandle: PTLoadImageProgressBlock? = nil,
-                                  _ targetSize: CGSize? = nil) async -> PTLoadImageResult {
+                                  _ targetSize: CGSize? = nil,
+                                  _ displayScale: CGFloat = 1) async -> PTLoadImageResult {
         if url.isFileURL {
-            return await handleFileURLAsync(url, iCloudDocumentName, targetSize)
+            return await handleFileURLAsync(url, iCloudDocumentName, targetSize, displayScale)
         }
         if url.pt_isVideoResource {
             return await loadVideo(url: url,
                                    frameNumber: 10,
-                                   maximumSize: targetSize ?? PTVideoThumbnailService.defaultMaximumSize)
+                                   maximumSize: pixelTargetSize(targetSize, scale: displayScale) ?? PTVideoThumbnailService.defaultMaximumSize)
         }
-        return await downloadImage(from: url, progressHandle, targetSize: targetSize)
+        return await downloadImage(from: url,
+                                   progressHandle,
+                                   targetSize: targetSize,
+                                   displayScale: displayScale)
     }
 
     private static func loadLocal(url: URL,
                                   iCloudDocumentName: String,
-                                  targetSize: CGSize? = nil) async -> PTLoadImageResult {
+                                  targetSize: CGSize? = nil,
+                                  displayScale: CGFloat = 1) async -> PTLoadImageResult {
         if url.pt_isVideoResource {
             return await loadVideo(url: url,
                                    frameNumber: 10,
-                                   maximumSize: targetSize ?? PTVideoThumbnailService.defaultMaximumSize)
+                                   maximumSize: pixelTargetSize(targetSize, scale: displayScale) ?? PTVideoThumbnailService.defaultMaximumSize)
         }
-        return await loadFromLocalFileAsync(path: url.path, targetSize: targetSize)
+        return await loadFromLocalFileAsync(path: url.path,
+                                            targetSize: targetSize,
+                                            displayScale: displayScale)
     }
 
     private static func handleFileURLAsync(_ url: URL,
                                            _ iCloudDocumentName: String,
-                                           _ targetSize: CGSize? = nil) async -> PTLoadImageResult {
+                                           _ targetSize: CGSize? = nil,
+                                           _ displayScale: CGFloat = 1) async -> PTLoadImageResult {
         guard !iCloudDocumentName.isEmpty else {
-            return await loadLocal(url: url, iCloudDocumentName: "", targetSize: targetSize)
+            return await loadLocal(url: url,
+                                   iCloudDocumentName: "",
+                                   targetSize: targetSize,
+                                   displayScale: displayScale)
         }
 
         guard let ubiquityURL = FileManager.default.url(forUbiquityContainerIdentifier: nil) else {
@@ -470,7 +503,10 @@ public class PTLoadImageFunction: NSObject {
         let resolvedURL = ubiquityURL
             .appendingPathComponent(iCloudDocumentName, isDirectory: true)
             .appendingPathComponent(url.lastPathComponent)
-        return await loadLocal(url: resolvedURL, iCloudDocumentName: "", targetSize: targetSize)
+        return await loadLocal(url: resolvedURL,
+                               iCloudDocumentName: "",
+                               targetSize: targetSize,
+                               displayScale: displayScale)
     }
 
     private static func loadVideo(url: URL,
@@ -515,7 +551,8 @@ public class PTLoadImageFunction: NSObject {
 
     public static func downloadImage(from url: URL,
                                      _ progressHandle: PTLoadImageProgressBlock? = nil,
-                                     targetSize: CGSize? = nil) async -> PTLoadImageResult {
+                                     targetSize: CGSize? = nil,
+                                     displayScale: CGFloat = 1) async -> PTLoadImageResult {
         guard !Task.isCancelled else { return emptyResult() }
 
         do {
@@ -523,11 +560,14 @@ public class PTLoadImageFunction: NSObject {
             let value = try await retrieveRemoteImage(from: url,
                                                       preloadAnimation: shouldPreloadAnimation,
                                                       progressHandle: progressHandle,
-                                                      targetSize: targetSize)
+                                                      targetSize: targetSize,
+                                                      displayScale: displayScale)
             try Task.checkCancellation()
             return await animatedResult(from: value,
                                         allowDataFallback: shouldPreloadAnimation || (value.image.kf.imageFrameCount ?? 0) > 1,
-                                        maximumPixelSize: maximumPixelSize(for: targetSize)) ?? imageResult(value.image)
+                                        maximumPixelSize: maximumPixelSize(for: targetSize,
+                                                                           displayScale: displayScale),
+                                        displayScale: displayScale) ?? imageResult(value.image)
         } catch {
             return emptyResult()
         }
@@ -538,7 +578,8 @@ public class PTLoadImageFunction: NSObject {
     /// 仅在需要时从 Kingfisher 的下载数据恢复 GIF 动画帧。
     private static func animatedResult(from value: RetrieveImageResult,
                                        allowDataFallback: Bool,
-                                       maximumPixelSize: Int? = nil) async -> PTLoadImageResult? {
+                                       maximumPixelSize: Int? = nil,
+                                       displayScale: CGFloat = 1) async -> PTLoadImageResult? {
         if let frames = value.image.images, !frames.isEmpty {
             return PTLoadImageResult(allImages: frames,
                                      firstImage: frames.first,
@@ -567,7 +608,9 @@ public class PTLoadImageFunction: NSObject {
         }
 
         guard let gifResult = await Task.detached(priority: .userInitiated, operation: {
-            PTLoadImageFunction.decodeGIF(data: data, maximumPixelSize: maximumPixelSize)
+            PTLoadImageFunction.decodeGIF(data: data,
+                                          maximumPixelSize: maximumPixelSize,
+                                          displayScale: displayScale)
         }).value,
               !gifResult.images.isEmpty else {
             return nil
@@ -586,12 +629,15 @@ public class PTLoadImageFunction: NSObject {
     private nonisolated static func retrieveRemoteImage(from url: URL,
                                                         preloadAnimation: Bool,
                                                         progressHandle: PTLoadImageProgressBlock?,
-                                                        targetSize: CGSize?) async throws -> RetrieveImageResult {
+                                                        targetSize: CGSize?,
+                                                        displayScale: CGFloat) async throws -> RetrieveImageResult {
         var options: KingfisherOptionsInfo = preloadAnimation ? [.preloadAllAnimationData] : []
+        options.append(.scaleFactor(normalizedDisplayScale(displayScale)))
         if !preloadAnimation,
            let targetSize,
            let validSize = validatedTargetSize(targetSize) {
             options.append(.processor(DownsamplingImageProcessor(size: validSize)))
+            options.append(.cacheOriginalImage)
         }
         return try await KingfisherManager.shared.retrieveImage(
             with: url,
@@ -622,7 +668,8 @@ public class PTLoadImageFunction: NSObject {
     /// Decodifica fotogramas GIF con reducción opcional y libera los objetos temporales por fotograma.
     /// 解码 GIF 帧，可选按目标像素降采样，并在每帧结束后释放临时对象。
     private nonisolated static func decodeGIF(data: Data,
-                                              maximumPixelSize: Int?) -> (images: [UIImage], duration: TimeInterval)? {
+                                              maximumPixelSize: Int?,
+                                              displayScale: CGFloat = 1) -> (images: [UIImage], duration: TimeInterval)? {
         guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
             return nil
         }
@@ -641,7 +688,9 @@ public class PTLoadImageFunction: NSObject {
 
                 let frameDuration = PTLoadImageFunction.gifFrameDuration(source: source, index: i)
                 totalDuration += frameDuration
-                images.append(UIImage(cgImage: cgImage))
+                images.append(UIImage(cgImage: cgImage,
+                                      scale: normalizedDisplayScale(displayScale),
+                                      orientation: .up))
             }
         }
 
@@ -666,12 +715,13 @@ public class PTLoadImageFunction: NSObject {
     /// Decodifica una imagen estática con el tamaño máximo de píxel solicitado.
     /// 按请求的最大像素尺寸解码静态图片。
     private nonisolated static func decodeImage(data: Data,
-                                                maximumPixelSize: Int?) -> UIImage? {
-        if let maximumPixelSize,
-           maximumPixelSize > 0,
+                                                targetSize: CGSize?,
+                                                maximumPixelSize: Int?,
+                                                displayScale: CGFloat) -> UIImage? {
+        if maximumPixelSize != nil,
            let image = PTImageDownsampler.decode(data: data,
-                                                 targetSize: CGSize(width: maximumPixelSize,
-                                                                    height: maximumPixelSize)) {
+                                                 targetSize: targetSize,
+                                                 scale: displayScale) {
             return image
         }
         guard let source = CGImageSourceCreateWithData(data as CFData, nil),
@@ -681,7 +731,9 @@ public class PTLoadImageFunction: NSObject {
               ] as CFDictionary) else {
             return UIImage(data: data)
         }
-        return UIImage(cgImage: cgImage)
+        return UIImage(cgImage: cgImage,
+                       scale: normalizedDisplayScale(displayScale),
+                       orientation: .up)
     }
 
     private nonisolated static func validatedTargetSize(_ size: CGSize) -> CGSize? {
@@ -690,12 +742,28 @@ public class PTLoadImageFunction: NSObject {
         return size
     }
 
-    private static func maximumPixelSize(for size: CGSize?) -> Int? {
+    private nonisolated static func normalizedDisplayScale(_ scale: CGFloat) -> CGFloat {
+        scale.isFinite && scale > 0 ? scale : 1
+    }
+
+    private nonisolated static func pixelTargetSize(_ size: CGSize?, scale: CGFloat) -> CGSize? {
+        guard let size, let validSize = validatedTargetSize(size) else { return nil }
+        let safeScale = normalizedDisplayScale(scale)
+        let pixelSize = CGSize(width: validSize.width * safeScale,
+                               height: validSize.height * safeScale)
+        guard let validPixelSize = validatedTargetSize(pixelSize) else { return nil }
+        let budget = CGFloat(PTImageDownsampler.defaultMaximumPixelSize)
+        let ratio = min(1, budget / max(validPixelSize.width, validPixelSize.height))
+        return validatedTargetSize(CGSize(width: validPixelSize.width * ratio,
+                                          height: validPixelSize.height * ratio))
+    }
+
+    private nonisolated static func maximumPixelSize(for size: CGSize?, displayScale: CGFloat = 1) -> Int? {
         guard let size = size, let validSize = validatedTargetSize(size) else { return nil }
         let dimension = max(validSize.width, validSize.height)
-        let pixelSize = dimension * UIScreen.main.scale
+        let pixelSize = dimension * normalizedDisplayScale(displayScale)
         guard pixelSize.isFinite else { return nil }
-        return max(1, Int(ceil(pixelSize)))
+        return max(1, min(PTImageDownsampler.defaultMaximumPixelSize, Int(ceil(pixelSize))))
     }
 
     private nonisolated static func gifFrameDuration(source: CGImageSource, index: Int) -> TimeInterval {
@@ -798,11 +866,13 @@ public extension PTLoadImageFunction {
     static func loadImage(source: Any,
                           iCloudDocumentName: String = "",
                           progressHandle: PTLoadImageProgressBlock? = nil,
-                          targetSize: CGSize? = nil) async -> PTLoadImageResult {
+                          targetSize: CGSize? = nil,
+                          displayScale: CGFloat = 1) async -> PTLoadImageResult {
         await loadImage(contentData: source,
                         iCloudDocumentName: iCloudDocumentName,
                         progressHandle: progressHandle,
-                        targetSize: targetSize)
+                        targetSize: targetSize,
+                        displayScale: displayScale)
     }
 
     // English: Resolve only the video source forms supported by the rich-text adapter.

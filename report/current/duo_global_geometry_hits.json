@@ -1,5 +1,8 @@
 {
+  "generator": "Scripts/audit_duo_uikit_coverage.py",
   "generated_by": "Scripts/audit_duo_uikit_coverage.py",
+  "source_revision": "486435925e25155cc3fab847fbe7c076e7f31883",
+  "generated_at": "2026-10-14T08:14:26.940796+00:00",
   "hits": [
     {
       "kind": "statusBarHeight",
@@ -16,25 +19,25 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift",
-      "line": 53,
+      "line": 55,
       "text": "width: max(0, bounds.width - 16),"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift",
-      "line": 54,
+      "line": 56,
       "text": "height: max(0, buttonY - 12)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift",
-      "line": 56,
+      "line": 58,
       "text": "refreshButton.frame = CGRect(x: 8, y: buttonY, width: 60, height: buttonHeight)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift",
-      "line": 60,
+      "line": 62,
       "text": "width: 60,"
     },
     {
@@ -100,14 +103,14 @@
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertBackgroundView.swift",
-      "line": 113,
+      "line": 133,
       "text": "layer.borderWidth = 1 / max(UIScreen.main.scale, 1)"
     },
     {
-      "kind": "UIScreen.main",
-      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift",
-      "line": 110,
-      "text": "1 / max(UIScreen.main.scale, 1)"
+      "kind": "magic-fixed-dimension",
+      "path": "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertLayoutEngine.swift",
+      "line": 99,
+      "text": "ceil(measuredTitleHeight(title, width: titleWidth, font: font) + 20)"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -184,7 +187,13 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Base/PTBaseViewController+Navigation.swift",
-      "line": 248,
+      "line": 174,
+      "text": "let fallbackSize = view is UISwitch ? CGSize(width: 51, height: 31) : CGSize(width: defaultSize, height: defaultSize)"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "PooToolsSource/Base/PTBaseViewController+Navigation.swift",
+      "line": 306,
       "text": "let height = maxHeight + stretch * 40"
     },
     {
@@ -246,30 +255,6 @@
       "path": "PooToolsSource/Base/PTFusionCellModel.swift",
       "line": 241,
       "text": "let moreStringWidth = UIView.sizeFor(string: moreString, font: moreFont,height: 34).width"
-    },
-    {
-      "kind": "magic-fixed-dimension",
-      "path": "PooToolsSource/Base/PTNavBar.swift",
-      "line": 252,
-      "text": "make.size.equalTo(value.bounds.size.width > 0 ? value.bounds.size : CGSize(width: 51, height: 31))"
-    },
-    {
-      "kind": "magic-fixed-dimension",
-      "path": "PooToolsSource/Base/PTNavBar.swift",
-      "line": 283,
-      "text": "make.size.equalTo(value.bounds.size.width > 0 ? value.bounds.size : CGSize(width: 51, height: 31))"
-    },
-    {
-      "kind": "magic-fixed-dimension",
-      "path": "PooToolsSource/Base/PTNavBar.swift",
-      "line": 302,
-      "text": "total += $0.bounds.width > 0 ? $0.bounds.width : 51"
-    },
-    {
-      "kind": "magic-fixed-dimension",
-      "path": "PooToolsSource/Base/PTNavBar.swift",
-      "line": 304,
-      "text": "total += $0.bounds.width > 0 ? $0.bounds.width : 34"
     },
     {
       "kind": "statusBarHeight",
@@ -536,6 +521,12 @@
       "text": "var statusBarHeight: CGFloat {"
     },
     {
+      "kind": "UIScreen.main",
+      "path": "PooToolsSource/Category/UIButton+PTEX.swift",
+      "line": 168,
+      "text": "displayScale: window?.screen.scale ?? UIScreen.main.scale)"
+    },
+    {
       "kind": "kSCREEN",
       "path": "PooToolsSource/Category/UICollectionView+PTEX.swift",
       "line": 343,
@@ -544,25 +535,25 @@
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/Category/UICollectionView+PTEX.swift",
-      "line": 439,
+      "line": 448,
       "text": "width: screenWidth ?? CGFloat.kSCREEN_WIDTH,"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/Category/UICollectionView+PTEX.swift",
-      "line": 465,
+      "line": 474,
       "text": "let viewW = PTCollectionLayoutGeometry.dimension(screenWidth ?? CGFloat.kSCREEN_WIDTH)"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/Category/UICollectionView+PTEX.swift",
-      "line": 495,
+      "line": 504,
       "text": "let viewW = PTCollectionLayoutGeometry.dimension(screenWidth ?? CGFloat.kSCREEN_WIDTH)"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/Category/UICollectionView+PTEX.swift",
-      "line": 668,
+      "line": 677,
       "text": "width: monitorWidth ?? CGFloat.kSCREEN_WIDTH,"
     },
     {
@@ -592,7 +583,13 @@
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 421,
+      "line": 89,
+      "text": "displayScale: window?.screen.scale ?? UIScreen.main.scale)"
+    },
+    {
+      "kind": "UIScreen.main",
+      "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
+      "line": 422,
       "text": "let screenRect = UIScreen.main.bounds"
     },
     {
@@ -670,19 +667,25 @@
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Category/UIView+PTEX.swift",
-      "line": 2118,
+      "line": 1842,
+      "text": "let resolvedDisplayScale = displayScale ?? window?.screen.scale ?? UIScreen.main.scale"
+    },
+    {
+      "kind": "UIScreen.main",
+      "path": "PooToolsSource/Category/UIView+PTEX.swift",
+      "line": 2176,
       "text": "format.scale = UIScreen.main.scale"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Category/UIView+PTEX.swift",
-      "line": 2147,
+      "line": 2205,
       "text": "format.scale = scale.isFinite && scale > 0 ? scale : UIScreen.main.scale"
     },
     {
       "kind": "UIDevice.current.orientation",
       "path": "PooToolsSource/Category/UIView+PTEX.swift",
-      "line": 2162,
+      "line": 2220,
       "text": "?? UIInterfaceOrientation(rawValue: UIDevice.current.orientation.rawValue)"
     },
     {
@@ -694,20 +697,14 @@
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Core/BorderManager.swift",
-      "line": 16,
+      "line": 20,
       "text": "static let outlineWidth = 1 - 1 / UIScreen.main.scale"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 344,
-      "text": "targetSize: targetSize ?? CGSize(width: 1024, height: 1024),"
-    },
-    {
-      "kind": "UIScreen.main",
-      "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 696,
-      "text": "let pixelSize = dimension * UIScreen.main.scale"
+      "line": 357,
+      "text": "scale: displayScale) ?? CGSize(width: 1024, height: 1024),"
     },
     {
       "kind": "isFaceIDCapable",
@@ -832,289 +829,289 @@
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Debug/PTInstruments.swift",
-      "line": 112,
+      "line": 115,
       "text": "let screen = window?.windowScene?.screen ?? UIScreen.main"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Debug/PTInstruments.swift",
-      "line": 908,
+      "line": 911,
       "text": "let screen = window?.windowScene?.screen ?? UIScreen.main"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Debug/PTInstrumentsUI.swift",
-      "line": 135,
+      "line": 138,
       "text": "let sampleRect = CGRect(x: x, y: y + 4, width: 2, height: 10)"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/DebugCategory/UIWindow+PTDebugEx.swift",
-      "line": 74,
+      "line": 77,
       "text": "static var keyWindow: UIWindow? {"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugColor/PTColorPickPlugin.swift",
-      "line": 19,
+      "line": 22,
       "text": "x * CGFloat.kSCREEN_WIDTH / 750"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/DebugColor/PTColorPickPlugin.swift",
-      "line": 283,
+      "line": 286,
       "text": "layer.contentsScale = UIScreen.main.scale"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugCrash/PTCrashDetailViewController.swift",
-      "line": 30,
+      "line": 34,
       "text": "let viewHeight = UIView.sizeFor(string: (cellModel.name + cellModel.content), font: font,width: CGFloat.kSCREEN_WIDTH).height"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugCrash/PTCrashLogViewController.swift",
-      "line": 32,
+      "line": 35,
       "text": "let nameHeight = UIView.sizeFor(string: cellModel.name, font: font,width: CGFloat.kSCREEN_WIDTH).height"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugCrash/PTCrashLogViewController.swift",
-      "line": 33,
+      "line": 36,
       "text": "let descHeight = UIView.sizeFor(string: cellModel.desc, font: descFont,width: CGFloat.kSCREEN_WIDTH).height"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/DebugCrash/PTCrashModel.swift",
-      "line": 64,
+      "line": 67,
       "text": ".init(image: UIWindow.keyWindow?._snapshotWithTouch?.pngData(), consoleOutput: \"\", errorOutput: \"\")"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugCrash/PTCreateLeakViewController.swift",
-      "line": 28,
+      "line": 31,
       "text": "imageView.frame = CGRect(x: 0, y: 0, width: 200, height: 200)"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/DebugCrash/PTDebugUserInfo.swift",
-      "line": 69,
+      "line": 72,
       "text": "let screen = UIScreen.main"
     },
     {
       "kind": "screen.bounds",
       "path": "PooToolsSource/DebugCrash/PTDebugUserInfo.swift",
-      "line": 70,
+      "line": 73,
       "text": "let bounds = screen.bounds"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 88,
+      "line": 92,
       "text": "activityVC.popoverPresentationController?.sourceRect = CGRect(x: 10, y: CGFloat.kSCREEN_HEIGHT - 300, width: CGFloat.kSCREEN_WIDTH - 20, height: 300)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 88,
+      "line": 92,
       "text": "activityVC.popoverPresentationController?.sourceRect = CGRect(x: 10, y: CGFloat.kSCREEN_HEIGHT - 300, width: CGFloat.kSCREEN_WIDTH - 20, height: 300)"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugLibs/PTLoadedLibsViewController.swift",
-      "line": 110,
+      "line": 114,
       "text": "view.bounds = .init(origin: .zero, size: .init(width: (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 88), height: 32))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugLibs/PTLoadedLibsViewController.swift",
-      "line": 110,
+      "line": 114,
       "text": "view.bounds = .init(origin: .zero, size: .init(width: (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 88), height: 32))"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugLibs/PTLoadedLibsViewController.swift",
-      "line": 213,
+      "line": 217,
       "text": "let screenWidth = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 24 - 4.5"
     },
     {
       "kind": "statusBarHeight",
       "path": "PooToolsSource/DebugNetwork/PTNetworkHelper.swift",
-      "line": 81,
+      "line": 84,
       "text": "floatingView = PFloatingButton(inView: hostView, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugNetwork/PTNetworkHelper.swift",
-      "line": 81,
+      "line": 84,
       "text": "floatingView = PFloatingButton(inView: hostView, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherDetailViewController.swift",
-      "line": 43,
+      "line": 47,
       "text": "view.bounds = CGRect(origin: .zero, size: CGSizeMake(320, 34))"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherDetailViewController.swift",
-      "line": 54,
+      "line": 58,
       "text": "make.width.equalTo(CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 88)"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherDetailViewController.swift",
-      "line": 76,
+      "line": 80,
       "text": "return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 64, cellRowCount: 1, originalX: 0)"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherDetailViewController.swift",
-      "line": 80,
+      "line": 84,
       "text": "let screenW: CGFloat = CGFloat.kSCREEN_WIDTH"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherDetailViewController.swift",
-      "line": 82,
+      "line": 86,
       "text": "var cellHeight: CGFloat = UIView.sizeFor(string: cellModel.description, font: .appfont(size: 12), width: screenW - PTAppBaseConfig.share.defaultViewSpace * 2).height + 10"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherDetailViewController.swift",
-      "line": 85,
+      "line": 89,
       "text": "let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: 0, y: groupH, width: screenW, height: cellHeight), zIndex: 1000)"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift",
-      "line": 27,
+      "line": 31,
       "text": "let titleViewContainerWidth = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 3 - 88"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift",
-      "line": 39,
+      "line": 43,
       "text": "view.frame = CGRect(origin: .zero, size: CGSizeMake(self.titleViewContainerWidth - CGSize.SwitchSize.width - 100, 34))"
     },
     {
       "kind": "statusBarHeight",
       "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift",
-      "line": 259,
+      "line": 263,
       "text": "floatingView = PFloatingButton(inView: AppWindows, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift",
-      "line": 259,
+      "line": 263,
       "text": "floatingView = PFloatingButton(inView: AppWindows, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugPerformance/PTDebugPerformanceToolKit.swift",
-      "line": 231,
+      "line": 234,
       "text": "floatingView = PFloatingButton(inView: hostView, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight(), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2, height: 30))"
     },
     {
       "kind": "statusBarHeight",
       "path": "PooToolsSource/DebugPerformance/PTDebugPerformanceToolKit.swift",
-      "line": 231,
+      "line": 234,
       "text": "floatingView = PFloatingButton(inView: hostView, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight(), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2, height: 30))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugPerformance/PTDebugPerformanceToolKit.swift",
-      "line": 231,
+      "line": 234,
       "text": "floatingView = PFloatingButton(inView: hostView, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight(), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2, height: 30))"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugPerformance/PTDebugPerformanceViewController.swift",
-      "line": 43,
+      "line": 46,
       "text": "return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 54,cellRowCount: 1,originalX: 0)"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugPerformance/PTDebugPerformanceViewController.swift",
-      "line": 45,
+      "line": 48,
       "text": "return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 250,cellRowCount: 1,originalX: 0)"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugPerformance/PTDebugPerformanceViewController.swift",
-      "line": 50,
+      "line": 53,
       "text": "let screenW:CGFloat = CGFloat.kSCREEN_WIDTH"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugPerformance/PTDebugPerformanceViewController.swift",
-      "line": 61,
+      "line": 64,
       "text": "let item = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: inset, y: groupH, width: width, height: cellHeight), zIndex: 1000 + index)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugPerformance/PTLeakListViewController.swift",
-      "line": 29,
+      "line": 33,
       "text": "view.bounds = CGRect(origin: .zero, size: CGSize(width: 320, height: 34))"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugPerformance/PTLeakListViewController.swift",
-      "line": 40,
+      "line": 44,
       "text": "make.width.equalTo(CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 132)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugPerformance/PTPerformanceChartView.swift",
-      "line": 189,
+      "line": 192,
       "text": "let textRect = CGRect(x: x - textSize.width / 2, y: y - 20, width: textSize.width, height: textSize.height)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
-      "line": 229,
+      "line": 232,
       "text": "let height = CGFloat.SizeFrom750(x: 100)"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
-      "line": 243,
+      "line": 246,
       "text": "super.init(frame: CGRectMake(0, 0, CGFloat.kSCREEN_WIDTH, CGFloat.kSCREEN_HEIGHT))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
-      "line": 311,
+      "line": 314,
       "text": "horizontalLine.frame = CGRect(x: 0, y: centerY - 0.25, width: bounds.width, height: 0.5)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
-      "line": 312,
+      "line": 315,
       "text": "verticalLine.frame = CGRect(x: centerX - 0.25, y: 0, width: 0.5, height: bounds.height)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
-      "line": 358,
+      "line": 361,
       "text": "let height = UIView.sizeFor(string: stringInfo, font: .appfont(size: 16), width: textWidth).height"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
-      "line": 36,
+      "line": 39,
       "text": "view.frame = CGRect(x: 0, y: 0, width: 20, height: 20)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
-      "line": 112,
+      "line": 115,
       "text": "self.springMotionView.frame = CGRect(x: point.x - size.width / 2, y: point.y - size.height / 2, width: 20, height: 20)"
     },
     {
       "kind": "isFaceIDCapable",
       "path": "PooToolsSource/DevMask/PTDevMaskView.swift",
-      "line": 117,
+      "line": 120,
       "text": "if deviceInfo.isFaceIDCapable {"
     },
     {
@@ -1132,31 +1129,31 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Guide/PTGuidePageHUD.swift",
-      "line": 205,
+      "line": 208,
       "text": "make.width.equalTo(movieStartButton.sizeFor(height: 50).width + 10)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Guide/PTGuidePageHUD.swift",
-      "line": 218,
+      "line": 221,
       "text": "let skipButtonWidth = UIView.sizeFor(string: viewModel.skipName, font: viewModel.skipFont, height: 44).width + 10 + skipButtonWidthOffset"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Guide/PTGuidePageHUD.swift",
-      "line": 302,
+      "line": 305,
       "text": "make.width.equalTo(startButton.sizeFor(height: 44).width + 10)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Guide/PTGuidePageHUD.swift",
-      "line": 396,
+      "line": 399,
       "text": "let frame = PTAdaptiveVisibleRegionResolver.controlFrame(size: CGSize(width: skipButtonWidth(), height: 44),"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Guide/PTGuidePageHUD.swift",
-      "line": 430,
+      "line": 433,
       "text": "max(44, UIView.sizeFor(string: viewModel.skipName, font: viewModel.skipFont, height: 44).width + 25)"
     },
     {
@@ -1168,19 +1165,19 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/ImageEditor/PTAdjustSliderView.swift",
-      "line": 115,
+      "line": 119,
       "text": "shadowView.frame = CGRect(x: 40, y: 0, width: sliderWidth, height: bounds.height)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/ImageEditor/PTAdjustSliderView.swift",
-      "line": 120,
+      "line": 124,
       "text": "valueLabel.frame = CGRect(x: 0, y: bounds.height / 2 - 10, width: 38, height: 20)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/ImageEditor/PTAdjustSliderView.swift",
-      "line": 122,
+      "line": 126,
       "text": "valueLabel.frame = CGRect(x: 0, y: 0, width: pt.jx_width, height: 38)"
     },
     {
@@ -1318,889 +1315,889 @@
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "line": 28,
+      "line": 34,
       "text": "open var inputBoxBorderWidth: CGFloat = 1.0 / UIScreen.main.scale"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "line": 174,
+      "line": 180,
       "text": "let cursorPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: 2, height: config.inputBoxHeight * 0.6))"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/ElementCatalogIconProviderDefault.swift",
-      "line": 49,
+      "line": 50,
       "text": "if window.isKeyWindow { return .keyWindow }"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/ElementCatalogIconProviderDefault.swift",
-      "line": 140,
+      "line": 141,
       "text": "@MainActor static let keyWindow: UIImage = .icon(\"Key-UIWindow-32_Normal\")!"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/ElementInspectorConfiguration.swift",
-      "line": 16,
+      "line": 19,
       "text": "guard let userInterfaceIdiom = ViewHierarchy.shared.keyWindow?.traitCollection.userInterfaceIdiom else {"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/ElementInspectorConfiguration.swift",
-      "line": 31,
+      "line": 34,
       "text": "width: min(UIScreen.main.bounds.width, 414),"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/ElementInspectorConfiguration.swift",
-      "line": 31,
+      "line": 34,
       "text": "width: min(UIScreen.main.bounds.width, 414),"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/ElementInspectorConfiguration.swift",
-      "line": 40,
+      "line": 43,
       "text": "width: 768,"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/ElementInspectorConfiguration.swift",
-      "line": 41,
+      "line": 44,
       "text": "height: 768"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/ElementInspectorViewController.swift",
-      "line": 243,
+      "line": 246,
       "text": "let maskViewNewFrame = CGRect(origin: .zero, size: CGSize(width: 0.3 * view.frame.width, height: view.frame.height))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/ElementInspectorViewController.swift",
-      "line": 319,
+      "line": 322,
       "text": "let halfWidthSize = CGSize(width: 0.3 * toView.frame.width, height: toView.frame.height)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/ElementInspectorViewController.swift",
-      "line": 320,
+      "line": 323,
       "text": "let maskView = UIView(frame: CGRect(origin: .init(x: -0.5 * toView.frame.width, y: .zero), size: halfWidthSize))"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/ElementNameView.swift",
-      "line": 91,
+      "line": 94,
       "text": "$0.layer.borderWidth = 1 / UIScreen.main.scale"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/HierarchyInspectorSearchView.swift",
-      "line": 13,
+      "line": 16,
       "text": "size: CGSize(19)"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/HierarchyInspectorSearchView.swift",
-      "line": 29,
+      "line": 32,
       "text": "private(set) lazy var separatorView = SeparatorView(style: .medium, thickness: UIScreen.main.scale)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/Icon.swift",
-      "line": 21,
+      "line": 24,
       "text": "@MainActor init(_ glpyh: Glyph, color: UIColor? = nil, size: CGSize = CGSize(width: 16, height: 16)) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/Icon.swift",
-      "line": 77,
+      "line": 80,
       "text": "size: CGSize(16)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 15,
+      "line": 18,
       "text": "class func drawBorderStyleRoundedRect(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 20, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 21,
+      "line": 24,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 20, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 52,
+      "line": 55,
       "text": "class func drawBorderStyleBezel(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 20, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 58,
+      "line": 61,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 20, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 110,
+      "line": 113,
       "text": "class func drawBorderStyleLine(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 20, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 116,
+      "line": 119,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 20, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 143,
+      "line": 146,
       "text": "class func drawBorderStyleNone(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 20, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 149,
+      "line": 152,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 20, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 285,
+      "line": 288,
       "text": "class func drawTextAlignmentNatural(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 291,
+      "line": 294,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 16, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 325,
+      "line": 328,
       "text": "class func drawTextAlignmentJustified(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 331,
+      "line": 334,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 16, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 371,
+      "line": 374,
       "text": "class func drawTextAlignmentRight(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 377,
+      "line": 380,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 16, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 417,
+      "line": 420,
       "text": "class func drawTextAlignmentCenter(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 423,
+      "line": 426,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 16, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 463,
+      "line": 466,
       "text": "class func drawAppearanceDark(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 469,
+      "line": 472,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 16, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 551,
+      "line": 554,
       "text": "class func drawAppearanceMedium(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 557,
+      "line": 560,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 16, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 631,
+      "line": 634,
       "text": "class func drawSliderHorizontal(color: UIColor = .black, frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 637,
+      "line": 640,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 24, height: 24), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 712,
+      "line": 715,
       "text": "class func drawSetSquareFill(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 718,
+      "line": 721,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 24, height: 24), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 756,
+      "line": 759,
       "text": "class func drawAppearanceLight(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 762,
+      "line": 765,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 16, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 830,
+      "line": 833,
       "text": "class func drawTextAlignmentLeft(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 836,
+      "line": 839,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 16, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 876,
+      "line": 879,
       "text": "class func drawColorGrid(color: UIColor = .init(white: 0, alpha: 0.5), frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 32, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 882,
+      "line": 885,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 32, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 961,
+      "line": 964,
       "text": "class func drawVerticalAlignmentTop(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 15, height: 11), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 967,
+      "line": 970,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 15, height: 11), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 997,
+      "line": 1000,
       "text": "class func drawVerticalAlignmentCenter(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 15, height: 11), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1003,
+      "line": 1006,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 15, height: 11), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1043,
+      "line": 1046,
       "text": "class func drawVerticalAlignmentBottom(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 15, height: 11), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1049,
+      "line": 1052,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 15, height: 11), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1079,
+      "line": 1082,
       "text": "class func drawVerticalAlignmentFill(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 11, height: 11), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1085,
+      "line": 1088,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 11, height: 11), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1126,
+      "line": 1129,
       "text": "class func drawHorizontalAlignmentFill(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 11, height: 11), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1132,
+      "line": 1135,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 11, height: 11), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1174,
+      "line": 1177,
       "text": "class func drawHorizontalAlignmentRight(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 11, height: 15), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1180,
+      "line": 1183,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 11, height: 15), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1210,
+      "line": 1213,
       "text": "class func drawHorizontalAlignmentTrailing(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 11, height: 15), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1216,
+      "line": 1219,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 11, height: 15), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1256,
+      "line": 1259,
       "text": "class func drawHorizontalAlignmentCenter(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 11, height: 15), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1262,
+      "line": 1265,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 11, height: 15), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1302,
+      "line": 1305,
       "text": "class func drawHorizontalAlignmentLeft(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 11, height: 15), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1308,
+      "line": 1311,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 11, height: 15), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1338,
+      "line": 1341,
       "text": "class func drawHorizontalAlignmentLeading(frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 11, height: 15), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1344,
+      "line": 1347,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 11, height: 15), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1382,
+      "line": 1385,
       "text": "class func drawWifiExlusionMark(color: UIColor = .black, frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1388,
+      "line": 1391,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 24, height: 24), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1449,
+      "line": 1452,
       "text": "class func drawEyeSlashFill(color: UIColor = .black, frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1455,
+      "line": 1458,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 24, height: 24), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1510,
+      "line": 1513,
       "text": "class func drawListBulletIndent(color: UIColor = .black, frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1516,
+      "line": 1519,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 24, height: 24), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1675,
+      "line": 1678,
       "text": "class func drawInfoCircleFill(color: UIColor = .black, frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1681,
+      "line": 1684,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 24, height: 24), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1861,
+      "line": 1864,
       "text": "class func drawChevronUpDown(color: UIColor = .black, frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1867,
+      "line": 1870,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 16, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1920,
+      "line": 1923,
       "text": "class func drawChevronDown(color: UIColor = .black, frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1926,
+      "line": 1929,
       "text": "let resizedFrame = resizing.apply(rect: CGRect(x: 0, y: 0, width: 16, height: 16), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1955,
+      "line": 1958,
       "text": "class func drawSearch(color: UIColor = .black, frame targetFrame: CGRect = CGRect(x: 0, y: 0, width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 1961,
+      "line": 1964,
       "text": "let resizedFrame: CGRect = resizing.apply(rect: CGRect(x: 0, y: 0, width: 19, height: 19), target: targetFrame)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2004,
+      "line": 2007,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 20, height: 16), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2022,
+      "line": 2025,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 20, height: 16), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2040,
+      "line": 2043,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 20, height: 16), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2058,
+      "line": 2061,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 20, height: 16), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2076,
+      "line": 2079,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 16, height: 16), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2094,
+      "line": 2097,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 16, height: 16), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2112,
+      "line": 2115,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 16, height: 16), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2130,
+      "line": 2133,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 16, height: 16), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2148,
+      "line": 2151,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 16, height: 16), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2166,
+      "line": 2169,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 16, height: 16), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2184,
+      "line": 2187,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 24, height: 24), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2202,
+      "line": 2205,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 24, height: 24), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2220,
+      "line": 2223,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 16, height: 16), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2238,
+      "line": 2241,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 16, height: 16), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2256,
+      "line": 2259,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 32, height: 16), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2274,
+      "line": 2277,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 15, height: 11), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2292,
+      "line": 2295,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 15, height: 11), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2310,
+      "line": 2313,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 15, height: 11), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2328,
+      "line": 2331,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 11, height: 11), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2346,
+      "line": 2349,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 11, height: 11), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2364,
+      "line": 2367,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 11, height: 15), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2382,
+      "line": 2385,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 11, height: 15), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2400,
+      "line": 2403,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 11, height: 15), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2418,
+      "line": 2421,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 11, height: 15), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2436,
+      "line": 2439,
       "text": "UIGraphicsBeginImageContextWithOptions(CGSize(width: 11, height: 15), false, 0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2445,
+      "line": 2448,
       "text": "class func imageOfWifiExlusionMark(_ size: CGSize = CGSize(width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) -> UIImage {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2463,
+      "line": 2466,
       "text": "class func imageOfEyeSlashFill(_ size: CGSize = CGSize(width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) -> UIImage {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2481,
+      "line": 2484,
       "text": "class func imageOfRelationshipDiagram(_ size: CGSize = CGSize(width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) -> UIImage {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2499,
+      "line": 2502,
       "text": "class func imageOfInfoCircleFill(_ size: CGSize = CGSize(width: 24, height: 24), resizing: ResizingBehavior = .aspectFit) -> UIImage {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2517,
+      "line": 2520,
       "text": "class func imageOfChevronUpDown(_ size: CGSize = CGSize(width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) -> UIImage {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2571,
+      "line": 2574,
       "text": "class func imageOfChevronRight(_ size: CGSize = CGSize(width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) -> UIImage? {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2590,
+      "line": 2593,
       "text": "class func imageOfChevronLeft(_ size: CGSize = CGSize(width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) -> UIImage? {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2609,
+      "line": 2612,
       "text": "class func imageOfChevronDown(_ size: CGSize = CGSize(width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) -> UIImage {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/IconKit.swift",
-      "line": 2627,
+      "line": 2630,
       "text": "class func imageOfSearch(_ size: CGSize = CGSize(width: 16, height: 16), resizing: ResizingBehavior = .aspectFit) -> UIImage {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/InspectorAppearance.swift",
-      "line": 14,
+      "line": 17,
       "text": "var regularIconSize = CGSize(width: 20, height: 20)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/InspectorAppearance.swift",
-      "line": 16,
+      "line": 19,
       "text": "var actionIconSize = CGSize(width: 24, height: 24)"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/InspectorAppearance.swift",
-      "line": 28,
+      "line": 31,
       "text": "var highlightLayerBorderWidth: CGFloat = 2 / UIScreen.main.scale"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/InspectorAppearance.swift",
-      "line": 30,
+      "line": 33,
       "text": "var wireframeLayerBorderWidth: CGFloat = 1 / UIScreen.main.scale"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/InspectorConfiguration.swift",
-      "line": 50,
+      "line": 53,
       "text": "guard let keyWindow = ViewHierarchy(application: .shared).keyWindow else { return .light }"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/InspectorConfiguration.swift",
-      "line": 52,
+      "line": 55,
       "text": "switch (keyWindow.overrideUserInterfaceStyle, keyWindow.traitCollection.userInterfaceStyle) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/InspectorHighlightView.swift",
-      "line": 329,
+      "line": 332,
       "text": "elementNameView.image = element.iconImage?.resized(CGSize(18))"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/InspectorHighlightView.swift",
-      "line": 371,
+      "line": 374,
       "text": "borderWidth = 4 / UIScreen.main.scale"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/InspectorHighlightView.swift",
-      "line": 375,
+      "line": 378,
       "text": "borderWidth = 2 / UIScreen.main.scale"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/Manager+ElementInspectorCoordinatorDelegate.swift",
-      "line": 34,
+      "line": 37,
       "text": "guard let keyWindow = keyWindow else { return }"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/Manager+ElementInspectorCoordinatorDelegate.swift",
-      "line": 42,
+      "line": 45,
       "text": "sourceView: sourceView ?? keyWindow"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/Manager+ElementInspectorCoordinatorDelegate.swift",
-      "line": 44,
+      "line": 47,
       "text": "presentedBy: keyWindow"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/Manager+ElementInspectorCoordinatorDelegate.swift",
-      "line": 48,
+      "line": 51,
       "text": "keyWindow.topPresentedViewController?.present(coordinator.start(), animated: animated) { [weak self] in"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/Manager+KeyCommandPresentable.swift",
-      "line": 133,
+      "line": 136,
       "text": "guard let keyWindow = keyWindow else { return [] }"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/Manager+KeyCommandPresentable.swift",
-      "line": 147,
+      "line": 150,
       "text": "var commands = windows.map { inspectCommands(window: $0, from: keyWindow) }"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/Manager+KeyCommandPresentable.swift",
-      "line": 189,
+      "line": 192,
       "text": "let keyWindow = keyWindow,"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/Manager+KeyCommandPresentable.swift",
-      "line": 199,
+      "line": 202,
       "text": "keyWindow.overrideUserInterfaceStyle = {"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/Manager+KeyCommandPresentable.swift",
-      "line": 200,
+      "line": 203,
       "text": "switch keyWindow.traitCollection.userInterfaceStyle {"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/Manager+KeyCommandPresentable.swift",
-      "line": 208,
+      "line": 211,
       "text": "guard keyWindow.traitCollection.userInterfaceStyle == .light else {"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/Manager.swift",
-      "line": 20,
+      "line": 23,
       "text": "var keyWindow: UIWindow? { dependencies.viewHierarchy.keyWindow }"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/OptionListControl.swift",
-      "line": 27,
+      "line": 30,
       "text": "private lazy var icon = Icon(.chevronUpDown, color: textColor, size: CGSize(width: 14, height: 14))"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/SeparatorView.swift",
-      "line": 36,
+      "line": 39,
       "text": "var thicknesInPixels: CGFloat { thickness / UIScreen.main.scale }"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/UIImage+InspectorEX.swift",
-      "line": 116,
+      "line": 119,
       "text": "UIScreen.main.scale"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/UIView+InspectorEX.swift",
-      "line": 608,
+      "line": 611,
       "text": "layer.rasterizationScale = max(maxScale, UIScreen.main.scale)"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/ViewHierarchy.swift",
-      "line": 25,
+      "line": 28,
       "text": "var keyWindow: UIWindow? { windows.first(where: \\.isKeyWindow) }"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/ViewHierarchy.swift",
-      "line": 28,
+      "line": 31,
       "text": "presentedViewControllers?.last ?? keyWindow?.rootViewController"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/ViewHierarchy.swift",
-      "line": 32,
+      "line": 35,
       "text": "keyWindow?.rootViewController?.allPresentedViewControllers"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/ViewHierarchyCoordinator+AsyncOperationProtocol.swift",
-      "line": 13,
+      "line": 16,
       "text": "guard let keyWindow = PTSceneContext.activeWindow() else {"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/ViewHierarchyCoordinator+AsyncOperationProtocol.swift",
-      "line": 21,
+      "line": 24,
       "text": "let showLoaderTask = showLoaderTask(loaderView, in: keyWindow) { [weak self] _ in"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/ViewHierarchyElementThumbnailView.swift",
-      "line": 171,
+      "line": 174,
       "text": "let icon = Icon(glyph, color: color, size: CGSize(width: 36, height: 36))"
     },
     {
       "kind": "keyWindow",
       "path": "PooToolsSource/Inspector/ViewHierarchyRepresentable.swift",
-      "line": 11,
+      "line": 14,
       "text": "var keyWindow: UIWindow? { get }"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/ViewHierarchyRoot.swift",
-      "line": 160,
+      "line": 163,
       "text": "var frame: CGRect { UIScreen.main.bounds }"
     },
     {
       "kind": "screen.bounds",
       "path": "PooToolsSource/Inspector/WindowAttributesSectionDataSource.swift",
-      "line": 53,
+      "line": 56,
       "text": "rect: { window.screen.bounds },"
     },
     {
@@ -2224,7 +2221,7 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Label/PTAutoScrollLabel.swift",
-      "line": 136,
+      "line": 139,
       "text": "label.frame = CGRect(x: xOffset, y: 0, width: size.width + 10, height: bounds.height)"
     },
     {
@@ -2242,193 +2239,193 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 38,
+      "line": 42,
       "text": "public let systemLog_base_width:CGFloat = 240"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 39,
+      "line": 43,
       "text": "public let systemLog_base_height:CGFloat = 148"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 888,
+      "line": 892,
       "text": "let view = PTAlertDebugView(frame: CGRect(x: 40, y: 100, width: 280, height: 250))"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1302,
+      "line": 1306,
       "text": "let screenSize = UIScreen.main.bounds.size"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1595,
+      "line": 1599,
       "text": "hzString = \"MaxFrameRate: \\(UIScreen.main.maximumFramesPerSecond) Hz\""
     },
     {
       "kind": "isFaceIDCapable",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1615,
+      "line": 1619,
       "text": "IsFaceIDCapable: \\(PTDevice.current.isFaceIDCapable ? \"Yes\" : \"No\")"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1623,
+      "line": 1627,
       "text": "ScreenSize: \\(UIScreen.main.bounds.size)"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1625,
+      "line": 1629,
       "text": "ScreenScale: \\(UIScreen.main.scale)"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1656,
+      "line": 1660,
       "text": "Screen Size:       \\(UIScreen.main.bounds.size)"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1658,
+      "line": 1662,
       "text": "Screen Scale:      \\(UIScreen.main.scale)"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1659,
+      "line": 1663,
       "text": "Max Frame Rate:    \\(UIScreen.main.maximumFramesPerSecond) Hz"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1660,
+      "line": 1664,
       "text": "Brightness:        \\(String(format: \"%.2f\", UIScreen.main.brightness))"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/LocalConsole/ResizeController.swift",
-      "line": 293,
+      "line": 296,
       "text": "@MainActor static let kMaxConsoleWidth: CGFloat = CGFloat.kSCREEN_WIDTH - 56"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/LocalConsole/ResizeController.swift",
-      "line": 314,
+      "line": 317,
       "text": "terminal.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/LocalConsole/ResizeController.swift",
-      "line": 320,
+      "line": 323,
       "text": "terminal.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/LocalConsole/ResizeController.swift",
-      "line": 355,
+      "line": 358,
       "text": "layer.borderWidth = 1 / UIScreen.main.scale"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/LocalConsole/ResizeController.swift",
-      "line": 382,
+      "line": 385,
       "text": "grabber.frame.size = CGSize(width: 36, height: 5)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/LocalConsole/ResizeController.swift",
-      "line": 449,
+      "line": 452,
       "text": "backgroundButton.frame.size = CGSize(width: self.frame.size.width, height: possibleEndpoints[0].y + 30)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/LocalConsole/ResizeController.swift",
-      "line": 459,
+      "line": 462,
       "text": "button.frame.size = CGSize(width: 116, height: 52)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/LocalConsole/ResizeController.swift",
-      "line": 481,
+      "line": 484,
       "text": "button.frame.size = CGSize(width: 116, height: 52)"
     },
     {
       "kind": "statusBarHeight",
       "path": "PooToolsSource/LocalConsole/ResizeController.swift",
-      "line": 611,
+      "line": 614,
       "text": "lazy var possibleEndpoints = [CGPoint(x: 0, y: (UIScreen.hasRoundedCorners ? 44 : -8) + 63), CGPoint(x: 0, y: CGFloat.statusBarHeight() + 5)]"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 746,
+      "line": 749,
       "text": "var reloadWidth = reloadButton.sizeFor(height: 34).width + 16"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 750,
+      "line": 753,
       "text": "baseHeight = reloadButton.sizeFor(lineSpacing: 2.5,width: reloadMaxWidth).height + 16"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift",
-      "line": 53,
+      "line": 56,
       "text": "public var playButtonImageSize:CGSize = .init(width: 44, height: 44)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 56,
+      "line": 57,
       "text": "let width = containerWidth.isFinite && containerWidth > 0 ? containerWidth : 320"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 115,
+      "line": 116,
       "text": "public var chatMeBubbleImage:UIImage = UIColor.white.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 117,
+      "line": 118,
       "text": "public var chatMeHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.white).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 119,
+      "line": 120,
       "text": "public var chatOtherBubbleImage:UIImage = UIColor.systemBlue.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 121,
+      "line": 122,
       "text": "public var chatOtherHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.systemBlue).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 183,
+      "line": 184,
       "text": "public var mediaPlayButtonSize:CGSize = .init(width: 34, height: 34)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MessageKit/PTChatTextCell.swift",
-      "line": 139,
+      "line": 142,
       "text": "var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont, lineSpacing: PTChatConfig.share.textLineSpace, width: maxContentWidth).height + 40"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MessageKit/PTChatView.swift",
-      "line": 109,
+      "line": 112,
       "text": "var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont,lineSpacing: PTChatConfig.share.textLineSpace,width: contentMaxWidth).height + 40"
     },
     {
@@ -3022,7 +3019,7 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextAttributes.swift",
-      "line": 283,
+      "line": 310,
       "text": "size: configuration.display.placeholderSize(fallback: CGSize(width: 160, height: 90)))"
     },
     {
@@ -3034,31 +3031,31 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 446,
+      "line": 456,
       "text": "static func image(size: CGSize = CGSize(width: 24, height: 24), video: Bool) -> UIImage {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 447,
+      "line": 457,
       "text": "let width = max(1, size.width.isFinite ? size.width : 24)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 448,
+      "line": 458,
       "text": "let height = max(1, size.height.isFinite ? size.height : 24)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 948,
+      "line": 978,
       "text": "let badgeSize = CGSize(width: textSize.width + 10, height: textSize.height + 6)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/PageControl/PTPillPageControl.swift",
-      "line": 28,
+      "line": 34,
       "text": "open var pillSize: CGSize = CGSize(width: 20, height: 2.5) {"
     },
     {
@@ -3090,6 +3087,18 @@
       "path": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
       "line": 125,
       "text": "let width = videoTimeLabel.sizeFor(height: 15).width + 8"
+    },
+    {
+      "kind": "UIScreen.main",
+      "path": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
+      "line": 139,
+      "text": "let scale = window?.screen.scale ?? UIScreen.main.scale"
+    },
+    {
+      "kind": "UIScreen.main",
+      "path": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
+      "line": 334,
+      "text": "let side = bounds.height * (window?.screen.scale ?? UIScreen.main.scale)"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -3154,79 +3163,79 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
-      "line": 39,
+      "line": 43,
       "text": "open var backImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
-      "line": 41,
+      "line": 45,
       "text": "open var photoImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
-      "line": 43,
+      "line": 47,
       "text": "open var flashImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
-      "line": 44,
+      "line": 48,
       "text": "open var flashImageSelected:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
-      "line": 46,
+      "line": 50,
       "text": "open var scanLineImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
-      "line": 48,
+      "line": 52,
       "text": "open var qrCodeImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
-      "line": 79,
+      "line": 83,
       "text": "let scanningLineX:CGFloat = 0.5 * (1 - 0.9) * CGFloat.kSCREEN_WIDTH"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
-      "line": 80,
+      "line": 84,
       "text": "let scanningLineY:CGFloat = 0.25 * CGFloat.kSCREEN_HEIGHT"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
-      "line": 81,
+      "line": 85,
       "text": "let scanningLineW:CGFloat = 0.9 * CGFloat.kSCREEN_WIDTH"
     },
     {
       "kind": "statusBarHeight",
       "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
-      "line": 272,
+      "line": 276,
       "text": "make.top.equalToSuperview().inset(CGFloat.statusBarHeight())"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
-      "line": 305,
+      "line": 309,
       "text": "view.imageSize = CGSize(width: 24, height: 24)"
     },
     {
       "kind": "statusBarHeight",
       "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
-      "line": 437,
+      "line": 441,
       "text": "make.top.equalToSuperview().inset(CGFloat.statusBarHeight())"
     },
     {
       "kind": "statusBarHeight",
       "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
-      "line": 587,
+      "line": 591,
       "text": "make.top.equalToSuperview().inset(CGFloat.statusBarHeight())"
     },
     {
@@ -3250,13 +3259,13 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 477,
+      "line": 480,
       "text": "make.size.equalTo(CGSize(width: 36, height: 36))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 488,
+      "line": 491,
       "text": "make.size.equalTo(CGSize(width: 36, height: 36))"
     },
     {
@@ -3274,13 +3283,13 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/SignView/PTEasySignatureView.swift",
-      "line": 236,
+      "line": 239,
       "text": "let sizeToFit = text.nsString.boundingRect(with: CGSize(width: 128, height: 30),options: NSStringDrawingOptions.usesLineFragmentOrigin,attributes: [NSAttributedString.Key.font:textFont], context: nil).size"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/SignView/PTEasySignatureView.swift",
-      "line": 248,
+      "line": 251,
       "text": "UIGraphicsBeginImageContextWithOptions(bounds.size, false, UIScreen.main.scale)"
     },
     {
@@ -3328,19 +3337,19 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Stepper/PTStepper.swift",
-      "line": 124,
+      "line": 127,
       "text": "open var addImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44)) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Stepper/PTStepper.swift",
-      "line": 131,
+      "line": 134,
       "text": "open var reduceImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44)) {"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/Stepper/PTStepperView.swift",
-      "line": 141,
+      "line": 144,
       "text": "let contentWidth = CGFloat.kSCREEN_WIDTH - self.viewConfig.itemOriginalX * 2 - cellModel.stopCircleWidth - PTStepperVerticalCell.circleRight - PTAppBaseConfig.share.defaultViewSpace"
     },
     {
@@ -3370,7 +3379,7 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/TouchInspector/TouchOverlayView.swift",
-      "line": 17,
+      "line": 20,
       "text": "let touchIndicatorView = TouchIndicatorView(size: CGSize(width: 30, height: 30))"
     },
     {
@@ -3388,115 +3397,115 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorHandleLayer.swift",
-      "line": 54,
+      "line": 57,
       "text": "layer.frame = CGRect(x: 0, y: 0, width: 6, height: 16)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsSlider.swift",
-      "line": 16,
+      "line": 22,
       "text": "static let height: CGFloat = 34.0"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsSlider.swift",
-      "line": 268,
+      "line": 274,
       "text": "frame.size.width = 100.0"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsSlider.swift",
-      "line": 312,
+      "line": 318,
       "text": "stack.frame = CGRect(x: Constants.trackerOutterCircleHeight / 2,y: bounds.midY + Constants.height / 2,width: bounds.width - Constants.trackerOutterCircleHeight,height: 34.0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsSlider.swift",
-      "line": 341,
+      "line": 347,
       "text": "label.frame = CGRect(x: x,y: y,width: label.frame.width,height: 34.0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 432,
+      "line": 433,
       "text": "make.width.equalTo(UIView.sizeFor(string: self.currentOutputType.name, font: .appfont(size: 14),height: 34).width + 25)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 549,
+      "line": 550,
       "text": "let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: groupW, y: 0, width: cellWidth, height: cellHeight), zIndex: 1000+index)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1104,
+      "line": 1105,
       "text": "let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1115,
+      "line": 1116,
       "text": "self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1126,
+      "line": 1127,
       "text": "let height: CGFloat = 160.0"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1163,
+      "line": 1164,
       "text": "make.width.equalTo(UIView.sizeFor(string: self.currentOutputType.name, font: .appfont(size: 14),height: 34).width + 25)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1316,
+      "line": 1317,
       "text": "generator.maximumSize = CGSize(width: 600, height: 600)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1329,
+      "line": 1330,
       "text": "playerItem.asset.getVideoFirstImage(maximumSize: CGSize(width: 600, height: 600)) { image in"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1348,
+      "line": 1349,
       "text": "let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1359,
+      "line": 1360,
       "text": "self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1364,
+      "line": 1365,
       "text": "let height: CGFloat = 160.0"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorVideoTimeLineGenerator.swift",
-      "line": 52,
+      "line": 55,
       "text": "maximumSize: CGSize = CGSize(width: 300, height: 300)) async throws -> [CGImage] {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/VideoConverter.swift",
-      "line": 136,
+      "line": 139,
       "text": "let width = floor(cropFrame.size.width / 16) * 16"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/VideoConverter.swift",
-      "line": 137,
+      "line": 140,
       "text": "let height = floor(cropFrame.size.height / 16) * 16"
     },
     {
@@ -3699,6 +3708,12 @@
     },
     {
       "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsListTests/PTCollectionHeaderSpacingTests.swift",
+      "line": 43,
+      "text": "list.frame = CGRect(x: 0, y: 0, width: 320, height: 640)"
+    },
+    {
+      "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsListTests/PTListQualityTests.swift",
       "line": 325,
       "text": "list.frame = CGRect(x: 0, y: 0, width: 320, height: 480)"
@@ -3765,8 +3780,44 @@
     },
     {
       "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsNavigationTests/PTNavigationRegressionTests.swift",
+      "line": 61,
+      "text": "let bar = PTNavBar(frame: CGRect(x: 0, y: 0, width: 320, height: 72))"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsNavigationTests/PTNavigationRegressionTests.swift",
+      "line": 64,
+      "text": "let leftButton = UIView(frame: CGRect(x: 0, y: 0, width: 80, height: 56))"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsNavigationTests/PTNavigationRegressionTests.swift",
+      "line": 65,
+      "text": "let rightButton = UIView(frame: CGRect(x: 0, y: 0, width: 48, height: 40))"
+    },
+    {
+      "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift",
-      "line": 122,
+      "line": 110,
+      "text": ".custom(size: CGSize(width: 20, height: 20)),"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift",
+      "line": 126,
+      "text": ".custom(size: CGSize(width: 24, height: 16)),"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift",
+      "line": 133,
+      "text": "let configuration = PTRichTextImageConfiguration(size: CGSize(width: 32, height: 18),"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift",
+      "line": 167,
       "text": "XCTAssertEqual(videoAttachment?.attachmentSize, CGSize(width: 160, height: 90))"
     },
     {
@@ -4126,68 +4177,92 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsUIFoundationTests/PTTabBarAndGradientTests.swift",
-      "line": 89,
+      "line": 100,
       "text": "XCTAssertEqual(base, CGSize(width: 32, height: 32))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsUIFoundationTests/PTTabBarAndGradientTests.swift",
-      "line": 103,
+      "line": 114,
       "text": "CGSize(width: 24, height: 28)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsUIFoundationTests/PTTabBarAndGradientTests.swift",
-      "line": 110,
+      "line": 121,
       "text": "CGSize(width: 36, height: 36)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsUIFoundationTests/PTTabBarAndGradientTests.swift",
-      "line": 126,
+      "line": 137,
       "text": "XCTAssertEqual(result, CGSize(width: 64, height: 32))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsUIFoundationTests/PTTabBarAndGradientTests.swift",
-      "line": 142,
+      "line": 153,
       "text": "item.frame = CGRect(x: 0, y: 0, width: 120, height: 100)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsUIFoundationTests/PTTabBarAndGradientTests.swift",
-      "line": 157,
+      "line": 168,
       "text": "let label = UILabel(frame: CGRect(x: 0, y: 0, width: 160, height: 50))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsUIFoundationTests/PTTabBarAndGradientTests.swift",
-      "line": 169,
+      "line": 180,
       "text": "let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 120, height: 120))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsUIFoundationTests/PTTabBarAndGradientTests.swift",
-      "line": 186,
+      "line": 197,
       "text": "button.frame = CGRect(x: 0, y: 0, width: 160, height: 50)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsUIFoundationTests/PTTabBarAndGradientTests.swift",
-      "line": 207,
+      "line": 218,
       "text": "button.frame = CGRect(x: 0, y: 0, width: 160, height: 50)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsUIFoundationTests/PTTabBarAndGradientTests.swift",
-      "line": 236,
+      "line": 247,
       "text": "let view = UIView(frame: CGRect(x: 0, y: 0, width: 120, height: 50))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsUIFoundationTests/PTTabBarAndGradientTests.swift",
-      "line": 246,
+      "line": 257,
       "text": "let label = UILabel(frame: CGRect(x: 0, y: 0, width: 160, height: 50))"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift",
+      "line": 27,
+      "text": "width: 340,"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift",
+      "line": 39,
+      "text": "width: 340,"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift",
+      "line": 66,
+      "text": "width: 260,"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift",
+      "line": 80,
+      "text": "width: 340,"
     }
   ]
 }

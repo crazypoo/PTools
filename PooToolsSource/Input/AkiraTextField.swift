@@ -113,10 +113,19 @@ import UIKit
     
     private func updatePlaceholder() {
         placeholderLabel.frame = placeholderRect(forBounds: bounds)
-        placeholderLabel.text = placeholder
-        placeholderLabel.font = placeholderFontFromFont(currentFont)
-        placeholderLabel.textColor = placeholderColor
+        applyPlaceholder(to: placeholderLabel,
+                         text: placeholder,
+                         font: currentFont,
+                         color: placeholderColor,
+                         scale: placeholderFontScale)
         placeholderLabel.textAlignment = textAlignment
+    }
+
+    // English: Refresh the Akira label without changing its border animation policy.
+    // Español: Actualiza la etiqueta de Akira sin cambiar su política de animación del borde.
+    // 中文：只刷新 Akira 占位标签，不改变原有边框动画策略。
+    override open func refreshPlaceholderAppearance() {
+        updatePlaceholder()
     }
     
     private func updateBorder() {
@@ -136,7 +145,8 @@ import UIKit
     
     /// 根据当前字体和缩放比例，计算上浮后占位符的字体
     private func placeholderFontFromFont(_ font: UIFont) -> UIFont {
-        return UIFont(descriptor: font.fontDescriptor, size: font.pointSize * placeholderFontScale)
+        inputAppearance.placeholderFontOverride ?? UIFont(descriptor: font.fontDescriptor,
+                                                           size: font.pointSize * placeholderFontScale)
     }
     
     /// 计算占位符区域的高度
@@ -176,6 +186,6 @@ import UIKit
     /// 返回正常的文本绘制区域
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
         // 将输入文本向下偏移，避免与上浮的占位符重叠
-        return bounds.offsetBy(dx: textFieldInsets.x, dy: textFieldInsets.y + placeholderHeight / 2)
+        return applySharedTextRect(bounds.offsetBy(dx: textFieldInsets.x, dy: textFieldInsets.y + placeholderHeight / 2), bounds: bounds)
     }
 }

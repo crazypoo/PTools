@@ -5046,6 +5046,7 @@
   {
     "dependencies": [
       "PToolsCore",
+      "PToolsUIFoundation",
       "ptools"
     ],
     "name": "PooToolsInput",

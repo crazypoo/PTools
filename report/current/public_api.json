@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29",
-  "generated_at": "2026-10-14T06:06:17Z",
+  "source_revision": "486435925e25155cc3fab847fbe7c076e7f31883",
+  "generated_at": "2026-10-14T08:12:53Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -14506,7 +14506,7 @@
     {
       "key": "PooToolsSource/Category/UIButton+PTEX.swift|public|class|public class ConsoleMenuButton: UIButton",
       "path": "PooToolsSource/Category/UIButton+PTEX.swift",
-      "line": 323,
+      "line": 327,
       "access": "public",
       "kind": "class",
       "declaration": "public class ConsoleMenuButton: UIButton { }"
@@ -14650,7 +14650,7 @@
     {
       "key": "PooToolsSource/Category/UIImageView+PTEX.swift|public|typealias|public typealias PTGIFImageTask = (UIImageView) -> Void",
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 133,
+      "line": 134,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTGIFImageTask = (UIImageView) -> Void"
@@ -14658,7 +14658,7 @@
     {
       "key": "PooToolsSource/Category/UIImageView+PTEX.swift|public|typealias|public typealias PTGIFImageFailTask = (UIImageView,URL,Error?) -> Void",
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 134,
+      "line": 135,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTGIFImageFailTask = (UIImageView,URL,Error?) -> Void"
@@ -15530,7 +15530,7 @@
     {
       "key": "PooToolsSource/Category/UIView+PTEX.swift|public|protocol|public protocol UIFadeOut",
       "path": "PooToolsSource/Category/UIView+PTEX.swift",
-      "line": 2206,
+      "line": 2259,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol UIFadeOut {}"
@@ -15538,7 +15538,7 @@
     {
       "key": "PooToolsSource/Category/UIView+PTEX.swift|public|func|public func fadeUpdate(duration: TimeInterval = 1, delay: TimeInterval = 0.15, work: @escaping @MainActor (Self) -> Void, completion: (@MainActor @Sendable () -> Void)? = nil)",
       "path": "PooToolsSource/Category/UIView+PTEX.swift",
-      "line": 2223,
+      "line": 2276,
       "access": "public",
       "kind": "func",
       "declaration": "public func fadeUpdate(duration: TimeInterval = 1, delay: TimeInterval = 0.15, work: @escaping @MainActor (Self) -> Void, completion: (@MainActor @Sendable () -> Void)? = nil) {"
@@ -18416,17 +18416,25 @@
       "declaration": "public var targetSize: CGSize?"
     },
     {
-      "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|init|public init(iCloudDocumentName: String = \"\", radius: CGFloat = 0, topLeft: CGFloat = 0, topRight: CGFloat = 0, bottomLeft: CGFloat = 0, bottomRight: CGFloat = 0, corner: UIRectCorner = .allCorners, capsule: Bool = false, borderWidth: CGFloat? = nil, borderColor: UIColor? = nil, showValueLabel: Bool? = nil, valueLabelFont: UIFont? = nil, valueLabelColor: UIColor? = nil, uniCount: Int? = nil, emptyImage: UIImage? = nil, targetSize: CGSize? = nil)",
+      "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|var|public var displayScale: CGFloat?",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 149,
+      "line": 136,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var displayScale: CGFloat?"
+    },
+    {
+      "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|init|public init(iCloudDocumentName: String = \"\", radius: CGFloat = 0, topLeft: CGFloat = 0, topRight: CGFloat = 0, bottomLeft: CGFloat = 0, bottomRight: CGFloat = 0, corner: UIRectCorner = .allCorners, capsule: Bool = false, borderWidth: CGFloat? = nil, borderColor: UIColor? = nil, showValueLabel: Bool? = nil, valueLabelFont: UIFont? = nil, valueLabelColor: UIColor? = nil, uniCount: Int? = nil, emptyImage: UIImage? = nil, targetSize: CGSize? = nil, displayScale: CGFloat? = nil)",
+      "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
+      "line": 154,
       "access": "public",
       "kind": "init",
-      "declaration": "public init(iCloudDocumentName: String = \"\", radius: CGFloat = 0, topLeft: CGFloat = 0, topRight: CGFloat = 0, bottomLeft: CGFloat = 0, bottomRight: CGFloat = 0, corner: UIRectCorner = .allCorners, capsule: Bool = false, borderWidth: CGFloat? = nil, borderColor: UIColor? = nil, showValueLabel: Bool? = nil, valueLabelFont: UIFont? = nil, valueLabelColor: UIColor? = nil, uniCount: Int? = nil, emptyImage: UIImage? = nil, targetSize: CGSize? = nil) {"
+      "declaration": "public init(iCloudDocumentName: String = \"\", radius: CGFloat = 0, topLeft: CGFloat = 0, topRight: CGFloat = 0, bottomLeft: CGFloat = 0, bottomRight: CGFloat = 0, corner: UIRectCorner = .allCorners, capsule: Bool = false, borderWidth: CGFloat? = nil, borderColor: UIColor? = nil, showValueLabel: Bool? = nil, valueLabelFont: UIFont? = nil, valueLabelColor: UIColor? = nil, uniCount: Int? = nil, emptyImage: UIImage? = nil, targetSize: CGSize? = nil, displayScale: CGFloat? = nil) {"
     },
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|struct|public struct PTLoadImageResult",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 170,
+      "line": 176,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTLoadImageResult {"
@@ -18434,7 +18442,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|let|public let allImages: [UIImage]?",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 171,
+      "line": 177,
       "access": "public",
       "kind": "let",
       "declaration": "public let allImages: [UIImage]?"
@@ -18442,7 +18450,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|let|public let firstImage: UIImage?",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 172,
+      "line": 178,
       "access": "public",
       "kind": "let",
       "declaration": "public let firstImage: UIImage?"
@@ -18450,7 +18458,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|let|public let loadTime: TimeInterval",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 173,
+      "line": 179,
       "access": "public",
       "kind": "let",
       "declaration": "public let loadTime: TimeInterval"
@@ -18458,7 +18466,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|let|public let imageType: PTImageType",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 174,
+      "line": 180,
       "access": "public",
       "kind": "let",
       "declaration": "public let imageType: PTImageType"
@@ -18466,7 +18474,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|init|public init(allImages: [UIImage]?, firstImage: UIImage?, loadTime: TimeInterval, imageType: PTImageType = .unknown)",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 176,
+      "line": 182,
       "access": "public",
       "kind": "init",
       "declaration": "public init(allImages: [UIImage]?, firstImage: UIImage?, loadTime: TimeInterval, imageType: PTImageType = .unknown) {"
@@ -18474,7 +18482,7 @@
     {
       "key": "PooToolsSource/Core/PTLoadImageFunction.swift|public|class|public class PTLoadImageFunction: NSObject",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 193,
+      "line": 199,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTLoadImageFunction: NSObject {"
@@ -29170,23 +29178,47 @@
     {
       "key": "PooToolsSource/Input/HoshiTextField.swift|open|class|open class PTHoshiTextField: UITextField",
       "path": "PooToolsSource/Input/HoshiTextField.swift",
-      "line": 208,
+      "line": 210,
       "access": "open",
       "kind": "class",
       "declaration": "open class PTHoshiTextField: UITextField {"
     },
     {
-      "key": "PooToolsSource/Input/HoshiTextField.swift|open|var|open var textAndPlceholderSpace: CGFloat = 0",
+      "key": "PooToolsSource/Input/HoshiTextField.swift|open|var|open var inputAppearance = PTInputAppearance()",
       "path": "PooToolsSource/Input/HoshiTextField.swift",
-      "line": 231,
+      "line": 217,
       "access": "open",
       "kind": "var",
-      "declaration": "open var textAndPlceholderSpace: CGFloat = 0 {"
+      "declaration": "open var inputAppearance = PTInputAppearance() {"
+    },
+    {
+      "key": "PooToolsSource/Input/HoshiTextField.swift|open|var|open var textAndPlaceholderSpace: CGFloat = 0",
+      "path": "PooToolsSource/Input/HoshiTextField.swift",
+      "line": 240,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var textAndPlaceholderSpace: CGFloat = 0 {"
+    },
+    {
+      "key": "PooToolsSource/Input/HoshiTextField.swift|open|var|open var textAndPlceholderSpace: CGFloat",
+      "path": "PooToolsSource/Input/HoshiTextField.swift",
+      "line": 246,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var textAndPlceholderSpace: CGFloat {"
+    },
+    {
+      "key": "PooToolsSource/Input/HoshiTextField.swift|open|var|open var leadingSpace: CGFloat",
+      "path": "PooToolsSource/Input/HoshiTextField.swift",
+      "line": 251,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var leadingSpace: CGFloat {"
     },
     {
       "key": "PooToolsSource/Input/HoshiTextField.swift|open|var|open var leftSpace: CGFloat?",
       "path": "PooToolsSource/Input/HoshiTextField.swift",
-      "line": 236,
+      "line": 257,
       "access": "open",
       "kind": "var",
       "declaration": "open var leftSpace: CGFloat? {"
@@ -29194,7 +29226,7 @@
     {
       "key": "PooToolsSource/Input/HoshiTextField.swift|open|var|open var textEditingEdges: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)",
       "path": "PooToolsSource/Input/HoshiTextField.swift",
-      "line": 245,
+      "line": 266,
       "access": "open",
       "kind": "var",
       "declaration": "open var textEditingEdges: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)"
@@ -29450,15 +29482,47 @@
     {
       "key": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift|public|class|public class PTFloatingPlaseholderTextField: UIView",
       "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
-      "line": 49,
+      "line": 50,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTFloatingPlaseholderTextField: UIView {"
     },
     {
+      "key": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift|public|var|public var inputAppearance = PTInputAppearance()",
+      "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
+      "line": 67,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var inputAppearance = PTInputAppearance() {"
+    },
+    {
+      "key": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift|public|var|public var textAndPlaceholderSpace: CGFloat",
+      "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
+      "line": 71,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var textAndPlaceholderSpace: CGFloat {"
+    },
+    {
+      "key": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift|public|var|public var textAndPlceholderSpace: CGFloat",
+      "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
+      "line": 81,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var textAndPlceholderSpace: CGFloat {"
+    },
+    {
+      "key": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift|public|var|public var leadingSpace: CGFloat",
+      "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
+      "line": 86,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var leadingSpace: CGFloat {"
+    },
+    {
       "key": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift|public|var|public var inputedCallback: ((String) -> Void)?",
       "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
-      "line": 62,
+      "line": 95,
       "access": "public",
       "kind": "var",
       "declaration": "public var inputedCallback: ((String) -> Void)?"
@@ -29466,7 +29530,7 @@
     {
       "key": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift|public|var|public var inputBegainCallback: PTActionTask?",
       "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
-      "line": 63,
+      "line": 96,
       "access": "public",
       "kind": "var",
       "declaration": "public var inputBegainCallback: PTActionTask?"
@@ -29474,7 +29538,7 @@
     {
       "key": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift|public|var|public var inputingCallback: ((String) -> Void)?",
       "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
-      "line": 64,
+      "line": 97,
       "access": "public",
       "kind": "var",
       "declaration": "public var inputingCallback: ((String) -> Void)?"
@@ -29482,7 +29546,7 @@
     {
       "key": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift|public|var|public var actionTouchBlock: TouchedBlock?",
       "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
-      "line": 65,
+      "line": 98,
       "access": "public",
       "kind": "var",
       "declaration": "public var actionTouchBlock: TouchedBlock?"
@@ -29490,7 +29554,7 @@
     {
       "key": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift|public|init|public init(config: PTFloatingPlaseholderConfig = PTFloatingPlaseholderConfig())",
       "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
-      "line": 107,
+      "line": 140,
       "access": "public",
       "kind": "init",
       "declaration": "public init(config: PTFloatingPlaseholderConfig = PTFloatingPlaseholderConfig()) {"
@@ -29498,7 +29562,7 @@
     {
       "key": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift|public|func|public func configure(placeholder: String, text: String? = nil)",
       "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
-      "line": 197,
+      "line": 282,
       "access": "public",
       "kind": "func",
       "declaration": "public func configure(placeholder: String, text: String? = nil) {"
@@ -29506,7 +29570,7 @@
     {
       "key": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift|public|func|public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool",
       "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
-      "line": 298,
+      "line": 390,
       "access": "public",
       "kind": "func",
       "declaration": "public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {"
@@ -29514,7 +29578,7 @@
     {
       "key": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift|public|func|public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool",
       "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
-      "line": 308,
+      "line": 400,
       "access": "public",
       "kind": "func",
       "declaration": "public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {"
@@ -29522,7 +29586,7 @@
     {
       "key": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift|public|func|public func textFieldDidEndEditing(_ textField: UITextField)",
       "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
-      "line": 313,
+      "line": 405,
       "access": "public",
       "kind": "func",
       "declaration": "public func textFieldDidEndEditing(_ textField: UITextField) {"
@@ -29938,7 +30002,7 @@
     {
       "key": "PooToolsSource/Input/PTTextField.swift|public|class|public class PTTextField: UITextField",
       "path": "PooToolsSource/Input/PTTextField.swift",
-      "line": 23,
+      "line": 24,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTTextField: UITextField {"
@@ -29946,15 +30010,39 @@
     {
       "key": "PooToolsSource/Input/PTTextField.swift|open|var|open var leftSpace: CGFloat = 0",
       "path": "PooToolsSource/Input/PTTextField.swift",
-      "line": 27,
+      "line": 28,
       "access": "open",
       "kind": "var",
       "declaration": "open var leftSpace: CGFloat = 0 {"
     },
     {
+      "key": "PooToolsSource/Input/PTTextField.swift|open|var|open var leadingSpace: CGFloat",
+      "path": "PooToolsSource/Input/PTTextField.swift",
+      "line": 38,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var leadingSpace: CGFloat {"
+    },
+    {
+      "key": "PooToolsSource/Input/PTTextField.swift|open|var|open var textEditingEdges: UIEdgeInsets = .zero",
+      "path": "PooToolsSource/Input/PTTextField.swift",
+      "line": 46,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var textEditingEdges: UIEdgeInsets = .zero {"
+    },
+    {
+      "key": "PooToolsSource/Input/PTTextField.swift|open|var|open var inputAppearance = PTInputAppearance()",
+      "path": "PooToolsSource/Input/PTTextField.swift",
+      "line": 53,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var inputAppearance = PTInputAppearance() {"
+    },
+    {
       "key": "PooToolsSource/Input/PTTextField.swift|open|var|open var rightTapBlock: PTActionTask?",
       "path": "PooToolsSource/Input/PTTextField.swift",
-      "line": 34,
+      "line": 60,
       "access": "open",
       "kind": "var",
       "declaration": "open var rightTapBlock: PTActionTask?"
@@ -29962,15 +30050,79 @@
     {
       "key": "PooToolsSource/Input/PTTextField.swift|public|var|public var rightConfig: PTTextCustomRightViewConfig?",
       "path": "PooToolsSource/Input/PTTextField.swift",
-      "line": 36,
+      "line": 62,
       "access": "public",
       "kind": "var",
       "declaration": "public var rightConfig: PTTextCustomRightViewConfig? {"
     },
     {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|public|struct|public struct PTInputAppearance",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 28,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTInputAppearance {"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|public|var|public var placeholderAtt: PTRichText?",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 29,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var placeholderAtt: PTRichText?"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|public|var|public var placeholderColorOverride: UIColor?",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 30,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var placeholderColorOverride: UIColor?"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|public|var|public var placeholderFontOverride: UIFont?",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 31,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var placeholderFontOverride: UIFont?"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|public|var|public var textAndPlaceholderSpace: CGFloat",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 32,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var textAndPlaceholderSpace: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|public|var|public var leadingSpace: CGFloat",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 33,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var leadingSpace: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|public|var|public var textEditingEdges: UIEdgeInsets",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 34,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var textEditingEdges: UIEdgeInsets"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|public|init|public init(placeholderAtt: PTRichText? = nil, placeholderColorOverride: UIColor? = nil, placeholderFontOverride: UIFont? = nil, textAndPlaceholderSpace: CGFloat = 0, leadingSpace: CGFloat = 0, textEditingEdges: UIEdgeInsets = .zero)",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 41,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(placeholderAtt: PTRichText? = nil, placeholderColorOverride: UIColor? = nil, placeholderFontOverride: UIFont? = nil, textAndPlaceholderSpace: CGFloat = 0, leadingSpace: CGFloat = 0, textEditingEdges: UIEdgeInsets = .zero) {"
+    },
+    {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|class|open class TextFieldEffects: UITextField",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 21,
+      "line": 73,
       "access": "open",
       "kind": "class",
       "declaration": "open class TextFieldEffects: UITextField {"
@@ -29978,7 +30130,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|public|enum|public enum AnimationType: Int",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 24,
+      "line": 76,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum AnimationType: Int {"
@@ -29986,7 +30138,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|public|typealias|public typealias AnimationCompletionHandler = (_ type: AnimationType) -> Void",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 33,
+      "line": 85,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias AnimationCompletionHandler = (_ type: AnimationType) -> Void"
@@ -29994,7 +30146,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|public|let|public let placeholderLabel = UILabel()",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 36,
+      "line": 88,
       "access": "public",
       "kind": "let",
       "declaration": "public let placeholderLabel = UILabel()"
@@ -30002,15 +30154,79 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var animationCompletionHandler: AnimationCompletionHandler?",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 39,
+      "line": 91,
       "access": "open",
       "kind": "var",
       "declaration": "open var animationCompletionHandler: AnimationCompletionHandler?"
     },
     {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var inputAppearance = PTInputAppearance()",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 94,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var inputAppearance = PTInputAppearance() {"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var placeholderAtt: PTRichText?",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 102,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var placeholderAtt: PTRichText? {"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var placeholderFont: UIFont",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 112,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var placeholderFont: UIFont {"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var textAndPlaceholderSpace: CGFloat",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 121,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var textAndPlaceholderSpace: CGFloat {"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var textAndPlceholderSpace: CGFloat",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 132,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var textAndPlceholderSpace: CGFloat {"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var leadingSpace: CGFloat",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 137,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var leadingSpace: CGFloat {"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var leftSpace: CGFloat",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 147,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var leftSpace: CGFloat {"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var textEditingEdges: UIEdgeInsets",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 152,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var textEditingEdges: UIEdgeInsets {"
+    },
+    {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func animateViewsForTextEntry()",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 45,
+      "line": 165,
       "access": "open",
       "kind": "func",
       "declaration": "open func animateViewsForTextEntry() {"
@@ -30018,7 +30234,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func animateViewsForTextDisplay()",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 54,
+      "line": 170,
       "access": "open",
       "kind": "func",
       "declaration": "open func animateViewsForTextDisplay() {"
@@ -30026,7 +30242,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func drawViewsForRect(_ rect: CGRect)",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 61,
+      "line": 176,
       "access": "open",
       "kind": "func",
       "declaration": "open func drawViewsForRect(_ rect: CGRect) {"
@@ -30034,15 +30250,47 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func updateViewsForBoundsChange(_ bounds: CGRect)",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 68,
+      "line": 182,
       "access": "open",
       "kind": "func",
       "declaration": "open func updateViewsForBoundsChange(_ bounds: CGRect) {"
     },
     {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func applyPlaceholder(to label: UILabel, text: String?, font: UIFont, color: UIColor, scale: CGFloat = 1)",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 190,
+      "access": "open",
+      "kind": "func",
+      "declaration": "open func applyPlaceholder(to label: UILabel, text: String?, font: UIFont, color: UIColor, scale: CGFloat = 1) {"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func refreshPlaceholderAppearance()",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 210,
+      "access": "open",
+      "kind": "func",
+      "declaration": "open func refreshPlaceholderAppearance() {"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func applySharedTextRect(_ styleRect: CGRect, bounds: CGRect) -> CGRect",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 214,
+      "access": "open",
+      "kind": "func",
+      "declaration": "open func applySharedTextRect(_ styleRect: CGRect, bounds: CGRect) -> CGRect {"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func invalidateInputLayout()",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 231,
+      "access": "open",
+      "kind": "func",
+      "declaration": "open func invalidateInputLayout() {"
+    },
+    {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|@objc open func textFieldDidBeginEditing()",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 110,
+      "line": 315,
       "access": "open",
       "kind": "func",
       "declaration": "@objc open func textFieldDidBeginEditing() {"
@@ -30050,7 +30298,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|@objc open func textFieldDidEndEditing()",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 115,
+      "line": 320,
       "access": "open",
       "kind": "func",
       "declaration": "@objc open func textFieldDidEndEditing() {"

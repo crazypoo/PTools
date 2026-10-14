@@ -830,7 +830,7 @@
   {
     "symbolName": "addSubviews",
     "referencePath": "PooToolsSource/Base/PTGAnimationImageView.swift",
-    "line": 76,
+    "line": 71,
     "ownerTarget": "ptools",
     "requiredModule": "ptools",
     "currentImports": "Lottie;UIKit",
@@ -839,7 +839,16 @@
   {
     "symbolName": "PTAppBaseConfig",
     "referencePath": "PooToolsSource/Base/PTGAnimationImageView.swift",
-    "line": 51,
+    "line": 39,
+    "ownerTarget": "ptools",
+    "requiredModule": "ptools",
+    "currentImports": "Lottie;UIKit",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTAppBaseConfig",
+    "referencePath": "PooToolsSource/Base/PTGAnimationImageView.swift",
+    "line": 48,
     "ownerTarget": "ptools",
     "requiredModule": "ptools",
     "currentImports": "Lottie;UIKit",
@@ -1784,7 +1793,7 @@
   {
     "symbolName": "PTLoadImageFunction",
     "referencePath": "PooToolsSource/Core/PTLoadImageFunction.swift",
-    "line": 392,
+    "line": 406,
     "ownerTarget": "ptools",
     "requiredModule": "PToolsCore",
     "currentImports": "AVFoundation;ImageIO;Kingfisher;UIKit;os",
@@ -1793,7 +1802,7 @@
   {
     "symbolName": "PTLoadImageFunction",
     "referencePath": "PooToolsSource/Core/PTLoadImageFunction.swift",
-    "line": 404,
+    "line": 420,
     "ownerTarget": "ptools",
     "requiredModule": "PToolsCore",
     "currentImports": "AVFoundation;ImageIO;Kingfisher;UIKit;os",
@@ -1802,7 +1811,7 @@
   {
     "symbolName": "PTLoadImageFunction",
     "referencePath": "PooToolsSource/Core/PTLoadImageFunction.swift",
-    "line": 570,
+    "line": 611,
     "ownerTarget": "ptools",
     "requiredModule": "PToolsCore",
     "currentImports": "AVFoundation;ImageIO;Kingfisher;UIKit;os",
@@ -4680,18 +4689,9 @@
     "ownerCandidates": "ptools"
   },
   {
-    "symbolName": "appfont",
-    "referencePath": "PooToolsSource/Input/HoshiTextField.swift",
-    "line": 226,
-    "ownerTarget": "PooToolsInput",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
-    "ownerCandidates": "ptools"
-  },
-  {
     "symbolName": "addSubviews",
     "referencePath": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
-    "line": 133,
+    "line": 166,
     "ownerTarget": "PooToolsInput",
     "requiredModule": "ptools",
     "currentImports": "Foundation;PToolsUIFoundation;SnapKit;UIKit;ptools",

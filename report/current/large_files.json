@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29",
-  "generated_at": "2026-10-14T06:07:23Z",
+  "source_revision": "486435925e25155cc3fab847fbe7c076e7f31883",
+  "generated_at": "2026-10-14T08:12:52Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -486,7 +486,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTGAnimationImageView.swift",
-      "lines": 90,
+      "lines": 85,
       "classification": "ok"
     },
     {
@@ -586,7 +586,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "lines": 558,
+      "lines": 561,
       "classification": "ok"
     },
     {
@@ -1056,7 +1056,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIButton+PTEX.swift",
-      "lines": 334,
+      "lines": 338,
       "classification": "ok"
     },
     {
@@ -1126,7 +1126,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "lines": 583,
+      "lines": 584,
       "classification": "ok"
     },
     {
@@ -1231,7 +1231,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIView+PTEX.swift",
-      "lines": 2253,
+      "lines": 2306,
       "classification": "hard_limit_allowlisted"
     },
     {
@@ -1431,7 +1431,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTImageDownsampler.swift",
-      "lines": 82,
+      "lines": 83,
       "classification": "ok"
     },
     {
@@ -1446,7 +1446,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "lines": 907,
+      "lines": 977,
       "classification": "ok"
     },
     {
@@ -2251,42 +2251,42 @@
     },
     {
       "path": "PooToolsSource/Input/AkiraTextField.swift",
-      "lines": 181,
+      "lines": 191,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Input/HoshiTextField.swift",
-      "lines": 416,
+      "lines": 452,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Input/IsaoTextField.swift",
-      "lines": 203,
+      "lines": 220,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Input/JiroTextField.swift",
-      "lines": 206,
+      "lines": 217,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Input/KaedeTextField.swift",
-      "lines": 178,
+      "lines": 188,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Input/MadokaTextField.swift",
-      "lines": 219,
+      "lines": 230,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Input/MinoruTextField.swift",
-      "lines": 200,
+      "lines": 211,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
-      "lines": 336,
+      "lines": 428,
       "classification": "ok"
     },
     {
@@ -2301,12 +2301,12 @@
     },
     {
       "path": "PooToolsSource/Input/PTTextField.swift",
-      "lines": 116,
+      "lines": 158,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "lines": 128,
+      "lines": 345,
       "classification": "ok"
     },
     {
@@ -2316,12 +2316,12 @@
     },
     {
       "path": "PooToolsSource/Input/YokoTextField.swift",
-      "lines": 264,
+      "lines": 274,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Input/YoshikoTextField.swift",
-      "lines": 240,
+      "lines": 249,
       "classification": "ok"
     },
     {

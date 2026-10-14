@@ -1568,6 +1568,8 @@ PooToolsInput,PooToolsSource/Input/PTInputBoxView.swift,14,if,SWIFT_PACKAGE,SWIF
 PooToolsInput,PooToolsSource/Input/PTInputBoxView.swift,16,endif,,,structural
 PooToolsInput,PooToolsSource/Input/PTTextField.swift,11,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
 PooToolsInput,PooToolsSource/Input/PTTextField.swift,13,endif,,,structural
+PooToolsInput,PooToolsSource/Input/TextFieldEffects.swift,10,if,canImport(PToolsUIFoundation),canImport(PToolsUIFoundation),review-platform-or-package-branch
+PooToolsInput,PooToolsSource/Input/TextFieldEffects.swift,12,endif,,,structural
 PooToolsInstructions,PooToolsSource/Instructions/PTInstructionCoordinator.swift,6,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
 PooToolsInstructions,PooToolsSource/Instructions/PTInstructionCoordinator.swift,8,endif,,,structural
 PooToolsInstructions,PooToolsSource/Instructions/PTInstructionModels.swift,6,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
@@ -2113,7 +2115,7 @@ ptools,PooToolsSource/Category/UIImage+PTEX.swift,1087,if,POOTOOLS_IMAGEEDITOR,!
 ptools,PooToolsSource/Category/UIImage+PTEX.swift,1089,endif,,!os(macOS),structural
 ptools,PooToolsSource/Category/UIImage+PTEX.swift,1433,endif,,,structural
 ptools,PooToolsSource/Category/UIImageView+PTEX.swift,9,if,!os(macOS),!os(macOS),review-platform-or-package-branch
-ptools,PooToolsSource/Category/UIImageView+PTEX.swift,583,endif,,,structural
+ptools,PooToolsSource/Category/UIImageView+PTEX.swift,584,endif,,,structural
 ptools,PooToolsSource/Category/UINavigationController+PTEX.swift,9,if,canImport(UIKit) && (os(iOS) || os(tvOS)),canImport(UIKit) && (os(iOS) || os(tvOS)),review-platform-or-package-branch
 ptools,PooToolsSource/Category/UINavigationController+PTEX.swift,16,if,os(iOS),canImport(UIKit) && (os(iOS) || os(tvOS)) > os(iOS),review-platform-or-package-branch
 ptools,PooToolsSource/Category/UINavigationController+PTEX.swift,18,endif,,canImport(UIKit) && (os(iOS) || os(tvOS)),structural
@@ -2129,7 +2131,7 @@ ptools,PooToolsSource/Category/UIToolbar+PTEX.swift,64,endif,,,structural
 ptools,PooToolsSource/Category/UIView+PTEX+Constraints.swift,10,if,canImport(UIKit) && (os(iOS) || os(tvOS)),canImport(UIKit) && (os(iOS) || os(tvOS)),review-platform-or-package-branch
 ptools,PooToolsSource/Category/UIView+PTEX+Constraints.swift,186,endif,,,structural
 ptools,PooToolsSource/Category/UIView+PTEX.swift,9,if,canImport(UIKit) && (os(iOS) || os(tvOS)),canImport(UIKit) && (os(iOS) || os(tvOS)),review-platform-or-package-branch
-ptools,PooToolsSource/Category/UIView+PTEX.swift,2253,endif,,,structural
+ptools,PooToolsSource/Category/UIView+PTEX.swift,2306,endif,,,structural
 ptools,PooToolsSource/Category/UIViewController+PTEX.swift,309,if,POOTOOLS_BANNER,POOTOOLS_BANNER,review-platform-or-package-branch
 ptools,PooToolsSource/Category/UIViewController+PTEX.swift,343,else,,else of POOTOOLS_BANNER,structural
 ptools,PooToolsSource/Category/UIViewController+PTEX.swift,350,endif,,,structural
@@ -2558,7 +2560,7 @@ Package.swift,Package.swift,1028,swift-setting-define,".target(name: ""PooToolsC
 Package.swift,Package.swift,1029,swift-setting-define,".target(name: ""PooToolsCountry"", dependencies: [""ptools""], path: ""PooToolsSource/Country"", swiftSettings: [.define(""POOTOOLS_COUNTRY""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
 Package.swift,Package.swift,1030,swift-setting-define,".target(name: ""PooToolsGuide"", dependencies: [""ptools"", ""PooToolsPageControl""], path: ""PooToolsSource/Guide"", swiftSettings: [.define(""POOTOOLS_GUIDE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
 Package.swift,Package.swift,1034,swift-setting-define,".target(name: ""PooToolsInstructions"", dependencies: [""PToolsOverlay""], path: ""PooToolsSource/Instructions"", swiftSettings: [.define(""POOTOOLS_INSTRUCTIONS""), .define(""POOTOOLS_COCOAPODS""), .enableUpcomingFeature(""StrictConcurrency"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1035,swift-setting-define,".target(name: ""PooToolsInput"", dependencies: [""ptools"", ""PToolsCore"", ""PhoneNumberKit""], path: ""PooToolsSource/Input"", swiftSettings: [.define(""POOTOOLS_INPUT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1035,swift-setting-define,".target(name: ""PooToolsInput"", dependencies: [""ptools"", ""PToolsCore"", ""PToolsUIFoundation"", ""PhoneNumberKit"", ""SnapKit""], path: ""PooToolsSource/Input"", swiftSettings: [.define(""POOTOOLS_INPUT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
 Package.swift,Package.swift,1036,swift-setting-define,".target(name: ""PooToolsKeyboard"", dependencies: [""ptools""], path: ""PooToolsSource/Keyboard"", swiftSettings: [.define(""POOTOOLS_CUSTOMERNUMBERKEYWORD""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
 Package.swift,Package.swift,1037,swift-setting-define,".target(name: ""PooToolsKeyChain"", dependencies: [], path: ""PooToolsSource/KeyChain"", swiftSettings: [.define(""POOTOOLS_KEYCHAIN""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
 Package.swift,Package.swift,1038,swift-setting-define,".target(name: ""PooToolsMotion"", dependencies: [""ptools"", ""PTMotionPermission""], path: ""PooToolsSource/Motion"", swiftSettings: [.define(""POOTOOLS_MOTION""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro

@@ -140,9 +140,11 @@ import UIKit
     
     /// 更新占位符状态
     private func updatePlaceholder() {
-        placeholderLabel.font = placeholderFontFromFont(currentFont)
-        placeholderLabel.text = placeholder
-        placeholderLabel.textColor = placeholderColor
+        applyPlaceholder(to: placeholderLabel,
+                         text: placeholder,
+                         font: currentFont,
+                         color: placeholderColor ?? .black,
+                         scale: placeholderFontScale)
         placeholderLabel.sizeToFit()
         layoutPlaceholderInTextRect()
         
@@ -151,10 +153,18 @@ import UIKit
             animateViewsForTextEntry()
         }
     }
+
+    // English: Refresh Yoko's placeholder without disturbing its 3D transition.
+    // Español: Actualiza el marcador de Yoko sin alterar su transición 3D.
+    // 中文：刷新 Yoko 占位符，不干扰 3D 转场效果。
+    override open func refreshPlaceholderAppearance() {
+        updatePlaceholder()
+    }
     
     /// 根据设定的缩放比例计算占位符的字体大小
     private func placeholderFontFromFont(_ font: UIFont) -> UIFont {
-        return UIFont(descriptor: font.fontDescriptor, size: font.pointSize * placeholderFontScale)
+        inputAppearance.placeholderFontOverride ?? UIFont(descriptor: font.fontDescriptor,
+                                                           size: font.pointSize * placeholderFontScale)
     }
     
     /// 计算 3D 视图的基础 Frame (给文本和边框留出空间)
@@ -253,12 +263,12 @@ import UIKit
     /// 返回处于编辑状态时的文本绘制区域
     override open func editingRect(forBounds bounds: CGRect) -> CGRect {
         let newBounds = CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height - currentFont.lineHeight + textFieldInsets.y)
-        return newBounds.insetBy(dx: textFieldInsets.x, dy: 0)
+        return applySharedTextRect(newBounds.insetBy(dx: textFieldInsets.x, dy: 0), bounds: bounds)
     }
     
     /// 返回正常的文本绘制区域
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
         let newBounds = CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height - currentFont.lineHeight + textFieldInsets.y)
-        return newBounds.insetBy(dx: textFieldInsets.x, dy: 0)
+        return applySharedTextRect(newBounds.insetBy(dx: textFieldInsets.x, dy: 0), bounds: bounds)
     }
 }

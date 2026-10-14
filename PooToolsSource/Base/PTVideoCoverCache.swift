@@ -539,7 +539,10 @@ private extension PTVideoCoverCache {
             localVersion = ""
         }
 
-        let rawKey = "pt-video-cover-v2|url:\(url.absoluteString)|frame:\(safeFrameNumber)|size:\(size)|transform:\(appliesPreferredTrackTransform)\(localVersion)"
+        // English: Version the key because this cache now stores pixel-bounded covers.
+        // Español: Versiona la clave porque esta caché ahora guarda portadas limitadas por píxeles.
+        // 中文：由于缓存现在按像素限制封面尺寸，因此升级缓存键版本。
+        let rawKey = "pt-video-cover-v3|unit:px|url:\(url.absoluteString)|frame:\(safeFrameNumber)|size:\(size)|transform:\(appliesPreferredTrackTransform)\(localVersion)"
         return cacheKeyForVideo(rawKey)
     }
 

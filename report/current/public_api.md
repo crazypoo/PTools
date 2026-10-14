@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: 93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29
-Generated at: 2026-10-14T06:06:17Z
+Source revision: 486435925e25155cc3fab847fbe7c076e7f31883
+Generated at: 2026-10-14T08:12:53Z
 -->
 
 # PTools 当前公开 API 清单
@@ -1825,7 +1825,7 @@ Generated at: 2026-10-14T06:06:17Z
 | PooToolsSource/Category/String+PTEX.swift:179 | enum | public | public enum PTHashType { |
 | PooToolsSource/Category/String+PTEX.swift:188 | enum | public | public enum PTConstellationType { |
 | PooToolsSource/Category/UIButton+PTEX.swift:17 | typealias | public | public typealias TouchedBlock = (_ sender:UIButton) -> Void |
-| PooToolsSource/Category/UIButton+PTEX.swift:323 | class | public | public class ConsoleMenuButton: UIButton { } |
+| PooToolsSource/Category/UIButton+PTEX.swift:327 | class | public | public class ConsoleMenuButton: UIButton { } |
 | PooToolsSource/Category/UIColor+PTEX.swift:11 | enum | public | public enum PTColorTone { |
 | PooToolsSource/Category/UIControl+PTMenu.swift:8 | struct | public | public struct PTControlMenuSelectionItem<ID: Hashable> { |
 | PooToolsSource/Category/UIControl+PTMenu.swift:12 | let | public | public let id: ID |
@@ -1843,8 +1843,8 @@ Generated at: 2026-10-14T06:06:17Z
 | PooToolsSource/Category/UIImage+PTFaceAware.swift:45 | var | public | public var focusOnFaces: Bool { |
 | PooToolsSource/Category/UIImage+PTFaceAware.swift:55 | var | public | public var didFocusOnFaces: (() -> Void)? { |
 | PooToolsSource/Category/UIImage+PTFaceAware.swift:69 | func | public | public func set(image: UIImage?, focusOnFaces: Bool) { |
-| PooToolsSource/Category/UIImageView+PTEX.swift:133 | typealias | public | public typealias PTGIFImageTask = (UIImageView) -> Void |
-| PooToolsSource/Category/UIImageView+PTEX.swift:134 | typealias | public | public typealias PTGIFImageFailTask = (UIImageView,URL,Error?) -> Void |
+| PooToolsSource/Category/UIImageView+PTEX.swift:134 | typealias | public | public typealias PTGIFImageTask = (UIImageView) -> Void |
+| PooToolsSource/Category/UIImageView+PTEX.swift:135 | typealias | public | public typealias PTGIFImageFailTask = (UIImageView,URL,Error?) -> Void |
 | PooToolsSource/Category/UIPageControl+PTEX.swift:12 | typealias | public | public typealias PageControlTouchedBlock = (_ sender:UIPageControl) -> Void |
 | PooToolsSource/Category/UIRefreshControl+PTEX.swift:10 | typealias | public | public typealias RefreshedBlock = (_ sender:UIRefreshControl) -> Void |
 | PooToolsSource/Category/UIScreen+PTEX.swift:13 | enum | public | public enum UIScreenShotType { |
@@ -1953,8 +1953,8 @@ Generated at: 2026-10-14T06:06:17Z
 | PooToolsSource/Category/UIView+PTEX.swift:16 | enum | public | @objc public enum Imagegradien:Int { |
 | PooToolsSource/Category/UIView+PTEX.swift:23 | var | public | @MainActor public var GLOBAL_BORDER_TRACKERS: [BorderManager] = [] |
 | PooToolsSource/Category/UIView+PTEX.swift:25 | typealias | public | public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void |
-| PooToolsSource/Category/UIView+PTEX.swift:2206 | protocol | public | public protocol UIFadeOut {} |
-| PooToolsSource/Category/UIView+PTEX.swift:2223 | func | public | public func fadeUpdate(duration: TimeInterval = 1, delay: TimeInterval = 0.15, work: @escaping @MainActor (Self) -> Void, completion: (@MainActor @Sendable () -> Void)? = nil) { |
+| PooToolsSource/Category/UIView+PTEX.swift:2259 | protocol | public | public protocol UIFadeOut {} |
+| PooToolsSource/Category/UIView+PTEX.swift:2276 | func | public | public func fadeUpdate(duration: TimeInterval = 1, delay: TimeInterval = 0.15, work: @escaping @MainActor (Self) -> Void, completion: (@MainActor @Sendable () -> Void)? = nil) { |
 | PooToolsSource/Category/UIViewController+PTEX.swift:15 | enum | public | @objc public enum PTSheetPresentType:Int { |
 | PooToolsSource/Category/UIViewController+PTEX.swift:511 | func | public | public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle { |
 | PooToolsSource/Category/UIViewController+PTEX.swift:517 | func | public | public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle { |
@@ -2314,14 +2314,15 @@ Generated at: 2026-10-14T06:06:17Z
 | PooToolsSource/Core/PTLoadImageFunction.swift:127 | var | public | public var uniCount: Int? |
 | PooToolsSource/Core/PTLoadImageFunction.swift:128 | var | public | public var emptyImage: UIImage? |
 | PooToolsSource/Core/PTLoadImageFunction.swift:132 | var | public | public var targetSize: CGSize? |
-| PooToolsSource/Core/PTLoadImageFunction.swift:149 | init | public | public init(iCloudDocumentName: String = "", radius: CGFloat = 0, topLeft: CGFloat = 0, topRight: CGFloat = 0, bottomLeft: CGFloat = 0, bottomRight: CGFloat = 0, corner: UIRectCorner = .allCorners, capsule: Bool = false, borderWidth: CGFloat? = nil, borderColor: UIColor? = nil, showValueLabel: Bool? = nil, valueLabelFont: UIFont? = nil, valueLabelColor: UIColor? = nil, uniCount: Int? = nil, emptyImage: UIImage? = nil, targetSize: CGSize? = nil) { |
-| PooToolsSource/Core/PTLoadImageFunction.swift:170 | struct | public | public struct PTLoadImageResult { |
-| PooToolsSource/Core/PTLoadImageFunction.swift:171 | let | public | public let allImages: [UIImage]? |
-| PooToolsSource/Core/PTLoadImageFunction.swift:172 | let | public | public let firstImage: UIImage? |
-| PooToolsSource/Core/PTLoadImageFunction.swift:173 | let | public | public let loadTime: TimeInterval |
-| PooToolsSource/Core/PTLoadImageFunction.swift:174 | let | public | public let imageType: PTImageType |
-| PooToolsSource/Core/PTLoadImageFunction.swift:176 | init | public | public init(allImages: [UIImage]?, firstImage: UIImage?, loadTime: TimeInterval, imageType: PTImageType = .unknown) { |
-| PooToolsSource/Core/PTLoadImageFunction.swift:193 | class | public | public class PTLoadImageFunction: NSObject { |
+| PooToolsSource/Core/PTLoadImageFunction.swift:136 | var | public | public var displayScale: CGFloat? |
+| PooToolsSource/Core/PTLoadImageFunction.swift:154 | init | public | public init(iCloudDocumentName: String = "", radius: CGFloat = 0, topLeft: CGFloat = 0, topRight: CGFloat = 0, bottomLeft: CGFloat = 0, bottomRight: CGFloat = 0, corner: UIRectCorner = .allCorners, capsule: Bool = false, borderWidth: CGFloat? = nil, borderColor: UIColor? = nil, showValueLabel: Bool? = nil, valueLabelFont: UIFont? = nil, valueLabelColor: UIColor? = nil, uniCount: Int? = nil, emptyImage: UIImage? = nil, targetSize: CGSize? = nil, displayScale: CGFloat? = nil) { |
+| PooToolsSource/Core/PTLoadImageFunction.swift:176 | struct | public | public struct PTLoadImageResult { |
+| PooToolsSource/Core/PTLoadImageFunction.swift:177 | let | public | public let allImages: [UIImage]? |
+| PooToolsSource/Core/PTLoadImageFunction.swift:178 | let | public | public let firstImage: UIImage? |
+| PooToolsSource/Core/PTLoadImageFunction.swift:179 | let | public | public let loadTime: TimeInterval |
+| PooToolsSource/Core/PTLoadImageFunction.swift:180 | let | public | public let imageType: PTImageType |
+| PooToolsSource/Core/PTLoadImageFunction.swift:182 | init | public | public init(allImages: [UIImage]?, firstImage: UIImage?, loadTime: TimeInterval, imageType: PTImageType = .unknown) { |
+| PooToolsSource/Core/PTLoadImageFunction.swift:199 | class | public | public class PTLoadImageFunction: NSObject { |
 | PooToolsSource/Core/PTMarcos_swift.swift:14 | let | public | public let CorePodBundleName = "PooToolsResource" |
 | PooToolsSource/Core/PTMarcos_swift.swift:17 | typealias | public | public typealias PTBackgroundTask = @Sendable () -> Void |
 | PooToolsSource/Core/PTMarcos_swift.swift:19 | typealias | public | public typealias PTBoolTask = (@Sendable (Bool) -> Void) |
@@ -3658,10 +3659,13 @@ Generated at: 2026-10-14T06:06:17Z
 | PooToolsSource/ImagePicker/PTImagePickerObject.swift:79 | let | public | public let url:URL? |
 | PooToolsSource/Input/AkiraTextField.swift:15 | class | open | @IBDesignable open class AkiraTextField: TextFieldEffects { |
 | PooToolsSource/Input/HoshiTextField.swift:19 | class | open | @IBDesignable open class HoshiTextField: TextFieldEffects { |
-| PooToolsSource/Input/HoshiTextField.swift:208 | class | open | open class PTHoshiTextField: UITextField { |
-| PooToolsSource/Input/HoshiTextField.swift:231 | var | open | open var textAndPlceholderSpace: CGFloat = 0 { |
-| PooToolsSource/Input/HoshiTextField.swift:236 | var | open | open var leftSpace: CGFloat? { |
-| PooToolsSource/Input/HoshiTextField.swift:245 | var | open | open var textEditingEdges: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0) |
+| PooToolsSource/Input/HoshiTextField.swift:210 | class | open | open class PTHoshiTextField: UITextField { |
+| PooToolsSource/Input/HoshiTextField.swift:217 | var | open | open var inputAppearance = PTInputAppearance() { |
+| PooToolsSource/Input/HoshiTextField.swift:240 | var | open | open var textAndPlaceholderSpace: CGFloat = 0 { |
+| PooToolsSource/Input/HoshiTextField.swift:246 | var | open | open var textAndPlceholderSpace: CGFloat { |
+| PooToolsSource/Input/HoshiTextField.swift:251 | var | open | open var leadingSpace: CGFloat { |
+| PooToolsSource/Input/HoshiTextField.swift:257 | var | open | open var leftSpace: CGFloat? { |
+| PooToolsSource/Input/HoshiTextField.swift:266 | var | open | open var textEditingEdges: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0) |
 | PooToolsSource/Input/IsaoTextField.swift:13 | class | open | @IBDesignable open class IsaoTextField: TextFieldEffects { |
 | PooToolsSource/Input/JiroTextField.swift:13 | class | open | @IBDesignable open class JiroTextField: TextFieldEffects { |
 | PooToolsSource/Input/KaedeTextField.swift:13 | class | open | @IBDesignable open class KaedeTextField: TextFieldEffects { |
@@ -3693,16 +3697,20 @@ Generated at: 2026-10-14T06:06:17Z
 | PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:44 | var | public | public var actionSelected: Any? |
 | PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:45 | var | public | public var actionSapcing: CGFloat = 8 // 建议拼写修改为 actionSpacing |
 | PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:46 | var | public | public var textAlignment: NSTextAlignment = .left |
-| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:49 | class | public | public class PTFloatingPlaseholderTextField: UIView { |
-| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:62 | var | public | public var inputedCallback: ((String) -> Void)? |
-| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:63 | var | public | public var inputBegainCallback: PTActionTask? |
-| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:64 | var | public | public var inputingCallback: ((String) -> Void)? |
-| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:65 | var | public | public var actionTouchBlock: TouchedBlock? |
-| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:107 | init | public | public init(config: PTFloatingPlaseholderConfig = PTFloatingPlaseholderConfig()) { |
-| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:197 | func | public | public func configure(placeholder: String, text: String? = nil) { |
-| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:298 | func | public | public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool { |
-| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:308 | func | public | public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool { |
-| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:313 | func | public | public func textFieldDidEndEditing(_ textField: UITextField) { |
+| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:50 | class | public | public class PTFloatingPlaseholderTextField: UIView { |
+| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:67 | var | public | public var inputAppearance = PTInputAppearance() { |
+| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:71 | var | public | public var textAndPlaceholderSpace: CGFloat { |
+| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:81 | var | public | public var textAndPlceholderSpace: CGFloat { |
+| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:86 | var | public | public var leadingSpace: CGFloat { |
+| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:95 | var | public | public var inputedCallback: ((String) -> Void)? |
+| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:96 | var | public | public var inputBegainCallback: PTActionTask? |
+| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:97 | var | public | public var inputingCallback: ((String) -> Void)? |
+| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:98 | var | public | public var actionTouchBlock: TouchedBlock? |
+| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:140 | init | public | public init(config: PTFloatingPlaseholderConfig = PTFloatingPlaseholderConfig()) { |
+| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:282 | func | public | public func configure(placeholder: String, text: String? = nil) { |
+| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:390 | func | public | public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool { |
+| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:400 | func | public | public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool { |
+| PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:405 | func | public | public func textFieldDidEndEditing(_ textField: UITextField) { |
 | PooToolsSource/Input/PTGrowingText.swift:11 | typealias | public | public typealias GrowingTextDidChangeHeight = (_ view: PTGrowingTextView, _ height: CGFloat) -> Void |
 | PooToolsSource/Input/PTGrowingText.swift:12 | typealias | public | public typealias GrowingTextDidChange = (_ view: PTGrowingTextView) -> Void |
 | PooToolsSource/Input/PTGrowingText.swift:15 | class | open | open class PTGrowingTextView: UITextView { |
@@ -3754,21 +3762,44 @@ Generated at: 2026-10-14T06:06:17Z
 | PooToolsSource/Input/PTTextField.swift:17 | var | open | open var size: CGSize = .zero |
 | PooToolsSource/Input/PTTextField.swift:18 | var | open | open var image: Any? |
 | PooToolsSource/Input/PTTextField.swift:19 | var | open | open var rightSpace: CGFloat = 5 |
-| PooToolsSource/Input/PTTextField.swift:23 | class | public | public class PTTextField: UITextField { |
-| PooToolsSource/Input/PTTextField.swift:27 | var | open | open var leftSpace: CGFloat = 0 { |
-| PooToolsSource/Input/PTTextField.swift:34 | var | open | open var rightTapBlock: PTActionTask? |
-| PooToolsSource/Input/PTTextField.swift:36 | var | public | public var rightConfig: PTTextCustomRightViewConfig? { |
-| PooToolsSource/Input/TextFieldEffects.swift:21 | class | open | open class TextFieldEffects: UITextField { |
-| PooToolsSource/Input/TextFieldEffects.swift:24 | enum | public | public enum AnimationType: Int { |
-| PooToolsSource/Input/TextFieldEffects.swift:33 | typealias | public | public typealias AnimationCompletionHandler = (_ type: AnimationType) -> Void |
-| PooToolsSource/Input/TextFieldEffects.swift:36 | let | public | public let placeholderLabel = UILabel() |
-| PooToolsSource/Input/TextFieldEffects.swift:39 | var | open | open var animationCompletionHandler: AnimationCompletionHandler? |
-| PooToolsSource/Input/TextFieldEffects.swift:45 | func | open | open func animateViewsForTextEntry() { |
-| PooToolsSource/Input/TextFieldEffects.swift:54 | func | open | open func animateViewsForTextDisplay() { |
-| PooToolsSource/Input/TextFieldEffects.swift:61 | func | open | open func drawViewsForRect(_ rect: CGRect) { |
-| PooToolsSource/Input/TextFieldEffects.swift:68 | func | open | open func updateViewsForBoundsChange(_ bounds: CGRect) { |
-| PooToolsSource/Input/TextFieldEffects.swift:110 | func | open | @objc open func textFieldDidBeginEditing() { |
-| PooToolsSource/Input/TextFieldEffects.swift:115 | func | open | @objc open func textFieldDidEndEditing() { |
+| PooToolsSource/Input/PTTextField.swift:24 | class | public | public class PTTextField: UITextField { |
+| PooToolsSource/Input/PTTextField.swift:28 | var | open | open var leftSpace: CGFloat = 0 { |
+| PooToolsSource/Input/PTTextField.swift:38 | var | open | open var leadingSpace: CGFloat { |
+| PooToolsSource/Input/PTTextField.swift:46 | var | open | open var textEditingEdges: UIEdgeInsets = .zero { |
+| PooToolsSource/Input/PTTextField.swift:53 | var | open | open var inputAppearance = PTInputAppearance() { |
+| PooToolsSource/Input/PTTextField.swift:60 | var | open | open var rightTapBlock: PTActionTask? |
+| PooToolsSource/Input/PTTextField.swift:62 | var | public | public var rightConfig: PTTextCustomRightViewConfig? { |
+| PooToolsSource/Input/TextFieldEffects.swift:28 | struct | public | public struct PTInputAppearance { |
+| PooToolsSource/Input/TextFieldEffects.swift:29 | var | public | public var placeholderAtt: PTRichText? |
+| PooToolsSource/Input/TextFieldEffects.swift:30 | var | public | public var placeholderColorOverride: UIColor? |
+| PooToolsSource/Input/TextFieldEffects.swift:31 | var | public | public var placeholderFontOverride: UIFont? |
+| PooToolsSource/Input/TextFieldEffects.swift:32 | var | public | public var textAndPlaceholderSpace: CGFloat |
+| PooToolsSource/Input/TextFieldEffects.swift:33 | var | public | public var leadingSpace: CGFloat |
+| PooToolsSource/Input/TextFieldEffects.swift:34 | var | public | public var textEditingEdges: UIEdgeInsets |
+| PooToolsSource/Input/TextFieldEffects.swift:41 | init | public | public init(placeholderAtt: PTRichText? = nil, placeholderColorOverride: UIColor? = nil, placeholderFontOverride: UIFont? = nil, textAndPlaceholderSpace: CGFloat = 0, leadingSpace: CGFloat = 0, textEditingEdges: UIEdgeInsets = .zero) { |
+| PooToolsSource/Input/TextFieldEffects.swift:73 | class | open | open class TextFieldEffects: UITextField { |
+| PooToolsSource/Input/TextFieldEffects.swift:76 | enum | public | public enum AnimationType: Int { |
+| PooToolsSource/Input/TextFieldEffects.swift:85 | typealias | public | public typealias AnimationCompletionHandler = (_ type: AnimationType) -> Void |
+| PooToolsSource/Input/TextFieldEffects.swift:88 | let | public | public let placeholderLabel = UILabel() |
+| PooToolsSource/Input/TextFieldEffects.swift:91 | var | open | open var animationCompletionHandler: AnimationCompletionHandler? |
+| PooToolsSource/Input/TextFieldEffects.swift:94 | var | open | open var inputAppearance = PTInputAppearance() { |
+| PooToolsSource/Input/TextFieldEffects.swift:102 | var | open | open var placeholderAtt: PTRichText? { |
+| PooToolsSource/Input/TextFieldEffects.swift:112 | var | open | open var placeholderFont: UIFont { |
+| PooToolsSource/Input/TextFieldEffects.swift:121 | var | open | open var textAndPlaceholderSpace: CGFloat { |
+| PooToolsSource/Input/TextFieldEffects.swift:132 | var | open | open var textAndPlceholderSpace: CGFloat { |
+| PooToolsSource/Input/TextFieldEffects.swift:137 | var | open | open var leadingSpace: CGFloat { |
+| PooToolsSource/Input/TextFieldEffects.swift:147 | var | open | open var leftSpace: CGFloat { |
+| PooToolsSource/Input/TextFieldEffects.swift:152 | var | open | open var textEditingEdges: UIEdgeInsets { |
+| PooToolsSource/Input/TextFieldEffects.swift:165 | func | open | open func animateViewsForTextEntry() { |
+| PooToolsSource/Input/TextFieldEffects.swift:170 | func | open | open func animateViewsForTextDisplay() { |
+| PooToolsSource/Input/TextFieldEffects.swift:176 | func | open | open func drawViewsForRect(_ rect: CGRect) { |
+| PooToolsSource/Input/TextFieldEffects.swift:182 | func | open | open func updateViewsForBoundsChange(_ bounds: CGRect) { |
+| PooToolsSource/Input/TextFieldEffects.swift:190 | func | open | open func applyPlaceholder(to label: UILabel, text: String?, font: UIFont, color: UIColor, scale: CGFloat = 1) { |
+| PooToolsSource/Input/TextFieldEffects.swift:210 | func | open | open func refreshPlaceholderAppearance() { |
+| PooToolsSource/Input/TextFieldEffects.swift:214 | func | open | open func applySharedTextRect(_ styleRect: CGRect, bounds: CGRect) -> CGRect { |
+| PooToolsSource/Input/TextFieldEffects.swift:231 | func | open | open func invalidateInputLayout() { |
+| PooToolsSource/Input/TextFieldEffects.swift:315 | func | open | @objc open func textFieldDidBeginEditing() { |
+| PooToolsSource/Input/TextFieldEffects.swift:320 | func | open | @objc open func textFieldDidEndEditing() { |
 | PooToolsSource/Input/UIView+PTEXShake.swift:12 | enum | public | public enum PTShakeDirection { |
 | PooToolsSource/Input/YokoTextField.swift:13 | class | open | @IBDesignable open class YokoTextField: TextFieldEffects { |
 | PooToolsSource/Input/YoshikoTextField.swift:13 | class | open | @IBDesignable open class YoshikoTextField: TextFieldEffects { |

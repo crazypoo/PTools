@@ -143,8 +143,11 @@ import UIKit
     
     /// 更新占位符状态
     private func updatePlaceholder() {
-        placeholderLabel.text = placeholder
-        placeholderLabel.textColor = placeholderColor
+        applyPlaceholder(to: placeholderLabel,
+                         text: placeholder,
+                         font: currentFont,
+                         color: placeholderColor,
+                         scale: placeholderFontScale)
         placeholderLabel.sizeToFit()
         layoutPlaceholderInTextRect()
         
@@ -152,10 +155,18 @@ import UIKit
             animateViewsForTextEntry()
         }
     }
+
+    // English: Refresh Minoru's label while preserving its glow and border layers.
+    // Español: Actualiza la etiqueta de Minoru y conserva sus capas de brillo y borde.
+    // 中文：刷新 Minoru 标签，同时保留发光和边框图层。
+    override open func refreshPlaceholderAppearance() {
+        updatePlaceholder()
+    }
     
     /// 根据设定的缩放比例计算占位符字体大小
     private func placeholderFontFromFont(_ font: UIFont) -> UIFont {
-        return UIFont(descriptor: font.fontDescriptor, size: font.pointSize * placeholderFontScale)
+        inputAppearance.placeholderFontOverride ?? UIFont(descriptor: font.fontDescriptor,
+                                                           size: font.pointSize * placeholderFontScale)
     }
     
     /// 计算边框图层所在的区域坐标
@@ -189,12 +200,12 @@ import UIKit
     /// 返回处于编辑状态时的文本绘制区域
     override open func editingRect(forBounds bounds: CGRect) -> CGRect {
         let newBounds = rectForBorder(bounds)
-        return newBounds.insetBy(dx: textFieldInsets.x, dy: 0)
+        return applySharedTextRect(newBounds.insetBy(dx: textFieldInsets.x, dy: 0), bounds: bounds)
     }
     
     /// 返回正常的文本绘制区域
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
         let newBounds = rectForBorder(bounds)
-        return newBounds.insetBy(dx: textFieldInsets.x, dy: 0)
+        return applySharedTextRect(newBounds.insetBy(dx: textFieldInsets.x, dy: 0), bounds: bounds)
     }
 }

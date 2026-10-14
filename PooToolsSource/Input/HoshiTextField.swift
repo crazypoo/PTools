@@ -42,11 +42,6 @@ import SnapKit        // 依赖 SnapKit 进行自动布局
     
     // MARK: - 属性覆盖与扩展
     
-    /// 自定义的属性字符串占位符
-    dynamic open var placeholderAtt: PTRichText? {
-        didSet { updatePlaceholder() }
-    }
-
     override open var placeholder: String? {
         didSet { updatePlaceholder() }
     }
@@ -145,13 +140,11 @@ import SnapKit        // 依赖 SnapKit 进行自动布局
     }
     
     private func updatePlaceholder() {
-        if let placeholderAtt = placeholderAtt {
-            // 假设扩展了 UILabel 支持此属性
-            placeholderLabel.attributedText = placeholderAtt.value
-        } else {
-            placeholderLabel.text = placeholder
-            placeholderLabel.textColor = placeholderColor
-        }
+        applyPlaceholder(to: placeholderLabel,
+                         text: placeholder,
+                         font: currentFont,
+                         color: placeholderColor,
+                         scale: placeholderFontScale)
         placeholderLabel.sizeToFit()
         layoutPlaceholderInTextRect()
         
@@ -160,9 +153,17 @@ import SnapKit        // 依赖 SnapKit 进行自动布局
             animateViewsForTextEntry()
         }
     }
+
+    // English: Refresh Hoshi's floating label while preserving its two-border effect.
+    // Español: Actualiza la etiqueta flotante de Hoshi y conserva su efecto de dos bordes.
+    // 中文：刷新 Hoshi 浮动标签，同时保留双底边效果。
+    override open func refreshPlaceholderAppearance() {
+        updatePlaceholder()
+    }
     
     private func placeholderFontFromFont(_ font: UIFont) -> UIFont {
-        return UIFont(descriptor: font.fontDescriptor, size: font.pointSize * placeholderFontScale)
+        inputAppearance.placeholderFontOverride ?? UIFont(descriptor: font.fontDescriptor,
+                                                           size: font.pointSize * placeholderFontScale)
     }
     
     private func rectForBorder(_ thickness: CGFloat, isFilled: Bool) -> CGRect {
@@ -193,11 +194,11 @@ import SnapKit        // 依赖 SnapKit 进行自动布局
     // MARK: - UITextField 重写
     
     override open func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.offsetBy(dx: textFieldInsets.x, dy: textFieldInsets.y)
+        applySharedTextRect(bounds.offsetBy(dx: textFieldInsets.x, dy: textFieldInsets.y), bounds: bounds)
     }
     
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.offsetBy(dx: textFieldInsets.x, dy: textFieldInsets.y)
+        applySharedTextRect(bounds.offsetBy(dx: textFieldInsets.x, dy: textFieldInsets.y), bounds: bounds)
     }
 }
 
@@ -205,9 +206,17 @@ import SnapKit        // 依赖 SnapKit 进行自动布局
 // MARK: - PTHoshiTextField
 
 /// 直接继承自 UITextField，利用 SnapKit 约束实现类似功能的输入框，支持左侧留白设定。
+@MainActor
 open class PTHoshiTextField: UITextField {
     
     private let floatingLabel: UILabel = UILabel()
+
+    // English: Keep the standalone Hoshi variant on the same appearance contract as TextFieldEffects.
+    // Español: Mantiene la variante Hoshi independiente en el mismo contrato de apariencia que TextFieldEffects.
+    // 中文：让独立 Hoshi 变体也遵循 TextFieldEffects 的统一外观契约。
+    open var inputAppearance = PTInputAppearance() {
+        didSet { applyInputAppearance() }
+    }
     
     // MARK: - 公开属性配置
     
@@ -223,21 +232,33 @@ open class PTHoshiTextField: UITextField {
         didSet { updatePlaceholder() }
     }
     
-    dynamic open var placeholderFont: UIFont = UIFont.systemFont(ofSize: 12) { // 替换掉自定义的 .appfont 防止编译报错
+    dynamic open var placeholderFont: UIFont = UIFont.systemFont(ofSize: 12) {
         didSet { updatePlaceholder() }
     }
     
     /// 输入文本与悬浮占位符之间的距离
-    open var textAndPlceholderSpace: CGFloat = 0 {
-        didSet { layoutSubviews() }
+    open var textAndPlaceholderSpace: CGFloat = 0 {
+        didSet { setNeedsLayout() }
+    }
+
+    /// 兼容旧拼写，内部与正确拼写共用同一份值。
+    @available(*, deprecated, message: "Use textAndPlaceholderSpace instead")
+    open var textAndPlceholderSpace: CGFloat {
+        get { textAndPlaceholderSpace }
+        set { textAndPlaceholderSpace = newValue }
+    }
+
+    open var leadingSpace: CGFloat {
+        get { leftSpace ?? 0 }
+        set { leftSpace = newValue }
     }
     
     /// 左侧留白距离
     open var leftSpace: CGFloat? {
         didSet {
-            // 更新 leftSpaceView 的宽度
-            leftSpaceView.frame = CGRect(x: 0, y: 0, width: leftSpace ?? 0, height: self.frame.size.height)
-            layoutSubviews()
+            leftSpaceView.frame.size = CGSize(width: leftSpace ?? 0, height: bounds.height)
+            setNeedsLayout()
+            invalidateIntrinsicContentSize()
         }
     }
     
@@ -250,6 +271,16 @@ open class PTHoshiTextField: UITextField {
         view.frame = CGRect(x: 0, y: 0, width: leftSpace ?? 0, height: self.frame.size.height)
         return view
     }()
+
+    private func applyInputAppearance() {
+        placeholderAtt = inputAppearance.placeholderAtt
+        if let value = inputAppearance.placeholderColorOverride { placeholderColor = value }
+        if let value = inputAppearance.placeholderFontOverride { placeholderFont = value }
+        textAndPlaceholderSpace = inputAppearance.textAndPlaceholderSpace
+        leftSpace = inputAppearance.leadingSpace > 0 ? inputAppearance.leadingSpace : nil
+        textEditingEdges = inputAppearance.textEditingEdges
+        setNeedsLayout()
+    }
     
     // MARK: - 初始化
     
@@ -328,10 +359,13 @@ open class PTHoshiTextField: UITextField {
     open override func layoutSubviews() {
         super.layoutSubviews()
 
-        if (leftSpace ?? 0) > 0 {
-            leftView = leftSpaceView
-            leftViewMode = .always
-        } else {
+        if let space = leftSpace, space > 0 {
+            leftSpaceView.frame = CGRect(x: 0, y: 0, width: space, height: bounds.height)
+            if leftView == nil || leftView === leftSpaceView {
+                leftView = leftSpaceView
+                leftViewMode = .always
+            }
+        } else if leftView === leftSpaceView {
             leftView = nil
             leftViewMode = .never
         }
@@ -348,6 +382,7 @@ open class PTHoshiTextField: UITextField {
         } else {
             floatingLabel.snp.updateConstraints { make in
                 make.top.equalToSuperview().inset((self.bounds.height - labelHeight) / 2)
+                make.left.equalToSuperview().inset(self.leftSpace ?? 0)
             }
             floatingLabel.alpha = 0
         }
@@ -355,12 +390,17 @@ open class PTHoshiTextField: UITextField {
     
     private func updatePlaceholder() {
         if let placeholderAtt = placeholderAtt {
-            floatingLabel.attributedText = placeholderAtt.value
-            attributedPlaceholder = placeholderAtt.value // English: Keep UIKit on the system bridge. // Español: Mantén UIKit en el puente del sistema. // 中文：通过系统桥接交给 UIKit。
+            floatingLabel.attributedText = PTInputPlaceholderRenderer.attributedText(placeholderAtt,
+                                                                                       font: placeholderFont,
+                                                                                       color: placeholderColor)
+            floatingLabel.text = nil
+            attributedPlaceholder = floatingLabel.attributedText
         } else {
+            floatingLabel.attributedText = nil
             floatingLabel.text = placeholder
             floatingLabel.font = placeholderFont
             floatingLabel.textColor = placeholderColor
+            attributedPlaceholder = nil
         }
         floatingLabel.sizeToFit()
     }
@@ -379,10 +419,10 @@ open class PTHoshiTextField: UITextField {
         if lessSpace < 0 {
             lessSpace = 0
         } else {
-            if (lessSpace - textAndPlceholderSpace) < 0 {
+            if (lessSpace - textAndPlaceholderSpace) < 0 {
                 lessSpace = 0
             } else {
-                lessSpace -= textAndPlceholderSpace
+                lessSpace -= textAndPlaceholderSpace
             }
         }
         return lessSpace
@@ -392,14 +432,10 @@ open class PTHoshiTextField: UITextField {
     
     /// 获取经过简化的内边距 Rect
     private func calculatedRect(forBounds bounds: CGRect) -> CGRect {
-        let isTextEmpty = text?.isEmpty ?? true
-        if !isTextEmpty {
-            // 当文本不为空时，应用设定的文本边界
-            return bounds.inset(by: textEditingEdges)
-        } else {
-            // 当文本为空时（无论是否获取焦点），应用左侧留白设定
-            return bounds.inset(by: UIEdgeInsets(top: 0, left: self.leftSpace ?? 0, bottom: 0, right: 0))
-        }
+        // English: Keep the text origin stable while the first character is entered.
+        // Español: Mantiene estable el origen del texto al introducir el primer carácter.
+        // 中文：输入第一个字符时保持文本起点稳定，避免水平方向跳动。
+        return bounds.inset(by: textEditingEdges)
     }
 
     open override func textRect(forBounds bounds: CGRect) -> CGRect {

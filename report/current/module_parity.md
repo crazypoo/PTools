@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: 93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29
-Generated at: 2026-10-14T06:07:49Z
+Source revision: 486435925e25155cc3fab847fbe7c076e7f31883
+Generated at: 2026-10-14T08:22:39Z
 -->
 
 # SwiftPM / CocoaPods Module Parity
 
 - Status: `baseline`
-- Fingerprint: `10eeba4ed803a4afb929e911cee036bcaf0f3a58996d5bedde2ffc2b1f4acde0`
+- Fingerprint: `b0894a6870d3b9e75b734d994237c20a6171f89413f8cd78ef754e50381288de`
 - Matched modules: `123`
 - SwiftPM-only modules: `30`
 - CocoaPods-only modules: `33`
@@ -59,7 +59,7 @@ The baseline records existing differences as explicit review items. A later mani
 - `HarbethKit` / `internal_dependencies`: SPM=["CameraPermission", "Core", "MediaViewer", "Symbols"]; CocoaPods=["CameraPermission", "Core", "Symbols"]
 - `ImageEditor` / `internal_dependencies`: SPM=["Core", "HarbethKit", "MediaCore", "PToolsCore", "PhotoPicker", "Symbols"]; CocoaPods=["Core", "HarbethKit", "MediaCore", "PhotoPicker", "Symbols"]
 - `ImageEditor` / `third_party_dependencies`: SPM=["Harbeth"]; CocoaPods=[]
-- `Input` / `internal_dependencies`: SPM=["Core", "PToolsCore"]; CocoaPods=["Core"]
+- `Input` / `internal_dependencies`: SPM=["Core", "PToolsCore", "PToolsUIFoundation"]; CocoaPods=["Core", "PToolsUIFoundation"]
 - `Instructions` / `internal_dependencies`: SPM=["Overlay"]; CocoaPods=["Core", "Overlay"]
 - `MeidaPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["MeidaPermission"]
 - `Model` / `internal_dependencies`: SPM=["ModelCore", "PToolsModelMacroPlugin"]; CocoaPods=["ModelCore"]

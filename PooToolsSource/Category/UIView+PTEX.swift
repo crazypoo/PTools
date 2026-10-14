@@ -1787,6 +1787,7 @@ public extension UIView {
                          uniCount: configuration.uniCount,
                          emptyImage: configuration.emptyImage,
                          targetSize: configuration.targetSize,
+                         displayScale: configuration.displayScale,
                          progressHandle: progressHandle,
                          setImageBlock: setImageBlock,
                          loadFinish: loadFinish)
@@ -1823,6 +1824,10 @@ public extension UIView {
                           /// Español: Tamaño máximo opcional para reducir la imagen al decodificarla.
                           /// 中文：可选的最大显示尺寸，用于图片解码时降采样。
                           targetSize: CGSize? = nil,
+                          /// English: Optional display scale used to convert point sizes into source pixels.
+                          /// Español: Escala de pantalla opcional para convertir puntos en píxeles de origen.
+                          /// 中文：可选的显示比例，用于把点尺寸转换为源图片像素。
+                          displayScale: CGFloat? = nil,
                           progressHandle: (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
                           setImageBlock: @escaping @MainActor @Sendable (UIImage?) -> Void,
                           loadFinish: (@MainActor @Sendable (PTLoadImageResult) -> Void)? = nil) {
@@ -1834,6 +1839,9 @@ public extension UIView {
         let valueLabelC = valueLabelColor ?? PTAppBaseConfig.share.loadImageShowValueColor
         let uniC = uniCount ?? PTAppBaseConfig.share.loadImageShowValueUniCount
         let placeholder = emptyImage ?? PTAppBaseConfig.share.defaultEmptyImage
+        let resolvedDisplayScale = displayScale ?? window?.screen.scale ?? UIScreen.main.scale
+        let validBounds = bounds.width > 0 && bounds.height > 0
+        let requestTargetSize = targetSize ?? (validBounds ? bounds.size : nil)
 
         // 取消旧任务
         cancelImageLoad()
@@ -1856,6 +1864,41 @@ public extension UIView {
         // Español: Muestra el marcador antes de iniciar cualquier fuente asíncrona para no exponer contenido obsoleto.
         // 中文：在启动任何异步来源前先显示占位图，避免暴露已经过期的内容。
         setEmpty()
+
+        // English: Wait for a real layout size instead of decoding a full-size image for a zero-sized view.
+        // Español: Espera un tamaño de diseño real en lugar de decodificar una imagen completa para una vista de tamaño cero.
+        // 中文：等待真实布局尺寸，避免零尺寸视图先解码整张大图。
+        if requestTargetSize == nil {
+            ptLoadTask = Task { @MainActor [weak self] in
+                await Task.yield()
+                guard let self,
+                      !Task.isCancelled,
+                      self.bounds.width > 0,
+                      self.bounds.height > 0 else { return }
+                self.pt_loadCoreImage(contentData: contentData,
+                                      iCloudDocumentName: iCloudDocumentName,
+                                      radius: radius,
+                                      topLeft: topLeft,
+                                      topRight: topRight,
+                                      bottomLeft: bottomLeft,
+                                      bottomRight: bottomRight,
+                                      corner: corner,
+                                      capsule: capsule,
+                                      borderWidth: borderWidth,
+                                      borderColor: borderColor,
+                                      showValueLabel: showValueLabel,
+                                      valueLabelFont: valueLabelFont,
+                                      valueLabelColor: valueLabelColor,
+                                      uniCount: uniCount,
+                                      emptyImage: emptyImage,
+                                      targetSize: self.bounds.size,
+                                      displayScale: resolvedDisplayScale,
+                                      progressHandle: progressHandle,
+                                      setImageBlock: setImageBlock,
+                                      loadFinish: loadFinish)
+            }
+            return
+        }
 
         let showImage: @MainActor @Sendable (UIImage) -> Void = { [weak self] image in
             guard let self = self, isValid() else { return }
@@ -1913,7 +1956,11 @@ public extension UIView {
                 let result = await PTLoadImageFunction.loadImage(
                     source: .videoURL(url,
                                      frameNumber: 10,
-                                     maximumSize: targetSize ?? PTVideoThumbnailService.defaultMaximumSize)
+                                     maximumSize: requestTargetSize.map {
+                                         CGSize(width: $0.width * resolvedDisplayScale,
+                                                height: $0.height * resolvedDisplayScale)
+                                     } ?? PTVideoThumbnailService.defaultMaximumSize),
+                    displayScale: resolvedDisplayScale
                 )
                 guard !Task.isCancelled else { return }
                 finish(result)
@@ -1958,7 +2005,8 @@ public extension UIView {
                         )
                     }
                     },
-                    targetSize: targetSize
+                    targetSize: requestTargetSize,
+                    displayScale: resolvedDisplayScale
                 )
                 
                 if Task.isCancelled { return }
@@ -1973,7 +2021,8 @@ public extension UIView {
                 let result = await PTLoadImageFunction.loadImage(source: source,
                                                                  iCloudDocumentName: iCloudDocumentName,
                                                                  progressHandle: progressHandle,
-                                                                 targetSize: targetSize)
+                                                                 targetSize: requestTargetSize,
+                                                                 displayScale: resolvedDisplayScale)
                 guard !Task.isCancelled else { return }
                 finish(result)
             }
@@ -1986,7 +2035,8 @@ public extension UIView {
             ptLoadTask = Task { @MainActor in
                 guard !Task.isCancelled else { return }
                 let result = await PTLoadImageFunction.loadImage(source: .data(data),
-                                                                 targetSize: targetSize)
+                                                                 targetSize: requestTargetSize,
+                                                                 displayScale: resolvedDisplayScale)
                 guard !Task.isCancelled else { return }
                 finish(result)
             }
@@ -1994,7 +2044,8 @@ public extension UIView {
             ptLoadTask = Task { @MainActor in
                 if Task.isCancelled { return }
                 let result = await PTLoadImageFunction.handleAssetContent(asset: asset,
-                                                                           targetSize: targetSize)
+                                                                           targetSize: requestTargetSize,
+                                                                           displayScale: resolvedDisplayScale)
                 if Task.isCancelled { return }
                 finish(result)
             }
@@ -2002,7 +2053,8 @@ public extension UIView {
             ptLoadTask = Task { @MainActor in
                 guard !Task.isCancelled else { return }
                 let result = await PTLoadImageFunction.loadImage(source: .avAsset(avasset),
-                                                                 targetSize: targetSize)
+                                                                 targetSize: requestTargetSize,
+                                                                 displayScale: resolvedDisplayScale)
                 guard !Task.isCancelled else { return }
                 finish(result)
             }
@@ -2015,7 +2067,8 @@ public extension UIView {
                     let result = await PTLoadImageFunction.loadImage(
                         contentData: string,
                         iCloudDocumentName: iCloudDocumentName,
-                        targetSize: targetSize
+                        targetSize: requestTargetSize,
+                        displayScale: resolvedDisplayScale
                     )
                     guard !Task.isCancelled else { return }
                     finish(result)

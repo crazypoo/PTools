@@ -28,6 +28,11 @@ import UIKit
             updateBorder()
         }
     }
+
+    /// 可选的独立占位符颜色；未设置时继续使用 Isao 的状态颜色。
+    @IBInspectable dynamic open var placeholderColor: UIColor? {
+        didSet { updatePlaceholder() }
+    }
     
     /// 占位符字体的缩放比例。
     /// 决定了占位符标签相对于输入框文本字体大小的比例。默认为 0.7。
@@ -114,8 +119,12 @@ import UIKit
     
     /// 更新占位符的内容和布局
     private func updatePlaceholder() {
-        placeholderLabel.text = placeholder
-        placeholderLabel.textColor = inactiveColor
+        let fallbackColor = isFirstResponder ? (activeColor ?? inactiveColor ?? .black) : (inactiveColor ?? activeColor ?? .black)
+        applyPlaceholder(to: placeholderLabel,
+                         text: placeholder,
+                         font: currentFont,
+                         color: placeholderColor ?? fallbackColor,
+                         scale: placeholderFontScale)
         placeholderLabel.sizeToFit()
         layoutPlaceholderInTextRect()
         
@@ -124,10 +133,18 @@ import UIKit
             animateViewsForTextEntry()
         }
     }
+
+    // English: Refresh Isao using its active and inactive color semantics.
+    // Español: Actualiza Isao conservando la semántica de color activo e inactivo.
+    // 中文：刷新 Isao，同时保留激活和非激活颜色语义。
+    override open func refreshPlaceholderAppearance() {
+        updatePlaceholder()
+    }
     
     /// 根据设定的缩放比例计算占位符的字体大小
     private func placeholderFontFromFont(_ font: UIFont) -> UIFont {
-        return UIFont(descriptor: font.fontDescriptor, size: font.pointSize * placeholderFontScale)
+        inputAppearance.placeholderFontOverride ?? UIFont(descriptor: font.fontDescriptor,
+                                                           size: font.pointSize * placeholderFontScale)
     }
     
     /// 计算底部边框所在的区域
@@ -192,12 +209,12 @@ import UIKit
     /// 返回处于编辑状态时的文本绘制区域
     override open func editingRect(forBounds bounds: CGRect) -> CGRect {
         let newBounds = CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height - currentFont.lineHeight + textFieldInsets.y)
-        return newBounds.insetBy(dx: textFieldInsets.x, dy: 0)
+        return applySharedTextRect(newBounds.insetBy(dx: textFieldInsets.x, dy: 0), bounds: bounds)
     }
     
     /// 返回正常的文本绘制区域
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
         let newBounds = CGRect(x: 0, y: 0, width: bounds.size.width, height: bounds.size.height - currentFont.lineHeight + textFieldInsets.y)
-        return newBounds.insetBy(dx: textFieldInsets.x, dy: 0)
+        return applySharedTextRect(newBounds.insetBy(dx: textFieldInsets.x, dy: 0), bounds: bounds)
     }
 }

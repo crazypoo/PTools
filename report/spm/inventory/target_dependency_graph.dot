@@ -243,6 +243,7 @@ digraph PToolsSwiftPM {
   "PooToolsImagePicker" -> "PTCameraPermission";
   "PooToolsImagePicker" -> "ptools";
   "PooToolsInput" -> "PToolsCore";
+  "PooToolsInput" -> "PToolsUIFoundation";
   "PooToolsInput" -> "ptools";
   "PooToolsInstructions" -> "PToolsOverlay";
   "PooToolsKeyChain";

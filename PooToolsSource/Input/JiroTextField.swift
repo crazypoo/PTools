@@ -134,8 +134,11 @@ import UIKit
     
     /// 更新占位符的内容和状态
     private func updatePlaceholder() {
-        placeholderLabel.text = placeholder
-        placeholderLabel.textColor = placeholderColor
+        applyPlaceholder(to: placeholderLabel,
+                         text: placeholder,
+                         font: currentFont,
+                         color: placeholderColor,
+                         scale: placeholderFontScale)
         placeholderLabel.sizeToFit()
         layoutPlaceholderInTextRect()
         
@@ -145,10 +148,18 @@ import UIKit
             animateViewsForTextEntry()
         }
     }
+
+    // English: Refresh Jiro's placeholder without rebuilding its background effect.
+    // Español: Actualiza el marcador de Jiro sin reconstruir su efecto de fondo.
+    // 中文：刷新 Jiro 占位符，不重建原有背景效果。
+    override open func refreshPlaceholderAppearance() {
+        updatePlaceholder()
+    }
     
     /// 计算缩放后的占位符字体
     private func placeholderFontFromFont(_ font: UIFont) -> UIFont {
-        return UIFont(descriptor: font.fontDescriptor, size: font.pointSize * placeholderFontScale)
+        inputAppearance.placeholderFontOverride ?? UIFont(descriptor: font.fontDescriptor,
+                                                           size: font.pointSize * placeholderFontScale)
     }
     
     /// 计算边框或背景的坐标和大小
@@ -196,11 +207,11 @@ import UIKit
     
     /// 返回处于编辑状态时的文本绘制区域，加入设定的偏移量
     override open func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.offsetBy(dx: textFieldInsets.x, dy: textFieldInsets.y)
+        return applySharedTextRect(bounds.offsetBy(dx: textFieldInsets.x, dy: textFieldInsets.y), bounds: bounds)
     }
     
     /// 返回正常的文本绘制区域，加入设定的偏移量
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.offsetBy(dx: textFieldInsets.x, dy: textFieldInsets.y)
+        return applySharedTextRect(bounds.offsetBy(dx: textFieldInsets.x, dy: textFieldInsets.y), bounds: bounds)
     }
 }

@@ -6,6 +6,14 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.64.6 — 2026-10-14
+
+- 统一 Input TextFieldEffects 与独立 `PTHoshiTextField` 的占位符、富文本、字体、间距和编辑区域配置；保留旧拼写 `textAndPlceholderSpace` 作为弃用兼容入口。
+- 修复输入框依赖绘制生命周期初始化、重复通知监听、直接调用 `layoutSubviews()`、程序化赋值动画和首字符水平跳动的问题；多次布局和复用保持幂等。
+- 为 Input 的 SwiftPM / CocoaPods 入口补齐 `PToolsUIFoundation` 与 `SnapKit` 显式依赖，避免独立 target 编译时依赖聚合模块传递可见性。
+- 统一图片加载的点尺寸与像素尺寸边界：PhotoKit、ImageIO、本地文件、Kingfisher 和视频封面都使用实际窗口屏幕比例；图片视图和按钮在布局稳定后再请求，并在请求开始时立即显示占位图。
+- 保留图片取消、generation 校验、GIF、iCloud、视频首帧和旧公开 API；补充高分辨率图片加载指南与 Input 样式演示说明。
+
 ## 5.64.5 — 2026-10-14
 
 - 完成 SwiftPM 全仓 179 个 target、155 个 product 和源码归属的动态审计，生成依赖图、符号归属、条件编译、资源和消费者矩阵报告。

@@ -1032,7 +1032,7 @@ let package = Package(
         // Español: Instructions usa el host de overlay compartido en lugar de una ventana de terceros.
         // 中文：Instructions 使用共享 Overlay 容器，不再创建第三方引导窗口。
         .target(name: "PooToolsInstructions", dependencies: ["PToolsOverlay"], path: "PooToolsSource/Instructions", swiftSettings: [.define("POOTOOLS_INSTRUCTIONS"), .define("POOTOOLS_COCOAPODS"), .enableUpcomingFeature("StrictConcurrency")]),
-        .target(name: "PooToolsInput", dependencies: ["ptools", "PToolsCore", "PhoneNumberKit"], path: "PooToolsSource/Input", swiftSettings: [.define("POOTOOLS_INPUT"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsInput", dependencies: ["ptools", "PToolsCore", "PToolsUIFoundation", "PhoneNumberKit", "SnapKit"], path: "PooToolsSource/Input", swiftSettings: [.define("POOTOOLS_INPUT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsKeyboard", dependencies: ["ptools"], path: "PooToolsSource/Keyboard", swiftSettings: [.define("POOTOOLS_CUSTOMERNUMBERKEYWORD"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsKeyChain", dependencies: [], path: "PooToolsSource/KeyChain", swiftSettings: [.define("POOTOOLS_KEYCHAIN"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsMotion", dependencies: ["ptools", "PTMotionPermission"], path: "PooToolsSource/Motion", swiftSettings: [.define("POOTOOLS_MOTION"), .define("POOTOOLS_COCOAPODS")]),
