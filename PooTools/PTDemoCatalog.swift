@@ -124,6 +124,7 @@ enum PTDemoRegistry {
         make("network.ptmodel-lab", "PooToolsNetwork", "PTModel + Typed Network", .networkConnectivity, .interactive, .push, .runnable, legacy: "PTModel + Typed Network", tags: ["network", "ptmodel", "nested-json", "model-path"]),
         make("media.image-review", "PooToolsMediaViewer", "图片展示", .mediaGraphics, .interactive, .fullScreen, .runnable, legacy: "图片展示", tags: ["image", "gif", "video"]),
         make("media.image-clarity", "PooToolsCore", "Image Loading Clarity", .mediaGraphics, .interactive, .push, .runnable, tags: ["image", "placeholder", "downsampling", "scale"]),
+        make("ui.rich-text-attachment-multiline", "PToolsUIFoundation", "Rich Text · Attachment Multiline Regression", .uiComponents, .interactive, .push, .runnable, tags: ["rich-text", "attachment", "multiline", "baseline", "action"]),
         make("media.video-editor", "PooToolsVideoEditor", "视频编辑", .mediaGraphics, .hostRequired, .fullScreen, .physicalDeviceRequired, [.photoLibrary, .physicalDevice], legacy: "视频编辑", tags: ["video", "export"]),
         make("media.signature", "PooToolsHandSign", "签名", .mediaGraphics, .interactive, .sheet, .runnable, legacy: "签名", tags: ["drawing"]),
         make("media.dynamic-code", "PooToolsCodeView", "动态验证码", .mediaGraphics, .interactive, .sheet, .runnable, legacy: "动态验证码", tags: ["code"]),
@@ -332,6 +333,8 @@ final class PTDemoCoordinator {
             return PTInputStylesDemoViewController()
         case "media.image-clarity":
             return PTImageClarityDemoViewController()
+        case "ui.rich-text-attachment-multiline":
+            return PTRichTextAttachmentMultilineDemoViewController()
         case "infrastructure.database":
             return PTDatabaseInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
         case "infrastructure.auth":
@@ -2110,6 +2113,176 @@ private final class PTImageClarityDemoViewController: PTBaseViewController {
             make.height.equalTo(height)
         }
         return container
+    }
+}
+
+// English: Demonstrate multiline attachments, baseline offsets and wrapped actions with real UIKit bounds.
+// Español: Demuestra adjuntos multilínea, desplazamientos de línea base y acciones envueltas con bounds UIKit reales.
+// 中文：使用真实 UIKit bounds 展示多行附件、基线偏移和换行 Action。
+@MainActor
+private final class PTRichTextAttachmentMultilineDemoViewController: PTBaseViewController {
+    private let scrollView = UIScrollView()
+    private let stackView = UIStackView()
+    private let previewScrollView = UIScrollView()
+    private let previewContentView = UIView()
+    private let richContainer = UIView()
+    private let richLabel = UILabel()
+    private let plainLabel = UILabel()
+    private let statusLabel = UILabel()
+    private let heightControl = UISegmentedControl(items: ["40", "64", "80", "120"])
+    private let widthControl = UISegmentedControl(items: ["280", "366", "430"])
+    private let offsetControl = UISegmentedControl(items: ["-7", "0", "+7"])
+    private let breakControl = UISegmentedControl(items: ["Word", "Character"])
+    private let actionID = PTTextActionID("rich-text-rule")
+    private lazy var actionRegistry: PTTextActionRegistry = {
+        let registry = PTTextActionRegistry()
+        registry.register(actionID) { [weak self] _ in
+            self?.statusLabel.text = "Action callback: rich-text-rule"
+        }
+        return registry
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = "Rich Text Attachment"
+        view.backgroundColor = .systemBackground
+        configureViews()
+        updatePreview()
+    }
+
+    private func configureViews() {
+        let description = UILabel()
+        description.numberOfLines = 0
+        description.font = .preferredFont(forTextStyle: .footnote)
+        description.textColor = .secondaryLabel
+        description.text = "验证 24×24 图片在 40/64/80/120pt 容器、-7/0/+7 基线和多行 Action 下的实际布局。\nValidate real UIKit layout for inline attachments, wrapping and action hit testing."
+
+        heightControl.selectedSegmentIndex = 2
+        widthControl.selectedSegmentIndex = 1
+        offsetControl.selectedSegmentIndex = 0
+        breakControl.selectedSegmentIndex = 0
+        [heightControl, widthControl, offsetControl, breakControl].forEach {
+            $0.addTarget(self, action: #selector(controlChanged), for: .valueChanged)
+        }
+
+        richLabel.numberOfLines = 0
+        richLabel.font = .systemFont(ofSize: 14)
+        richLabel.isUserInteractionEnabled = true
+        richLabel.backgroundColor = .secondarySystemBackground
+        richLabel.accessibilityLabel = "Rich text attachment preview"
+        plainLabel.numberOfLines = 0
+        plainLabel.font = .systemFont(ofSize: 14)
+        plainLabel.textColor = .secondaryLabel
+        plainLabel.backgroundColor = .tertiarySystemBackground
+        statusLabel.numberOfLines = 0
+        statusLabel.font = .monospacedSystemFont(ofSize: 11, weight: .regular)
+        statusLabel.textColor = .secondaryLabel
+
+        let heightRow = makeControlRow(title: "Height", control: heightControl)
+        let widthRow = makeControlRow(title: "Width", control: widthControl)
+        let offsetRow = makeControlRow(title: "Baseline", control: offsetControl)
+        let breakRow = makeControlRow(title: "Break", control: breakControl)
+
+        previewScrollView.alwaysBounceHorizontal = true
+        previewScrollView.showsHorizontalScrollIndicator = true
+        previewScrollView.addSubview(previewContentView)
+        previewContentView.addSubview(richContainer)
+        richContainer.addSubview(richLabel)
+        richLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(8)
+        }
+        previewContentView.snp.makeConstraints { make in
+            make.edges.equalTo(previewScrollView.contentLayoutGuide)
+            make.height.equalTo(previewScrollView.frameLayoutGuide)
+            make.width.equalTo(366)
+        }
+        richContainer.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(80)
+        }
+
+        stackView.axis = .vertical
+        stackView.spacing = 12
+        stackView.addArrangedSubview(description)
+        stackView.addArrangedSubview(heightRow)
+        stackView.addArrangedSubview(widthRow)
+        stackView.addArrangedSubview(offsetRow)
+        stackView.addArrangedSubview(breakRow)
+        stackView.addArrangedSubview(previewScrollView)
+        stackView.addArrangedSubview(plainLabel)
+        stackView.addArrangedSubview(statusLabel)
+        previewScrollView.snp.makeConstraints { make in
+            make.height.equalTo(120)
+        }
+
+        view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        stackView.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView.contentLayoutGuide).inset(16)
+            make.width.equalTo(scrollView.frameLayoutGuide).offset(-32)
+        }
+    }
+
+    @objc private func controlChanged() {
+        updatePreview()
+    }
+
+    private func updatePreview() {
+        let width = [280, 366, 430][max(0, min(widthControl.selectedSegmentIndex, 2))]
+        let height = [40, 64, 80, 120][max(0, min(heightControl.selectedSegmentIndex, 3))]
+        let offset = [-7, 0, 7][max(0, min(offsetControl.selectedSegmentIndex, 2))]
+        let lineBreakMode: NSLineBreakMode = breakControl.selectedSegmentIndex == 0 ? .byWordWrapping : .byCharWrapping
+
+        previewContentView.snp.remakeConstraints { make in
+            make.edges.equalTo(previewScrollView.contentLayoutGuide)
+            make.height.equalTo(previewScrollView.frameLayoutGuide)
+            make.width.equalTo(width)
+        }
+        richContainer.snp.updateConstraints { make in
+            make.height.equalTo(height)
+        }
+        richLabel.lineBreakMode = lineBreakMode
+        let richText = makeRichText(offset: CGFloat(offset))
+        richLabel.pt_apply(richText: richText,
+                           actionRegistry: actionRegistry,
+                           interactionMode: .actionsOnly)
+        plainLabel.text = "Plain UILabel 对照：\n\(richText.plainText)"
+        view.layoutIfNeeded()
+
+        let fitted = richLabel.sizeThatFits(CGSize(width: max(1, CGFloat(width - 16)), height: 10_000))
+        statusLabel.text = "bounds=\(NSCoder.string(for: richLabel.bounds))\nsizeThatFits=\(NSCoder.string(for: fitted))\nintrinsic=\(NSCoder.string(for: richLabel.intrinsicContentSize))\noffset=\(offset), break=\(lineBreakMode.rawValue)"
+    }
+
+    private func makeControlRow(title: String, control: UISegmentedControl) -> UIView {
+        let row = UIStackView(arrangedSubviews: [UILabel(), control])
+        row.axis = .horizontal
+        row.alignment = .center
+        row.spacing = 8
+        (row.arrangedSubviews[0] as? UILabel)?.text = title
+        (row.arrangedSubviews[0] as? UILabel)?.setContentHuggingPriority(.required, for: .horizontal)
+        return row
+    }
+
+    private func makeRichText(offset: CGFloat) -> PTRichText {
+        let image = UIImage(named: "DemoImage") ?? UIGraphicsImageRenderer(size: CGSize(width: 24, height: 24)).image { context in
+            UIColor.systemBlue.setFill()
+            context.fill(CGRect(x: 0, y: 0, width: 24, height: 24))
+        }
+        let imageAttribute = PTTextAttribute.image(image,
+                                                    .custom(size: CGSize(width: 24, height: 24)),
+                                                    baselineOffset: offset)
+        var value = PTRichText(string: "\u{FFFC}", with: [imageAttribute])
+        value += PTRichText(" 标题与描述 mixed text that is intentionally long enough to wrap ",
+                            with: [.font(.systemFont(ofSize: 14, weight: .bold))])
+        value += PTRichText("点击规则",
+                            with: [.action(actionID),
+                                   .foreground(.systemBlue),
+                                   .font(.systemFont(ofSize: 14))])
+        return PTRichText(wrap: .embedding(value),
+                          .paragraph(.lineBreakMode(.byWordWrapping)))
     }
 }
 

@@ -281,6 +281,11 @@ func applyMedia() {
 避免异步结果串写。Action、链接、匹配、Markdown、本地化和附件描述仍保持为值数据；点击行为通过
 `PTTextActionRegistry` 或控件回调注册，不把闭包写进富文本模型。
 
+内嵌图片需要参与多行布局时，直接使用 `UILabel.pt_apply(richText:)` 即可；渲染器会在 UIKit 显示副本上
+安全处理附件的 `baselineOffset`，不会强制修改调用方的 `numberOfLines` 或 `lineBreakMode`。可在 Example
+中打开 `Rich Text · Attachment Multiline Regression` 验证 24×24 图片、不同高度和换行 Action。
+详见 [PTRichText 多行附件布局指南](docs/guides/PTRICHTEXT_MULTILINE_ATTACHMENTS.md)。
+
 ### 搜索页面
 
 需要完整搜索容器时选择 `PooTools/Search` 或 `PooToolsSearch`；只使用输入框时继续选择

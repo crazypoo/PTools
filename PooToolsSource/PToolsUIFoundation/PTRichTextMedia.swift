@@ -406,6 +406,18 @@ public final class PTRichTextMediaTextAttachment: NSTextAttachment {
                                       size: size ?? attachmentSize,
                                       baselineOffset: baselineOffset)
     }
+
+    // English: Clone the attachment before UIKit-only bounds normalization so shared model attachments are never mutated.
+    // Español: Clona el adjunto antes de normalizar los bounds solo para UIKit y nunca muta el modelo compartido.
+    // 中文：在 UIKit 专用 bounds 规整前复制附件，避免修改共享模型附件。
+    func renderingCopy() -> PTRichTextMediaTextAttachment {
+        let copy = PTRichTextMediaTextAttachment(media: media,
+                                                  image: image,
+                                                  size: attachmentSize,
+                                                  baselineOffset: baselineOffset)
+        copy.bounds = bounds
+        return copy
+    }
 }
 
 // English: Store a typed remote URL beside its placeholder attachment for later MainActor replacement.
@@ -438,14 +450,32 @@ public final class PTRemoteImageTextAttachment: NSTextAttachment {
         return nil
     }
 
-    // English: Return a plain attachment so a resolved image never starts another remote load.
-    // Español: Devuelve un adjunto normal para que una imagen resuelta no vuelva a iniciar una carga remota.
-    // 中文：返回普通附件，避免真实图片设置后再次触发远程加载。
-    public func resolvedAttachment(with image: UIImage) -> NSTextAttachment {
-        let attachment = NSTextAttachment()
-        attachment.image = image
-        attachment.bounds = CGRect(origin: .zero, size: attachmentSize)
+    // English: Preserve remote metadata after resolution; only the source value controls whether loading starts.
+    // Español: Conserva los metadatos remotos tras resolver; solo el valor fuente decide si comienza la carga.
+    // 中文：解析完成后保留远程元数据，是否加载只由源值决定。
+    public func resolvedAttachment(with image: UIImage) -> PTRemoteImageTextAttachment {
+        let attachment = PTRemoteImageTextAttachment(identifier: identifier,
+                                                      url: remoteURL,
+                                                      size: attachmentSize,
+                                                      placeholder: image,
+                                                      mediaID: mediaID,
+                                                      baselineOffset: baselineOffset)
+        attachment.bounds = bounds
         return attachment
+    }
+
+    // English: Clone the remote attachment before UIKit-only bounds normalization.
+    // Español: Clona el adjunto remoto antes de normalizar los bounds solo para UIKit.
+    // 中文：在 UIKit 专用 bounds 规整前复制远程附件。
+    func renderingCopy() -> PTRemoteImageTextAttachment {
+        let copy = PTRemoteImageTextAttachment(identifier: identifier,
+                                                url: remoteURL,
+                                                size: attachmentSize,
+                                                placeholder: image,
+                                                mediaID: mediaID,
+                                                baselineOffset: baselineOffset)
+        copy.bounds = bounds
+        return copy
     }
 }
 

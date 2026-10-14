@@ -13,6 +13,8 @@
 - 为 Input 的 SwiftPM / CocoaPods 入口补齐 `PToolsUIFoundation` 与 `SnapKit` 显式依赖，避免独立 target 编译时依赖聚合模块传递可见性。
 - 统一图片加载的点尺寸与像素尺寸边界：PhotoKit、ImageIO、本地文件、Kingfisher 和视频封面都使用实际窗口屏幕比例；图片视图和按钮在布局稳定后再请求，并在请求开始时立即显示占位图。
 - 保留图片取消、generation 校验、GIF、iCloud、视频首帧和旧公开 API；补充高分辨率图片加载指南与 Input 样式演示说明。
+- 修复 `PTRichText` 内嵌图片在 UILabel 多行布局中的附件基线处理：保留值模型语义，仅对 UIKit 显示副本应用一次偏移，并统一初始渲染、异步媒体回填和交互高亮路径。
+- 新增 `Rich Text · Attachment Multiline Regression` Demo、真实 UILabel 回归覆盖和多行附件迁移指南，验证 40/64/80/120pt 高度、不同换行方式及换行 Action。
 
 ## 5.64.5 — 2026-10-14
 

@@ -143,7 +143,11 @@ final class PTRichTextMediaController: NSObject {
                                                                        size: resolved.size),
                                  range: subrange)
         }
-        label?.attributedText = updated
-        textView?.attributedText = updated
+        if let label {
+            PTRichTextLabelRendering.apply(updated, to: label)
+        }
+        if let textView {
+            PTRichTextLabelRendering.apply(updated, to: textView)
+        }
     }
 }

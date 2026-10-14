@@ -87,6 +87,7 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
     private lazy var tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
     private lazy var longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
     private var highlightedRange: NSRange?
+    private var savedHighlightBackground: [(range: NSRange, value: Any)] = []
 
     public init(richText: PTRichText,
                 label: UILabel,
@@ -145,6 +146,7 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
     public func update(richText: PTRichText) {
         self.richText = richText
         highlightedRange = nil
+        savedHighlightBackground.removeAll(keepingCapacity: false)
     }
 
     fileprivate func install(on view: UIView) {
@@ -177,12 +179,9 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
             onInteraction?(interaction)
             if case .media = interaction { return }
         }
-        guard let hit = hit(at: point),
+        guard let event = actionEvent(at: point, interaction: .tap),
               let registry else { return }
-        registry.perform(PTTextActionEvent(actionID: hit.id,
-                                           range: hit.range,
-                                           text: hit.text,
-                                           interaction: .tap))
+        registry.perform(event)
     }
 
     @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
@@ -199,15 +198,27 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
                                                text: hit.text,
                                                interaction: .longPress))
         case .ended, .cancelled, .failed:
-            highlightedRange = nil
             clearTemporaryHighlight()
+            highlightedRange = nil
         default:
             break
         }
     }
 
+    // English: Build action events from the displayed attributed text so wrapped lines and resolved attachments share one layout.
+    // Español: Construye eventos desde el texto atribuido mostrado para que las líneas envueltas y los adjuntos resueltos compartan layout.
+    // 中文：始终根据当前显示的富文本生成 Action 事件，让换行文本和已解析附件共用同一套布局。
+    internal func actionEvent(at point: CGPoint,
+                              interaction: PTTextInteractionKind) -> PTTextActionEvent? {
+        guard let hit = hit(at: point) else { return nil }
+        return PTTextActionEvent(actionID: hit.id,
+                                 range: hit.range,
+                                 text: hit.text,
+                                 interaction: interaction)
+    }
+
     private func hit(at point: CGPoint) -> (id: PTTextActionID, range: NSRange, text: String)? {
-        let attributedText = richText.value
+        let attributedText = displayedAttributedText
         guard attributedText.length > 0,
               let index = characterIndex(at: point, attributedText: attributedText),
               let rawID = attributedText.attribute(PTRichText.actionAttributeKey,
@@ -223,7 +234,7 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
     }
 
     private func interaction(at point: CGPoint) -> PTRichTextInteraction? {
-        let attributedText = richText.value
+        let attributedText = displayedAttributedText
         guard attributedText.length > 0,
               let index = characterIndex(at: point, attributedText: attributedText) else {
             return nil
@@ -281,18 +292,54 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
     }
 
     private func applyTemporaryHighlight(_ range: NSRange) {
-        let value = NSMutableAttributedString(attributedString: richText.value)
+        let value = NSMutableAttributedString(attributedString: displayedAttributedText)
         guard range.location >= 0,
               range.length > 0,
               NSMaxRange(range) <= value.length else { return }
+        savedHighlightBackground.removeAll(keepingCapacity: true)
+        value.enumerateAttribute(.backgroundColor, in: range, options: []) { existing, subrange, _ in
+            if let existing {
+                savedHighlightBackground.append((subrange, existing))
+            }
+        }
         value.addAttribute(.backgroundColor, value: UIColor.systemYellow.withAlphaComponent(0.25), range: range)
-        label?.attributedText = value
-        textView?.attributedText = value
+        if let label {
+            PTRichTextLabelRendering.apply(value, to: label)
+        }
+        if let textView {
+            PTRichTextLabelRendering.apply(value, to: textView)
+        }
     }
 
     private func clearTemporaryHighlight() {
-        label?.attributedText = richText.value
-        textView?.attributedText = richText.value
+        guard let highlightedRange,
+              highlightedRange.location >= 0,
+              highlightedRange.length > 0 else {
+            savedHighlightBackground.removeAll(keepingCapacity: false)
+            return
+        }
+        let value = NSMutableAttributedString(attributedString: displayedAttributedText)
+        guard NSMaxRange(highlightedRange) <= value.length else {
+            savedHighlightBackground.removeAll(keepingCapacity: false)
+            return
+        }
+        value.removeAttribute(.backgroundColor, range: highlightedRange)
+        for saved in savedHighlightBackground where NSMaxRange(saved.range) <= value.length {
+            value.addAttribute(.backgroundColor, value: saved.value, range: saved.range)
+        }
+        if let label {
+            PTRichTextLabelRendering.apply(value, to: label)
+        }
+        if let textView {
+            PTRichTextLabelRendering.apply(value, to: textView)
+        }
+        savedHighlightBackground.removeAll(keepingCapacity: false)
+    }
+
+    private var displayedAttributedText: NSAttributedString {
+        label?.attributedText
+            ?? textView?.attributedText
+            ?? PTRichTextLabelRendering.prepare(richText.value)
     }
 
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
@@ -367,8 +414,12 @@ private final class PTRichTextRemoteImageController: NSObject {
                                  range: subrange)
         }
 
-        label?.attributedText = updated
-        textView?.attributedText = updated
+        if let label {
+            PTRichTextLabelRendering.apply(updated, to: label)
+        }
+        if let textView {
+            PTRichTextLabelRendering.apply(updated, to: textView)
+        }
     }
 }
 
@@ -382,7 +433,7 @@ public enum PTRichTextRenderer {
                              attachmentCoordinator: PTTextAttachmentCoordinator? = nil,
                              mediaLoader: PTRichTextMediaLoader? = nil,
                              onInteraction: PTRichTextInteractionHandler? = nil) {
-        label.attributedText = richText.value
+        PTRichTextLabelRendering.apply(richText.value, to: label)
         (objc_getAssociatedObject(label, &ptRichTextRemoteImageAssociationKey) as? PTRichTextRemoteImageController)?.cancel()
         objc_setAssociatedObject(label,
                                  &ptRichTextRemoteImageAssociationKey,
@@ -441,7 +492,7 @@ public enum PTRichTextRenderer {
                              attachmentCoordinator: PTTextAttachmentCoordinator? = nil,
                              mediaLoader: PTRichTextMediaLoader? = nil,
                              onInteraction: PTRichTextInteractionHandler? = nil) {
-        textView.attributedText = richText.value
+        PTRichTextLabelRendering.apply(richText.value, to: textView)
         textView.isEditable = false
         textView.isSelectable = interactionMode != .actionsOnly
         textView.isScrollEnabled = true

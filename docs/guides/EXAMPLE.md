@@ -38,6 +38,7 @@ Demo 身份由 `PooTools/PTDemoCatalog.swift` 中的 `PTDemoID` 和 `PTDemoDescr
 | Network | 网络和局域网传送示例 | 状态、请求日志、上传/下载和取消 | `PooToolsNetWork` |
 | Media | 图片、视频、签名、识字和媒体选择示例 | 图片加载、视频缩略图、保存和权限 | `PTLoadImageFunction`、`PTVideoThumbnailService`、`PTMediaSaveService` |
 | Rich Text Media | `PTRichText` 媒体示例（见下方代码） | URL/String/UIImage/Data 图片、视频封面、时长、点击和取消 | `PTRichText.image(source:)`、`PTRichText.video(source:)` |
+| Rich Text · Attachment Multiline Regression | `PTDemoCatalog` → `Rich Text · Attachment Multiline Regression` | 24×24 内嵌图片、-7/0/+7 基线、40/64/80/120pt 高度、多行 Action 和真实 bounds | `PTRichTextRenderer`、`UILabel.pt_apply(richText:)` |
 | Picker | 媒体选择和 `PTImageListViewController` | 系统 ImagePicker、PhotoPicker、取消和结果状态 | `PTSystemMediaPicker` 或 `PTMediaLibViewController` |
 | Alert | Alert、反馈、Menu 和 Alert Capsule Lab 示例 | 系统样式、胶囊按钮顺序、长按钮、滚动、键盘和无障碍 | `UIAlertController+PTEX`、`PTCustomerAlertController`、[胶囊操作指南](PTCUSTOMER_ALERT_CAPSULE_ACTIONS.md) |
 | Permission | `PTPermissionViewController`、`PTPermissionSettingViewController` | 授权、拒绝、受限和 MainActor completion | `PTPermission` |
@@ -97,6 +98,16 @@ func configureRichTextMedia() {
 ```
 
 `PTRichText` 只渲染占位图和封面，不创建 `AVPlayer`。宿主负责播放；页面复用或替换内容时，渲染器会取消旧媒体请求并忽略过期结果。
+
+### Rich Text · Attachment Multiline Regression
+
+在 Demo Catalog 中打开 `Rich Text · Attachment Multiline Regression`，可以切换容器高度、宽度、图片
+基线偏移和换行策略，观察 `bounds`、`sizeThatFits` 与 `intrinsicContentSize`。图片附件的原始
+`baselineOffset` 仍保留在 `PTRichText` 值模型中；交给 UIKit 显示时，渲染器只在附件副本上应用一次垂直偏移，
+因此普通文字的 `.baselineOffset`、调用方的 `numberOfLines` 和 `lineBreakMode` 不会被改写。
+
+完整的复现矩阵、迁移注意事项和三语示例见
+[PTRichText 多行附件布局指南](PTRICHTEXT_MULTILINE_ATTACHMENTS.md)。
 
 ### Search
 
