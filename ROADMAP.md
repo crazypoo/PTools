@@ -1,8 +1,16 @@
 # PTools 路线图
 
-> 当前代码基线：`5.64.4`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.64.5`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.59.0`；`5.64.4` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.59.0`；`5.64.5` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.64.5 SwiftPM 全仓跨 target 兼容性闭环
+
+- ✅ 动态生成 179 个 target、155 个 product、1229 个 Swift 源文件归属和无环依赖图。
+- ✅ 补齐独立 target 对 `ptools`、`PToolsCore`、`PToolsSymbols` 和相关 Feature 模块的直接依赖与 import；Banner 轻量路径改用 UIKit 原生子视图移除。
+- ✅ 新增符号声明/引用、条件编译和资源归属审计，所有当前高置信度跨 target finding 已关闭或进入真实宿主构建确认。
+- ✅ 新增 SwiftPM consumer fixture 矩阵和 Debug/Release 宿主构建脚本；`not_run` 不计为通过，未配置 iOS consumer host 时会明确报告阻断。
+- ⬜ 仍需在宿主 Xcode consumer 中逐个完成 155 个 product 的隔离 Debug/Release 编译；当前工作区完整 Example 构建与外部 Pods 构建证据单独记录。
 
 ## 5.64.4 Target 依赖边界修复
 

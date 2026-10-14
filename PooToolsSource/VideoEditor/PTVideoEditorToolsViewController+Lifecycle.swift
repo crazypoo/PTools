@@ -5,6 +5,9 @@
 
 import AVFoundation
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 // MARK: - 系统级生命周期与音频管控 (App Lifecycle & Audio Session)
 extension PTVideoEditorToolsViewController {

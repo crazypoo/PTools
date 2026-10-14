@@ -8,6 +8,10 @@
 
 import UIKit
 
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
+
 #if SWIFT_PACKAGE
 // English: Import the Core target explicitly when this file is built as a Swift package target.
 // Español: Importamos explícitamente el target Core cuando este archivo se compila como target de Swift Package.

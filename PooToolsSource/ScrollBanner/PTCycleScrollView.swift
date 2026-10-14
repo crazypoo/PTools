@@ -12,6 +12,9 @@ import AVFoundation
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 /// English: Page-control styles kept for source compatibility with the legacy banner API.
 /// Español: Estilos de control de páginas conservados para compatibilidad con la API heredada.

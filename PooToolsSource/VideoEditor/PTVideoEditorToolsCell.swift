@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 #if SWIFT_PACKAGE
+import ptools
 import PToolsSymbols
 #endif
 

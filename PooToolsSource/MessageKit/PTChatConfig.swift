@@ -8,6 +8,7 @@
 import UIKit
 import MapKit
 #if SWIFT_PACKAGE
+import ptools
 import PToolsSymbols
 #endif
 

@@ -10,6 +10,10 @@ import UIKit
 import SnapKit
 import Photos
 
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
+
 #if SWIFT_PACKAGE
 import ptools
 import PooToolsImagePicker

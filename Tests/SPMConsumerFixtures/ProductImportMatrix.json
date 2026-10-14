@@ -1,0 +1,2286 @@
+{
+  "generatedFrom": "swift package dump-package",
+  "statusMeaning": "not_run is not a pass; a host Xcode consumer is required for build evidence",
+  "products": [
+    {
+      "product": "PTBluetoothPermission",
+      "targets": [
+        "PTBluetoothPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTCalendarPermission",
+      "targets": [
+        "PTCalendarPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTCameraPermission",
+      "targets": [
+        "PTCameraPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTContactsPermission",
+      "targets": [
+        "PTContactsPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTFaceIDPermission",
+      "targets": [
+        "PTFaceIDPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTHealthPermission",
+      "targets": [
+        "PTHealthPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTLocationPermission",
+      "targets": [
+        "PTLocationPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTMediaPermission",
+      "targets": [
+        "PTMediaPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTMicPermission",
+      "targets": [
+        "PTMicPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTModelBenchmark",
+      "targets": [
+        "PTModelBenchmark"
+      ],
+      "type": {
+        "executable": null
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTModelLegacyKakaJSONFixture",
+      "targets": [
+        "PTModelLegacyKakaJSONFixture"
+      ],
+      "type": {
+        "executable": null
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTModelLegacySmartCodableFixture",
+      "targets": [
+        "PTModelLegacySmartCodableFixture"
+      ],
+      "type": {
+        "executable": null
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTModelMixedLegacyFixture",
+      "targets": [
+        "PTModelMixedLegacyFixture"
+      ],
+      "type": {
+        "executable": null
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTModelOnlyFixture",
+      "targets": [
+        "PTModelOnlyFixture"
+      ],
+      "type": {
+        "executable": null
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTMotionPermission",
+      "targets": [
+        "PTMotionPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTNotificationPermission",
+      "targets": [
+        "PTNotificationPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTRemindersPermission",
+      "targets": [
+        "PTRemindersPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTSiriPermission",
+      "targets": [
+        "PTSiriPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTSpeechPermission",
+      "targets": [
+        "PTSpeechPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PTTrackingPermission",
+      "targets": [
+        "PTTrackingPermission"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsAccessibility",
+      "targets": [
+        "PToolsAccessibility"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsActivities",
+      "targets": [
+        "PToolsActivities"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsAppIntegrity",
+      "targets": [
+        "PToolsAppIntegrity"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsAppIntents",
+      "targets": [
+        "PToolsAppIntents"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsAudio",
+      "targets": [
+        "PToolsAudio"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsAuth",
+      "targets": [
+        "PToolsAuth"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsAuthCore",
+      "targets": [
+        "PToolsAuthCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsBackgroundTasks",
+      "targets": [
+        "PToolsBackgroundTasks"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsBluetooth",
+      "targets": [
+        "PToolsBluetooth"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsConfiguration",
+      "targets": [
+        "PToolsConfiguration"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsConnectivity",
+      "targets": [
+        "PToolsConnectivity"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsContentState",
+      "targets": [
+        "PToolsContentState"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsCore",
+      "targets": [
+        "PToolsCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsDatabase",
+      "targets": [
+        "PToolsDatabase"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsDatabaseCore",
+      "targets": [
+        "PToolsDatabaseCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsDate",
+      "targets": [
+        "PToolsDate"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsDeepLink",
+      "targets": [
+        "PToolsDeepLink"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsDevice",
+      "targets": [
+        "PToolsDevice"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsDocuments",
+      "targets": [
+        "PToolsDocuments"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsFeedback",
+      "targets": [
+        "PToolsFeedback"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsForm",
+      "targets": [
+        "PToolsForm"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsHTTPFilePortal",
+      "targets": [
+        "PToolsHTTPFilePortal"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsHTTPServer",
+      "targets": [
+        "PToolsHTTPServer"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsLogging",
+      "targets": [
+        "PToolsLogging"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsMap",
+      "targets": [
+        "PToolsMap"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsMapCore",
+      "targets": [
+        "PToolsMapCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsModel",
+      "targets": [
+        "PToolsModel"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsModelCombine",
+      "targets": [
+        "PToolsModelCombine"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsModelCore",
+      "targets": [
+        "PToolsModelCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsModelLegacyKakaJSON",
+      "targets": [
+        "PToolsModelLegacyKakaJSON"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsModelLegacySmartCodable",
+      "targets": [
+        "PToolsModelLegacySmartCodable"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsModelUIKit",
+      "targets": [
+        "PToolsModelUIKit"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsNotifications",
+      "targets": [
+        "PToolsNotifications"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsObservability",
+      "targets": [
+        "PToolsObservability"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsObservabilityCore",
+      "targets": [
+        "PToolsObservabilityCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsOverlay",
+      "targets": [
+        "PToolsOverlay"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsPermissionCore",
+      "targets": [
+        "PToolsPermissionCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsPermissionUI",
+      "targets": [
+        "PToolsPermissionUI"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsRealtime",
+      "targets": [
+        "PToolsRealtime"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsRealtimeCore",
+      "targets": [
+        "PToolsRealtimeCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsRouteCore",
+      "targets": [
+        "PToolsRouteCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsSimulation",
+      "targets": [
+        "PToolsSimulation"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsSimulationCore",
+      "targets": [
+        "PToolsSimulationCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsStorage",
+      "targets": [
+        "PToolsStorage"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsStorageCore",
+      "targets": [
+        "PToolsStorageCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsStoreKit",
+      "targets": [
+        "PToolsStoreKit"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsSymbols",
+      "targets": [
+        "PToolsSymbols"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsSync",
+      "targets": [
+        "PToolsSync"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsSyncCore",
+      "targets": [
+        "PToolsSyncCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsTheme",
+      "targets": [
+        "PToolsTheme"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsTransfer",
+      "targets": [
+        "PToolsTransfer"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsTransferCore",
+      "targets": [
+        "PToolsTransferCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsUIFoundation",
+      "targets": [
+        "PToolsUIFoundation"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsWeb",
+      "targets": [
+        "PToolsWeb"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsWebBridge",
+      "targets": [
+        "PToolsWebBridge"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsWebCore",
+      "targets": [
+        "PToolsWebCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PToolsWidgetCore",
+      "targets": [
+        "PToolsWidgetCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsAll",
+      "targets": [
+        "ptools",
+        "PToolsLogging",
+        "PToolsDate",
+        "PToolsSymbols",
+        "PToolsModelCore",
+        "PToolsModel",
+        "PToolsModelUIKit",
+        "PToolsModelCombine",
+        "PToolsConnectivity",
+        "PToolsStorageCore",
+        "PToolsStorage",
+        "PToolsRouteCore",
+        "PToolsDeepLink",
+        "PToolsNotifications",
+        "PToolsBackgroundTasks",
+        "PToolsTheme",
+        "PToolsAccessibility",
+        "PToolsContentState",
+        "PToolsForm",
+        "PooToolsSplitView",
+        "PToolsBluetooth",
+        "PToolsDocuments",
+        "PToolsSimulationCore",
+        "PToolsSimulation",
+        "PToolsConfiguration",
+        "PToolsFeedback",
+        "PToolsAudio",
+        "PToolsAppIntents",
+        "PToolsWidgetCore",
+        "PToolsActivities",
+        "PToolsPermissionCore",
+        "PToolsPermissionUI",
+        "PToolsOverlay",
+        "PooToolsBanner",
+        "PooToolsPopover",
+        "PooToolsMediaCore",
+        "PToolsHTTPServer",
+        "PToolsHTTPFilePortal",
+        "PooToolsCustomerLabel",
+        "PooToolsProgressBar",
+        "PooToolsPageControl",
+        "PooToolsLoading",
+        "PooToolsHud",
+        "PooToolsLivePhoto",
+        "PooToolsShare",
+        "PooToolsPDF",
+        "PooToolsSVG",
+        "PTCameraPermission",
+        "PTLocationPermission",
+        "PTCalendarPermission",
+        "PTMotionPermission",
+        "PTTrackingPermission",
+        "PTRemindersPermission",
+        "PTSpeechPermission",
+        "PTHealthPermission",
+        "PTFaceIDPermission",
+        "PTContactsPermission",
+        "PTMicPermission",
+        "PTMediaPermission",
+        "PTBluetoothPermission",
+        "PTSiriPermission",
+        "PTNotificationPermission",
+        "PooToolsNetWork",
+        "PooToolsDataEncrypt",
+        "PooToolsSecurity",
+        "PooToolsSearchBar",
+        "PooToolsSearch",
+        "PooToolsMediaViewer",
+        "PooToolsImagePicker",
+        "PooToolsPhotoPicker",
+        "PooToolsHarbethKit",
+        "PooToolsImageEditor",
+        "PooToolsVideoEditor",
+        "PooToolsCheckDirtyWord",
+        "PooToolsStepper",
+        "PooToolsBankCard",
+        "PooToolsBioID",
+        "PooToolsCalendar",
+        "PooToolsTelephony",
+        "PooToolsCheckBox",
+        "PooToolsCodeView",
+        "PooToolsCountry",
+        "PooToolsGuide",
+        "PooToolsInstructions",
+        "PooToolsInput",
+        "PooToolsKeyboard",
+        "PooToolsKeyChain",
+        "PooToolsMotion",
+        "PooToolsPhoneInfo",
+        "PooToolsRateView",
+        "PooToolsScrollBanner",
+        "PooToolsSegmented",
+        "PooToolsHandSign",
+        "PooToolsSlider",
+        "PooToolsCheckUpdate",
+        "PooToolsLayout",
+        "PooToolsLocation",
+        "PooToolsSmartScreenshot",
+        "PooToolsPagingControl",
+        "PooToolsScanQRCode",
+        "PooToolsStepCount",
+        "PooToolsContact",
+        "PooToolsVision",
+        "PooToolsRouter",
+        "PooToolsPing",
+        "PooToolsSpeedPanel",
+        "PooToolsNetworkSpeedTest",
+        "PooToolsOSSKitSpeech",
+        "PooToolsiOS17Tips",
+        "PooToolsWhatsNewsKit",
+        "PooToolsHeartRate",
+        "PooToolsChinesePinyin",
+        "PooToolsCircle",
+        "PooToolsMessageKit",
+        "PooToolsSocketKit",
+        "PooToolsIAP",
+        "PooToolsTipsView",
+        "PooToolsDEBUG",
+        "PooToolsDEBUGTrackingEyes",
+        "PooToolsLaunchTimeProfiler",
+        "PooToolsPicker"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": "aggregate product; import the concrete product used by the consumer"
+    },
+    {
+      "product": "PooToolsBankCard",
+      "targets": [
+        "PooToolsBankCard"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsBanner",
+      "targets": [
+        "PooToolsBanner"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsBioID",
+      "targets": [
+        "PooToolsBioID"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsCalendar",
+      "targets": [
+        "PooToolsCalendar"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsCheckBox",
+      "targets": [
+        "PooToolsCheckBox"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsCheckDirtyWord",
+      "targets": [
+        "PooToolsCheckDirtyWord"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsCheckUpdate",
+      "targets": [
+        "PooToolsCheckUpdate"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsChinesePinyin",
+      "targets": [
+        "PooToolsChinesePinyin"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsCircle",
+      "targets": [
+        "PooToolsCircle"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsCodeView",
+      "targets": [
+        "PooToolsCodeView"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsContact",
+      "targets": [
+        "PooToolsContact"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsCountry",
+      "targets": [
+        "PooToolsCountry"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsCustomerLabel",
+      "targets": [
+        "PooToolsCustomerLabel"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsDEBUG",
+      "targets": [
+        "PooToolsDEBUG"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsDEBUGTrackingEyes",
+      "targets": [
+        "PooToolsDEBUGTrackingEyes"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsDataEncrypt",
+      "targets": [
+        "PooToolsDataEncrypt"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsFilterCamera",
+      "targets": [
+        "PooToolsFilterCamera"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsGuide",
+      "targets": [
+        "PooToolsGuide"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsHandSign",
+      "targets": [
+        "PooToolsHandSign"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsHarbethKit",
+      "targets": [
+        "PooToolsHarbethKit"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsHeartRate",
+      "targets": [
+        "PooToolsHeartRate"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsHud",
+      "targets": [
+        "PooToolsHud"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsIAP",
+      "targets": [
+        "PooToolsIAP"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsImageEditor",
+      "targets": [
+        "PooToolsImageEditor"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsImagePicker",
+      "targets": [
+        "PooToolsImagePicker"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsInput",
+      "targets": [
+        "PooToolsInput"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsInstructions",
+      "targets": [
+        "PooToolsInstructions"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsKeyChain",
+      "targets": [
+        "PooToolsKeyChain"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsKeyboard",
+      "targets": [
+        "PooToolsKeyboard"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsLaunchTimeProfiler",
+      "targets": [
+        "PooToolsLaunchTimeProfiler"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsLayout",
+      "targets": [
+        "PooToolsLayout"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsLivePhoto",
+      "targets": [
+        "PooToolsLivePhoto"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsLoading",
+      "targets": [
+        "PooToolsLoading"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsLocation",
+      "targets": [
+        "PooToolsLocation"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsMediaCore",
+      "targets": [
+        "PooToolsMediaCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsMediaViewer",
+      "targets": [
+        "PooToolsMediaViewer"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsMessageKit",
+      "targets": [
+        "PooToolsMessageKit"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsMotion",
+      "targets": [
+        "PooToolsMotion"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsNetWork",
+      "targets": [
+        "PooToolsNetWork"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsNetwork",
+      "targets": [
+        "PooToolsNetWork"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": "product name maps to the PooToolsNetWork module"
+    },
+    {
+      "product": "PooToolsNetworkSpeedTest",
+      "targets": [
+        "PooToolsNetworkSpeedTest"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsOSSKitSpeech",
+      "targets": [
+        "PooToolsOSSKitSpeech"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsPDF",
+      "targets": [
+        "PooToolsPDF"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsPageControl",
+      "targets": [
+        "PooToolsPageControl"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsPagingControl",
+      "targets": [
+        "PooToolsPagingControl"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsPhoneInfo",
+      "targets": [
+        "PooToolsPhoneInfo"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsPhotoPicker",
+      "targets": [
+        "PooToolsPhotoPicker"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsPicker",
+      "targets": [
+        "PooToolsPicker"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsPing",
+      "targets": [
+        "PooToolsPing"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsPopover",
+      "targets": [
+        "PooToolsPopover"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsProgressBar",
+      "targets": [
+        "PooToolsProgressBar"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsRateView",
+      "targets": [
+        "PooToolsRateView"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsRouter",
+      "targets": [
+        "PooToolsRouter"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsSVG",
+      "targets": [
+        "PooToolsSVG"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsScanQRCode",
+      "targets": [
+        "PooToolsScanQRCode"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsScrollBanner",
+      "targets": [
+        "PooToolsScrollBanner"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsSearch",
+      "targets": [
+        "PooToolsSearch"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsSearchBar",
+      "targets": [
+        "PooToolsSearchBar"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsSecurity",
+      "targets": [
+        "PooToolsSecurity"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsSegmented",
+      "targets": [
+        "PooToolsSegmented"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsShare",
+      "targets": [
+        "PooToolsShare"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsSlider",
+      "targets": [
+        "PooToolsSlider"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsSmartScreenshot",
+      "targets": [
+        "PooToolsSmartScreenshot"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsSocketKit",
+      "targets": [
+        "PooToolsSocketKit"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsSpeedPanel",
+      "targets": [
+        "PooToolsSpeedPanel"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsSplitView",
+      "targets": [
+        "PooToolsSplitView"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsStepCount",
+      "targets": [
+        "PooToolsStepCount"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsStepper",
+      "targets": [
+        "PooToolsStepper"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsTelephony",
+      "targets": [
+        "PooToolsTelephony"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsTipsView",
+      "targets": [
+        "PooToolsTipsView"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsVideoCache",
+      "targets": [
+        "ptools"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": "product name maps to the ptools module"
+    },
+    {
+      "product": "PooToolsVideoEditor",
+      "targets": [
+        "PooToolsVideoEditor"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsVision",
+      "targets": [
+        "PooToolsVision"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsWebKit",
+      "targets": [
+        "PooToolsWebKit"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsWhatsNewsKit",
+      "targets": [
+        "PooToolsWhatsNewsKit"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "PooToolsiOS17Tips",
+      "targets": [
+        "PooToolsiOS17Tips"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    },
+    {
+      "product": "ptools",
+      "targets": [
+        "ptools"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "status": "not_run",
+      "evidence": "",
+      "notes": ""
+    }
+  ]
+}

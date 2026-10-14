@@ -13,6 +13,9 @@ import AVKit
 import Kingfisher
 import Photos
 import PhotosUI
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 @MainActor
 class PTMediaBrowserCell: PTBaseNormalCell {

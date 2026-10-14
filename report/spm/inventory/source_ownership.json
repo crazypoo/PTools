@@ -1,0 +1,3693 @@
+{
+  "generated_from": "swift package dump-package + swift package describe --type json",
+  "owners": {
+    "Benchmarks/PTModel/Runner/main.swift": [
+      "PTModelBenchmark"
+    ],
+    "Fixtures/PTModelConsumers/KakaJSONLegacyApp/main.swift": [
+      "PTModelLegacyKakaJSONFixture"
+    ],
+    "Fixtures/PTModelConsumers/MixedLegacyApp/main.swift": [
+      "PTModelMixedLegacyFixture"
+    ],
+    "Fixtures/PTModelConsumers/PTModelOnlyApp/main.swift": [
+      "PTModelOnlyFixture"
+    ],
+    "Fixtures/PTModelConsumers/SmartCodableLegacyApp/main.swift": [
+      "PTModelLegacySmartCodableFixture"
+    ],
+    "PToolsModelMacros/PTModelMacros.swift": [
+      "PToolsModelMacroPlugin"
+    ],
+    "PooToolsSource/AESAndDES/PTDataEncryption.swift": [
+      "PooToolsDataEncrypt"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTAlertController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTAlertManager.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTAlertProtocol.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTAlertTips.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTAlertTipsHaptic.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTAlertTipsIcon.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTAlertTipsViewController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTAlertWindow.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertActionCoordinator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertAppearance.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertBackgroundView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertLayoutEngine.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertMeasurement.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertPresentationCoordinator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTCustomerAlertTypes.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTDynamicNotificationView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTEditMenuKit.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTMapActionSheet.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ActionsheetAndAlert/PTPopoverMenuContent.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Animation/PTAnimationFunction.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Animation/PTCoinAnimation.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Animation/PTGroupBuyAvatarView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Animation/PTListAnimation.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Animation/PTPurchaseCarAnimationTool.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Animation/PTWaterWaveView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/AppDelegate/PTAppDelegate.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/AppDelegate/PTAppScenesDelegate.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/AppDelegate/PTAppWindowsDelegate.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/AppDelegate/PTWindowSceneDelegate.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/AppStore/PTAppStoreFunction.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ApplicationFunction/PCleanCache.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/ApplicationFunction/PTOpenSystemFunction.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Badge/CAAnimation+BadgeEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Badge/PTBadgeCore.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Badge/PTBadgeProtocol.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Badge/UIBarButtonItem+BadgeEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Badge/UITabBarItem+BadgeEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Badge/UIView+BadgeEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/BankCard/PTBankCardSearch.swift": [
+      "PooToolsBankCard"
+    ],
+    "PooToolsSource/Banner/PTBanner.swift": [
+      "PooToolsBanner"
+    ],
+    "PooToolsSource/Banner/PTBannerHandle.swift": [
+      "PooToolsBanner"
+    ],
+    "PooToolsSource/Banner/PTBannerPresenter.swift": [
+      "PooToolsBanner"
+    ],
+    "PooToolsSource/Banner/PTBannerTheme.swift": [
+      "PooToolsBanner"
+    ],
+    "PooToolsSource/Banner/PooToolsBannerView.swift": [
+      "PooToolsBanner"
+    ],
+    "PooToolsSource/Base/PTAdaptiveBarCoordinator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTAdaptiveBarDebugOverlay.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTAdaptiveBarHostView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTAdaptiveBarLayoutContext.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTAdaptiveBarLayoutResolver.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTAdaptiveBarOverflowController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTAdaptiveBarPresentationPolicy.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTAdaptiveSystemBarBridge.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTAdaptiveVisibleRegionResolver.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTAppBaseConfig.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTAudioCache.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTBaseButton.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTBaseCellOption.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTBaseCollectionReusableView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTBaseDecorationFunction.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTBaseMaskView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTBaseNavControl.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTBaseTabBarViewController+Support.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTBaseTabBarViewController+SystemTabs.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTBaseTabBarViewController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTBaseViewController+Navigation.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTBaseViewController+NavigationTypes.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTBaseViewController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTBaseWebViewController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionDataCoordinator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionIdentifiers.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionIndexCoordinator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionInteractionCoordinator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionLayoutTransition.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionModelStore.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionPrefetchCoordinator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionRefreshCoordinator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionUpdateCoordinator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionUpdateDiagnostics.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionViewLayoutSupport.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionViewSkeleton.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionViewTypes.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTColorPickerContainerViewController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTEmptyDataSet.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTEmptyDataSetDelegate.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTEmptyDataSetSource.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTEmptyDataSetView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTFusionCell.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTFusionCellModel.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTGAnimationImageView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTGradientBorderView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTHeaderAndFooter.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTImageCell.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTLazyViewContainer.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTListViewController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTNavBar.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTNavigationBarManager.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTNavigationConfiguration.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTPlayerViewController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTSnapKitEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTTabBarItemView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTTabBarLayoutEngine.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTTabBarMediaContent.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTTabBarSelectionCoordinator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTTabBarState.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTTabBarView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTTriangleView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTUnavailableFunction.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTVerticalBarRailView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTVideoCoverCache.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/BioID/PTBiologyID.swift": [
+      "PooToolsBioID"
+    ],
+    "PooToolsSource/BlackMagic/PTSwiftMethodSwizzle.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/BluetoothPermission/PTPermissionBluetooth.swift": [
+      "PTBluetoothPermission"
+    ],
+    "PooToolsSource/BluetoothPermission/PTPermissionBluetoothHandler.swift": [
+      "PTBluetoothPermission"
+    ],
+    "PooToolsSource/Blur/PSecurityStrategy.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Blur/PTFrostedGlassView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Blur/SSBlurView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Button/PFloatingButton.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Button/PTActionLayoutButton.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Button/PTCollectionAnimationButton.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Button/PTLayoutButton.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Button/PTLoginDescButton.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Button/PTMenuSheetArrowButton.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Button/PTMenuSheetButtonItems.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Button/PTMenuSheetButtonView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Button/PTSortButton.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/C7Collector/C7CameraConfig.swift": [
+      "PooToolsHarbethKit"
+    ],
+    "PooToolsSource/C7Collector/C7Collector.swift": [
+      "PooToolsHarbethKit"
+    ],
+    "PooToolsSource/C7Collector/C7CollectorCamera.swift": [
+      "PooToolsHarbethKit"
+    ],
+    "PooToolsSource/C7Collector/C7CollectorVideo.swift": [
+      "PooToolsHarbethKit"
+    ],
+    "PooToolsSource/C7Collector/PTC7VideoExportService.swift": [
+      "PooToolsHarbethKit"
+    ],
+    "PooToolsSource/C7Collector/PTCameraAnimationUtils.swift": [
+      "PooToolsHarbethKit"
+    ],
+    "PooToolsSource/C7Collector/PTCameraFilterConfig.swift": [
+      "PooToolsHarbethKit"
+    ],
+    "PooToolsSource/C7Collector/PTFilterCameraViewController.swift": [
+      "PooToolsHarbethKit"
+    ],
+    "PooToolsSource/C7Collector/PTFilterImageCell.swift": [
+      "PooToolsHarbethKit"
+    ],
+    "PooToolsSource/C7Collector/PTHarBethFilter.swift": [
+      "PooToolsHarbethKit"
+    ],
+    "PooToolsSource/C7Collector/PTTakePictureReviewer.swift": [
+      "PooToolsHarbethKit"
+    ],
+    "PooToolsSource/Calendar/PTEventOnCalendar.swift": [
+      "PooToolsCalendar"
+    ],
+    "PooToolsSource/CalendarPermission/PTPermissionCalendar.swift": [
+      "PTCalendarPermission"
+    ],
+    "PooToolsSource/CallMessageMail/PTCallMessageMailFunction.swift": [
+      "PooToolsTelephony"
+    ],
+    "PooToolsSource/CallMessageMail/PTPhoneBlock.swift": [
+      "PooToolsTelephony"
+    ],
+    "PooToolsSource/CameraPermission/PTPermissionCamera.swift": [
+      "PTCameraPermission"
+    ],
+    "PooToolsSource/Category/AVAsset+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/AVCaptureDevice+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/AVExport+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/AVPlayerItem+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/AnyClass+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Array+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/AutoScale+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Bool+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Bundle+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/CGFloat+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/CGPoint+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/CGRect+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/CGSize+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/CLGeocoder+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Character+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Collection+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/CoreLocation+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Data+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Date+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/DateFormatter+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Decimal+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Device+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Dictionary+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/DispatchQueue+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Double+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/FileManager+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Float+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/IBDesignable+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Int+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Locale+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Mirror+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/NSAttributedString+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/NSData+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/NSDate+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/NSDecimalNumberHandler+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/NSDictionary+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/NSImage+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/NSImageView+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/NSLayoutConstraint+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/NSMutableArray+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/NSMutableString+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/NSString+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/NSURLResponse+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Number+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/PHAsset+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/PHPhotoLibrary+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/PTColorRBGModel.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/PTControlMenuCoordinator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/PTJson+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/PTKeyedDecoding+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/PTList+EX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/PTVideoExportService.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/PTVideoThumbnailService.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/String+PTEX+Crypto.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/String+PTEX+Password.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/String+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/TimeInterval+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/Timer+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIAlertController+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIApplication+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIBezierPath+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIButton+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UICollectionView+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIColor+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIControl+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIControl+PTMenu.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIEdgeInsets+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIFeedbackGenerator+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIFont+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIGestureRecognizer+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIGraphicsImageRenderer+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIImage+PTEX+GIF.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIImage+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIImage+PTFaceAware.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIImageAsset+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIImageView+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UILabel+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UINavigationBar+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UINavigationController+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIPageControl+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIRefreshControl+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIScreen+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIScrollView+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UISctckView+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UISegmentedControl+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UISlider+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UISwitch+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UITabBar+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UITabBarController+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UITableView+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UITextField+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UITextView+BKExt.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIToolbar+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UITraitCollection+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIView+PTEX+Constraints.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIView+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIViewController+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIViewController+Swizzled.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UIWindow+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/URL+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/UserDefaults+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/View+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Category/WKWebView+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/CheckBox/PTCheckBox.swift": [
+      "PooToolsCheckBox"
+    ],
+    "PooToolsSource/CheckDirtyWord/PTCheckFWords.swift": [
+      "PooToolsCheckDirtyWord"
+    ],
+    "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift": [
+      "PooToolsCheckUpdate"
+    ],
+    "PooToolsSource/Circle/PTHalfCircleView.swift": [
+      "PooToolsCircle"
+    ],
+    "PooToolsSource/CodeView/PTCodeView.swift": [
+      "PooToolsCodeView"
+    ],
+    "PooToolsSource/Colors/Color+PTDerivingEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Colors/Color+PTDynamicEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Colors/Color+PTMixingEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Colors/Color+PTcmykEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Colors/Color+PThsbaEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Colors/Color+PThslEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Colors/Color+PTlabEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Colors/Color+PTrgbaEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Colors/Color+PTxyzEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Colors/PTColorHSL.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Colors/PTColorUtils.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Colors/PTContrastDisplayContext.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Colors/PTDynamicGradient.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Colors/UIImage+PTColorEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Contact/PTContact.swift": [
+      "PooToolsContact"
+    ],
+    "PooToolsSource/ContactsPermission/PTPermissionContacts.swift": [
+      "PTContactsPermission"
+    ],
+    "PooToolsSource/Core/BorderManager.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/OSSVoice.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTAdaptiveNavigationContainer.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTAppUserdefault.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTAssociatedObjectStore.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTBaseModel.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTCacheStore.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTControlLoadingCoordinator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTFullScreenPopGesture.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTGCDManager.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTGifManager.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTImageDownsampler.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTLayerExports.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTLifecycleBag.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTLoadImageFunction.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTMarcos_swift.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTMediaCache.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTMediaLifecycle.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTMediaSaveService.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTPhoneFeedBackControl.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTPropertyWrapperFunction.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTTimeUtils.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTUpdateTipsViewController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTUrlChange.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTUtils+SceneConcurrency.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/PTUtils.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Core/ResponseModel.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Country/PTCountryCodes.swift": [
+      "PooToolsCountry"
+    ],
+    "PooToolsSource/DEBUGLocation/CLLocationManager+PTDebugEx.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DEBUGLocation/PTDebugLocationKit.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DEBUGLocation/PTDebugLocationMapViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DEBUGLocation/PTDebugLocationModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DEBUGLocation/PTDebugLocationViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DarkMode/PTDarkFollowSystemFooter.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/DarkMode/PTDarkModeControl.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/DarkMode/PTDarkModeHeader.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/DarkMode/PTDarkModePickerView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/DarkMode/PTDarkSmartFooter.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/DarkMode/PTDrakModeOption.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/DarkMode/PTThemeProvider.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Debug/CwlDemangle.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Debug/PTApplicationDirectories.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Debug/PTBaseViewController+Debug.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Debug/PTDebugFunction.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Debug/PTDebugHookRegistry.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Debug/PTDebugShareManager.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Debug/PTDebugViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Debug/PTDevFunction.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Debug/PTInstruments.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Debug/PTInstrumentsUI.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Debug/PTLaunchTimeTracker.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Debug/PTPlatformDiagnosticsViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Debug/StderrCapture.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Debug/StdoutCapture.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCategory/FileHandle+PTDebugEx.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCategory/HTTPURLResponse+PTEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCategory/InputStream+PTEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCategory/String+PTDebugEx.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCategory/UIView+PTSwizzle.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCategory/UIWindow+PTDebugEx.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCategory/URLCache+PTDebugEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCategory/URLSessionConfiguration+PTSwizzle.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugColor/PTColorPickPlugin.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCrash/PTCallStackParser.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCrash/PTCrashDetailModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCrash/PTCrashDetailViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCrash/PTCrashHandler.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCrash/PTCrashLogViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCrash/PTCrashManager.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCrash/PTCrashModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCrash/PTCrashViewModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCrash/PTCreateLeakViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCrash/PTDebugUserInfo.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugCrash/Thread+PTDebugEx.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugFile/PTFileBrowser.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugFile/PTFileBrowserViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugFile/PTFileModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugLibs/PTClassExplorerViewModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugLibs/PTLoadedImageRegistry.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugLibs/PTLoadedImageTypes.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugLibs/PTLoadedLibCellCollections.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugLibs/PTLoadedLibrariesViewModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugLibs/PTLoadedLibraryClassifier.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugLibs/PTLoadedLibraryInspectionCache.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugLibs/PTLoadedLibraryInspector.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugLibs/PTLoadedLibsViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugLibs/PTMachOImageInspector.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugLibs/PTObjCRuntimeImageInspector.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugLibs/PTSwiftMetadataInspector.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTErrorHelper.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTHttpDatasource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTHttpModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTNetworkCaptureModels.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTNetworkCaptureStore.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTNetworkDebugSupport.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTNetworkExporters.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTNetworkHelper.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTNetworkModuleCaptureAdapter.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTNetworkRedactor.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTNetworkRegressionMatrix.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTNetworkTimelineView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTNetworkViewModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTNetworkWatcherCell.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTNetworkWatcherDetailViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugPerformance/PTDebugPerformanceToolKit.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugPerformance/PTDebugPerformanceViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugPerformance/PTDebugSnapshotViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugPerformance/PTFPSTool.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugPerformance/PTLeakListViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugPerformance/PTLeakViewModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugPerformance/PTPerformanceChartCell.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugPerformance/PTPerformanceChartView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugPerformance/PTPerformanceLeakDetector.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugPerformance/PTPerformanceSegmentCell.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugUserDefault/PTUserDefaultKeysAndValues.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DebugUserDefault/PTUserDefultsViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DevMask/PTDevMaskView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DevMask/SpringConfiguration.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DevMask/SpringMotionLayer.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DevMask/SpringMotionPhysics.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DevMask/SpringMotionState.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/DevMask/SpringMotionView-iOS.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift": [
+      "PTFaceIDPermission"
+    ],
+    "PooToolsSource/FilterCamera/PTFilterCameraCompatibility.swift": [
+      "PooToolsFilterCamera"
+    ],
+    "PooToolsSource/FloatPanel/PTBaseViewController+FloatPanel.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/FloatPanel/PTInitialTouchPanGestureRecognizer.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/FloatPanel/PTSheetContentViewController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/FloatPanel/PTSheetEXCombos.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/FloatPanel/PTSheetOptions.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/FloatPanel/PTSheetTransition.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/FloatPanel/PTSheetView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/FloatPanel/PTSheetViewController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/FloatPanel/UIViewController+PTSheetEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Font/FontName.swift": [
+      "PToolsFontCatalogCore"
+    ],
+    "PooToolsSource/Font/Generated/PTFontCatalog.generated.swift": [
+      "PToolsFontCatalogCore"
+    ],
+    "PooToolsSource/Font/Generated/PTFontCompatibility.generated.swift": [
+      "PToolsFontCatalogCore"
+    ],
+    "PooToolsSource/Font/PTFont.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Font/PTFontCatalog.swift": [
+      "PToolsFontCatalogCore"
+    ],
+    "PooToolsSource/Font/PTFontDescriptor.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Font/PTFontRuntime.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Foundation/PTCopying.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Guide/PTGuidePageHUD.swift": [
+      "PooToolsGuide"
+    ],
+    "PooToolsSource/HealthKit/PTHealthKit.swift": [
+      "PooToolsStepCount"
+    ],
+    "PooToolsSource/HealthPermission/PTPermissionHealth.swift": [
+      "PTHealthPermission"
+    ],
+    "PooToolsSource/HeartRate/PTFiter.swift": [
+      "PooToolsHeartRate"
+    ],
+    "PooToolsSource/HeartRate/PTHeartRateManager.swift": [
+      "PooToolsHeartRate"
+    ],
+    "PooToolsSource/HeartRate/PTHeartRateViewController.swift": [
+      "PooToolsHeartRate"
+    ],
+    "PooToolsSource/HeartRate/PTPulseDetector.swift": [
+      "PooToolsHeartRate"
+    ],
+    "PooToolsSource/Hud/PTProgressHUD.swift": [
+      "PooToolsHud"
+    ],
+    "PooToolsSource/IAP/PTIAPManager.swift": [
+      "PooToolsIAP"
+    ],
+    "PooToolsSource/ImageEditor/PTAdjustSliderView.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTAdjustToolCell.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTCutViewController.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTEditImageViewController.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTEditInputProtocol.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTEditInputViewController.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTEditModel.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTEditToolsCell.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTFontPickerViewController.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTImageClipRatio.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTImageCutRatioCell.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTImageEditorConfig.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTImageEditorSticker.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTMediaEditManager.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTPaths.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTStickerManager.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTTransitioningAnimation.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImageEditor/PTWeakProxy.swift": [
+      "PooToolsImageEditor"
+    ],
+    "PooToolsSource/ImagePicker/PTImagePicker.swift": [
+      "PooToolsImagePicker"
+    ],
+    "PooToolsSource/ImagePicker/PTImagePickerObject.swift": [
+      "PooToolsImagePicker"
+    ],
+    "PooToolsSource/Input/AkiraTextField.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Input/HoshiTextField.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Input/IsaoTextField.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Input/JiroTextField.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Input/KaedeTextField.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Input/MadokaTextField.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Input/MinoruTextField.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Input/PTGrowingText.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Input/PTInputBoxView.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Input/PTTextField.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Input/TextFieldEffects.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Input/UIView+PTEXShake.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Input/YokoTextField.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Input/YoshikoTextField.swift": [
+      "PooToolsInput"
+    ],
+    "PooToolsSource/Inspector/AccessoryControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Actionable.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ActivityIndicatorViewAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/AdaptiveModalPresenter.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/AdaptivePresentationControllerDelegate.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Animation.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/AnyHashable+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ApplicationAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ApplicationShortcutItemSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Array+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/AsyncOperationProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/BaseCardView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/BaseControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/BaseFormControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/BaseView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/BinaryFloatingPoint+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/BundleInfo.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ButtonAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ButtonSizeSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/CACornerMask+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/CALayer+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/CGRect+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/CGSize+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/CellViewModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/CharacterSet+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ColorPickerPresenter.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ColorPreviewControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Command.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/CommandGroupsViewModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/CommandsGroup.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ContentLayoutPrioritySizeSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ContextMenuPresenter.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ControlAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Coordinator.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/CoordinatorProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Create.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/CustomImageConvertible.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/CustomStringConvertible.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/DataReloadingProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/DatePickerAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/DefaultElementAttributesLibrary.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/DefaultElementIdentityLibrary.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/DefaultElementSizeLibrary.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/DefaultFormPanelDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/DeviceShakeModifier.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/DirectionalEdgeInsetsControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Dismissable.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/DismissableNavigationController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/DismissablePresentationProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/DismissableViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/DocumentPickerPresenter.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/DraggableViewProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/EdgeInsetsControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementCatalogIconProviderDefault.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementChildrenPanelAction.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementChildrenPanelTableViewCodeCell.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementChildrenPanelViewCode.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementChildrenPanelViewController+UITableViewDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementChildrenPanelViewController+UITableViewDelegate.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementChildrenPanelViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementChildrenPanelViewModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorAppearance.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorAppearanceProviding.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorConfiguration.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorCoordinator+ElementInspectorFormPanelDelegate.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorCoordinator+ElementInspectorNavigationControllerDismissDelegate.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorCoordinator+ElementInspectorViewControllerDelegate.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorCoordinator+OperationQueueManagerProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorCoordinator.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorFormPanelDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorFormPanelViewController+InspectorElementSectionViewControllerDelegate.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorFormPanelViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorNavigationController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorPanel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorPanelListState.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorPanelSelectionMode.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorPanelViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorPanelViewControllerProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorSlidingPanelAnimator.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorViewCode+Content.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorViewCode.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementInspectorViewModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementNameView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ElementPanelType.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ExpirableProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ExpirableStore.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/FontReference.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/HashableValue.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/HierarchyIdentitySectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/HierarchyInspectorActionTableViewCell.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/HierarchyInspectorReferenceSummaryTableViewCell.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/HierarchyInspectorSearchView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/HierarchyInspectorTableViewCell.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/HierarchyInspectorTableViewHeaderView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/HierarchyInspectorViewCode.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/HierarchyInspectorViewModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/HighlightViewSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Icon.Glyph.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Icon.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/IconButton.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/IconKit.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ImagePreviewControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ImageViewAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/IndexPath+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Inspector.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorAppearance.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorAppearanceProviding.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorColorStyle.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorCommand.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorConfiguration+KeyCommandSettings.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorConfiguration.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorCustomizationProviding.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorElementItemSeparatorStyle.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorElementKeyCommandSectionView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorElementLayoutConstraintSectionView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorElementLibraryProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorElementProperty+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorElementProperty.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorElementSection.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorElementSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorElementSectionFormView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorElementSectionState.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorElementSectionView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorElementSectionViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorHighlightView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorModifier.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorProvider.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorUI.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorViewController+UITableViewDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorViewController+UITableViewDelegate.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorViewController+UITableViewKeyCommandsDelegate.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InspectorViewCoordinator.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/InternalViewProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/KeyCommandPresentable.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/KeyCommandsSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/KeyboardAnimatable.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/KeyboardAnimation.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/KeyboardNotificationName.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/LabelAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/LabelSizeSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/LayerAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/LayerCommandProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/LayerView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/LayerViewComponent.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/LayerViewProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/LayoutConstraintElement.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/LayoutConstraintSizeSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/LengthMeasurementView+ArrowView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/LengthMeasurementView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/LiveViewHierarchyElementThumbnailView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/LoaderView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/MKMapView+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/MainThreadAsyncOperation.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/MainThreadOperation.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Manager+ElementInspectorCoordinatorDelegate.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Manager+InspectorViewCoordinatorDelegate.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Manager+KeyCommandPresentable.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Manager+ViewHierarchyActionableProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Manager+ViewHierarchyLayerManagerProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Manager.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/MapViewAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/MenuContentProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/NSAttributeString+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/NSDirectionalEdgeInsets+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/NSLayoutConstraint+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/NSObject+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/NSRegularExpression+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/NSTextAlignment+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/NavigationBarAppearanceAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/NavigationBarAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/NavigationControllerAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/NavigationItemAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/NonInspectableView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/NoteControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Notification+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Notification.Name+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/NumberFormatter+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/OffsetControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/OperationQueueManagerProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/OptionListControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Optional+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/PointControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/PreviewIdentitySectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/RectControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/RootViewControllerProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/RuntimeAttributesIdentitySectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ScrollViewAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ScrollViewSizeSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ScrollingStackView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/SectionHeader.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/SegmentedControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/SegmentedControlAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/SegmentedControlSizeSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/SeparatorView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/SizeControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/SizeInspectorView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/SliderAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/SnapshotStore.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/SnapshotViewModel.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/StackViewAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Startable.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/StepperControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/StepperPairControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/String+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/SwitchAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/TabBarAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/TabBarItemAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/TableViewAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/TableViewSizeSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/TextElement.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/TextFieldAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/TextFieldControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/TextViewAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/TextViewControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/Texts.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ThumbnailBackgroundStyle.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ToggleControl.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ToogleCollapseButton.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIAction+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIActivityIndicatorView+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIBarStyle+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIBlurEffect+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIButton+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIColor+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIColorPickerViewController+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIContextMenuConfiguration+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIControl+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIDataDetectorTypes+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIDatePicker+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIDatePickerStyle+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIDocumentPickerViewController+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIEdgeInsets+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIFont+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIImage+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIImageView+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIKeyCommand+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIKeyCommandTableView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIKeyboardAppearance+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIKeyboardType+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UILabel+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UILayoutPriority+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIMenu+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIMenuElement+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIModalPresentationStyle+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIModalTransitionStyle+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UINavigationController+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIPopoverPresentationController+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIReturnKeyType+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIScrollView+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UISemanticContentAttribute+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIStackView+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIStepper+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UISwitch+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UITableView+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UITextAutocapitalizationType+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UITextAutocorrectionType+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UITextContentType+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UITextField+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UITextSmartDashesType+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UITextSmartQuotesType+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UITextSpellCheckingType+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UITextView+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIView+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIViewController+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIViewControllerTransitionPresenter.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UIWindow+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/UTTTypeOption.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewControllerAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewFrameSizeSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchy.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyActionableProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyColorSchemeDefault.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyControllerProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyCoordinator+AsyncOperationProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyCoordinator+LayerCommandProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyCoordinator+LayerConstructorProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyCoordinator+LayerViewDelegate.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyCoordinator.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyCoordinatorFactory.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyElement.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyElementAction.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyElementCatalog.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyElementController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyElementDescriptionView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyElementReference.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyElementRepresentable.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyElementThumbnailView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyInformation.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyInterfaceStyle.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyIssue.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyLayer+InspectorEX.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyLayer.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyLayerAction.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyLayerConstructorProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyLayerManagerProtocol.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyRepresentable.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyRoot.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchySnapshot.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/ViewHierarchyThumbnailViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/WeekObject.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/WindowAttributesSectionDataSource.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Inspector/WireframeView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Instructions/PTInstructionCoordinator.swift": [
+      "PooToolsInstructions"
+    ],
+    "PooToolsSource/Instructions/PTInstructionModels.swift": [
+      "PooToolsInstructions"
+    ],
+    "PooToolsSource/Instructions/PTInstructionPersistence.swift": [
+      "PooToolsInstructions"
+    ],
+    "PooToolsSource/Instructions/PTInstructionTargetRegistry.swift": [
+      "PooToolsInstructions"
+    ],
+    "PooToolsSource/Instructions/PTInstructionViews.swift": [
+      "PooToolsInstructions"
+    ],
+    "PooToolsSource/Instructions/UIViewController+PTInstructions.swift": [
+      "PooToolsInstructions"
+    ],
+    "PooToolsSource/KeyChain/PTKeyChain.swift": [
+      "PooToolsKeyChain"
+    ],
+    "PooToolsSource/Keyboard/PTNumberKeyBoard.swift": [
+      "PooToolsKeyboard"
+    ],
+    "PooToolsSource/KingfisherSVG/Kingfisher+SVG.swift": [
+      "PooToolsSVG"
+    ],
+    "PooToolsSource/Label/PTActiveBuilder.swift": [
+      "PooToolsCustomerLabel"
+    ],
+    "PooToolsSource/Label/PTActiveLabel.swift": [
+      "PooToolsCustomerLabel"
+    ],
+    "PooToolsSource/Label/PTActiveType.swift": [
+      "PooToolsCustomerLabel"
+    ],
+    "PooToolsSource/Label/PTAutoScrollLabel.swift": [
+      "PooToolsCustomerLabel"
+    ],
+    "PooToolsSource/Label/PTCountingLabel.swift": [
+      "PooToolsCustomerLabel"
+    ],
+    "PooToolsSource/Label/PTLabel.swift": [
+      "PooToolsCustomerLabel"
+    ],
+    "PooToolsSource/Label/PTTagLabelScrollView.swift": [
+      "PooToolsCustomerLabel"
+    ],
+    "PooToolsSource/Language/PTLanguage.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift": [
+      "PooToolsLaunchTimeProfiler"
+    ],
+    "PooToolsSource/Layout/PTCollectionLayout.swift": [
+      "PooToolsLayout"
+    ],
+    "PooToolsSource/Line/PTImaginaryLineView.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/LivePhoto/PTLivePhoto.swift": [
+      "PooToolsLivePhoto"
+    ],
+    "PooToolsSource/Loading/PTCycleLoadingView.swift": [
+      "PooToolsLoading"
+    ],
+    "PooToolsSource/Loading/PTHudView.swift": [
+      "PooToolsLoading"
+    ],
+    "PooToolsSource/LocalConsole/GestureEndpointPredictor.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/LocalConsole/LocalConsole.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/LocalConsole/PTInvertedTextView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/LocalConsole/PTLocalConsoleFunction.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/LocalConsole/PTLogConsoleViewController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/LocalConsole/ResizeController.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/LocalConsole/SystemReport.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/Location/PTGetGPSData.swift": [
+      "PooToolsLocation"
+    ],
+    "PooToolsSource/LocationPermission/PTPermissionLocation.swift": [
+      "PTLocationPermission"
+    ],
+    "PooToolsSource/LocationPermission/PTPermissionLocationAccuracy.swift": [
+      "PTLocationPermission"
+    ],
+    "PooToolsSource/LocationPermission/PTPermissionLocationAlwaysHandler.swift": [
+      "PTLocationPermission"
+    ],
+    "PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift": [
+      "PTLocationPermission"
+    ],
+    "PooToolsSource/Log/Logger+PTEX.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Log/PTLogFileManager.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Log/PTNSLog.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/MediaViewer/PTMediaBrowserBottom.swift": [
+      "PooToolsMediaViewer"
+    ],
+    "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift": [
+      "PooToolsMediaViewer"
+    ],
+    "PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift": [
+      "PooToolsMediaViewer"
+    ],
+    "PooToolsSource/MediaViewer/PTMediaBrowserController+PhotoLibrary.swift": [
+      "PooToolsMediaViewer"
+    ],
+    "PooToolsSource/MediaViewer/PTMediaBrowserController.swift": [
+      "PooToolsMediaViewer"
+    ],
+    "PooToolsSource/MediaViewer/PTMediaBrowserModel.swift": [
+      "PooToolsMediaViewer"
+    ],
+    "PooToolsSource/MediaViewer/PTMediaBrowserNav.swift": [
+      "PooToolsMediaViewer"
+    ],
+    "PooToolsSource/MeidaLibraryPermission/PTPermissionMedia.swift": [
+      "PTMediaPermission"
+    ],
+    "PooToolsSource/MessageKit/PTChatBaseCell.swift": [
+      "PooToolsMessageKit"
+    ],
+    "PooToolsSource/MessageKit/PTChatBubbleCircle.swift": [
+      "PooToolsMessageKit"
+    ],
+    "PooToolsSource/MessageKit/PTChatConfig.swift": [
+      "PooToolsMessageKit"
+    ],
+    "PooToolsSource/MessageKit/PTChatFileCell.swift": [
+      "PooToolsMessageKit"
+    ],
+    "PooToolsSource/MessageKit/PTChatListModel.swift": [
+      "PooToolsMessageKit"
+    ],
+    "PooToolsSource/MessageKit/PTChatMapCell.swift": [
+      "PooToolsMessageKit"
+    ],
+    "PooToolsSource/MessageKit/PTChatMediaCell.swift": [
+      "PooToolsMessageKit"
+    ],
+    "PooToolsSource/MessageKit/PTChatSystemMessageCell.swift": [
+      "PooToolsMessageKit"
+    ],
+    "PooToolsSource/MessageKit/PTChatTextCell.swift": [
+      "PooToolsMessageKit"
+    ],
+    "PooToolsSource/MessageKit/PTChatTypingBubble.swift": [
+      "PooToolsMessageKit"
+    ],
+    "PooToolsSource/MessageKit/PTChatTypingIndicator.swift": [
+      "PooToolsMessageKit"
+    ],
+    "PooToolsSource/MessageKit/PTChatTypingIndicatorCell.swift": [
+      "PooToolsMessageKit"
+    ],
+    "PooToolsSource/MessageKit/PTChatView.swift": [
+      "PooToolsMessageKit"
+    ],
+    "PooToolsSource/MessageKit/PTChatVoiceCell.swift": [
+      "PooToolsMessageKit"
+    ],
+    "PooToolsSource/MicPermission/PTPermissionMic.swift": [
+      "PTMicPermission"
+    ],
+    "PooToolsSource/Motion/PTMotion.swift": [
+      "PooToolsMotion"
+    ],
+    "PooToolsSource/MotionPermission/PTPermissionMotion.swift": [
+      "PTMotionPermission"
+    ],
+    "PooToolsSource/NetWork/Network+Download.swift": [
+      "PooToolsNetWork"
+    ],
+    "PooToolsSource/NetWork/Network+LegacyCompatibility.swift": [
+      "PooToolsNetWork"
+    ],
+    "PooToolsSource/NetWork/Network+Logging.swift": [
+      "PooToolsNetWork"
+    ],
+    "PooToolsSource/NetWork/Network+RequestPipeline.swift": [
+      "PooToolsNetWork"
+    ],
+    "PooToolsSource/NetWork/Network+TypedRequest.swift": [
+      "PooToolsNetWork"
+    ],
+    "PooToolsSource/NetWork/Network.swift": [
+      "PooToolsNetWork"
+    ],
+    "PooToolsSource/NetWork/NetworkMetrics.swift": [
+      "PooToolsNetWork"
+    ],
+    "PooToolsSource/NetWork/NetworkSupport.swift": [
+      "PooToolsNetWork"
+    ],
+    "PooToolsSource/NetWork/NetworkTypes.swift": [
+      "PooToolsNetWork"
+    ],
+    "PooToolsSource/NetWork/NetworkUploads.swift": [
+      "PooToolsNetWork"
+    ],
+    "PooToolsSource/NetWork/PTNetworkArchitecture.swift": [
+      "PooToolsNetWork"
+    ],
+    "PooToolsSource/NetWork/PTNetworkModelBridge.swift": [
+      "PToolsNetworkModelCore"
+    ],
+    "PooToolsSource/NetWork/PTNetworkResponseSelection.swift": [
+      "PToolsNetworkModelCore"
+    ],
+    "PooToolsSource/NetWorkModelCore/PTNetworkResponseSnapshot.swift": [
+      "PToolsNetworkModelCore"
+    ],
+    "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedHistoriaModel.swift": [
+      "PooToolsNetworkSpeedTest"
+    ],
+    "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift": [
+      "PooToolsNetworkSpeedTest"
+    ],
+    "PooToolsSource/NotificationPermission/PTPermissionNotification.swift": [
+      "PTNotificationPermission"
+    ],
+    "PooToolsSource/OSSKit/OSSSpeech.swift": [
+      "PooToolsOSSKitSpeech"
+    ],
+    "PooToolsSource/OSSKit/OSSUtterance.swift": [
+      "PooToolsOSSKitSpeech"
+    ],
+    "PooToolsSource/Overlay/PTOverlayAnimation.swift": [
+      "PToolsOverlay"
+    ],
+    "PooToolsSource/Overlay/PTOverlayCore.swift": [
+      "PToolsOverlay"
+    ],
+    "PooToolsSource/Overlay/PTOverlayGeometry.swift": [
+      "PToolsOverlay"
+    ],
+    "PooToolsSource/Overlay/PTOverlayInteraction.swift": [
+      "PToolsOverlay"
+    ],
+    "PooToolsSource/Overlay/PTOverlayLifecycle.swift": [
+      "PToolsOverlay"
+    ],
+    "PooToolsSource/Overlay/PTOverlayPresentation.swift": [
+      "PToolsOverlay"
+    ],
+    "PooToolsSource/PDF/PTPDFManager.swift": [
+      "PooToolsPDF"
+    ],
+    "PooToolsSource/PDF/PTPDFPreviewController.swift": [
+      "PooToolsPDF"
+    ],
+    "PooToolsSource/PDF/PTViewToPDF.swift": [
+      "PooToolsPDF"
+    ],
+    "PooToolsSource/PDF/UIImage+PTpdfEX.swift": [
+      "PooToolsPDF"
+    ],
+    "PooToolsSource/PToolsAccessibility/PTAccessibility.swift": [
+      "PToolsAccessibility"
+    ],
+    "PooToolsSource/PToolsActivities/PTActivities.swift": [
+      "PToolsActivities"
+    ],
+    "PooToolsSource/PToolsAppIntegrity/PTAppIntegrity.swift": [
+      "PToolsAppIntegrity"
+    ],
+    "PooToolsSource/PToolsAppIntents/PTAppIntents.swift": [
+      "PToolsAppIntents"
+    ],
+    "PooToolsSource/PToolsAudio/PTAudio.swift": [
+      "PToolsAudio"
+    ],
+    "PooToolsSource/PToolsAuth/PTAuth.swift": [
+      "PToolsAuth"
+    ],
+    "PooToolsSource/PToolsAuthCore/PTAuthCore.swift": [
+      "PToolsAuthCore"
+    ],
+    "PooToolsSource/PToolsBackgroundTasks/PTBackgroundTasks.swift": [
+      "PToolsBackgroundTasks"
+    ],
+    "PooToolsSource/PToolsBluetooth/PTBluetooth.swift": [
+      "PToolsBluetooth"
+    ],
+    "PooToolsSource/PToolsConfiguration/PTConfiguration.swift": [
+      "PToolsConfiguration"
+    ],
+    "PooToolsSource/PToolsConfiguration/PTRemoteConfigurationProviders.swift": [
+      "PToolsConfiguration"
+    ],
+    "PooToolsSource/PToolsConnectivity/PTConnectivity.swift": [
+      "PToolsConnectivity"
+    ],
+    "PooToolsSource/PToolsContentState/PTBaseViewController+ContentState.swift": [
+      "PToolsContentState"
+    ],
+    "PooToolsSource/PToolsContentState/PTContentState.swift": [
+      "PToolsContentState"
+    ],
+    "PooToolsSource/PToolsCore/PTCoreAssociatedObjectStore.swift": [
+      "PToolsCore"
+    ],
+    "PooToolsSource/PToolsCore/PTCoreCodable.swift": [
+      "PToolsCore"
+    ],
+    "PooToolsSource/PToolsCore/PTCoreConcurrency.swift": [
+      "PToolsCore"
+    ],
+    "PooToolsSource/PToolsCore/PTCoreContracts.swift": [
+      "PToolsCore"
+    ],
+    "PooToolsSource/PToolsCore/PTCoreValueTypes.swift": [
+      "PToolsCore"
+    ],
+    "PooToolsSource/PToolsCore/PTFeedbackCenter.swift": [
+      "PToolsCore"
+    ],
+    "PooToolsSource/PToolsCore/PTMainActorBridge.swift": [
+      "PToolsCore"
+    ],
+    "PooToolsSource/PToolsCore/PTURLParser.swift": [
+      "PToolsCore"
+    ],
+    "PooToolsSource/PToolsDatabase/PTDatabase.swift": [
+      "PToolsDatabase"
+    ],
+    "PooToolsSource/PToolsDatabaseCore/PTDatabaseCore.swift": [
+      "PToolsDatabaseCore"
+    ],
+    "PooToolsSource/PToolsDate/PTDateContext.swift": [
+      "PToolsDate"
+    ],
+    "PooToolsSource/PToolsDate/PTDateParser.swift": [
+      "PToolsDate"
+    ],
+    "PooToolsSource/PToolsDate/PTZonedDate.swift": [
+      "PToolsDate"
+    ],
+    "PooToolsSource/PToolsDeepLink/PTDeepLink.swift": [
+      "PToolsDeepLink"
+    ],
+    "PooToolsSource/PToolsDevice/Core/PTDevice.swift": [
+      "PToolsDevice"
+    ],
+    "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift": [
+      "PToolsDevice"
+    ],
+    "PooToolsSource/PToolsDevice/Core/PTDeviceCatalog.swift": [
+      "PToolsDevice"
+    ],
+    "PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift": [
+      "PToolsDevice"
+    ],
+    "PooToolsSource/PToolsDevice/Core/PTDeviceTypes.swift": [
+      "PToolsDevice"
+    ],
+    "PooToolsSource/PToolsDevice/Generated/PTAppleTVCatalog.generated.swift": [
+      "PToolsDevice"
+    ],
+    "PooToolsSource/PToolsDevice/Generated/PTAppleVisionCatalog.generated.swift": [
+      "PToolsDevice"
+    ],
+    "PooToolsSource/PToolsDevice/Generated/PTAppleWatchCatalog.generated.swift": [
+      "PToolsDevice"
+    ],
+    "PooToolsSource/PToolsDevice/Generated/PTDeviceIdentifierIndex.generated.swift": [
+      "PToolsDevice"
+    ],
+    "PooToolsSource/PToolsDevice/Generated/PTHomePodCatalog.generated.swift": [
+      "PToolsDevice"
+    ],
+    "PooToolsSource/PToolsDevice/Generated/PTMacCatalog.generated.swift": [
+      "PToolsDevice"
+    ],
+    "PooToolsSource/PToolsDevice/Generated/PTiPadCatalog.generated.swift": [
+      "PToolsDevice"
+    ],
+    "PooToolsSource/PToolsDevice/Generated/PTiPhoneCatalog.generated.swift": [
+      "PToolsDevice"
+    ],
+    "PooToolsSource/PToolsDevice/Generated/PTiPodCatalog.generated.swift": [
+      "PToolsDevice"
+    ],
+    "PooToolsSource/PToolsDocuments/PTDocumentPDFAdapters.swift": [
+      "PToolsDocuments"
+    ],
+    "PooToolsSource/PToolsDocuments/PTDocumentPDFBridge.swift": [
+      "PToolsDocuments"
+    ],
+    "PooToolsSource/PToolsDocuments/PTDocuments.swift": [
+      "PToolsDocuments"
+    ],
+    "PooToolsSource/PToolsFeedback/PTFeedback.swift": [
+      "PToolsFeedback"
+    ],
+    "PooToolsSource/PToolsFontCore/PTFontMetadata.swift": [
+      "PToolsFontCatalogCore"
+    ],
+    "PooToolsSource/PToolsForm/PTForm.swift": [
+      "PToolsForm"
+    ],
+    "PooToolsSource/PToolsForm/PTFormConfiguration.swift": [
+      "PToolsForm"
+    ],
+    "PooToolsSource/PToolsForm/PTFormRenderers.swift": [
+      "PToolsForm"
+    ],
+    "PooToolsSource/PToolsForm/PTFormSectionRenderer.swift": [
+      "PToolsForm"
+    ],
+    "PooToolsSource/PToolsForm/PTFormSnapshot.swift": [
+      "PToolsForm"
+    ],
+    "PooToolsSource/PToolsForm/PTFormSupport.swift": [
+      "PToolsForm"
+    ],
+    "PooToolsSource/PToolsForm/PTFormValidation.swift": [
+      "PToolsForm"
+    ],
+    "PooToolsSource/PToolsHTTPFilePortal/PTHTTPFilePortal.swift": [
+      "PToolsHTTPFilePortal"
+    ],
+    "PooToolsSource/PToolsHTTPServer/PTHTTPMiddleware.swift": [
+      "PToolsHTTPServer"
+    ],
+    "PooToolsSource/PToolsHTTPServer/PTHTTPParser.swift": [
+      "PToolsHTTPServer"
+    ],
+    "PooToolsSource/PToolsHTTPServer/PTHTTPServer.swift": [
+      "PToolsHTTPServer"
+    ],
+    "PooToolsSource/PToolsHTTPServer/PTHTTPTypes.swift": [
+      "PToolsHTTPServer"
+    ],
+    "PooToolsSource/PToolsLogging/Core/PTLogTypes.swift": [
+      "PToolsLogging"
+    ],
+    "PooToolsSource/PToolsLogging/Core/PTLogger.swift": [
+      "PToolsLogging"
+    ],
+    "PooToolsSource/PToolsLogging/Destinations/PTFileLogDestination.swift": [
+      "PToolsLogging"
+    ],
+    "PooToolsSource/PToolsLogging/Destinations/PTMemoryLogDestination.swift": [
+      "PToolsLogging"
+    ],
+    "PooToolsSource/PToolsLogging/Destinations/PTOSLogDestination.swift": [
+      "PToolsLogging"
+    ],
+    "PooToolsSource/PToolsLogging/File/PTLogFileWriter.swift": [
+      "PToolsLogging"
+    ],
+    "PooToolsSource/PToolsLogging/Internal/PTLoggerInternalDiagnostics.swift": [
+      "PToolsLogging"
+    ],
+    "PooToolsSource/PToolsLogging/Privacy/PTLogRedactor.swift": [
+      "PToolsLogging"
+    ],
+    "PooToolsSource/PToolsMap/PTMap.swift": [
+      "PToolsMap"
+    ],
+    "PooToolsSource/PToolsMapCore/PTMapCore.swift": [
+      "PToolsMapCore"
+    ],
+    "PooToolsSource/PToolsMediaCore/PTMediaCoreContracts.swift": [
+      "PooToolsMediaCore"
+    ],
+    "PooToolsSource/PToolsModel/PTModelExports.swift": [
+      "PToolsModel"
+    ],
+    "PooToolsSource/PToolsModelCombine/PTModelCombine.swift": [
+      "PToolsModelCombine"
+    ],
+    "PooToolsSource/PToolsModelCore/PTJSONByteSink.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTJSONScanner.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTJSONValue.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTModelAdvanced.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTModelChunkSources.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTModelCodec.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTModelFeatures.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTModelFoundationCodecs.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTModelPolicy.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTModelRuntime.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTModelSchema.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTModelSemantics.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTModelStreaming.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTModelTreeDecoder.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTModelTreeEncoder.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTModelTypes.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTStaticFieldScanner.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelCore/PTStaticJSONWriter.swift": [
+      "PToolsModelCore"
+    ],
+    "PooToolsSource/PToolsModelLegacyKakaJSON/PTLegacyKakaJSONAdapter.swift": [
+      "PToolsModelLegacyKakaJSON"
+    ],
+    "PooToolsSource/PToolsModelLegacySmartCodable/PTLegacySmartCodableAdapter.swift": [
+      "PToolsModelLegacySmartCodable"
+    ],
+    "PooToolsSource/PToolsModelUIKit/PTModelUIKit.swift": [
+      "PToolsModelUIKit"
+    ],
+    "PooToolsSource/PToolsNotifications/PTNotifications.swift": [
+      "PToolsNotifications"
+    ],
+    "PooToolsSource/PToolsObservability/PTObservability.swift": [
+      "PToolsObservability"
+    ],
+    "PooToolsSource/PToolsObservabilityCore/PTObservabilityCore.swift": [
+      "PToolsObservabilityCore"
+    ],
+    "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift": [
+      "PToolsPermissionCore"
+    ],
+    "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift": [
+      "PToolsPermissionCore"
+    ],
+    "PooToolsSource/PToolsPermissionUI/PTPermissionUI.swift": [
+      "PToolsPermissionUI"
+    ],
+    "PooToolsSource/PToolsRealtime/PTRealtime.swift": [
+      "PToolsRealtime"
+    ],
+    "PooToolsSource/PToolsRealtimeCore/PTRealtimeCore.swift": [
+      "PToolsRealtimeCore"
+    ],
+    "PooToolsSource/PToolsRouteCore/PTRouteCore.swift": [
+      "PToolsRouteCore"
+    ],
+    "PooToolsSource/PToolsSimulation/PTSimulation.swift": [
+      "PToolsSimulation"
+    ],
+    "PooToolsSource/PToolsSimulationCore/PTSimulationCore.swift": [
+      "PToolsSimulationCore"
+    ],
+    "PooToolsSource/PToolsStorage/PTStorage.swift": [
+      "PToolsStorage"
+    ],
+    "PooToolsSource/PToolsStorageCore/PTStorageCore.swift": [
+      "PToolsStorageCore"
+    ],
+    "PooToolsSource/PToolsStoreKit/PTStoreKit.swift": [
+      "PToolsStoreKit"
+    ],
+    "PooToolsSource/PToolsSymbols/Generated/PTSymbols+iOS17.swift": [
+      "PToolsSymbols"
+    ],
+    "PooToolsSource/PToolsSymbols/Generated/PTSymbols+iOS18.swift": [
+      "PToolsSymbols"
+    ],
+    "PooToolsSource/PToolsSymbols/Generated/PTSymbols+iOS26.swift": [
+      "PToolsSymbols"
+    ],
+    "PooToolsSource/PToolsSymbols/PTSymbol.swift": [
+      "PToolsSymbols"
+    ],
+    "PooToolsSource/PToolsSymbols/PTSymbolCatalog.swift": [
+      "PToolsSymbols"
+    ],
+    "PooToolsSource/PToolsSymbols/PTSymbolDiagnostics.swift": [
+      "PToolsSymbols"
+    ],
+    "PooToolsSource/PToolsSymbols/PTSymbolResolver.swift": [
+      "PToolsSymbols"
+    ],
+    "PooToolsSource/PToolsSymbols/Semantic/PTSymbols+Semantic.swift": [
+      "PToolsSymbols"
+    ],
+    "PooToolsSource/PToolsSymbols/UIImage+PTSymbol.swift": [
+      "PToolsSymbols"
+    ],
+    "PooToolsSource/PToolsSync/PTSync.swift": [
+      "PToolsSync"
+    ],
+    "PooToolsSource/PToolsSyncCore/PTSyncCore.swift": [
+      "PToolsSyncCore"
+    ],
+    "PooToolsSource/PToolsTheme/PTTheme.swift": [
+      "PToolsTheme"
+    ],
+    "PooToolsSource/PToolsTransfer/PTTransfer.swift": [
+      "PToolsTransfer"
+    ],
+    "PooToolsSource/PToolsTransfer/PTTransferDownloadController.swift": [
+      "PToolsTransfer"
+    ],
+    "PooToolsSource/PToolsTransfer/PTTransferResumeStore.swift": [
+      "PToolsTransfer"
+    ],
+    "PooToolsSource/PToolsTransferCore/PTTransferCore.swift": [
+      "PToolsTransferCore"
+    ],
+    "PooToolsSource/PToolsUIFoundation/PTRichText.swift": [
+      "PToolsUIFoundation"
+    ],
+    "PooToolsSource/PToolsUIFoundation/PTRichTextAttributes.swift": [
+      "PToolsUIFoundation"
+    ],
+    "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift": [
+      "PToolsUIFoundation"
+    ],
+    "PooToolsSource/PToolsUIFoundation/PTRichTextCache.swift": [
+      "PToolsUIFoundation"
+    ],
+    "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift": [
+      "PToolsUIFoundation"
+    ],
+    "PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift": [
+      "PToolsUIFoundation"
+    ],
+    "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift": [
+      "PToolsUIFoundation"
+    ],
+    "PooToolsSource/PToolsUIFoundation/PTRichTextMediaController.swift": [
+      "PToolsUIFoundation"
+    ],
+    "PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift": [
+      "PToolsUIFoundation"
+    ],
+    "PooToolsSource/PToolsWeb/PTWeb.swift": [
+      "PToolsWeb"
+    ],
+    "PooToolsSource/PToolsWebBridge/PTWebBridge.swift": [
+      "PToolsWebBridge"
+    ],
+    "PooToolsSource/PToolsWebCore/PTWebCore.swift": [
+      "PToolsWebCore"
+    ],
+    "PooToolsSource/PToolsWidgetCore/PTWidgetCore.swift": [
+      "PToolsWidgetCore"
+    ],
+    "PooToolsSource/PageControl/PTFilledPageControl.swift": [
+      "PooToolsPageControl"
+    ],
+    "PooToolsSource/PageControl/PTImagePageControl.swift": [
+      "PooToolsPageControl"
+    ],
+    "PooToolsSource/PageControl/PTPageControllable.swift": [
+      "PooToolsPageControl"
+    ],
+    "PooToolsSource/PageControl/PTPillPageControl.swift": [
+      "PooToolsPageControl"
+    ],
+    "PooToolsSource/PageControl/PTScrollingPageControl.swift": [
+      "PooToolsPageControl"
+    ],
+    "PooToolsSource/PageControl/PTSnakePageControl.swift": [
+      "PooToolsPageControl"
+    ],
+    "PooToolsSource/PermissionCore/PTPermission.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/PermissionCore/PTPermissionCell.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/PermissionCore/PTPermissionHeader.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/PermissionCore/PTPermissionModel.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/PermissionCore/PTPermissionSettingCell.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/PermissionCore/PTPermissionSettingHeader.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/PermissionCore/PTPermissionSettingViewController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/PermissionCore/PTPermissionText.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/PermissionCore/PTPermissionViewController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/PhoneInfo/PTPhoneNetWorkInfo.swift": [
+      "PooToolsPhoneInfo"
+    ],
+    "PooToolsSource/PhotoLibraryPermission/PTPermissionPhotoLibrary.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift": [
+      "PooToolsPhotoPicker"
+    ],
+    "PooToolsSource/PhotoPicker/PTMediaLibAlbumListViewController.swift": [
+      "PooToolsPhotoPicker"
+    ],
+    "PooToolsSource/PhotoPicker/PTMediaLibCameraContainerViewController.swift": [
+      "PooToolsPhotoPicker"
+    ],
+    "PooToolsSource/PhotoPicker/PTMediaLibCell.swift": [
+      "PooToolsPhotoPicker"
+    ],
+    "PooToolsSource/PhotoPicker/PTMediaLibConfig.swift": [
+      "PooToolsPhotoPicker"
+    ],
+    "PooToolsSource/PhotoPicker/PTMediaLibListModel.swift": [
+      "PooToolsPhotoPicker"
+    ],
+    "PooToolsSource/PhotoPicker/PTMediaLibManager.swift": [
+      "PooToolsPhotoPicker"
+    ],
+    "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift": [
+      "PooToolsPhotoPicker"
+    ],
+    "PooToolsSource/PhotoPicker/PTMediaRequestCoordinator.swift": [
+      "PooToolsPhotoPicker"
+    ],
+    "PooToolsSource/PhotoPicker/PTMediaSaveUI.swift": [
+      "PooToolsPhotoPicker"
+    ],
+    "PooToolsSource/Picker/PTBasePickerView.swift": [
+      "PooToolsPicker"
+    ],
+    "PooToolsSource/Ping/ICMP.swift": [
+      "PooToolsPing"
+    ],
+    "PooToolsSource/Ping/IPv4.swift": [
+      "PooToolsPing"
+    ],
+    "PooToolsSource/Ping/PTPingActivityIndicator.swift": [
+      "PooToolsPing"
+    ],
+    "PooToolsSource/Ping/PTPingTool.swift": [
+      "PooToolsPing"
+    ],
+    "PooToolsSource/Ping/SimplePing.swift": [
+      "PooToolsPing"
+    ],
+    "PooToolsSource/Pinyin/PTPinyin.swift": [
+      "PooToolsChinesePinyin"
+    ],
+    "PooToolsSource/Popover/PTContextMenu.swift": [
+      "PooToolsPopover"
+    ],
+    "PooToolsSource/Popover/PTPopover.swift": [
+      "PooToolsPopover"
+    ],
+    "PooToolsSource/ProgressBar/PTCircularProgressView.swift": [
+      "PooToolsProgressBar"
+    ],
+    "PooToolsSource/ProgressBar/PTFlexibleSteppedProgressBar.swift": [
+      "PooToolsProgressBar"
+    ],
+    "PooToolsSource/ProgressBar/PTMediaBrowserLoadingView.swift": [
+      "PooToolsProgressBar"
+    ],
+    "PooToolsSource/ProgressBar/PTProgressBar.swift": [
+      "PooToolsProgressBar"
+    ],
+    "PooToolsSource/Protocol/PTProtocol.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/QRCodeScan/PTScanQRController.swift": [
+      "PooToolsScanQRCode"
+    ],
+    "PooToolsSource/RateView/PTRateView.swift": [
+      "PooToolsRateView"
+    ],
+    "PooToolsSource/RemindersPermission/PTPermissionReminders.swift": [
+      "PTRemindersPermission"
+    ],
+    "PooToolsSource/Rotation/PTRotationManager.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Router/PTRouteHostCoordinator.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouteRouter.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouter.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterBridge.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterBuilder.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterDebugTool.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterDynamicParamsMapping.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterInterceptor.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterLegacyCompatibility.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterManager.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterMatcher.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterNavigator.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterParser.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterPattern.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterRequest.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterResolver.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterServiceManager.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterServiceProtocol.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterable.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/Router/PTRouterableProxy.swift": [
+      "PooToolsRouter"
+    ],
+    "PooToolsSource/ScreenShot/PTSnapShotKitProtocol.swift": [
+      "PooToolsSmartScreenshot"
+    ],
+    "PooToolsSource/ScreenShot/PTWebViewPrintPageRenderer.swift": [
+      "PooToolsSmartScreenshot"
+    ],
+    "PooToolsSource/ScreenShot/UIScrollView+PTSnapShot.swift": [
+      "PooToolsSmartScreenshot"
+    ],
+    "PooToolsSource/ScreenShot/UITableView+PTSnapShot.swift": [
+      "PooToolsSmartScreenshot"
+    ],
+    "PooToolsSource/ScreenShot/UIView+PTSnapShot.swift": [
+      "PooToolsSmartScreenshot"
+    ],
+    "PooToolsSource/ScreenShot/UIWindow+PTSnapShot.swift": [
+      "PooToolsSmartScreenshot"
+    ],
+    "PooToolsSource/ScreenShot/WKWebView+PTSnapShot.swift": [
+      "PooToolsSmartScreenshot"
+    ],
+    "PooToolsSource/ScrollBanner/PTBannerCell.swift": [
+      "PooToolsScrollBanner"
+    ],
+    "PooToolsSource/ScrollBanner/PTBannerMediaManager.swift": [
+      "PooToolsScrollBanner"
+    ],
+    "PooToolsSource/ScrollBanner/PTBannerModel.swift": [
+      "PooToolsScrollBanner"
+    ],
+    "PooToolsSource/ScrollBanner/PTBannerView.swift": [
+      "PooToolsScrollBanner"
+    ],
+    "PooToolsSource/ScrollBanner/PTCycleScrollView.swift": [
+      "PooToolsScrollBanner"
+    ],
+    "PooToolsSource/Search/PTSearchConfiguration.swift": [
+      "PooToolsSearch"
+    ],
+    "PooToolsSource/Search/PTSearchEmptyConfiguration.swift": [
+      "PooToolsSearch"
+    ],
+    "PooToolsSource/Search/PTSearchErrorConfiguration.swift": [
+      "PooToolsSearch"
+    ],
+    "PooToolsSource/Search/PTSearchHistoryProvider.swift": [
+      "PooToolsSearch"
+    ],
+    "PooToolsSource/Search/PTSearchMode.swift": [
+      "PooToolsSearch"
+    ],
+    "PooToolsSource/Search/PTSearchPagination.swift": [
+      "PooToolsSearch"
+    ],
+    "PooToolsSource/Search/PTSearchPlacement.swift": [
+      "PooToolsSearch"
+    ],
+    "PooToolsSource/Search/PTSearchPresentationContext.swift": [
+      "PooToolsSearch"
+    ],
+    "PooToolsSource/Search/PTSearchResultProvider.swift": [
+      "PooToolsSearch"
+    ],
+    "PooToolsSource/Search/PTSearchSnapshot.swift": [
+      "PooToolsSearch"
+    ],
+    "PooToolsSource/Search/PTSearchState.swift": [
+      "PooToolsSearch"
+    ],
+    "PooToolsSource/Search/PTSearchSuggestionProvider.swift": [
+      "PooToolsSearch"
+    ],
+    "PooToolsSource/Search/PTSearchTaskCoordinator.swift": [
+      "PooToolsSearch"
+    ],
+    "PooToolsSource/Search/PTSearchViewController.swift": [
+      "PooToolsSearch"
+    ],
+    "PooToolsSource/SearchBar/PTSearchBar.swift": [
+      "PooToolsSearchBar"
+    ],
+    "PooToolsSource/Security/PTSecurity.swift": [
+      "PooToolsSecurity"
+    ],
+    "PooToolsSource/SegmentControl/PTInlineBadgeView.swift": [
+      "PooToolsPagingControl"
+    ],
+    "PooToolsSource/SegmentControl/PTMainSegmentCell.swift": [
+      "PooToolsPagingControl"
+    ],
+    "PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift": [
+      "PooToolsPagingControl"
+    ],
+    "PooToolsSource/SegmentControl/PTMainSegmentModel.swift": [
+      "PooToolsPagingControl"
+    ],
+    "PooToolsSource/SegmentControl/PTNestedScrollCoordinator.swift": [
+      "PooToolsPagingControl"
+    ],
+    "PooToolsSource/SegmentControl/PTPageContainer.swift": [
+      "PooToolsPagingControl"
+    ],
+    "PooToolsSource/SegmentControl/PTPaging.swift": [
+      "PooToolsPagingControl"
+    ],
+    "PooToolsSource/SegmentControl/PTPagingLayoutEngine.swift": [
+      "PooToolsPagingControl"
+    ],
+    "PooToolsSource/SegmentControl/PTPagingTypes.swift": [
+      "PooToolsPagingControl"
+    ],
+    "PooToolsSource/SegmentControl/PTScrollDelegateProxy.swift": [
+      "PooToolsPagingControl"
+    ],
+    "PooToolsSource/SegmentControl/PTSegmentControlBaseModel.swift": [
+      "PooToolsPagingControl"
+    ],
+    "PooToolsSource/SegmentControl/PTSegmentedTypes.swift": [
+      "PooToolsPagingControl"
+    ],
+    "PooToolsSource/SegmentControl/PTSegmentedView.swift": [
+      "PooToolsPagingControl"
+    ],
+    "PooToolsSource/Segmented/PTSegmentView.swift": [
+      "PooToolsSegmented"
+    ],
+    "PooToolsSource/Share/PTActivityViewController.swift": [
+      "PooToolsShare"
+    ],
+    "PooToolsSource/SideMenuControl/PTBaseSideController.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/SideMenuControl/PTSideMenuBasicTransitionAnimator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/SideMenuControl/PTSideMenuControl.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/SideMenuControl/PTSideMenuSegue.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/SideMenuControl/UIView+Container.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/SideMenuControl/UIViewController+Container.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/SignView/PTEasySignatureView.swift": [
+      "PooToolsHandSign"
+    ],
+    "PooToolsSource/SignView/PTImageBlackToTransparent.swift": [
+      "PooToolsHandSign"
+    ],
+    "PooToolsSource/SignView/PTSignView.swift": [
+      "PooToolsHandSign"
+    ],
+    "PooToolsSource/SiriPermission/PTPermissionSiri.swift": [
+      "PTSiriPermission"
+    ],
+    "PooToolsSource/Slider/PTRangeSeekSlider.swift": [
+      "PooToolsSlider"
+    ],
+    "PooToolsSource/Slider/PTSlider.swift": [
+      "PooToolsSlider"
+    ],
+    "PooToolsSource/SocketKit/PTSocketManager.swift": [
+      "PooToolsSocketKit"
+    ],
+    "PooToolsSource/SocketKit/PTWebSocketClient.swift": [
+      "PooToolsSocketKit"
+    ],
+    "PooToolsSource/SpeechPremission/PTPermissionSpeech.swift": [
+      "PTSpeechPermission"
+    ],
+    "PooToolsSource/SpeedPanel/PTSpeedPanel.swift": [
+      "PooToolsSpeedPanel"
+    ],
+    "PooToolsSource/SplitView/PTSplitConfiguration.swift": [
+      "PooToolsSplitView"
+    ],
+    "PooToolsSource/SplitView/PTSplitViewController.swift": [
+      "PooToolsSplitView"
+    ],
+    "PooToolsSource/StatusBar/StatusBarManager.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Stepper/PTStepper.swift": [
+      "PooToolsStepper"
+    ],
+    "PooToolsSource/Stepper/PTStepperCellsCollection.swift": [
+      "PooToolsStepper"
+    ],
+    "PooToolsSource/Stepper/PTStepperView.swift": [
+      "PooToolsStepper"
+    ],
+    "PooToolsSource/Switch/PTSwitch.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/TipsView/PTTipsOverlayIntegration.swift": [
+      "PooToolsTipsView"
+    ],
+    "PooToolsSource/TipsView/PTTipsView.swift": [
+      "PooToolsTipsView"
+    ],
+    "PooToolsSource/TouchInspector/TouchInspectorWindow.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/TouchInspector/TouchOverlayView.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/TouchInspector/Utilities.swift": [
+      "PooToolsDEBUG"
+    ],
+    "PooToolsSource/TrackingPermission/PTPermissionTracking.swift": [
+      "PTTrackingPermission"
+    ],
+    "PooToolsSource/VideoEditor/CALayer+VideoEditorEX.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/CompositionInstruction.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/Compositor.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/ConverterCrop.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/ConverterDegree.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/ConverterOption.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/CropDimView.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/CropPickerView.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/CropResult.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/CropView.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/DateComponentsFormatter+VideoEditorEX.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/Error.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/Exporter.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/LineButton.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/MovieFileType.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/Options.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorBaseFloatingViewController.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorConfig.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorFilterControl.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorHandleLayer.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorToolsCell.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorToolsCropControl.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorToolsModel.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorToolsSlider.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorToolsSpeedControl.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimmingControl.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController+Lifecycle.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorVideoTimeLineGenerator.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/PTVideoEditorVideoTimeLineView.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/Provider.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/UIColor+VideoEditorEX.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/VideoEditor/VideoConverter.swift": [
+      "PooToolsVideoEditor"
+    ],
+    "PooToolsSource/Vision/PTVision.swift": [
+      "PooToolsVision"
+    ],
+    "PooToolsSource/WebKit/PTHTMLHeightCalculator.swift": [
+      "PooToolsWebKit"
+    ],
+    "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift": [
+      "PooToolsWhatsNewsKit"
+    ],
+    "PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift": [
+      "PooToolsDEBUGTrackingEyes"
+    ],
+    "PooToolsSource/WhereIsMyEye/PTEyeTrackingExtensions.swift": [
+      "PooToolsDEBUGTrackingEyes"
+    ],
+    "PooToolsSource/WhereIsMyEye/PTEyeTrackingManager.swift": [
+      "PooToolsDEBUGTrackingEyes"
+    ],
+    "PooToolsSource/WhereIsMyEye/PTEyeTrackingSessionManager.swift": [
+      "PooToolsDEBUGTrackingEyes"
+    ],
+    "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift": [
+      "PooToolsDEBUGTrackingEyes"
+    ],
+    "PooToolsSource/WhereIsMyEye/PTFaceEye.swift": [
+      "PooToolsDEBUGTrackingEyes"
+    ],
+    "PooToolsSource/iCloud/PTiCloudFileManager.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/iCloud/PTiCloudKeychainService.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/iOS17Tips/PTTip.swift": [
+      "PooToolsiOS17Tips"
+    ],
+    "Tests/PToolsAdvancedTests/PTAdvancedTests.swift": [
+      "PToolsAdvancedTests"
+    ],
+    "Tests/PToolsApplicationInfrastructureTests/PTApplicationInfrastructureTests.swift": [
+      "PToolsApplicationInfrastructureTests"
+    ],
+    "Tests/PToolsBannerTests/PTBannerQueueTests.swift": [
+      "PToolsBannerTests"
+    ],
+    "Tests/PToolsDateTests/PTDateTests.swift": [
+      "PToolsDateTests"
+    ],
+    "Tests/PToolsDebugTests/Fixtures/PTDebugNetworkHTTPFixture.swift": [
+      "PToolsDebugTests"
+    ],
+    "Tests/PToolsDebugTests/Fixtures/PTDebugNetworkURLProtocolStub.swift": [
+      "PToolsDebugTests"
+    ],
+    "Tests/PToolsDebugTests/PTDebugNetworkBodyStoreTests.swift": [
+      "PToolsDebugTests"
+    ],
+    "Tests/PToolsDebugTests/PTDebugNetworkCaptureMatrixTests.swift": [
+      "PToolsDebugTests"
+    ],
+    "Tests/PToolsDebugTests/PTDebugNetworkParityTests.swift": [
+      "PToolsDebugTests"
+    ],
+    "Tests/PToolsDebugTests/PTDebugNetworkPerformanceTests.swift": [
+      "PToolsDebugTests"
+    ],
+    "Tests/PToolsDebugTests/PTLoadedLibsTests.swift": [
+      "PToolsDebugTests"
+    ],
+    "Tests/PToolsDebugTests/PTNetworkCaptureContractTests.swift": [
+      "PToolsDebugTests"
+    ],
+    "Tests/PToolsDeviceTests/PTDeviceTests.swift": [
+      "PToolsDeviceTests"
+    ],
+    "Tests/PToolsFontTests/PTFontCatalogTests.swift": [
+      "PToolsFontTests"
+    ],
+    "Tests/PToolsFontTests/PTFontCompatibilityTests.swift": [
+      "PToolsFontTests"
+    ],
+    "Tests/PToolsFontTests/PTFontGeneratedConsistencyTests.swift": [
+      "PToolsFontTests"
+    ],
+    "Tests/PToolsFontTests/PTFontRuntimeTests.swift": [
+      "PToolsFontRuntimeTests"
+    ],
+    "Tests/PToolsHTTPServerTests/PTHTTPParserTests.swift": [
+      "PToolsHTTPServerTests"
+    ],
+    "Tests/PToolsListTests/PTCollectionHeaderSpacingTests.swift": [
+      "PToolsListTests"
+    ],
+    "Tests/PToolsListTests/PTListQualityTests.swift": [
+      "PToolsListTests"
+    ],
+    "Tests/PToolsLoggingTests/PTLoggingFoundationTests.swift": [
+      "PToolsLoggingTests"
+    ],
+    "Tests/PToolsLoggingTests/PTLoggingPerformanceTests.swift": [
+      "PToolsLoggingTests"
+    ],
+    "Tests/PToolsMediaTests/PTMediaQualityTests.swift": [
+      "PToolsMediaTests"
+    ],
+    "Tests/PToolsModelTests/PTModelCoreTests.swift": [
+      "PToolsModelTests"
+    ],
+    "Tests/PToolsModelTests/PTModelMacroGoldenTests.swift": [
+      "PToolsModelTests"
+    ],
+    "Tests/PToolsModelTests/PTModelNestedModelTests.swift": [
+      "PToolsModelTests"
+    ],
+    "Tests/PToolsNavigationTests/PTNavigationRegressionTests.swift": [
+      "PToolsNavigationTests"
+    ],
+    "Tests/PToolsNetworkTests/PTNetworkModelPathTests.swift": [
+      "PToolsNetworkTests"
+    ],
+    "Tests/PToolsNetworkTests/PTNetworkQualityTests.swift": [
+      "PToolsNetworkRuntimeTests"
+    ],
+    "Tests/PToolsP2Tests/PTFormDocumentsFeedbackTests.swift": [
+      "PToolsP2Tests"
+    ],
+    "Tests/PToolsP2Tests/PTModernModulesTests.swift": [
+      "PToolsP2Tests"
+    ],
+    "Tests/PToolsPermissionTests/PTPermissionQualityTests.swift": [
+      "PToolsPermissionTests"
+    ],
+    "Tests/PToolsPlatformTests/PTPlatformTests.swift": [
+      "PToolsPlatformTests"
+    ],
+    "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift": [
+      "PToolsRichTextTests"
+    ],
+    "Tests/PToolsSocketKitTests/PTWebSocketContractTests.swift": [
+      "PToolsSocketKitTests"
+    ],
+    "Tests/PToolsSymbolsTests/PTSymbolTests.swift": [
+      "PToolsSymbolsTests"
+    ],
+    "Tests/PToolsUIFoundationTests/PTAdaptiveBarLayoutTests.swift": [
+      "PToolsUIFoundationTests"
+    ],
+    "Tests/PToolsUIFoundationTests/PTCategoryCompatibilityTests.swift": [
+      "PToolsUIFoundationTests"
+    ],
+    "Tests/PToolsUIFoundationTests/PTControlMenuTests.swift": [
+      "PToolsUIFoundationTests"
+    ],
+    "Tests/PToolsUIFoundationTests/PTPagingTests.swift": [
+      "PToolsUIFoundationTests"
+    ],
+    "Tests/PToolsUIFoundationTests/PTSegmentedPagingTests.swift": [
+      "PToolsUIFoundationTests"
+    ],
+    "Tests/PToolsUIFoundationTests/PTTabBarAndGradientTests.swift": [
+      "PToolsUIFoundationTests"
+    ],
+    "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift": [
+      "PToolsUIFoundationTests"
+    ],
+    "Tests/PooToolsCoreTests/PTCoreContractTests.swift": [
+      "PToolsCoreTests"
+    ]
+  },
+  "source_count": 1229
+}

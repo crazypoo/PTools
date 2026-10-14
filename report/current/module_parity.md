@@ -3,19 +3,19 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: aa4f1fca1a9f03b73abba39ea1fee3b7ff201ee3
-Generated at: 2026-10-10T18:33:46Z
+Source revision: 93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29
+Generated at: 2026-10-14T06:07:49Z
 -->
 
 # SwiftPM / CocoaPods Module Parity
 
 - Status: `baseline`
-- Fingerprint: `033bfb32201f236caaf4a6b8c944be3094370b01394edeba2f3a38fa2cb8913b`
+- Fingerprint: `10eeba4ed803a4afb929e911cee036bcaf0f3a58996d5bedde2ffc2b1f4acde0`
 - Matched modules: `123`
 - SwiftPM-only modules: `30`
 - CocoaPods-only modules: `33`
 - Source-directory drift: `3`
-- Dependency drift: `24`
+- Dependency drift: `30`
 - Swift setting / macro drift: `56`
 
 ## Classification
@@ -50,26 +50,32 @@ The baseline records existing differences as explicit review items. A later mani
 
 - `BilogyID` / `internal_dependencies`: SPM=["Core", "FaceIDPermission"]; CocoaPods=["Core", "FaceIDPermission", "KeyChain"]
 - `BluetoothPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["Core"]
+- `CheckUpdate` / `internal_dependencies`: SPM=["Core", "NetWork"]; CocoaPods=["NetWork"]
 - `CheckUpdate` / `third_party_dependencies`: SPM=["Swift-JWT"]; CocoaPods=["SwiftJWT"]
 - `Configuration` / `internal_dependencies`: SPM=["Storage", "StorageCore"]; CocoaPods=["Storage"]
 - `Core` / `internal_dependencies`: SPM=["Device", "Logging", "PToolsCore", "PToolsDate", "PToolsFontCatalogCore", "PToolsPermissionCore", "PToolsUIFoundation", "Symbols"]; CocoaPods=["Date", "Device", "Logging", "PToolsCore", "PToolsUIFoundation", "Symbols"]
 - `Core` / `third_party_dependencies`: SPM=["IQKeyboardManager", "Kingfisher", "SnapKit", "lottie-ios"]; CocoaPods=["IQKeyboardManagerSwift", "IQKeyboardToolbarManager", "Kingfisher", "SnapKit", "lottie-ios"]
 - `Form` / `internal_dependencies`: SPM=["Accessibility", "CheckBox", "ContentState", "Core", "PToolsCore", "Picker", "Slider", "Theme"]; CocoaPods=["Accessibility", "CheckBox", "ContentState", "Core", "Input", "PToolsCore", "Picker", "Slider", "Stepper", "Theme"]
 - `HarbethKit` / `internal_dependencies`: SPM=["CameraPermission", "Core", "MediaViewer", "Symbols"]; CocoaPods=["CameraPermission", "Core", "Symbols"]
+- `ImageEditor` / `internal_dependencies`: SPM=["Core", "HarbethKit", "MediaCore", "PToolsCore", "PhotoPicker", "Symbols"]; CocoaPods=["Core", "HarbethKit", "MediaCore", "PhotoPicker", "Symbols"]
 - `ImageEditor` / `third_party_dependencies`: SPM=["Harbeth"]; CocoaPods=[]
+- `Input` / `internal_dependencies`: SPM=["Core", "PToolsCore"]; CocoaPods=["Core"]
 - `Instructions` / `internal_dependencies`: SPM=["Overlay"]; CocoaPods=["Core", "Overlay"]
 - `MeidaPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["MeidaPermission"]
 - `Model` / `internal_dependencies`: SPM=["ModelCore", "PToolsModelMacroPlugin"]; CocoaPods=["ModelCore"]
 - `NetWork` / `internal_dependencies`: SPM=["Connectivity", "Core", "Loading", "ModelCore", "PToolsCore", "PToolsModelLegacyKakaJSON", "PToolsModelLegacySmartCodable", "PToolsNetworkModelCore"]; CocoaPods=["Connectivity", "Core", "Loading", "ModelCore", "ModelLegacyKakaJSON", "ModelLegacySmartCodable"]
+- `PageControl` / `internal_dependencies`: SPM=["Core", "PToolsCore"]; CocoaPods=["Core"]
 - `PhotoPicker` / `internal_dependencies`: SPM=["CameraPermission", "Core", "ImagePicker", "Loading", "MediaCore", "Symbols"]; CocoaPods=["Core", "ImagePicker", "Loading", "MediaCore", "Symbols"]
+- `Picker` / `internal_dependencies`: SPM=["Core", "PToolsCore"]; CocoaPods=["Core"]
 - `Picker` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `Popover` / `internal_dependencies`: SPM=["Overlay", "PToolsCore", "Symbols"]; CocoaPods=["Overlay", "Symbols"]
-- `RateView` / `internal_dependencies`: SPM=[]; CocoaPods=["PToolsUIFoundation"]
+- `RateView` / `internal_dependencies`: SPM=["Core"]; CocoaPods=["PToolsUIFoundation"]
 - `SVG` / `third_party_dependencies`: SPM=["Kingfisher", "PocketSVG"]; CocoaPods=["PocketSVG", "Protobuf", "SVGAPlayer"]
-- `ScanQRCode` / `internal_dependencies`: SPM=["CameraPermission", "Core", "ImagePicker", "PhotoPicker"]; CocoaPods=["CameraPermission", "Core", "PhotoPicker"]
+- `ScanQRCode` / `internal_dependencies`: SPM=["CameraPermission", "Core", "ImagePicker", "PToolsCore", "PhotoPicker"]; CocoaPods=["CameraPermission", "Core", "PhotoPicker"]
 - `SiriPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["Core"]
 - `Slider` / `internal_dependencies`: SPM=[]; CocoaPods=["PToolsUIFoundation"]
 - `TipsView` / `internal_dependencies`: SPM=["Core", "Overlay"]; CocoaPods=["Core"]
+- `VideoEditor` / `internal_dependencies`: SPM=["Core", "HarbethKit", "Loading", "MediaCore", "PToolsCore", "ProgressBar", "Symbols"]; CocoaPods=["Core", "HarbethKit", "Loading", "MediaCore", "ProgressBar", "Symbols"]
 - `VideoEditor` / `third_party_dependencies`: SPM=["Harbeth"]; CocoaPods=[]
 - `WidgetCore` / `internal_dependencies`: SPM=["DeepLink", "RouteCore", "Storage", "StorageCore"]; CocoaPods=["DeepLink", "RouteCore", "Storage"]
 

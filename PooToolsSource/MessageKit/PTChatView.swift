@@ -6,6 +6,9 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 import SnapKit
 import AVFoundation
 import Photos

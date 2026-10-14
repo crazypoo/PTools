@@ -14,6 +14,7 @@ import SnapKit
 import Harbeth
 import Photos
 #if SWIFT_PACKAGE
+import ptools
 import PToolsSymbols
 #endif
 

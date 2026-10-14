@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "aa8a0f957b4b43be8340a53d817cf62c4cbda04e",
-  "generated_at": "2026-10-14T01:27:00Z",
+  "source_revision": "93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29",
+  "generated_at": "2026-10-14T06:06:19Z",
   "counts": {
     "reduce_motion": 61,
     "accessibility": 275,
@@ -1393,7 +1393,7 @@
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/PageControl/PTImagePageControl.swift",
-      "line": 154
+      "line": 160
     },
     {
       "rule": "accessibility",
@@ -1508,22 +1508,22 @@
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 370
+      "line": 373
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 407
+      "line": 410
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 411
+      "line": 414
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 691
+      "line": 694
     },
     {
       "rule": "accessibility",

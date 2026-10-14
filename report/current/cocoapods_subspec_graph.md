@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: aa4f1fca1a9f03b73abba39ea1fee3b7ff201ee3
-Generated at: 2026-10-10T18:33:46Z
+Source revision: 93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29
+Generated at: 2026-10-14T06:07:48Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.63.6`
+- Podspec: `PooTools` `5.64.5`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
@@ -146,13 +146,13 @@ Generated at: 2026-10-10T18:33:46Z
 | `Security` | — | — | `Security` | CryptoKit, Foundation, LocalAuthentication, Security | — |
 | `SecuritySuite` | `PooTools/Core` | `IOSSecuritySuite` | — | — | — |
 | `Segmented` | `PooTools/Core` | — | `Segmented` | — | — |
-| `Share` | `PooTools/CustomerLabel` | — | `Share` | — | — |
+| `Share` | `PooTools/Core`, `PooTools/CustomerLabel` | `SnapKit` | `Share` | — | — |
 | `Simulation` | `PooTools/Bluetooth`, `PooTools/Connectivity`, `PooTools/PToolsCore`, `PooTools/PToolsDevice`, `PooTools/SimulationCore` | — | `PToolsSimulation` | Foundation | — |
 | `SimulationCore` | — | — | `PToolsSimulationCore` | Foundation | — |
 | `SiriPermission` | `PooTools/Core` | — | `SiriPermission` | — | — |
 | `Slider` | `PooTools/PToolsUIFoundation` | `SnapKit` | `Slider` | — | — |
 | `SmartScreenshot` | `PooTools/Core` | — | `ScreenShot` | — | — |
-| `SocketKit` | `PooTools/Core`, `PooTools/Logging` | — | `SocketKit` | — | — |
+| `SocketKit` | `PooTools/Core`, `PooTools/Logging`, `PooTools/Network` | — | `SocketKit` | — | — |
 | `SpeechRecognizerPermission` | `PooTools/PToolsPermissionCore` | — | `SpeechPremission` | — | — |
 | `SpeedPanel` | `PooTools/Core` | — | `SpeedPanel` | — | — |
 | `SplitView` | `PooTools/Core` | — | `SplitView` | Foundation, UIKit | — |

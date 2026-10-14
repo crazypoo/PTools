@@ -164,8 +164,8 @@ public final class PooToolsBannerView: UIView {
     }
 
     private func configureAccessories() {
-        leadingContainer.removeAllSubviews()
-        trailingContainer.removeAllSubviews()
+        leadingContainer.subviews.forEach { $0.removeFromSuperview() }
+        trailingContainer.subviews.forEach { $0.removeFromSuperview() }
         if let leading = banner.content.leading {
             addAccessory(makeAccessory(leading), to: leadingContainer)
         }

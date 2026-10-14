@@ -8,6 +8,9 @@
 
 import UIKit
 import SnapKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 open class PTVideoEditorBaseFloatingViewController: PTBaseViewController {
 

@@ -9,6 +9,9 @@
 import UIKit
 import SnapKit
 import Kingfisher
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 @objc public enum PTSegmentSelectedType : Int {
     case UnderLine

@@ -8,6 +8,9 @@
 
 import UIKit
 import SnapKit
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif

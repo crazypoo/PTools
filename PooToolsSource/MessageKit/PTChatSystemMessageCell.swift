@@ -10,6 +10,9 @@ import UIKit
 import PToolsUIFoundation
 #endif
 import SnapKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 @MainActor
 public class PTChatSystemMessageCell: PTBaseNormalCell {

@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_sendable_exceptions.rb
-Source revision: aa8a0f957b4b43be8340a53d817cf62c4cbda04e
-Generated at: 2026-10-14T01:26:59Z
+Source revision: 93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29
+Generated at: 2026-10-14T06:06:17Z
 -->
 
 # Swift 6 Sendable 例外清单
@@ -60,9 +60,9 @@ Generated at: 2026-10-14T01:26:59Z
 | `PooToolsSource/VideoEditor/CompositionInstruction.swift` | 11 | `class CompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/VideoEditor/Compositor.swift` | 15 | `public final class Compositor: NSObject, AVVideoCompositing, @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/VideoEditor/Exporter.swift` | 19 | `struct PTSystemAVAssetBox: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
-| `PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift` | 13 | `private struct PTSafeMediaBox<T>: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
-| `PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift` | 1535 | `private struct PTC7SafeBox:@unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
-| `PooToolsSource/VideoEditor/VideoConverter.swift` | 47 | `private struct PTSafeAudioExportBox: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
+| `PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift` | 16 | `private struct PTSafeMediaBox<T>: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
+| `PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift` | 1536 | `private struct PTC7SafeBox:@unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
+| `PooToolsSource/VideoEditor/VideoConverter.swift` | 50 | `private struct PTSafeAudioExportBox: @unchecked Sendable {` | yes | 系统媒体对象窄边界，继续用快照或生命周期保护 |
 | `PooToolsSource/Vision/PTVision.swift` | 27 | `private struct PTObservationBox: @unchecked Sendable {` | yes | 兼容边界；不得新增业务共享状态 |
 
 ## 版本门槛

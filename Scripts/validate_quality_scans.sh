@@ -68,6 +68,17 @@ bash Scripts/validate_concurrency_5_19.sh
 # Español: Mantén las líneas base de paridad SPM/CocoaPods y dirección de dependencias en la puerta de calidad.
 # 中文：将 SPM/CocoaPods 一致性和依赖方向基线纳入常规质量门禁。
 bash Scripts/validate_module_parity.sh --check
+# English: Refresh the complete SwiftPM ownership, symbol, conditional, and resource reports.
+# Español: Actualiza los informes completos de propiedad, símbolos, condiciones y recursos de SwiftPM.
+# 中文：刷新完整的 SwiftPM 归属、符号、条件编译和资源报告。
+python3 Scripts/CI/audit_spm_target_graph.py --strict
+python3 Scripts/CI/audit_spm_symbol_ownership.py --strict
+python3 Scripts/CI/audit_spm_conditional_compilation.py
+python3 Scripts/CI/audit_spm_resources.py
+python3 Scripts/CI/generate_spm_consumer_fixtures.py
+if [[ "${PTOOLS_SPM_RELEASE_GATE:-0}" == "1" ]]; then
+  python3 Scripts/CI/validate_spm_release_gate.py
+fi
 # English: Hard-gate the three CocoaPods / SwiftPM compatibility products and removed ownerships.
 # Español: Bloquea estrictamente los tres productos de compatibilidad y las dependencias cuya propiedad fue retirada.
 # 中文：将三个 CocoaPods / SwiftPM 兼容产品及已移除依赖所有权纳入硬门禁。

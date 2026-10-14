@@ -8,6 +8,12 @@
 
 import UIKit
 import Foundation
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public typealias ImagePageControlBlock = (_ sender: PTImagePageControl) -> Void
 

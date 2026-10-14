@@ -1422,6 +1422,15 @@
     },
     {
       "kind": "dependency",
+      "module": "CheckUpdate",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM declares ptools directly because CheckUpdate uses the public UIFont Category API; CocoaPods resolves the same Core surface through its aggregate Core subspec.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
       "module": "Core",
       "field": "internal_dependencies",
       "reason": "SwiftPM publishes split contracts; CocoaPods keeps monolithic Core.",
@@ -1443,6 +1452,24 @@
       "module": "ImageEditor",
       "field": "third_party_dependencies",
       "reason": "SPM declares Harbeth; CocoaPods uses the local HarbethKit route.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "ImageEditor",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM declares PToolsCore directly because ImageEditor uses PTFeedbackCenter; CocoaPods resolves that symbol through the aggregate Core subspec.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Input",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM declares PToolsCore directly because Input uses PTFeedbackCenter; CocoaPods resolves that symbol through the aggregate Core subspec.",
       "owner": "packaging",
       "expiration": "2026-12-31",
       "classification": "INTENTIONAL"
@@ -1485,6 +1512,24 @@
     },
     {
       "kind": "dependency",
+      "module": "Picker",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM declares PToolsCore directly because Picker uses PTFeedbackCenter; CocoaPods resolves that symbol through the aggregate Core subspec.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "PageControl",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM declares PToolsCore directly because PageControl uses PTFeedbackCenter; CocoaPods resolves that symbol through the aggregate Core subspec.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
       "module": "SVG",
       "field": "third_party_dependencies",
       "reason": "SPM and CocoaPods expose different direct and transitive SVG dependencies.",
@@ -1515,6 +1560,15 @@
       "module": "VideoEditor",
       "field": "third_party_dependencies",
       "reason": "SPM declares Harbeth; CocoaPods uses the local HarbethKit route.",
+      "owner": "packaging",
+      "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "VideoEditor",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM declares PToolsCore directly because VideoEditor uses PTFeedbackCenter; CocoaPods resolves that symbol through the aggregate Core subspec.",
       "owner": "packaging",
       "expiration": "2026-12-31",
       "classification": "INTENTIONAL"

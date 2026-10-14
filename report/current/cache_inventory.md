@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory.rb
-Source revision: aa8a0f957b4b43be8340a53d817cf62c4cbda04e
-Generated at: 2026-10-14T01:26:59Z
+Source revision: 93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29
+Generated at: 2026-10-14T06:07:24Z
 -->
 
 # PTools 当前缓存盘点
@@ -81,7 +81,7 @@ Generated at: 2026-10-14T01:26:59Z
 | PooToolsSource/Category/UIImageView+PTEX.swift:577 | NSCache | private var cache: NSCache<AnyObject, AnyObject>? { |
 | PooToolsSource/Category/UIImageView+PTEX.swift:578 | NSCache | get { objc_getAssociatedObject(self, &AssociatedKeys.cache) as? NSCache } |
 | PooToolsSource/Category/UIImageView+PTEX.swift:579 | disk or custom cache | set { objc_setAssociatedObject(self, &AssociatedKeys.cache, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) } |
-| PooToolsSource/Core/BorderManager.swift:21 | disk or custom cache | // Previous configuration cache. |
+| PooToolsSource/Core/BorderManager.swift:23 | disk or custom cache | // English: Cache the previous layer configuration for restoration. |
 | PooToolsSource/Core/PTCacheStore.swift:1 | disk or custom cache | // English: This bounded actor is the shared cache contract for resource and computation caches. |
 | PooToolsSource/Core/PTGCDManager.swift:51 | NSCache | // 用于保存定时器的 Task 引用，替代原有的 NSCache 和 DispatchSourceTimer |
 | PooToolsSource/Core/PTGifManager.swift:179 | disk or custom cache | /// Check if this manager has cache for an imageView |

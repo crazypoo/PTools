@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "709b16be6083e89fafa73181bef6d4902013cbcb",
-  "generated_at": "2026-10-06T01:53:26Z",
+  "source_revision": "93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29",
+  "generated_at": "2026-10-14T05:18:53Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -494,6 +494,17 @@
     },
     {
       "module": "CheckUpdate",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "NetWork"
+      ],
+      "cocoapods": [
+        "NetWork"
+      ]
+    },
+    {
+      "module": "CheckUpdate",
       "field": "third_party_dependencies",
       "spm": [
         "Swift-JWT"
@@ -595,11 +606,41 @@
     },
     {
       "module": "ImageEditor",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "HarbethKit",
+        "MediaCore",
+        "PToolsCore",
+        "PhotoPicker",
+        "Symbols"
+      ],
+      "cocoapods": [
+        "Core",
+        "HarbethKit",
+        "MediaCore",
+        "PhotoPicker",
+        "Symbols"
+      ]
+    },
+    {
+      "module": "ImageEditor",
       "field": "third_party_dependencies",
       "spm": [
         "Harbeth"
       ],
       "cocoapods": []
+    },
+    {
+      "module": "Input",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "PToolsCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
     },
     {
       "module": "Instructions",
@@ -656,6 +697,17 @@
       ]
     },
     {
+      "module": "PageControl",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "PToolsCore"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
+    },
+    {
       "module": "PhotoPicker",
       "field": "internal_dependencies",
       "spm": [
@@ -672,6 +724,17 @@
         "Loading",
         "MediaCore",
         "Symbols"
+      ]
+    },
+    {
+      "module": "Picker",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "PToolsCore"
+      ],
+      "cocoapods": [
+        "Core"
       ]
     },
     {
@@ -698,7 +761,9 @@
     {
       "module": "RateView",
       "field": "internal_dependencies",
-      "spm": [],
+      "spm": [
+        "Core"
+      ],
       "cocoapods": [
         "PToolsUIFoundation"
       ]
@@ -723,6 +788,7 @@
         "CameraPermission",
         "Core",
         "ImagePicker",
+        "PToolsCore",
         "PhotoPicker"
       ],
       "cocoapods": [
@@ -758,6 +824,27 @@
       ],
       "cocoapods": [
         "Core"
+      ]
+    },
+    {
+      "module": "VideoEditor",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "HarbethKit",
+        "Loading",
+        "MediaCore",
+        "PToolsCore",
+        "ProgressBar",
+        "Symbols"
+      ],
+      "cocoapods": [
+        "Core",
+        "HarbethKit",
+        "Loading",
+        "MediaCore",
+        "ProgressBar",
+        "Symbols"
       ]
     },
     {
@@ -1676,5 +1763,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "033bfb32201f236caaf4a6b8c944be3094370b01394edeba2f3a38fa2cb8913b"
+  "fingerprint": "10eeba4ed803a4afb929e911cee036bcaf0f3a58996d5bedde2ffc2b1f4acde0"
 }

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "aa8a0f957b4b43be8340a53d817cf62c4cbda04e",
-  "generated_at": "2026-10-14T01:27:05Z",
+  "source_revision": "93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29",
+  "generated_at": "2026-10-14T06:07:48Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -12,37 +12,27 @@
   ],
   "platforms": [
     {
-      "options": [
-
-      ],
+      "options": [],
       "platformName": "ios",
       "version": "17.0"
     },
     {
-      "options": [
-
-      ],
+      "options": [],
       "platformName": "macos",
       "version": "14.0"
     },
     {
-      "options": [
-
-      ],
+      "options": [],
       "platformName": "tvos",
       "version": "17.0"
     },
     {
-      "options": [
-
-      ],
+      "options": [],
       "platformName": "visionos",
       "version": "1.0"
     },
     {
-      "options": [
-
-      ],
+      "options": [],
       "platformName": "watchos",
       "version": "10.0"
     }
@@ -2275,12 +2265,8 @@
       "name": "PTBluetoothPermission",
       "type": "regular",
       "path": "PooToolsSource/BluetoothPermission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -2294,12 +2280,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -2331,12 +2313,8 @@
       "name": "PTCalendarPermission",
       "type": "regular",
       "path": "PooToolsSource/CalendarPermission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -2350,12 +2328,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -2387,12 +2361,8 @@
       "name": "PTCameraPermission",
       "type": "regular",
       "path": "PooToolsSource/CameraPermission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -2406,12 +2376,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -2443,12 +2409,8 @@
       "name": "PTContactsPermission",
       "type": "regular",
       "path": "PooToolsSource/ContactsPermission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -2462,12 +2424,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -2499,12 +2457,8 @@
       "name": "PTFaceIDPermission",
       "type": "regular",
       "path": "PooToolsSource/FaceIDPermission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -2518,12 +2472,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -2555,12 +2505,8 @@
       "name": "PTHealthPermission",
       "type": "regular",
       "path": "PooToolsSource/HealthPermission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -2574,12 +2520,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -2611,12 +2553,8 @@
       "name": "PTLocationPermission",
       "type": "regular",
       "path": "PooToolsSource/LocationPermission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -2630,12 +2568,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -2667,12 +2601,8 @@
       "name": "PTMediaPermission",
       "type": "regular",
       "path": "PooToolsSource/MeidaLibraryPermission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -2686,12 +2616,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -2723,12 +2649,8 @@
       "name": "PTMicPermission",
       "type": "regular",
       "path": "PooToolsSource/MicPermission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -2742,12 +2664,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -2779,12 +2697,8 @@
       "name": "PTModelBenchmark",
       "type": "executable",
       "path": "Benchmarks/PTModel/Runner",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsModel",
@@ -2798,12 +2712,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -2819,12 +2729,8 @@
       "name": "PTModelLegacyKakaJSONFixture",
       "type": "executable",
       "path": "Fixtures/PTModelConsumers/KakaJSONLegacyApp",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsModelLegacyKakaJSON",
@@ -2853,23 +2759,15 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PTModelLegacySmartCodableFixture",
       "type": "executable",
       "path": "Fixtures/PTModelConsumers/SmartCodableLegacyApp",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsModelLegacySmartCodable",
@@ -2898,23 +2796,15 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PTModelMixedLegacyFixture",
       "type": "executable",
       "path": "Fixtures/PTModelConsumers/MixedLegacyApp",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsModelLegacyKakaJSON",
@@ -2939,26 +2829,16 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PTModelOnlyFixture",
       "type": "executable",
       "path": "Fixtures/PTModelConsumers/PTModelOnlyApp",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsModel",
@@ -2972,26 +2852,16 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PTMotionPermission",
       "type": "regular",
       "path": "PooToolsSource/MotionPermission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -3005,12 +2875,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3042,12 +2908,8 @@
       "name": "PTNotificationPermission",
       "type": "regular",
       "path": "PooToolsSource/NotificationPermission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -3061,12 +2923,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3098,12 +2956,8 @@
       "name": "PTRemindersPermission",
       "type": "regular",
       "path": "PooToolsSource/RemindersPermission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -3117,12 +2971,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3154,12 +3004,8 @@
       "name": "PTSiriPermission",
       "type": "regular",
       "path": "PooToolsSource/SiriPermission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -3173,12 +3019,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3210,12 +3052,8 @@
       "name": "PTSpeechPermission",
       "type": "regular",
       "path": "PooToolsSource/SpeechPremission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -3229,12 +3067,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3266,12 +3100,8 @@
       "name": "PTTrackingPermission",
       "type": "regular",
       "path": "PooToolsSource/TrackingPermission",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -3285,12 +3115,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3322,12 +3148,8 @@
       "name": "PToolsAccessibility",
       "type": "regular",
       "path": "PooToolsSource/PToolsAccessibility",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsUIFoundation",
@@ -3341,12 +3163,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3362,21 +3180,11 @@
       "name": "PToolsActivities",
       "type": "regular",
       "path": "PooToolsSource/PToolsActivities",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3392,12 +3200,8 @@
       "name": "PToolsAdvancedTests",
       "type": "test",
       "path": "Tests/PToolsAdvancedTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsBluetooth",
@@ -3466,12 +3270,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3487,21 +3287,11 @@
       "name": "PToolsAppIntegrity",
       "type": "regular",
       "path": "PooToolsSource/PToolsAppIntegrity",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3517,12 +3307,8 @@
       "name": "PToolsAppIntents",
       "type": "regular",
       "path": "PooToolsSource/PToolsAppIntents",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsRouteCore",
@@ -3536,12 +3322,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3557,12 +3339,8 @@
       "name": "PToolsApplicationInfrastructureTests",
       "type": "test",
       "path": "Tests/PToolsApplicationInfrastructureTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsAppIntegrity",
@@ -3752,12 +3530,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3773,12 +3547,8 @@
       "name": "PToolsAudio",
       "type": "regular",
       "path": "PooToolsSource/PToolsAudio",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTMicPermission",
@@ -3792,12 +3562,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3813,12 +3579,8 @@
       "name": "PToolsAuth",
       "type": "regular",
       "path": "PooToolsSource/PToolsAuth",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsAuthCore",
@@ -3854,12 +3616,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3875,21 +3633,11 @@
       "name": "PToolsAuthCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsAuthCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3905,21 +3653,11 @@
       "name": "PToolsBackgroundTasks",
       "type": "regular",
       "path": "PooToolsSource/PToolsBackgroundTasks",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3935,12 +3673,8 @@
       "name": "PToolsBannerTests",
       "type": "test",
       "path": "Tests/PToolsBannerTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PooToolsBanner",
@@ -3954,35 +3688,19 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsBluetooth",
       "type": "regular",
       "path": "PooToolsSource/PToolsBluetooth",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -3998,12 +3716,8 @@
       "name": "PToolsConfiguration",
       "type": "regular",
       "path": "PooToolsSource/PToolsConfiguration",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsStorage",
@@ -4028,12 +3742,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4049,21 +3759,11 @@
       "name": "PToolsConnectivity",
       "type": "regular",
       "path": "PooToolsSource/PToolsConnectivity",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4079,12 +3779,8 @@
       "name": "PToolsContentState",
       "type": "regular",
       "path": "PooToolsSource/PToolsContentState",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsAccessibility",
@@ -4131,12 +3827,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4152,21 +3844,11 @@
       "name": "PToolsCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4182,12 +3864,8 @@
       "name": "PToolsCoreTests",
       "type": "test",
       "path": "Tests/PooToolsCoreTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsCore",
@@ -4201,26 +3879,16 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsDatabase",
       "type": "regular",
       "path": "PooToolsSource/PToolsDatabase",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsDatabaseCore",
@@ -4234,12 +3902,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4263,21 +3927,11 @@
       "name": "PToolsDatabaseCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsDatabaseCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4293,21 +3947,11 @@
       "name": "PToolsDate",
       "type": "regular",
       "path": "PooToolsSource/PToolsDate",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4323,12 +3967,8 @@
       "name": "PToolsDateTests",
       "type": "test",
       "path": "Tests/PToolsDateTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsDate",
@@ -4342,26 +3982,16 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsDebugTests",
       "type": "test",
       "path": "Tests/PToolsDebugTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PooToolsDEBUG",
@@ -4375,12 +4005,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4396,12 +4022,8 @@
       "name": "PToolsDeepLink",
       "type": "regular",
       "path": "PooToolsSource/PToolsDeepLink",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsRouteCore",
@@ -4415,12 +4037,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4436,21 +4054,11 @@
       "name": "PToolsDevice",
       "type": "regular",
       "path": "PooToolsSource/PToolsDevice",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4466,12 +4074,8 @@
       "name": "PToolsDeviceTests",
       "type": "test",
       "path": "Tests/PToolsDeviceTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsDevice",
@@ -4485,26 +4089,16 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsDocuments",
       "type": "regular",
       "path": "PooToolsSource/PToolsDocuments",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PooToolsPDF",
@@ -4518,12 +4112,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4539,12 +4129,8 @@
       "name": "PToolsFeedback",
       "type": "regular",
       "path": "PooToolsSource/PToolsFeedback",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsCore",
@@ -4558,12 +4144,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4586,21 +4168,11 @@
         "Font/PTFontCatalog.swift",
         "PToolsFontCore/PTFontMetadata.swift"
       ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsFontRuntimeTests",
@@ -4609,9 +4181,7 @@
       "sources": [
         "PTFontRuntimeTests.swift"
       ],
-      "resources": [
-
-      ],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsFontCatalogCore",
@@ -4636,15 +4206,9 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsFontTests",
@@ -4655,9 +4219,7 @@
         "PTFontCompatibilityTests.swift",
         "PTFontGeneratedConsistencyTests.swift"
       ],
-      "resources": [
-
-      ],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsFontCatalogCore",
@@ -4671,26 +4233,16 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsForm",
       "type": "regular",
       "path": "PooToolsSource/PToolsForm",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsAccessibility",
@@ -4781,12 +4333,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4802,15 +4350,12 @@
       "name": "PToolsHTTPFilePortal",
       "type": "regular",
       "path": "PooToolsSource/PToolsHTTPFilePortal",
-      "sources": [
-
-      ],
+      "sources": [],
       "resources": [
         {
           "path": "Resources",
           "rule": {
-            "process": {
-            }
+            "process": {}
           }
         }
       ],
@@ -4827,12 +4372,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4848,21 +4389,11 @@
       "name": "PToolsHTTPServer",
       "type": "regular",
       "path": "PooToolsSource/PToolsHTTPServer",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4886,12 +4417,8 @@
       "name": "PToolsHTTPServerTests",
       "type": "test",
       "path": "Tests/PToolsHTTPServerTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsHTTPServer",
@@ -4905,12 +4432,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4926,12 +4449,8 @@
       "name": "PToolsListTests",
       "type": "test",
       "path": "Tests/PToolsListTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -4945,35 +4464,19 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsLogging",
       "type": "regular",
       "path": "PooToolsSource/PToolsLogging",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -4989,12 +4492,8 @@
       "name": "PToolsLoggingTests",
       "type": "test",
       "path": "Tests/PToolsLoggingTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsLogging",
@@ -5008,26 +4507,16 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsMap",
       "type": "regular",
       "path": "PooToolsSource/PToolsMap",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsMapCore",
@@ -5041,12 +4530,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -5062,21 +4547,11 @@
       "name": "PToolsMapCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsMapCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -5092,12 +4567,8 @@
       "name": "PToolsMediaTests",
       "type": "test",
       "path": "Tests/PToolsMediaTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -5111,26 +4582,16 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsModel",
       "type": "regular",
       "path": "PooToolsSource/PToolsModel",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsModelCore",
@@ -5155,12 +4616,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -5176,21 +4633,11 @@
       "name": "PToolsModelCombine",
       "type": "regular",
       "path": "PooToolsSource/PToolsModelCombine",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -5206,21 +4653,11 @@
       "name": "PToolsModelCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsModelCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -5239,12 +4676,8 @@
       "sources": [
         "PTLegacyKakaJSONAdapter.swift"
       ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
+      "resources": [],
+      "internal_dependencies": [],
       "third_party_dependencies": [
         {
           "name": "KakaJSON",
@@ -5258,9 +4691,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -5276,15 +4707,9 @@
       "name": "PToolsModelLegacySmartCodable",
       "type": "regular",
       "path": "PooToolsSource/PToolsModelLegacySmartCodable",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
       "third_party_dependencies": [
         {
           "name": "SmartCodable",
@@ -5298,9 +4723,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -5319,12 +4742,8 @@
       "sources": [
         "PTModelMacros.swift"
       ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
+      "resources": [],
+      "internal_dependencies": [],
       "third_party_dependencies": [
         {
           "name": "SwiftCompilerPlugin",
@@ -5379,23 +4798,15 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsModelTests",
       "type": "test",
       "path": "Tests/PToolsModelTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsModel",
@@ -5446,9 +4857,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -5464,12 +4873,8 @@
       "name": "PToolsModelUIKit",
       "type": "regular",
       "path": "PooToolsSource/PToolsModelUIKit",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsModelCore",
@@ -5483,12 +4888,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -5504,12 +4905,8 @@
       "name": "PToolsNavigationTests",
       "type": "test",
       "path": "Tests/PToolsNavigationTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PooToolsSplitView",
@@ -5534,15 +4931,9 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsNetworkModelCore",
@@ -5553,9 +4944,7 @@
         "NetWork/PTNetworkResponseSelection.swift",
         "NetWorkModelCore/PTNetworkResponseSnapshot.swift"
       ],
-      "resources": [
-
-      ],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsCore",
@@ -5602,15 +4991,9 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsNetworkRuntimeTests",
@@ -5619,9 +5002,7 @@
       "sources": [
         "PTNetworkQualityTests.swift"
       ],
-      "resources": [
-
-      ],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsModelCore",
@@ -5659,12 +5040,8 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsNetworkTests",
@@ -5673,9 +5050,7 @@
       "sources": [
         "PTNetworkModelPathTests.swift"
       ],
-      "resources": [
-
-      ],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsModelCore",
@@ -5700,26 +5075,16 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsNotifications",
       "type": "regular",
       "path": "PooToolsSource/PToolsNotifications",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTNotificationPermission",
@@ -5744,12 +5109,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -5765,12 +5126,8 @@
       "name": "PToolsObservability",
       "type": "regular",
       "path": "PooToolsSource/PToolsObservability",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsLogging",
@@ -5795,12 +5152,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -5816,21 +5169,11 @@
       "name": "PToolsObservabilityCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsObservabilityCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -5846,12 +5189,8 @@
       "name": "PToolsOverlay",
       "type": "regular",
       "path": "PooToolsSource/Overlay",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsCore",
@@ -5887,12 +5226,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -5924,12 +5259,8 @@
       "name": "PToolsP2Tests",
       "type": "test",
       "path": "Tests/PToolsP2Tests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsActivities",
@@ -6053,12 +5384,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6074,21 +5401,11 @@
       "name": "PToolsPermissionCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsPermissionCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6104,12 +5421,8 @@
       "name": "PToolsPermissionTests",
       "type": "test",
       "path": "Tests/PToolsPermissionTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -6123,26 +5436,16 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsPermissionUI",
       "type": "regular",
       "path": "PooToolsSource/PToolsPermissionUI",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsPermissionCore",
@@ -6167,12 +5470,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6188,12 +5487,8 @@
       "name": "PToolsPlatformTests",
       "type": "test",
       "path": "Tests/PToolsPlatformTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsBackgroundTasks",
@@ -6273,12 +5568,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6294,12 +5585,8 @@
       "name": "PToolsRealtime",
       "type": "regular",
       "path": "PooToolsSource/PToolsRealtime",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsRealtimeCore",
@@ -6324,12 +5611,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6345,21 +5628,11 @@
       "name": "PToolsRealtimeCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsRealtimeCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6375,12 +5648,8 @@
       "name": "PToolsRichTextTests",
       "type": "test",
       "path": "Tests/PToolsRichTextTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsUIFoundation",
@@ -6394,35 +5663,19 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsRouteCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsRouteCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6438,12 +5691,8 @@
       "name": "PToolsSimulation",
       "type": "regular",
       "path": "PooToolsSource/PToolsSimulation",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsBluetooth",
@@ -6501,12 +5750,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6522,21 +5767,11 @@
       "name": "PToolsSimulationCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsSimulationCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6552,12 +5787,8 @@
       "name": "PToolsSocketKitTests",
       "type": "test",
       "path": "Tests/PToolsSocketKitTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PooToolsSocketKit",
@@ -6571,26 +5802,16 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsStorage",
       "type": "regular",
       "path": "PooToolsSource/PToolsStorage",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsStorageCore",
@@ -6615,12 +5836,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6636,21 +5853,11 @@
       "name": "PToolsStorageCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsStorageCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6666,21 +5873,11 @@
       "name": "PToolsStoreKit",
       "type": "regular",
       "path": "PooToolsSource/PToolsStoreKit",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6696,27 +5893,18 @@
       "name": "PToolsSymbols",
       "type": "regular",
       "path": "PooToolsSource/PToolsSymbols",
-      "sources": [
-
-      ],
+      "sources": [],
       "resources": [
         {
           "path": "Resources",
           "rule": {
-            "process": {
-            }
+            "process": {}
           }
         }
       ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6732,12 +5920,8 @@
       "name": "PToolsSymbolsTests",
       "type": "test",
       "path": "Tests/PToolsSymbolsTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsSymbols",
@@ -6751,26 +5935,16 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsSync",
       "type": "regular",
       "path": "PooToolsSource/PToolsSync",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsConnectivity",
@@ -6817,12 +5991,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6838,21 +6008,11 @@
       "name": "PToolsSyncCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsSyncCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6868,12 +6028,8 @@
       "name": "PToolsTheme",
       "type": "regular",
       "path": "PooToolsSource/PToolsTheme",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsUIFoundation",
@@ -6887,12 +6043,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6908,12 +6060,8 @@
       "name": "PToolsTransfer",
       "type": "regular",
       "path": "PooToolsSource/PToolsTransfer",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsTransferCore",
@@ -6927,12 +6075,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6948,21 +6092,11 @@
       "name": "PToolsTransferCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsTransferCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -6978,12 +6112,8 @@
       "name": "PToolsUIFoundation",
       "type": "regular",
       "path": "PooToolsSource/PToolsUIFoundation",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsCore",
@@ -7010,9 +6140,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7028,12 +6156,8 @@
       "name": "PToolsUIFoundationTests",
       "type": "test",
       "path": "Tests/PToolsUIFoundationTests",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PooToolsPagingControl",
@@ -7058,26 +6182,16 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
-      "swift_settings": [
-
-      ]
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsWeb",
       "type": "regular",
       "path": "PooToolsSource/PToolsWeb",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsWebBridge",
@@ -7091,12 +6205,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7112,12 +6222,8 @@
       "name": "PToolsWebBridge",
       "type": "regular",
       "path": "PooToolsSource/PToolsWebBridge",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsWebCore",
@@ -7131,12 +6237,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7152,21 +6254,11 @@
       "name": "PToolsWebCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsWebCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7182,12 +6274,8 @@
       "name": "PToolsWidgetCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsWidgetCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsDeepLink",
@@ -7234,12 +6322,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7255,12 +6339,8 @@
       "name": "PooToolsBankCard",
       "type": "regular",
       "path": "PooToolsSource/BankCard",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -7274,12 +6354,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7303,12 +6379,8 @@
       "name": "PooToolsBanner",
       "type": "regular",
       "path": "PooToolsSource/Banner",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsCore",
@@ -7355,12 +6427,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7392,12 +6460,8 @@
       "name": "PooToolsBioID",
       "type": "regular",
       "path": "PooToolsSource/BioID",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTFaceIDPermission",
@@ -7422,12 +6486,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7459,12 +6519,8 @@
       "name": "PooToolsCalendar",
       "type": "regular",
       "path": "PooToolsSource/Calendar",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTCalendarPermission",
@@ -7500,12 +6556,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7529,21 +6581,11 @@
       "name": "PooToolsCheckBox",
       "type": "regular",
       "path": "PooToolsSource/CheckBox",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7567,27 +6609,18 @@
       "name": "PooToolsCheckDirtyWord",
       "type": "regular",
       "path": "PooToolsSource/CheckDirtyWord",
-      "sources": [
-
-      ],
+      "sources": [],
       "resources": [
         {
           "path": "Resource",
           "rule": {
-            "process": {
-            }
+            "process": {}
           }
         }
       ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7611,12 +6644,8 @@
       "name": "PooToolsCheckUpdate",
       "type": "regular",
       "path": "PooToolsSource/CheckUpdate",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PooToolsNetWork",
@@ -7625,6 +6654,17 @@
           "declaration": {
             "byName": [
               "PooToolsNetWork",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
               null
             ]
           }
@@ -7645,9 +6685,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7671,12 +6709,8 @@
       "name": "PooToolsChinesePinyin",
       "type": "regular",
       "path": "PooToolsSource/Pinyin",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -7690,12 +6724,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7719,12 +6749,8 @@
       "name": "PooToolsCircle",
       "type": "regular",
       "path": "PooToolsSource/Circle",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -7738,12 +6764,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7767,12 +6789,8 @@
       "name": "PooToolsCodeView",
       "type": "regular",
       "path": "PooToolsSource/CodeView",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -7786,12 +6804,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7815,12 +6829,8 @@
       "name": "PooToolsContact",
       "type": "regular",
       "path": "PooToolsSource/Contact",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTContactsPermission",
@@ -7845,12 +6855,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7874,12 +6880,8 @@
       "name": "PooToolsCountry",
       "type": "regular",
       "path": "PooToolsSource/Country",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -7893,12 +6895,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7922,12 +6920,8 @@
       "name": "PooToolsCustomerLabel",
       "type": "regular",
       "path": "PooToolsSource/Label",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -7941,12 +6935,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -7987,9 +6977,7 @@
         "LocalConsole",
         "TouchInspector"
       ],
-      "resources": [
-
-      ],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsBackgroundTasks",
@@ -8135,12 +7123,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -8164,12 +7148,8 @@
       "name": "PooToolsDEBUGTrackingEyes",
       "type": "regular",
       "path": "PooToolsSource/WhereIsMyEye",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTCameraPermission",
@@ -8205,12 +7185,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -8234,12 +7210,8 @@
       "name": "PooToolsDataEncrypt",
       "type": "regular",
       "path": "PooToolsSource/AESAndDES",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -8266,9 +7238,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -8292,12 +7262,8 @@
       "name": "PooToolsFilterCamera",
       "type": "regular",
       "path": "PooToolsSource/FilterCamera",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PooToolsHarbethKit",
@@ -8322,12 +7288,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -8351,12 +7313,8 @@
       "name": "PooToolsGuide",
       "type": "regular",
       "path": "PooToolsSource/Guide",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PooToolsPageControl",
@@ -8381,12 +7339,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -8410,12 +7364,8 @@
       "name": "PooToolsHandSign",
       "type": "regular",
       "path": "PooToolsSource/SignView",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -8429,12 +7379,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -8458,12 +7404,8 @@
       "name": "PooToolsHarbethKit",
       "type": "regular",
       "path": "PooToolsSource/C7Collector",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTCameraPermission",
@@ -8523,9 +7465,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -8549,12 +7489,8 @@
       "name": "PooToolsHeartRate",
       "type": "regular",
       "path": "PooToolsSource/HeartRate",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTCameraPermission",
@@ -8594,9 +7530,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -8620,12 +7554,8 @@
       "name": "PooToolsHud",
       "type": "regular",
       "path": "PooToolsSource/Hud",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PooToolsProgressBar",
@@ -8650,12 +7580,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -8679,12 +7605,8 @@
       "name": "PooToolsIAP",
       "type": "regular",
       "path": "PooToolsSource/IAP",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -8698,12 +7620,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -8727,13 +7645,20 @@
       "name": "PooToolsImageEditor",
       "type": "regular",
       "path": "PooToolsSource/ImageEditor",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
         {
           "name": "PToolsSymbols",
           "kind": "internal",
@@ -8803,9 +7728,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -8829,12 +7752,8 @@
       "name": "PooToolsImagePicker",
       "type": "regular",
       "path": "PooToolsSource/ImagePicker",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTCameraPermission",
@@ -8859,12 +7778,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -8888,13 +7803,20 @@
       "name": "PooToolsInput",
       "type": "regular",
       "path": "PooToolsSource/Input",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
         {
           "name": "ptools",
           "kind": "internal",
@@ -8920,9 +7842,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -8946,12 +7866,8 @@
       "name": "PooToolsInstructions",
       "type": "regular",
       "path": "PooToolsSource/Instructions",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsOverlay",
@@ -8965,12 +7881,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9002,21 +7914,11 @@
       "name": "PooToolsKeyChain",
       "type": "regular",
       "path": "PooToolsSource/KeyChain",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9040,12 +7942,8 @@
       "name": "PooToolsKeyboard",
       "type": "regular",
       "path": "PooToolsSource/Keyboard",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -9059,12 +7957,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9088,12 +7982,8 @@
       "name": "PooToolsLaunchTimeProfiler",
       "type": "regular",
       "path": "PooToolsSource/LaunchTimeProfiler",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -9107,12 +7997,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9136,12 +8022,8 @@
       "name": "PooToolsLayout",
       "type": "regular",
       "path": "PooToolsSource/Layout",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -9168,9 +8050,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9194,12 +8074,8 @@
       "name": "PooToolsLivePhoto",
       "type": "regular",
       "path": "PooToolsSource/LivePhoto",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -9213,12 +8089,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9242,12 +8114,8 @@
       "name": "PooToolsLoading",
       "type": "regular",
       "path": "PooToolsSource/Loading",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -9261,12 +8129,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9290,12 +8154,8 @@
       "name": "PooToolsLocation",
       "type": "regular",
       "path": "PooToolsSource/Location",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTLocationPermission",
@@ -9331,12 +8191,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9360,21 +8216,11 @@
       "name": "PooToolsMediaCore",
       "type": "regular",
       "path": "PooToolsSource/PToolsMediaCore",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9390,12 +8236,8 @@
       "name": "PooToolsMediaViewer",
       "type": "regular",
       "path": "PooToolsSource/MediaViewer",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PooToolsLivePhoto",
@@ -9453,12 +8295,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9482,12 +8320,8 @@
       "name": "PooToolsMessageKit",
       "type": "regular",
       "path": "PooToolsSource/MessageKit",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsSymbols",
@@ -9523,12 +8357,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9552,12 +8382,8 @@
       "name": "PooToolsMotion",
       "type": "regular",
       "path": "PooToolsSource/Motion",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTMotionPermission",
@@ -9582,12 +8408,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9624,9 +8446,7 @@
         "NetworkUploads.swift",
         "PTNetworkArchitecture.swift"
       ],
-      "resources": [
-
-      ],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsConnectivity",
@@ -9730,9 +8550,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9756,12 +8574,8 @@
       "name": "PooToolsNetworkSpeedTest",
       "type": "regular",
       "path": "PooToolsSource/NetworkSpeedTest",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -9775,12 +8589,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9804,12 +8614,8 @@
       "name": "PooToolsOSSKitSpeech",
       "type": "regular",
       "path": "PooToolsSource/OSSKit",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTSpeechPermission",
@@ -9834,12 +8640,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9863,12 +8665,8 @@
       "name": "PooToolsPDF",
       "type": "regular",
       "path": "PooToolsSource/PDF",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -9882,12 +8680,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9911,13 +8705,20 @@
       "name": "PooToolsPageControl",
       "type": "regular",
       "path": "PooToolsSource/PageControl",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
         {
           "name": "ptools",
           "kind": "internal",
@@ -9930,12 +8731,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -9959,12 +8756,8 @@
       "name": "PooToolsPagingControl",
       "type": "regular",
       "path": "PooToolsSource/SegmentControl",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -9978,12 +8771,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10007,21 +8796,11 @@
       "name": "PooToolsPhoneInfo",
       "type": "regular",
       "path": "PooToolsSource/PhoneInfo",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10048,9 +8827,7 @@
       "sources": [
         "PhotoPicker"
       ],
-      "resources": [
-
-      ],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTCameraPermission",
@@ -10119,12 +8896,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10148,13 +8921,20 @@
       "name": "PooToolsPicker",
       "type": "regular",
       "path": "PooToolsSource/Picker",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
         {
           "name": "ptools",
           "kind": "internal",
@@ -10180,9 +8960,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10206,12 +8984,8 @@
       "name": "PooToolsPing",
       "type": "regular",
       "path": "PooToolsSource/Ping",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -10225,12 +8999,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10254,12 +9024,8 @@
       "name": "PooToolsPopover",
       "type": "regular",
       "path": "PooToolsSource/Popover",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsCore",
@@ -10295,12 +9061,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10332,12 +9094,8 @@
       "name": "PooToolsProgressBar",
       "type": "regular",
       "path": "PooToolsSource/ProgressBar",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -10351,12 +9109,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10380,12 +9134,8 @@
       "name": "PooToolsRateView",
       "type": "regular",
       "path": "PooToolsSource/RateView",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -10412,9 +9162,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10438,12 +9186,8 @@
       "name": "PooToolsRouter",
       "type": "regular",
       "path": "PooToolsSource/Router",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsDeepLink",
@@ -10479,12 +9223,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10508,12 +9248,8 @@
       "name": "PooToolsSVG",
       "type": "regular",
       "path": "PooToolsSource/KingfisherSVG",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -10551,9 +9287,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10577,12 +9311,8 @@
       "name": "PooToolsScanQRCode",
       "type": "regular",
       "path": "PooToolsSource/QRCodeScan",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTCameraPermission",
@@ -10591,6 +9321,17 @@
           "declaration": {
             "byName": [
               "PTCameraPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
               null
             ]
           }
@@ -10629,12 +9370,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10658,12 +9395,8 @@
       "name": "PooToolsScrollBanner",
       "type": "regular",
       "path": "PooToolsSource/ScrollBanner",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PooToolsPageControl",
@@ -10688,12 +9421,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10717,12 +9446,8 @@
       "name": "PooToolsSearch",
       "type": "regular",
       "path": "PooToolsSource/Search",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsUIFoundation",
@@ -10758,12 +9483,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10787,12 +9508,8 @@
       "name": "PooToolsSearchBar",
       "type": "regular",
       "path": "PooToolsSource/SearchBar",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -10806,12 +9523,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10835,21 +9548,11 @@
       "name": "PooToolsSecurity",
       "type": "regular",
       "path": "PooToolsSource/Security",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10873,12 +9576,8 @@
       "name": "PooToolsSegmented",
       "type": "regular",
       "path": "PooToolsSource/Segmented",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -10892,12 +9591,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10921,12 +9616,8 @@
       "name": "PooToolsShare",
       "type": "regular",
       "path": "PooToolsSource/Share",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PooToolsCustomerLabel",
@@ -10964,9 +9655,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -10990,15 +9679,9 @@
       "name": "PooToolsSlider",
       "type": "regular",
       "path": "PooToolsSource/Slider",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
-      "internal_dependencies": [
-
-      ],
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
       "third_party_dependencies": [
         {
           "name": "SnapKit",
@@ -11012,9 +9695,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -11038,12 +9719,8 @@
       "name": "PooToolsSmartScreenshot",
       "type": "regular",
       "path": "PooToolsSource/ScreenShot",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -11057,12 +9734,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -11086,12 +9759,8 @@
       "name": "PooToolsSocketKit",
       "type": "regular",
       "path": "PooToolsSource/SocketKit",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsLogging",
@@ -11127,12 +9796,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -11156,12 +9821,8 @@
       "name": "PooToolsSpeedPanel",
       "type": "regular",
       "path": "PooToolsSource/SpeedPanel",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -11175,12 +9836,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -11204,12 +9861,8 @@
       "name": "PooToolsSplitView",
       "type": "regular",
       "path": "PooToolsSource/SplitView",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -11223,12 +9876,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -11244,12 +9893,8 @@
       "name": "PooToolsStepCount",
       "type": "regular",
       "path": "PooToolsSource/HealthKit",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PTHealthPermission",
@@ -11274,12 +9919,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -11303,12 +9944,8 @@
       "name": "PooToolsStepper",
       "type": "regular",
       "path": "PooToolsSource/Stepper",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -11322,12 +9959,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -11351,12 +9984,8 @@
       "name": "PooToolsTelephony",
       "type": "regular",
       "path": "PooToolsSource/CallMessageMail",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -11370,12 +9999,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -11399,12 +10024,8 @@
       "name": "PooToolsTipsView",
       "type": "regular",
       "path": "PooToolsSource/TipsView",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "PToolsOverlay",
@@ -11429,12 +10050,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -11458,13 +10075,20 @@
       "name": "PooToolsVideoEditor",
       "type": "regular",
       "path": "PooToolsSource/VideoEditor",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
         {
           "name": "PToolsSymbols",
           "kind": "internal",
@@ -11545,9 +10169,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -11571,12 +10193,8 @@
       "name": "PooToolsVision",
       "type": "regular",
       "path": "PooToolsSource/Vision",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -11590,12 +10208,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -11619,12 +10233,8 @@
       "name": "PooToolsWebKit",
       "type": "regular",
       "path": "PooToolsSource/WebKit",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -11638,12 +10248,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -11675,12 +10281,8 @@
       "name": "PooToolsWhatsNewsKit",
       "type": "regular",
       "path": "PooToolsSource/WhatsNewsKit",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -11694,12 +10296,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -11723,12 +10321,8 @@
       "name": "PooToolsiOS17Tips",
       "type": "regular",
       "path": "PooToolsSource/iOS17Tips",
-      "sources": [
-
-      ],
-      "resources": [
-
-      ],
+      "sources": [],
+      "resources": [],
       "internal_dependencies": [
         {
           "name": "ptools",
@@ -11742,12 +10336,8 @@
           }
         }
       ],
-      "third_party_dependencies": [
-
-      ],
-      "unknown_dependencies": [
-
-      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {
@@ -11807,8 +10397,7 @@
         {
           "path": "Resource",
           "rule": {
-            "process": {
-            }
+            "process": {}
           }
         }
       ],
@@ -11952,9 +10541,7 @@
           }
         }
       ],
-      "unknown_dependencies": [
-
-      ],
+      "unknown_dependencies": [],
       "swift_settings": [
         {
           "kind": {

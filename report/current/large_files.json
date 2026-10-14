@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "aa8a0f957b4b43be8340a53d817cf62c4cbda04e",
-  "generated_at": "2026-10-14T01:26:57Z",
+  "source_revision": "93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29",
+  "generated_at": "2026-10-14T06:07:23Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -1281,7 +1281,7 @@
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "lines": 767,
+      "lines": 770,
       "classification": "ok"
     },
     {
@@ -1376,7 +1376,7 @@
     },
     {
       "path": "PooToolsSource/Core/BorderManager.swift",
-      "lines": 67,
+      "lines": 81,
       "classification": "ok"
     },
     {
@@ -2101,7 +2101,7 @@
     },
     {
       "path": "PooToolsSource/Guide/PTGuidePageHUD.swift",
-      "lines": 648,
+      "lines": 651,
       "classification": "ok"
     },
     {
@@ -2146,7 +2146,7 @@
     },
     {
       "path": "PooToolsSource/ImageEditor/PTAdjustSliderView.swift",
-      "lines": 203,
+      "lines": 207,
       "classification": "ok"
     },
     {
@@ -2296,7 +2296,7 @@
     },
     {
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "lines": 369,
+      "lines": 372,
       "classification": "ok"
     },
     {
@@ -4046,37 +4046,37 @@
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserBottom.swift",
-      "lines": 220,
+      "lines": 223,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "lines": 758,
+      "lines": 761,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift",
-      "lines": 90,
+      "lines": 93,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController+PhotoLibrary.swift",
-      "lines": 15,
+      "lines": 18,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
-      "lines": 883,
+      "lines": 886,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserModel.swift",
-      "lines": 23,
+      "lines": 26,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserNav.swift",
-      "lines": 55,
+      "lines": 58,
       "classification": "ok"
     },
     {
@@ -4086,72 +4086,72 @@
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatBaseCell.swift",
-      "lines": 374,
+      "lines": 377,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatBubbleCircle.swift",
-      "lines": 25,
+      "lines": 28,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "lines": 226,
+      "lines": 227,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatFileCell.swift",
-      "lines": 178,
+      "lines": 181,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatListModel.swift",
-      "lines": 86,
+      "lines": 89,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatMapCell.swift",
-      "lines": 163,
+      "lines": 166,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatMediaCell.swift",
-      "lines": 343,
+      "lines": 346,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatSystemMessageCell.swift",
-      "lines": 66,
+      "lines": 69,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatTextCell.swift",
-      "lines": 158,
+      "lines": 161,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatTypingBubble.swift",
-      "lines": 124,
+      "lines": 127,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatTypingIndicator.swift",
-      "lines": 152,
+      "lines": 155,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatTypingIndicatorCell.swift",
-      "lines": 57,
+      "lines": 60,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatView.swift",
-      "lines": 454,
+      "lines": 457,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatVoiceCell.swift",
-      "lines": 264,
+      "lines": 267,
       "classification": "ok"
     },
     {
@@ -5006,12 +5006,12 @@
     },
     {
       "path": "PooToolsSource/PageControl/PTFilledPageControl.swift",
-      "lines": 171,
+      "lines": 177,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PageControl/PTImagePageControl.swift",
-      "lines": 217,
+      "lines": 223,
       "classification": "ok"
     },
     {
@@ -5021,17 +5021,17 @@
     },
     {
       "path": "PooToolsSource/PageControl/PTPillPageControl.swift",
-      "lines": 161,
+      "lines": 167,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PageControl/PTScrollingPageControl.swift",
-      "lines": 240,
+      "lines": 246,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PageControl/PTSnakePageControl.swift",
-      "lines": 155,
+      "lines": 161,
       "classification": "ok"
     },
     {
@@ -5211,7 +5211,7 @@
     },
     {
       "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
-      "lines": 694,
+      "lines": 698,
       "classification": "ok"
     },
     {
@@ -5366,27 +5366,27 @@
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTBannerCell.swift",
-      "lines": 126,
+      "lines": 129,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTBannerMediaManager.swift",
-      "lines": 166,
+      "lines": 169,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTBannerModel.swift",
-      "lines": 31,
+      "lines": 34,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "lines": 1177,
+      "lines": 1180,
       "classification": "warning"
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTCycleScrollView.swift",
-      "lines": 287,
+      "lines": 290,
       "classification": "ok"
     },
     {
@@ -5536,7 +5536,7 @@
     },
     {
       "path": "PooToolsSource/Segmented/PTSegmentView.swift",
-      "lines": 514,
+      "lines": 517,
       "classification": "ok"
     },
     {
@@ -5576,7 +5576,7 @@
     },
     {
       "path": "PooToolsSource/SignView/PTEasySignatureView.swift",
-      "lines": 261,
+      "lines": 264,
       "classification": "ok"
     },
     {
@@ -5586,7 +5586,7 @@
     },
     {
       "path": "PooToolsSource/SignView/PTSignView.swift",
-      "lines": 171,
+      "lines": 174,
       "classification": "ok"
     },
     {
@@ -5776,92 +5776,92 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorBaseFloatingViewController.swift",
-      "lines": 69,
+      "lines": 72,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorConfig.swift",
-      "lines": 86,
+      "lines": 87,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorFilterControl.swift",
-      "lines": 119,
+      "lines": 122,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorHandleLayer.swift",
-      "lines": 67,
+      "lines": 70,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsCell.swift",
-      "lines": 66,
+      "lines": 67,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsCropControl.swift",
-      "lines": 111,
+      "lines": 114,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsModel.swift",
-      "lines": 74,
+      "lines": 75,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsSlider.swift",
-      "lines": 345,
+      "lines": 351,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsSpeedControl.swift",
-      "lines": 56,
+      "lines": 59,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift",
-      "lines": 109,
+      "lines": 112,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimmingControl.swift",
-      "lines": 217,
+      "lines": 220,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController+Lifecycle.swift",
-      "lines": 39,
+      "lines": 42,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "lines": 1639,
+      "lines": 1640,
       "classification": "architecture_exception"
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorVideoTimeLineGenerator.swift",
-      "lines": 81,
+      "lines": 84,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorVideoTimeLineView.swift",
-      "lines": 66,
+      "lines": 69,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/Provider.swift",
-      "lines": 44,
+      "lines": 47,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/UIColor+VideoEditorEX.swift",
-      "lines": 17,
+      "lines": 20,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/VideoEditor/VideoConverter.swift",
-      "lines": 555,
+      "lines": 558,
       "classification": "ok"
     },
     {

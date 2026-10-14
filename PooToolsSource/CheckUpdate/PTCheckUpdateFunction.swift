@@ -9,6 +9,9 @@
 import UIKit
 import SwiftJWT
 import Alamofire
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 struct IpadScreenshotUrls: PTCodableModelProtocol, Sendable {
     init() {}

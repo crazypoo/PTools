@@ -1,0 +1,1817 @@
+[
+  {
+    "name": "PTBluetoothPermission",
+    "targets": [
+      "PTBluetoothPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PTCalendarPermission",
+    "targets": [
+      "PTCalendarPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PTCameraPermission",
+    "targets": [
+      "PTCameraPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PTContactsPermission",
+    "targets": [
+      "PTContactsPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PTFaceIDPermission",
+    "targets": [
+      "PTFaceIDPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PTHealthPermission",
+    "targets": [
+      "PTHealthPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PTLocationPermission",
+    "targets": [
+      "PTLocationPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PTMediaPermission",
+    "targets": [
+      "PTMediaPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PTMicPermission",
+    "targets": [
+      "PTMicPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PTModelBenchmark",
+    "targets": [
+      "PTModelBenchmark"
+    ],
+    "type": {
+      "executable": null
+    }
+  },
+  {
+    "name": "PTModelLegacyKakaJSONFixture",
+    "targets": [
+      "PTModelLegacyKakaJSONFixture"
+    ],
+    "type": {
+      "executable": null
+    }
+  },
+  {
+    "name": "PTModelLegacySmartCodableFixture",
+    "targets": [
+      "PTModelLegacySmartCodableFixture"
+    ],
+    "type": {
+      "executable": null
+    }
+  },
+  {
+    "name": "PTModelMixedLegacyFixture",
+    "targets": [
+      "PTModelMixedLegacyFixture"
+    ],
+    "type": {
+      "executable": null
+    }
+  },
+  {
+    "name": "PTModelOnlyFixture",
+    "targets": [
+      "PTModelOnlyFixture"
+    ],
+    "type": {
+      "executable": null
+    }
+  },
+  {
+    "name": "PTMotionPermission",
+    "targets": [
+      "PTMotionPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PTNotificationPermission",
+    "targets": [
+      "PTNotificationPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PTRemindersPermission",
+    "targets": [
+      "PTRemindersPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PTSiriPermission",
+    "targets": [
+      "PTSiriPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PTSpeechPermission",
+    "targets": [
+      "PTSpeechPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PTTrackingPermission",
+    "targets": [
+      "PTTrackingPermission"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsAccessibility",
+    "targets": [
+      "PToolsAccessibility"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsActivities",
+    "targets": [
+      "PToolsActivities"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsAppIntegrity",
+    "targets": [
+      "PToolsAppIntegrity"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsAppIntents",
+    "targets": [
+      "PToolsAppIntents"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsAudio",
+    "targets": [
+      "PToolsAudio"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsAuth",
+    "targets": [
+      "PToolsAuth"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsAuthCore",
+    "targets": [
+      "PToolsAuthCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsBackgroundTasks",
+    "targets": [
+      "PToolsBackgroundTasks"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsBluetooth",
+    "targets": [
+      "PToolsBluetooth"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsConfiguration",
+    "targets": [
+      "PToolsConfiguration"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsConnectivity",
+    "targets": [
+      "PToolsConnectivity"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsContentState",
+    "targets": [
+      "PToolsContentState"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsCore",
+    "targets": [
+      "PToolsCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDatabase",
+    "targets": [
+      "PToolsDatabase"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDatabaseCore",
+    "targets": [
+      "PToolsDatabaseCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDate",
+    "targets": [
+      "PToolsDate"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDeepLink",
+    "targets": [
+      "PToolsDeepLink"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDevice",
+    "targets": [
+      "PToolsDevice"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDocuments",
+    "targets": [
+      "PToolsDocuments"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsFeedback",
+    "targets": [
+      "PToolsFeedback"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsForm",
+    "targets": [
+      "PToolsForm"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsHTTPFilePortal",
+    "targets": [
+      "PToolsHTTPFilePortal"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsHTTPServer",
+    "targets": [
+      "PToolsHTTPServer"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsLogging",
+    "targets": [
+      "PToolsLogging"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsMap",
+    "targets": [
+      "PToolsMap"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsMapCore",
+    "targets": [
+      "PToolsMapCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsModel",
+    "targets": [
+      "PToolsModel"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsModelCombine",
+    "targets": [
+      "PToolsModelCombine"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsModelCore",
+    "targets": [
+      "PToolsModelCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsModelLegacyKakaJSON",
+    "targets": [
+      "PToolsModelLegacyKakaJSON"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsModelLegacySmartCodable",
+    "targets": [
+      "PToolsModelLegacySmartCodable"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsModelUIKit",
+    "targets": [
+      "PToolsModelUIKit"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsNotifications",
+    "targets": [
+      "PToolsNotifications"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsObservability",
+    "targets": [
+      "PToolsObservability"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsObservabilityCore",
+    "targets": [
+      "PToolsObservabilityCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsOverlay",
+    "targets": [
+      "PToolsOverlay"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsPermissionCore",
+    "targets": [
+      "PToolsPermissionCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsPermissionUI",
+    "targets": [
+      "PToolsPermissionUI"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsRealtime",
+    "targets": [
+      "PToolsRealtime"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsRealtimeCore",
+    "targets": [
+      "PToolsRealtimeCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsRouteCore",
+    "targets": [
+      "PToolsRouteCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsSimulation",
+    "targets": [
+      "PToolsSimulation"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsSimulationCore",
+    "targets": [
+      "PToolsSimulationCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsStorage",
+    "targets": [
+      "PToolsStorage"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsStorageCore",
+    "targets": [
+      "PToolsStorageCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsStoreKit",
+    "targets": [
+      "PToolsStoreKit"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsSymbols",
+    "targets": [
+      "PToolsSymbols"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsSync",
+    "targets": [
+      "PToolsSync"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsSyncCore",
+    "targets": [
+      "PToolsSyncCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsTheme",
+    "targets": [
+      "PToolsTheme"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsTransfer",
+    "targets": [
+      "PToolsTransfer"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsTransferCore",
+    "targets": [
+      "PToolsTransferCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsUIFoundation",
+    "targets": [
+      "PToolsUIFoundation"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsWeb",
+    "targets": [
+      "PToolsWeb"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsWebBridge",
+    "targets": [
+      "PToolsWebBridge"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsWebCore",
+    "targets": [
+      "PToolsWebCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsWidgetCore",
+    "targets": [
+      "PToolsWidgetCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsAll",
+    "targets": [
+      "ptools",
+      "PToolsLogging",
+      "PToolsDate",
+      "PToolsSymbols",
+      "PToolsModelCore",
+      "PToolsModel",
+      "PToolsModelUIKit",
+      "PToolsModelCombine",
+      "PToolsConnectivity",
+      "PToolsStorageCore",
+      "PToolsStorage",
+      "PToolsRouteCore",
+      "PToolsDeepLink",
+      "PToolsNotifications",
+      "PToolsBackgroundTasks",
+      "PToolsTheme",
+      "PToolsAccessibility",
+      "PToolsContentState",
+      "PToolsForm",
+      "PooToolsSplitView",
+      "PToolsBluetooth",
+      "PToolsDocuments",
+      "PToolsSimulationCore",
+      "PToolsSimulation",
+      "PToolsConfiguration",
+      "PToolsFeedback",
+      "PToolsAudio",
+      "PToolsAppIntents",
+      "PToolsWidgetCore",
+      "PToolsActivities",
+      "PToolsPermissionCore",
+      "PToolsPermissionUI",
+      "PToolsOverlay",
+      "PooToolsBanner",
+      "PooToolsPopover",
+      "PooToolsMediaCore",
+      "PToolsHTTPServer",
+      "PToolsHTTPFilePortal",
+      "PooToolsCustomerLabel",
+      "PooToolsProgressBar",
+      "PooToolsPageControl",
+      "PooToolsLoading",
+      "PooToolsHud",
+      "PooToolsLivePhoto",
+      "PooToolsShare",
+      "PooToolsPDF",
+      "PooToolsSVG",
+      "PTCameraPermission",
+      "PTLocationPermission",
+      "PTCalendarPermission",
+      "PTMotionPermission",
+      "PTTrackingPermission",
+      "PTRemindersPermission",
+      "PTSpeechPermission",
+      "PTHealthPermission",
+      "PTFaceIDPermission",
+      "PTContactsPermission",
+      "PTMicPermission",
+      "PTMediaPermission",
+      "PTBluetoothPermission",
+      "PTSiriPermission",
+      "PTNotificationPermission",
+      "PooToolsNetWork",
+      "PooToolsDataEncrypt",
+      "PooToolsSecurity",
+      "PooToolsSearchBar",
+      "PooToolsSearch",
+      "PooToolsMediaViewer",
+      "PooToolsImagePicker",
+      "PooToolsPhotoPicker",
+      "PooToolsHarbethKit",
+      "PooToolsImageEditor",
+      "PooToolsVideoEditor",
+      "PooToolsCheckDirtyWord",
+      "PooToolsStepper",
+      "PooToolsBankCard",
+      "PooToolsBioID",
+      "PooToolsCalendar",
+      "PooToolsTelephony",
+      "PooToolsCheckBox",
+      "PooToolsCodeView",
+      "PooToolsCountry",
+      "PooToolsGuide",
+      "PooToolsInstructions",
+      "PooToolsInput",
+      "PooToolsKeyboard",
+      "PooToolsKeyChain",
+      "PooToolsMotion",
+      "PooToolsPhoneInfo",
+      "PooToolsRateView",
+      "PooToolsScrollBanner",
+      "PooToolsSegmented",
+      "PooToolsHandSign",
+      "PooToolsSlider",
+      "PooToolsCheckUpdate",
+      "PooToolsLayout",
+      "PooToolsLocation",
+      "PooToolsSmartScreenshot",
+      "PooToolsPagingControl",
+      "PooToolsScanQRCode",
+      "PooToolsStepCount",
+      "PooToolsContact",
+      "PooToolsVision",
+      "PooToolsRouter",
+      "PooToolsPing",
+      "PooToolsSpeedPanel",
+      "PooToolsNetworkSpeedTest",
+      "PooToolsOSSKitSpeech",
+      "PooToolsiOS17Tips",
+      "PooToolsWhatsNewsKit",
+      "PooToolsHeartRate",
+      "PooToolsChinesePinyin",
+      "PooToolsCircle",
+      "PooToolsMessageKit",
+      "PooToolsSocketKit",
+      "PooToolsIAP",
+      "PooToolsTipsView",
+      "PooToolsDEBUG",
+      "PooToolsDEBUGTrackingEyes",
+      "PooToolsLaunchTimeProfiler",
+      "PooToolsPicker"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsBankCard",
+    "targets": [
+      "PooToolsBankCard"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsBanner",
+    "targets": [
+      "PooToolsBanner"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsBioID",
+    "targets": [
+      "PooToolsBioID"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsCalendar",
+    "targets": [
+      "PooToolsCalendar"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsCheckBox",
+    "targets": [
+      "PooToolsCheckBox"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsCheckDirtyWord",
+    "targets": [
+      "PooToolsCheckDirtyWord"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsCheckUpdate",
+    "targets": [
+      "PooToolsCheckUpdate"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsChinesePinyin",
+    "targets": [
+      "PooToolsChinesePinyin"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsCircle",
+    "targets": [
+      "PooToolsCircle"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsCodeView",
+    "targets": [
+      "PooToolsCodeView"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsContact",
+    "targets": [
+      "PooToolsContact"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsCountry",
+    "targets": [
+      "PooToolsCountry"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsCustomerLabel",
+    "targets": [
+      "PooToolsCustomerLabel"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsDEBUG",
+    "targets": [
+      "PooToolsDEBUG"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsDEBUGTrackingEyes",
+    "targets": [
+      "PooToolsDEBUGTrackingEyes"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsDataEncrypt",
+    "targets": [
+      "PooToolsDataEncrypt"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsFilterCamera",
+    "targets": [
+      "PooToolsFilterCamera"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsGuide",
+    "targets": [
+      "PooToolsGuide"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsHandSign",
+    "targets": [
+      "PooToolsHandSign"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsHarbethKit",
+    "targets": [
+      "PooToolsHarbethKit"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsHeartRate",
+    "targets": [
+      "PooToolsHeartRate"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsHud",
+    "targets": [
+      "PooToolsHud"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsIAP",
+    "targets": [
+      "PooToolsIAP"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsImageEditor",
+    "targets": [
+      "PooToolsImageEditor"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsImagePicker",
+    "targets": [
+      "PooToolsImagePicker"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsInput",
+    "targets": [
+      "PooToolsInput"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsInstructions",
+    "targets": [
+      "PooToolsInstructions"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsKeyChain",
+    "targets": [
+      "PooToolsKeyChain"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsKeyboard",
+    "targets": [
+      "PooToolsKeyboard"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsLaunchTimeProfiler",
+    "targets": [
+      "PooToolsLaunchTimeProfiler"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsLayout",
+    "targets": [
+      "PooToolsLayout"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsLivePhoto",
+    "targets": [
+      "PooToolsLivePhoto"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsLoading",
+    "targets": [
+      "PooToolsLoading"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsLocation",
+    "targets": [
+      "PooToolsLocation"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsMediaCore",
+    "targets": [
+      "PooToolsMediaCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsMediaViewer",
+    "targets": [
+      "PooToolsMediaViewer"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsMessageKit",
+    "targets": [
+      "PooToolsMessageKit"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsMotion",
+    "targets": [
+      "PooToolsMotion"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsNetWork",
+    "targets": [
+      "PooToolsNetWork"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsNetwork",
+    "targets": [
+      "PooToolsNetWork"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsNetworkSpeedTest",
+    "targets": [
+      "PooToolsNetworkSpeedTest"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsOSSKitSpeech",
+    "targets": [
+      "PooToolsOSSKitSpeech"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsPDF",
+    "targets": [
+      "PooToolsPDF"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsPageControl",
+    "targets": [
+      "PooToolsPageControl"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsPagingControl",
+    "targets": [
+      "PooToolsPagingControl"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsPhoneInfo",
+    "targets": [
+      "PooToolsPhoneInfo"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsPhotoPicker",
+    "targets": [
+      "PooToolsPhotoPicker"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsPicker",
+    "targets": [
+      "PooToolsPicker"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsPing",
+    "targets": [
+      "PooToolsPing"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsPopover",
+    "targets": [
+      "PooToolsPopover"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsProgressBar",
+    "targets": [
+      "PooToolsProgressBar"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsRateView",
+    "targets": [
+      "PooToolsRateView"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsRouter",
+    "targets": [
+      "PooToolsRouter"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsSVG",
+    "targets": [
+      "PooToolsSVG"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsScanQRCode",
+    "targets": [
+      "PooToolsScanQRCode"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsScrollBanner",
+    "targets": [
+      "PooToolsScrollBanner"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsSearch",
+    "targets": [
+      "PooToolsSearch"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsSearchBar",
+    "targets": [
+      "PooToolsSearchBar"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsSecurity",
+    "targets": [
+      "PooToolsSecurity"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsSegmented",
+    "targets": [
+      "PooToolsSegmented"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsShare",
+    "targets": [
+      "PooToolsShare"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsSlider",
+    "targets": [
+      "PooToolsSlider"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsSmartScreenshot",
+    "targets": [
+      "PooToolsSmartScreenshot"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsSocketKit",
+    "targets": [
+      "PooToolsSocketKit"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsSpeedPanel",
+    "targets": [
+      "PooToolsSpeedPanel"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsSplitView",
+    "targets": [
+      "PooToolsSplitView"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsStepCount",
+    "targets": [
+      "PooToolsStepCount"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsStepper",
+    "targets": [
+      "PooToolsStepper"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsTelephony",
+    "targets": [
+      "PooToolsTelephony"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsTipsView",
+    "targets": [
+      "PooToolsTipsView"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsVideoCache",
+    "targets": [
+      "ptools"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsVideoEditor",
+    "targets": [
+      "PooToolsVideoEditor"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsVision",
+    "targets": [
+      "PooToolsVision"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsWebKit",
+    "targets": [
+      "PooToolsWebKit"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsWhatsNewsKit",
+    "targets": [
+      "PooToolsWhatsNewsKit"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PooToolsiOS17Tips",
+    "targets": [
+      "PooToolsiOS17Tips"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "ptools",
+    "targets": [
+      "ptools"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  }
+]

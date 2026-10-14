@@ -2225,7 +2225,7 @@ private final class PTInputStylesDemoViewController: PTBaseViewController {
         let rightConfig = PTTextCustomRightViewConfig()
         rightConfig.size = CGSize(width: 22, height: 22)
         rightConfig.rightSpace = 10
-        rightConfig.image = UIImage(systemName: "magnifyingglass")?.withTintColor(.secondaryLabel, renderingMode: .alwaysOriginal)
+        rightConfig.image = PTSymbolResolver.image(.magnifyingglass)?.withTintColor(.secondaryLabel, renderingMode: .alwaysOriginal)
         field.rightConfig = rightConfig
         return field
     }

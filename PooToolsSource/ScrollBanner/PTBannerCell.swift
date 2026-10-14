@@ -12,6 +12,9 @@ import AVFoundation
 import PToolsUIFoundation
 #endif
 import SnapKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 @MainActor
 public class PTBannerCell: PTBaseNormalCell {

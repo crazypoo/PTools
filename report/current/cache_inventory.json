@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "aa8a0f957b4b43be8340a53d817cf62c4cbda04e",
-  "generated_at": "2026-10-14T01:26:59Z",
+  "source_revision": "93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29",
+  "generated_at": "2026-10-14T06:07:24Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -414,9 +414,9 @@
     },
     {
       "path": "PooToolsSource/Core/BorderManager.swift",
-      "line": 21,
+      "line": 23,
       "kind": "disk or custom cache",
-      "text": "// Previous configuration cache."
+      "text": "// English: Cache the previous layer configuration for restoration."
     },
     {
       "path": "PooToolsSource/Core/PTCacheStore.swift",

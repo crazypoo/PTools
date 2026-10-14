@@ -10,6 +10,9 @@ import UIKit
 import AVKit
 import SnapKit
 import Kingfisher
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public enum PTGuidePageControlSelection {
     case none

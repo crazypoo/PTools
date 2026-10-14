@@ -9,6 +9,9 @@
 import Foundation
 import AVFoundation
 import UIKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public class PTVideoFrameTimeLineFunction {
     public static func frameTimes(for asset: AVAsset,

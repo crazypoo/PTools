@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons.rb",
-  "source_revision": "aa8a0f957b4b43be8340a53d817cf62c4cbda04e",
-  "generated_at": "2026-10-14T01:26:59Z",
+  "source_revision": "93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29",
+  "generated_at": "2026-10-14T06:06:18Z",
   "shared_call_count": 1674,
   "declarations": [
     {
@@ -187,7 +187,7 @@
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 338,
+      "line": 341,
       "declaration": "@MainActor public static let share = PTCheckUpdateFunction()",
       "name": "share",
       "category": "C",
@@ -700,7 +700,7 @@
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift",
-      "line": 36,
+      "line": 39,
       "declaration": "public static let share = PTMediaBrowserConfig()",
       "name": "share",
       "category": "C",
@@ -709,7 +709,7 @@
     },
     {
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
-      "line": 42,
+      "line": 43,
       "declaration": "public static let share = PTChatConfig()",
       "name": "share",
       "category": "C",
@@ -1087,7 +1087,7 @@
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTBannerMediaManager.swift",
-      "line": 16,
+      "line": 19,
       "declaration": "static let shared = PTBannerVideoManager()",
       "name": "shared",
       "category": "C",
@@ -1096,7 +1096,7 @@
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTBannerMediaManager.swift",
-      "line": 52,
+      "line": 55,
       "declaration": "public static let shared = PTBannerPlayerManager()",
       "name": "shared",
       "category": "C",
@@ -1105,7 +1105,7 @@
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 19,
+      "line": 22,
       "declaration": "public static let shared = PTBannerScheduler()",
       "name": "shared",
       "category": "D",
@@ -1141,7 +1141,7 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorConfig.swift",
-      "line": 17,
+      "line": 18,
       "declaration": "public static let share = PTVideoEditorConfig()",
       "name": "share",
       "category": "C",

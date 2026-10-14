@@ -6,6 +6,13 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.64.5 — 2026-10-14
+
+- 完成 SwiftPM 全仓 179 个 target、155 个 product 和源码归属的动态审计，生成依赖图、符号归属、条件编译、资源和消费者矩阵报告。
+- 修复 Banner、Segmented、MediaViewer、VideoEditor、MessageKit、Guide、ScrollBanner、SignView、ImageEditor、Input、PageControl、Picker、QRCodeScan、CheckUpdate 等独立 target 对 Core / Category API 的隐式依赖。
+- Banner 的子视图清理改用 UIKit 原生实现，避免为两行基础操作引入完整 `ptools` 依赖；其余跨模块 API 通过显式 target 依赖和直接 import 收口。
+- 增加 SwiftPM 隔离消费者构建脚本和不伪造通过的发布门禁，保留 CocoaPods / SwiftPM product 名称差异及未执行宿主构建的阻断记录。
+
 ## 5.64.4 — 2026-10-14
 
 - 修复调试诊断文件缺少 UIKit 显式导入的问题，避免 SwiftPM 与独立 Target 下的类型解析失败。

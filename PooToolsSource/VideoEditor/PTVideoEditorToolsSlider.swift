@@ -7,6 +7,12 @@
 //
 
 import UIKit
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 class PTVideoEditorToolsSlider: UIControl {
 

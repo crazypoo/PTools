@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "aa8a0f957b4b43be8340a53d817cf62c4cbda04e",
-  "generated_at": "2026-10-14T01:26:59Z",
+  "source_revision": "93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29",
+  "generated_at": "2026-10-14T06:06:17Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -328,19 +328,19 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift",
-      "line": 13,
+      "line": 16,
       "declaration": "private struct PTSafeMediaBox<T>: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1535,
+      "line": 1536,
       "declaration": "private struct PTC7SafeBox:@unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/VideoEditor/VideoConverter.swift",
-      "line": 47,
+      "line": 50,
       "declaration": "private struct PTSafeAudioExportBox: @unchecked Sendable {",
       "allowlisted": true
     },

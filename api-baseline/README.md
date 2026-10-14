@@ -1,6 +1,6 @@
 # Public API Baseline
 
-`api-baseline/` 保存发布版本的公开 Swift API 快照。5.36.0 使用从 `5.35.0` tag 导出的冻结快照，
+`api-baseline/` 保存发布版本的公开 Swift API 快照。5.64.4 使用从 `5.64.4` tag 导出的冻结快照，
 后续版本应继续在发布前保存上一正式版本的 API 基线；缺少快照时门禁会明确打印回退，而不会伪造版本快照：
 
 - 新增 API 必须出现在 CHANGELOG 或迁移文档中。
@@ -17,6 +17,8 @@ api-baseline/
 ├── 5.18.2/
 │   └── public_api.json
 ├── 5.35.0/
+│   └── public_api.json
+├── 5.64.4/
 │   └── public_api.json
 └── removals_<version>.txt
 ```

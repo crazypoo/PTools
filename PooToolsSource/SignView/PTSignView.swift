@@ -11,6 +11,9 @@ import SnapKit
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 public typealias SignImageBlock = (_ signImage:UIImage?) -> Void
 

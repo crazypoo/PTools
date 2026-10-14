@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "aa4f1fca1a9f03b73abba39ea1fee3b7ff201ee3",
-  "generated_at": "2026-10-10T18:32:23Z",
+  "source_revision": "93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29",
+  "generated_at": "2026-10-14T06:06:58Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, PToolsDevice, and PToolsFontCatalogCore",
@@ -396,6 +396,10 @@
       "destination": "PooToolsNetWork"
     },
     {
+      "source": "PooToolsCheckUpdate",
+      "destination": "ptools"
+    },
+    {
       "source": "PooToolsChinesePinyin",
       "destination": "ptools"
     },
@@ -549,6 +553,10 @@
     },
     {
       "source": "PooToolsImageEditor",
+      "destination": "PToolsCore"
+    },
+    {
+      "source": "PooToolsImageEditor",
       "destination": "PToolsSymbols"
     },
     {
@@ -574,6 +582,10 @@
     {
       "source": "PooToolsImagePicker",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsInput",
+      "destination": "PToolsCore"
     },
     {
       "source": "PooToolsInput",
@@ -705,6 +717,10 @@
     },
     {
       "source": "PooToolsPageControl",
+      "destination": "PToolsCore"
+    },
+    {
+      "source": "PooToolsPageControl",
       "destination": "ptools"
     },
     {
@@ -737,6 +753,10 @@
     },
     {
       "source": "PooToolsPicker",
+      "destination": "PToolsCore"
+    },
+    {
+      "source": "PooToolsPicker",
       "destination": "ptools"
     },
     {
@@ -760,6 +780,10 @@
       "destination": "ptools"
     },
     {
+      "source": "PooToolsRateView",
+      "destination": "ptools"
+    },
+    {
       "source": "PooToolsRouter",
       "destination": "PToolsDeepLink"
     },
@@ -778,6 +802,10 @@
     {
       "source": "PooToolsScanQRCode",
       "destination": "PTCameraPermission"
+    },
+    {
+      "source": "PooToolsScanQRCode",
+      "destination": "PToolsCore"
     },
     {
       "source": "PooToolsScanQRCode",
@@ -824,12 +852,20 @@
       "destination": "PooToolsCustomerLabel"
     },
     {
+      "source": "PooToolsShare",
+      "destination": "ptools"
+    },
+    {
       "source": "PooToolsSmartScreenshot",
       "destination": "ptools"
     },
     {
       "source": "PooToolsSocketKit",
       "destination": "PToolsLogging"
+    },
+    {
+      "source": "PooToolsSocketKit",
+      "destination": "PooToolsNetWork"
     },
     {
       "source": "PooToolsSocketKit",
@@ -866,6 +902,10 @@
     {
       "source": "PooToolsTipsView",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsVideoEditor",
+      "destination": "PToolsCore"
     },
     {
       "source": "PooToolsVideoEditor",
