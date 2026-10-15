@@ -804,13 +804,14 @@
       ],
       "matches": [
         "PooToolsSource/Base/PTBaseViewController.swift",
+        "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
         "PooToolsSource/Base/PTCollectionView.swift",
         "PooToolsSource/Base/PTUnavailableFunction.swift",
         "PooToolsSource/PToolsContentState/PTBaseViewController+ContentState.swift",
         "PooToolsSource/PToolsContentState/PTContentState.swift",
         "PooToolsSource/Search/PTSearchViewController.swift"
       ],
-      "match_count": 6
+      "match_count": 7
     },
     {
       "capability": "split_navigation",
@@ -833,7 +834,7 @@
     }
   ],
   "generator": "Scripts/report_semantic_capability_ownership.sh",
-  "source_revision": "b9635475234bf5df4d0584a7bd5bd086e11eb6f0",
-  "generated_at": "2026-10-15T04:06:08Z",
-  "source_file_count": 1184
+  "source_revision": "4a2379802d43285d4e157cddb704274bc4aea549",
+  "generated_at": "2026-10-15T14:42:45Z",
+  "source_file_count": 1189
 }

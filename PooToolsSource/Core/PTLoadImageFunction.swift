@@ -135,6 +135,47 @@ public struct PTImageLoadConfiguration {
     /// 中文：用于把点尺寸转换为解码像素的显示比例。
     public var displayScale: CGFloat?
 
+    // English: Keep the pre-5.65 initializer signature source-compatible; callers that need the new scale pass it explicitly below.
+    // Español: Conserva la firma anterior a 5.65; quien necesite la nueva escala la pasa explícitamente en el inicializador siguiente.
+    // 中文：保留 5.65 之前的初始化器签名；需要新的显示比例时显式调用下面的初始化器。
+    public init(iCloudDocumentName: String = "",
+                radius: CGFloat = 0,
+                topLeft: CGFloat = 0,
+                topRight: CGFloat = 0,
+                bottomLeft: CGFloat = 0,
+                bottomRight: CGFloat = 0,
+                corner: UIRectCorner = .allCorners,
+                capsule: Bool = false,
+                borderWidth: CGFloat? = nil,
+                borderColor: UIColor? = nil,
+                showValueLabel: Bool? = nil,
+                valueLabelFont: UIFont? = nil,
+                valueLabelColor: UIColor? = nil,
+                uniCount: Int? = nil,
+                emptyImage: UIImage? = nil,
+                targetSize: CGSize? = nil) {
+        self.init(iCloudDocumentName: iCloudDocumentName,
+                  radius: radius,
+                  topLeft: topLeft,
+                  topRight: topRight,
+                  bottomLeft: bottomLeft,
+                  bottomRight: bottomRight,
+                  corner: corner,
+                  capsule: capsule,
+                  borderWidth: borderWidth,
+                  borderColor: borderColor,
+                  showValueLabel: showValueLabel,
+                  valueLabelFont: valueLabelFont,
+                  valueLabelColor: valueLabelColor,
+                  uniCount: uniCount,
+                  emptyImage: emptyImage,
+                  targetSize: targetSize,
+                  displayScale: nil)
+    }
+
+    // English: Require the new display scale only on the additive overload so existing callers keep the exact old API.
+    // Español: Exige la nueva escala solo en la sobrecarga aditiva para que los callers existentes conserven la API exacta.
+    // 中文：仅在新增重载中要求显示比例，保证现有调用继续保留原始 API。
     public init(iCloudDocumentName: String = "",
                 radius: CGFloat = 0,
                 topLeft: CGFloat = 0,
@@ -151,7 +192,7 @@ public struct PTImageLoadConfiguration {
                 uniCount: Int? = nil,
                 emptyImage: UIImage? = nil,
                 targetSize: CGSize? = nil,
-                displayScale: CGFloat? = nil) {
+                displayScale: CGFloat?) {
         self.iCloudDocumentName = iCloudDocumentName
         self.radius = radius
         self.topLeft = topLeft

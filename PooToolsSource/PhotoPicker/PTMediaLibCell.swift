@@ -136,7 +136,10 @@ class PTMediaLibCell: PTBaseNormalCell {
         guard let cellModel else { return }
         let asset = cellModel.asset
         let ident = cellModel.ident
-        let scale = window?.screen.scale ?? UIScreen.main.scale
+        // English: Resolve scale from the cell's scene; use one only before the cell is attached to a window.
+        // Español: Resuelve la escala desde la escena de la celda; usa uno solo antes de adjuntarla a una ventana.
+        // 中文：优先从 Cell 所属场景读取比例，尚未挂载到 Window 时才使用 1。
+        let scale = window?.screen.scale ?? PTSceneContext.activeWindow()?.screen.scale ?? 1
         let targetWidth = max(1, bounds.width) * scale
         guard cellModel.whRatio.isFinite, cellModel.whRatio > 0 else {
             imageView.image = PTAppBaseConfig.share.defaultEmptyImage
@@ -331,7 +334,10 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
         
         if let asset = albumModel.headImageAsset {
             let ident = asset.localIdentifier
-            let side = bounds.height * (window?.screen.scale ?? UIScreen.main.scale)
+            // English: Keep album thumbnails scene-aware and avoid the process-wide screen singleton.
+            // Español: Mantiene las miniaturas del álbum vinculadas a la escena y evita el singleton de pantalla global.
+            // 中文：相册缩略图按当前场景计算，避免使用进程级屏幕单例。
+            let side = bounds.height * (window?.screen.scale ?? PTSceneContext.activeWindow()?.screen.scale ?? 1)
 
             let requestID = PTMediaLibManager.requestImage(for: asset,
                                                            targetSize: CGSize(width: side, height: side),

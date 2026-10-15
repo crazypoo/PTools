@@ -785,7 +785,7 @@
   {
     "symbolName": "appfont",
     "referencePath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 83,
+    "line": 90,
     "ownerTarget": "ptools",
     "requiredModule": "ptools",
     "currentImports": "PToolsUIFoundation;Photos;SnapKit;UIKit",
@@ -794,7 +794,7 @@
   {
     "symbolName": "PTFeedbackCenter",
     "referencePath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 102,
+    "line": 109,
     "ownerTarget": "ptools",
     "requiredModule": "PToolsCore",
     "currentImports": "PToolsUIFoundation;Photos;SnapKit;UIKit",
@@ -1793,7 +1793,7 @@
   {
     "symbolName": "PTLoadImageFunction",
     "referencePath": "PooToolsSource/Core/PTLoadImageFunction.swift",
-    "line": 406,
+    "line": 447,
     "ownerTarget": "ptools",
     "requiredModule": "PToolsCore",
     "currentImports": "AVFoundation;ImageIO;Kingfisher;UIKit;os",
@@ -1802,7 +1802,7 @@
   {
     "symbolName": "PTLoadImageFunction",
     "referencePath": "PooToolsSource/Core/PTLoadImageFunction.swift",
-    "line": 420,
+    "line": 461,
     "ownerTarget": "ptools",
     "requiredModule": "PToolsCore",
     "currentImports": "AVFoundation;ImageIO;Kingfisher;UIKit;os",
@@ -1811,7 +1811,7 @@
   {
     "symbolName": "PTLoadImageFunction",
     "referencePath": "PooToolsSource/Core/PTLoadImageFunction.swift",
-    "line": 611,
+    "line": 652,
     "ownerTarget": "ptools",
     "requiredModule": "PToolsCore",
     "currentImports": "AVFoundation;ImageIO;Kingfisher;UIKit;os",
@@ -7562,7 +7562,7 @@
   {
     "symbolName": "addSubviews",
     "referencePath": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
-    "line": 272,
+    "line": 275,
     "ownerTarget": "PooToolsPhotoPicker",
     "requiredModule": "ptools",
     "currentImports": "PToolsSymbols;PToolsUIFoundation;Photos;PooToolsImagePicker;SnapKit;UIKit;ptools",
@@ -7571,7 +7571,7 @@
   {
     "symbolName": "addSubviews",
     "referencePath": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
-    "line": 273,
+    "line": 276,
     "ownerTarget": "PooToolsPhotoPicker",
     "requiredModule": "ptools",
     "currentImports": "PToolsSymbols;PToolsUIFoundation;Photos;PooToolsImagePicker;SnapKit;UIKit;ptools",
@@ -7580,7 +7580,7 @@
   {
     "symbolName": "addSubviews",
     "referencePath": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
-    "line": 380,
+    "line": 386,
     "ownerTarget": "PooToolsPhotoPicker",
     "requiredModule": "ptools",
     "currentImports": "PToolsSymbols;PToolsUIFoundation;Photos;PooToolsImagePicker;SnapKit;UIKit;ptools",
@@ -7589,7 +7589,7 @@
   {
     "symbolName": "PTAppBaseConfig",
     "referencePath": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
-    "line": 142,
+    "line": 145,
     "ownerTarget": "PooToolsPhotoPicker",
     "requiredModule": "ptools",
     "currentImports": "PToolsSymbols;PToolsUIFoundation;Photos;PooToolsImagePicker;SnapKit;UIKit;ptools",
@@ -7598,7 +7598,7 @@
   {
     "symbolName": "PTAppBaseConfig",
     "referencePath": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
-    "line": 322,
+    "line": 325,
     "ownerTarget": "PooToolsPhotoPicker",
     "requiredModule": "ptools",
     "currentImports": "PToolsSymbols;PToolsUIFoundation;Photos;PooToolsImagePicker;SnapKit;UIKit;ptools",
@@ -7607,7 +7607,7 @@
   {
     "symbolName": "PTAppBaseConfig",
     "referencePath": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
-    "line": 329,
+    "line": 332,
     "ownerTarget": "PooToolsPhotoPicker",
     "requiredModule": "ptools",
     "currentImports": "PToolsSymbols;PToolsUIFoundation;Photos;PooToolsImagePicker;SnapKit;UIKit;ptools",
@@ -7616,7 +7616,7 @@
   {
     "symbolName": "PTAppBaseConfig",
     "referencePath": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
-    "line": 345,
+    "line": 351,
     "ownerTarget": "PooToolsPhotoPicker",
     "requiredModule": "ptools",
     "currentImports": "PToolsSymbols;PToolsUIFoundation;Photos;PooToolsImagePicker;SnapKit;UIKit;ptools",
@@ -7625,7 +7625,7 @@
   {
     "symbolName": "PTAppBaseConfig",
     "referencePath": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
-    "line": 384,
+    "line": 390,
     "ownerTarget": "PooToolsPhotoPicker",
     "requiredModule": "ptools",
     "currentImports": "PToolsSymbols;PToolsUIFoundation;Photos;PooToolsImagePicker;SnapKit;UIKit;ptools",
@@ -7634,7 +7634,7 @@
   {
     "symbolName": "PTAppBaseConfig",
     "referencePath": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
-    "line": 389,
+    "line": 395,
     "ownerTarget": "PooToolsPhotoPicker",
     "requiredModule": "ptools",
     "currentImports": "PToolsSymbols;PToolsUIFoundation;Photos;PooToolsImagePicker;SnapKit;UIKit;ptools",

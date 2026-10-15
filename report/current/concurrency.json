@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "b9635475234bf5df4d0584a7bd5bd086e11eb6f0",
-  "generated_at": "2026-10-15T04:06:15Z",
+  "source_revision": "4a2379802d43285d4e157cddb704274bc4aea549",
+  "generated_at": "2026-10-15T14:42:50Z",
   "counts": {
     "main_queue_async": 26,
     "task_detached": 31,
@@ -193,25 +193,25 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 405,
+      "line": 446,
       "text": "let gifResult = await Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 419,
+      "line": 460,
       "text": "let image = await Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 433,
+      "line": 474,
       "text": "let image = await Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 610,
+      "line": 651,
       "text": "guard let gifResult = await Task.detached(priority: .userInitiated, operation: {"
     },
     {

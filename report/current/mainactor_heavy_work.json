@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_mainactor_heavy_work.rb",
-  "source_revision": "93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29",
-  "generated_at": "2026-10-14T06:07:24Z",
+  "source_revision": "4a2379802d43285d4e157cddb704274bc4aea549",
+  "generated_at": "2026-10-15T14:43:49Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
@@ -118,49 +118,49 @@
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 626,
+      "line": 714,
       "operation": "CGImageSourceCreate",
       "classification": "INTENTIONAL",
       "text": "guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 638,
+      "line": 726,
       "operation": "CGImageSourceCreate",
       "classification": "INTENTIONAL",
       "text": "guard let cgImage = CGImageSourceCreateImageAtIndex(source, i, options) else {"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 657,
+      "line": 747,
       "operation": "CGImageSourceCreate",
       "classification": "INTENTIONAL",
       "text": "kCGImageSourceCreateThumbnailFromImageAlways as String: true,"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 658,
+      "line": 748,
       "operation": "CGImageSourceCreate",
       "classification": "INTENTIONAL",
       "text": "kCGImageSourceCreateThumbnailWithTransform as String: true,"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 677,
+      "line": 768,
       "operation": "CGImageSourceCreate",
       "classification": "INTENTIONAL",
       "text": "guard let source = CGImageSourceCreateWithData(data as CFData, nil),"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 678,
+      "line": 769,
       "operation": "CGImageSourceCreate",
       "classification": "INTENTIONAL",
       "text": "let cgImage = CGImageSourceCreateImageAtIndex(source, 0, ["
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 682,
+      "line": 773,
       "operation": "UIImage\\(data:",
       "classification": "INTENTIONAL",
       "text": "return UIImage(data: data)"

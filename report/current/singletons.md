@@ -3,16 +3,16 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_singletons.rb
-Source revision: b9635475234bf5df4d0584a7bd5bd086e11eb6f0
-Generated at: 2026-10-15T04:06:16Z
+Source revision: 4a2379802d43285d4e157cddb704274bc4aea549
+Generated at: 2026-10-15T14:42:51Z
 -->
 
 # PTools 当前单例范围盘点
 
 本报告用于后续 DI 迁移；它不会自动改变现有单例生命周期。
 
-- .shared / .share 调用文本计数：**1675**
-- 单例声明计数：**131**
+- .shared / .share 调用文本计数：**1677**
+- 单例声明计数：**132**
 
 | 位置 | 名称 | 分类 | 声明 | 迁移建议 |
 | --- | --- | --- | --- | --- |
@@ -23,6 +23,7 @@ Generated at: 2026-10-15T04:06:16Z
 | PooToolsSource/Base/PTAppBaseConfig.swift:18 | share | D Shared mutable UI or scene state | public static let share = PTAppBaseConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/Base/PTAudioCache.swift:132 | shared | B Thread-safe shared cache or resource | public static let shared = PTAudioCacheFileManager() | 保留共享入口，但必须有容量、过期和清理策略 |
 | PooToolsSource/Base/PTAudioCache.swift:234 | shared | B Thread-safe shared cache or resource | public static let shared = PTAudioService() | 保留共享入口，但必须有容量、过期和清理策略 |
+| PooToolsSource/Base/PTCollectionSkeletonTemplateRegistry.swift:14 | shared | C Shared mutable service | public static let shared = PTCollectionSkeletonTemplateRegistry() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/Base/PTNavigationBarManager.swift:184 | shared | D Shared mutable UI or scene state | public static let shared = PTNavigationBarManager() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/Base/PTVideoCoverCache.swift:54 | shared | B Thread-safe shared cache or resource | public static let shared = PTVideoManager() | 保留共享入口，但必须有容量、过期和清理策略 |
 | PooToolsSource/Base/PTVideoCoverCache.swift:115 | shared | B Thread-safe shared cache or resource | static let shared = PTVideoFileDownloadCoordinator() | 保留共享入口，但必须有容量、过期和清理策略 |

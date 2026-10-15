@@ -388,6 +388,7 @@ extension PTCollectionViewConfig {
         copy.prefetchThreshold = prefetchThreshold
         copy.skeletonItemCount = skeletonItemCount
         copy.skeletonCornerRadius = skeletonCornerRadius
+        copy.skeletonConfiguration = skeletonConfiguration
         return copy
     }
 }

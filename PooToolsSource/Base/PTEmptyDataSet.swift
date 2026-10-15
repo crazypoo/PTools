@@ -157,6 +157,15 @@ extension UIScrollView: @retroactive UIGestureRecognizerDelegate {
     // MARK: - Reload APIs (Public)
     public func reloadEmptyDataSet() {
         guard (emptyDataSetSource != nil || configureEmptyDataSetView != nil) else { return }
+        if let collectionView = self as? PTBaseCollectionView,
+           collectionView.isSkeletonPresentationSuppressed {
+            // English: A scoped skeleton session owns this collection's presentation layer.
+            // Español: La sesión de skeleton de este ámbito posee la capa de presentación de esta colección.
+            // 中文：当前列表的骨架会话接管展示层。
+            emptyDataSetView?.isHidden = true
+            collectionView.backgroundView?.isHidden = true
+            return
+        }
         
         if (shouldDisplay && itemsCount == 0) || shouldBeForcedToDisplay {
             willAppear()

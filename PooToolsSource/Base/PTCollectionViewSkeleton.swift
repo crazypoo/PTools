@@ -73,10 +73,12 @@ public extension NSDiffableDataSourceSnapshot where SectionIdentifierType == PTS
 @MainActor
 final class PTSkeletonOverlayView: UIView {
     private static let animationKey = "PTCollectionView.skeletonShimmer"
+    private static let pulseKey = "PTCollectionView.skeletonPulse"
 
     private struct LayoutSignature: Equatable {
         let rects: [CGRect]
         let cornerRadius: CGFloat
+        let descriptors: String
     }
 
     private let baseLayer = CAShapeLayer()
@@ -84,6 +86,8 @@ final class PTSkeletonOverlayView: UIView {
     private let shimmerMask = CAShapeLayer()
     private var layoutSignature: LayoutSignature?
     private var wantsShimmer = false
+    private var animationConfiguration = PTCollectionSkeletonAnimation.legacyShimmer
+    private var appearanceConfiguration = PTCollectionSkeletonAppearance()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -130,7 +134,7 @@ final class PTSkeletonOverlayView: UIView {
 
     func update(rects: [CGRect], cornerRadius: CGFloat) {
         let radius = max(0, cornerRadius)
-        let signature = LayoutSignature(rects: rects, cornerRadius: radius)
+        let signature = LayoutSignature(rects: rects, cornerRadius: radius, descriptors: "legacy")
         guard signature != layoutSignature else { return }
         layoutSignature = signature
 
@@ -142,8 +146,43 @@ final class PTSkeletonOverlayView: UIView {
         shimmerMask.path = path.cgPath
     }
 
+    func render(items: [PTSkeletonRenderedItem],
+                appearance: PTCollectionSkeletonAppearance,
+                animation: PTCollectionSkeletonAnimation,
+                accessibilityLabel: String?) {
+        appearanceConfiguration = appearance
+        animationConfiguration = animation
+        self.accessibilityLabel = accessibilityLabel
+
+        let path = UIBezierPath()
+        for item in items.prefix(200) {
+            appendShapes(item.descriptor.shapes,
+                         in: item.frame,
+                         to: path,
+                         fallbackCornerRadius: 8)
+        }
+        let rects = items.map(\.frame)
+        let descriptors = items.prefix(200).map { String(describing: $0.descriptor) }.joined(separator: "|")
+        let signature = LayoutSignature(rects: rects, cornerRadius: 0, descriptors: descriptors)
+        if signature != layoutSignature || baseLayer.path == nil {
+            layoutSignature = signature
+            baseLayer.path = path.cgPath
+            shimmerMask.path = path.cgPath
+        }
+        updateColors()
+        wantsShimmer = animation.style != .none && animation.style != .solid && animation.style != .gradient
+        updateShimmerState()
+    }
+
     func startShimmerIfNeeded() {
         wantsShimmer = true
+        animationConfiguration = .legacyShimmer
+        updateShimmerState()
+    }
+
+    func startAnimation(_ animation: PTCollectionSkeletonAnimation) {
+        animationConfiguration = animation
+        wantsShimmer = animation.style != .none && animation.style != .solid && animation.style != .gradient
         updateShimmerState()
     }
 
@@ -158,30 +197,103 @@ final class PTSkeletonOverlayView: UIView {
 
     private func updateShimmerState() {
         let reduceMotionEnabled = UIAccessibility.isReduceMotionEnabled
-        shimmerLayer.isHidden = reduceMotionEnabled
+        shimmerLayer.isHidden = reduceMotionEnabled || animationConfiguration.style == .solid || animationConfiguration.style == .none
+        baseLayer.isHidden = false
+        baseLayer.opacity = animationConfiguration.style == .pulse ? appearanceConfiguration.pulseMaximumAlpha : 1
+        shimmerLayer.removeAnimation(forKey: Self.animationKey)
+        baseLayer.removeAnimation(forKey: Self.pulseKey)
         guard wantsShimmer, window != nil, !isHidden, !reduceMotionEnabled else {
             shimmerLayer.removeAnimation(forKey: Self.animationKey)
             return
         }
 
-        guard shimmerLayer.animation(forKey: Self.animationKey) == nil else { return }
-
-        let animation = CABasicAnimation(keyPath: "locations")
-        animation.fromValue = [-1, -0.5, 0]
-        animation.toValue = [1, 1.5, 2]
-        animation.duration = 1.2
-        animation.repeatCount = .infinity
-        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        shimmerLayer.add(animation, forKey: Self.animationKey)
+        switch animationConfiguration.style {
+        case .pulse:
+            let animation = CABasicAnimation(keyPath: "opacity")
+            animation.fromValue = appearanceConfiguration.pulseMinimumAlpha
+            animation.toValue = appearanceConfiguration.pulseMaximumAlpha
+            animation.duration = animationConfiguration.duration
+            animation.autoreverses = animationConfiguration.autoreverses
+            animation.repeatCount = animationConfiguration.repeatCount
+            animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            baseLayer.add(animation, forKey: Self.pulseKey)
+        case .shimmer:
+            let animation = CABasicAnimation(keyPath: "locations")
+            animation.fromValue = [-1, -0.5, 0]
+            animation.toValue = [1, 1.5, 2]
+            animation.duration = animationConfiguration.duration
+            animation.autoreverses = animationConfiguration.autoreverses
+            animation.repeatCount = animationConfiguration.repeatCount
+            animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            shimmerLayer.add(animation, forKey: Self.animationKey)
+        case .solid, .gradient, .none:
+            break
+        }
     }
 
     private func updateColors() {
-        let baseColor = UIColor.secondarySystemBackground.resolvedColor(with: traitCollection)
-        let highlightColor = UIColor.tertiarySystemBackground.resolvedColor(with: traitCollection)
+        let baseColor = appearanceConfiguration.baseColor.resolvedColor(with: traitCollection)
         baseLayer.fillColor = baseColor.cgColor
-        shimmerLayer.colors = [baseColor.cgColor, highlightColor.cgColor, baseColor.cgColor]
-        shimmerLayer.locations = [0, 0.5, 1]
-        shimmerLayer.startPoint = CGPoint(x: 0, y: 0.5)
-        shimmerLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        let colors = (appearanceConfiguration.gradientColors ?? [appearanceConfiguration.baseColor,
+                                                                  appearanceConfiguration.highlightColor,
+                                                                  appearanceConfiguration.baseColor])
+            .map { $0.resolvedColor(with: traitCollection).cgColor }
+        shimmerLayer.colors = colors
+        shimmerLayer.locations = colors.count == 3 ? [0, 0.5, 1] : nil
+        // English: Map every public direction to one gradient vector so the animation configuration is visible.
+        // Español: Mapea cada dirección pública a un vector de gradiente para que la configuración sea visible.
+        // 中文：将每个公开方向映射到渐变向量，确保动画配置真实生效。
+        switch animationConfiguration.direction {
+        case .leftToRight:
+            shimmerLayer.startPoint = CGPoint(x: 0, y: 0.5)
+            shimmerLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        case .rightToLeft:
+            shimmerLayer.startPoint = CGPoint(x: 1, y: 0.5)
+            shimmerLayer.endPoint = CGPoint(x: 0, y: 0.5)
+        case .topToBottom:
+            shimmerLayer.startPoint = CGPoint(x: 0.5, y: 0)
+            shimmerLayer.endPoint = CGPoint(x: 0.5, y: 1)
+        case .bottomToTop:
+            shimmerLayer.startPoint = CGPoint(x: 0.5, y: 1)
+            shimmerLayer.endPoint = CGPoint(x: 0.5, y: 0)
+        case .topLeadingToBottomTrailing:
+            shimmerLayer.startPoint = CGPoint(x: 0, y: 0)
+            shimmerLayer.endPoint = CGPoint(x: 1, y: 1)
+        case .bottomTrailingToTopLeading:
+            shimmerLayer.startPoint = CGPoint(x: 1, y: 1)
+            shimmerLayer.endPoint = CGPoint(x: 0, y: 0)
+        }
+    }
+
+    private func appendShapes(_ shapes: [PTSkeletonShape],
+                              in itemFrame: CGRect,
+                              to path: UIBezierPath,
+                              fallbackCornerRadius: CGFloat) {
+        let safeShapes = shapes.isEmpty ? [PTSkeletonShape.roundedRect(CGRect(x: 0, y: 0, width: 1, height: 1), cornerRadius: fallbackCornerRadius)] : shapes
+        for shape in safeShapes.prefix(40) {
+            let frame: CGRect
+            if shape.isNormalized {
+                frame = CGRect(x: itemFrame.minX + shape.localFrame.minX * itemFrame.width,
+                               y: itemFrame.minY + shape.localFrame.minY * itemFrame.height,
+                               width: shape.localFrame.width * itemFrame.width,
+                               height: shape.localFrame.height * itemFrame.height)
+            } else {
+                frame = CGRect(x: itemFrame.minX + shape.localFrame.minX,
+                               y: itemFrame.minY + shape.localFrame.minY,
+                               width: shape.localFrame.width,
+                               height: shape.localFrame.height)
+            }
+            guard frame.width > 0, frame.height > 0,
+                  frame.minX.isFinite, frame.minY.isFinite,
+                  frame.width.isFinite, frame.height.isFinite else { continue }
+            switch shape.kind {
+            case .circle:
+                path.append(UIBezierPath(ovalIn: frame))
+            case .line, .roundedRect:
+                path.append(UIBezierPath(roundedRect: frame, cornerRadius: min(shape.cornerRadius, min(frame.width, frame.height) / 2)))
+            case .rect:
+                path.append(UIBezierPath(rect: frame))
+            }
+        }
     }
 }

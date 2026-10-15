@@ -12,22 +12,144 @@ import UIKit
 extension PTCollectionView {
     /// 显示独立的骨架覆盖层，不改变当前 Diffable snapshot。
     public func showSkeleton(itemCount: Int? = nil) {
-        let requestedCount = itemCount ?? viewConfig.skeletonItemCount
-        activeSkeletonItemCount = min(max(requestedCount, 1), 50)
-        isSkeletonVisible = true
-        skeletonOverlayView.isHidden = false
-        bringSubviewToFront(skeletonOverlayView)
-        updateSkeletonLayout()
-        skeletonOverlayView.startShimmerIfNeeded()
+        showSkeleton(itemCount: itemCount,
+                     configuration: viewConfig.skeletonConfiguration ?? PTCollectionSkeletonConfiguration())
     }
 
-    /// 隐藏骨架覆盖层，不改变当前空状态或内容状态。
+    /// 显示带独立几何、内容、动画和状态策略的骨架覆盖层。
+    public func showSkeleton(itemCount: Int? = nil,
+                             configuration: PTCollectionSkeletonConfiguration) {
+        skeletonShowTask?.cancel()
+        skeletonMinimumVisibleTask?.cancel()
+        activeSkeletonConfiguration = configuration
+        activeSkeletonItemCount = itemCount.map { min(max($0, 1), 50) }
+        let token = presentationCoordinator.beginSkeleton()
+        explicitLoadingRequested = false
+        skeletonIsPending = configuration.showDelay > 0
+        if !skeletonIsPending {
+            PTUnavailableManager.hideUnavailableView(in: self)
+        }
+
+        let show = { @MainActor [weak self] in
+            guard let self, self.presentationCoordinator.isCurrent(token), self.presentationCoordinator.skeletonRequested else { return }
+            self.skeletonIsPending = false
+            self.isSkeletonVisible = true
+            self.collectionView.isSkeletonPresentationSuppressed = true
+            PTUnavailableManager.hideUnavailableView(in: self)
+            self.skeletonVisibleSince = ContinuousClock.now
+            self.skeletonOverlayView.isHidden = false
+            self.skeletonOverlayView.alpha = 1
+            self.skeletonOverlayView.isUserInteractionEnabled = configuration.interactionPolicy != .passthrough
+            self.bringSubviewToFront(self.skeletonOverlayView)
+            self.updateSkeletonLayout()
+            self.skeletonOverlayView.startAnimation(configuration.animation)
+        }
+
+        guard configuration.showDelay > 0 else {
+            show()
+            return
+        }
+        skeletonShowTask = Task { @MainActor [weak self] in
+            do {
+                try await Task.sleep(for: .seconds(configuration.showDelay))
+                guard !Task.isCancelled else { return }
+                show()
+            } catch {
+                // English: Cancellation is the expected path when a fast request finishes before the delay.
+                // Español: La cancelación es el camino esperado cuando una solicitud rápida termina antes del retraso.
+                // 中文：快速请求在延迟结束前完成时，取消任务是预期路径。
+            }
+            self?.skeletonShowTask = nil
+        }
+    }
+
+    /// 隐藏骨架覆盖层，并按最新已提交 Snapshot 恢复 Empty 或 Content。
     public func hideSkeleton() {
-        guard isSkeletonVisible || !skeletonOverlayView.isHidden else { return }
+        skeletonShowTask?.cancel()
+        skeletonShowTask = nil
+        let configuration = activeSkeletonConfiguration
+        let token = presentationCoordinator.endSkeleton()
+
+        guard isSkeletonVisible || !skeletonOverlayView.isHidden || configuration != nil else {
+            reconcilePresentation()
+            return
+        }
+
+        let elapsed: TimeInterval
+        if let skeletonVisibleSince {
+            let components = skeletonVisibleSince.duration(to: .now).components
+            elapsed = Double(components.seconds) + Double(components.attoseconds) / 1_000_000_000_000_000_000
+        } else {
+            elapsed = 0
+        }
+        let remaining = max(0, (configuration?.minimumVisibleDuration ?? 0) - elapsed)
+        guard remaining > 0 else {
+            finishSkeletonHide(token: token, configuration: configuration)
+            return
+        }
+
+        skeletonMinimumVisibleTask?.cancel()
+        skeletonMinimumVisibleTask = Task { @MainActor [weak self] in
+            do {
+                try await Task.sleep(for: .seconds(remaining))
+                guard !Task.isCancelled else { return }
+                self?.finishSkeletonHide(token: token, configuration: configuration)
+            } catch {
+                // English: A newer show/hide generation owns the overlay after cancellation.
+                // Español: Una generación nueva de show/hide posee el overlay después de la cancelación.
+                // 中文：取消后由更新的 show/hide generation 继续拥有覆盖层。
+            }
+        }
+    }
+
+    public func updateSkeleton(configuration: PTCollectionSkeletonConfiguration,
+                               animated: Bool = true) {
+        activeSkeletonConfiguration = configuration
+        if isSkeletonVisible {
+            let update = { @MainActor [weak self] in
+                guard let self else { return }
+                if animated, configuration.transition.duration > 0 {
+                    UIView.animate(withDuration: configuration.transition.duration) {
+                        self.updateSkeletonLayout()
+                    }
+                } else {
+                    self.updateSkeletonLayout()
+                }
+                self.skeletonOverlayView.startAnimation(configuration.animation)
+            }
+            update()
+        }
+    }
+
+    public func invalidateSkeletonLayout() {
+        updateSkeletonLayout()
+    }
+
+    private func finishSkeletonHide(token: UInt64,
+                                    configuration: PTCollectionSkeletonConfiguration?) {
+        guard !presentationCoordinator.skeletonRequested || presentationCoordinator.isCurrent(token) else { return }
         isSkeletonVisible = false
+        skeletonIsPending = false
         activeSkeletonItemCount = nil
-        skeletonOverlayView.stopShimmer()
-        skeletonOverlayView.isHidden = true
+        activeSkeletonConfiguration = nil
+        skeletonVisibleSince = nil
+        skeletonMinimumVisibleTask = nil
+        let duration = configuration?.transition.duration ?? 0
+        let hide = { @MainActor [weak self] in
+            guard let self else { return }
+            guard !self.presentationCoordinator.skeletonRequested || self.presentationCoordinator.isCurrent(token) else { return }
+            self.skeletonOverlayView.stopShimmer()
+            self.skeletonOverlayView.isHidden = true
+            self.skeletonOverlayView.alpha = 1
+            self.reconcilePresentation()
+        }
+        if duration > 0, !UIAccessibility.isReduceMotionEnabled {
+            UIView.animate(withDuration: duration, animations: { [weak self] in
+                self?.skeletonOverlayView.alpha = 0
+            }, completion: { _ in hide() })
+        } else {
+            hide()
+        }
     }
 }
 
@@ -35,84 +157,18 @@ extension PTCollectionView {
     func updateSkeletonLayout() {
         guard isSkeletonVisible else { return }
         bringSubviewToFront(skeletonOverlayView)
-        let count = activeSkeletonItemCount ?? viewConfig.skeletonItemCount
-        skeletonOverlayView.update(rects: skeletonFrames(itemCount: count), cornerRadius: viewConfig.skeletonCornerRadius)
-    }
-
-    fileprivate func skeletonFrames(itemCount: Int) -> [CGRect] {
-        let count = min(max(itemCount, 1), 50)
-        guard let config = viewConfig else { return [] }
-        let bounds = skeletonOverlayView.bounds
-        guard bounds.width > 0, bounds.height > 0 else { return [] }
-
-        let leading = max(0, config.itemOriginalX)
-        let trailing = max(0, config.itemOriginalX)
-        let verticalSpacing = max(0, config.cellTrailingSpace)
-        let contentTop = max(0, config.contentTopSpace)
-        let contentBottom = max(0, config.contentBottomSpace)
-        let contentWidth = max(1, bounds.width - leading - trailing)
-        let baseHeight = max(1, config.itemHeight)
-        let columnCount = max(1, config.rowCount)
-        let columnSpacing = max(0, config.cellLeadingSpace)
-        let availableColumnWidth = max(1, (contentWidth - CGFloat(columnCount - 1) * columnSpacing) / CGFloat(columnCount))
-
-        func photoHeight(for width: CGFloat, fallback: CGFloat) -> CGFloat {
-            guard config.viewForPhoto,
-                  config.previewImageSize.width > 0,
-                  config.previewImageSize.height > 0 else {
-                return fallback
-            }
-            return max(1, width * config.previewImageSize.height / config.previewImageSize.width)
-        }
-
-        switch config.viewType {
-        case .Normal, .Custom:
-            let width = max(1, bounds.width - leading - trailing)
-            let height = photoHeight(for: width, fallback: baseHeight)
-            return (0..<count).map { index in
-                CGRect(x: leading,
-                       y: contentTop + CGFloat(index) * (height + verticalSpacing),
-                       width: width,
-                       height: height)
-            }
-
-        case .Gird, .Tag:
-            let height = photoHeight(for: availableColumnWidth, fallback: baseHeight)
-            return (0..<count).map { index in
-                let row = index / columnCount
-                let column = index % columnCount
-                return CGRect(x: leading + CGFloat(column) * (availableColumnWidth + columnSpacing),
-                              y: contentTop + CGFloat(row) * (height + verticalSpacing),
-                              width: availableColumnWidth,
-                              height: height)
-            }
-
-        case .WaterFall:
-            var columnHeights = Array(repeating: contentTop, count: columnCount)
-            let heightMultipliers: [CGFloat] = [0.82, 1.0, 1.18]
-            return (0..<count).map { index in
-                let column = index % columnCount
-                let width = availableColumnWidth
-                let height = photoHeight(for: width, fallback: baseHeight) * heightMultipliers[index % heightMultipliers.count]
-                let frame = CGRect(x: leading + CGFloat(column) * (width + columnSpacing),
-                                   y: columnHeights[column],
-                                   width: width,
-                                   height: max(1, height))
-                columnHeights[column] = frame.maxY + verticalSpacing
-                return frame
-            }
-
-        case .Horizontal, .HorizontalLayoutSystem:
-            let width = max(1, config.itemWidth)
-            let height = min(baseHeight, max(1, bounds.height - contentTop - contentBottom))
-            let y = max(contentTop, (bounds.height - height) / 2)
-            return (0..<count).map { index in
-                CGRect(x: leading + CGFloat(index) * (width + columnSpacing),
-                       y: y,
-                       width: width,
-                       height: height)
-            }
-        }
+        let configuration = activeSkeletonConfiguration ?? PTCollectionSkeletonConfiguration()
+        let direction = effectiveUserInterfaceLayoutDirection
+        let items = PTCollectionSkeletonLayoutResolver.resolve(bounds: skeletonOverlayView.bounds,
+                                                                viewConfig: viewConfig,
+                                                                configuration: configuration,
+                                                                explicitItemCount: activeSkeletonItemCount,
+                                                                adjustedContentInset: collectionView.adjustedContentInset,
+                                                                layoutDirection: direction)
+        skeletonOverlayView.render(items: items,
+                                   appearance: PTSkeletonThemeDefaults.appearance ?? configuration.appearance,
+                                   animation: configuration.animation,
+                                   accessibilityLabel: configuration.accessibilityLabel)
     }
 }
 

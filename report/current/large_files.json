@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "b9635475234bf5df4d0584a7bd5bd086e11eb6f0",
-  "generated_at": "2026-10-15T04:06:14Z",
+  "source_revision": "4a2379802d43285d4e157cddb704274bc4aea549",
+  "generated_at": "2026-10-15T14:43:49Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -396,7 +396,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionLayoutTransition.swift",
-      "lines": 393,
+      "lines": 394,
       "classification": "ok"
     },
     {
@@ -410,13 +410,38 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/Base/PTCollectionPresentationCoordinator.swift",
+      "lines": 36,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/Base/PTCollectionRefreshCoordinator.swift",
       "lines": 49,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-      "lines": 145,
+      "lines": 201,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Base/PTCollectionSkeletonDiagnostics.swift",
+      "lines": 46,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Base/PTCollectionSkeletonLayoutResolver.swift",
+      "lines": 382,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Base/PTCollectionSkeletonTemplateRegistry.swift",
+      "lines": 45,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Base/PTCollectionSkeletonTypes.swift",
+      "lines": 418,
       "classification": "ok"
     },
     {
@@ -431,7 +456,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "lines": 2295,
+      "lines": 2328,
       "classification": "hard_limit_allowlisted"
     },
     {
@@ -441,12 +466,12 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewSkeleton.swift",
-      "lines": 187,
+      "lines": 299,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "lines": 426,
+      "lines": 434,
       "classification": "ok"
     },
     {
@@ -456,7 +481,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTEmptyDataSet.swift",
-      "lines": 238,
+      "lines": 247,
       "classification": "ok"
     },
     {
@@ -1446,8 +1471,8 @@
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "lines": 977,
-      "classification": "ok"
+      "lines": 1018,
+      "classification": "warning"
     },
     {
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
@@ -2256,7 +2281,7 @@
     },
     {
       "path": "PooToolsSource/Input/HoshiTextField.swift",
-      "lines": 452,
+      "lines": 483,
       "classification": "ok"
     },
     {
@@ -5111,7 +5136,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
-      "lines": 425,
+      "lines": 431,
       "classification": "ok"
     },
     {
@@ -5930,7 +5955,7 @@
       "classification": "ok"
     }
   ],
-  "warning_count": 17,
+  "warning_count": 18,
   "architecture_exception_count": 10,
   "hard_limit_allowlisted_count": 5
 }

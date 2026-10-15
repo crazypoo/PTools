@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "b9635475234bf5df4d0584a7bd5bd086e11eb6f0",
-  "generated_at": "2026-10-15T04:06:16Z",
+  "source_revision": "4a2379802d43285d4e157cddb704274bc4aea549",
+  "generated_at": "2026-10-15T14:42:52Z",
   "counts": {
-    "reduce_motion": 61,
-    "accessibility": 275,
+    "reduce_motion": 62,
+    "accessibility": 281,
     "reduce_transparency": 14,
     "dynamic_type": 21
   },
@@ -306,14 +306,49 @@
       "line": 115
     },
     {
+      "rule": "reduce_motion",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
+      "line": 146
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
+      "line": 171
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonTypes.swift",
+      "line": 356
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonTypes.swift",
+      "line": 369
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonTypes.swift",
+      "line": 381
+    },
+    {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTCollectionViewSkeleton.swift",
-      "line": 92
+      "line": 96
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Base/PTCollectionViewSkeleton.swift",
+      "line": 152
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Base/PTCollectionViewSkeleton.swift",
+      "line": 155
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTCollectionViewSkeleton.swift",
-      "line": 160
+      "line": 199
     },
     {
       "rule": "accessibility",

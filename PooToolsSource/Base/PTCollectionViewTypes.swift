@@ -286,6 +286,10 @@ public class PTCollectionViewConfig: NSObject {
     open var skeletonItemCount: Int = 6
     /// 骨架占位块的圆角半径
     open var skeletonCornerRadius: CGFloat = 8
+    // English: Swift-only skeleton configuration; legacy Objective-C properties remain the fallback.
+    // Español: Configuración de skeleton solo para Swift; las propiedades Objective-C heredadas siguen siendo el respaldo.
+    // 中文：仅 Swift 使用的骨架配置；旧版 Objective-C 属性继续作为兼容回退。
+    @nonobjc open var skeletonConfiguration: PTCollectionSkeletonConfiguration? = nil
 }
 
 public class PTCollectionIndexViewConfiguration: NSObject {
@@ -324,6 +328,10 @@ public class PTCollectionIndexViewConfiguration: NSObject {
 open class PTBaseCollectionView: UICollectionView {
 
     public var contentOffSetZero: Bool = false
+    // English: Suppress only this collection's legacy empty adapter while a skeleton owns presentation.
+    // Español: Suprime solo el adaptador empty heredado de esta colección mientras el skeleton posee la presentación.
+    // 中文：骨架接管展示期间，只抑制当前列表的旧空态适配器。
+    var isSkeletonPresentationSuppressed = false
 
     open override var contentOffset: CGPoint {
         didSet {

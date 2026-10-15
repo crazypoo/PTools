@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: 93b291c1dae69cbf0c8e67d2f8f72dfecdde8b29
-Generated at: 2026-10-14T06:07:06Z
+Source revision: 4a2379802d43285d4e157cddb704274bc4aea549
+Generated at: 2026-10-15T14:43:32Z
 -->
 
 # PTools 当前弃用入口清单
@@ -383,6 +383,9 @@ Generated at: 2026-10-14T06:07:06Z
 | `PooToolsSource/ImagePicker/PTImagePicker.swift:867` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/ImagePicker/PTImagePicker.swift:888` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/ImagePicker/PTImagePicker.swift:903` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Input/HoshiTextField.swift:253` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:80` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Input/TextFieldEffects.swift:153` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Inspector/InspectorElementProperty.swift:12` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Inspector/InspectorElementProperty.swift:126` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Inspector/InspectorElementSectionDataSource.swift:12` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
@@ -438,4 +441,4 @@ Generated at: 2026-10-14T06:07:06Z
 | `PooToolsSource/SegmentControl/PTSegmentedTypes.swift:214` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/SignView/PTSignView.swift:165` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 
-扫描数量：`424`。该数量用于发现漂移，不代表可以自动删除公开 API。
+扫描数量：`427`。该数量用于发现漂移，不代表可以自动删除公开 API。

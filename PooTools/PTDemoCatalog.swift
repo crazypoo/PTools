@@ -170,6 +170,7 @@ enum PTDemoRegistry {
         make("ui.collection-tag", "PToolsForm", "CollectionTag", .inputForm, .interactive, .sheet, .runnable, legacy: "CollectionTag", tags: ["collection", "tag"]),
         make("ui.collection-refresh-lab", "PToolsUIFoundation", "Diffable Refresh Lab", .uiComponents, .interactive, .push, .runnable, legacy: "Diffable Refresh Lab", tags: ["collection", "diffable", "content-refresh", "stress"]),
         make("ui.collection-layout-switch-lab", "PToolsUIFoundation", "Collection Layout Switch Lab", .uiComponents, .interactive, .push, .runnable, legacy: "Collection Layout Switch Lab", tags: ["collection", "layout", "runtime-switch", "stress"]),
+        make("ui.collection-skeleton-lab", "PToolsUIFoundation", "Collection Skeleton Lab", .uiComponents, .interactive, .push, .runnable, legacy: "Collection Skeleton Lab", tags: ["collection", "skeleton", "loading", "diffable"]),
         make("input.input-box", "PooToolsInput", "InputBox", .inputForm, .interactive, .sheet, .runnable, legacy: "InputBox", tags: ["input"]),
         make("input.all-styles", "PooToolsInput", "Input Styles", .inputForm, .interactive, .push, .runnable, legacy: "Input Styles", tags: ["input", "text-field", "text-view", "styles"]),
         make("input.stepper", "PooToolsStepper", "Stepper", .inputForm, .interactive, .sheet, .runnable, legacy: "Stepper", tags: ["input"]),
@@ -327,6 +328,8 @@ final class PTDemoCoordinator {
             return PTCollectionRefreshLabViewController()
         case "ui.collection-layout-switch-lab":
             return PTCollectionLayoutSwitchLabViewController()
+        case "ui.collection-skeleton-lab":
+            return PTCollectionSkeletonLabViewController()
         case "ui.control-menu":
             return PTControlMenuDemoViewController()
         case "input.all-styles":
@@ -2076,7 +2079,7 @@ private final class PTImageClarityDemoViewController: PTBaseViewController {
         didLoadImages = true
         imageViews.forEach { imageView in
             imageView.loadImage(contentData: imageData,
-                                emptyImage: UIImage(systemName: "photo"))
+                                emptyImage: PTSymbolResolver.image(.photo))
         }
     }
 

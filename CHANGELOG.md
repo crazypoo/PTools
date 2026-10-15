@@ -6,6 +6,18 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.65.0 — 2026-10-15
+
+- 将 `PTCollectionView` 骨架加载统一为独立覆盖层，不伪造 Diffable 数据、不触发业务 Cell 回调，并与 empty/loading/content 状态统一仲裁。
+- 新增可配置的骨架布局、内容模板、分区/头尾描述、占位数量策略、RTL、窗口填充和安全尺寸裁剪能力。
+- 新增 solid、gradient、pulse、shimmer、none 动画策略，支持 Reduce Motion、延迟显示、最短可见时间、取消和窗口生命周期恢复。
+- 新增 `PTCollectionSkeletonLabViewController` Demo、诊断快照、模板注册入口和骨架使用指南；保留原有 `showSkeleton` / `hideSkeleton` API。
+
+## 5.64.11 — 2026-10-15
+
+- 修复独立 `PTHoshiTextField` 在浮动占位符更新时覆盖原始 placeholder 的问题。
+- 增加占位符更新递归保护，并让普通占位符与富文本占位符在编辑状态切换时保持一致。
+
 ## 5.64.10 — 2026-10-15
 
 - 为所有继承 `TextFieldEffects` 的输入框增加统一的 `activityChangeHandler` 和只读 `isActive` 状态。

@@ -453,7 +453,7 @@ public final class PTRemoteImageTextAttachment: NSTextAttachment {
     // English: Preserve remote metadata after resolution; only the source value controls whether loading starts.
     // Español: Conserva los metadatos remotos tras resolver; solo el valor fuente decide si comienza la carga.
     // 中文：解析完成后保留远程元数据，是否加载只由源值决定。
-    public func resolvedAttachment(with image: UIImage) -> PTRemoteImageTextAttachment {
+    public func resolvedAttachment(with image: UIImage) -> NSTextAttachment {
         let attachment = PTRemoteImageTextAttachment(identifier: identifier,
                                                       url: remoteURL,
                                                       size: attachmentSize,

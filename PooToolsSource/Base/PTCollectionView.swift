@@ -47,6 +47,13 @@ public class PTCollectionView: UIView {
 
     lazy var skeletonOverlayView = PTSkeletonOverlayView()
     var activeSkeletonItemCount: Int?
+    var activeSkeletonConfiguration: PTCollectionSkeletonConfiguration?
+    var skeletonShowTask: Task<Void, Never>?
+    var skeletonMinimumVisibleTask: Task<Void, Never>?
+    var skeletonVisibleSince: ContinuousClock.Instant?
+    var skeletonIsPending = false
+    lazy var presentationCoordinator = PTCollectionPresentationCoordinator()
+    var explicitLoadingRequested = false
     public internal(set) var isSkeletonVisible = false
     
     ///索引
@@ -380,6 +387,8 @@ public class PTCollectionView: UIView {
     }
     
     deinit {
+        skeletonShowTask?.cancel()
+        skeletonMinimumVisibleTask?.cancel()
         if let memoryWarningRegistration {
             MainActor.gcdRunUnsafely {
                 PTMemoryWarningCoordinator.shared.unregister(memoryWarningRegistration)
@@ -824,10 +833,6 @@ extension PTCollectionView {
 
             if !rowsToReconfigure.isEmpty {
                 snapshot.reconfigureItems(rowsToReconfigure)
-            }
-
-            if !collectionData.isEmpty {
-                PTUnavailableManager.render(.content, in: self)
             }
 
             self.applySnapshot(snapshot,
@@ -1551,6 +1556,29 @@ extension PTCollectionView {
 //MARK: EmptyDataView
 extension PTCollectionView {
     func setiOS17EmptyDataView() {
+        reconcilePresentation()
+    }
+
+    // English: Recompute presentation from the latest committed snapshot and current intent.
+    // Español: Recalcula la presentación usando el snapshot confirmado y la intención actual.
+    // 中文：根据最新已提交 Snapshot 和当前意图重新计算展示状态。
+    func reconcilePresentation() {
+        guard diffableDataSource != nil else { return }
+        if presentationCoordinator.skeletonRequested, !skeletonIsPending {
+            collectionView.isSkeletonPresentationSuppressed = true
+            PTUnavailableManager.hideUnavailableView(in: self)
+            if isSkeletonVisible {
+                bringSubviewToFront(skeletonOverlayView)
+            }
+            return
+        }
+
+        collectionView.isSkeletonPresentationSuppressed = false
+        if explicitLoadingRequested {
+            PTUnavailableManager.render(.loading, in: self)
+            return
+        }
+
         switch self.viewConfig.emptyShowType {
         case .Auto:
             self.showEmptyConfig()
@@ -1580,10 +1608,14 @@ extension PTCollectionView {
     }
     
     public func hideEmptyLoading(task: PTActionTask?) {
+        explicitLoadingRequested = false
         PTUnavailableManager.hideUnavailableView(in: self, task: task)
+        reconcilePresentation()
     }
     
     public func showEmptyLoading() {
+        guard !presentationCoordinator.skeletonRequested else { return }
+        explicitLoadingRequested = true
         PTUnavailableManager.render(.loading, in: self)
     }
     
@@ -1634,6 +1666,7 @@ extension PTCollectionView {
     }
     
     public func reloadEmptyConfig() {
+        guard !presentationCoordinator.skeletonRequested else { return }
         if self.viewConfig.showEmptyAlert {
             collectionView.reloadEmptyDataSet()
         }

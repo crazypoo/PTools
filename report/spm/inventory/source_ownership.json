@@ -259,10 +259,25 @@
     "PooToolsSource/Base/PTCollectionPrefetchCoordinator.swift": [
       "ptools"
     ],
+    "PooToolsSource/Base/PTCollectionPresentationCoordinator.swift": [
+      "ptools"
+    ],
     "PooToolsSource/Base/PTCollectionRefreshCoordinator.swift": [
       "ptools"
     ],
     "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionSkeletonDiagnostics.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionSkeletonLayoutResolver.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionSkeletonTemplateRegistry.swift": [
+      "ptools"
+    ],
+    "PooToolsSource/Base/PTCollectionSkeletonTypes.swift": [
       "ptools"
     ],
     "PooToolsSource/Base/PTCollectionUpdateCoordinator.swift": [
@@ -3695,5 +3710,5 @@
       "PToolsCoreTests"
     ]
   },
-  "source_count": 1231
+  "source_count": 1236
 }

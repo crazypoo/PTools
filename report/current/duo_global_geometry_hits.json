@@ -1,8 +1,8 @@
 {
   "generator": "Scripts/audit_duo_uikit_coverage.py",
   "generated_by": "Scripts/audit_duo_uikit_coverage.py",
-  "source_revision": "486435925e25155cc3fab847fbe7c076e7f31883",
-  "generated_at": "2026-10-14T08:14:26.940796+00:00",
+  "source_revision": "4a2379802d43285d4e157cddb704274bc4aea549",
+  "generated_at": "2026-10-15T14:41:43.056112+00:00",
   "hits": [
     {
       "kind": "statusBarHeight",
@@ -229,13 +229,13 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "line": 293,
+      "line": 297,
       "text": "open var itemSize: CGSize = CGSize(width: 15, height: 15)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Base/PTCollectionViewTypes.swift",
-      "line": 379,
+      "line": 387,
       "text": "let height = PTLRUCache<HeightCacheKey, NSNumber>(countLimit: 1000)"
     },
     {
@@ -703,7 +703,7 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 357,
+      "line": 398,
       "text": "scale: displayScale) ?? CGSize(width: 1024, height: 1024),"
     },
     {
@@ -2509,7 +2509,7 @@
     {
       "kind": "isFaceIDCapable",
       "path": "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift",
-      "line": 56,
+      "line": 52,
       "text": "return device.isFaceIDCapable ? .available : .unsupported"
     },
     {
@@ -3031,25 +3031,25 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 456,
+      "line": 486,
       "text": "static func image(size: CGSize = CGSize(width: 24, height: 24), video: Bool) -> UIImage {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 457,
+      "line": 487,
       "text": "let width = max(1, size.width.isFinite ? size.width : 24)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 458,
+      "line": 488,
       "text": "let height = max(1, size.height.isFinite ? size.height : 24)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 978,
+      "line": 1008,
       "text": "let badgeSize = CGSize(width: textSize.width + 10, height: textSize.height + 6)"
     },
     {
@@ -3087,18 +3087,6 @@
       "path": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
       "line": 125,
       "text": "let width = videoTimeLabel.sizeFor(height: 15).width + 8"
-    },
-    {
-      "kind": "UIScreen.main",
-      "path": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
-      "line": 139,
-      "text": "let scale = window?.screen.scale ?? UIScreen.main.scale"
-    },
-    {
-      "kind": "UIScreen.main",
-      "path": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
-      "line": 334,
-      "text": "let side = bounds.height * (window?.screen.scale ?? UIScreen.main.scale)"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -3822,6 +3810,54 @@
     },
     {
       "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+      "line": 12,
+      "text": "withLabel(width: 366, height: 120) { label in"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+      "line": 16,
+      "text": "XCTAssertEqual(label.bounds.size, CGSize(width: 366, height: 120))"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+      "line": 49,
+      "text": "withLabel(width: 280, height: 64) { label in"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+      "line": 80,
+      "text": "withLabel(width: 280, height: 120) { label in"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+      "line": 122,
+      "text": ".custom(size: CGSize(width: 24, height: 24)),"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+      "line": 126,
+      "text": "let replacement = remote?.resolvedAttachment(with: makeImage(size: CGSize(width: 24, height: 24)))"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+      "line": 140,
+      "text": ".custom(size: CGSize(width: 24, height: 24)),"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+      "line": 156,
+      "text": "private func makeImage(size: CGSize = CGSize(width: 24, height: 24)) -> UIImage {"
+    },
+    {
+      "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsUIFoundationTests/PTAdaptiveBarLayoutTests.swift",
       "line": 13,
       "text": "bounds: CGRect = CGRect(x: 0, y: 0, width: 390, height: 844),"
@@ -4243,25 +4279,25 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift",
-      "line": 27,
+      "line": 68,
       "text": "width: 340,"
-    },
-    {
-      "kind": "magic-fixed-dimension",
-      "path": "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift",
-      "line": 39,
-      "text": "width: 340,"
-    },
-    {
-      "kind": "magic-fixed-dimension",
-      "path": "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift",
-      "line": 66,
-      "text": "width: 260,"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift",
       "line": 80,
+      "text": "width: 340,"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift",
+      "line": 107,
+      "text": "width: 260,"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift",
+      "line": 121,
       "text": "width: 340,"
     }
   ]

@@ -19,6 +19,47 @@ final class PTUIFoundationContractTests: XCTestCase {
         XCTAssertEqual(configuration.skeletonCornerRadius, 14)
     }
 
+    // English: Keep the new skeleton configuration independent from legacy Diffable content.
+    // Español: Mantiene la nueva configuración del skeleton independiente del contenido Diffable heredado.
+    // 中文：验证新的骨架配置独立于旧的 Diffable 内容。
+    func testSkeletonConfigurationKeepsPresentationPolicies() {
+        let configuration = PTCollectionSkeletonConfiguration(
+            itemCountMode: .fillViewport(extraRows: 2),
+            interactionPolicy: .blocksTouches,
+            auxiliaryViewPolicy: .hideWhileVisible,
+            showDelay: 0.2,
+            minimumVisibleDuration: 0.4
+        )
+
+        XCTAssertEqual(configuration.itemCountMode, .fillViewport(extraRows: 2))
+        XCTAssertEqual(configuration.interactionPolicy, .blocksTouches)
+        XCTAssertEqual(configuration.auxiliaryViewPolicy, .hideWhileVisible)
+        XCTAssertEqual(configuration.showDelay, 0.2, accuracy: 0.001)
+        XCTAssertEqual(configuration.minimumVisibleDuration, 0.4, accuracy: 0.001)
+    }
+
+    // English: Invalid shape values must be sanitized before they reach Core Animation paths.
+    // Español: Los valores de forma inválidos deben sanearse antes de llegar a las rutas de Core Animation.
+    // 中文：无效的骨架形状参数必须在进入 Core Animation 路径前完成清理。
+    func testSkeletonShapeSanitizesInvalidRadius() {
+        let shape = PTSkeletonShape.roundedRect(.init(x: 0, y: 0, width: 1, height: 1),
+                                                cornerRadius: .infinity)
+
+        XCTAssertEqual(shape.cornerRadius, 0)
+    }
+
+    func testSkeletonConfigurationUsesIndependentGeometry() {
+        let layout = PTCollectionSkeletonLayout(itemHeight: 72,
+                                                 horizontalSpacing: 12,
+                                                 verticalSpacing: 16,
+                                                 columnCount: 2)
+
+        XCTAssertEqual(layout.itemHeight, 72)
+        XCTAssertEqual(layout.horizontalSpacing, 12)
+        XCTAssertEqual(layout.verticalSpacing, 16)
+        XCTAssertEqual(layout.columnCount, 2)
+    }
+
     func testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing() {
         let insets = UIEdgeInsets(top: 10, left: 18, bottom: 18, right: 18)
         let font = UIFont.systemFont(ofSize: 15)

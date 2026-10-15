@@ -7136,7 +7136,7 @@
         }
       }
     ],
-    "source_count": 314,
+    "source_count": 319,
     "sources": [
       "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift",
       "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -7211,8 +7211,13 @@
       "PooToolsSource/Base/PTCollectionLayoutTransition.swift",
       "PooToolsSource/Base/PTCollectionModelStore.swift",
       "PooToolsSource/Base/PTCollectionPrefetchCoordinator.swift",
+      "PooToolsSource/Base/PTCollectionPresentationCoordinator.swift",
       "PooToolsSource/Base/PTCollectionRefreshCoordinator.swift",
       "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
+      "PooToolsSource/Base/PTCollectionSkeletonDiagnostics.swift",
+      "PooToolsSource/Base/PTCollectionSkeletonLayoutResolver.swift",
+      "PooToolsSource/Base/PTCollectionSkeletonTemplateRegistry.swift",
+      "PooToolsSource/Base/PTCollectionSkeletonTypes.swift",
       "PooToolsSource/Base/PTCollectionUpdateCoordinator.swift",
       "PooToolsSource/Base/PTCollectionUpdateDiagnostics.swift",
       "PooToolsSource/Base/PTCollectionView.swift",
