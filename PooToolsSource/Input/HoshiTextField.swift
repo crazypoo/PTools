@@ -211,6 +211,9 @@ open class PTHoshiTextField: UITextField {
     
     private let floatingLabel: UILabel = UILabel()
 
+    private var normalPlaceholderText: String?
+    private var isUpdatingPlaceholder = false
+    
     // English: Keep the standalone Hoshi variant on the same appearance contract as TextFieldEffects.
     // Español: Mantiene la variante Hoshi independiente en el mismo contrato de apariencia que TextFieldEffects.
     // 中文：让独立 Hoshi 变体也遵循 TextFieldEffects 的统一外观契约。
@@ -221,7 +224,12 @@ open class PTHoshiTextField: UITextField {
     // MARK: - 公开属性配置
     
     override open var placeholder: String? {
-        didSet { updatePlaceholder() }
+        didSet {
+            guard !isUpdatingPlaceholder else { return }
+
+            normalPlaceholderText = placeholder
+            updatePlaceholder()
+        }
     }
     
     dynamic open var placeholderAtt: PTRichText? {
@@ -298,6 +306,8 @@ open class PTHoshiTextField: UITextField {
     }
 
     private func setup() {
+        normalPlaceholderText = super.placeholder
+
         addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         addTarget(self, action: #selector(textFieldDidBeginEditing), for: .editingDidBegin)
         addTarget(self, action: #selector(textFieldDidEndEditing), for: .editingDidEnd)
@@ -389,20 +399,41 @@ open class PTHoshiTextField: UITextField {
     }
     
     private func updatePlaceholder() {
-        if let placeholderAtt = placeholderAtt {
-            floatingLabel.attributedText = PTInputPlaceholderRenderer.attributedText(placeholderAtt,
-                                                                                       font: placeholderFont,
-                                                                                       color: placeholderColor)
-            floatingLabel.text = nil
-            attributedPlaceholder = floatingLabel.attributedText
+        guard !isUpdatingPlaceholder else { return }
+
+        isUpdatingPlaceholder = true
+        defer { isUpdatingPlaceholder = false }
+
+        let resolvedPlaceholder: NSAttributedString?
+
+        if let placeholderAtt {
+            let attributedText = PTInputPlaceholderRenderer.attributedText(
+                placeholderAtt,
+                font: placeholderFont,
+                color: placeholderColor
+            )
+
+            floatingLabel.attributedText = attributedText
+            resolvedPlaceholder = attributedText
         } else {
             floatingLabel.attributedText = nil
-            floatingLabel.text = placeholder
+            floatingLabel.text = normalPlaceholderText
             floatingLabel.font = placeholderFont
             floatingLabel.textColor = placeholderColor
-            attributedPlaceholder = nil
+
+            resolvedPlaceholder = normalPlaceholderText.map {
+                NSAttributedString(
+                    string: $0,
+                    attributes: [
+                        .font: placeholderFont,
+                        .foregroundColor: placeholderColor
+                    ]
+                )
+            }
         }
-        floatingLabel.sizeToFit()
+
+        attributedPlaceholder = resolvedPlaceholder
+        setNeedsLayout()
     }
     
     private func setTextAndPlaceHolderTop() -> CGFloat {
