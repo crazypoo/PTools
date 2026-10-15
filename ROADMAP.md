@@ -1,8 +1,15 @@
 # PTools 路线图
 
-> 当前代码基线：`5.64.9`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.64.10`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.64.7`；`5.64.9` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.64.7`；`5.64.10` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.64.10 TextFieldEffects 激活状态回调
+
+- ✅ 在 `TextFieldEffects` 基类新增 `activityChangeHandler` 和只读 `isActive`，九种继承样式统一复用同一套状态判断。
+- ✅ 激活状态覆盖获得焦点、失去焦点、用户编辑、程序化 `text` 和 `attributedText` 赋值；同一状态不会重复回调。
+- ✅ 回调使用 `@MainActor @Sendable`，不改变既有动画、占位符和公开初始化方式。
+- ⬜ 仍需在真实宿主中验证键盘联动、Cell 复用、Dynamic Type 和外部控制器的视觉回归。
 
 ## 5.64.9 Input 占位符与边框颜色解耦
 

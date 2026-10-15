@@ -11,7 +11,9 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.64.9`，真机/宿主回归与发布证据完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.64.10`，真机/宿主回归与发布证据完成前不创建正式 tag。
+
+5.64.10 为所有 `TextFieldEffects` 样式提供统一的输入活动状态回调：`activityChangeHandler` 会在获得焦点、失去焦点、文本变化或程序化赋值导致状态改变时通知外部调用方，`isActive` 可随时读取当前状态。详见 [Input 输入框指南](docs/guides/PTINPUT_TEXTFIELD_EFFECTS.md)。
 
 5.64.9 修复 `YoshikoTextField` 的边框颜色与占位符配置耦合问题：`activeBorderColor` 只控制激活边框，默认沿用共享占位符配置，需要时可单独设置 `activePlaceholderColor`、`activePlaceholderFont` 和 `activePlaceholderAtt`；悬浮状态会按占位符实际高度动态预留输入区域。
 

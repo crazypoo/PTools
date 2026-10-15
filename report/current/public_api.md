@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: 6aa269a6b76fd5bc8343ea0b09c63d122b477c4a
-Generated at: 2026-10-15T02:09:09Z
+Source revision: b9635475234bf5df4d0584a7bd5bd086e11eb6f0
+Generated at: 2026-10-15T04:06:15Z
 -->
 
 # PTools 当前公开 API 清单
@@ -3782,24 +3782,27 @@ Generated at: 2026-10-15T02:09:09Z
 | PooToolsSource/Input/TextFieldEffects.swift:85 | typealias | public | public typealias AnimationCompletionHandler = (_ type: AnimationType) -> Void |
 | PooToolsSource/Input/TextFieldEffects.swift:88 | let | public | public let placeholderLabel = UILabel() |
 | PooToolsSource/Input/TextFieldEffects.swift:91 | var | open | open var animationCompletionHandler: AnimationCompletionHandler? |
-| PooToolsSource/Input/TextFieldEffects.swift:94 | var | open | open var inputAppearance = PTInputAppearance() { |
-| PooToolsSource/Input/TextFieldEffects.swift:102 | var | open | open var placeholderAtt: PTRichText? { |
-| PooToolsSource/Input/TextFieldEffects.swift:112 | var | open | open var placeholderFont: UIFont { |
-| PooToolsSource/Input/TextFieldEffects.swift:121 | var | open | open var textAndPlaceholderSpace: CGFloat { |
-| PooToolsSource/Input/TextFieldEffects.swift:132 | var | open | open var textAndPlceholderSpace: CGFloat { |
-| PooToolsSource/Input/TextFieldEffects.swift:137 | var | open | open var leadingSpace: CGFloat { |
-| PooToolsSource/Input/TextFieldEffects.swift:147 | var | open | open var leftSpace: CGFloat { |
-| PooToolsSource/Input/TextFieldEffects.swift:152 | var | open | open var textEditingEdges: UIEdgeInsets { |
-| PooToolsSource/Input/TextFieldEffects.swift:165 | func | open | open func animateViewsForTextEntry() { |
-| PooToolsSource/Input/TextFieldEffects.swift:170 | func | open | open func animateViewsForTextDisplay() { |
-| PooToolsSource/Input/TextFieldEffects.swift:176 | func | open | open func drawViewsForRect(_ rect: CGRect) { |
-| PooToolsSource/Input/TextFieldEffects.swift:182 | func | open | open func updateViewsForBoundsChange(_ bounds: CGRect) { |
-| PooToolsSource/Input/TextFieldEffects.swift:190 | func | open | open func applyPlaceholder(to label: UILabel, text: String?, font: UIFont, color: UIColor, scale: CGFloat = 1) { |
-| PooToolsSource/Input/TextFieldEffects.swift:210 | func | open | open func refreshPlaceholderAppearance() { |
-| PooToolsSource/Input/TextFieldEffects.swift:214 | func | open | open func applySharedTextRect(_ styleRect: CGRect, bounds: CGRect) -> CGRect { |
-| PooToolsSource/Input/TextFieldEffects.swift:231 | func | open | open func invalidateInputLayout() { |
-| PooToolsSource/Input/TextFieldEffects.swift:315 | func | open | @objc open func textFieldDidBeginEditing() { |
-| PooToolsSource/Input/TextFieldEffects.swift:320 | func | open | @objc open func textFieldDidEndEditing() { |
+| PooToolsSource/Input/TextFieldEffects.swift:96 | typealias | public | public typealias ActivityChangeHandler = @MainActor @Sendable (_ isActive: Bool) -> Void |
+| PooToolsSource/Input/TextFieldEffects.swift:101 | var | open | open var activityChangeHandler: ActivityChangeHandler? { |
+| PooToolsSource/Input/TextFieldEffects.swift:111 | var | public | public var isActive: Bool { |
+| PooToolsSource/Input/TextFieldEffects.swift:116 | var | open | open var inputAppearance = PTInputAppearance() { |
+| PooToolsSource/Input/TextFieldEffects.swift:124 | var | open | open var placeholderAtt: PTRichText? { |
+| PooToolsSource/Input/TextFieldEffects.swift:134 | var | open | open var placeholderFont: UIFont { |
+| PooToolsSource/Input/TextFieldEffects.swift:143 | var | open | open var textAndPlaceholderSpace: CGFloat { |
+| PooToolsSource/Input/TextFieldEffects.swift:154 | var | open | open var textAndPlceholderSpace: CGFloat { |
+| PooToolsSource/Input/TextFieldEffects.swift:159 | var | open | open var leadingSpace: CGFloat { |
+| PooToolsSource/Input/TextFieldEffects.swift:169 | var | open | open var leftSpace: CGFloat { |
+| PooToolsSource/Input/TextFieldEffects.swift:174 | var | open | open var textEditingEdges: UIEdgeInsets { |
+| PooToolsSource/Input/TextFieldEffects.swift:187 | func | open | open func animateViewsForTextEntry() { |
+| PooToolsSource/Input/TextFieldEffects.swift:192 | func | open | open func animateViewsForTextDisplay() { |
+| PooToolsSource/Input/TextFieldEffects.swift:198 | func | open | open func drawViewsForRect(_ rect: CGRect) { |
+| PooToolsSource/Input/TextFieldEffects.swift:204 | func | open | open func updateViewsForBoundsChange(_ bounds: CGRect) { |
+| PooToolsSource/Input/TextFieldEffects.swift:212 | func | open | open func applyPlaceholder(to label: UILabel, text: String?, font: UIFont, color: UIColor, scale: CGFloat = 1) { |
+| PooToolsSource/Input/TextFieldEffects.swift:232 | func | open | open func refreshPlaceholderAppearance() { |
+| PooToolsSource/Input/TextFieldEffects.swift:236 | func | open | open func applySharedTextRect(_ styleRect: CGRect, bounds: CGRect) -> CGRect { |
+| PooToolsSource/Input/TextFieldEffects.swift:253 | func | open | open func invalidateInputLayout() { |
+| PooToolsSource/Input/TextFieldEffects.swift:347 | func | open | @objc open func textFieldDidBeginEditing() { |
+| PooToolsSource/Input/TextFieldEffects.swift:353 | func | open | @objc open func textFieldDidEndEditing() { |
 | PooToolsSource/Input/UIView+PTEXShake.swift:12 | enum | public | public enum PTShakeDirection { |
 | PooToolsSource/Input/YokoTextField.swift:13 | class | open | @IBDesignable open class YokoTextField: TextFieldEffects { |
 | PooToolsSource/Input/YoshikoTextField.swift:13 | class | open | @IBDesignable open class YoshikoTextField: TextFieldEffects { |

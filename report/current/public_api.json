@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "6aa269a6b76fd5bc8343ea0b09c63d122b477c4a",
-  "generated_at": "2026-10-15T02:09:09Z",
+  "source_revision": "b9635475234bf5df4d0584a7bd5bd086e11eb6f0",
+  "generated_at": "2026-10-15T04:06:15Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -30160,9 +30160,33 @@
       "declaration": "open var animationCompletionHandler: AnimationCompletionHandler?"
     },
     {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|public|typealias|public typealias ActivityChangeHandler = @MainActor @Sendable (_ isActive: Bool) -> Void",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 96,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias ActivityChangeHandler = @MainActor @Sendable (_ isActive: Bool) -> Void"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var activityChangeHandler: ActivityChangeHandler?",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 101,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var activityChangeHandler: ActivityChangeHandler? {"
+    },
+    {
+      "key": "PooToolsSource/Input/TextFieldEffects.swift|public|var|public var isActive: Bool",
+      "path": "PooToolsSource/Input/TextFieldEffects.swift",
+      "line": 111,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isActive: Bool {"
+    },
+    {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var inputAppearance = PTInputAppearance()",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 94,
+      "line": 116,
       "access": "open",
       "kind": "var",
       "declaration": "open var inputAppearance = PTInputAppearance() {"
@@ -30170,7 +30194,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var placeholderAtt: PTRichText?",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 102,
+      "line": 124,
       "access": "open",
       "kind": "var",
       "declaration": "open var placeholderAtt: PTRichText? {"
@@ -30178,7 +30202,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var placeholderFont: UIFont",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 112,
+      "line": 134,
       "access": "open",
       "kind": "var",
       "declaration": "open var placeholderFont: UIFont {"
@@ -30186,7 +30210,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var textAndPlaceholderSpace: CGFloat",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 121,
+      "line": 143,
       "access": "open",
       "kind": "var",
       "declaration": "open var textAndPlaceholderSpace: CGFloat {"
@@ -30194,7 +30218,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var textAndPlceholderSpace: CGFloat",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 132,
+      "line": 154,
       "access": "open",
       "kind": "var",
       "declaration": "open var textAndPlceholderSpace: CGFloat {"
@@ -30202,7 +30226,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var leadingSpace: CGFloat",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 137,
+      "line": 159,
       "access": "open",
       "kind": "var",
       "declaration": "open var leadingSpace: CGFloat {"
@@ -30210,7 +30234,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var leftSpace: CGFloat",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 147,
+      "line": 169,
       "access": "open",
       "kind": "var",
       "declaration": "open var leftSpace: CGFloat {"
@@ -30218,7 +30242,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|var|open var textEditingEdges: UIEdgeInsets",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 152,
+      "line": 174,
       "access": "open",
       "kind": "var",
       "declaration": "open var textEditingEdges: UIEdgeInsets {"
@@ -30226,7 +30250,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func animateViewsForTextEntry()",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 165,
+      "line": 187,
       "access": "open",
       "kind": "func",
       "declaration": "open func animateViewsForTextEntry() {"
@@ -30234,7 +30258,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func animateViewsForTextDisplay()",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 170,
+      "line": 192,
       "access": "open",
       "kind": "func",
       "declaration": "open func animateViewsForTextDisplay() {"
@@ -30242,7 +30266,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func drawViewsForRect(_ rect: CGRect)",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 176,
+      "line": 198,
       "access": "open",
       "kind": "func",
       "declaration": "open func drawViewsForRect(_ rect: CGRect) {"
@@ -30250,7 +30274,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func updateViewsForBoundsChange(_ bounds: CGRect)",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 182,
+      "line": 204,
       "access": "open",
       "kind": "func",
       "declaration": "open func updateViewsForBoundsChange(_ bounds: CGRect) {"
@@ -30258,7 +30282,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func applyPlaceholder(to label: UILabel, text: String?, font: UIFont, color: UIColor, scale: CGFloat = 1)",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 190,
+      "line": 212,
       "access": "open",
       "kind": "func",
       "declaration": "open func applyPlaceholder(to label: UILabel, text: String?, font: UIFont, color: UIColor, scale: CGFloat = 1) {"
@@ -30266,7 +30290,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func refreshPlaceholderAppearance()",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 210,
+      "line": 232,
       "access": "open",
       "kind": "func",
       "declaration": "open func refreshPlaceholderAppearance() {"
@@ -30274,7 +30298,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func applySharedTextRect(_ styleRect: CGRect, bounds: CGRect) -> CGRect",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 214,
+      "line": 236,
       "access": "open",
       "kind": "func",
       "declaration": "open func applySharedTextRect(_ styleRect: CGRect, bounds: CGRect) -> CGRect {"
@@ -30282,7 +30306,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|open func invalidateInputLayout()",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 231,
+      "line": 253,
       "access": "open",
       "kind": "func",
       "declaration": "open func invalidateInputLayout() {"
@@ -30290,7 +30314,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|@objc open func textFieldDidBeginEditing()",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 315,
+      "line": 347,
       "access": "open",
       "kind": "func",
       "declaration": "@objc open func textFieldDidBeginEditing() {"
@@ -30298,7 +30322,7 @@
     {
       "key": "PooToolsSource/Input/TextFieldEffects.swift|open|func|@objc open func textFieldDidEndEditing()",
       "path": "PooToolsSource/Input/TextFieldEffects.swift",
-      "line": 320,
+      "line": 353,
       "access": "open",
       "kind": "func",
       "declaration": "@objc open func textFieldDidEndEditing() {"

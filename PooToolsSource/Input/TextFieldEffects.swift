@@ -90,6 +90,28 @@ open class TextFieldEffects: UITextField {
     /// 动画完成时的回调属性
     open var animationCompletionHandler: AnimationCompletionHandler?
 
+    // English: Report only active-state transitions; active means focused or containing text.
+    // Español: Informa solo las transiciones de actividad; activo significa enfocado o con texto.
+    // 中文：仅报告激活状态变化；激活表示获得焦点或当前包含文本。
+    public typealias ActivityChangeHandler = @MainActor @Sendable (_ isActive: Bool) -> Void
+
+    // English: External consumers can react to the shared active state without observing UIKit events.
+    // Español: Los consumidores externos pueden reaccionar al estado activo común sin observar eventos de UIKit.
+    // 中文：外部调用方无需监听 UIKit 事件即可响应统一的激活状态。
+    open var activityChangeHandler: ActivityChangeHandler? {
+        didSet {
+            lastReportedActivity = nil
+            notifyActivityIfNeeded()
+        }
+    }
+
+    // English: The state is shared by every TextFieldEffects style and remains readable at any time.
+    // Español: El estado es común a todos los estilos TextFieldEffects y siempre se puede consultar.
+    // 中文：所有 TextFieldEffects 样式共享该状态，并且可以随时读取。
+    public var isActive: Bool {
+        isFirstResponder || !(text?.isEmpty ?? true)
+    }
+
     /// 统一输入框外观配置；旧属性继续通过各样式保留。
     open var inputAppearance = PTInputAppearance() {
         didSet {
@@ -261,6 +283,7 @@ open class TextFieldEffects: UITextField {
         didSet {
             // 延迟到布局/绘制阶段更新，避免控件尚未安装图层时触发动画。
             invalidateInputLayout()
+            notifyActivityIfNeeded()
         }
     }
 
@@ -268,7 +291,10 @@ open class TextFieldEffects: UITextField {
     // Español: Mantiene los cambios programáticos de texto enriquecido en el mismo flujo seguro de invalidación.
     // 中文：让程序化富文本变化也进入同一条安全的布局刷新路径。
     override open var attributedText: NSAttributedString? {
-        didSet { invalidateInputLayout() }
+        didSet {
+            invalidateInputLayout()
+            notifyActivityIfNeeded()
+        }
     }
     
     // MARK: - 生命周期与编辑事件
@@ -290,16 +316,18 @@ open class TextFieldEffects: UITextField {
         guard !isEditingTargetsInstalled else { return }
         addTarget(self, action: #selector(handleEditingDidBegin), for: .editingDidBegin)
         addTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEnd)
+        addTarget(self, action: #selector(handleEditingChanged), for: .editingChanged)
         isEditingTargetsInstalled = true
     }
 
-    // English: Removing only the two targets keeps reuse and repeated superview moves idempotent.
-    // Español: Elimina solo los dos objetivos para que la reutilización y los movimientos sean idempotentes.
-    // 中文：只移除这两个 target，保证复用和重复进出父视图都是幂等的。
+    // English: Removing only the three owned targets keeps reuse and repeated superview moves idempotent.
+    // Español: Elimina solo los tres objetivos propios para que la reutilización y los movimientos sean idempotentes.
+    // 中文：只移除这三个自有 target，保证复用和重复进出父视图都是幂等的。
     private func removeEditingTargets() {
         guard isEditingTargetsInstalled else { return }
         removeTarget(self, action: #selector(handleEditingDidBegin), for: .editingDidBegin)
         removeTarget(self, action: #selector(handleEditingDidEnd), for: .editingDidEnd)
+        removeTarget(self, action: #selector(handleEditingChanged), for: .editingChanged)
         isEditingTargetsInstalled = false
     }
 
@@ -310,15 +338,28 @@ open class TextFieldEffects: UITextField {
     @objc private func handleEditingDidEnd(_ sender: UITextField) {
         textFieldDidEndEditing()
     }
+
+    @objc private func handleEditingChanged(_ sender: UITextField) {
+        notifyActivityIfNeeded()
+    }
     
     /// 触发条件：输入框开始编辑（获得焦点）
     @objc open func textFieldDidBeginEditing() {
+        notifyActivityIfNeeded()
         animateViewsForTextEntry()
     }
     
     /// 触发条件：输入框结束编辑（失去焦点）
     @objc open func textFieldDidEndEditing() {
+        notifyActivityIfNeeded()
         animateViewsForTextDisplay()
+    }
+
+    private func notifyActivityIfNeeded() {
+        let currentActivity = isActive
+        guard currentActivity != lastReportedActivity else { return }
+        lastReportedActivity = currentActivity
+        activityChangeHandler?(currentActivity)
     }
     
     // MARK: - Interface Builder 支持
@@ -335,6 +376,7 @@ open class TextFieldEffects: UITextField {
     }
 
     private var isEditingTargetsInstalled = false
+    private var lastReportedActivity: Bool?
     private var renderedBounds = CGRect.null
 
     deinit {

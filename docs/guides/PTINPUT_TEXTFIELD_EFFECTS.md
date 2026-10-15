@@ -29,6 +29,21 @@ field.inputAppearance = PTInputAppearance(
 
 `YoshikoTextField` 的 `activeBorderColor` 只控制激活边框，不再影响占位符文字。激活态默认沿用 `placeholderColor`；如果需要独立配置，可分别设置 `activePlaceholderColor`、`activePlaceholderFont` 和 `activePlaceholderAtt`。悬浮占位符会按实际字体或富文本高度动态调整输入区域。
 
+所有继承 `TextFieldEffects` 的样式都支持统一的激活状态回调。`isActive` 在输入框获得焦点或包含文本时为 `true`，`activityChangeHandler` 只在状态发生变化时调用：
+
+```swift
+@MainActor
+final class FormViewController: UIViewController {
+    private func configure(field: HoshiTextField) {
+        field.activityChangeHandler = { [weak self] isActive in
+            self?.updateSubmitState(for: isActive)
+        }
+    }
+}
+```
+
+回调同样覆盖用户编辑、失去焦点以及程序化设置 `text` / `attributedText` 的场景。独立的 `PTHoshiTextField` 不继承 `TextFieldEffects`，继续使用自身 API。
+
 旧拼写 `textAndPlceholderSpace` 仍可用，但新代码应使用 `textAndPlaceholderSpace`。旧属性和旧初始化方式不会改变动画和布局时机。
 
 ## English
@@ -39,6 +54,8 @@ field.inputAppearance = PTInputAppearance(
 
 For `YoshikoTextField`, `activeBorderColor` controls only the active border. The floating placeholder falls back to the shared placeholder configuration and can override its color, font, and rich text with `activePlaceholderColor`, `activePlaceholderFont`, and `activePlaceholderAtt`. The input area reserves the placeholder's measured height while it floats.
 
+Every `TextFieldEffects` style exposes the same active-state API. `isActive` is `true` while the field is focused or contains text, and `activityChangeHandler` is called only when that value changes. The callback also covers user editing, resigning first responder, and programmatic `text` / `attributedText` assignments. The standalone `PTHoshiTextField` is not a `TextFieldEffects` subclass and keeps its own API.
+
 ## Español
 
 `PooToolsInput` ofrece un contrato común de apariencia para iOS 17+ y Swift 6. Se mantienen las propiedades específicas de cada estilo para conservar la compatibilidad. Usa `inputAppearance` cuando una pantalla necesite una fuente, color, espacio inicial e insets uniformes. Se conservan todos los runs del placeholder enriquecido y asignar `nil` a `placeholderAtt` vuelve al placeholder normal de UIKit.
@@ -46,4 +63,6 @@ For `YoshikoTextField`, `activeBorderColor` controls only the active border. The
 `PTHoshiTextField` respeta un `leftView` proporcionado por la aplicación; el espaciador interno solo se instala cuando no existe uno personalizado. El layout se invalida en lugar de ejecutarse manualmente, lo que mantiene estable Auto Layout y la reutilización de celdas.
 
 En `YoshikoTextField`, `activeBorderColor` solo controla el borde activo. El placeholder flotante usa la configuración compartida o puede sobrescribir color, fuente y texto enriquecido con `activePlaceholderColor`, `activePlaceholderFont` y `activePlaceholderAtt`. El área de entrada reserva la altura medida del placeholder mientras flota.
+
+Todos los estilos que heredan de `TextFieldEffects` ofrecen el mismo estado activo. `isActive` es `true` cuando el campo tiene el foco o contiene texto, y `activityChangeHandler` solo se ejecuta cuando ese valor cambia. También cubre la edición del usuario, la pérdida del foco y las asignaciones programáticas de `text` / `attributedText`. `PTHoshiTextField` es una variante independiente y conserva su propia API.
 
