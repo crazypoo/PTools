@@ -6,6 +6,13 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.64.9 — 2026-10-15
+
+- 修复 `YoshikoTextField` 将 `activeBorderColor` 错误复用为激活态占位符文字颜色的问题；边框和占位符颜色现在可以独立配置。
+- 新增可选的 `activePlaceholderColor`、`activePlaceholderFont` 和 `activePlaceholderAtt`，未设置时激活态占位符继续使用共享的 `placeholderColor`、`placeholderFont` 和 `placeholderAtt`，保留现有调用兼容性。
+- 修复 Yoshiko 悬浮占位符在字体或富文本高度变化时被输入框裁剪的问题；输入区域会按占位符实际测量高度动态预留空间。
+- 审计 Input 模块的相关输入框：其他样式已使用独立占位符颜色入口，`IsaoTextField` 的旧颜色回退行为保持不变。
+
 ## 5.64.8 — 2026-10-14
 
 - 修复默认 `Core` / `Device` 被动导入 CoreNFC 的问题；未使用 NFC 的宿主不再因为 `PTDeviceCapability.nfc` 检测而携带 NFC 框架。

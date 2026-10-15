@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory.rb
-Source revision: 486435925e25155cc3fab847fbe7c076e7f31883
-Generated at: 2026-10-14T08:12:54Z
+Source revision: 6aa269a6b76fd5bc8343ea0b09c63d122b477c4a
+Generated at: 2026-10-15T02:09:10Z
 -->
 
 # PTools 当前缓存盘点
@@ -168,17 +168,17 @@ Generated at: 2026-10-14T08:12:54Z
 | PooToolsSource/PToolsUIFoundation/PTRichTextCache.swift:9 | NSCache | private let regexCache = NSCache<NSString, NSRegularExpression>() |
 | PooToolsSource/PToolsUIFoundation/PTRichTextCache.swift:10 | NSCache | private let detectorCache = NSCache<NSNumber, NSDataDetector>() |
 | PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift:1 | disk or custom cache | // English: Rich-text match rules and conflict policies remain value-only and independent from caching. |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:721 | NSCache | private let imageCache = NSCache<NSString, UIImage>() |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:722 | NSCache | private let posterCache = NSCache<NSString, UIImage>() |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:899 | disk or custom cache | // English: The poster renderer uses the bounded rich-text cache contract. |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:905 | NSCache | private static let cache: NSCache<NSString, UIImage> = { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:906 | NSCache | let cache = NSCache<NSString, UIImage>() |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:907 | disk or custom cache | cache.countLimit = cachePolicy.countLimit |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:908 | disk or custom cache | cache.totalCostLimit = cachePolicy.costLimit |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:909 | disk or custom cache | return cache |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:922 | disk or custom cache | cache.removeAllObjects() |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:931 | disk or custom cache | if let cached = cache.object(forKey: key as NSString) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:991 | disk or custom cache | cache.setObject(rendered, forKey: key as NSString) |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:751 | NSCache | private let imageCache = NSCache<NSString, UIImage>() |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:752 | NSCache | private let posterCache = NSCache<NSString, UIImage>() |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:929 | disk or custom cache | // English: The poster renderer uses the bounded rich-text cache contract. |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:935 | NSCache | private static let cache: NSCache<NSString, UIImage> = { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:936 | NSCache | let cache = NSCache<NSString, UIImage>() |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:937 | disk or custom cache | cache.countLimit = cachePolicy.countLimit |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:938 | disk or custom cache | cache.totalCostLimit = cachePolicy.costLimit |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:939 | disk or custom cache | return cache |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:952 | disk or custom cache | cache.removeAllObjects() |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:961 | disk or custom cache | if let cached = cache.object(forKey: key as NSString) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:1021 | disk or custom cache | cache.setObject(rendered, forKey: key as NSString) |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:669 | disk or custom cache | PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to cache failed", icon: .Error) |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:707 | disk or custom cache | // MARK: - Cache Helper |
 | PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:721 | disk or custom cache | PTNSLogConsole("Video cache export failed: \(String(describing: error))") |

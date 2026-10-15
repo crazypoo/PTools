@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "486435925e25155cc3fab847fbe7c076e7f31883",
-  "generated_at": "2026-10-14T08:12:52Z",
+  "source_revision": "6aa269a6b76fd5bc8343ea0b09c63d122b477c4a",
+  "generated_at": "2026-10-15T02:09:08Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -2321,7 +2321,7 @@
     },
     {
       "path": "PooToolsSource/Input/YoshikoTextField.swift",
-      "lines": 249,
+      "lines": 298,
       "classification": "ok"
     },
     {
@@ -4466,7 +4466,7 @@
     },
     {
       "path": "PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift",
-      "lines": 103,
+      "lines": 98,
       "classification": "ok"
     },
     {
@@ -4960,8 +4960,13 @@
       "classification": "ok"
     },
     {
+      "path": "PooToolsSource/PToolsUIFoundation/PTRichTextLabelRendering.swift",
+      "lines": 123,
+      "classification": "ok"
+    },
+    {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
-      "lines": 534,
+      "lines": 585,
       "classification": "ok"
     },
     {
@@ -4971,12 +4976,12 @@
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "lines": 1030,
+      "lines": 1060,
       "classification": "warning"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMediaController.swift",
-      "lines": 149,
+      "lines": 153,
       "classification": "ok"
     },
     {

@@ -37,7 +37,6 @@ import UIKit
         didSet {
             updateBorder()
             updateBackground()
-            updatePlaceholder()
         }
     }
     
@@ -47,7 +46,6 @@ import UIKit
         didSet {
             updateBorder()
             updateBackground()
-            updatePlaceholder()
         }
     }
 
@@ -62,6 +60,33 @@ import UIKit
     /// 占位符文字的初始颜色。
     /// 默认值为深灰色 (dark gray)。
     @IBInspectable dynamic open var placeholderColor: UIColor = .darkGray {
+        didSet {
+            updatePlaceholder()
+        }
+    }
+
+    // English: Keep the floating placeholder color independent from the active border color; nil reuses placeholderColor.
+    // Español: Mantiene independiente el color del placeholder flotante del borde activo; nil reutiliza placeholderColor.
+    // 中文：让悬浮占位符颜色独立于激活边框颜色；为 nil 时沿用 placeholderColor。
+    @IBInspectable dynamic open var activePlaceholderColor: UIColor? {
+        didSet {
+            updatePlaceholder()
+        }
+    }
+
+    // English: Use a separate floating placeholder font; nil keeps the shared placeholder font and scale.
+    // Español: Usa una fuente independiente para el placeholder flotante; nil conserva la fuente y escala compartidas.
+    // 中文：为悬浮占位符提供独立字体；为 nil 时沿用共享占位符字体和缩放比例。
+    open var activePlaceholderFont: UIFont? {
+        didSet {
+            updatePlaceholder()
+        }
+    }
+
+    // English: Use a separate floating rich placeholder; nil falls back to the shared placeholderAtt.
+    // Español: Usa un placeholder enriquecido independiente al flotar; nil vuelve a placeholderAtt.
+    // 中文：为悬浮占位符提供独立富文本；为 nil 时回退到共享的 placeholderAtt。
+    open var activePlaceholderAtt: PTRichText? {
         didSet {
             updatePlaceholder()
         }
@@ -122,15 +147,30 @@ import UIKit
 
     /// 更新占位符的文字、字体、对齐方式及颜色
     private func updatePlaceholder() {
-        placeholderLabel.frame = placeholderRect(forBounds: bounds)
         placeholderLabel.textAlignment = textAlignment
 
         let isActive = isFirstResponder || isTextNotEmpty
-        applyPlaceholder(to: placeholderLabel,
-                         text: isActive ? placeholder?.uppercased() : placeholder,
-                         font: currentFont,
-                         color: isActive ? activeBorderColor : placeholderColor,
-                         scale: isActive ? placeholderFontScale * 0.8 : placeholderFontScale)
+        let scale = isActive ? placeholderFontScale * 0.8 : placeholderFontScale
+        let resolvedFont = activePlaceholderFont ??
+            inputAppearance.placeholderFontOverride ??
+            UIFont(descriptor: currentFont.fontDescriptor, size: max(1, currentFont.pointSize * scale))
+        let resolvedColor = inputAppearance.placeholderColorOverride ??
+            (isActive ? (activePlaceholderColor ?? placeholderColor) : placeholderColor)
+        let resolvedRichText = isActive ? (activePlaceholderAtt ?? placeholderAtt) : placeholderAtt
+
+        if let resolvedRichText {
+            placeholderLabel.attributedText = PTInputPlaceholderRenderer.attributedText(resolvedRichText,
+                                                                                         font: resolvedFont,
+                                                                                         color: resolvedColor)
+            placeholderLabel.text = nil
+        } else {
+            placeholderLabel.attributedText = nil
+            placeholderLabel.text = isActive ? placeholder?.uppercased() : placeholder
+            placeholderLabel.font = resolvedFont
+            placeholderLabel.textColor = resolvedColor
+        }
+
+        placeholderLabel.frame = placeholderRect(forBounds: bounds)
     }
 
     // English: Refresh Yoshiko with its state-specific uppercase and border rules.
@@ -140,19 +180,25 @@ import UIKit
         updatePlaceholder()
     }
     
-    /// 修复 Bug 后的字体缩放计算方法
-    private func placeholderFontFromFont(font: UIFont, percentageOfOriginalSize: CGFloat) -> UIFont {
-        return UIFont(descriptor: font.fontDescriptor, size: font.pointSize * percentageOfOriginalSize)
-    }
-
     /// 计算边框图层所在的区域坐标 (让出顶部占位符悬浮的空间)
     private func rectForBounds(_ bounds: CGRect) -> CGRect {
-        return CGRect(x: bounds.origin.x, y: bounds.origin.y + placeholderHeight, width: bounds.size.width, height: bounds.size.height - placeholderHeight)
+        return CGRect(x: bounds.origin.x,
+                      y: bounds.origin.y + placeholderHeight,
+                      width: bounds.size.width,
+                      height: max(0, bounds.size.height - placeholderHeight))
     }
 
-    /// 计算占位符区域的高度
+    // English: Reserve the measured placeholder height so a floating label is never clipped.
+    // Español: Reserva la altura medida del placeholder para que la etiqueta flotante nunca se recorte.
+    // 中文：根据占位符的实际测量高度预留空间，避免悬浮标签被裁剪。
     private var placeholderHeight: CGFloat {
-        return placeHolderInsets.y + placeholderFontFromFont(font: currentFont, percentageOfOriginalSize: placeholderFontScale).lineHeight
+        let fallbackHeight = placeHolderInsets.y + (placeholderLabel.font ?? currentFont).lineHeight
+        guard bounds.width > 0 else { return fallbackHeight }
+
+        let availableWidth = max(1, bounds.width - (placeHolderInsets.x * 2))
+        let measuredHeight = placeholderLabel.sizeThatFits(CGSize(width: availableWidth,
+                                                                   height: .greatestFiniteMagnitude)).height
+        return max(fallbackHeight, measuredHeight + placeHolderInsets.y)
     }
     
     /// 核心动画逻辑封装：处理状态切换时的视图过渡动画
@@ -211,7 +257,10 @@ import UIKit
     open override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
         if isFirstResponder || isTextNotEmpty {
             // 激活状态下，占位符上浮至预设的顶部内边距位置
-            return CGRect(x: placeHolderInsets.x, y: placeHolderInsets.y, width: bounds.width, height: placeholderHeight)
+            return CGRect(x: placeHolderInsets.x,
+                          y: placeHolderInsets.y,
+                          width: max(0, bounds.width - (placeHolderInsets.x * 2)),
+                          height: placeholderHeight)
         } else {
             // 未激活状态下，占位符处于正常文本位置
             return textRect(forBounds: bounds)
@@ -228,8 +277,8 @@ import UIKit
         // 让出顶部的高度，保证输入的文本不会和上浮的占位符重叠
         return applySharedTextRect(CGRect(x: textFieldInsets.x,
                                           y: placeholderHeight,
-                                          width: bounds.width - (textFieldInsets.x * 2),
-                                          height: bounds.height - placeholderHeight),
+                                          width: max(0, bounds.width - (textFieldInsets.x * 2)),
+                                          height: max(0, bounds.height - placeholderHeight)),
                                    bounds: bounds)
     }
     

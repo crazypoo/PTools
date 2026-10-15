@@ -232,29 +232,24 @@ PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,1
 PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,13,endif,,,structural
 PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,15,if,canImport(CoreLocation),canImport(CoreLocation),review-platform-or-package-branch
 PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,17,endif,,,structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,19,if,canImport(CoreNFC),canImport(CoreNFC),review-platform-or-package-branch
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,21,endif,,,structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,30,if,canImport(AVFoundation),canImport(AVFoundation),review-platform-or-package-branch
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,32,else,,else of canImport(AVFoundation),structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,34,endif,,,structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,42,if,canImport(AVFoundation) && (os(iOS) || os(tvOS) || os(watchOS)),canImport(AVFoundation) && (os(iOS) || os(tvOS) || os(watchOS)),review-platform-or-package-branch
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,44,else,,else of canImport(AVFoundation) && (os(iOS) || os(tvOS) || os(watchOS)),structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,46,endif,,,structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,48,if,canImport(AVFoundation) && (os(iOS) || os(tvOS) || os(watchOS)),canImport(AVFoundation) && (os(iOS) || os(tvOS) || os(watchOS)),review-platform-or-package-branch
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,50,else,,else of canImport(AVFoundation) && (os(iOS) || os(tvOS) || os(watchOS)),structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,52,endif,,,structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,60,if,canImport(CoreNFC),canImport(CoreNFC),review-platform-or-package-branch
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,62,else,,else of canImport(CoreNFC),structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,64,endif,,,structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,66,if,canImport(CoreMotion) && (os(iOS) || os(tvOS) || os(watchOS)),canImport(CoreMotion) && (os(iOS) || os(tvOS) || os(watchOS)),review-platform-or-package-branch
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,68,else,,else of canImport(CoreMotion) && (os(iOS) || os(tvOS) || os(watchOS)),structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,70,endif,,,structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,72,if,canImport(CoreLocation),canImport(CoreLocation),review-platform-or-package-branch
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,74,else,,else of canImport(CoreLocation),structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,76,endif,,,structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,78,if,canImport(CoreTelephony),canImport(CoreTelephony),review-platform-or-package-branch
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,80,else,,else of canImport(CoreTelephony),structural
-PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,82,endif,,,structural
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,26,if,canImport(AVFoundation),canImport(AVFoundation),review-platform-or-package-branch
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,28,else,,else of canImport(AVFoundation),structural
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,30,endif,,,structural
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,38,if,canImport(AVFoundation) && (os(iOS) || os(tvOS) || os(watchOS)),canImport(AVFoundation) && (os(iOS) || os(tvOS) || os(watchOS)),review-platform-or-package-branch
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,40,else,,else of canImport(AVFoundation) && (os(iOS) || os(tvOS) || os(watchOS)),structural
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,42,endif,,,structural
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,44,if,canImport(AVFoundation) && (os(iOS) || os(tvOS) || os(watchOS)),canImport(AVFoundation) && (os(iOS) || os(tvOS) || os(watchOS)),review-platform-or-package-branch
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,46,else,,else of canImport(AVFoundation) && (os(iOS) || os(tvOS) || os(watchOS)),structural
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,48,endif,,,structural
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,61,if,canImport(CoreMotion) && (os(iOS) || os(tvOS) || os(watchOS)),canImport(CoreMotion) && (os(iOS) || os(tvOS) || os(watchOS)),review-platform-or-package-branch
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,63,else,,else of canImport(CoreMotion) && (os(iOS) || os(tvOS) || os(watchOS)),structural
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,65,endif,,,structural
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,67,if,canImport(CoreLocation),canImport(CoreLocation),review-platform-or-package-branch
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,69,else,,else of canImport(CoreLocation),structural
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,71,endif,,,structural
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,73,if,canImport(CoreTelephony),canImport(CoreTelephony),review-platform-or-package-branch
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,75,else,,else of canImport(CoreTelephony),structural
+PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift,77,endif,,,structural
 PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift,7,if,canImport(Darwin),canImport(Darwin),review-platform-or-package-branch
 PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift,9,endif,,,structural
 PToolsDevice,PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift,60,if,targetEnvironment(simulator),targetEnvironment(simulator),review-platform-or-package-branch
@@ -505,6 +500,10 @@ PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransferDownloadController.swift,
 PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransferDownloadController.swift,8,endif,,,structural
 PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransferResumeStore.swift,6,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
 PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransferResumeStore.swift,8,endif,,,structural
+PToolsUIFoundation,PooToolsSource/PToolsUIFoundation/PTRichTextLabelRendering.swift,60,if,DEBUG,DEBUG,review-platform-or-package-branch
+PToolsUIFoundation,PooToolsSource/PToolsUIFoundation/PTRichTextLabelRendering.swift,86,endif,,,structural
+PToolsUIFoundation,PooToolsSource/PToolsUIFoundation/PTRichTextLabelRendering.swift,113,if,DEBUG,DEBUG,review-platform-or-package-branch
+PToolsUIFoundation,PooToolsSource/PToolsUIFoundation/PTRichTextLabelRendering.swift,123,endif,,,structural
 PToolsUIFoundation,PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift,13,if,canImport(PToolsCore),canImport(PToolsCore),review-platform-or-package-branch
 PToolsUIFoundation,PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift,15,endif,,,structural
 PToolsUIFoundation,PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift,15,if,os(iOS) || os(tvOS),os(iOS) || os(tvOS),review-platform-or-package-branch

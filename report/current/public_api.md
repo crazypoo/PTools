@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: 486435925e25155cc3fab847fbe7c076e7f31883
-Generated at: 2026-10-14T08:12:53Z
+Source revision: 6aa269a6b76fd5bc8343ea0b09c63d122b477c4a
+Generated at: 2026-10-15T02:09:09Z
 -->
 
 # PTools 当前公开 API 清单
@@ -3804,6 +3804,8 @@ Generated at: 2026-10-14T08:12:53Z
 | PooToolsSource/Input/YokoTextField.swift:13 | class | open | @IBDesignable open class YokoTextField: TextFieldEffects { |
 | PooToolsSource/Input/YoshikoTextField.swift:13 | class | open | @IBDesignable open class YoshikoTextField: TextFieldEffects { |
 | PooToolsSource/Input/YoshikoTextField.swift:28 | var | open | @IBInspectable open var borderSize: CGFloat = 2.0 { |
+| PooToolsSource/Input/YoshikoTextField.swift:80 | var | open | open var activePlaceholderFont: UIFont? { |
+| PooToolsSource/Input/YoshikoTextField.swift:89 | var | open | open var activePlaceholderAtt: PTRichText? { |
 | PooToolsSource/Inspector/AdaptivePresentationControllerDelegate.swift:14 | class | public | public final class AdaptivePresentationControllerDelegate: NSObject, UIAdaptivePresentationControllerDelegate, @MainActor Dismissable { |
 | PooToolsSource/Inspector/AdaptivePresentationControllerDelegate.swift:15 | typealias | public | public typealias ModalPresentationStyleProvider = (UIPresentationController, UITraitCollection) -> UIModalPresentationStyle |
 | PooToolsSource/Inspector/AdaptivePresentationControllerDelegate.swift:17 | typealias | public | public typealias DismissDecisionProvider = (UIPresentationController) -> Bool |
@@ -6210,11 +6212,11 @@ Generated at: 2026-10-14T08:12:53Z
 | PooToolsSource/PToolsDevice/Core/PTDevice.swift:135 | var | public | public var hasTelephotoCamera: Bool { |
 | PooToolsSource/PToolsDevice/Core/PTDevice.swift:143 | var | public | public var hasUltraWideCamera: Bool { |
 | PooToolsSource/PToolsDevice/Core/PTDevice.swift:152 | var | public | public var isGuidedAccessSessionActive: Bool { |
-| PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift:23 | enum | public | public enum PTDeviceCapabilityResolver { |
-| PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift:93 | struct | public | public struct PTSystemDeviceCapabilityProvider: PTDeviceCapabilityProviding { |
-| PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift:94 | let | public | public let device: PTDevice |
-| PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift:96 | init | public | public init(device: PTDevice = .current) { |
-| PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift:100 | func | public | public func status(for capability: PTDeviceCapability) async -> PTDeviceCapabilityStatus { |
+| PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift:19 | enum | public | public enum PTDeviceCapabilityResolver { |
+| PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift:88 | struct | public | public struct PTSystemDeviceCapabilityProvider: PTDeviceCapabilityProviding { |
+| PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift:89 | let | public | public let device: PTDevice |
+| PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift:91 | init | public | public init(device: PTDevice = .current) { |
+| PooToolsSource/PToolsDevice/Core/PTDeviceCapabilityResolver.swift:95 | func | public | public func status(for capability: PTDeviceCapability) async -> PTDeviceCapabilityStatus { |
 | PooToolsSource/PToolsDevice/Core/PTDeviceCatalog.swift:7 | enum | public | public enum PTDeviceCatalog { |
 | PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift:11 | protocol | public | public protocol PTDeviceRuntimeEnvironmentProviding: Sendable { |
 | PooToolsSource/PToolsDevice/Core/PTDeviceRuntime.swift:21 | struct | public | public struct PTDeviceRuntimeEnvironment: PTDeviceRuntimeEnvironmentProviding, Sendable { |
@@ -8394,13 +8396,13 @@ Generated at: 2026-10-14T08:12:53Z
 | PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:70 | func | public | public func removeAll() { |
 | PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:74 | func | public | public func perform(_ event: PTTextActionEvent) { |
 | PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:80 | class | public | public final class PTRichTextInteractionController: NSObject, UIGestureRecognizerDelegate { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:95 | init | public | public init(richText: PTRichText, label: UILabel, registry: PTTextActionRegistry, interactionMode: PTTextInteractionMode = .hybrid, onInteraction: PTRichTextInteractionHandler? = nil) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:108 | init | public | public init(richText: PTRichText, label: UILabel, interactionMode: PTTextInteractionMode = .hybrid, onInteraction: PTRichTextInteractionHandler? = nil) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:122 | init | public | public init(richText: PTRichText, textView: UITextView, registry: PTTextActionRegistry, interactionMode: PTTextInteractionMode = .hybrid, onInteraction: PTRichTextInteractionHandler? = nil) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:135 | init | public | public init(richText: PTRichText, textView: UITextView, interactionMode: PTTextInteractionMode = .hybrid, onInteraction: PTRichTextInteractionHandler? = nil) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:145 | func | public | public func update(richText: PTRichText) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:299 | func | public | public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:377 | enum | public | public enum PTRichTextRenderer { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:96 | init | public | public init(richText: PTRichText, label: UILabel, registry: PTTextActionRegistry, interactionMode: PTTextInteractionMode = .hybrid, onInteraction: PTRichTextInteractionHandler? = nil) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:109 | init | public | public init(richText: PTRichText, label: UILabel, interactionMode: PTTextInteractionMode = .hybrid, onInteraction: PTRichTextInteractionHandler? = nil) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:123 | init | public | public init(richText: PTRichText, textView: UITextView, registry: PTTextActionRegistry, interactionMode: PTTextInteractionMode = .hybrid, onInteraction: PTRichTextInteractionHandler? = nil) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:136 | init | public | public init(richText: PTRichText, textView: UITextView, interactionMode: PTTextInteractionMode = .hybrid, onInteraction: PTRichTextInteractionHandler? = nil) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:146 | func | public | public func update(richText: PTRichText) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:346 | func | public | public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift:428 | enum | public | public enum PTRichTextRenderer { |
 | PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift:7 | enum | public | public enum PTTextMatchRule: Sendable, Hashable { |
 | PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift:18 | enum | public | public enum PTTextMatchKind: String, Sendable { |
 | PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift:29 | enum | public | public enum PTTextMatchConflictPolicy: Sendable { |
@@ -8492,48 +8494,48 @@ Generated at: 2026-10-14T08:12:53Z
 | PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:384 | let | public | public let baselineOffset: CGFloat |
 | PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:389 | init | public | public init(media: PTRichTextMediaAttachment, image: UIImage?, size: CGSize, baselineOffset: CGFloat = 0) { |
 | PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:403 | func | public | public func resolvedAttachment(with image: UIImage, size: CGSize? = nil) -> PTRichTextMediaTextAttachment { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:414 | class | public | public final class PTRemoteImageTextAttachment: NSTextAttachment { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:415 | let | public | public let identifier: String |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:416 | let | public | public let mediaID: UUID |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:417 | let | public | public let remoteURL: URL |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:418 | let | public | public let attachmentSize: CGSize |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:419 | let | public | public let baselineOffset: CGFloat |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:426 | init | public | public init(identifier: String, url: URL, size: CGSize, placeholder: UIImage? = nil, mediaID: UUID = UUID(), baselineOffset: CGFloat = 0) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:444 | func | public | public func resolvedAttachment(with image: UIImage) -> NSTextAttachment { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:511 | struct | public | public struct PTTextViewAttachmentDescriptor: Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:512 | let | public | public let id: String |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:513 | let | public | public let size: CGSize |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:514 | let | public | public let accessibilityDescription: String? |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:515 | let | public | public let makeView: @MainActor @Sendable () -> UIView |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:520 | init | public | public init(id: String, size: CGSize, accessibilityDescription: String? = nil, makeView: @escaping @MainActor @Sendable () -> UIView) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:534 | func | public | public func makeViewProvider(textAttachment: NSTextAttachment, parentView: UIView?, textLayoutManager: NSTextLayoutManager?, location: NSTextLocation) -> PTTextAttachmentViewProvider { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:547 | class | public | public final class PTTextAttachmentViewProvider: NSTextAttachmentViewProvider { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:554 | init | public | public init(descriptor: PTTextViewAttachmentDescriptor, textAttachment: NSTextAttachment, parentView: UIView?, textLayoutManager: NSTextLayoutManager?, location: NSTextLocation) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:585 | protocol | public | public protocol PTTextImageLoader: Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:592 | typealias | public | public typealias PTTextImageLoadHandler = @MainActor @Sendable (_ url: URL, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:595 | struct | public | public struct PTURLSessionTextImageLoader: PTTextImageLoader, Sendable { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:596 | init | public | public init() {} |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:598 | func | public | public func image(for url: URL) async throws -> UIImage { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:613 | class | public | public final class PTTextAttachmentCoordinator { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:618 | init | public | public init(loader: any PTTextImageLoader = PTURLSessionTextImageLoader()) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:627 | init | public | public init(imageLoader: @escaping PTTextImageLoadHandler) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:633 | func | public | public func loadRemote(_ descriptor: PTTextAttachmentDescriptor, completion: @escaping @MainActor @Sendable (Result<UIImage, Error>) -> Void) -> UInt64 { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:661 | func | public | public func cancel(id: String) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:667 | func | public | public func cancelAll() { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:682 | class | public | public final class PTRichTextMediaLoadToken { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:689 | func | public | public func cancel() { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:703 | class | public | public final class PTRichTextMediaLoader { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:704 | typealias | public | public typealias ImageLoader = @MainActor @Sendable (_ source: Any, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:706 | typealias | public | public typealias VideoPosterLoader = @MainActor @Sendable (_ source: Any, |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:710 | typealias | public | public typealias VideoMetadataLoader = @MainActor @Sendable (_ source: Any) async -> PTRichTextVideoMetadata |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:728 | init | public | public init(imageLoader: @escaping ImageLoader, videoPosterLoader: @escaping VideoPosterLoader, videoMetadataLoader: @escaping VideoMetadataLoader = { _ in .init() }) { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:755 | func | public | public func clearCache() { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:761 | func | public | public func loadImage(source: Any, targetSize: CGSize? = nil) async throws -> UIImage { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:789 | func | public | public func loadVideoPoster(source: Any, frameNumber: Int = 10, time: CMTime? = nil, targetSize: CGSize? = nil) async throws -> PTRichTextVideoLoadResult { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:822 | func | public | public func loadVideoMetadata(source: Any) async -> PTRichTextVideoMetadata { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:829 | func | public | public func loadImage(source: Any, targetSize: CGSize? = nil, completion: @escaping @MainActor @Sendable (Result<UIImage, PTRichTextMediaError>) -> Void) -> PTRichTextMediaLoadToken { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:850 | func | public | public func loadVideoPoster(source: Any, frameNumber: Int = 10, time: CMTime? = nil, targetSize: CGSize? = nil, completion: @escaping @MainActor @Sendable (Result<PTRichTextVideoLoadResult, PTRichTextMediaError>) -> Void) -> PTRichTextMediaLoadToken { |
-| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:898 | enum | public | public enum PTRichTextVideoPosterRenderer { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:426 | class | public | public final class PTRemoteImageTextAttachment: NSTextAttachment { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:427 | let | public | public let identifier: String |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:428 | let | public | public let mediaID: UUID |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:429 | let | public | public let remoteURL: URL |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:430 | let | public | public let attachmentSize: CGSize |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:431 | let | public | public let baselineOffset: CGFloat |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:438 | init | public | public init(identifier: String, url: URL, size: CGSize, placeholder: UIImage? = nil, mediaID: UUID = UUID(), baselineOffset: CGFloat = 0) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:456 | func | public | public func resolvedAttachment(with image: UIImage) -> PTRemoteImageTextAttachment { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:541 | struct | public | public struct PTTextViewAttachmentDescriptor: Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:542 | let | public | public let id: String |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:543 | let | public | public let size: CGSize |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:544 | let | public | public let accessibilityDescription: String? |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:545 | let | public | public let makeView: @MainActor @Sendable () -> UIView |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:550 | init | public | public init(id: String, size: CGSize, accessibilityDescription: String? = nil, makeView: @escaping @MainActor @Sendable () -> UIView) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:564 | func | public | public func makeViewProvider(textAttachment: NSTextAttachment, parentView: UIView?, textLayoutManager: NSTextLayoutManager?, location: NSTextLocation) -> PTTextAttachmentViewProvider { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:577 | class | public | public final class PTTextAttachmentViewProvider: NSTextAttachmentViewProvider { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:584 | init | public | public init(descriptor: PTTextViewAttachmentDescriptor, textAttachment: NSTextAttachment, parentView: UIView?, textLayoutManager: NSTextLayoutManager?, location: NSTextLocation) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:615 | protocol | public | public protocol PTTextImageLoader: Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:622 | typealias | public | public typealias PTTextImageLoadHandler = @MainActor @Sendable (_ url: URL, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:625 | struct | public | public struct PTURLSessionTextImageLoader: PTTextImageLoader, Sendable { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:626 | init | public | public init() {} |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:628 | func | public | public func image(for url: URL) async throws -> UIImage { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:643 | class | public | public final class PTTextAttachmentCoordinator { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:648 | init | public | public init(loader: any PTTextImageLoader = PTURLSessionTextImageLoader()) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:657 | init | public | public init(imageLoader: @escaping PTTextImageLoadHandler) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:663 | func | public | public func loadRemote(_ descriptor: PTTextAttachmentDescriptor, completion: @escaping @MainActor @Sendable (Result<UIImage, Error>) -> Void) -> UInt64 { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:691 | func | public | public func cancel(id: String) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:697 | func | public | public func cancelAll() { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:712 | class | public | public final class PTRichTextMediaLoadToken { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:719 | func | public | public func cancel() { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:733 | class | public | public final class PTRichTextMediaLoader { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:734 | typealias | public | public typealias ImageLoader = @MainActor @Sendable (_ source: Any, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:736 | typealias | public | public typealias VideoPosterLoader = @MainActor @Sendable (_ source: Any, |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:740 | typealias | public | public typealias VideoMetadataLoader = @MainActor @Sendable (_ source: Any) async -> PTRichTextVideoMetadata |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:758 | init | public | public init(imageLoader: @escaping ImageLoader, videoPosterLoader: @escaping VideoPosterLoader, videoMetadataLoader: @escaping VideoMetadataLoader = { _ in .init() }) { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:785 | func | public | public func clearCache() { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:791 | func | public | public func loadImage(source: Any, targetSize: CGSize? = nil) async throws -> UIImage { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:819 | func | public | public func loadVideoPoster(source: Any, frameNumber: Int = 10, time: CMTime? = nil, targetSize: CGSize? = nil) async throws -> PTRichTextVideoLoadResult { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:852 | func | public | public func loadVideoMetadata(source: Any) async -> PTRichTextVideoMetadata { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:859 | func | public | public func loadImage(source: Any, targetSize: CGSize? = nil, completion: @escaping @MainActor @Sendable (Result<UIImage, PTRichTextMediaError>) -> Void) -> PTRichTextMediaLoadToken { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:880 | func | public | public func loadVideoPoster(source: Any, frameNumber: Int = 10, time: CMTime? = nil, targetSize: CGSize? = nil, completion: @escaping @MainActor @Sendable (Result<PTRichTextVideoLoadResult, PTRichTextMediaError>) -> Void) -> PTRichTextMediaLoadToken { |
+| PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift:928 | enum | public | public enum PTRichTextVideoPosterRenderer { |
 | PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift:17 | typealias | public | public typealias ConstraintView = UIView |
 | PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift:18 | typealias | public | public typealias ConstraintEdgeInsets = UIEdgeInsets |
 | PooToolsSource/PToolsUIFoundation/PTUIFoundationSnapKitEX.swift:24 | enum | public | public enum PTUIFoundationContext { |

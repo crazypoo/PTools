@@ -1,8 +1,16 @@
 # PTools 路线图
 
-> 当前代码基线：`5.64.8`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.64.9`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.64.7`；`5.64.8` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.64.7`；`5.64.9` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.64.9 Input 占位符与边框颜色解耦
+
+- ✅ 修复 `YoshikoTextField` 激活态占位符错误读取 `activeBorderColor` 的问题，边框颜色只负责边框绘制。
+- ✅ 新增可选 `activePlaceholderColor`、`activePlaceholderFont` 和 `activePlaceholderAtt`；未配置时沿用共享占位符配置，旧调用方式保持兼容。
+- ✅ 悬浮占位符按实际字体/富文本高度动态计算边框和输入区域，避免激活后文字被裁剪。
+- ✅ 审计 Input 相关样式，其他输入框未发现相同的 `activeBorderColor` 复用；保留 `IsaoTextField` 的兼容回退行为。
+- ⬜ 仍需在真实宿主中验证 Interface Builder、Dynamic Type、富文本占位符和不同主题下的视觉效果。
 
 ## 5.64.8 默认 Core 移除隐式 NFC 依赖
 

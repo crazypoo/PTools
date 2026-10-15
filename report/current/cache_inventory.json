@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "486435925e25155cc3fab847fbe7c076e7f31883",
-  "generated_at": "2026-10-14T08:12:54Z",
+  "source_revision": "6aa269a6b76fd5bc8343ea0b09c63d122b477c4a",
+  "generated_at": "2026-10-15T02:09:10Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -936,67 +936,67 @@
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 721,
+      "line": 751,
       "kind": "NSCache",
       "text": "private let imageCache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 722,
+      "line": 752,
       "kind": "NSCache",
       "text": "private let posterCache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 899,
+      "line": 929,
       "kind": "disk or custom cache",
       "text": "// English: The poster renderer uses the bounded rich-text cache contract."
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 905,
+      "line": 935,
       "kind": "NSCache",
       "text": "private static let cache: NSCache<NSString, UIImage> = {"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 906,
+      "line": 936,
       "kind": "NSCache",
       "text": "let cache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 907,
+      "line": 937,
       "kind": "disk or custom cache",
       "text": "cache.countLimit = cachePolicy.countLimit"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 908,
+      "line": 938,
       "kind": "disk or custom cache",
       "text": "cache.totalCostLimit = cachePolicy.costLimit"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 909,
+      "line": 939,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 922,
+      "line": 952,
       "kind": "disk or custom cache",
       "text": "cache.removeAllObjects()"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 931,
+      "line": 961,
       "kind": "disk or custom cache",
       "text": "if let cached = cache.object(forKey: key as NSString) {"
     },
     {
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 991,
+      "line": 1021,
       "kind": "disk or custom cache",
       "text": "cache.setObject(rendered, forKey: key as NSString)"
     },

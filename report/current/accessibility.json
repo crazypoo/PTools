@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "486435925e25155cc3fab847fbe7c076e7f31883",
-  "generated_at": "2026-10-14T08:12:55Z",
+  "source_revision": "6aa269a6b76fd5bc8343ea0b09c63d122b477c4a",
+  "generated_at": "2026-10-15T02:09:11Z",
   "counts": {
     "reduce_motion": 61,
     "accessibility": 275,
@@ -1373,17 +1373,17 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 514
+      "line": 544
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 519
+      "line": 549
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",
-      "line": 523
+      "line": 553
     },
     {
       "rule": "reduce_motion",

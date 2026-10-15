@@ -2940,9 +2940,10 @@
     "path": "Tests/PToolsRichTextTests",
     "product_memberships": [],
     "resources": [],
-    "source_count": 1,
+    "source_count": 2,
     "sources": [
-      "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift"
+      "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift",
+      "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift"
     ],
     "swift_settings": [],
     "type": "test"
@@ -3494,12 +3495,13 @@
       "PooToolsAll"
     ],
     "resources": [],
-    "source_count": 9,
+    "source_count": 10,
     "sources": [
       "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
       "PooToolsSource/PToolsUIFoundation/PTRichTextAttributes.swift",
       "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
       "PooToolsSource/PToolsUIFoundation/PTRichTextCache.swift",
+      "PooToolsSource/PToolsUIFoundation/PTRichTextLabelRendering.swift",
       "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
       "PooToolsSource/PToolsUIFoundation/PTRichTextMatcher.swift",
       "PooToolsSource/PToolsUIFoundation/PTRichTextMedia.swift",

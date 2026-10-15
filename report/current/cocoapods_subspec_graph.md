@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: 486435925e25155cc3fab847fbe7c076e7f31883
-Generated at: 2026-10-14T08:22:39Z
+Source revision: 6aa269a6b76fd5bc8343ea0b09c63d122b477c4a
+Generated at: 2026-10-15T02:09:12Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.64.6`
+- Podspec: `PooTools` `5.64.9`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
@@ -105,7 +105,7 @@ Generated at: 2026-10-14T08:22:39Z
 | `ModelLegacySmartCodable` | — | `SmartCodable` | `PToolsModelLegacySmartCodable` | Foundation | — |
 | `Motion` | `PooTools/Core`, `PooTools/MotionPermission` | — | `Motion` | CoreMotion | — |
 | `MotionPermission` | `PooTools/PToolsPermissionCore` | — | `MotionPermission` | — | — |
-| `NFCKit` | `PooTools/Core` | — | `NFC` | — | — |
+| `NFCKit` | `PooTools/Core` | — | `NFC` | CoreNFC | — |
 | `NetWork` | `PooTools/Network` | — | — | — | — |
 | `Network` | `PooTools/Connectivity`, `PooTools/Core`, `PooTools/Loading`, `PooTools/ModelCore`, `PooTools/ModelLegacyKakaJSON`, `PooTools/ModelLegacySmartCodable` | `Alamofire` | `NetWork`, `NetWorkModelCore` | — | — |
 | `NetworkSpeedTest` | `PooTools/Core` | — | `NetworkSpeedTest` | — | — |

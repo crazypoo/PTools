@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "486435925e25155cc3fab847fbe7c076e7f31883",
-  "generated_at": "2026-10-14T08:22:39Z",
+  "source_revision": "6aa269a6b76fd5bc8343ea0b09c63d122b477c4a",
+  "generated_at": "2026-10-15T02:09:12Z",
   "name": "PooTools",
-  "version": "5.64.6",
+  "version": "5.64.9",
   "platforms": {
     "ios": "17.0"
   },
@@ -1986,7 +1986,9 @@
       ],
       "resource_bundles": {},
       "resources": [],
-      "frameworks": [],
+      "frameworks": [
+        "CoreNFC"
+      ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NFC POOTOOLS_COCOAPODS"
       }

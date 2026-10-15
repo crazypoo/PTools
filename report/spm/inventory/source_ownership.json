@@ -2980,6 +2980,9 @@
     "PooToolsSource/PToolsUIFoundation/PTRichTextCache.swift": [
       "PToolsUIFoundation"
     ],
+    "PooToolsSource/PToolsUIFoundation/PTRichTextLabelRendering.swift": [
+      "PToolsUIFoundation"
+    ],
     "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift": [
       "PToolsUIFoundation"
     ],
@@ -3658,6 +3661,9 @@
     "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift": [
       "PToolsRichTextTests"
     ],
+    "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift": [
+      "PToolsRichTextTests"
+    ],
     "Tests/PToolsSocketKitTests/PTWebSocketContractTests.swift": [
       "PToolsSocketKitTests"
     ],
@@ -3689,5 +3695,5 @@
       "PToolsCoreTests"
     ]
   },
-  "source_count": 1229
+  "source_count": 1231
 }
