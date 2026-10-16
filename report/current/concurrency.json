@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "6e273aeca2aa2ab5d7b926a50e1f001e4572ae03",
-  "generated_at": "2026-10-16T15:13:18Z",
+  "source_revision": "56ef385b6efeeb838c5e981c076fd52498f44992",
+  "generated_at": "2026-10-16T16:06:29Z",
   "counts": {
     "main_queue_async": 26,
     "task_detached": 31,
@@ -61,25 +61,25 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/C7Collector/C7CollectorCamera.swift",
-      "line": 17,
+      "line": 24,
       "text": "private struct PTSystemPixelBufferBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
-      "line": 13,
+      "line": 20,
       "text": "private struct PTC7FilterBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
-      "line": 17,
+      "line": 24,
       "text": "private final class PTC7VideoCompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
-      "line": 42,
+      "line": 49,
       "text": "private final class PTC7VideoFilterCompositor: NSObject, AVVideoCompositing, @unchecked Sendable {"
     },
     {
@@ -259,19 +259,19 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
-      "line": 17,
+      "line": 24,
       "text": "private struct PTHeartRateSampleBufferBox: @unchecked Sendable {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "line": 301,
+      "line": 308,
       "text": "DispatchQueue.main.async { self.updateIndicators() }"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "line": 489,
+      "line": 496,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in"
     },
     {
@@ -331,19 +331,19 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
-      "line": 17,
+      "line": 24,
       "text": "private final class AVContext: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
-      "line": 37,
+      "line": 44,
       "text": "private struct PTAVSendableBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
-      "line": 44,
+      "line": 51,
       "text": "private final class ProgressState: @unchecked Sendable {"
     },
     {
@@ -355,19 +355,19 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/Motion/PTMotion.swift",
-      "line": 81,
+      "line": 88,
       "text": "public class PTMotion: NSObject, @unchecked Sendable,CMHeadphoneMotionManagerDelegate {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Motion/PTMotion.swift",
-      "line": 230,
+      "line": 237,
       "text": "DispatchQueue.main.async { [weak self] in"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Motion/PTMotion.swift",
-      "line": 372,
+      "line": 379,
       "text": "DispatchQueue.main.async { [weak self] in"
     },
     {
@@ -445,13 +445,13 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 129,
+      "line": 136,
       "text": "public class OSSSpeech: NSObject, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 385,
+      "line": 392,
       "text": "final class ConverterState: @unchecked Sendable {"
     },
     {
@@ -607,7 +607,7 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/VideoEditor/CropPickerView.swift",
-      "line": 532,
+      "line": 539,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {"
     },
     {

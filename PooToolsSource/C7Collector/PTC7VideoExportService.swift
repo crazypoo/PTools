@@ -3,6 +3,13 @@
 // 中文：C7 原生视频导出保留现有 Harbeth 滤镜管线，不再依赖 Kakapos。
 
 @preconcurrency import AVFoundation
+
+// English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
+// Español: Importa explícitamente el target Core para las compilaciones SwiftPM independientes.
+// 中文：独立 SwiftPM 编译时，显式导入 Core 聚合 target。
+#if SWIFT_PACKAGE
+import ptools
+#endif
 import CoreVideo
 import Foundation
 import Harbeth

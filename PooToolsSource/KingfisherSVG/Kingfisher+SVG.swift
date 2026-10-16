@@ -10,6 +10,13 @@ import UIKit
 import Kingfisher
 import PocketSVG
 
+// English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
+// Español: Importa explícitamente el target Core para las compilaciones SwiftPM independientes.
+// 中文：独立 SwiftPM 编译时，显式导入 Core 聚合 target。
+#if SWIFT_PACKAGE
+import ptools
+#endif
+
 // Convert SVG images from Server to UIImage
 public struct SVGProcessor: @preconcurrency ImageProcessor {
     

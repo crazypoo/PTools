@@ -2,8 +2,8 @@
 AUTO-GENERATED FILE.
 
 Generator: Scripts/audit_duo_uikit_coverage.py
-Source revision: 6e273aeca2aa2ab5d7b926a50e1f001e4572ae03
-Generated at: 2026-10-16T15:32:26.114621+00:00
+Source revision: 56ef385b6efeeb838c5e981c076fd52498f44992
+Generated at: 2026-10-16T16:28:04.344008+00:00
 -->
 
 # iPhone Duo UIKit 覆盖报告 / Cobertura UIKit / UIKit Coverage

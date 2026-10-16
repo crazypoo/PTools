@@ -9,6 +9,13 @@
 import UIKit
 import SnapKit
 
+// English: Import the split Core target explicitly for feedback events in standalone SwiftPM builds.
+// Español: Importa explícitamente el target Core dividido para los eventos de feedback en SwiftPM independiente.
+// 中文：独立 SwiftPM 编译时，显式导入拆分后的 Core target 以发送反馈事件。
+#if SWIFT_PACKAGE
+import PToolsCore
+#endif
+
 public class PTMenuSheetButtonView: UIView {
     public enum Direction {
         case up, down, left, right

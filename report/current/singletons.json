@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons.rb",
-  "source_revision": "6e273aeca2aa2ab5d7b926a50e1f001e4572ae03",
-  "generated_at": "2026-10-16T15:13:19Z",
+  "source_revision": "56ef385b6efeeb838c5e981c076fd52498f44992",
+  "generated_at": "2026-10-16T16:06:30Z",
   "shared_call_count": 1677,
   "declarations": [
     {
@@ -133,7 +133,7 @@
     },
     {
       "path": "PooToolsSource/C7Collector/C7CameraConfig.swift",
-      "line": 14,
+      "line": 21,
       "declaration": "public static let share = C7CameraConfig()",
       "name": "share",
       "category": "D",
@@ -142,7 +142,7 @@
     },
     {
       "path": "PooToolsSource/C7Collector/PTCameraFilterConfig.swift",
-      "line": 37,
+      "line": 44,
       "declaration": "public static let share = PTCameraFilterConfig()",
       "name": "share",
       "category": "D",
@@ -151,7 +151,7 @@
     },
     {
       "path": "PooToolsSource/C7Collector/PTHarBethFilter.swift",
-      "line": 21,
+      "line": 28,
       "declaration": "public static let share = PTHarBethFilter(name: \"\", type: .cigaussian)",
       "name": "share",
       "category": "C",
@@ -160,7 +160,7 @@
     },
     {
       "path": "PooToolsSource/CallMessageMail/PTCallMessageMailFunction.swift",
-      "line": 19,
+      "line": 26,
       "declaration": "public static let share = PTCallMessageMailFunction()",
       "name": "share",
       "category": "C",
@@ -169,7 +169,7 @@
     },
     {
       "path": "PooToolsSource/CallMessageMail/PTPhoneBlock.swift",
-      "line": 17,
+      "line": 24,
       "declaration": "public static let shared = PTPhoneBlock()",
       "name": "shared",
       "category": "C",
@@ -178,7 +178,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 49,
+      "line": 55,
       "declaration": "public static let shared = PTRefreshConfig()",
       "name": "shared",
       "category": "C",
@@ -205,7 +205,7 @@
     },
     {
       "path": "PooToolsSource/Contact/PTContact.swift",
-      "line": 48,
+      "line": 55,
       "declaration": "public static let share = PTContact()",
       "name": "share",
       "category": "C",
@@ -502,7 +502,7 @@
     },
     {
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
-      "line": 16,
+      "line": 23,
       "declaration": "public static let share = PTHealthKit()",
       "name": "share",
       "category": "C",
@@ -511,7 +511,7 @@
     },
     {
       "path": "PooToolsSource/IAP/PTIAPManager.swift",
-      "line": 24,
+      "line": 31,
       "declaration": "public static let shared = PTIAPManager()",
       "name": "shared",
       "category": "C",
@@ -583,7 +583,7 @@
     },
     {
       "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
-      "line": 18,
+      "line": 25,
       "declaration": "public static let shared = PTLaunchProfiler()",
       "name": "shared",
       "category": "D",
@@ -592,7 +592,7 @@
     },
     {
       "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
-      "line": 193,
+      "line": 200,
       "declaration": "public static let shared = LaunchVisualizer()",
       "name": "shared",
       "category": "D",
@@ -601,7 +601,7 @@
     },
     {
       "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
-      "line": 260,
+      "line": 267,
       "declaration": "static let share = EntryWindow()",
       "name": "share",
       "category": "D",
@@ -610,7 +610,7 @@
     },
     {
       "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
-      "line": 86,
+      "line": 93,
       "declaration": "public static let shared = PTLivePhoto()",
       "name": "shared",
       "category": "C",
@@ -664,7 +664,7 @@
     },
     {
       "path": "PooToolsSource/Location/PTGetGPSData.swift",
-      "line": 18,
+      "line": 25,
       "declaration": "public static let share = PTGetGPSData()",
       "name": "share",
       "category": "C",
@@ -727,7 +727,7 @@
     },
     {
       "path": "PooToolsSource/Motion/PTMotion.swift",
-      "line": 83,
+      "line": 90,
       "declaration": "public static let shared = PTMotion()",
       "name": "shared",
       "category": "C",
@@ -781,7 +781,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/PTNetworkArchitecture.swift",
-      "line": 181,
+      "line": 188,
       "declaration": "public static let shared = PTNetworkExecutor(network: .share)",
       "name": "shared",
       "category": "C",
@@ -790,7 +790,7 @@
     },
     {
       "path": "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift",
-      "line": 71,
+      "line": 78,
       "declaration": "public static let shared = PTNetworkSpeedTester()",
       "name": "shared",
       "category": "C",
@@ -799,7 +799,7 @@
     },
     {
       "path": "PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift",
-      "line": 218,
+      "line": 225,
       "declaration": "public static let shared = PTNetworkSpeedTestFunction()",
       "name": "shared",
       "category": "C",
@@ -808,7 +808,7 @@
     },
     {
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 201,
+      "line": 208,
       "declaration": "public static let shared = OSSSpeech()",
       "name": "shared",
       "category": "C",
@@ -1168,7 +1168,7 @@
     },
     {
       "path": "PooToolsSource/WhereIsMyEye/PTFaceEye.swift",
-      "line": 15,
+      "line": 22,
       "declaration": "public static let share = PTFaceEye()",
       "name": "share",
       "category": "C",
@@ -1186,7 +1186,7 @@
     },
     {
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 110,
+      "line": 117,
       "declaration": "public static let shared = PTTip()",
       "name": "shared",
       "category": "C",

@@ -7,6 +7,12 @@
 //
 
 import UIKit
+#if SWIFT_PACKAGE
+// English: Import the split Core target explicitly for the legacy feedback adapter.
+// Español: Importa explícitamente el target Core dividido para el adaptador heredado de feedback.
+// 中文：独立 SwiftPM 编译时，显式导入拆分后的 Core target 以支持旧反馈适配器。
+import PToolsCore
+#endif
 
 /// 统一的设备震动与触觉反馈控制工具
 @available(*, deprecated, message: "Use PTFeedbackCenter or PTHapticEngine instead.")

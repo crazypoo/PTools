@@ -1,8 +1,8 @@
 {
   "generator": "Scripts/audit_duo_uikit_coverage.py",
   "generated_by": "Scripts/audit_duo_uikit_coverage.py",
-  "source_revision": "6e273aeca2aa2ab5d7b926a50e1f001e4572ae03",
-  "generated_at": "2026-10-16T15:32:26.114621+00:00",
+  "source_revision": "56ef385b6efeeb838c5e981c076fd52498f44992",
+  "generated_at": "2026-10-16T16:28:04.344008+00:00",
   "hits": [
     {
       "kind": "statusBarHeight",
@@ -397,67 +397,67 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/C7Collector/PTCameraFilterConfig.swift",
-      "line": 185,
+      "line": 192,
       "text": "open var focusImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/C7Collector/PTCameraFilterConfig.swift",
-      "line": 200,
+      "line": 207,
       "text": "open var reloadCameraImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/C7Collector/PTCameraFilterConfig.swift",
-      "line": 201,
+      "line": 208,
       "text": "open var outputVideImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 225,
+      "line": 232,
       "text": "self.originImageView.image = self.originImageView.image?.transformImage(size: CGSizeMake(CGFloat.kSCREEN_WIDTH, CGFloat.kSCREEN_HEIGHT))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 395,
+      "line": 402,
       "text": "view.frame = CGRect(x: 0, y: 0, width: 70, height: 70)"
     },
     {
       "kind": "statusBarHeight",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 543,
+      "line": 550,
       "text": "make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 5)"
     },
     {
       "kind": "statusBarHeight",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 800,
+      "line": 807,
       "text": "make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 5)"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/C7Collector/PTHarBethFilter.swift",
-      "line": 39,
+      "line": 46,
       "text": "var texureSize:CGSize = CGSizeMake(CGFloat.kSCREEN_WIDTH, CGFloat.kSCREEN_HEIGHT)"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift",
-      "line": 60,
+      "line": 67,
       "text": "super.init(frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarHeight_Total - ItemHeight - 15 - CGFloat.kNavBarHeight_Total, width: ItemWidth, height: ItemHeight))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift",
-      "line": 60,
+      "line": 67,
       "text": "super.init(frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarHeight_Total - ItemHeight - 15 - CGFloat.kNavBarHeight_Total, width: ItemWidth, height: ItemHeight))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift",
-      "line": 122,
+      "line": 129,
       "text": "view.imageSize = CGSize(width: 15, height: 15)"
     },
     {
@@ -697,19 +697,19 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 865,
+      "line": 871,
       "text": "textLabel.frame = CGRect(x: 0, y: halfHeight - 15, width: bounds.width, height: halfHeight)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 871,
+      "line": 877,
       "text": "textLabel.frame = CGRect(x: 0, y: centerY, width: bounds.width, height: 40)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Category/UIScrollView+PTRefreshEX.swift",
-      "line": 1011,
+      "line": 1017,
       "text": "textLabel.frame = CGRect(x: 0, y: centerY, width: bounds.width, height: 40)"
     },
     {
@@ -1225,7 +1225,7 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
-      "line": 216,
+      "line": 223,
       "text": "let specs = VideoSpec(fps: 30, size: CGSize(width: 300, height: 300))"
     },
     {
@@ -2281,7 +2281,7 @@
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/KingfisherSVG/Kingfisher+SVG.swift",
-      "line": 48,
+      "line": 55,
       "text": "UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, UIScreen.main.scale)"
     },
     {
@@ -2293,7 +2293,7 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
-      "line": 347,
+      "line": 354,
       "text": "btn.bounds = CGRect(origin: .zero, size: .init(width: btn.sizeFor().width + 5, height: 34))"
     },
     {
@@ -3205,7 +3205,7 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/ProgressBar/PTMediaBrowserLoadingView.swift",
-      "line": 118,
+      "line": 125,
       "text": "public func hudShow(hudSize:CGSize = .init(width: 64, height: 64)) {"
     },
     {
@@ -3409,25 +3409,25 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 474,
+      "line": 481,
       "text": "let anchorX = rect.width > 0 ? arrowPosition.x / rect.width : 0.5"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 482,
+      "line": 489,
       "text": "let anchorX = rect.width > 0 ? arrowPosition.x / rect.width : 0.5"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 491,
+      "line": 498,
       "text": "let anchorY = rect.height > 0 ? arrowPosition.y / rect.height : 0.5"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/TipsView/PTTipsView.swift",
-      "line": 500,
+      "line": 507,
       "text": "let anchorY = rect.height > 0 ? arrowPosition.y / rect.height : 0.5"
     },
     {
@@ -3613,151 +3613,151 @@
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingManager.swift",
-      "line": 95,
+      "line": 102,
       "text": "private var screenSize = kSCREEN_BOUNDS"
     },
     {
       "kind": "UIDevice.current.orientation",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingManager.swift",
-      "line": 222,
+      "line": 229,
       "text": "switch UIDevice.current.orientation {"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 15,
+      "line": 22,
       "text": "@MainActor internal var screenSize = kSCREEN_BOUNDS"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 26,
+      "line": 33,
       "text": "if CGFloat.kSCREEN_WIDTH < CGFloat.kSCREEN_HEIGHT {"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 27,
+      "line": 34,
       "text": "portraitScreenSize = kSCREEN_BOUNDS"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 29,
+      "line": 36,
       "text": "portraitScreenSize = CGRect(x: 0, y: 0, width: CGFloat.kSCREEN_HEIGHT, height: CGFloat.kSCREEN_WIDTH)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 35,
+      "line": 42,
       "text": "let label = UILabel(frame: CGRect(x: 50,"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 36,
+      "line": 43,
       "text": "y: kSCREEN_BOUNDS.height / 2 - 15,"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 37,
+      "line": 44,
       "text": "width: kSCREEN_BOUNDS.width - 50,"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 37,
+      "line": 44,
       "text": "width: kSCREEN_BOUNDS.width - 50,"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 38,
+      "line": 45,
       "text": "height: 30))"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 53,
+      "line": 60,
       "text": "let view = UIView(frame: CGRect(x: kSCREEN_BOUNDS.width / 2 - size / 2,"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 54,
+      "line": 61,
       "text": "y: kSCREEN_BOUNDS.height / 2 - size / 2,"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 100,
+      "line": 107,
       "text": "var x = max(-kSCREEN_BOUNDS.width / 2, min(lookAtPoint.x, kSCREEN_BOUNDS.width / 2))"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 101,
+      "line": 108,
       "text": "var y = max(-kSCREEN_BOUNDS.height / 2, min(lookAtPoint.y, kSCREEN_BOUNDS.height / 2))"
     },
     {
       "kind": "UIDevice.current.orientation",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 103,
+      "line": 110,
       "text": "switch UIDevice.current.orientation {"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 130,
+      "line": 137,
       "text": "cursorView?.frame.origin.x = (kSCREEN_BOUNDS.width / 2) - (size / 2)"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 131,
+      "line": 138,
       "text": "cursorView?.frame.origin.y = (kSCREEN_BOUNDS.height / 2) - (size / 2)"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 134,
+      "line": 141,
       "text": "statusLabel?.frame = CGRect(x: kSCREEN_BOUNDS.width / 2,"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 135,
+      "line": 142,
       "text": "y: kSCREEN_BOUNDS.height / 2,"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 136,
+      "line": 143,
       "text": "width: kSCREEN_BOUNDS.width - 50,"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 136,
+      "line": 143,
       "text": "width: kSCREEN_BOUNDS.width - 50,"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift",
-      "line": 137,
+      "line": 144,
       "text": "height: 30)"
     },
     {
       "kind": "isFaceIDCapable",
       "path": "PooToolsSource/WhereIsMyEye/PTFaceEye.swift",
-      "line": 38,
+      "line": 45,
       "text": "guard deviceInfo.isFaceIDCapable else {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/iOS17Tips/PTTip.swift",
-      "line": 184,
+      "line": 191,
       "text": "tipUIView.imageSize = CGSize(width: 40, height: 40)"
     },
     {

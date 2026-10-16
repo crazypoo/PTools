@@ -11,7 +11,9 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.65.3`，真机/宿主回归与发布证据完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.65.4`，真机/宿主回归与发布证据完成前不创建正式 tag。
+
+`5.65.4` 全量收口 SwiftPM 独立 target 的导入和直接依赖边界，覆盖 SmartScreenshot、ProgressBar 以及 C7Collector、Hud、Network、Paging、SplitView、Debug、权限等可选模块；同时新增跨 target 符号归属门禁，避免 CocoaPods 聚合模块掩盖独立编译错误。
 
 `5.65.3` 修复 WhatsNewsKit 跨 target 访问内部 `HSL` 类型的问题，改用 Core 公开颜色 API。
 

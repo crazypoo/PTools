@@ -1,8 +1,16 @@
 # PTools 路线图
 
-> 当前代码基线：`5.65.3`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.65.4`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.65.2`；`5.65.3` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.65.3`；`5.65.4` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.65.4 SwiftPM 全模块导入边界收口
+
+- ✅ 修复 `PooToolsSmartScreenshot` 和 `PooToolsProgressBar` 独立 target 对 Core 聚合 target 的显式导入缺失。
+- ✅ 扩展全模块 SwiftPM 审计并补齐 C7Collector、Hud、Network、Paging、SplitView、Debug、权限等可选 target 的直接导入边界。
+- ✅ 为 ptools 聚合 target 内直接使用 `PToolsCore` 符号的文件补齐拆分 Core 导入，并为网络运行时测试声明 `PToolsCore` 直接依赖。
+- ✅ 强化跨 target 符号归属审计，支持 `@testable import` 并排除非 SwiftPM 分支的误报。
+- ⬜ 仍需在真实宿主项目中完成独立 SwiftPM Debug/Release 与真机回归。
 
 ## 5.65.3 WhatsNewsKit SwiftPM 颜色类型边界修复
 

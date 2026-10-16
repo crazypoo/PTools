@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_concurrency.rb
-Source revision: 6e273aeca2aa2ab5d7b926a50e1f001e4572ae03
-Generated at: 2026-10-16T15:13:18Z
+Source revision: 56ef385b6efeeb838c5e981c076fd52498f44992
+Generated at: 2026-10-16T16:06:29Z
 -->
 
 # PTools 当前 Swift 6 并发扫描

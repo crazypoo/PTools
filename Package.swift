@@ -1164,7 +1164,7 @@ let package = Package(
         // 中文：将传输和取消测试放入仅 iOS 的产品，避免阻断 Foundation XCTest。
         .testTarget(
             name: "PToolsNetworkRuntimeTests",
-            dependencies: ["PooToolsNetWork", "PToolsModelCore", "Alamofire"],
+            dependencies: ["PooToolsNetWork", "PToolsModelCore", "PToolsCore", "Alamofire"],
             path: "Tests/PToolsNetworkTests",
             sources: ["PTNetworkQualityTests.swift"]
         ),

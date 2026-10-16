@@ -6,6 +6,13 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.65.4 — 2026-10-17
+
+- 修复 `PooToolsSmartScreenshot` 与 `PooToolsProgressBar` 独立 SwiftPM target 缺少 Core 聚合 target 显式导入的问题。
+- 全量审计并补齐 C7Collector、Hud、Network、Paging、SplitView、Debug、权限及其他可选模块的 SwiftPM 跨 target 导入边界。
+- 为 ptools 聚合 target 内直接使用 `PToolsCore` 符号的文件补齐拆分 Core 导入；网络运行时测试显式声明 `PToolsCore` 依赖。
+- 强化跨 target 符号归属门禁，识别 `@testable import`，避免 CocoaPods 聚合可见性掩盖 SwiftPM 独立编译问题。
+
 ## 5.65.3 — 2026-10-16
 
 - 修复 SwiftPM 独立编译 `PooToolsWhatsNewsKit` 时访问内部 `HSL` 类型导致的 `cannot find 'HSL' in scope` 错误。

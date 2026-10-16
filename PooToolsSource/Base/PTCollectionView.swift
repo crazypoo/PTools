@@ -8,6 +8,12 @@
 
 import UIKit
 import SnapKit
+#if SWIFT_PACKAGE
+// English: Import the split Core target explicitly for semantic feedback in standalone SwiftPM builds.
+// Español: Importa explícitamente el target Core dividido para la retroalimentación semántica en SwiftPM independiente.
+// 中文：独立 SwiftPM 编译时，显式导入拆分后的 Core target 以使用语义反馈。
+import PToolsCore
+#endif
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif

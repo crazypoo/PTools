@@ -10,6 +10,13 @@ import UIKit
 import TipKit
 import SnapKit
 
+// English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
+// Español: Importa explícitamente el target Core para las compilaciones SwiftPM independientes.
+// 中文：独立 SwiftPM 编译时，显式导入 Core 聚合 target。
+#if SWIFT_PACKAGE
+import ptools
+#endif
+
 // MARK: - 自定义Tip
 public struct TestTip: Tip {
     // English: Expose the demo tip initializer so clients can configure it through the public module.

@@ -8,6 +8,13 @@
 
 import UIKit
 
+// English: Import the split Core target explicitly when the umbrella target builds under SwiftPM.
+// Español: Importa explícitamente el target Core dividido cuando el umbrella se compila con SwiftPM.
+// 中文：SwiftPM 编译聚合 target 时，显式导入拆分后的 Core target。
+#if SWIFT_PACKAGE
+import PToolsCore
+#endif
+
 public enum PTAlertTipsHaptic {
     case success
     case warning

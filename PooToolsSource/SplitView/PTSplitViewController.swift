@@ -5,6 +5,13 @@
 
 import UIKit
 
+// English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
+// Español: Importa explícitamente el target Core para las compilaciones SwiftPM independientes.
+// 中文：独立 SwiftPM 编译时，显式导入 Core 聚合 target。
+#if SWIFT_PACKAGE
+import ptools
+#endif
+
 // English: A scene-owned adaptive UIKit container for iPhone, iPad, and resizable windows.
 // Español: Un contenedor UIKit adaptativo y perteneciente a la escena para iPhone, iPad y ventanas redimensionables.
 // 中文：面向 iPhone、iPad 和可调整窗口的场景级自适应 UIKit 容器。

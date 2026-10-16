@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "6e273aeca2aa2ab5d7b926a50e1f001e4572ae03",
-  "generated_at": "2026-10-16T15:13:18Z",
+  "source_revision": "56ef385b6efeeb838c5e981c076fd52498f44992",
+  "generated_at": "2026-10-16T16:06:30Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -46,25 +46,25 @@
   "declarations": [
     {
       "path": "PooToolsSource/C7Collector/C7CollectorCamera.swift",
-      "line": 17,
+      "line": 24,
       "declaration": "private struct PTSystemPixelBufferBox: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
-      "line": 13,
+      "line": 20,
       "declaration": "private struct PTC7FilterBox: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
-      "line": 17,
+      "line": 24,
       "declaration": "private final class PTC7VideoCompositionInstruction: AVMutableVideoCompositionInstruction, @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
-      "line": 42,
+      "line": 49,
       "declaration": "private final class PTC7VideoFilterCompositor: NSObject, AVVideoCompositing, @unchecked Sendable {",
       "allowlisted": true
     },
@@ -136,7 +136,7 @@
     },
     {
       "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
-      "line": 17,
+      "line": 24,
       "declaration": "private struct PTHeartRateSampleBufferBox: @unchecked Sendable {",
       "allowlisted": true
     },
@@ -154,19 +154,19 @@
     },
     {
       "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
-      "line": 17,
+      "line": 24,
       "declaration": "private final class AVContext: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
-      "line": 37,
+      "line": 44,
       "declaration": "private struct PTAVSendableBox: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/LivePhoto/PTLivePhoto.swift",
-      "line": 44,
+      "line": 51,
       "declaration": "private final class ProgressState: @unchecked Sendable {",
       "allowlisted": true
     },
@@ -178,7 +178,7 @@
     },
     {
       "path": "PooToolsSource/Motion/PTMotion.swift",
-      "line": 81,
+      "line": 88,
       "declaration": "public class PTMotion: NSObject, @unchecked Sendable,CMHeadphoneMotionManagerDelegate {",
       "allowlisted": true
     },
@@ -226,13 +226,13 @@
     },
     {
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 129,
+      "line": 136,
       "declaration": "public class OSSSpeech: NSObject, @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/OSSKit/OSSSpeech.swift",
-      "line": 385,
+      "line": 392,
       "declaration": "final class ConverterState: @unchecked Sendable {",
       "allowlisted": true
     },

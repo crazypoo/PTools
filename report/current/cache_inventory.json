@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "6e273aeca2aa2ab5d7b926a50e1f001e4572ae03",
-  "generated_at": "2026-10-16T15:14:21Z",
+  "source_revision": "56ef385b6efeeb838c5e981c076fd52498f44992",
+  "generated_at": "2026-10-16T16:07:37Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -60,49 +60,49 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 125,
+      "line": 131,
       "kind": "disk or custom cache",
       "text": "// English: Invalidate every geometry cache when a runtime layout contract changes."
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 769,
+      "line": 775,
       "kind": "disk or custom cache",
       "text": "if let cache = heightCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 770,
+      "line": 776,
       "kind": "disk or custom cache",
       "text": "return cache.doubleValue"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1419,
+      "line": 1425,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1420,
+      "line": 1426,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1530,
+      "line": 1536,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1531,
+      "line": 1537,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2257,
+      "line": 2263,
       "kind": "disk or custom cache",
       "text": "// English: Invalidate only the geometry cache for the requested rows."
     },
@@ -618,7 +618,7 @@
     },
     {
       "path": "PooToolsSource/KingfisherSVG/Kingfisher+SVG.swift",
-      "line": 17,
+      "line": 24,
       "kind": "disk or custom cache",
       "text": "// It will be used when storing and retrieving the image to/from cache."
     },

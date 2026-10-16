@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_file_size_gate.sh
-Source revision: 6e273aeca2aa2ab5d7b926a50e1f001e4572ae03
-Generated at: 2026-10-16T15:14:21Z
+Source revision: 56ef385b6efeeb838c5e981c076fd52498f44992
+Generated at: 2026-10-16T16:07:37Z
 -->
 
 # 当前文件尺寸门禁
@@ -18,12 +18,12 @@ Generated at: 2026-10-16T15:14:21Z
 | 文件 | 行数 | 分类 |
 | --- | ---: | --- |
 | `PooToolsSource/ActionsheetAndAlert/PTCustomerAlertController.swift` | 1217 | warning |
-| `PooToolsSource/Base/PTCollectionView.swift` | 2332 | hard_limit_allowlisted |
+| `PooToolsSource/Base/PTCollectionView.swift` | 2338 | hard_limit_allowlisted |
 | `PooToolsSource/Base/PTNavigationBarManager.swift` | 1124 | warning |
 | `PooToolsSource/Base/PTTabBarView.swift` | 1058 | warning |
 | `PooToolsSource/Category/String+PTEX.swift` | 1878 | architecture_exception |
 | `PooToolsSource/Category/UIImage+PTEX.swift` | 1433 | warning |
-| `PooToolsSource/Category/UIScrollView+PTRefreshEX.swift` | 1446 | warning |
+| `PooToolsSource/Category/UIScrollView+PTRefreshEX.swift` | 1452 | warning |
 | `PooToolsSource/Category/UIView+PTEX.swift` | 2306 | hard_limit_allowlisted |
 | `PooToolsSource/Core/PTLoadImageFunction.swift` | 1018 | warning |
 | `PooToolsSource/Debug/CwlDemangle.swift` | 4630 | hard_limit_allowlisted |
@@ -43,5 +43,5 @@ Generated at: 2026-10-16T15:14:21Z
 | `PooToolsSource/Picker/PTBasePickerView.swift` | 1399 | warning |
 | `PooToolsSource/ScrollBanner/PTBannerView.swift` | 1180 | warning |
 | `PooToolsSource/SideMenuControl/PTSideMenuControl.swift` | 1179 | warning |
-| `PooToolsSource/TipsView/PTTipsView.swift` | 1248 | warning |
+| `PooToolsSource/TipsView/PTTipsView.swift` | 1255 | warning |
 | `PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift` | 1640 | architecture_exception |

@@ -9,6 +9,13 @@
 import Foundation
 import UIKit
 
+// English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
+// Español: Importa explícitamente el target Core para las compilaciones SwiftPM independientes.
+// 中文：独立 SwiftPM 编译时，显式导入 Core 聚合 target。
+#if SWIFT_PACKAGE
+import ptools
+#endif
+
 /// English: Snapshot options for resolution, opacity, and safe bitmap size.
 /// Español: Opciones de captura para la resolución, la opacidad y el tamaño seguro del bitmap.
 /// 中文：截图配置选项，用于控制分辨率、透明度和安全的位图大小。

@@ -10,6 +10,13 @@ import UIKit
 @preconcurrency import WebKit
 import MessageUI
 
+// English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
+// Español: Importa explícitamente el target Core para las compilaciones SwiftPM independientes.
+// 中文：独立 SwiftPM 编译时，显式导入 Core 聚合 target。
+#if SWIFT_PACKAGE
+import ptools
+#endif
+
 public typealias MessageResultBlock = (_ sendResult: MessageComposeResult) -> Void
 public typealias MailResultBlock = (_ sendResult: MFMailComposeResult) -> Void
 

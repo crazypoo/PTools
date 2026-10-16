@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: 6e273aeca2aa2ab5d7b926a50e1f001e4572ae03
-Generated at: 2026-10-16T15:32:13Z
+Source revision: 56ef385b6efeeb838c5e981c076fd52498f44992
+Generated at: 2026-10-16T16:27:54Z
 -->
 
 # SwiftPM Dependency Graph
@@ -250,7 +250,7 @@ Generated at: 2026-10-16T15:32:13Z
 | `PToolsModelUIKit` | `PooToolsSource/PToolsModelUIKit` | PToolsModelCore | — | 0 source entries / 0 resources |
 | `PToolsNavigationTests` | `Tests/PToolsNavigationTests` | PooToolsSplitView, ptools | — | 0 source entries / 0 resources |
 | `PToolsNetworkModelCore` | `PooToolsSource` | PToolsCore, PToolsModelCore, PToolsModelLegacyKakaJSON, PToolsModelLegacySmartCodable | — | 3 source entries / 0 resources |
-| `PToolsNetworkRuntimeTests` | `Tests/PToolsNetworkTests` | PToolsModelCore, PooToolsNetWork | Alamofire | 1 source entries / 0 resources |
+| `PToolsNetworkRuntimeTests` | `Tests/PToolsNetworkTests` | PToolsCore, PToolsModelCore, PooToolsNetWork | Alamofire | 1 source entries / 0 resources |
 | `PToolsNetworkTests` | `Tests/PToolsNetworkTests` | PToolsModelCore, PToolsNetworkModelCore | — | 1 source entries / 0 resources |
 | `PToolsNotifications` | `PooToolsSource/PToolsNotifications` | PTNotificationPermission, PToolsRouteCore | — | 0 source entries / 0 resources |
 | `PToolsObservability` | `PooToolsSource/PToolsObservability` | PToolsLogging, PToolsObservabilityCore | — | 0 source entries / 0 resources |

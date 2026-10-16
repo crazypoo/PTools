@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "6e273aeca2aa2ab5d7b926a50e1f001e4572ae03",
-  "generated_at": "2026-10-16T15:32:13Z",
+  "source_revision": "56ef385b6efeeb838c5e981c076fd52498f44992",
+  "generated_at": "2026-10-16T16:27:54Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -5004,6 +5004,17 @@
       ],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
         {
           "name": "PToolsModelCore",
           "kind": "internal",

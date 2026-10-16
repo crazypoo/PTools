@@ -23,7 +23,7 @@ MEMBER = re.compile(
     rf"^\s*{ACCESS}(?:static\s+|class\s+|final\s+|mutating\s+|override\s+|nonisolated\s+)*"
     r"(func|var|let|init|subscript)\s+([A-Za-z_][A-Za-z0-9_]*)?"
 )
-IMPORT = re.compile(r"^\s*import\s+([A-Za-z_][A-Za-z0-9_]*)", re.MULTILINE)
+IMPORT = re.compile(r"^\s*(?:@testable\s+)?import\s+([A-Za-z_][A-Za-z0-9_]*)", re.MULTILINE)
 
 # English: These names are not the complete scanner; they are high-confidence probes for the known boundary families.
 # Español: Estos nombres no sustituyen el escáner completo; son sondas de alta confianza para las fronteras conocidas.
@@ -33,10 +33,68 @@ KNOWN_SYMBOLS = {
     "removeAllSubviews": "ptools",
     "emojiToImage": "ptools",
     "appfont": "ptools",
+    "DevMaskColor": "ptools",
+    "base_alertVC": "ptools",
+    "createImageWithColor": "ptools",
+    "fixOrientation": "ptools",
+    "gcdRunUnsafely": "ptools",
+    "getCurrentVC": "ptools",
+    "kSCREEN_HEIGHT": "ptools",
+    "kSCREEN_WIDTH": "ptools",
+    "randomColor": "ptools",
+    "resize_vI": "ptools",
+    "stringIsEmpty": "ptools",
+    "transformImage": "ptools",
+    "viewCorner": "ptools",
+    "PTAdaptiveBarCoordinator": "ptools",
+    "PTAdaptiveBarEdge": "ptools",
+    "PTAdaptiveBarLayoutContext": "ptools",
+    "PTAdaptiveNavigationContainer": "ptools",
+    "PTAdaptiveReservedRegion": "ptools",
+    "PTAdaptiveVisibleRegionResolver": "ptools",
+    "PTActionLayoutButton": "ptools",
+    "PTAlertTipsViewController": "ptools",
+    "PTAnimationFunction": "ptools",
+    "PTAppStoreFunction": "ptools",
+    "PTBaseButton": "ptools",
+    "PTBaseNavControl": "ptools",
+    "PTBaseNormalCell": "ptools",
+    "PTBaseViewController": "ptools",
+    "PTClampedPropertyWrapper": "ptools",
+    "PTCollectionView": "ptools",
+    "PTCollectionViewConfig": "ptools",
+    "PTCollectionViewType": "ptools",
+    "PTControlMenuFactory": "ptools",
+    "PTControlMenuSelectionItem": "ptools",
+    "PTCoreUserDefaultsWrapper": "ptools",
+    "PTFontRuntime": "ptools",
+    "PTLayoutButton": "ptools",
+    "PTMediaSaveService": "ptools",
+    "PTNavBar": "ptools",
+    "PTNSLogConsole": "ptools",
+    "PTOpenSystemConfig": "ptools",
+    "PTOpenSystemFunction": "ptools",
+    "PTProgressSnapshot": "PToolsCore",
+    "PTResponseMetadata": "PToolsCore",
+    "PTRows": "ptools",
+    "PTSceneContext": "ptools",
+    "PTSection": "ptools",
+    "PTScreenShotImageHandle": "ptools",
+    "PTSwitch": "ptools",
+    "PTTabBarAppearance": "ptools",
+    "PTTabBarImageContent": "ptools",
+    "PTTabBarItemView": "ptools",
+    "PTTabBarLayoutAppearance": "ptools",
+    "PTTabBarLayoutEngine": "ptools",
+    "PTUnavailableManager": "ptools",
+    "PTUtils": "ptools",
+    "PTVideoCoverCache": "ptools",
+    "PTVideoExportError": "ptools",
+    "PTVideoThumbnailService": "ptools",
     "PTSymbolResolver": "PToolsSymbols",
     "PTSymbol": "PToolsSymbols",
     "PTFeedbackCenter": "PToolsCore",
-    "PTLoadImageFunction": "PToolsCore",
+    "PTLoadImageFunction": "ptools",
     "PTDarkModeOption": "ptools",
     "PTAppBaseConfig": "ptools",
 }
@@ -148,14 +206,24 @@ def main() -> int:
                     "ownerCandidates": ";".join(sorted(symbol_targets.get(symbol, {required_import}))),
                 }
                 references.append(reference)
-                if owner == required_import or required_import in target_map.get(owner, {}).get("dependencies", []):
+                target_dependencies = set(target_map.get(owner, {}).get("dependencies", []))
+                if owner == required_import:
                     status = "closed"
                     severity = "info"
-                    fix_strategy = "existing-direct-dependency-and-import"
+                    fix_strategy = "symbol-owned-by-current-target"
                 elif required_import in imports or (required_import == "ptools" and "ptools" in imports):
-                    status = "needs-build-confirmation"
-                    severity = "low"
-                    fix_strategy = "direct-import-present-check-consumer-build"
+                    if required_import in target_dependencies:
+                        status = "needs-build-confirmation"
+                        severity = "low"
+                        fix_strategy = "direct-dependency-and-explicit-import"
+                    else:
+                        status = "open"
+                        severity = "high"
+                        fix_strategy = "explicit-import-without-manifest-dependency"
+                elif required_import in target_dependencies:
+                    status = "open"
+                    severity = "high"
+                    fix_strategy = "direct-dependency-missing-file-import"
                 else:
                     status = "open"
                     severity = "high"
@@ -170,7 +238,7 @@ def main() -> int:
                     "severity": severity,
                     "status": status,
                     "fixStrategy": fix_strategy,
-                    "fixCommit": "working-tree-5.64.5" if status != "open" else "",
+                    "fixCommit": "working-tree-5.65.4" if status != "open" else "",
                     "buildEvidence": "pending-isolated-consumer" if status != "closed" else "static-dependency-check",
                 })
 

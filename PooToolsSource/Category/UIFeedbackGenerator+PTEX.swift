@@ -8,6 +8,12 @@
 
 #if canImport(UIKit) && os(iOS)
 import UIKit
+#if SWIFT_PACKAGE
+// English: Import the split Core target explicitly for the shared MainActor feedback bridge.
+// Español: Importa explícitamente el target Core dividido para el puente compartido de feedback en MainActor.
+// 中文：独立 SwiftPM 编译时，显式导入拆分后的 Core target 以使用共享的 MainActor 反馈桥接。
+import PToolsCore
+#endif
 
 public extension UIFeedbackGenerator {
     

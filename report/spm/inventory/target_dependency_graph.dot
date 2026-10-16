@@ -112,6 +112,7 @@ digraph PToolsSwiftPM {
   "PToolsNetworkModelCore" -> "PToolsModelCore";
   "PToolsNetworkModelCore" -> "PToolsModelLegacyKakaJSON";
   "PToolsNetworkModelCore" -> "PToolsModelLegacySmartCodable";
+  "PToolsNetworkRuntimeTests" -> "PToolsCore";
   "PToolsNetworkRuntimeTests" -> "PToolsModelCore";
   "PToolsNetworkRuntimeTests" -> "PooToolsNetWork";
   "PToolsNetworkTests" -> "PToolsModelCore";

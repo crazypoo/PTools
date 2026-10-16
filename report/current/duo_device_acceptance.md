@@ -1,9 +1,14 @@
 <!--
+Current report metadata.
 AUTO-GENERATED FILE.
-
+Repository: crazypoo/PTools
+Branch: master
+Source revision: 56ef385b6efeeb838c5e981c076fd52498f44992
+Source version: 5.65.4
+Source inputs digest: 2af4ccb99e9f4e3265969b7432c18bdc238725e1dd6602b611a288a55c9f217a
+Generator version: 1
 Generator: manual Duo validation record maintained with the repository gates
-Source revision: 486435925e25155cc3fab847fbe7c076e7f31883
-Generated at: 2026-10-14T08:13:55Z
+Generated at: 2026-10-16T16:05:42Z
 -->
 
 # iPhone Duo 设备验收记录 / Aceptación de dispositivo / Device acceptance
