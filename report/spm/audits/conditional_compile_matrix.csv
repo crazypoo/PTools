@@ -1931,8 +1931,12 @@ PooToolsVideoEditor,PooToolsSource/VideoEditor/UIColor+VideoEditorEX.swift,10,if
 PooToolsVideoEditor,PooToolsSource/VideoEditor/UIColor+VideoEditorEX.swift,12,endif,,,structural
 PooToolsVideoEditor,PooToolsSource/VideoEditor/VideoConverter.swift,10,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
 PooToolsVideoEditor,PooToolsSource/VideoEditor/VideoConverter.swift,12,endif,,,structural
-PooToolsWhatsNewsKit,PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift,10,if,canImport(PToolsUIFoundation),canImport(PToolsUIFoundation),review-platform-or-package-branch
+PooToolsVision,PooToolsSource/Vision/PTVision.swift,12,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
+PooToolsVision,PooToolsSource/Vision/PTVision.swift,14,endif,,,structural
+PooToolsWhatsNewsKit,PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift,10,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
 PooToolsWhatsNewsKit,PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift,12,endif,,,structural
+PooToolsWhatsNewsKit,PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift,13,if,canImport(PToolsUIFoundation),canImport(PToolsUIFoundation),review-platform-or-package-branch
+PooToolsWhatsNewsKit,PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift,15,endif,,,structural
 ptools,PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift,11,if,canImport(PToolsCore),canImport(PToolsCore),review-platform-or-package-branch
 ptools,PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift,13,endif,,,structural
 ptools,PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift,14,if,canImport(PToolsUIFoundation),canImport(PToolsUIFoundation),review-platform-or-package-branch

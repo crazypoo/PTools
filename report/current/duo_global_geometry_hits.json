@@ -1,8 +1,8 @@
 {
   "generator": "Scripts/audit_duo_uikit_coverage.py",
   "generated_by": "Scripts/audit_duo_uikit_coverage.py",
-  "source_revision": "a3d7346c36485d8c3f7e3c68d423fbe9b1d18a5f",
-  "generated_at": "2026-10-16T02:19:27.513835+00:00",
+  "source_revision": "572d47945fc3e7f7006539a8975811bc86ffbb59",
+  "generated_at": "2026-10-16T14:22:48.667822+00:00",
   "hits": [
     {
       "kind": "statusBarHeight",
@@ -3589,7 +3589,7 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 356,
+      "line": 359,
       "text": "iKnowButton.imageSize = CGSize(width: 44, height: 44)"
     },
     {

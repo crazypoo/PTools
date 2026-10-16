@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "a3d7346c36485d8c3f7e3c68d423fbe9b1d18a5f",
-  "generated_at": "2026-10-16T02:18:25Z",
+  "source_revision": "572d47945fc3e7f7006539a8975811bc86ffbb59",
+  "generated_at": "2026-10-16T13:59:58Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -87434,7 +87434,7 @@
     {
       "key": "PooToolsSource/Vision/PTVision.swift|public|struct|public struct PTVisionTextResult",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 14,
+      "line": 17,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTVisionTextResult {"
@@ -87442,7 +87442,7 @@
     {
       "key": "PooToolsSource/Vision/PTVision.swift|public|let|public let text: String",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 15,
+      "line": 18,
       "access": "public",
       "kind": "let",
       "declaration": "public let text: String"
@@ -87450,7 +87450,7 @@
     {
       "key": "PooToolsSource/Vision/PTVision.swift|public|let|public let observations: [VNRecognizedTextObservation]",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 16,
+      "line": 19,
       "access": "public",
       "kind": "let",
       "declaration": "public let observations: [VNRecognizedTextObservation]"
@@ -87458,7 +87458,7 @@
     {
       "key": "PooToolsSource/Vision/PTVision.swift|public|init|public init(text: String, observations: [VNRecognizedTextObservation])",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 18,
+      "line": 21,
       "access": "public",
       "kind": "init",
       "declaration": "public init(text: String, observations: [VNRecognizedTextObservation]) {"
@@ -87466,7 +87466,7 @@
     {
       "key": "PooToolsSource/Vision/PTVision.swift|public|class|public final class PTVision: NSObject",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 31,
+      "line": 34,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTVision: NSObject {"
@@ -87474,7 +87474,7 @@
     {
       "key": "PooToolsSource/Vision/PTVision.swift|public|func|public func findText(withImage image: UIImage, revision: Int = VNRecognizeTextRequestRevision2, recognitionLanguages: [String] = [\"zh-cn\",\"zh-Hant\",\"zh-Hans\",\"en\",\"es\"], resultBlock: (@MainActor @Sendable (_ resultText: String, _ textObservations: [VNRecognizedTextObservation]) -> Void)?)",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 107,
+      "line": 110,
       "access": "public",
       "kind": "func",
       "declaration": "public func findText(withImage image: UIImage, revision: Int = VNRecognizeTextRequestRevision2, recognitionLanguages: [String] = [\"zh-cn\",\"zh-Hant\",\"zh-Hans\",\"en\",\"es\"], resultBlock: (@MainActor @Sendable (_ resultText: String, _ textObservations: [VNRecognizedTextObservation]) -> Void)?) {"
@@ -87482,7 +87482,7 @@
     {
       "key": "PooToolsSource/Vision/PTVision.swift|public|func|public func findText(withImageView imageView: UIImageView, revision: Int = VNRecognizeTextRequestRevision2, resultBlock: (@Sendable (_ resultText: String) -> Void)?)",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 172,
+      "line": 175,
       "access": "public",
       "kind": "func",
       "declaration": "public func findText(withImageView imageView: UIImageView, revision: Int = VNRecognizeTextRequestRevision2, resultBlock: (@Sendable (_ resultText: String) -> Void)?) {"
@@ -87530,7 +87530,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|enum|@objc public enum PTWhatsNewsPresentationOption:Int",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 15,
+      "line": 18,
       "access": "public",
       "kind": "enum",
       "declaration": "@objc public enum PTWhatsNewsPresentationOption:Int {"
@@ -87538,7 +87538,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|class|public class PTWhatsNews:NSObject",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 27,
+      "line": 30,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTWhatsNews:NSObject {"
@@ -87546,7 +87546,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|class|@MainActor public class func shouldPresent(with option: PTWhatsNewsPresentationOption = .always, currentVersion: String? = nil) -> Bool",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 33,
+      "line": 36,
       "access": "public",
       "kind": "class",
       "declaration": "@MainActor public class func shouldPresent(with option: PTWhatsNewsPresentationOption = .always, currentVersion: String? = nil) -> Bool {"
@@ -87554,7 +87554,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|class|public class PTWhatsNewsTitleItem:NSObject",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 55,
+      "line": 58,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTWhatsNewsTitleItem:NSObject {"
@@ -87562,7 +87562,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var title:String = \"\"",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 56,
+      "line": 59,
       "access": "public",
       "kind": "var",
       "declaration": "public var title:String = \"\""
@@ -87570,7 +87570,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var titleFont:UIFont = .systemFont(ofSize: 26)",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 57,
+      "line": 60,
       "access": "public",
       "kind": "var",
       "declaration": "public var titleFont:UIFont = .systemFont(ofSize: 26)"
@@ -87578,7 +87578,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var titleColor:UIColor = .black",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 58,
+      "line": 61,
       "access": "public",
       "kind": "var",
       "declaration": "public var titleColor:UIColor = .black"
@@ -87586,7 +87586,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var atts:PTRichText?",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 59,
+      "line": 62,
       "access": "public",
       "kind": "var",
       "declaration": "public var atts:PTRichText?"
@@ -87594,7 +87594,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var textAlignment:NSTextAlignment = .center",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 60,
+      "line": 63,
       "access": "public",
       "kind": "var",
       "declaration": "public var textAlignment:NSTextAlignment = .center"
@@ -87602,7 +87602,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|init|@MainActor public init(title: String = \"What's News\", titleFont: UIFont = UIFont.appfont(size: 26,bold: true), titleColor: UIColor? = nil, atts: PTRichText? = nil, textAlignment:NSTextAlignment = .center)",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 62,
+      "line": 65,
       "access": "public",
       "kind": "init",
       "declaration": "@MainActor public init(title: String = \"What's News\", titleFont: UIFont = UIFont.appfont(size: 26,bold: true), titleColor: UIColor? = nil, atts: PTRichText? = nil, textAlignment:NSTextAlignment = .center) {"
@@ -87610,7 +87610,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|class|public class PTWhatsNewsIKnowItem:NSObject",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 72,
+      "line": 75,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTWhatsNewsIKnowItem:NSObject {"
@@ -87618,7 +87618,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var title:String = \"\"",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 73,
+      "line": 76,
       "access": "public",
       "kind": "var",
       "declaration": "public var title:String = \"\""
@@ -87626,7 +87626,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var titleFont:UIFont = .systemFont(ofSize: 16)",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 74,
+      "line": 77,
       "access": "public",
       "kind": "var",
       "declaration": "public var titleFont:UIFont = .systemFont(ofSize: 16)"
@@ -87634,7 +87634,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var titleColor:UIColor = .white",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 75,
+      "line": 78,
       "access": "public",
       "kind": "var",
       "declaration": "public var titleColor:UIColor = .white"
@@ -87642,7 +87642,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var backgroundColor:UIColor = .systemBlue",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 76,
+      "line": 79,
       "access": "public",
       "kind": "var",
       "declaration": "public var backgroundColor:UIColor = .systemBlue"
@@ -87650,7 +87650,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var itemLayout:PTSheetButtonStyle = .leftImageRightTitle",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 77,
+      "line": 80,
       "access": "public",
       "kind": "var",
       "declaration": "public var itemLayout:PTSheetButtonStyle = .leftImageRightTitle"
@@ -87658,7 +87658,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var image:Any?",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 78,
+      "line": 81,
       "access": "public",
       "kind": "var",
       "declaration": "public var image:Any?"
@@ -87666,7 +87666,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var itemSpace:CGFloat = 10",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 79,
+      "line": 82,
       "access": "public",
       "kind": "var",
       "declaration": "public var itemSpace:CGFloat = 10"
@@ -87674,7 +87674,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var privacy:String = \"\"",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 80,
+      "line": 83,
       "access": "public",
       "kind": "var",
       "declaration": "public var privacy:String = \"\""
@@ -87682,7 +87682,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var privacyURL:String = \"\"",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 81,
+      "line": 84,
       "access": "public",
       "kind": "var",
       "declaration": "public var privacyURL:String = \"\""
@@ -87690,7 +87690,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var privacyFont:UIFont = .systemFont(ofSize: 14)",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 82,
+      "line": 85,
       "access": "public",
       "kind": "var",
       "declaration": "public var privacyFont:UIFont = .systemFont(ofSize: 14)"
@@ -87698,7 +87698,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var privacyColor:UIColor = .systemBlue",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 83,
+      "line": 86,
       "access": "public",
       "kind": "var",
       "declaration": "public var privacyColor:UIColor = .systemBlue"
@@ -87706,7 +87706,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|init|public init(title: String = \"I Know\", titleFont: UIFont = UIFont.appfont(size: 16,bold: true), titleColor: UIColor = .white, backgroundColor: UIColor = .systemBlue, itemLayout: PTSheetButtonStyle = .leftImageRightTitle, image: Any? = nil, itemSpace: CGFloat = 10, privacy:String = \"\", privacyURL:String = \"\", privacyFont:UIFont = .appfont(size: 14), privacyColor:UIColor = .systemBlue)",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 95,
+      "line": 98,
       "access": "public",
       "kind": "init",
       "declaration": "public init(title: String = \"I Know\", titleFont: UIFont = UIFont.appfont(size: 16,bold: true), titleColor: UIColor = .white, backgroundColor: UIColor = .systemBlue, itemLayout: PTSheetButtonStyle = .leftImageRightTitle, image: Any? = nil, itemSpace: CGFloat = 10, privacy:String = \"\", privacyURL:String = \"\", privacyFont:UIFont = .appfont(size: 14), privacyColor:UIColor = .systemBlue) {"
@@ -87714,7 +87714,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|class|public class PTWhatsNewsItem:NSObject",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 111,
+      "line": 114,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTWhatsNewsItem:NSObject {"
@@ -87722,7 +87722,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var title:String = \"\"",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 112,
+      "line": 115,
       "access": "public",
       "kind": "var",
       "declaration": "public var title:String = \"\""
@@ -87730,7 +87730,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var titleFont:UIFont = .systemFont(ofSize: 20)",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 113,
+      "line": 116,
       "access": "public",
       "kind": "var",
       "declaration": "public var titleFont:UIFont = .systemFont(ofSize: 20)"
@@ -87738,7 +87738,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var titleColor:UIColor = .black",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 114,
+      "line": 117,
       "access": "public",
       "kind": "var",
       "declaration": "public var titleColor:UIColor = .black"
@@ -87746,7 +87746,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var contentSpace:CGFloat = 2",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 115,
+      "line": 118,
       "access": "public",
       "kind": "var",
       "declaration": "public var contentSpace:CGFloat = 2"
@@ -87754,7 +87754,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var subTitle:String = \"\"",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 116,
+      "line": 119,
       "access": "public",
       "kind": "var",
       "declaration": "public var subTitle:String = \"\""
@@ -87762,7 +87762,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var subTitleFont:UIFont = .systemFont(ofSize: 16)",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 117,
+      "line": 120,
       "access": "public",
       "kind": "var",
       "declaration": "public var subTitleFont:UIFont = .systemFont(ofSize: 16)"
@@ -87770,7 +87770,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var subTitleColor:UIColor = .lightGray",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 118,
+      "line": 121,
       "access": "public",
       "kind": "var",
       "declaration": "public var subTitleColor:UIColor = .lightGray"
@@ -87778,7 +87778,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var newsImage:Any?",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 119,
+      "line": 122,
       "access": "public",
       "kind": "var",
       "declaration": "public var newsImage:Any?"
@@ -87786,7 +87786,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|init|@MainActor public init(title: String = \"\", titleFont: UIFont = UIFont.appfont(size: 20,bold: true), titleColor: UIColor? = nil, contentSpace: CGFloat = 2, subTitle: String = \"\", subTitleFont: UIFont = UIFont.appfont(size: 16,bold: true), subTitleColor: UIColor = .lightGray, newsImage: Any? = nil)",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 128,
+      "line": 131,
       "access": "public",
       "kind": "init",
       "declaration": "@MainActor public init(title: String = \"\", titleFont: UIFont = UIFont.appfont(size: 20,bold: true), titleColor: UIColor? = nil, contentSpace: CGFloat = 2, subTitle: String = \"\", subTitleFont: UIFont = UIFont.appfont(size: 16,bold: true), subTitleColor: UIColor = .lightGray, newsImage: Any? = nil) {"
@@ -87794,7 +87794,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|class|public class PTWhatsNewsViewController: PTBaseViewController",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 236,
+      "line": 239,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTWhatsNewsViewController: PTBaseViewController {"
@@ -87802,7 +87802,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var privacyTapHandler:PTActionTask?",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 238,
+      "line": 241,
       "access": "public",
       "kind": "var",
       "declaration": "public var privacyTapHandler:PTActionTask?"
@@ -87810,7 +87810,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|var|public var iKnowTapHandler:PTActionTask?",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 239,
+      "line": 242,
       "access": "public",
       "kind": "var",
       "declaration": "public var iKnowTapHandler:PTActionTask?"
@@ -87818,7 +87818,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|func|public func setContentLRSpace(@PTClampedPropertyWrapper(range:0...100) values:CGFloat = 48)",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 241,
+      "line": 244,
       "access": "public",
       "kind": "func",
       "declaration": "public func setContentLRSpace(@PTClampedPropertyWrapper(range:0...100) values:CGFloat = 48) {"
@@ -87826,7 +87826,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|init|public init(titleItem: PTWhatsNewsTitleItem? = nil, iKnowItem:PTWhatsNewsIKnowItem = PTWhatsNewsIKnowItem(), newsItem:[PTWhatsNewsItem])",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 332,
+      "line": 335,
       "access": "public",
       "kind": "init",
       "declaration": "public init(titleItem: PTWhatsNewsTitleItem? = nil, iKnowItem:PTWhatsNewsIKnowItem = PTWhatsNewsIKnowItem(), newsItem:[PTWhatsNewsItem]) {"
@@ -87834,7 +87834,7 @@
     {
       "key": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift|public|func|public func whatsNewsShow(vc:UIViewController)",
       "path": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-      "line": 414,
+      "line": 417,
       "access": "public",
       "kind": "func",
       "declaration": "public func whatsNewsShow(vc:UIViewController) {"

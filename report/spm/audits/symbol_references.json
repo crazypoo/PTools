@@ -8525,100 +8525,100 @@
   {
     "symbolName": "addSubviews",
     "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 188,
+    "line": 191,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
     "ownerCandidates": "ptools"
   },
   {
     "symbolName": "addSubviews",
     "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 371,
+    "line": 374,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
     "ownerCandidates": "ptools"
   },
   {
     "symbolName": "addSubviews",
     "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 373,
+    "line": 376,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
     "ownerCandidates": "ptools"
   },
   {
     "symbolName": "appfont",
-    "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 62,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "appfont",
-    "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 86,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "appfont",
-    "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 94,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "appfont",
-    "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 122,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "appfont",
-    "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 126,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "PTDarkModeOption",
     "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 65,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "appfont",
+    "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 89,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "appfont",
+    "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 97,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "appfont",
+    "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 125,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "appfont",
+    "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 129,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
     "ownerCandidates": "ptools"
   },
   {
     "symbolName": "PTDarkModeOption",
     "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 131,
+    "line": 68,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTDarkModeOption",
+    "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 134,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
     "ownerCandidates": "ptools"
   },
   {
     "symbolName": "PTAppBaseConfig",
     "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 376,
+    "line": 379,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
     "ownerCandidates": "ptools"
   },
   {

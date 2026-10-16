@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "a3d7346c36485d8c3f7e3c68d423fbe9b1d18a5f",
-  "generated_at": "2026-10-16T02:18:25Z",
+  "source_revision": "572d47945fc3e7f7006539a8975811bc86ffbb59",
+  "generated_at": "2026-10-16T13:59:57Z",
   "counts": {
     "main_queue_async": 26,
     "task_detached": 31,
@@ -643,19 +643,19 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 27,
+      "line": 30,
       "text": "private struct PTObservationBox: @unchecked Sendable {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 59,
+      "line": 62,
       "text": "Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 116,
+      "line": 119,
       "text": "Task.detached(priority: .userInitiated) {"
     }
   ]

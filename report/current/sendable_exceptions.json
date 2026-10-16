@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "a3d7346c36485d8c3f7e3c68d423fbe9b1d18a5f",
-  "generated_at": "2026-10-16T02:18:26Z",
+  "source_revision": "572d47945fc3e7f7006539a8975811bc86ffbb59",
+  "generated_at": "2026-10-16T13:59:58Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
@@ -346,7 +346,7 @@
     },
     {
       "path": "PooToolsSource/Vision/PTVision.swift",
-      "line": 27,
+      "line": 30,
       "declaration": "private struct PTObservationBox: @unchecked Sendable {",
       "allowlisted": true
     }

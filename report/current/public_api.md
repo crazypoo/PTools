@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: a3d7346c36485d8c3f7e3c68d423fbe9b1d18a5f
-Generated at: 2026-10-16T02:18:25Z
+Source revision: 572d47945fc3e7f7006539a8975811bc86ffbb59
+Generated at: 2026-10-16T13:59:58Z
 -->
 
 # PTools 当前公开 API 清单
@@ -10941,57 +10941,57 @@ Generated at: 2026-10-16T02:18:25Z
 | PooToolsSource/VideoEditor/VideoConverter.swift:227 | func | open | open func convert(_ option: ConverterOption? = nil) async throws -> (AVMutableComposition, AVMutableVideoComposition) { |
 | PooToolsSource/VideoEditor/VideoConverter.swift:324 | func | open | open func convert(_ option: ConverterOption? = nil, handler: @escaping @Sendable (AVMutableComposition, AVMutableVideoComposition) -> Void) { |
 | PooToolsSource/VideoEditor/VideoConverter.swift:335 | func | open | open func convert(_ option: ConverterOption? = nil, temporaryFileName: String? = nil, progress: (@Sendable (Double?) -> Void)? = nil, completion: @escaping @Sendable (URL?, Error?) -> Void) { |
-| PooToolsSource/Vision/PTVision.swift:14 | struct | public | public struct PTVisionTextResult { |
-| PooToolsSource/Vision/PTVision.swift:15 | let | public | public let text: String |
-| PooToolsSource/Vision/PTVision.swift:16 | let | public | public let observations: [VNRecognizedTextObservation] |
-| PooToolsSource/Vision/PTVision.swift:18 | init | public | public init(text: String, observations: [VNRecognizedTextObservation]) { |
-| PooToolsSource/Vision/PTVision.swift:31 | class | public | public final class PTVision: NSObject { |
-| PooToolsSource/Vision/PTVision.swift:107 | func | public | public func findText(withImage image: UIImage, revision: Int = VNRecognizeTextRequestRevision2, recognitionLanguages: [String] = ["zh-cn","zh-Hant","zh-Hans","en","es"], resultBlock: (@MainActor @Sendable (_ resultText: String, _ textObservations: [VNRecognizedTextObservation]) -> Void)?) { |
-| PooToolsSource/Vision/PTVision.swift:172 | func | public | public func findText(withImageView imageView: UIImageView, revision: Int = VNRecognizeTextRequestRevision2, resultBlock: (@Sendable (_ resultText: String) -> Void)?) { |
+| PooToolsSource/Vision/PTVision.swift:17 | struct | public | public struct PTVisionTextResult { |
+| PooToolsSource/Vision/PTVision.swift:18 | let | public | public let text: String |
+| PooToolsSource/Vision/PTVision.swift:19 | let | public | public let observations: [VNRecognizedTextObservation] |
+| PooToolsSource/Vision/PTVision.swift:21 | init | public | public init(text: String, observations: [VNRecognizedTextObservation]) { |
+| PooToolsSource/Vision/PTVision.swift:34 | class | public | public final class PTVision: NSObject { |
+| PooToolsSource/Vision/PTVision.swift:110 | func | public | public func findText(withImage image: UIImage, revision: Int = VNRecognizeTextRequestRevision2, recognitionLanguages: [String] = ["zh-cn","zh-Hant","zh-Hans","en","es"], resultBlock: (@MainActor @Sendable (_ resultText: String, _ textObservations: [VNRecognizedTextObservation]) -> Void)?) { |
+| PooToolsSource/Vision/PTVision.swift:175 | func | public | public func findText(withImageView imageView: UIImageView, revision: Int = VNRecognizeTextRequestRevision2, resultBlock: (@Sendable (_ resultText: String) -> Void)?) { |
 | PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:14 | class | public | public final class PTHTMLHeightCalculator: NSObject { |
 | PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:53 | func | public | public func calculateHeight(for html: String, containerWidth: CGFloat? = nil) async -> CGFloat { |
 | PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:113 | func | public | public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) { |
 | PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:132 | func | public | public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) { |
 | PooToolsSource/WebKit/PTHTMLHeightCalculator.swift:137 | func | public | public func webViewWebContentProcessDidTerminate(_ webView: WKWebView) { |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:15 | enum | public | @objc public enum PTWhatsNewsPresentationOption:Int { |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:27 | class | public | public class PTWhatsNews:NSObject { |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:33 | class | public | @MainActor public class func shouldPresent(with option: PTWhatsNewsPresentationOption = .always, currentVersion: String? = nil) -> Bool { |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:55 | class | public | public class PTWhatsNewsTitleItem:NSObject { |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:56 | var | public | public var title:String = "" |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:57 | var | public | public var titleFont:UIFont = .systemFont(ofSize: 26) |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:58 | var | public | public var titleColor:UIColor = .black |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:59 | var | public | public var atts:PTRichText? |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:60 | var | public | public var textAlignment:NSTextAlignment = .center |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:62 | init | public | @MainActor public init(title: String = "What's News", titleFont: UIFont = UIFont.appfont(size: 26,bold: true), titleColor: UIColor? = nil, atts: PTRichText? = nil, textAlignment:NSTextAlignment = .center) { |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:72 | class | public | public class PTWhatsNewsIKnowItem:NSObject { |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:73 | var | public | public var title:String = "" |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:74 | var | public | public var titleFont:UIFont = .systemFont(ofSize: 16) |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:75 | var | public | public var titleColor:UIColor = .white |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:76 | var | public | public var backgroundColor:UIColor = .systemBlue |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:77 | var | public | public var itemLayout:PTSheetButtonStyle = .leftImageRightTitle |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:78 | var | public | public var image:Any? |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:79 | var | public | public var itemSpace:CGFloat = 10 |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:80 | var | public | public var privacy:String = "" |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:81 | var | public | public var privacyURL:String = "" |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:82 | var | public | public var privacyFont:UIFont = .systemFont(ofSize: 14) |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:83 | var | public | public var privacyColor:UIColor = .systemBlue |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:95 | init | public | public init(title: String = "I Know", titleFont: UIFont = UIFont.appfont(size: 16,bold: true), titleColor: UIColor = .white, backgroundColor: UIColor = .systemBlue, itemLayout: PTSheetButtonStyle = .leftImageRightTitle, image: Any? = nil, itemSpace: CGFloat = 10, privacy:String = "", privacyURL:String = "", privacyFont:UIFont = .appfont(size: 14), privacyColor:UIColor = .systemBlue) { |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:111 | class | public | public class PTWhatsNewsItem:NSObject { |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:112 | var | public | public var title:String = "" |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:113 | var | public | public var titleFont:UIFont = .systemFont(ofSize: 20) |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:114 | var | public | public var titleColor:UIColor = .black |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:115 | var | public | public var contentSpace:CGFloat = 2 |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:116 | var | public | public var subTitle:String = "" |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:117 | var | public | public var subTitleFont:UIFont = .systemFont(ofSize: 16) |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:118 | var | public | public var subTitleColor:UIColor = .lightGray |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:119 | var | public | public var newsImage:Any? |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:128 | init | public | @MainActor public init(title: String = "", titleFont: UIFont = UIFont.appfont(size: 20,bold: true), titleColor: UIColor? = nil, contentSpace: CGFloat = 2, subTitle: String = "", subTitleFont: UIFont = UIFont.appfont(size: 16,bold: true), subTitleColor: UIColor = .lightGray, newsImage: Any? = nil) { |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:236 | class | public | public class PTWhatsNewsViewController: PTBaseViewController { |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:238 | var | public | public var privacyTapHandler:PTActionTask? |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:239 | var | public | public var iKnowTapHandler:PTActionTask? |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:241 | func | public | public func setContentLRSpace(@PTClampedPropertyWrapper(range:0...100) values:CGFloat = 48) { |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:332 | init | public | public init(titleItem: PTWhatsNewsTitleItem? = nil, iKnowItem:PTWhatsNewsIKnowItem = PTWhatsNewsIKnowItem(), newsItem:[PTWhatsNewsItem]) { |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:414 | func | public | public func whatsNewsShow(vc:UIViewController) { |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:18 | enum | public | @objc public enum PTWhatsNewsPresentationOption:Int { |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:30 | class | public | public class PTWhatsNews:NSObject { |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:36 | class | public | @MainActor public class func shouldPresent(with option: PTWhatsNewsPresentationOption = .always, currentVersion: String? = nil) -> Bool { |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:58 | class | public | public class PTWhatsNewsTitleItem:NSObject { |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:59 | var | public | public var title:String = "" |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:60 | var | public | public var titleFont:UIFont = .systemFont(ofSize: 26) |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:61 | var | public | public var titleColor:UIColor = .black |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:62 | var | public | public var atts:PTRichText? |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:63 | var | public | public var textAlignment:NSTextAlignment = .center |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:65 | init | public | @MainActor public init(title: String = "What's News", titleFont: UIFont = UIFont.appfont(size: 26,bold: true), titleColor: UIColor? = nil, atts: PTRichText? = nil, textAlignment:NSTextAlignment = .center) { |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:75 | class | public | public class PTWhatsNewsIKnowItem:NSObject { |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:76 | var | public | public var title:String = "" |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:77 | var | public | public var titleFont:UIFont = .systemFont(ofSize: 16) |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:78 | var | public | public var titleColor:UIColor = .white |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:79 | var | public | public var backgroundColor:UIColor = .systemBlue |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:80 | var | public | public var itemLayout:PTSheetButtonStyle = .leftImageRightTitle |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:81 | var | public | public var image:Any? |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:82 | var | public | public var itemSpace:CGFloat = 10 |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:83 | var | public | public var privacy:String = "" |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:84 | var | public | public var privacyURL:String = "" |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:85 | var | public | public var privacyFont:UIFont = .systemFont(ofSize: 14) |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:86 | var | public | public var privacyColor:UIColor = .systemBlue |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:98 | init | public | public init(title: String = "I Know", titleFont: UIFont = UIFont.appfont(size: 16,bold: true), titleColor: UIColor = .white, backgroundColor: UIColor = .systemBlue, itemLayout: PTSheetButtonStyle = .leftImageRightTitle, image: Any? = nil, itemSpace: CGFloat = 10, privacy:String = "", privacyURL:String = "", privacyFont:UIFont = .appfont(size: 14), privacyColor:UIColor = .systemBlue) { |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:114 | class | public | public class PTWhatsNewsItem:NSObject { |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:115 | var | public | public var title:String = "" |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:116 | var | public | public var titleFont:UIFont = .systemFont(ofSize: 20) |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:117 | var | public | public var titleColor:UIColor = .black |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:118 | var | public | public var contentSpace:CGFloat = 2 |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:119 | var | public | public var subTitle:String = "" |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:120 | var | public | public var subTitleFont:UIFont = .systemFont(ofSize: 16) |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:121 | var | public | public var subTitleColor:UIColor = .lightGray |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:122 | var | public | public var newsImage:Any? |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:131 | init | public | @MainActor public init(title: String = "", titleFont: UIFont = UIFont.appfont(size: 20,bold: true), titleColor: UIColor? = nil, contentSpace: CGFloat = 2, subTitle: String = "", subTitleFont: UIFont = UIFont.appfont(size: 16,bold: true), subTitleColor: UIColor = .lightGray, newsImage: Any? = nil) { |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:239 | class | public | public class PTWhatsNewsViewController: PTBaseViewController { |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:241 | var | public | public var privacyTapHandler:PTActionTask? |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:242 | var | public | public var iKnowTapHandler:PTActionTask? |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:244 | func | public | public func setContentLRSpace(@PTClampedPropertyWrapper(range:0...100) values:CGFloat = 48) { |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:335 | init | public | public init(titleItem: PTWhatsNewsTitleItem? = nil, iKnowItem:PTWhatsNewsIKnowItem = PTWhatsNewsIKnowItem(), newsItem:[PTWhatsNewsItem]) { |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:417 | func | public | public func whatsNewsShow(vc:UIViewController) { |
 | PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift:41 | init | public | public init() { |
 | PooToolsSource/WhereIsMyEye/PTEyeTrackingManager.swift:15 | protocol | public | public protocol PTEyeTrackingDelegate: NSObjectProtocol { |
 | PooToolsSource/WhereIsMyEye/PTEyeTrackingManager.swift:40 | enum | public | @objc public enum PTEyeTrackingState: Int { |

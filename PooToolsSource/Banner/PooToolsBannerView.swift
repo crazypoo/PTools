@@ -132,7 +132,10 @@ public final class PooToolsBannerView: UIView {
     private func configureLabels() {
         configure(titleLabel, with: banner.content.title, identifier: "pt.banner.title")
         configure(subtitleLabel, with: banner.content.subtitle, identifier: "pt.banner.subtitle")
-        textStack.removeAllArrangedSubviews()
+        // English: Remove arranged subviews through UIKit to keep Banner independent from the umbrella module.
+        // Español: Elimina las subviews organizadas con UIKit para mantener Banner independiente del módulo umbrella.
+        // 中文：直接使用 UIKit 移除排列子视图，保持 Banner 独立于聚合模块。
+        textStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         if titleLabel.isHidden == false {
             textStack.addArrangedSubview(titleLabel)
         }
@@ -218,7 +221,7 @@ public final class PooToolsBannerView: UIView {
     }
 
     private func configureActions() {
-        actionStack.removeAllArrangedSubviews()
+        actionStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         guard banner.actions.isEmpty == false else {
             trailingContainer.isHidden = banner.content.trailing == nil
             return

@@ -9,6 +9,9 @@
 import UIKit
 import Vision
 import VisionKit
+#if SWIFT_PACKAGE
+import ptools
+#endif
 
 @MainActor
 public struct PTVisionTextResult {
@@ -205,8 +208,10 @@ public final class PTVision: NSObject {
 
             let layer = CAShapeLayer()
             layer.frame = layerFrame
-            // 假设 UIColor.random 是你库里的一个分类扩展，这里直接使用
-            layer.borderColor = UIColor.random.cgColor
+            // English: Use the public randomColor API exported by the Core color extension.
+            // Español: Usa la API pública randomColor exportada por la extensión de colores de Core.
+            // 中文：使用 Core 颜色扩展导出的公开 randomColor API。
+            layer.borderColor = UIColor.randomColor.cgColor
             layer.borderWidth = 1
             layer.cornerRadius = 2
             return layer

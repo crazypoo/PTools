@@ -1,8 +1,15 @@
 # PTools 路线图
 
-> 当前代码基线：`5.65.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.65.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.65.0`；`5.65.1` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.65.1`；`5.65.2` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.65.2 SwiftPM 独立 Target 修复
+
+- ✅ Banner 不再依赖 CocoaPods 聚合模块提供的 `UIStackView` 扩展，直接使用 UIKit 清理排列子视图。
+- ✅ WhatsNewsKit 和 Vision 在 SwiftPM 编译路径显式导入已有 `ptools` target。
+- ✅ Vision 的随机边框颜色改用 `UIColor.randomColor` 公开 API。
+- ⬜ 仍需在真实宿主的 SwiftPM Debug/Release 和真机环境完成最终回归。
 
 ## 5.65.1 PTCollectionView 骨架显示修复
 

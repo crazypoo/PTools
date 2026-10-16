@@ -6,6 +6,12 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.65.2 — 2026-10-16
+
+- 修复 SwiftPM 独立编译 `PooToolsBanner` 时错误依赖 `UIStackView.removeAllArrangedSubviews()` 扩展的问题，改用 UIKit 原生移除排列子视图，保持 Banner target 轻量且不依赖聚合模块。
+- 为 `PooToolsWhatsNewsKit` 和 `PooToolsVision` 增加 SwiftPM 下对已有 `ptools` target 的显式导入，修复独立产品无法解析 Core 扩展和基类符号的问题。
+- 修复 `PTVision` 使用不存在的 `UIColor.random`，统一改用 Core 已公开的 `UIColor.randomColor`。
+
 ## 5.65.1 — 2026-10-16
 
 - 修复 `PTCollectionView` 骨架显示时真实 Cell 文案（例如 `Content row X`）透出的问题；显示期间隐藏底层业务内容，隐藏后恢复原有内容和透明度。

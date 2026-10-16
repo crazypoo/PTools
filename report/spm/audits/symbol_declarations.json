@@ -22068,10 +22068,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:configure:147",
+    "symbolID": "PooToolsBanner:configure:150",
     "symbolName": "configure",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 147,
+    "line": 150,
     "ownerTarget": "PooToolsBanner",
     "kind": "func",
     "accessLevel": "private",
@@ -22080,10 +22080,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:configureAccessories:166",
+    "symbolID": "PooToolsBanner:configureAccessories:169",
     "symbolName": "configureAccessories",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 166,
+    "line": 169,
     "ownerTarget": "PooToolsBanner",
     "kind": "func",
     "accessLevel": "private",
@@ -22092,10 +22092,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:addAccessory:180",
+    "symbolID": "PooToolsBanner:addAccessory:183",
     "symbolName": "addAccessory",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 180,
+    "line": 183,
     "ownerTarget": "PooToolsBanner",
     "kind": "func",
     "accessLevel": "private",
@@ -22104,10 +22104,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:makeAccessory:188",
+    "symbolID": "PooToolsBanner:makeAccessory:191",
     "symbolName": "makeAccessory",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 188,
+    "line": 191,
     "ownerTarget": "PooToolsBanner",
     "kind": "func",
     "accessLevel": "private",
@@ -22116,20 +22116,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:view:189",
+    "symbolID": "PooToolsBanner:view:192",
     "symbolName": "view",
-    "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 189,
-    "ownerTarget": "PooToolsBanner",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsBanner:imageView:192",
-    "symbolName": "imageView",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
     "line": 192,
     "ownerTarget": "PooToolsBanner",
@@ -22140,10 +22128,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:imageView:196",
+    "symbolID": "PooToolsBanner:imageView:195",
     "symbolName": "imageView",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 196,
+    "line": 195,
     "ownerTarget": "PooToolsBanner",
     "kind": "let",
     "accessLevel": "internal",
@@ -22152,10 +22140,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:activity:202",
+    "symbolID": "PooToolsBanner:imageView:199",
+    "symbolName": "imageView",
+    "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
+    "line": 199,
+    "ownerTarget": "PooToolsBanner",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsBanner:activity:205",
     "symbolName": "activity",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 202,
+    "line": 205,
     "ownerTarget": "PooToolsBanner",
     "kind": "let",
     "accessLevel": "internal",
@@ -22164,10 +22164,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:progress:206",
+    "symbolID": "PooToolsBanner:progress:209",
     "symbolName": "progress",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 206,
+    "line": 209,
     "ownerTarget": "PooToolsBanner",
     "kind": "let",
     "accessLevel": "internal",
@@ -22176,10 +22176,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:configureActions:220",
+    "symbolID": "PooToolsBanner:configureActions:223",
     "symbolName": "configureActions",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 220,
+    "line": 223,
     "ownerTarget": "PooToolsBanner",
     "kind": "func",
     "accessLevel": "private",
@@ -22188,10 +22188,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:button:230",
+    "symbolID": "PooToolsBanner:button:233",
     "symbolName": "button",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 230,
+    "line": 233,
     "ownerTarget": "PooToolsBanner",
     "kind": "let",
     "accessLevel": "internal",
@@ -22200,56 +22200,20 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:applyAppearance:250",
+    "symbolID": "PooToolsBanner:applyAppearance:253",
     "symbolName": "applyAppearance",
-    "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 250,
-    "ownerTarget": "PooToolsBanner",
-    "kind": "func",
-    "accessLevel": "private",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsBanner:appearance:251",
-    "symbolName": "appearance",
-    "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 251,
-    "ownerTarget": "PooToolsBanner",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsBanner:background:252",
-    "symbolName": "background",
-    "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 252,
-    "ownerTarget": "PooToolsBanner",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsBanner:tint:253",
-    "symbolName": "tint",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
     "line": 253,
     "ownerTarget": "PooToolsBanner",
-    "kind": "let",
-    "accessLevel": "internal",
+    "kind": "func",
+    "accessLevel": "private",
     "extensionReceiverType": "",
     "availability": "",
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:border:254",
-    "symbolName": "border",
+    "symbolID": "PooToolsBanner:appearance:254",
+    "symbolName": "appearance",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
     "line": 254,
     "ownerTarget": "PooToolsBanner",
@@ -22260,8 +22224,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:shouldUseMaterial:255",
-    "symbolName": "shouldUseMaterial",
+    "symbolID": "PooToolsBanner:background:255",
+    "symbolName": "background",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
     "line": 255,
     "ownerTarget": "PooToolsBanner",
@@ -22272,10 +22236,46 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:accessibilityText:274",
+    "symbolID": "PooToolsBanner:tint:256",
+    "symbolName": "tint",
+    "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
+    "line": 256,
+    "ownerTarget": "PooToolsBanner",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsBanner:border:257",
+    "symbolName": "border",
+    "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
+    "line": 257,
+    "ownerTarget": "PooToolsBanner",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsBanner:shouldUseMaterial:258",
+    "symbolName": "shouldUseMaterial",
+    "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
+    "line": 258,
+    "ownerTarget": "PooToolsBanner",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsBanner:accessibilityText:277",
     "symbolName": "accessibilityText",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 274,
+    "line": 277,
     "ownerTarget": "PooToolsBanner",
     "kind": "var",
     "accessLevel": "private",
@@ -22284,10 +22284,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:title:275",
+    "symbolID": "PooToolsBanner:title:278",
     "symbolName": "title",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 275,
+    "line": 278,
     "ownerTarget": "PooToolsBanner",
     "kind": "let",
     "accessLevel": "internal",
@@ -22296,10 +22296,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:subtitle:284",
+    "symbolID": "PooToolsBanner:subtitle:287",
     "symbolName": "subtitle",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 284,
+    "line": 287,
     "ownerTarget": "PooToolsBanner",
     "kind": "let",
     "accessLevel": "internal",
@@ -22308,10 +22308,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:translation:301",
+    "symbolID": "PooToolsBanner:translation:304",
     "symbolName": "translation",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 301,
+    "line": 304,
     "ownerTarget": "PooToolsBanner",
     "kind": "let",
     "accessLevel": "internal",
@@ -22320,10 +22320,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:velocity:302",
+    "symbolID": "PooToolsBanner:velocity:305",
     "symbolName": "velocity",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 302,
+    "line": 305,
     "ownerTarget": "PooToolsBanner",
     "kind": "let",
     "accessLevel": "internal",
@@ -22332,10 +22332,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:direction:307",
+    "symbolID": "PooToolsBanner:direction:310",
     "symbolName": "direction",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 307,
+    "line": 310,
     "ownerTarget": "PooToolsBanner",
     "kind": "let",
     "accessLevel": "internal",
@@ -22344,20 +22344,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:offset:308",
+    "symbolID": "PooToolsBanner:offset:311",
     "symbolName": "offset",
-    "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 308,
-    "ownerTarget": "PooToolsBanner",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsBanner:direction:311",
-    "symbolName": "direction",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
     "line": 311,
     "ownerTarget": "PooToolsBanner",
@@ -22368,10 +22356,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsBanner:offset:312",
+    "symbolID": "PooToolsBanner:direction:314",
+    "symbolName": "direction",
+    "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
+    "line": 314,
+    "ownerTarget": "PooToolsBanner",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsBanner:offset:315",
     "symbolName": "offset",
     "declarationPath": "PooToolsSource/Banner/PooToolsBannerView.swift",
-    "line": 312,
+    "line": 315,
     "ownerTarget": "PooToolsBanner",
     "kind": "let",
     "accessLevel": "internal",
@@ -467916,10 +467916,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:PTVisionTextResult:14",
+    "symbolID": "PooToolsVision:PTVisionTextResult:17",
     "symbolName": "PTVisionTextResult",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 14,
+    "line": 17,
     "ownerTarget": "PooToolsVision",
     "kind": "struct",
     "accessLevel": "public",
@@ -467928,10 +467928,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:text:15",
+    "symbolID": "PooToolsVision:text:18",
     "symbolName": "text",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 15,
+    "line": 18,
     "ownerTarget": "PooToolsVision",
     "kind": "let",
     "accessLevel": "public",
@@ -467940,10 +467940,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:observations:16",
+    "symbolID": "PooToolsVision:observations:19",
     "symbolName": "observations",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 16,
+    "line": 19,
     "ownerTarget": "PooToolsVision",
     "kind": "let",
     "accessLevel": "public",
@@ -467952,10 +467952,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:PTObservationBox:27",
+    "symbolID": "PooToolsVision:PTObservationBox:30",
     "symbolName": "PTObservationBox",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 27,
+    "line": 30,
     "ownerTarget": "PooToolsVision",
     "kind": "struct",
     "accessLevel": "private",
@@ -467964,10 +467964,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:items:28",
+    "symbolID": "PooToolsVision:items:31",
     "symbolName": "items",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 28,
+    "line": 31,
     "ownerTarget": "PooToolsVision",
     "kind": "let",
     "accessLevel": "internal",
@@ -467976,10 +467976,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:PTVision:31",
+    "symbolID": "PooToolsVision:PTVision:34",
     "symbolName": "PTVision",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 31,
+    "line": 34,
     "ownerTarget": "PooToolsVision",
     "kind": "class",
     "accessLevel": "public",
@@ -467988,10 +467988,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:share:36",
+    "symbolID": "PooToolsVision:share:39",
     "symbolName": "share",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 36,
+    "line": 39,
     "ownerTarget": "PooToolsVision",
     "kind": "var",
     "accessLevel": "public",
@@ -468000,10 +468000,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:funcQRCode:47",
+    "symbolID": "PooToolsVision:funcQRCode:50",
     "symbolName": "funcQRCode",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 47,
+    "line": 50,
     "ownerTarget": "PooToolsVision",
     "kind": "func",
     "accessLevel": "public",
@@ -468012,10 +468012,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:barcodeRequest:60",
+    "symbolID": "PooToolsVision:barcodeRequest:63",
     "symbolName": "barcodeRequest",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 60,
+    "line": 63,
     "ownerTarget": "PooToolsVision",
     "kind": "let",
     "accessLevel": "internal",
@@ -468024,10 +468024,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:payload:69",
+    "symbolID": "PooToolsVision:payload:72",
     "symbolName": "payload",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 69,
+    "line": 72,
     "ownerTarget": "PooToolsVision",
     "kind": "let",
     "accessLevel": "internal",
@@ -468036,10 +468036,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:requestHandler:78",
+    "symbolID": "PooToolsVision:requestHandler:81",
     "symbolName": "requestHandler",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 78,
+    "line": 81,
     "ownerTarget": "PooToolsVision",
     "kind": "let",
     "accessLevel": "internal",
@@ -468048,10 +468048,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:findText:91",
+    "symbolID": "PooToolsVision:findText:94",
     "symbolName": "findText",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 91,
+    "line": 94,
     "ownerTarget": "PooToolsVision",
     "kind": "func",
     "accessLevel": "public",
@@ -468060,10 +468060,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:safeResult:97",
+    "symbolID": "PooToolsVision:safeResult:100",
     "symbolName": "safeResult",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 97,
+    "line": 100,
     "ownerTarget": "PooToolsVision",
     "kind": "let",
     "accessLevel": "internal",
@@ -468072,10 +468072,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:findText:104",
+    "symbolID": "PooToolsVision:findText:107",
     "symbolName": "findText",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 104,
+    "line": 107,
     "ownerTarget": "PooToolsVision",
     "kind": "func",
     "accessLevel": "public",
@@ -468084,10 +468084,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:textDetectionRequest:117",
+    "symbolID": "PooToolsVision:textDetectionRequest:120",
     "symbolName": "textDetectionRequest",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 117,
+    "line": 120,
     "ownerTarget": "PooToolsVision",
     "kind": "let",
     "accessLevel": "internal",
@@ -468096,35 +468096,23 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:resultText:126",
+    "symbolID": "PooToolsVision:resultText:129",
     "symbolName": "resultText",
-    "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 126,
-    "ownerTarget": "PooToolsVision",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsVision:maximumCandidates:127",
-    "symbolName": "maximumCandidates",
-    "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 127,
-    "ownerTarget": "PooToolsVision",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsVision:candidates:129",
-    "symbolName": "candidates",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
     "line": 129,
     "ownerTarget": "PooToolsVision",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsVision:maximumCandidates:130",
+    "symbolName": "maximumCandidates",
+    "declarationPath": "PooToolsSource/Vision/PTVision.swift",
+    "line": 130,
+    "ownerTarget": "PooToolsVision",
     "kind": "let",
     "accessLevel": "internal",
     "extensionReceiverType": "",
@@ -468132,8 +468120,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:safeBox:132",
-    "symbolName": "safeBox",
+    "symbolID": "PooToolsVision:candidates:132",
+    "symbolName": "candidates",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
     "line": 132,
     "ownerTarget": "PooToolsVision",
@@ -468144,10 +468132,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:handler:145",
+    "symbolID": "PooToolsVision:safeBox:135",
+    "symbolName": "safeBox",
+    "declarationPath": "PooToolsSource/Vision/PTVision.swift",
+    "line": 135,
+    "ownerTarget": "PooToolsVision",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsVision:handler:148",
     "symbolName": "handler",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 145,
+    "line": 148,
     "ownerTarget": "PooToolsVision",
     "kind": "let",
     "accessLevel": "internal",
@@ -468156,10 +468156,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:findText:158",
+    "symbolID": "PooToolsVision:findText:161",
     "symbolName": "findText",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 158,
+    "line": 161,
     "ownerTarget": "PooToolsVision",
     "kind": "func",
     "accessLevel": "public",
@@ -468168,10 +468168,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:findText:170",
+    "symbolID": "PooToolsVision:findText:173",
     "symbolName": "findText",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 170,
+    "line": 173,
     "ownerTarget": "PooToolsVision",
     "kind": "func",
     "accessLevel": "public",
@@ -468180,10 +468180,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:textLayers:188",
+    "symbolID": "PooToolsVision:textLayers:191",
     "symbolName": "textLayers",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 188,
+    "line": 191,
     "ownerTarget": "PooToolsVision",
     "kind": "let",
     "accessLevel": "internal",
@@ -468192,10 +468192,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:addShapeToText:196",
+    "symbolID": "PooToolsVision:addShapeToText:199",
     "symbolName": "addShapeToText",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 196,
+    "line": 199,
     "ownerTarget": "PooToolsVision",
     "kind": "func",
     "accessLevel": "private",
@@ -468204,10 +468204,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:bounds:198",
+    "symbolID": "PooToolsVision:bounds:201",
     "symbolName": "bounds",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 198,
+    "line": 201,
     "ownerTarget": "PooToolsVision",
     "kind": "let",
     "accessLevel": "internal",
@@ -468216,10 +468216,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:layerFrame:199",
+    "symbolID": "PooToolsVision:layerFrame:202",
     "symbolName": "layerFrame",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 199,
+    "line": 202,
     "ownerTarget": "PooToolsVision",
     "kind": "let",
     "accessLevel": "internal",
@@ -468228,10 +468228,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsVision:layer:206",
+    "symbolID": "PooToolsVision:layer:209",
     "symbolName": "layer",
     "declarationPath": "PooToolsSource/Vision/PTVision.swift",
-    "line": 206,
+    "line": 209,
     "ownerTarget": "PooToolsVision",
     "kind": "let",
     "accessLevel": "internal",
@@ -468456,10 +468456,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:PTWhatsNews:27",
+    "symbolID": "PooToolsWhatsNewsKit:PTWhatsNews:30",
     "symbolName": "PTWhatsNews",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 27,
+    "line": 30,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "class",
     "accessLevel": "public",
@@ -468468,32 +468468,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:newVersion:34",
+    "symbolID": "PooToolsWhatsNewsKit:newVersion:37",
     "symbolName": "newVersion",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 34,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:previousAppVersion:36",
-    "symbolName": "previousAppVersion",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 36,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:didUpdate:37",
-    "symbolName": "didUpdate",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 37,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468504,10 +468480,34 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:didChangeMajorVersion:46",
+    "symbolID": "PooToolsWhatsNewsKit:previousAppVersion:39",
+    "symbolName": "previousAppVersion",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 39,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:didUpdate:40",
+    "symbolName": "didUpdate",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 40,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:didChangeMajorVersion:49",
     "symbolName": "didChangeMajorVersion",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 46,
+    "line": 49,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "func",
     "accessLevel": "private",
@@ -468516,10 +468516,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:PTWhatsNewsTitleItem:55",
+    "symbolID": "PooToolsWhatsNewsKit:PTWhatsNewsTitleItem:58",
     "symbolName": "PTWhatsNewsTitleItem",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 55,
+    "line": 58,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "class",
     "accessLevel": "public",
@@ -468528,44 +468528,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:title:56",
+    "symbolID": "PooToolsWhatsNewsKit:title:59",
     "symbolName": "title",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 56,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "var",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:titleFont:57",
-    "symbolName": "titleFont",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 57,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "var",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:titleColor:58",
-    "symbolName": "titleColor",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 58,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "var",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:atts:59",
-    "symbolName": "atts",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 59,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468576,8 +468540,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:textAlignment:60",
-    "symbolName": "textAlignment",
+    "symbolID": "PooToolsWhatsNewsKit:titleFont:60",
+    "symbolName": "titleFont",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 60,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468588,10 +468552,46 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:PTWhatsNewsIKnowItem:72",
+    "symbolID": "PooToolsWhatsNewsKit:titleColor:61",
+    "symbolName": "titleColor",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 61,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "var",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:atts:62",
+    "symbolName": "atts",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 62,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "var",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:textAlignment:63",
+    "symbolName": "textAlignment",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 63,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "var",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:PTWhatsNewsIKnowItem:75",
     "symbolName": "PTWhatsNewsIKnowItem",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 72,
+    "line": 75,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "class",
     "accessLevel": "public",
@@ -468600,44 +468600,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:title:73",
+    "symbolID": "PooToolsWhatsNewsKit:title:76",
     "symbolName": "title",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 73,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "var",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:titleFont:74",
-    "symbolName": "titleFont",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 74,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "var",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:titleColor:75",
-    "symbolName": "titleColor",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 75,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "var",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:backgroundColor:76",
-    "symbolName": "backgroundColor",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 76,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468648,8 +468612,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:itemLayout:77",
-    "symbolName": "itemLayout",
+    "symbolID": "PooToolsWhatsNewsKit:titleFont:77",
+    "symbolName": "titleFont",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 77,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468660,8 +468624,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:image:78",
-    "symbolName": "image",
+    "symbolID": "PooToolsWhatsNewsKit:titleColor:78",
+    "symbolName": "titleColor",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 78,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468672,8 +468636,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:itemSpace:79",
-    "symbolName": "itemSpace",
+    "symbolID": "PooToolsWhatsNewsKit:backgroundColor:79",
+    "symbolName": "backgroundColor",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 79,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468684,8 +468648,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:privacy:80",
-    "symbolName": "privacy",
+    "symbolID": "PooToolsWhatsNewsKit:itemLayout:80",
+    "symbolName": "itemLayout",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 80,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468696,8 +468660,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:privacyURL:81",
-    "symbolName": "privacyURL",
+    "symbolID": "PooToolsWhatsNewsKit:image:81",
+    "symbolName": "image",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 81,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468708,8 +468672,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:privacyFont:82",
-    "symbolName": "privacyFont",
+    "symbolID": "PooToolsWhatsNewsKit:itemSpace:82",
+    "symbolName": "itemSpace",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 82,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468720,8 +468684,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:privacyColor:83",
-    "symbolName": "privacyColor",
+    "symbolID": "PooToolsWhatsNewsKit:privacy:83",
+    "symbolName": "privacy",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 83,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468732,10 +468696,46 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:PTWhatsNewsItem:111",
+    "symbolID": "PooToolsWhatsNewsKit:privacyURL:84",
+    "symbolName": "privacyURL",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 84,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "var",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:privacyFont:85",
+    "symbolName": "privacyFont",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 85,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "var",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:privacyColor:86",
+    "symbolName": "privacyColor",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 86,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "var",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:PTWhatsNewsItem:114",
     "symbolName": "PTWhatsNewsItem",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 111,
+    "line": 114,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "class",
     "accessLevel": "public",
@@ -468744,44 +468744,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:title:112",
+    "symbolID": "PooToolsWhatsNewsKit:title:115",
     "symbolName": "title",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 112,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "var",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:titleFont:113",
-    "symbolName": "titleFont",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 113,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "var",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:titleColor:114",
-    "symbolName": "titleColor",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 114,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "var",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:contentSpace:115",
-    "symbolName": "contentSpace",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 115,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468792,8 +468756,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:subTitle:116",
-    "symbolName": "subTitle",
+    "symbolID": "PooToolsWhatsNewsKit:titleFont:116",
+    "symbolName": "titleFont",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 116,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468804,8 +468768,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:subTitleFont:117",
-    "symbolName": "subTitleFont",
+    "symbolID": "PooToolsWhatsNewsKit:titleColor:117",
+    "symbolName": "titleColor",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 117,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468816,8 +468780,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:subTitleColor:118",
-    "symbolName": "subTitleColor",
+    "symbolID": "PooToolsWhatsNewsKit:contentSpace:118",
+    "symbolName": "contentSpace",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 118,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468828,8 +468792,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:newsImage:119",
-    "symbolName": "newsImage",
+    "symbolID": "PooToolsWhatsNewsKit:subTitle:119",
+    "symbolName": "subTitle",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 119,
     "ownerTarget": "PooToolsWhatsNewsKit",
@@ -468840,10 +468804,46 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:PTWhatsNewsCell:140",
+    "symbolID": "PooToolsWhatsNewsKit:subTitleFont:120",
+    "symbolName": "subTitleFont",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 120,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "var",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:subTitleColor:121",
+    "symbolName": "subTitleColor",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 121,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "var",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:newsImage:122",
+    "symbolName": "newsImage",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 122,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "var",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:PTWhatsNewsCell:143",
     "symbolName": "PTWhatsNewsCell",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 140,
+    "line": 143,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "class",
     "accessLevel": "fileprivate",
@@ -468852,35 +468852,35 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:ID:141",
+    "symbolID": "PooToolsWhatsNewsKit:ID:144",
     "symbolName": "ID",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 141,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:CellBaseHeight:142",
-    "symbolName": "CellBaseHeight",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 142,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:cellModel:144",
-    "symbolName": "cellModel",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 144,
     "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:CellBaseHeight:145",
+    "symbolName": "CellBaseHeight",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 145,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:cellModel:147",
+    "symbolName": "cellModel",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 147,
+    "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "var",
     "accessLevel": "internal",
     "extensionReceiverType": "",
@@ -468888,10 +468888,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:attTitle:153",
+    "symbolID": "PooToolsWhatsNewsKit:attTitle:156",
     "symbolName": "attTitle",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 153,
+    "line": 156,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "let",
     "accessLevel": "internal",
@@ -468900,10 +468900,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:attSubTitle:155",
+    "symbolID": "PooToolsWhatsNewsKit:attSubTitle:158",
     "symbolName": "attSubTitle",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 155,
+    "line": 158,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "let",
     "accessLevel": "internal",
@@ -468912,10 +468912,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:totalAtt:157",
+    "symbolID": "PooToolsWhatsNewsKit:totalAtt:160",
     "symbolName": "totalAtt",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 157,
+    "line": 160,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "var",
     "accessLevel": "internal",
@@ -468924,10 +468924,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:view:174",
+    "symbolID": "PooToolsWhatsNewsKit:view:177",
     "symbolName": "view",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 174,
+    "line": 177,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "let",
     "accessLevel": "internal",
@@ -468936,10 +468936,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:view:180",
+    "symbolID": "PooToolsWhatsNewsKit:view:183",
     "symbolName": "view",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 180,
+    "line": 183,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "let",
     "accessLevel": "internal",
@@ -468948,10 +468948,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:subMakeContent:196",
+    "symbolID": "PooToolsWhatsNewsKit:subMakeContent:199",
     "symbolName": "subMakeContent",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 196,
+    "line": 199,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "func",
     "accessLevel": "internal",
@@ -468960,10 +468960,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:layoutSubviews:211",
+    "symbolID": "PooToolsWhatsNewsKit:layoutSubviews:214",
     "symbolName": "layoutSubviews",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 211,
+    "line": 214,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "func",
     "accessLevel": "internal",
@@ -468972,10 +468972,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:PTWhatsNewsViewController:236",
+    "symbolID": "PooToolsWhatsNewsKit:PTWhatsNewsViewController:239",
     "symbolName": "PTWhatsNewsViewController",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 236,
+    "line": 239,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "class",
     "accessLevel": "public",
@@ -468984,10 +468984,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:privacyTapHandler:238",
+    "symbolID": "PooToolsWhatsNewsKit:privacyTapHandler:241",
     "symbolName": "privacyTapHandler",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 238,
+    "line": 241,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "var",
     "accessLevel": "public",
@@ -468996,10 +468996,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:iKnowTapHandler:239",
+    "symbolID": "PooToolsWhatsNewsKit:iKnowTapHandler:242",
     "symbolName": "iKnowTapHandler",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 239,
+    "line": 242,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "var",
     "accessLevel": "public",
@@ -469008,10 +469008,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:setContentLRSpace:241",
+    "symbolID": "PooToolsWhatsNewsKit:setContentLRSpace:244",
     "symbolName": "setContentLRSpace",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 241,
+    "line": 244,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "func",
     "accessLevel": "public",
@@ -469020,10 +469020,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:contentViewSpace:244",
+    "symbolID": "PooToolsWhatsNewsKit:contentViewSpace:247",
     "symbolName": "contentViewSpace",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 244,
+    "line": 247,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "var",
     "accessLevel": "private",
@@ -469032,10 +469032,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:view:247",
+    "symbolID": "PooToolsWhatsNewsKit:view:250",
     "symbolName": "view",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 247,
+    "line": 250,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "let",
     "accessLevel": "internal",
@@ -469044,10 +469044,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:view:253",
+    "symbolID": "PooToolsWhatsNewsKit:view:256",
     "symbolName": "view",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 253,
+    "line": 256,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "let",
     "accessLevel": "internal",
@@ -469056,10 +469056,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:view:267",
+    "symbolID": "PooToolsWhatsNewsKit:view:270",
     "symbolName": "view",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 267,
+    "line": 270,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "let",
     "accessLevel": "internal",
@@ -469068,10 +469068,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:viewWidth:283",
+    "symbolID": "PooToolsWhatsNewsKit:viewWidth:286",
     "symbolName": "viewWidth",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 283,
+    "line": 286,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "let",
     "accessLevel": "internal",
@@ -469080,10 +469080,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:contentViewWidth:285",
+    "symbolID": "PooToolsWhatsNewsKit:contentViewWidth:288",
     "symbolName": "contentViewWidth",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 285,
+    "line": 288,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "var",
     "accessLevel": "internal",
@@ -469092,10 +469092,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:config:287",
+    "symbolID": "PooToolsWhatsNewsKit:config:290",
     "symbolName": "config",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 287,
+    "line": 290,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "let",
     "accessLevel": "internal",
@@ -469104,10 +469104,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:view:292",
+    "symbolID": "PooToolsWhatsNewsKit:view:295",
     "symbolName": "view",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 292,
+    "line": 295,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "let",
     "accessLevel": "internal",
@@ -469116,35 +469116,35 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:titleHeight:300",
+    "symbolID": "PooToolsWhatsNewsKit:titleHeight:303",
     "symbolName": "titleHeight",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 300,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:subTitleHeight:301",
-    "symbolName": "subTitleHeight",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 301,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:cellHeight:303",
-    "symbolName": "cellHeight",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 303,
     "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:subTitleHeight:304",
+    "symbolName": "subTitleHeight",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 304,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:cellHeight:306",
+    "symbolName": "cellHeight",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 306,
+    "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "var",
     "accessLevel": "internal",
     "extensionReceiverType": "",
@@ -469152,35 +469152,35 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:newsItems:322",
+    "symbolID": "PooToolsWhatsNewsKit:newsItems:325",
     "symbolName": "newsItems",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 322,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "var",
-    "accessLevel": "fileprivate",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:iKnowItems:323",
-    "symbolName": "iKnowItems",
-    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 323,
-    "ownerTarget": "PooToolsWhatsNewsKit",
-    "kind": "var",
-    "accessLevel": "fileprivate",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsWhatsNewsKit:viewDidDisappear:325",
-    "symbolName": "viewDidDisappear",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 325,
     "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "var",
+    "accessLevel": "fileprivate",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:iKnowItems:326",
+    "symbolName": "iKnowItems",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 326,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "kind": "var",
+    "accessLevel": "fileprivate",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsWhatsNewsKit:viewDidDisappear:328",
+    "symbolName": "viewDidDisappear",
+    "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 328,
+    "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "func",
     "accessLevel": "public",
     "extensionReceiverType": "",
@@ -469188,10 +469188,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:titleItemN:334",
+    "symbolID": "PooToolsWhatsNewsKit:titleItemN:337",
     "symbolName": "titleItemN",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 334,
+    "line": 337,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "let",
     "accessLevel": "internal",
@@ -469200,10 +469200,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:viewDidLoad:367",
+    "symbolID": "PooToolsWhatsNewsKit:viewDidLoad:370",
     "symbolName": "viewDidLoad",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 367,
+    "line": 370,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "func",
     "accessLevel": "public",
@@ -469212,10 +469212,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:showNewsData:406",
+    "symbolID": "PooToolsWhatsNewsKit:showNewsData:409",
     "symbolName": "showNewsData",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 406,
+    "line": 409,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "func",
     "accessLevel": "internal",
@@ -469224,10 +469224,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:rows:407",
+    "symbolID": "PooToolsWhatsNewsKit:rows:410",
     "symbolName": "rows",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 407,
+    "line": 410,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "let",
     "accessLevel": "internal",
@@ -469236,10 +469236,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:whatsNewsShow:414",
+    "symbolID": "PooToolsWhatsNewsKit:whatsNewsShow:417",
     "symbolName": "whatsNewsShow",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 414,
+    "line": 417,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "func",
     "accessLevel": "public",

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "a3d7346c36485d8c3f7e3c68d423fbe9b1d18a5f",
-  "generated_at": "2026-10-16T02:18:27Z",
+  "source_revision": "572d47945fc3e7f7006539a8975811bc86ffbb59",
+  "generated_at": "2026-10-16T13:59:59Z",
   "counts": {
     "reduce_motion": 62,
     "accessibility": 281,
@@ -238,37 +238,32 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
-      "line": 148
+      "line": 151
     },
     {
       "rule": "dynamic_type",
       "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
-      "line": 149
+      "line": 152
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
-      "line": 231
+      "line": 234
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
-      "line": 232
+      "line": 235
     },
     {
       "rule": "reduce_transparency",
       "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
-      "line": 255
+      "line": 258
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
-      "line": 261
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
-      "line": 271
+      "line": 264
     },
     {
       "rule": "accessibility",
@@ -276,9 +271,14 @@
       "line": 274
     },
     {
+      "rule": "accessibility",
+      "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
+      "line": 277
+    },
+    {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Banner/PooToolsBannerView.swift",
-      "line": 316
+      "line": 319
     },
     {
       "rule": "accessibility",
