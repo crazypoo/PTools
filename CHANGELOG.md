@@ -6,6 +6,12 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.65.5 — 2026-10-17
+
+- 修复 `PooToolsInput/YoshikoTextField` 独立 SwiftPM target 缺少 `PToolsUIFoundation` 显式导入的问题。
+- 扩展富文本符号审计，并补齐 `PooToolsMediaViewer`、`PooToolsScrollBanner` 和 `PooToolsWhatsNewsKit` 对 `PToolsUIFoundation` 的直接 target 依赖。
+- 全模块复查同类 SwiftPM 隐式依赖，确保 CocoaPods 聚合可见性不会掩盖独立 target 的导入错误。
+
 ## 5.65.4 — 2026-10-17
 
 - 修复 `PooToolsSmartScreenshot` 与 `PooToolsProgressBar` 独立 SwiftPM target 缺少 Core 聚合 target 显式导入的问题。

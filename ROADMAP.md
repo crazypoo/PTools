@@ -1,8 +1,16 @@
 # PTools 路线图
 
-> 当前代码基线：`5.65.4`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.65.5`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.65.3`；`5.65.4` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.65.4`；`5.65.5` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.65.5 SwiftPM UI Foundation 边界收口
+
+- ✅ 修复 `PooToolsInput/YoshikoTextField` 缺少 `PToolsUIFoundation` 显式导入的问题。
+- ✅ 为 `PooToolsMediaViewer`、`PooToolsScrollBanner` 和 `PooToolsWhatsNewsKit` 补齐直接 `PToolsUIFoundation` target 依赖。
+- ✅ 将 `PTRichText`、`PTTextActionID` 和 `PTTextActionRegistry` 纳入全模块跨 target 符号审计。
+- ✅ 全模块严格审计结果为 `open=0`，避免 CocoaPods 聚合可见性掩盖 SwiftPM 独立编译问题。
+- ⬜ 仍需在真实宿主项目中完成独立 SwiftPM Debug/Release 与真机回归。
 
 ## 5.65.4 SwiftPM 全模块导入边界收口
 

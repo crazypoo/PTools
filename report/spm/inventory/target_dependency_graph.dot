@@ -257,6 +257,7 @@ digraph PToolsSwiftPM {
   "PooToolsLocation" -> "PToolsStorage";
   "PooToolsLocation" -> "ptools";
   "PooToolsMediaCore";
+  "PooToolsMediaViewer" -> "PToolsUIFoundation";
   "PooToolsMediaViewer" -> "PooToolsLivePhoto";
   "PooToolsMediaViewer" -> "PooToolsMediaCore";
   "PooToolsMediaViewer" -> "PooToolsPageControl";
@@ -306,6 +307,7 @@ digraph PToolsSwiftPM {
   "PooToolsScanQRCode" -> "PooToolsImagePicker";
   "PooToolsScanQRCode" -> "PooToolsPhotoPicker";
   "PooToolsScanQRCode" -> "ptools";
+  "PooToolsScrollBanner" -> "PToolsUIFoundation";
   "PooToolsScrollBanner" -> "PooToolsPageControl";
   "PooToolsScrollBanner" -> "ptools";
   "PooToolsSearch" -> "PToolsUIFoundation";
@@ -338,6 +340,7 @@ digraph PToolsSwiftPM {
   "PooToolsVideoEditor" -> "ptools";
   "PooToolsVision" -> "ptools";
   "PooToolsWebKit" -> "ptools";
+  "PooToolsWhatsNewsKit" -> "PToolsUIFoundation";
   "PooToolsWhatsNewsKit" -> "ptools";
   "PooToolsiOS17Tips" -> "ptools";
   "ptools" -> "PToolsCore";

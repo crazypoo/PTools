@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: 56ef385b6efeeb838c5e981c076fd52498f44992
-Generated at: 2026-10-16T16:06:29Z
+Source revision: 006e0ce7bc03d83a9975c28592ab72db02d84f0c
+Generated at: 2026-10-16T16:50:26Z
 -->
 
 # PTools 当前公开 API 清单
@@ -3933,10 +3933,10 @@ Generated at: 2026-10-16T16:06:29Z
 | PooToolsSource/Input/TextFieldEffects.swift:353 | func | open | @objc open func textFieldDidEndEditing() { |
 | PooToolsSource/Input/UIView+PTEXShake.swift:12 | enum | public | public enum PTShakeDirection { |
 | PooToolsSource/Input/YokoTextField.swift:13 | class | open | @IBDesignable open class YokoTextField: TextFieldEffects { |
-| PooToolsSource/Input/YoshikoTextField.swift:13 | class | open | @IBDesignable open class YoshikoTextField: TextFieldEffects { |
-| PooToolsSource/Input/YoshikoTextField.swift:28 | var | open | @IBInspectable open var borderSize: CGFloat = 2.0 { |
-| PooToolsSource/Input/YoshikoTextField.swift:80 | var | open | open var activePlaceholderFont: UIFont? { |
-| PooToolsSource/Input/YoshikoTextField.swift:89 | var | open | open var activePlaceholderAtt: PTRichText? { |
+| PooToolsSource/Input/YoshikoTextField.swift:20 | class | open | @IBDesignable open class YoshikoTextField: TextFieldEffects { |
+| PooToolsSource/Input/YoshikoTextField.swift:35 | var | open | @IBInspectable open var borderSize: CGFloat = 2.0 { |
+| PooToolsSource/Input/YoshikoTextField.swift:87 | var | open | open var activePlaceholderFont: UIFont? { |
+| PooToolsSource/Input/YoshikoTextField.swift:96 | var | open | open var activePlaceholderAtt: PTRichText? { |
 | PooToolsSource/Inspector/AdaptivePresentationControllerDelegate.swift:14 | class | public | public final class AdaptivePresentationControllerDelegate: NSObject, UIAdaptivePresentationControllerDelegate, @MainActor Dismissable { |
 | PooToolsSource/Inspector/AdaptivePresentationControllerDelegate.swift:15 | typealias | public | public typealias ModalPresentationStyleProvider = (UIPresentationController, UITraitCollection) -> UIModalPresentationStyle |
 | PooToolsSource/Inspector/AdaptivePresentationControllerDelegate.swift:17 | typealias | public | public typealias DismissDecisionProvider = (UIPresentationController) -> Bool |

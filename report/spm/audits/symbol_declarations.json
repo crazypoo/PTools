@@ -219300,10 +219300,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:borderLayer:18",
+    "symbolID": "PooToolsInput:borderLayer:25",
     "symbolName": "borderLayer",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 18,
+    "line": 25,
     "ownerTarget": "PooToolsInput",
     "kind": "let",
     "accessLevel": "private",
@@ -219312,10 +219312,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:textFieldInsets:20",
+    "symbolID": "PooToolsInput:textFieldInsets:27",
     "symbolName": "textFieldInsets",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 20,
+    "line": 27,
     "ownerTarget": "PooToolsInput",
     "kind": "let",
     "accessLevel": "private",
@@ -219324,10 +219324,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:placeHolderInsets:22",
+    "symbolID": "PooToolsInput:placeHolderInsets:29",
     "symbolName": "placeHolderInsets",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 22,
+    "line": 29,
     "ownerTarget": "PooToolsInput",
     "kind": "let",
     "accessLevel": "private",
@@ -219336,10 +219336,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:activePlaceholderFont:80",
+    "symbolID": "PooToolsInput:activePlaceholderFont:87",
     "symbolName": "activePlaceholderFont",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 80,
+    "line": 87,
     "ownerTarget": "PooToolsInput",
     "kind": "var",
     "accessLevel": "open",
@@ -219348,10 +219348,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:activePlaceholderAtt:89",
+    "symbolID": "PooToolsInput:activePlaceholderAtt:96",
     "symbolName": "activePlaceholderAtt",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 89,
+    "line": 96,
     "ownerTarget": "PooToolsInput",
     "kind": "var",
     "accessLevel": "open",
@@ -219360,10 +219360,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:currentFont:122",
+    "symbolID": "PooToolsInput:currentFont:129",
     "symbolName": "currentFont",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 122,
+    "line": 129,
     "ownerTarget": "PooToolsInput",
     "kind": "var",
     "accessLevel": "private",
@@ -219372,10 +219372,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:isTextNotEmpty:127",
+    "symbolID": "PooToolsInput:isTextNotEmpty:134",
     "symbolName": "isTextNotEmpty",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 127,
+    "line": 134,
     "ownerTarget": "PooToolsInput",
     "kind": "var",
     "accessLevel": "private",
@@ -219384,10 +219384,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:updateBorder:132",
+    "symbolID": "PooToolsInput:updateBorder:139",
     "symbolName": "updateBorder",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 132,
+    "line": 139,
     "ownerTarget": "PooToolsInput",
     "kind": "func",
     "accessLevel": "private",
@@ -219396,10 +219396,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:updateBackground:140",
+    "symbolID": "PooToolsInput:updateBackground:147",
     "symbolName": "updateBackground",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 140,
+    "line": 147,
     "ownerTarget": "PooToolsInput",
     "kind": "func",
     "accessLevel": "private",
@@ -219408,10 +219408,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:updatePlaceholder:149",
+    "symbolID": "PooToolsInput:updatePlaceholder:156",
     "symbolName": "updatePlaceholder",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 149,
+    "line": 156,
     "ownerTarget": "PooToolsInput",
     "kind": "func",
     "accessLevel": "private",
@@ -219420,56 +219420,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:isActive:152",
+    "symbolID": "PooToolsInput:isActive:159",
     "symbolName": "isActive",
-    "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 152,
-    "ownerTarget": "PooToolsInput",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsInput:scale:153",
-    "symbolName": "scale",
-    "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 153,
-    "ownerTarget": "PooToolsInput",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsInput:resolvedFont:154",
-    "symbolName": "resolvedFont",
-    "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 154,
-    "ownerTarget": "PooToolsInput",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsInput:resolvedColor:157",
-    "symbolName": "resolvedColor",
-    "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 157,
-    "ownerTarget": "PooToolsInput",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsInput:resolvedRichText:159",
-    "symbolName": "resolvedRichText",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
     "line": 159,
     "ownerTarget": "PooToolsInput",
@@ -219480,10 +219432,58 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:rectForBounds:184",
+    "symbolID": "PooToolsInput:scale:160",
+    "symbolName": "scale",
+    "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
+    "line": 160,
+    "ownerTarget": "PooToolsInput",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsInput:resolvedFont:161",
+    "symbolName": "resolvedFont",
+    "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
+    "line": 161,
+    "ownerTarget": "PooToolsInput",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsInput:resolvedColor:164",
+    "symbolName": "resolvedColor",
+    "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
+    "line": 164,
+    "ownerTarget": "PooToolsInput",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsInput:resolvedRichText:166",
+    "symbolName": "resolvedRichText",
+    "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
+    "line": 166,
+    "ownerTarget": "PooToolsInput",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsInput:rectForBounds:191",
     "symbolName": "rectForBounds",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 184,
+    "line": 191,
     "ownerTarget": "PooToolsInput",
     "kind": "func",
     "accessLevel": "private",
@@ -219492,10 +219492,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:placeholderHeight:194",
+    "symbolID": "PooToolsInput:placeholderHeight:201",
     "symbolName": "placeholderHeight",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 194,
+    "line": 201,
     "ownerTarget": "PooToolsInput",
     "kind": "var",
     "accessLevel": "private",
@@ -219504,10 +219504,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:fallbackHeight:195",
+    "symbolID": "PooToolsInput:fallbackHeight:202",
     "symbolName": "fallbackHeight",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 195,
+    "line": 202,
     "ownerTarget": "PooToolsInput",
     "kind": "let",
     "accessLevel": "internal",
@@ -219516,10 +219516,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:availableWidth:198",
+    "symbolID": "PooToolsInput:availableWidth:205",
     "symbolName": "availableWidth",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 198,
+    "line": 205,
     "ownerTarget": "PooToolsInput",
     "kind": "let",
     "accessLevel": "internal",
@@ -219528,10 +219528,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:measuredHeight:199",
+    "symbolID": "PooToolsInput:measuredHeight:206",
     "symbolName": "measuredHeight",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 199,
+    "line": 206,
     "ownerTarget": "PooToolsInput",
     "kind": "let",
     "accessLevel": "internal",
@@ -219540,10 +219540,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:animateViews:205",
+    "symbolID": "PooToolsInput:animateViews:212",
     "symbolName": "animateViews",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 205,
+    "line": 212,
     "ownerTarget": "PooToolsInput",
     "kind": "func",
     "accessLevel": "private",
@@ -219552,10 +219552,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:isTextEmpty:208",
+    "symbolID": "PooToolsInput:isTextEmpty:215",
     "symbolName": "isTextEmpty",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 208,
+    "line": 215,
     "ownerTarget": "PooToolsInput",
     "kind": "let",
     "accessLevel": "internal",
@@ -219564,10 +219564,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:placeholderRect:257",
+    "symbolID": "PooToolsInput:placeholderRect:264",
     "symbolName": "placeholderRect",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 257,
+    "line": 264,
     "ownerTarget": "PooToolsInput",
     "kind": "func",
     "accessLevel": "open",
@@ -219576,10 +219576,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:editingRect:271",
+    "symbolID": "PooToolsInput:editingRect:278",
     "symbolName": "editingRect",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 271,
+    "line": 278,
     "ownerTarget": "PooToolsInput",
     "kind": "func",
     "accessLevel": "open",
@@ -219588,10 +219588,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsInput:prepareForInterfaceBuilder:288",
+    "symbolID": "PooToolsInput:prepareForInterfaceBuilder:295",
     "symbolName": "prepareForInterfaceBuilder",
     "declarationPath": "PooToolsSource/Input/YoshikoTextField.swift",
-    "line": 288,
+    "line": 295,
     "ownerTarget": "PooToolsInput",
     "kind": "func",
     "accessLevel": "open",

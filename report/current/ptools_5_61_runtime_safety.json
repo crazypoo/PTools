@@ -2,9 +2,9 @@
   "generator": "Scripts/report_5_61_runtime_safety.sh",
   "schema_version": 1,
   "baseline": "5.61.0",
-  "source_revision": "56ef385b6efeeb838c5e981c076fd52498f44992",
+  "source_revision": "006e0ce7bc03d83a9975c28592ab72db02d84f0c",
   "source_tree_hash": "14d7dcac7921a98379a36cc5a6cc58dfaea8b527bdd231ddf6559a1ca364fa41",
-  "generated_at": "2026-10-16T16:05:42Z",
+  "generated_at": "2026-10-16T16:50:09Z",
   "checks": {
     "kakapos": {
       "count": 0,
@@ -1156,11 +1156,11 @@
     }
   },
   "schemaVersion": 1,
-  "generatedAt": "2026-10-16T16:05:42Z",
+  "generatedAt": "2026-10-16T16:50:09Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "56ef385b6efeeb838c5e981c076fd52498f44992",
-  "sourceVersion": "5.65.4",
+  "sourceRevision": "006e0ce7bc03d83a9975c28592ab72db02d84f0c",
+  "sourceVersion": "5.65.5",
   "generatorVersion": "Scripts/report_5_61_runtime_safety.sh",
-  "sourceInputsDigest": "2af4ccb99e9f4e3265969b7432c18bdc238725e1dd6602b611a288a55c9f217a"
+  "sourceInputsDigest": "fa638819a550cc10bcdfd4727a19c488d9d0849430ac11af4a37a71118a01d31"
 }

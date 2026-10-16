@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "56ef385b6efeeb838c5e981c076fd52498f44992",
-  "generated_at": "2026-10-16T16:27:54Z",
+  "source_revision": "006e0ce7bc03d83a9975c28592ab72db02d84f0c",
+  "generated_at": "2026-10-16T17:09:38Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -8273,6 +8273,17 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PToolsUIFoundation",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsUIFoundation",
+              null
+            ]
+          }
+        },
+        {
           "name": "PooToolsLivePhoto",
           "kind": "internal",
           "package": null,
@@ -9432,6 +9443,17 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PToolsUIFoundation",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsUIFoundation",
+              null
+            ]
+          }
+        },
+        {
           "name": "PooToolsPageControl",
           "kind": "internal",
           "package": null,
@@ -10317,6 +10339,17 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsUIFoundation",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsUIFoundation",
+              null
+            ]
+          }
+        },
         {
           "name": "ptools",
           "kind": "internal",

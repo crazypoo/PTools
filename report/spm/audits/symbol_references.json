@@ -3339,6 +3339,42 @@
     "ownerCandidates": "ptools"
   },
   {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/Button/PTActionLayoutButton.swift",
+    "line": 389,
+    "ownerTarget": "ptools",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/Button/PTActionLayoutButton.swift",
+    "line": 390,
+    "ownerTarget": "ptools",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/Button/PTActionLayoutButton.swift",
+    "line": 391,
+    "ownerTarget": "ptools",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/Button/PTActionLayoutButton.swift",
+    "line": 392,
+    "ownerTarget": "ptools",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
     "symbolName": "appfont",
     "referencePath": "PooToolsSource/Button/PTLayoutButton.swift",
     "line": 768,
@@ -3463,6 +3499,15 @@
     "requiredModule": "ptools",
     "currentImports": "Kingfisher;PToolsUIFoundation;UIKit",
     "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/Button/PTLoginDescButton.swift",
+    "line": 130,
+    "ownerTarget": "ptools",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
   },
   {
     "symbolName": "PTFeedbackCenter",
@@ -5128,6 +5173,33 @@
     "requiredModule": "ptools",
     "currentImports": "Kingfisher;ObjectiveC;PToolsUIFoundation;Photos;UIKit",
     "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/Category/UIButton+PTEX.swift",
+    "line": 183,
+    "ownerTarget": "ptools",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Kingfisher;ObjectiveC;PToolsUIFoundation;Photos;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/Category/UIButton+PTEX.swift",
+    "line": 184,
+    "ownerTarget": "ptools",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Kingfisher;ObjectiveC;PToolsUIFoundation;Photos;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/Category/UIButton+PTEX.swift",
+    "line": 185,
+    "ownerTarget": "ptools",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Kingfisher;ObjectiveC;PToolsUIFoundation;Photos;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
   },
   {
     "symbolName": "PTAppBaseConfig",
@@ -11214,6 +11286,15 @@
     "ownerCandidates": "ptools"
   },
   {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/Input/HoshiTextField.swift",
+    "line": 235,
+    "ownerTarget": "PooToolsInput",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
     "symbolName": "addSubviews",
     "referencePath": "PooToolsSource/Input/PTFloatingPlaseholderTextField.swift",
     "line": 166,
@@ -11230,6 +11311,15 @@
     "requiredModule": "PToolsCore",
     "currentImports": "PToolsCore;SnapKit;UIKit;ptools",
     "ownerCandidates": "PToolsCore"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/Input/TextFieldEffects.swift",
+    "line": 56,
+    "ownerTarget": "PooToolsInput",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "PToolsUIFoundation;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
   },
   {
     "symbolName": "PTNSLogConsole",
@@ -12562,6 +12652,15 @@
     "requiredModule": "ptools",
     "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
     "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/MediaViewer/PTMediaBrowserController.swift",
+    "line": 800,
+    "ownerTarget": "PooToolsMediaViewer",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
+    "ownerCandidates": "PToolsUIFoundation"
   },
   {
     "symbolName": "PTUtils",
@@ -15804,6 +15903,537 @@
     "ownerCandidates": "PToolsSymbols"
   },
   {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 300,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 320,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 333,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 351,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 422,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 430,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 430,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 430,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 436,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 436,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 437,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 440,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 440,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 444,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 445,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 465,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 474,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 477,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 479,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 486,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 491,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 498,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTTextActionID",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichText.swift",
+    "line": 265,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextAttributes.swift",
+    "line": 315,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextAttributes.swift",
+    "line": 323,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTTextActionID",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextAttributes.swift",
+    "line": 314,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTTextActionID",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextAttributes.swift",
+    "line": 319,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 26,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 26,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 27,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 30,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 31,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 34,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 34,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 38,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 42,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 42,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 43,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 46,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 46,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 50,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 50,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 54,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 54,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 55,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 60,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextBuilder.swift",
+    "line": 61,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
+    "line": 17,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
+    "line": 25,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
+    "line": 231,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
+    "line": 429,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
+    "line": 488,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTTextActionRegistry",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
+    "line": 43,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTTextActionRegistry",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
+    "line": 94,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTTextActionRegistry",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
+    "line": 121,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTTextActionRegistry",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
+    "line": 431,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTTextActionRegistry",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
+    "line": 491,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTTextActionRegistry",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
+    "line": 554,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTTextActionRegistry",
+    "referencePath": "PooToolsSource/PToolsUIFoundation/PTRichTextLayout.swift",
+    "line": 573,
+    "ownerTarget": "PToolsUIFoundation",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;ObjectiveC;UIKit",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
     "symbolName": "PTFeedbackCenter",
     "referencePath": "PooToolsSource/PageControl/PTFilledPageControl.swift",
     "line": 154,
@@ -17766,6 +18396,15 @@
     "ownerCandidates": "ptools"
   },
   {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/ScrollBanner/PTCycleScrollView.swift",
+    "line": 267,
+    "ownerTarget": "PooToolsScrollBanner",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "AVFoundation;PToolsUIFoundation;UIKit;ptools",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
     "symbolName": "gcdRunUnsafely",
     "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
     "line": 131,
@@ -17809,6 +18448,42 @@
     "requiredModule": "ptools",
     "currentImports": "PToolsUIFoundation;PooToolsSearchBar;UIKit;ptools",
     "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
+    "line": 839,
+    "ownerTarget": "PooToolsSearch",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;UIKit;ptools",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
+    "line": 840,
+    "ownerTarget": "PooToolsSearch",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;UIKit;ptools",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
+    "line": 849,
+    "ownerTarget": "PooToolsSearch",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;UIKit;ptools",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
+    "line": 850,
+    "ownerTarget": "PooToolsSearch",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;UIKit;ptools",
+    "ownerCandidates": "PToolsUIFoundation"
   },
   {
     "symbolName": "PTSection",
@@ -19575,6 +20250,15 @@
     "ownerCandidates": "ptools"
   },
   {
+    "symbolName": "PTRichText",
+    "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
+    "line": 65,
+    "ownerTarget": "PooToolsWhatsNewsKit",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
     "symbolName": "PTRows",
     "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
     "line": 299,
@@ -20059,6 +20743,141 @@
     "requiredModule": "PToolsCore",
     "currentImports": "PToolsActivities;PToolsAppIntents;PToolsAudio;PToolsConfiguration;PToolsCore;PToolsFeedback;PToolsRouteCore;PToolsWidgetCore;XCTest",
     "ownerCandidates": "PToolsCore"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift",
+    "line": 30,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift",
+    "line": 36,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift",
+    "line": 59,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift",
+    "line": 66,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift",
+    "line": 75,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift",
+    "line": 88,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift",
+    "line": 188,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTTextActionID",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift",
+    "line": 188,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+    "line": 70,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+    "line": 143,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+    "line": 146,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+    "line": 150,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTRichText",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+    "line": 152,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTTextActionID",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+    "line": 115,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
+  },
+  {
+    "symbolName": "PTTextActionID",
+    "referencePath": "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift",
+    "line": 146,
+    "ownerTarget": "PToolsRichTextTests",
+    "requiredModule": "PToolsUIFoundation",
+    "currentImports": "Foundation;PToolsUIFoundation;UIKit;XCTest",
+    "ownerCandidates": "PToolsUIFoundation"
   },
   {
     "symbolName": "PTSymbol",

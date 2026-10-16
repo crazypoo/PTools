@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "56ef385b6efeeb838c5e981c076fd52498f44992",
-  "generated_at": "2026-10-16T16:06:29Z",
+  "source_revision": "006e0ce7bc03d83a9975c28592ab72db02d84f0c",
+  "generated_at": "2026-10-16T16:50:26Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -31370,7 +31370,7 @@
     {
       "key": "PooToolsSource/Input/YoshikoTextField.swift|open|class|@IBDesignable open class YoshikoTextField: TextFieldEffects",
       "path": "PooToolsSource/Input/YoshikoTextField.swift",
-      "line": 13,
+      "line": 20,
       "access": "open",
       "kind": "class",
       "declaration": "@IBDesignable open class YoshikoTextField: TextFieldEffects {"
@@ -31378,7 +31378,7 @@
     {
       "key": "PooToolsSource/Input/YoshikoTextField.swift|open|var|@IBInspectable open var borderSize: CGFloat = 2.0",
       "path": "PooToolsSource/Input/YoshikoTextField.swift",
-      "line": 28,
+      "line": 35,
       "access": "open",
       "kind": "var",
       "declaration": "@IBInspectable open var borderSize: CGFloat = 2.0 {"
@@ -31386,7 +31386,7 @@
     {
       "key": "PooToolsSource/Input/YoshikoTextField.swift|open|var|open var activePlaceholderFont: UIFont?",
       "path": "PooToolsSource/Input/YoshikoTextField.swift",
-      "line": 80,
+      "line": 87,
       "access": "open",
       "kind": "var",
       "declaration": "open var activePlaceholderFont: UIFont? {"
@@ -31394,7 +31394,7 @@
     {
       "key": "PooToolsSource/Input/YoshikoTextField.swift|open|var|open var activePlaceholderAtt: PTRichText?",
       "path": "PooToolsSource/Input/YoshikoTextField.swift",
-      "line": 89,
+      "line": 96,
       "access": "open",
       "kind": "var",
       "declaration": "open var activePlaceholderAtt: PTRichText? {"

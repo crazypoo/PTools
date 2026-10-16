@@ -3,19 +3,19 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: 56ef385b6efeeb838c5e981c076fd52498f44992
-Generated at: 2026-10-16T16:27:55Z
+Source revision: 006e0ce7bc03d83a9975c28592ab72db02d84f0c
+Generated at: 2026-10-16T17:09:39Z
 -->
 
 # SwiftPM / CocoaPods Module Parity
 
 - Status: `baseline`
-- Fingerprint: `b0894a6870d3b9e75b734d994237c20a6171f89413f8cd78ef754e50381288de`
+- Fingerprint: `e47f1a14cb4e3eb26d8a45d296ff0872fdc678c40d5a76bc5360720e6fc3aa7c`
 - Matched modules: `123`
 - SwiftPM-only modules: `30`
 - CocoaPods-only modules: `33`
 - Source-directory drift: `3`
-- Dependency drift: `30`
+- Dependency drift: `33`
 - Swift setting / macro drift: `56`
 
 ## Classification
@@ -61,6 +61,7 @@ The baseline records existing differences as explicit review items. A later mani
 - `ImageEditor` / `third_party_dependencies`: SPM=["Harbeth"]; CocoaPods=[]
 - `Input` / `internal_dependencies`: SPM=["Core", "PToolsCore", "PToolsUIFoundation"]; CocoaPods=["Core", "PToolsUIFoundation"]
 - `Instructions` / `internal_dependencies`: SPM=["Overlay"]; CocoaPods=["Core", "Overlay"]
+- `MediaViewer` / `internal_dependencies`: SPM=["Core", "LivePhoto", "MediaCore", "PToolsUIFoundation", "PageControl", "ProgressBar"]; CocoaPods=["Core", "LivePhoto", "MediaCore", "PageControl", "ProgressBar"]
 - `MeidaPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["MeidaPermission"]
 - `Model` / `internal_dependencies`: SPM=["ModelCore", "PToolsModelMacroPlugin"]; CocoaPods=["ModelCore"]
 - `NetWork` / `internal_dependencies`: SPM=["Connectivity", "Core", "Loading", "ModelCore", "PToolsCore", "PToolsModelLegacyKakaJSON", "PToolsModelLegacySmartCodable", "PToolsNetworkModelCore"]; CocoaPods=["Connectivity", "Core", "Loading", "ModelCore", "ModelLegacyKakaJSON", "ModelLegacySmartCodable"]
@@ -72,11 +73,13 @@ The baseline records existing differences as explicit review items. A later mani
 - `RateView` / `internal_dependencies`: SPM=["Core"]; CocoaPods=["PToolsUIFoundation"]
 - `SVG` / `third_party_dependencies`: SPM=["Kingfisher", "PocketSVG"]; CocoaPods=["PocketSVG", "Protobuf", "SVGAPlayer"]
 - `ScanQRCode` / `internal_dependencies`: SPM=["CameraPermission", "Core", "ImagePicker", "PToolsCore", "PhotoPicker"]; CocoaPods=["CameraPermission", "Core", "PhotoPicker"]
+- `ScrollBanner` / `internal_dependencies`: SPM=["Core", "PToolsUIFoundation", "PageControl"]; CocoaPods=["Core", "PageControl"]
 - `SiriPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["Core"]
 - `Slider` / `internal_dependencies`: SPM=[]; CocoaPods=["PToolsUIFoundation"]
 - `TipsView` / `internal_dependencies`: SPM=["Core", "Overlay"]; CocoaPods=["Core"]
 - `VideoEditor` / `internal_dependencies`: SPM=["Core", "HarbethKit", "Loading", "MediaCore", "PToolsCore", "ProgressBar", "Symbols"]; CocoaPods=["Core", "HarbethKit", "Loading", "MediaCore", "ProgressBar", "Symbols"]
 - `VideoEditor` / `third_party_dependencies`: SPM=["Harbeth"]; CocoaPods=[]
+- `WhatsNewsKit` / `internal_dependencies`: SPM=["Core", "PToolsUIFoundation"]; CocoaPods=["Core"]
 - `WidgetCore` / `internal_dependencies`: SPM=["DeepLink", "RouteCore", "Storage", "StorageCore"]; CocoaPods=["DeepLink", "RouteCore", "Storage"]
 
 ### Swift settings and macros

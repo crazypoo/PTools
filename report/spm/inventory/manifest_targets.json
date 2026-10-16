@@ -5448,6 +5448,7 @@
   },
   {
     "dependencies": [
+      "PToolsUIFoundation",
       "PooToolsLivePhoto",
       "PooToolsMediaCore",
       "PooToolsPageControl",
@@ -6265,6 +6266,7 @@
   },
   {
     "dependencies": [
+      "PToolsUIFoundation",
       "PooToolsPageControl",
       "ptools"
     ],
@@ -6974,6 +6976,7 @@
   },
   {
     "dependencies": [
+      "PToolsUIFoundation",
       "ptools"
     ],
     "name": "PooToolsWhatsNewsKit",

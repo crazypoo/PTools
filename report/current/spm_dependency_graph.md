@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: 56ef385b6efeeb838c5e981c076fd52498f44992
-Generated at: 2026-10-16T16:27:54Z
+Source revision: 006e0ce7bc03d83a9975c28592ab72db02d84f0c
+Generated at: 2026-10-16T17:09:38Z
 -->
 
 # SwiftPM Dependency Graph
@@ -319,7 +319,7 @@ Generated at: 2026-10-16T16:27:54Z
 | `PooToolsLoading` | `PooToolsSource/Loading` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsLocation` | `PooToolsSource/Location` | PTLocationPermission, PToolsStorage, ptools | — | 0 source entries / 0 resources |
 | `PooToolsMediaCore` | `PooToolsSource/PToolsMediaCore` | — | — | 0 source entries / 0 resources |
-| `PooToolsMediaViewer` | `PooToolsSource/MediaViewer` | PooToolsLivePhoto, PooToolsMediaCore, PooToolsPageControl, PooToolsProgressBar, ptools | — | 0 source entries / 0 resources |
+| `PooToolsMediaViewer` | `PooToolsSource/MediaViewer` | PToolsUIFoundation, PooToolsLivePhoto, PooToolsMediaCore, PooToolsPageControl, PooToolsProgressBar, ptools | — | 0 source entries / 0 resources |
 | `PooToolsMessageKit` | `PooToolsSource/MessageKit` | PToolsSymbols, PooToolsCustomerLabel, ptools | — | 0 source entries / 0 resources |
 | `PooToolsMotion` | `PooToolsSource/Motion` | PTMotionPermission, ptools | — | 0 source entries / 0 resources |
 | `PooToolsNetWork` | `PooToolsSource/NetWork` | PToolsConnectivity, PToolsCore, PToolsModelCore, PToolsModelLegacyKakaJSON, PToolsModelLegacySmartCodable, PToolsNetworkModelCore, PooToolsLoading, ptools | Alamofire | 11 source entries / 0 resources |
@@ -338,7 +338,7 @@ Generated at: 2026-10-16T16:27:54Z
 | `PooToolsRouter` | `PooToolsSource/Router` | PToolsDeepLink, PToolsRouteCore, ptools | — | 0 source entries / 0 resources |
 | `PooToolsSVG` | `PooToolsSource/KingfisherSVG` | ptools | Kingfisher, PocketSVG | 0 source entries / 0 resources |
 | `PooToolsScanQRCode` | `PooToolsSource/QRCodeScan` | PTCameraPermission, PToolsCore, PooToolsImagePicker, PooToolsPhotoPicker, ptools | — | 0 source entries / 0 resources |
-| `PooToolsScrollBanner` | `PooToolsSource/ScrollBanner` | PooToolsPageControl, ptools | — | 0 source entries / 0 resources |
+| `PooToolsScrollBanner` | `PooToolsSource/ScrollBanner` | PToolsUIFoundation, PooToolsPageControl, ptools | — | 0 source entries / 0 resources |
 | `PooToolsSearch` | `PooToolsSource/Search` | PToolsUIFoundation, PooToolsSearchBar, ptools | — | 0 source entries / 0 resources |
 | `PooToolsSearchBar` | `PooToolsSource/SearchBar` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsSecurity` | `PooToolsSource/Security` | — | — | 0 source entries / 0 resources |
@@ -356,7 +356,7 @@ Generated at: 2026-10-16T16:27:54Z
 | `PooToolsVideoEditor` | `PooToolsSource/VideoEditor` | PToolsCore, PToolsSymbols, PooToolsHarbethKit, PooToolsLoading, PooToolsMediaCore, PooToolsProgressBar, ptools | Harbeth | 0 source entries / 0 resources |
 | `PooToolsVision` | `PooToolsSource/Vision` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsWebKit` | `PooToolsSource/WebKit` | ptools | — | 0 source entries / 0 resources |
-| `PooToolsWhatsNewsKit` | `PooToolsSource/WhatsNewsKit` | ptools | — | 0 source entries / 0 resources |
+| `PooToolsWhatsNewsKit` | `PooToolsSource/WhatsNewsKit` | PToolsUIFoundation, ptools | — | 0 source entries / 0 resources |
 | `PooToolsiOS17Tips` | `PooToolsSource/iOS17Tips` | ptools | — | 0 source entries / 0 resources |
 | `ptools` | `PooToolsSource` | PToolsCore, PToolsDate, PToolsDevice, PToolsFontCatalogCore, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsUIFoundation | IQKeyboardManagerSwift, Kingfisher, Lottie, SnapKit | 30 source entries / 1 resources |
 

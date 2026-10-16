@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "56ef385b6efeeb838c5e981c076fd52498f44992",
-  "generated_at": "2026-10-16T16:05:42Z",
+  "source_revision": "006e0ce7bc03d83a9975c28592ab72db02d84f0c",
+  "generated_at": "2026-10-16T16:50:09Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -656,6 +656,25 @@
       ]
     },
     {
+      "module": "MediaViewer",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "LivePhoto",
+        "MediaCore",
+        "PToolsUIFoundation",
+        "PageControl",
+        "ProgressBar"
+      ],
+      "cocoapods": [
+        "Core",
+        "LivePhoto",
+        "MediaCore",
+        "PageControl",
+        "ProgressBar"
+      ]
+    },
+    {
       "module": "MeidaPermission",
       "field": "internal_dependencies",
       "spm": [
@@ -800,6 +819,19 @@
       ]
     },
     {
+      "module": "ScrollBanner",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "PToolsUIFoundation",
+        "PageControl"
+      ],
+      "cocoapods": [
+        "Core",
+        "PageControl"
+      ]
+    },
+    {
       "module": "SiriPermission",
       "field": "internal_dependencies",
       "spm": [
@@ -856,6 +888,17 @@
         "Harbeth"
       ],
       "cocoapods": []
+    },
+    {
+      "module": "WhatsNewsKit",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "PToolsUIFoundation"
+      ],
+      "cocoapods": [
+        "Core"
+      ]
     },
     {
       "module": "WidgetCore",
@@ -1765,13 +1808,13 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "b0894a6870d3b9e75b734d994237c20a6171f89413f8cd78ef754e50381288de",
+  "fingerprint": "e47f1a14cb4e3eb26d8a45d296ff0872fdc678c40d5a76bc5360720e6fc3aa7c",
   "schemaVersion": 1,
-  "generatedAt": "2026-10-16T16:05:42Z",
+  "generatedAt": "2026-10-16T16:50:09Z",
   "repository": "crazypoo/PTools",
   "branch": "master",
-  "sourceRevision": "56ef385b6efeeb838c5e981c076fd52498f44992",
-  "sourceVersion": "5.65.4",
+  "sourceRevision": "006e0ce7bc03d83a9975c28592ab72db02d84f0c",
+  "sourceVersion": "5.65.5",
   "generatorVersion": "Scripts/validate_module_parity.sh",
-  "sourceInputsDigest": "2af4ccb99e9f4e3265969b7432c18bdc238725e1dd6602b611a288a55c9f217a"
+  "sourceInputsDigest": "fa638819a550cc10bcdfd4727a19c488d9d0849430ac11af4a37a71118a01d31"
 }

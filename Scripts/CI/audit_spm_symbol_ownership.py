@@ -76,6 +76,12 @@ KNOWN_SYMBOLS = {
     "PTOpenSystemFunction": "ptools",
     "PTProgressSnapshot": "PToolsCore",
     "PTResponseMetadata": "PToolsCore",
+    # English: Probe rich-text contracts that must be imported by independent UI targets.
+    # Español: Comprueba los contratos de texto enriquecido que los targets UI independientes deben importar.
+    # 中文：检查独立 UI target 必须显式导入的富文本契约。
+    "PTRichText": "PToolsUIFoundation",
+    "PTTextActionID": "PToolsUIFoundation",
+    "PTTextActionRegistry": "PToolsUIFoundation",
     "PTRows": "ptools",
     "PTSceneContext": "ptools",
     "PTSection": "ptools",
@@ -238,7 +244,7 @@ def main() -> int:
                     "severity": severity,
                     "status": status,
                     "fixStrategy": fix_strategy,
-                    "fixCommit": "working-tree-5.65.4" if status != "open" else "",
+                    "fixCommit": "working-tree-5.65.5" if status != "open" else "",
                     "buildEvidence": "pending-isolated-consumer" if status != "closed" else "static-dependency-check",
                 })
 

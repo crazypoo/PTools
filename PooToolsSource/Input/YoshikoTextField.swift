@@ -8,6 +8,13 @@
 
 import UIKit
 
+// English: Import the rich-text contracts explicitly for standalone SwiftPM builds.
+// Español: Importa explícitamente los contratos de texto enriquecido para las compilaciones SwiftPM independientes.
+// 中文：独立 SwiftPM 编译时，显式导入富文本契约。
+#if SWIFT_PACKAGE
+import PToolsUIFoundation
+#endif
+
 /// 一个继承自 TextFieldEffects 的自定义输入框 (Yoshiko 风格)。
 /// 特效表现：拥有可自定义的粗边框和背景色。激活时，占位符文字会上浮、进一步缩小并自动转换为大写。
 @IBDesignable open class YoshikoTextField: TextFieldEffects {

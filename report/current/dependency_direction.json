@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "56ef385b6efeeb838c5e981c076fd52498f44992",
-  "generated_at": "2026-10-16T16:07:13Z",
+  "source_revision": "006e0ce7bc03d83a9975c28592ab72db02d84f0c",
+  "generated_at": "2026-10-16T16:51:14Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, PToolsDevice, and PToolsFontCatalogCore",
@@ -633,6 +633,10 @@
     },
     {
       "source": "PooToolsMediaViewer",
+      "destination": "PToolsUIFoundation"
+    },
+    {
+      "source": "PooToolsMediaViewer",
       "destination": "PooToolsLivePhoto"
     },
     {
@@ -825,6 +829,10 @@
     },
     {
       "source": "PooToolsScrollBanner",
+      "destination": "PToolsUIFoundation"
+    },
+    {
+      "source": "PooToolsScrollBanner",
       "destination": "PooToolsPageControl"
     },
     {
@@ -942,6 +950,10 @@
     {
       "source": "PooToolsWebKit",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsWhatsNewsKit",
+      "destination": "PToolsUIFoundation"
     },
     {
       "source": "PooToolsWhatsNewsKit",

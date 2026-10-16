@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_dependency_matrix.rb
-Source revision: 56ef385b6efeeb838c5e981c076fd52498f44992
-Generated at: 2026-10-16T16:05:51Z
-Version source: 5.65.4
+Source revision: 006e0ce7bc03d83a9975c28592ab72db02d84f0c
+Generated at: 2026-10-16T16:50:09Z
+Version source: 5.65.5
 -->
 
 # Direct Dependency Matrix
@@ -86,7 +86,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `Map` | `MapCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `MapCore` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `MediaCore` | — | — | No direct third-party dependency | Keep; review direct drift |
-| `MediaViewer` | `Core`, `LivePhoto`, `MediaCore`, `PageControl`, `PooToolsLivePhoto`, `PooToolsMediaCore`, `PooToolsPageControl`, `PooToolsProgressBar`, `ProgressBar`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
+| `MediaViewer` | `Core`, `LivePhoto`, `MediaCore`, `PToolsUIFoundation`, `PageControl`, `PooToolsLivePhoto`, `PooToolsMediaCore`, `PooToolsPageControl`, `PooToolsProgressBar`, `ProgressBar`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `MeidaPermission` | `MediaPermission`, `PToolsPermissionCore` | — | No direct third-party dependency | Deprecate alias |
 | `MessageKit` | `Core`, `CustomerLabel`, `PToolsSymbols`, `PooToolsCustomerLabel`, `Symbols`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `MicPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
@@ -160,7 +160,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `Router` | `Core`, `DeepLink`, `PToolsDeepLink`, `PToolsRouteCore`, `RouteCore`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `SVG` | `Core`, `ptools` | `Kingfisher`, `PocketSVG`, `Protobuf`, `SVGAPlayer` | 6.0 review | Keep; review direct drift |
 | `ScanQRCode` | `CameraPermission`, `Core`, `PTCameraPermission`, `PToolsCore`, `PhotoPicker`, `PooToolsImagePicker`, `PooToolsPhotoPicker`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
-| `ScrollBanner` | `Core`, `PageControl`, `PooToolsPageControl`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
+| `ScrollBanner` | `Core`, `PToolsUIFoundation`, `PageControl`, `PooToolsPageControl`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Search` | `Core`, `PToolsUIFoundation`, `PooToolsSearchBar`, `SearchBar`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `SearchBar` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Security` | — | — | No direct third-party dependency | Keep; review direct drift |
@@ -196,7 +196,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `Web` | `WebBridge` | — | No direct third-party dependency | Keep; review direct drift |
 | `WebBridge` | `WebCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `WebCore` | — | — | No direct third-party dependency | Keep; review direct drift |
-| `WhatsNewsKit` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
+| `WhatsNewsKit` | `Core`, `PToolsUIFoundation`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `WidgetCore` | `DeepLink`, `PToolsDeepLink`, `PToolsRouteCore`, `PToolsStorage`, `PToolsStorageCore`, `RouteCore`, `Storage` | — | No direct third-party dependency | Keep; review direct drift |
 | `ZipArchive` | `Core` | `SSZipArchive` | 6.0 review | Keep; review direct drift |
 | `iOS17Tips` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |

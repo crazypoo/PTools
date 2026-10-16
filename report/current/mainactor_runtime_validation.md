@@ -3,17 +3,17 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: 56ef385b6efeeb838c5e981c076fd52498f44992
-Source version: 5.65.4
-Source inputs digest: 2af4ccb99e9f4e3265969b7432c18bdc238725e1dd6602b611a288a55c9f217a
+Source revision: 006e0ce7bc03d83a9975c28592ab72db02d84f0c
+Source version: 5.65.5
+Source inputs digest: fa638819a550cc10bcdfd4727a19c488d9d0849430ac11af4a37a71118a01d31
 Generator version: 1
 Generator: current-report-normalizer
-Generated at: 2026-10-16T16:05:42Z
+Generated at: 2026-10-16T16:50:09Z
 -->
 
 # MainActor Runtime Validation
 
-Source inputs digest: `ba6d9435420765763c19acf8a0431775a7ce2f447d5865b01bd1a917ffa3d5d7`
+Source inputs digest: `ef2098531aaf41e4e524615cc4582096db59b7de2b0ce88ee2709daef65df378`
 
 This report intentionally does not claim runtime proof. Execute the listed flows with Instruments or on a real iOS device before the 6.0 release gate.
 

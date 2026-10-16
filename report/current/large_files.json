@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "56ef385b6efeeb838c5e981c076fd52498f44992",
-  "generated_at": "2026-10-16T16:07:37Z",
+  "source_revision": "006e0ce7bc03d83a9975c28592ab72db02d84f0c",
+  "generated_at": "2026-10-16T16:51:38Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -2346,7 +2346,7 @@
     },
     {
       "path": "PooToolsSource/Input/YoshikoTextField.swift",
-      "lines": 298,
+      "lines": 305,
       "classification": "ok"
     },
     {

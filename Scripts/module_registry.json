@@ -2105,6 +2105,33 @@
       "owner": "filter-camera",
       "expiration": "2027-03-31",
       "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "MediaViewer",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM imports PToolsUIFoundation directly for PTRichText; CocoaPods receives the same UI foundation through the aggregate Core contract.",
+      "owner": "ui-foundation",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "ScrollBanner",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM imports PToolsUIFoundation directly for PTRichText compatibility; CocoaPods resolves the same contract through its aggregate Core surface.",
+      "owner": "scroll-banner",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "WhatsNewsKit",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM imports PToolsUIFoundation directly for PTRichText; CocoaPods receives the same UI foundation through the aggregate Core contract.",
+      "owner": "ui-foundation",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
     }
   ]
 }

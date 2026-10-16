@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: 56ef385b6efeeb838c5e981c076fd52498f44992
-Source version: 5.65.4
-Source inputs digest: 2af4ccb99e9f4e3265969b7432c18bdc238725e1dd6602b611a288a55c9f217a
+Source revision: 006e0ce7bc03d83a9975c28592ab72db02d84f0c
+Source version: 5.65.5
+Source inputs digest: fa638819a550cc10bcdfd4727a19c488d9d0849430ac11af4a37a71118a01d31
 Generator version: 1
 Generator: Scripts/governance/generate_current_reports.rb
-Generated at: 2026-10-16T16:05:42Z
+Generated at: 2026-10-16T16:50:09Z
 -->
 
 # Swift 6 Concurrency Exceptions v2
