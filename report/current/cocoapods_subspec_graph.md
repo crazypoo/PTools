@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: 4a2379802d43285d4e157cddb704274bc4aea549
-Generated at: 2026-10-15T14:43:24Z
+Source revision: a3d7346c36485d8c3f7e3c68d423fbe9b1d18a5f
+Generated at: 2026-10-16T02:19:24Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.65.0`
+- Podspec: `PooTools` `5.65.1`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`

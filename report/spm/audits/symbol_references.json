@@ -785,7 +785,7 @@
   {
     "symbolName": "appfont",
     "referencePath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 90,
+    "line": 94,
     "ownerTarget": "ptools",
     "requiredModule": "ptools",
     "currentImports": "PToolsUIFoundation;Photos;SnapKit;UIKit",
@@ -794,7 +794,7 @@
   {
     "symbolName": "PTFeedbackCenter",
     "referencePath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 109,
+    "line": 113,
     "ownerTarget": "ptools",
     "requiredModule": "PToolsCore",
     "currentImports": "PToolsUIFoundation;Photos;SnapKit;UIKit",

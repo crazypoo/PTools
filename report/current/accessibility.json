@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "4a2379802d43285d4e157cddb704274bc4aea549",
-  "generated_at": "2026-10-15T14:42:52Z",
+  "source_revision": "a3d7346c36485d8c3f7e3c68d423fbe9b1d18a5f",
+  "generated_at": "2026-10-16T02:18:27Z",
   "counts": {
     "reduce_motion": 62,
     "accessibility": 281,
@@ -308,12 +308,12 @@
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-      "line": 146
+      "line": 158
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-      "line": 171
+      "line": 183
     },
     {
       "rule": "accessibility",

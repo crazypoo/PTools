@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "4a2379802d43285d4e157cddb704274bc4aea549",
-  "generated_at": "2026-10-15T14:43:49Z",
+  "source_revision": "a3d7346c36485d8c3f7e3c68d423fbe9b1d18a5f",
+  "generated_at": "2026-10-16T02:19:51Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -60,49 +60,49 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 121,
+      "line": 125,
       "kind": "disk or custom cache",
       "text": "// English: Invalidate every geometry cache when a runtime layout contract changes."
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 765,
+      "line": 769,
       "kind": "disk or custom cache",
       "text": "if let cache = heightCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 766,
+      "line": 770,
       "kind": "disk or custom cache",
       "text": "return cache.doubleValue"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1415,
+      "line": 1419,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1416,
+      "line": 1420,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1526,
+      "line": 1530,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1527,
+      "line": 1531,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2253,
+      "line": 2257,
       "kind": "disk or custom cache",
       "text": "// English: Invalidate only the geometry cache for the requested rows."
     },

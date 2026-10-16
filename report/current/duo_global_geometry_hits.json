@@ -1,8 +1,8 @@
 {
   "generator": "Scripts/audit_duo_uikit_coverage.py",
   "generated_by": "Scripts/audit_duo_uikit_coverage.py",
-  "source_revision": "4a2379802d43285d4e157cddb704274bc4aea549",
-  "generated_at": "2026-10-15T14:41:43.056112+00:00",
+  "source_revision": "a3d7346c36485d8c3f7e3c68d423fbe9b1d18a5f",
+  "generated_at": "2026-10-16T02:19:27.513835+00:00",
   "hits": [
     {
       "kind": "statusBarHeight",
@@ -225,6 +225,72 @@
       "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
       "line": 15,
       "text": "return \"<!DOCTYPE html><html lang=\\\"\\(lang)\\\"><head><meta name=\\\"viewport\\\" content=\\\"width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no\\\"><style>body{padding:0;margin:0;}img{display:block;width:100%;}</style></head><body>\\(self)</body></html>\""
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonLayoutResolver.swift",
+      "line": 335,
+      "text": ".circle(CGRect(x: 0, y: 0.08, width: 0.28, height: 0.84)),"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonLayoutResolver.swift",
+      "line": 336,
+      "text": ".line(CGRect(x: 0.36, y: 0.25, width: 0.48, height: 0.14)),"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonLayoutResolver.swift",
+      "line": 337,
+      "text": ".line(CGRect(x: 0.36, y: 0.55, width: 0.36, height: 0.12))"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonLayoutResolver.swift",
+      "line": 341,
+      "text": ".roundedRect(CGRect(x: 0, y: 0, width: 0.32, height: 1), cornerRadius: 8),"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonLayoutResolver.swift",
+      "line": 342,
+      "text": ".line(CGRect(x: 0.4, y: 0.25, width: 0.48, height: 0.14)),"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonLayoutResolver.swift",
+      "line": 343,
+      "text": ".line(CGRect(x: 0.4, y: 0.55, width: 0.36, height: 0.12))"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonLayoutResolver.swift",
+      "line": 347,
+      "text": ".roundedRect(CGRect(x: 0, y: 0, width: 1, height: 0.54), cornerRadius: 8),"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonLayoutResolver.swift",
+      "line": 348,
+      "text": ".line(CGRect(x: 0.06, y: 0.66, width: 0.72, height: 0.1)),"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonLayoutResolver.swift",
+      "line": 349,
+      "text": ".line(CGRect(x: 0.06, y: 0.84, width: 0.38, height: 0.1))"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonTypes.swift",
+      "line": 303,
+      "text": "public init(height: CGFloat = 28, content: PTSkeletonItemDescriptor = .block) {"
+    },
+    {
+      "kind": "magic-fixed-dimension",
+      "path": "PooToolsSource/Base/PTCollectionSkeletonTypes.swift",
+      "line": 304,
+      "text": "self.height = max(1, height.isFinite ? height : 28)"
     },
     {
       "kind": "magic-fixed-dimension",

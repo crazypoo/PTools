@@ -52,6 +52,10 @@ public class PTCollectionView: UIView {
     var skeletonMinimumVisibleTask: Task<Void, Never>?
     var skeletonVisibleSince: ContinuousClock.Instant?
     var skeletonIsPending = false
+    // English: Preserve the caller's collection alpha while the skeleton owns presentation.
+    // Español: Conserva el alpha de la colección mientras el skeleton controla la presentación.
+    // 中文：骨架接管展示期间，保留调用方原先设置的 Collection alpha。
+    var skeletonUnderlyingCollectionAlpha: CGFloat?
     lazy var presentationCoordinator = PTCollectionPresentationCoordinator()
     var explicitLoadingRequested = false
     public internal(set) var isSkeletonVisible = false

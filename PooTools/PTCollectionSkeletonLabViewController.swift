@@ -9,6 +9,7 @@
 
 import UIKit
 import PooTools
+import SnapKit
 
 @MainActor
 private final class PTCollectionSkeletonDemoCell: UICollectionViewCell {
@@ -75,7 +76,6 @@ final class PTCollectionSkeletonLabViewController: PTBaseViewController {
         navigationItem.title = "Collection Skeleton Lab"
         view.backgroundColor = .systemBackground
         configureControls()
-        configureList()
         reloadContent()
     }
 
@@ -108,14 +108,11 @@ final class PTCollectionSkeletonLabViewController: PTBaseViewController {
         controls.spacing = 8
         controls.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(controls)
-        NSLayoutConstraint.activate([
-            controls.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            controls.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            controls.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12)
-        ])
-    }
-
-    private func configureList() {
+        controls.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 12)
+        }
+        
         list.registerClassCells(classs: [PTCollectionSkeletonDemoCell.reuseIdentifier: PTCollectionSkeletonDemoCell.self])
         list.cellInCollectionV2 = { collectionView, context in
             collectionView.dequeueReusableCell(withReuseIdentifier: PTCollectionSkeletonDemoCell.reuseIdentifier,
@@ -126,12 +123,10 @@ final class PTCollectionSkeletonLabViewController: PTBaseViewController {
         }
         list.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(list)
-        NSLayoutConstraint.activate([
-            list.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            list.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            list.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 168),
-            list.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        list.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalTo(controls.snp.bottom)
+        }
     }
 
     private func reloadContent() {

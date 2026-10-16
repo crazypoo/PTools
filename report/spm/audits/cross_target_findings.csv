@@ -86,8 +86,8 @@ PooToolsSource/Base/PTBaseViewController.swift,851,ptools,ptools,PToolsCore;PToo
 PooToolsSource/Base/PTBaseWebViewController.swift,118,ptools,ptools,SnapKit;UIKit;WebKit,addSubviews,info,closed,existing-direct-dependency-and-import,working-tree-5.64.5,static-dependency-check
 PooToolsSource/Base/PTCollectionIndexCoordinator.swift,30,ptools,ptools,SnapKit;UIKit,addSubviews,info,closed,existing-direct-dependency-and-import,working-tree-5.64.5,static-dependency-check
 PooToolsSource/Base/PTCollectionInteractionCoordinator.swift,63,ptools,ptools,UIKit,PTAppBaseConfig,info,closed,existing-direct-dependency-and-import,working-tree-5.64.5,static-dependency-check
-PooToolsSource/Base/PTCollectionView.swift,90,ptools,ptools,PToolsUIFoundation;Photos;SnapKit;UIKit,appfont,info,closed,existing-direct-dependency-and-import,working-tree-5.64.5,static-dependency-check
-PooToolsSource/Base/PTCollectionView.swift,109,ptools,PToolsCore,PToolsUIFoundation;Photos;SnapKit;UIKit,PTFeedbackCenter,info,closed,existing-direct-dependency-and-import,working-tree-5.64.5,static-dependency-check
+PooToolsSource/Base/PTCollectionView.swift,94,ptools,ptools,PToolsUIFoundation;Photos;SnapKit;UIKit,appfont,info,closed,existing-direct-dependency-and-import,working-tree-5.64.5,static-dependency-check
+PooToolsSource/Base/PTCollectionView.swift,113,ptools,PToolsCore,PToolsUIFoundation;Photos;SnapKit;UIKit,PTFeedbackCenter,info,closed,existing-direct-dependency-and-import,working-tree-5.64.5,static-dependency-check
 PooToolsSource/Base/PTColorPickerContainerViewController.swift,25,ptools,ptools,SnapKit;UIKit,PTAppBaseConfig,info,closed,existing-direct-dependency-and-import,working-tree-5.64.5,static-dependency-check
 PooToolsSource/Base/PTColorPickerContainerViewController.swift,25,ptools,ptools,SnapKit;UIKit,PTAppBaseConfig,info,closed,existing-direct-dependency-and-import,working-tree-5.64.5,static-dependency-check
 PooToolsSource/Base/PTFusionCell.swift,129,ptools,ptools,PToolsUIFoundation;SnapKit;UIKit,addSubviews,info,closed,existing-direct-dependency-and-import,working-tree-5.64.5,static-dependency-check

@@ -288,7 +288,15 @@ final class PTSkeletonOverlayView: UIView {
                   frame.width.isFinite, frame.height.isFinite else { continue }
             switch shape.kind {
             case .circle:
-                path.append(UIBezierPath(ovalIn: frame))
+                // English: A circle must stay circular even when its item frame is rectangular.
+                // Español: Un círculo debe seguir siendo circular aunque el marco del ítem sea rectangular.
+                // 中文：即使 Item 容器是矩形，圆形也必须保持真正的圆。
+                let diameter = min(frame.width, frame.height)
+                let circleFrame = CGRect(x: frame.midX - diameter / 2,
+                                         y: frame.midY - diameter / 2,
+                                         width: diameter,
+                                         height: diameter)
+                path.append(UIBezierPath(ovalIn: circleFrame))
             case .line, .roundedRect:
                 path.append(UIBezierPath(roundedRect: frame, cornerRadius: min(shape.cornerRadius, min(frame.width, frame.height) / 2)))
             case .rect:

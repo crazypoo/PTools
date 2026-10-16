@@ -36156,10 +36156,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:hideSkeleton:67",
+    "symbolID": "ptools:hideSkeleton:74",
     "symbolName": "hideSkeleton",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 67,
+    "line": 74,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -36168,10 +36168,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:configuration:70",
+    "symbolID": "ptools:configuration:77",
     "symbolName": "configuration",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 70,
+    "line": 77,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -36180,20 +36180,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:token:71",
+    "symbolID": "ptools:token:78",
     "symbolName": "token",
-    "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 71,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:elapsed:78",
-    "symbolName": "elapsed",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
     "line": 78,
     "ownerTarget": "ptools",
@@ -36204,20 +36192,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:components:80",
-    "symbolName": "components",
-    "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 80,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:remaining:85",
-    "symbolName": "remaining",
+    "symbolID": "ptools:elapsed:85",
+    "symbolName": "elapsed",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
     "line": 85,
     "ownerTarget": "ptools",
@@ -36228,22 +36204,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:updateSkeleton:105",
-    "symbolName": "updateSkeleton",
+    "symbolID": "ptools:components:87",
+    "symbolName": "components",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 105,
-    "ownerTarget": "ptools",
-    "kind": "func",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:update:109",
-    "symbolName": "update",
-    "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 109,
+    "line": 87,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -36252,10 +36216,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:invalidateSkeletonLayout:124",
-    "symbolName": "invalidateSkeletonLayout",
+    "symbolID": "ptools:remaining:92",
+    "symbolName": "remaining",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 124,
+    "line": 92,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:updateSkeleton:112",
+    "symbolName": "updateSkeleton",
+    "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
+    "line": 112,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -36264,10 +36240,34 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:finishSkeletonHide:128",
+    "symbolID": "ptools:update:116",
+    "symbolName": "update",
+    "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
+    "line": 116,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:invalidateSkeletonLayout:131",
+    "symbolName": "invalidateSkeletonLayout",
+    "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
+    "line": 131,
+    "ownerTarget": "ptools",
+    "kind": "func",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:finishSkeletonHide:135",
     "symbolName": "finishSkeletonHide",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 128,
+    "line": 135,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -36276,10 +36276,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:duration:137",
+    "symbolID": "ptools:duration:144",
     "symbolName": "duration",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 137,
+    "line": 144,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -36288,10 +36288,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:hide:138",
+    "symbolID": "ptools:hide:145",
     "symbolName": "hide",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 138,
+    "line": 145,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -36300,10 +36300,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:extension:PTCollectionView:156",
+    "symbolID": "ptools:extension:PTCollectionView:168",
     "symbolName": "PTCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 156,
+    "line": 168,
     "ownerTarget": "ptools",
     "kind": "extension",
     "accessLevel": "internal",
@@ -36312,10 +36312,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:updateSkeletonLayout:157",
+    "symbolID": "ptools:updateSkeletonLayout:169",
     "symbolName": "updateSkeletonLayout",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 157,
+    "line": 169,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "internal",
@@ -36324,10 +36324,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:configuration:160",
+    "symbolID": "ptools:configuration:172",
     "symbolName": "configuration",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 160,
+    "line": 172,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -36336,10 +36336,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:direction:161",
+    "symbolID": "ptools:direction:173",
     "symbolName": "direction",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 161,
+    "line": 173,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -36348,10 +36348,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:items:162",
+    "symbolID": "ptools:items:174",
     "symbolName": "items",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 162,
+    "line": 174,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -36360,10 +36360,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:extension:PTCollectionView:176",
+    "symbolID": "ptools:extension:PTCollectionView:188",
     "symbolName": "PTCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 176,
+    "line": 188,
     "ownerTarget": "ptools",
     "kind": "extension",
     "accessLevel": "internal",
@@ -36372,44 +36372,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:segmentScrolView:178",
+    "symbolID": "ptools:segmentScrolView:190",
     "symbolName": "segmentScrolView",
-    "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 178,
-    "ownerTarget": "ptools",
-    "kind": "func",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:visibleCells:183",
-    "symbolName": "visibleCells",
-    "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 183,
-    "ownerTarget": "ptools",
-    "kind": "func",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:extension:PTCollectionView:189",
-    "symbolName": "PTCollectionView",
-    "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 189,
-    "ownerTarget": "ptools",
-    "kind": "extension",
-    "accessLevel": "internal",
-    "extensionReceiverType": "PTCollectionView",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:scrolToItem:190",
-    "symbolName": "scrolToItem",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
     "line": 190,
     "ownerTarget": "ptools",
@@ -36420,10 +36384,46 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:mtSelectItem:196",
+    "symbolID": "ptools:visibleCells:195",
+    "symbolName": "visibleCells",
+    "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
+    "line": 195,
+    "ownerTarget": "ptools",
+    "kind": "func",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:extension:PTCollectionView:201",
+    "symbolName": "PTCollectionView",
+    "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
+    "line": 201,
+    "ownerTarget": "ptools",
+    "kind": "extension",
+    "accessLevel": "internal",
+    "extensionReceiverType": "PTCollectionView",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:scrolToItem:202",
+    "symbolName": "scrolToItem",
+    "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
+    "line": 202,
+    "ownerTarget": "ptools",
+    "kind": "func",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:mtSelectItem:208",
     "symbolName": "mtSelectItem",
     "declarationPath": "PooToolsSource/Base/PTCollectionSkeletonCoordinator.swift",
-    "line": 196,
+    "line": 208,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -39828,10 +39828,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:explicitLoadingRequested:56",
+    "symbolID": "ptools:skeletonUnderlyingCollectionAlpha:58",
+    "symbolName": "skeletonUnderlyingCollectionAlpha",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 58,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:explicitLoadingRequested:60",
     "symbolName": "explicitLoadingRequested",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 56,
+    "line": 60,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -39840,10 +39852,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:indicatorRadius:61",
+    "symbolID": "ptools:indicatorRadius:65",
     "symbolName": "indicatorRadius",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 61,
+    "line": 65,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -39852,10 +39864,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:indicator:62",
+    "symbolID": "ptools:indicator:66",
     "symbolName": "indicator",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 62,
+    "line": 66,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -39864,10 +39876,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:maskLayer:68",
+    "symbolID": "ptools:maskLayer:72",
     "symbolName": "maskLayer",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 68,
+    "line": 72,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -39876,10 +39888,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:path:70",
+    "symbolID": "ptools:path:74",
     "symbolName": "path",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 70,
+    "line": 74,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -39888,10 +39900,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:indicatorRadius:84",
+    "symbolID": "ptools:indicatorRadius:88",
     "symbolName": "indicatorRadius",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 84,
+    "line": 88,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -39900,10 +39912,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:label:85",
+    "symbolID": "ptools:label:89",
     "symbolName": "label",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 85,
+    "line": 89,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -39912,10 +39924,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:layerTopSpacing:98",
+    "symbolID": "ptools:layerTopSpacing:102",
     "symbolName": "layerTopSpacing",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 98,
+    "line": 102,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -39924,10 +39936,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:count:99",
+    "symbolID": "ptools:count:103",
     "symbolName": "count",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 99,
+    "line": 103,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -39936,23 +39948,23 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:floorValue:100",
+    "symbolID": "ptools:floorValue:104",
     "symbolName": "floorValue",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 100,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:isTouched:104",
-    "symbolName": "isTouched",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 104,
     "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:isTouched:108",
+    "symbolName": "isTouched",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 108,
+    "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
     "extensionReceiverType": "",
@@ -39960,10 +39972,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:touchedIndex:106",
+    "symbolID": "ptools:touchedIndex:110",
     "symbolName": "touchedIndex",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 106,
+    "line": 110,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -39972,56 +39984,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:lastUpdateTime:115",
+    "symbolID": "ptools:lastUpdateTime:119",
     "symbolName": "lastUpdateTime",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 115,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "private",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:scrollThrottleInterval:116",
-    "symbolName": "scrollThrottleInterval",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 116,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "private",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:lastPrefetchItemCount:117",
-    "symbolName": "lastPrefetchItemCount",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 117,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:indexPanGesture:118",
-    "symbolName": "indexPanGesture",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 118,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:lastLayoutBoundsSize:119",
-    "symbolName": "lastLayoutBoundsSize",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 119,
     "ownerTarget": "ptools",
@@ -40032,10 +39996,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:indexLayoutSignature:120",
-    "symbolName": "indexLayoutSignature",
+    "symbolID": "ptools:scrollThrottleInterval:120",
+    "symbolName": "scrollThrottleInterval",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 120,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "private",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:lastPrefetchItemCount:121",
+    "symbolName": "lastPrefetchItemCount",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 121,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -40044,8 +40020,32 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:runtimeLayoutRevision:124",
-    "symbolName": "runtimeLayoutRevision",
+    "symbolID": "ptools:indexPanGesture:122",
+    "symbolName": "indexPanGesture",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 122,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:lastLayoutBoundsSize:123",
+    "symbolName": "lastLayoutBoundsSize",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 123,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "private",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:indexLayoutSignature:124",
+    "symbolName": "indexLayoutSignature",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 124,
     "ownerTarget": "ptools",
@@ -40056,44 +40056,20 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:isApplyingRuntimeLayoutConfiguration:125",
-    "symbolName": "isApplyingRuntimeLayoutConfiguration",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 125,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:isLayoutTransitionActive:126",
-    "symbolName": "isLayoutTransitionActive",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 126,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:layoutCacheCoordinator:128",
-    "symbolName": "layoutCacheCoordinator",
+    "symbolID": "ptools:runtimeLayoutRevision:128",
+    "symbolName": "runtimeLayoutRevision",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 128,
     "ownerTarget": "ptools",
-    "kind": "let",
+    "kind": "var",
     "accessLevel": "internal",
     "extensionReceiverType": "",
     "availability": "",
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:heightCache:129",
-    "symbolName": "heightCache",
+    "symbolID": "ptools:isApplyingRuntimeLayoutConfiguration:129",
+    "symbolName": "isApplyingRuntimeLayoutConfiguration",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 129,
     "ownerTarget": "ptools",
@@ -40104,8 +40080,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:waterfallCache:130",
-    "symbolName": "waterfallCache",
+    "symbolID": "ptools:isLayoutTransitionActive:130",
+    "symbolName": "isLayoutTransitionActive",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 130,
     "ownerTarget": "ptools",
@@ -40116,22 +40092,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:layoutCache:131",
-    "symbolName": "layoutCache",
+    "symbolID": "ptools:layoutCacheCoordinator:132",
+    "symbolName": "layoutCacheCoordinator",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 131,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:dataCoordinator:135",
-    "symbolName": "dataCoordinator",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 135,
+    "line": 132,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -40140,8 +40104,44 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:modelStore:139",
-    "symbolName": "modelStore",
+    "symbolID": "ptools:heightCache:133",
+    "symbolName": "heightCache",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 133,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:waterfallCache:134",
+    "symbolName": "waterfallCache",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 134,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:layoutCache:135",
+    "symbolName": "layoutCache",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 135,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:dataCoordinator:139",
+    "symbolName": "dataCoordinator",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 139,
     "ownerTarget": "ptools",
@@ -40152,8 +40152,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:cellConfigurationDiagnostics:143",
-    "symbolName": "cellConfigurationDiagnostics",
+    "symbolID": "ptools:modelStore:143",
+    "symbolName": "modelStore",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 143,
     "ownerTarget": "ptools",
@@ -40164,10 +40164,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:151",
-    "symbolName": "snapshot",
+    "symbolID": "ptools:cellConfigurationDiagnostics:147",
+    "symbolName": "cellConfigurationDiagnostics",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 151,
+    "line": 147,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -40176,8 +40176,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:scrollObserverMultiplexer:155",
-    "symbolName": "scrollObserverMultiplexer",
+    "symbolID": "ptools:snapshot:155",
+    "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 155,
     "ownerTarget": "ptools",
@@ -40188,59 +40188,71 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:fallbackLayouts:157",
-    "symbolName": "fallbackLayouts",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 157,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "private",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:didReportFallbackLayout:158",
-    "symbolName": "didReportFallbackLayout",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 158,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "private",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:didReportWaterfallFallbackLayout:159",
-    "symbolName": "didReportWaterfallFallbackLayout",
+    "symbolID": "ptools:scrollObserverMultiplexer:159",
+    "symbolName": "scrollObserverMultiplexer",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 159,
     "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "private",
+    "kind": "let",
+    "accessLevel": "internal",
     "extensionReceiverType": "",
     "availability": "",
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:memoryWarningRegistration:160",
-    "symbolName": "memoryWarningRegistration",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 160,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "private",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:waterfallCacheLimit:161",
-    "symbolName": "waterfallCacheLimit",
+    "symbolID": "ptools:fallbackLayouts:161",
+    "symbolName": "fallbackLayouts",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 161,
     "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "private",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:didReportFallbackLayout:162",
+    "symbolName": "didReportFallbackLayout",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 162,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "private",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:didReportWaterfallFallbackLayout:163",
+    "symbolName": "didReportWaterfallFallbackLayout",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 163,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "private",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:memoryWarningRegistration:164",
+    "symbolName": "memoryWarningRegistration",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 164,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "private",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:waterfallCacheLimit:165",
+    "symbolName": "waterfallCacheLimit",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 165,
+    "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "private",
     "extensionReceiverType": "",
@@ -40248,10 +40260,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:refreshCoordinator:162",
+    "symbolID": "ptools:refreshCoordinator:166",
     "symbolName": "refreshCoordinator",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 162,
+    "line": 166,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -40260,10 +40272,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:view:165",
+    "symbolID": "ptools:view:169",
     "symbolName": "view",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 165,
+    "line": 169,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -40272,10 +40284,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:view:212",
+    "symbolID": "ptools:view:216",
     "symbolName": "view",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 212,
+    "line": 216,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -40284,32 +40296,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:topSpacer:217",
+    "symbolID": "ptools:topSpacer:221",
     "symbolName": "topSpacer",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 217,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:bottomSpacer:218",
-    "symbolName": "bottomSpacer",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 218,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:stack:221",
-    "symbolName": "stack",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 221,
     "ownerTarget": "ptools",
@@ -40320,56 +40308,32 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:headerInCollection:230",
+    "symbolID": "ptools:bottomSpacer:222",
+    "symbolName": "bottomSpacer",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 222,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:stack:225",
+    "symbolName": "stack",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 225,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:headerInCollection:234",
     "symbolName": "headerInCollection",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 230,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "open",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:footerInCollection:231",
-    "symbolName": "footerInCollection",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 231,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "open",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:cellInCollection:232",
-    "symbolName": "cellInCollection",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 232,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "open",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:cellInCollectionV2:233",
-    "symbolName": "cellInCollectionV2",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 233,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "open",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:configureCell:234",
-    "symbolName": "configureCell",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 234,
     "ownerTarget": "ptools",
@@ -40380,8 +40344,32 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:collectionDidSelect:237",
-    "symbolName": "collectionDidSelect",
+    "symbolID": "ptools:footerInCollection:235",
+    "symbolName": "footerInCollection",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 235,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "open",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:cellInCollection:236",
+    "symbolName": "cellInCollection",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 236,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "open",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:cellInCollectionV2:237",
+    "symbolName": "cellInCollectionV2",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 237,
     "ownerTarget": "ptools",
@@ -40392,8 +40380,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:collectionWillDisplay:238",
-    "symbolName": "collectionWillDisplay",
+    "symbolID": "ptools:configureCell:238",
+    "symbolName": "configureCell",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 238,
     "ownerTarget": "ptools",
@@ -40404,10 +40392,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:collectionDidEndDisplay:239",
-    "symbolName": "collectionDidEndDisplay",
+    "symbolID": "ptools:collectionDidSelect:241",
+    "symbolName": "collectionDidSelect",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 239,
+    "line": 241,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "open",
@@ -40416,8 +40404,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:collectionWillBeginDecelerating:242",
-    "symbolName": "collectionWillBeginDecelerating",
+    "symbolID": "ptools:collectionWillDisplay:242",
+    "symbolName": "collectionWillDisplay",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 242,
     "ownerTarget": "ptools",
@@ -40428,8 +40416,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:collectionViewDidScroll:243",
-    "symbolName": "collectionViewDidScroll",
+    "symbolID": "ptools:collectionDidEndDisplay:243",
+    "symbolName": "collectionDidEndDisplay",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 243,
     "ownerTarget": "ptools",
@@ -40440,32 +40428,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:collectionWillBeginDragging:244",
-    "symbolName": "collectionWillBeginDragging",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 244,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "open",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:collectionDidEndDragging:245",
-    "symbolName": "collectionDidEndDragging",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 245,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "open",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:collectionDidEndDecelerating:246",
-    "symbolName": "collectionDidEndDecelerating",
+    "symbolID": "ptools:collectionWillBeginDecelerating:246",
+    "symbolName": "collectionWillBeginDecelerating",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 246,
     "ownerTarget": "ptools",
@@ -40476,8 +40440,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:collectionDidEndScrollingAnimation:247",
-    "symbolName": "collectionDidEndScrollingAnimation",
+    "symbolID": "ptools:collectionViewDidScroll:247",
+    "symbolName": "collectionViewDidScroll",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 247,
     "ownerTarget": "ptools",
@@ -40488,8 +40452,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:collectionDidScrolltoTop:248",
-    "symbolName": "collectionDidScrolltoTop",
+    "symbolID": "ptools:collectionWillBeginDragging:248",
+    "symbolName": "collectionWillBeginDragging",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 248,
     "ownerTarget": "ptools",
@@ -40500,8 +40464,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:collectionWillEndDraging:249",
-    "symbolName": "collectionWillEndDraging",
+    "symbolID": "ptools:collectionDidEndDragging:249",
+    "symbolName": "collectionDidEndDragging",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 249,
     "ownerTarget": "ptools",
@@ -40512,10 +40476,58 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:listControllerDidScroll:254",
+    "symbolID": "ptools:collectionDidEndDecelerating:250",
+    "symbolName": "collectionDidEndDecelerating",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 250,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "open",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:collectionDidEndScrollingAnimation:251",
+    "symbolName": "collectionDidEndScrollingAnimation",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 251,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "open",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:collectionDidScrolltoTop:252",
+    "symbolName": "collectionDidScrolltoTop",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 252,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "open",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:collectionWillEndDraging:253",
+    "symbolName": "collectionWillEndDraging",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 253,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "open",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:listControllerDidScroll:258",
     "symbolName": "listControllerDidScroll",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 254,
+    "line": 258,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -40524,34 +40536,34 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:listControllerDidEndDragging:255",
+    "symbolID": "ptools:listControllerDidEndDragging:259",
     "symbolName": "listControllerDidEndDragging",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 255,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:orthogonalDidScroll:259",
-    "symbolName": "orthogonalDidScroll",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 259,
     "ownerTarget": "ptools",
     "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:orthogonalDidScroll:263",
+    "symbolName": "orthogonalDidScroll",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 263,
+    "ownerTarget": "ptools",
+    "kind": "var",
     "accessLevel": "open",
     "extensionReceiverType": "",
     "availability": "",
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:orthogonalPageDidChange:261",
+    "symbolID": "ptools:orthogonalPageDidChange:265",
     "symbolName": "orthogonalPageDidChange",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 261,
+    "line": 265,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "open",
@@ -40560,10 +40572,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:collectionWillReachBottomTask:266",
+    "symbolID": "ptools:collectionWillReachBottomTask:270",
     "symbolName": "collectionWillReachBottomTask",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 266,
+    "line": 270,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "open",
@@ -40572,10 +40584,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:headerRefreshTask:269",
+    "symbolID": "ptools:headerRefreshTask:273",
     "symbolName": "headerRefreshTask",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 269,
+    "line": 273,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "open",
@@ -40584,32 +40596,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:footRefreshTask:271",
+    "symbolID": "ptools:footRefreshTask:275",
     "symbolName": "footRefreshTask",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 271,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "open",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:waterFallLayout:274",
-    "symbolName": "waterFallLayout",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 274,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "open",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:customerLayout:275",
-    "symbolName": "customerLayout",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 275,
     "ownerTarget": "ptools",
@@ -40620,8 +40608,20 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:customerLayoutWithEnvironment:279",
-    "symbolName": "customerLayoutWithEnvironment",
+    "symbolID": "ptools:waterFallLayout:278",
+    "symbolName": "waterFallLayout",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 278,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "open",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:customerLayout:279",
+    "symbolName": "customerLayout",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 279,
     "ownerTarget": "ptools",
@@ -40632,20 +40632,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:customerReuseViews:280",
-    "symbolName": "customerReuseViews",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 280,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "open",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:emptyTap:283",
-    "symbolName": "emptyTap",
+    "symbolID": "ptools:customerLayoutWithEnvironment:283",
+    "symbolName": "customerLayoutWithEnvironment",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 283,
     "ownerTarget": "ptools",
@@ -40656,8 +40644,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:emptyButtonTap:284",
-    "symbolName": "emptyButtonTap",
+    "symbolID": "ptools:customerReuseViews:284",
+    "symbolName": "customerReuseViews",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 284,
     "ownerTarget": "ptools",
@@ -40668,8 +40656,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:decorationInCollectionView:287",
-    "symbolName": "decorationInCollectionView",
+    "symbolID": "ptools:emptyTap:287",
+    "symbolName": "emptyTap",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 287,
     "ownerTarget": "ptools",
@@ -40680,10 +40668,34 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:decorationViewReset:290",
+    "symbolID": "ptools:emptyButtonTap:288",
+    "symbolName": "emptyButtonTap",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 288,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "open",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:decorationInCollectionView:291",
+    "symbolName": "decorationInCollectionView",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 291,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "open",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:decorationViewReset:294",
     "symbolName": "decorationViewReset",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 290,
+    "line": 294,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "open",
@@ -40692,10 +40704,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:decorationCustomLayoutInsetReset:293",
+    "symbolID": "ptools:decorationCustomLayoutInsetReset:297",
     "symbolName": "decorationCustomLayoutInsetReset",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 293,
+    "line": 297,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "open",
@@ -40704,10 +40716,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:contentCollectionView:295",
+    "symbolID": "ptools:contentCollectionView:299",
     "symbolName": "contentCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 295,
+    "line": 299,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "public",
@@ -40716,10 +40728,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:collectionSectionDatas:296",
+    "symbolID": "ptools:collectionSectionDatas:300",
     "symbolName": "collectionSectionDatas",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 296,
+    "line": 300,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "public",
@@ -40728,44 +40740,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:indexPathSwipe:301",
+    "symbolID": "ptools:indexPathSwipe:305",
     "symbolName": "indexPathSwipe",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 301,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "open",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:swipeLeftHandler:302",
-    "symbolName": "swipeLeftHandler",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 302,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "open",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:swipeRightHandler:303",
-    "symbolName": "swipeRightHandler",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 303,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "open",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:itemMoveTo:305",
-    "symbolName": "itemMoveTo",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 305,
     "ownerTarget": "ptools",
@@ -40776,8 +40752,20 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:forceController:307",
-    "symbolName": "forceController",
+    "symbolID": "ptools:swipeLeftHandler:306",
+    "symbolName": "swipeLeftHandler",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 306,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "open",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:swipeRightHandler:307",
+    "symbolName": "swipeRightHandler",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 307,
     "ownerTarget": "ptools",
@@ -40788,46 +40776,70 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:forceActions:308",
+    "symbolID": "ptools:itemMoveTo:309",
+    "symbolName": "itemMoveTo",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 309,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "open",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:forceController:311",
+    "symbolName": "forceController",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 311,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "open",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:forceActions:312",
     "symbolName": "forceActions",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 308,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "open",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:collectionUpdateError:310",
-    "symbolName": "collectionUpdateError",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 310,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "open",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:viewConfig:312",
-    "symbolName": "viewConfig",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 312,
     "ownerTarget": "ptools",
     "kind": "var",
+    "accessLevel": "open",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:collectionUpdateError:314",
+    "symbolName": "collectionUpdateError",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 314,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "open",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:viewConfig:316",
+    "symbolName": "viewConfig",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 316,
+    "ownerTarget": "ptools",
+    "kind": "var",
     "accessLevel": "public",
     "extensionReceiverType": "",
     "availability": "",
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:registeredCells:327",
+    "symbolID": "ptools:registeredCells:331",
     "symbolName": "registeredCells",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 327,
+    "line": 331,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -40836,10 +40848,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:registeredSupplementary:328",
+    "symbolID": "ptools:registeredSupplementary:332",
     "symbolName": "registeredSupplementary",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 328,
+    "line": 332,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -40848,10 +40860,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:setupCollectionView:343",
+    "symbolID": "ptools:setupCollectionView:347",
     "symbolName": "setupCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 343,
+    "line": 347,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -40860,10 +40872,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:didMoveToWindow:382",
+    "symbolID": "ptools:didMoveToWindow:386",
     "symbolName": "didMoveToWindow",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 382,
+    "line": 386,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -40872,10 +40884,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:didReceiveMemoryWarning:399",
+    "symbolID": "ptools:didReceiveMemoryWarning:403",
     "symbolName": "didReceiveMemoryWarning",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 399,
+    "line": 403,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -40884,20 +40896,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:layoutIfNeeded:408",
+    "symbolID": "ptools:layoutIfNeeded:412",
     "symbolName": "layoutIfNeeded",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 408,
-    "ownerTarget": "ptools",
-    "kind": "func",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:layoutSubviews:412",
-    "symbolName": "layoutSubviews",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 412,
     "ownerTarget": "ptools",
@@ -40908,10 +40908,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:layoutSize:414",
+    "symbolID": "ptools:layoutSubviews:416",
+    "symbolName": "layoutSubviews",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 416,
+    "ownerTarget": "ptools",
+    "kind": "func",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:layoutSize:418",
     "symbolName": "layoutSize",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 414,
+    "line": 418,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -40920,10 +40932,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:extension:PTCollectionView:431",
+    "symbolID": "ptools:extension:PTCollectionView:435",
     "symbolName": "PTCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 431,
+    "line": 435,
     "ownerTarget": "ptools",
     "kind": "extension",
     "accessLevel": "internal",
@@ -40932,20 +40944,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:reportUpdateError:432",
+    "symbolID": "ptools:reportUpdateError:436",
     "symbolName": "reportUpdateError",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 432,
-    "ownerTarget": "ptools",
-    "kind": "func",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:validateSections:436",
-    "symbolName": "validateSections",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 436,
     "ownerTarget": "ptools",
@@ -40956,22 +40956,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:error:437",
-    "symbolName": "error",
+    "symbolID": "ptools:validateSections:440",
+    "symbolName": "validateSections",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 437,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:validateRows:450",
-    "symbolName": "validateRows",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 450,
+    "line": 440,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "internal",
@@ -40980,10 +40968,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:resolvedSection:461",
-    "symbolName": "resolvedSection",
+    "symbolID": "ptools:error:441",
+    "symbolName": "error",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 461,
+    "line": 441,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:validateRows:454",
+    "symbolName": "validateRows",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 454,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "internal",
@@ -41004,8 +41004,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:resolvedRow:469",
-    "symbolName": "resolvedRow",
+    "symbolID": "ptools:resolvedSection:469",
+    "symbolName": "resolvedSection",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 469,
     "ownerTarget": "ptools",
@@ -41028,10 +41028,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:synchronizeModelStore:480",
-    "symbolName": "synchronizeModelStore",
+    "symbolID": "ptools:resolvedRow:477",
+    "symbolName": "resolvedRow",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 480,
+    "line": 477,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "internal",
@@ -41040,10 +41040,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:extension:PTCollectionView:486",
+    "symbolID": "ptools:synchronizeModelStore:484",
+    "symbolName": "synchronizeModelStore",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 484,
+    "ownerTarget": "ptools",
+    "kind": "func",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:extension:PTCollectionView:490",
     "symbolName": "PTCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 486,
+    "line": 490,
     "ownerTarget": "ptools",
     "kind": "extension",
     "accessLevel": "internal",
@@ -41052,10 +41064,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:applySnapshot:490",
+    "symbolID": "ptools:applySnapshot:494",
     "symbolName": "applySnapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 490,
+    "line": 494,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "internal",
@@ -41064,20 +41076,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:structureAnimationEnabled:510",
+    "symbolID": "ptools:structureAnimationEnabled:514",
     "symbolName": "structureAnimationEnabled",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 510,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "private",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:contentAnimationEnabled:514",
-    "symbolName": "contentAnimationEnabled",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 514,
     "ownerTarget": "ptools",
@@ -41088,10 +41088,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:rowIdentifiers:521",
+    "symbolID": "ptools:contentAnimationEnabled:518",
+    "symbolName": "contentAnimationEnabled",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 518,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "private",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:rowIdentifiers:525",
     "symbolName": "rowIdentifiers",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 521,
+    "line": 525,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -41100,58 +41112,34 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:result:523",
+    "symbolID": "ptools:result:527",
     "symbolName": "result",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 523,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:seen:524",
-    "symbolName": "seen",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 524,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:section:527",
-    "symbolName": "section",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 527,
     "ownerTarget": "ptools",
-    "kind": "let",
+    "kind": "var",
     "accessLevel": "internal",
     "extensionReceiverType": "",
     "availability": "",
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:rows:528",
-    "symbolName": "rows",
+    "symbolID": "ptools:seen:528",
+    "symbolName": "seen",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 528,
     "ownerTarget": "ptools",
-    "kind": "let",
+    "kind": "var",
     "accessLevel": "internal",
     "extensionReceiverType": "",
     "availability": "",
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:row:530",
-    "symbolName": "row",
+    "symbolID": "ptools:section:531",
+    "symbolName": "section",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 530,
+    "line": 531,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41160,10 +41148,34 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:rowIdentifiers:538",
+    "symbolID": "ptools:rows:532",
+    "symbolName": "rows",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 532,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:row:534",
+    "symbolName": "row",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 534,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:rowIdentifiers:542",
     "symbolName": "rowIdentifiers",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 538,
+    "line": 542,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -41172,58 +41184,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:result:540",
+    "symbolID": "ptools:result:544",
     "symbolName": "result",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 540,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:seen:541",
-    "symbolName": "seen",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 541,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:section:544",
-    "symbolName": "section",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 544,
     "ownerTarget": "ptools",
-    "kind": "let",
+    "kind": "var",
     "accessLevel": "internal",
     "extensionReceiverType": "",
     "availability": "",
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:reconfigureVisibleCells:556",
-    "symbolName": "reconfigureVisibleCells",
+    "symbolID": "ptools:seen:545",
+    "symbolName": "seen",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 556,
-    "ownerTarget": "ptools",
-    "kind": "func",
-    "accessLevel": "private",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:configured:557",
-    "symbolName": "configured",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 557,
+    "line": 545,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -41232,58 +41208,34 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:cell:560",
-    "symbolName": "cell",
+    "symbolID": "ptools:section:548",
+    "symbolName": "section",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 548,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:reconfigureVisibleCells:560",
+    "symbolName": "reconfigureVisibleCells",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 560,
     "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
+    "kind": "func",
+    "accessLevel": "private",
     "extensionReceiverType": "",
     "availability": "",
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:section:565",
-    "symbolName": "section",
+    "symbolID": "ptools:configured:561",
+    "symbolName": "configured",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 565,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:row:566",
-    "symbolName": "row",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 566,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:context:567",
-    "symbolName": "context",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 567,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:didConfigure:572",
-    "symbolName": "didConfigure",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 572,
+    "line": 561,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -41292,10 +41244,70 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:fusionCell:578",
+    "symbolID": "ptools:cell:564",
+    "symbolName": "cell",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 564,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:section:569",
+    "symbolName": "section",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 569,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:row:570",
+    "symbolName": "row",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 570,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:context:571",
+    "symbolName": "context",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 571,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:didConfigure:576",
+    "symbolName": "didConfigure",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 576,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:fusionCell:582",
     "symbolName": "fusionCell",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 578,
+    "line": 582,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41304,10 +41316,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:fusionModel:579",
+    "symbolID": "ptools:fusionModel:583",
     "symbolName": "fusionModel",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 579,
+    "line": 583,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41316,10 +41328,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:bindableCell:584",
+    "symbolID": "ptools:bindableCell:588",
     "symbolName": "bindableCell",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 584,
+    "line": 588,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41328,10 +41340,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:dataModel:585",
+    "symbolID": "ptools:dataModel:589",
     "symbolName": "dataModel",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 585,
+    "line": 589,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41340,10 +41352,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshotSection:606",
+    "symbolID": "ptools:snapshotSection:610",
     "symbolName": "snapshotSection",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 606,
+    "line": 610,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -41352,10 +41364,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:identifiers:607",
+    "symbolID": "ptools:identifiers:611",
     "symbolName": "identifiers",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 607,
+    "line": 611,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41364,23 +41376,23 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:performContentRefresh:615",
+    "symbolID": "ptools:performContentRefresh:619",
     "symbolName": "performContentRefresh",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 615,
-    "ownerTarget": "ptools",
-    "kind": "func",
-    "accessLevel": "private",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:snapshot:619",
-    "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 619,
     "ownerTarget": "ptools",
+    "kind": "func",
+    "accessLevel": "private",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:snapshot:623",
+    "symbolName": "snapshot",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 623,
+    "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
     "extensionReceiverType": "",
@@ -41388,10 +41400,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:rowIDs:620",
+    "symbolID": "ptools:rowIDs:624",
     "symbolName": "rowIDs",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 620,
+    "line": 624,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41400,10 +41412,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:visibleRowIDs:622",
+    "symbolID": "ptools:visibleRowIDs:626",
     "symbolName": "visibleRowIDs",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 622,
+    "line": 626,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41412,10 +41424,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:invalidatedSections:628",
+    "symbolID": "ptools:invalidatedSections:632",
     "symbolName": "invalidatedSections",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 628,
+    "line": 632,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -41424,10 +41436,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:directlyConfigured:646",
+    "symbolID": "ptools:directlyConfigured:650",
     "symbolName": "directlyConfigured",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 646,
+    "line": 650,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41436,10 +41448,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:remainingIDs:647",
+    "symbolID": "ptools:remainingIDs:651",
     "symbolName": "remainingIDs",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 647,
+    "line": 651,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41448,10 +41460,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:contentSnapshot:657",
+    "symbolID": "ptools:contentSnapshot:661",
     "symbolName": "contentSnapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 657,
+    "line": 661,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -41460,10 +41472,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:cornerPosition:671",
+    "symbolID": "ptools:cornerPosition:675",
     "symbolName": "cornerPosition",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 671,
+    "line": 675,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -41472,10 +41484,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:hideIndicator:678",
+    "symbolID": "ptools:hideIndicator:682",
     "symbolName": "hideIndicator",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 678,
+    "line": 682,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -41484,10 +41496,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:clearLayoutCaches:684",
+    "symbolID": "ptools:clearLayoutCaches:688",
     "symbolName": "clearLayoutCaches",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 684,
+    "line": 688,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -41496,10 +41508,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:extension:PTCollectionView:693",
+    "symbolID": "ptools:extension:PTCollectionView:697",
     "symbolName": "PTCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 693,
+    "line": 697,
     "ownerTarget": "ptools",
     "kind": "extension",
     "accessLevel": "internal",
@@ -41508,10 +41520,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:hitTest:694",
+    "symbolID": "ptools:hitTest:698",
     "symbolName": "hitTest",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 694,
+    "line": 698,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "open",
@@ -41520,20 +41532,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:view:695",
+    "symbolID": "ptools:view:699",
     "symbolName": "view",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 695,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:rect:699",
-    "symbolName": "rect",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 699,
     "ownerTarget": "ptools",
@@ -41544,10 +41544,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:extension:PTCollectionView:714",
+    "symbolID": "ptools:rect:703",
+    "symbolName": "rect",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 703,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:extension:PTCollectionView:718",
     "symbolName": "PTCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 714,
+    "line": 718,
     "ownerTarget": "ptools",
     "kind": "extension",
     "accessLevel": "internal",
@@ -41556,10 +41568,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:handleScrollUpdate:715",
+    "symbolID": "ptools:handleScrollUpdate:719",
     "symbolName": "handleScrollUpdate",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 715,
+    "line": 719,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -41568,10 +41580,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:config:717",
+    "symbolID": "ptools:config:721",
     "symbolName": "config",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 717,
+    "line": 721,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41580,10 +41592,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:findCurrentSectionFast:726",
+    "symbolID": "ptools:findCurrentSectionFast:730",
     "symbolName": "findCurrentSectionFast",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 726,
+    "line": 730,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -41592,10 +41604,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:indexPaths:727",
+    "symbolID": "ptools:indexPaths:731",
     "symbolName": "indexPaths",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 727,
+    "line": 731,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41604,10 +41616,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:throttleScrollUpdate:732",
+    "symbolID": "ptools:throttleScrollUpdate:736",
     "symbolName": "throttleScrollUpdate",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 732,
+    "line": 736,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "internal",
@@ -41616,10 +41628,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:extension:PTCollectionView:753",
+    "symbolID": "ptools:extension:PTCollectionView:757",
     "symbolName": "PTCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 753,
+    "line": 757,
     "ownerTarget": "ptools",
     "kind": "extension",
     "accessLevel": "internal",
@@ -41628,10 +41640,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:cachedHeight:754",
+    "symbolID": "ptools:cachedHeight:758",
     "symbolName": "cachedHeight",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 754,
+    "line": 758,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -41640,10 +41652,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:key:761",
+    "symbolID": "ptools:key:765",
     "symbolName": "key",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 761,
+    "line": 765,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41652,10 +41664,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:height:769",
+    "symbolID": "ptools:height:773",
     "symbolName": "height",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 769,
+    "line": 773,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41664,10 +41676,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:extension:PTCollectionView:776",
+    "symbolID": "ptools:extension:PTCollectionView:780",
     "symbolName": "PTCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 776,
+    "line": 780,
     "ownerTarget": "ptools",
     "kind": "extension",
     "accessLevel": "internal",
@@ -41676,10 +41688,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:markSectionDirty:778",
+    "symbolID": "ptools:markSectionDirty:782",
     "symbolName": "markSectionDirty",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 778,
+    "line": 782,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -41688,10 +41700,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:779",
+    "symbolID": "ptools:snapshot:783",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 779,
+    "line": 783,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41700,44 +41712,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:previousSnapshot:800",
+    "symbolID": "ptools:previousSnapshot:804",
     "symbolName": "previousSnapshot",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 800,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:previousSectionIdentifiers:801",
-    "symbolName": "previousSectionIdentifiers",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 801,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:previousRowIdentifiers:802",
-    "symbolName": "previousRowIdentifiers",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 802,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:nextSectionIdentifiers:804",
-    "symbolName": "nextSectionIdentifiers",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 804,
     "ownerTarget": "ptools",
@@ -41748,8 +41724,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:nextRowIdentifiers:805",
-    "symbolName": "nextRowIdentifiers",
+    "symbolID": "ptools:previousSectionIdentifiers:805",
+    "symbolName": "previousSectionIdentifiers",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 805,
     "ownerTarget": "ptools",
@@ -41760,10 +41736,46 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:823",
+    "symbolID": "ptools:previousRowIdentifiers:806",
+    "symbolName": "previousRowIdentifiers",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 806,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:nextSectionIdentifiers:808",
+    "symbolName": "nextSectionIdentifiers",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 808,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:nextRowIdentifiers:809",
+    "symbolName": "nextRowIdentifiers",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 809,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:snapshot:827",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 823,
+    "line": 827,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -41772,10 +41784,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:rowsToReconfigure:826",
+    "symbolID": "ptools:rowsToReconfigure:830",
     "symbolName": "rowsToReconfigure",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 826,
+    "line": 830,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -41784,10 +41796,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:clearAllData:846",
+    "symbolID": "ptools:clearAllData:850",
     "symbolName": "clearAllData",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 846,
+    "line": 850,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -41796,10 +41808,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:861",
+    "symbolID": "ptools:snapshot:865",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 861,
+    "line": 865,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -41808,10 +41820,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:animated:863",
+    "symbolID": "ptools:animated:867",
     "symbolName": "animated",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 863,
+    "line": 867,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41820,10 +41832,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:insertRows:876",
+    "symbolID": "ptools:insertRows:880",
     "symbolName": "insertRows",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 876,
+    "line": 880,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -41832,10 +41844,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:883",
+    "symbolID": "ptools:snapshot:887",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 883,
+    "line": 887,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -41844,32 +41856,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionSnapshot:895",
+    "symbolID": "ptools:sectionSnapshot:899",
     "symbolName": "sectionSnapshot",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 895,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:sectionModel:896",
-    "symbolName": "sectionModel",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 896,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:currentRowsCount:899",
-    "symbolName": "currentRowsCount",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 899,
     "ownerTarget": "ptools",
@@ -41880,8 +41868,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:isAppend:900",
-    "symbolName": "isAppend",
+    "symbolID": "ptools:sectionModel:900",
+    "symbolName": "sectionModel",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 900,
     "ownerTarget": "ptools",
@@ -41892,32 +41880,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:currentRows:901",
-    "symbolName": "currentRows",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 901,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:anchorItem:902",
-    "symbolName": "anchorItem",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 902,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:insertIndex:903",
-    "symbolName": "insertIndex",
+    "symbolID": "ptools:currentRowsCount:903",
+    "symbolName": "currentRowsCount",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 903,
     "ownerTarget": "ptools",
@@ -41928,10 +41892,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:animated:922",
-    "symbolName": "animated",
+    "symbolID": "ptools:isAppend:904",
+    "symbolName": "isAppend",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 922,
+    "line": 904,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41940,34 +41904,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:insertRows:930",
-    "symbolName": "insertRows",
+    "symbolID": "ptools:currentRows:905",
+    "symbolName": "currentRows",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 930,
-    "ownerTarget": "ptools",
-    "kind": "func",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:snapshot:937",
-    "symbolName": "snapshot",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 937,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:sectionSnapshot:945",
-    "symbolName": "sectionSnapshot",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 945,
+    "line": 905,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41976,10 +41916,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionModel:946",
-    "symbolName": "sectionModel",
+    "symbolID": "ptools:anchorItem:906",
+    "symbolName": "anchorItem",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 946,
+    "line": 906,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -41988,58 +41928,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:animated:961",
-    "symbolName": "animated",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 961,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:insertSection:969",
-    "symbolName": "insertSection",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 969,
-    "ownerTarget": "ptools",
-    "kind": "func",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:snapshot:981",
-    "symbolName": "snapshot",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 981,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:insertIndex:996",
+    "symbolID": "ptools:insertIndex:907",
     "symbolName": "insertIndex",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 996,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:targetIndex:1005",
-    "symbolName": "targetIndex",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1005,
+    "line": 907,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42048,10 +41940,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:animated:1017",
+    "symbolID": "ptools:animated:926",
     "symbolName": "animated",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1017,
+    "line": 926,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42060,10 +41952,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:deleteRows:1025",
-    "symbolName": "deleteRows",
+    "symbolID": "ptools:insertRows:934",
+    "symbolName": "insertRows",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1025,
+    "line": 934,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -42072,10 +41964,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:1031",
+    "symbolID": "ptools:snapshot:941",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1031,
+    "line": 941,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -42084,10 +41976,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionSnapshot:1043",
+    "symbolID": "ptools:sectionSnapshot:949",
     "symbolName": "sectionSnapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1043,
+    "line": 949,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42096,10 +41988,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionModel:1044",
+    "symbolID": "ptools:sectionModel:950",
     "symbolName": "sectionModel",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1044,
+    "line": 950,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42108,34 +42000,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionRowIDs:1045",
-    "symbolName": "sectionRowIDs",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1045,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:existingRows:1046",
-    "symbolName": "existingRows",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1046,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:animated:1061",
+    "symbolID": "ptools:animated:965",
     "symbolName": "animated",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1061,
+    "line": 965,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42144,10 +42012,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:deleteSectionsRows:1069",
-    "symbolName": "deleteSectionsRows",
+    "symbolID": "ptools:insertSection:973",
+    "symbolName": "insertSection",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1069,
+    "line": 973,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -42156,34 +42024,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:allRowsToDelete:1077",
-    "symbolName": "allRowsToDelete",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1077,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:sectionsToDelete:1078",
-    "symbolName": "sectionsToDelete",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1078,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:snapshot:1079",
+    "symbolID": "ptools:snapshot:985",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1079,
+    "line": 985,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -42192,11 +42036,179 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionSnapshot:1083",
+    "symbolID": "ptools:insertIndex:1000",
+    "symbolName": "insertIndex",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1000,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:targetIndex:1009",
+    "symbolName": "targetIndex",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1009,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:animated:1021",
+    "symbolName": "animated",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1021,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:deleteRows:1029",
+    "symbolName": "deleteRows",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1029,
+    "ownerTarget": "ptools",
+    "kind": "func",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:snapshot:1035",
+    "symbolName": "snapshot",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1035,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:sectionSnapshot:1047",
     "symbolName": "sectionSnapshot",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1047,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:sectionModel:1048",
+    "symbolName": "sectionModel",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1048,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:sectionRowIDs:1049",
+    "symbolName": "sectionRowIDs",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1049,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:existingRows:1050",
+    "symbolName": "existingRows",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1050,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:animated:1065",
+    "symbolName": "animated",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1065,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:deleteSectionsRows:1073",
+    "symbolName": "deleteSectionsRows",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1073,
+    "ownerTarget": "ptools",
+    "kind": "func",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:allRowsToDelete:1081",
+    "symbolName": "allRowsToDelete",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1081,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:sectionsToDelete:1082",
+    "symbolName": "sectionsToDelete",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1082,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:snapshot:1083",
+    "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 1083,
     "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:sectionSnapshot:1087",
+    "symbolName": "sectionSnapshot",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1087,
+    "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
     "extensionReceiverType": "",
@@ -42204,10 +42216,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionModel:1084",
+    "symbolID": "ptools:sectionModel:1088",
     "symbolName": "sectionModel",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1084,
+    "line": 1088,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42216,10 +42228,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionRowIDs:1089",
+    "symbolID": "ptools:sectionRowIDs:1093",
     "symbolName": "sectionRowIDs",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1089,
+    "line": 1093,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42228,10 +42240,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:existingRows:1090",
+    "symbolID": "ptools:existingRows:1094",
     "symbolName": "existingRows",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1090,
+    "line": 1094,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42240,10 +42252,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:uniqueRows:1104",
+    "symbolID": "ptools:uniqueRows:1108",
     "symbolName": "uniqueRows",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1104,
+    "line": 1108,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42252,10 +42264,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:animated:1111",
+    "symbolID": "ptools:animated:1115",
     "symbolName": "animated",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1111,
+    "line": 1115,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42264,10 +42276,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:deleteSections:1122",
+    "symbolID": "ptools:deleteSections:1126",
     "symbolName": "deleteSections",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1122,
+    "line": 1126,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -42276,10 +42288,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:1128",
+    "symbolID": "ptools:snapshot:1132",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1128,
+    "line": 1132,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -42288,10 +42300,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:existingSections:1129",
+    "symbolID": "ptools:existingSections:1133",
     "symbolName": "existingSections",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1129,
+    "line": 1133,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42300,10 +42312,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:animated:1149",
+    "symbolID": "ptools:animated:1153",
     "symbolName": "animated",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1149,
+    "line": 1153,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42312,10 +42324,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:extension:PTCollectionView:1159",
+    "symbolID": "ptools:extension:PTCollectionView:1163",
     "symbolName": "PTCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1159,
+    "line": 1163,
     "ownerTarget": "ptools",
     "kind": "extension",
     "accessLevel": "internal",
@@ -42324,10 +42336,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:comboLayout:1160",
+    "symbolID": "ptools:comboLayout:1164",
     "symbolName": "comboLayout",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1160,
+    "line": 1164,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "internal",
@@ -42336,10 +42348,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:layout:1161",
+    "symbolID": "ptools:layout:1165",
     "symbolName": "layout",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1161,
+    "line": 1165,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42348,10 +42360,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:decorationID:1171",
+    "symbolID": "ptools:decorationID:1175",
     "symbolName": "decorationID",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1171,
+    "line": 1175,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42360,10 +42372,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:buildSection:1182",
+    "symbolID": "ptools:buildSection:1186",
     "symbolName": "buildSection",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1182,
+    "line": 1186,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -42372,10 +42384,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:screenWidth:1183",
+    "symbolID": "ptools:screenWidth:1187",
     "symbolName": "screenWidth",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1183,
+    "line": 1187,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42384,10 +42396,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:behavior:1184",
+    "symbolID": "ptools:behavior:1188",
     "symbolName": "behavior",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1184,
+    "line": 1188,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42396,10 +42408,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionLayout:1185",
+    "symbolID": "ptools:sectionLayout:1189",
     "symbolName": "sectionLayout",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1185,
+    "line": 1189,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42408,10 +42420,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:itemHeight:1186",
+    "symbolID": "ptools:itemHeight:1190",
     "symbolName": "itemHeight",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1186,
+    "line": 1190,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42420,10 +42432,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:usesEstimatedItemHeight:1191",
+    "symbolID": "ptools:usesEstimatedItemHeight:1195",
     "symbolName": "usesEstimatedItemHeight",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1191,
+    "line": 1195,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42432,10 +42444,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:topContentSpace:1196",
+    "symbolID": "ptools:topContentSpace:1200",
     "symbolName": "topContentSpace",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1196,
+    "line": 1200,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42444,20 +42456,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:bottomContentSpace:1197",
+    "symbolID": "ptools:bottomContentSpace:1201",
     "symbolName": "bottomContentSpace",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1197,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:itemLeadingSpace:1201",
-    "symbolName": "itemLeadingSpace",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 1201,
     "ownerTarget": "ptools",
@@ -42468,10 +42468,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:itemTrailingSpace:1202",
+    "symbolID": "ptools:itemLeadingSpace:1205",
+    "symbolName": "itemLeadingSpace",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1205,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:itemTrailingSpace:1206",
     "symbolName": "itemTrailingSpace",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1202,
+    "line": 1206,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42480,10 +42492,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:group:1203",
+    "symbolID": "ptools:group:1207",
     "symbolName": "group",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1203,
+    "line": 1207,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42492,10 +42504,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:size:1220",
+    "symbolID": "ptools:size:1224",
     "symbolName": "size",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1220,
+    "line": 1224,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42504,10 +42516,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:item:1222",
+    "symbolID": "ptools:item:1226",
     "symbolName": "item",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1222,
+    "line": 1226,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42516,10 +42528,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:groupSize:1223",
+    "symbolID": "ptools:groupSize:1227",
     "symbolName": "groupSize",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1223,
+    "line": 1227,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42528,10 +42540,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:estimatedGroup:1225",
+    "symbolID": "ptools:estimatedGroup:1229",
     "symbolName": "estimatedGroup",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1225,
+    "line": 1229,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42540,10 +42552,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:result:1243",
+    "symbolID": "ptools:result:1247",
     "symbolName": "result",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1243,
+    "line": 1247,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42552,10 +42564,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:groupSize:1255",
+    "symbolID": "ptools:groupSize:1259",
     "symbolName": "groupSize",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1255,
+    "line": 1259,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42564,10 +42576,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:tagDatas:1291",
+    "symbolID": "ptools:tagDatas:1295",
     "symbolName": "tagDatas",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1291,
+    "line": 1295,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42576,10 +42588,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionInsets:1320",
+    "symbolID": "ptools:sectionInsets:1324",
     "symbolName": "sectionInsets",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1320,
+    "line": 1324,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -42588,10 +42600,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:hasExplicitSectionInsets:1321",
+    "symbolID": "ptools:hasExplicitSectionInsets:1325",
     "symbolName": "hasExplicitSectionInsets",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1321,
+    "line": 1325,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42600,10 +42612,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:groupOwnsContentSpacing:1322",
+    "symbolID": "ptools:groupOwnsContentSpacing:1326",
     "symbolName": "groupOwnsContentSpacing",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1322,
+    "line": 1326,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42612,10 +42624,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:supplementaryItems:1350",
+    "symbolID": "ptools:supplementaryItems:1354",
     "symbolName": "supplementaryItems",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1350,
+    "line": 1354,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42624,10 +42636,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:headerOwnsOffset:1360",
+    "symbolID": "ptools:headerOwnsOffset:1364",
     "symbolName": "headerOwnsOffset",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1360,
+    "line": 1364,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42636,10 +42648,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:footerOwnsOffset:1363",
+    "symbolID": "ptools:footerOwnsOffset:1367",
     "symbolName": "footerOwnsOffset",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1363,
+    "line": 1367,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42648,10 +42660,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:laySection:1377",
+    "symbolID": "ptools:laySection:1381",
     "symbolName": "laySection",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1377,
+    "line": 1381,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42660,10 +42672,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:pageWidth:1390",
+    "symbolID": "ptools:pageWidth:1394",
     "symbolName": "pageWidth",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1390,
+    "line": 1394,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42672,10 +42684,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:currentPage:1392",
+    "symbolID": "ptools:currentPage:1396",
     "symbolName": "currentPage",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1392,
+    "line": 1396,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42684,10 +42696,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:generateSection:1401",
+    "symbolID": "ptools:generateSection:1405",
     "symbolName": "generateSection",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1401,
+    "line": 1405,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "fileprivate",
@@ -42696,10 +42708,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:1402",
+    "symbolID": "ptools:snapshot:1406",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1402,
+    "line": 1406,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42708,10 +42720,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionModel:1410",
+    "symbolID": "ptools:sectionModel:1414",
     "symbolName": "sectionModel",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1410,
+    "line": 1414,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42720,10 +42732,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:key:1411",
+    "symbolID": "ptools:key:1415",
     "symbolName": "key",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1411,
+    "line": 1415,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42732,10 +42744,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionLayout:1419",
+    "symbolID": "ptools:sectionLayout:1423",
     "symbolName": "sectionLayout",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1419,
+    "line": 1423,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42744,10 +42756,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:oneSquareGroup:1425",
+    "symbolID": "ptools:oneSquareGroup:1429",
     "symbolName": "oneSquareGroup",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1425,
+    "line": 1429,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -42756,10 +42768,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:itemSize:1433",
+    "symbolID": "ptools:itemSize:1437",
     "symbolName": "itemSize",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1433,
+    "line": 1437,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42768,10 +42780,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:item:1435",
+    "symbolID": "ptools:item:1439",
     "symbolName": "item",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1435,
+    "line": 1439,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42780,10 +42792,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:groupSize:1436",
+    "symbolID": "ptools:groupSize:1440",
     "symbolName": "groupSize",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1436,
+    "line": 1440,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42792,23 +42804,23 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:makeFallbackLayoutSection:1444",
+    "symbolID": "ptools:makeFallbackLayoutSection:1448",
     "symbolName": "makeFallbackLayoutSection",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1444,
-    "ownerTarget": "ptools",
-    "kind": "func",
-    "accessLevel": "fileprivate",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:itemSize:1448",
-    "symbolName": "itemSize",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 1448,
     "ownerTarget": "ptools",
+    "kind": "func",
+    "accessLevel": "fileprivate",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:itemSize:1452",
+    "symbolName": "itemSize",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1452,
+    "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
     "extensionReceiverType": "",
@@ -42816,10 +42828,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:item:1450",
+    "symbolID": "ptools:item:1454",
     "symbolName": "item",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1450,
+    "line": 1454,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42828,10 +42840,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:groupSize:1451",
+    "symbolID": "ptools:groupSize:1455",
     "symbolName": "groupSize",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1451,
+    "line": 1455,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42840,10 +42852,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:group:1453",
+    "symbolID": "ptools:group:1457",
     "symbolName": "group",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1453,
+    "line": 1457,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42852,10 +42864,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:generateSupplementaryItems:1457",
+    "symbolID": "ptools:generateSupplementaryItems:1461",
     "symbolName": "generateSupplementaryItems",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1457,
+    "line": 1461,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -42864,10 +42876,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:supplementaryItems:1458",
+    "symbolID": "ptools:supplementaryItems:1462",
     "symbolName": "supplementaryItems",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1458,
+    "line": 1462,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -42876,10 +42888,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:headerSize:1460",
+    "symbolID": "ptools:headerSize:1464",
     "symbolName": "headerSize",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1460,
+    "line": 1464,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42888,10 +42900,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:headerItem:1465",
+    "symbolID": "ptools:headerItem:1469",
     "symbolName": "headerItem",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1465,
+    "line": 1469,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42900,10 +42912,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:footerSize:1477",
+    "symbolID": "ptools:footerSize:1481",
     "symbolName": "footerSize",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1477,
+    "line": 1481,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42912,10 +42924,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:footerItem:1482",
+    "symbolID": "ptools:footerItem:1486",
     "symbolName": "footerItem",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1482,
+    "line": 1486,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42924,10 +42936,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:generateDecorationItems:1495",
+    "symbolID": "ptools:generateDecorationItems:1499",
     "symbolName": "generateDecorationItems",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1495,
+    "line": 1499,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -42936,10 +42948,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:1498",
+    "symbolID": "ptools:snapshot:1502",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1498,
+    "line": 1502,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42948,10 +42960,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:backItem:1506",
+    "symbolID": "ptools:backItem:1510",
     "symbolName": "backItem",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1506,
+    "line": 1510,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42960,10 +42972,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:buildWaterfallItems:1514",
+    "symbolID": "ptools:buildWaterfallItems:1518",
     "symbolName": "buildWaterfallItems",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1514,
+    "line": 1518,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "internal",
@@ -42972,10 +42984,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:key:1521",
+    "symbolID": "ptools:key:1525",
     "symbolName": "key",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1521,
+    "line": 1525,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42984,10 +42996,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:result:1530",
+    "symbolID": "ptools:result:1534",
     "symbolName": "result",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1530,
+    "line": 1534,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -42996,10 +43008,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:items:1539",
+    "symbolID": "ptools:items:1543",
     "symbolName": "items",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1539,
+    "line": 1543,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43008,10 +43020,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:oldestKey:1542",
+    "symbolID": "ptools:oldestKey:1546",
     "symbolName": "oldestKey",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1542,
+    "line": 1546,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43020,10 +43032,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:clearWaterfallCache:1550",
+    "symbolID": "ptools:clearWaterfallCache:1554",
     "symbolName": "clearWaterfallCache",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1550,
+    "line": 1554,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "internal",
@@ -43032,10 +43044,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:extension:PTCollectionView:1557",
+    "symbolID": "ptools:extension:PTCollectionView:1561",
     "symbolName": "PTCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1557,
+    "line": 1561,
     "ownerTarget": "ptools",
     "kind": "extension",
     "accessLevel": "internal",
@@ -43044,10 +43056,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:setiOS17EmptyDataView:1558",
+    "symbolID": "ptools:setiOS17EmptyDataView:1562",
     "symbolName": "setiOS17EmptyDataView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1558,
+    "line": 1562,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "internal",
@@ -43056,10 +43068,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:reconcilePresentation:1565",
+    "symbolID": "ptools:reconcilePresentation:1569",
     "symbolName": "reconcilePresentation",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1565,
+    "line": 1569,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "internal",
@@ -43068,10 +43080,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:showEmptyConfig:1592",
+    "symbolID": "ptools:showEmptyConfig:1596",
     "symbolName": "showEmptyConfig",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1592,
+    "line": 1596,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -43080,10 +43092,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:1593",
+    "symbolID": "ptools:snapshot:1597",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1593,
+    "line": 1597,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43092,10 +43104,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:isEmpty:1594",
+    "symbolID": "ptools:isEmpty:1598",
     "symbolName": "isEmpty",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1594,
+    "line": 1598,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43104,10 +43116,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:hideEmptyLoading:1610",
+    "symbolID": "ptools:hideEmptyLoading:1614",
     "symbolName": "hideEmptyLoading",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1610,
+    "line": 1614,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43116,10 +43128,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:showEmptyLoading:1616",
+    "symbolID": "ptools:showEmptyLoading:1620",
     "symbolName": "showEmptyLoading",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1616,
+    "line": 1620,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43128,10 +43140,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:below17EmptyDataSet:1622",
+    "symbolID": "ptools:below17EmptyDataSet:1626",
     "symbolName": "below17EmptyDataSet",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1622,
+    "line": 1626,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -43140,10 +43152,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:1623",
+    "symbolID": "ptools:snapshot:1627",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1623,
+    "line": 1627,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43152,10 +43164,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:isEmpty:1624",
+    "symbolID": "ptools:isEmpty:1628",
     "symbolName": "isEmpty",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1624,
+    "line": 1628,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43164,10 +43176,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:buttonAtt:1636",
+    "symbolID": "ptools:buttonAtt:1640",
     "symbolName": "buttonAtt",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1636,
+    "line": 1640,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43176,10 +43188,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:reloadEmptyConfig:1668",
+    "symbolID": "ptools:reloadEmptyConfig:1672",
     "symbolName": "reloadEmptyConfig",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1668,
+    "line": 1672,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43188,10 +43200,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:extension:PTCollectionView:1677",
+    "symbolID": "ptools:extension:PTCollectionView:1681",
     "symbolName": "PTCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1677,
+    "line": 1681,
     "ownerTarget": "ptools",
     "kind": "extension",
     "accessLevel": "internal",
@@ -43200,20 +43212,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:endRefresh:1678",
+    "symbolID": "ptools:endRefresh:1682",
     "symbolName": "endRefresh",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1678,
-    "ownerTarget": "ptools",
-    "kind": "func",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:footerRefreshNoMore:1682",
-    "symbolName": "footerRefreshNoMore",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 1682,
     "ownerTarget": "ptools",
@@ -43224,10 +43224,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:footerRefreshReset:1687",
-    "symbolName": "footerRefreshReset",
+    "symbolID": "ptools:footerRefreshNoMore:1686",
+    "symbolName": "footerRefreshNoMore",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1687,
+    "line": 1686,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43236,10 +43236,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:extension:PTCollectionView:1694",
+    "symbolID": "ptools:footerRefreshReset:1691",
+    "symbolName": "footerRefreshReset",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1691,
+    "ownerTarget": "ptools",
+    "kind": "func",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:extension:PTCollectionView:1698",
     "symbolName": "PTCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1694,
+    "line": 1698,
     "ownerTarget": "ptools",
     "kind": "extension",
     "accessLevel": "internal",
@@ -43248,20 +43260,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:registerHeaderIdsNClasss:1695",
+    "symbolID": "ptools:registerHeaderIdsNClasss:1699",
     "symbolName": "registerHeaderIdsNClasss",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1695,
-    "ownerTarget": "ptools",
-    "kind": "func",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:registerClassCells:1699",
-    "symbolName": "registerClassCells",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 1699,
     "ownerTarget": "ptools",
@@ -43272,8 +43272,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:registerNibCells:1703",
-    "symbolName": "registerNibCells",
+    "symbolID": "ptools:registerClassCells:1703",
+    "symbolName": "registerClassCells",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 1703,
     "ownerTarget": "ptools",
@@ -43284,8 +43284,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:registerSupplementaryView:1707",
-    "symbolName": "registerSupplementaryView",
+    "symbolID": "ptools:registerNibCells:1707",
+    "symbolName": "registerNibCells",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 1707,
     "ownerTarget": "ptools",
@@ -43296,10 +43296,22 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:extension:PTCollectionView:1712",
+    "symbolID": "ptools:registerSupplementaryView:1711",
+    "symbolName": "registerSupplementaryView",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1711,
+    "ownerTarget": "ptools",
+    "kind": "func",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:extension:PTCollectionView:1716",
     "symbolName": "PTCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1712,
+    "line": 1716,
     "ownerTarget": "ptools",
     "kind": "extension",
     "accessLevel": "internal",
@@ -43308,10 +43320,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:reloadSections:1713",
+    "symbolID": "ptools:reloadSections:1717",
     "symbolName": "reloadSections",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1713,
+    "line": 1717,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43320,35 +43332,35 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:1723",
+    "symbolID": "ptools:snapshot:1727",
     "symbolName": "snapshot",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1723,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:seenIndexes:1725",
-    "symbolName": "seenIndexes",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1725,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:validIndexes:1727",
-    "symbolName": "validIndexes",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 1727,
     "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:seenIndexes:1729",
+    "symbolName": "seenIndexes",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1729,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:validIndexes:1731",
+    "symbolName": "validIndexes",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1731,
+    "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
     "extensionReceiverType": "",
@@ -43356,10 +43368,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:validSections:1733",
+    "symbolID": "ptools:validSections:1737",
     "symbolName": "validSections",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1733,
+    "line": 1737,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43368,10 +43380,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:reloadRows:1764",
+    "symbolID": "ptools:reloadRows:1768",
     "symbolName": "reloadRows",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1764,
+    "line": 1768,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43380,10 +43392,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:1774",
+    "symbolID": "ptools:snapshot:1778",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1774,
+    "line": 1778,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -43392,10 +43404,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionSnapshot:1783",
+    "symbolID": "ptools:sectionSnapshot:1787",
     "symbolName": "sectionSnapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1783,
+    "line": 1787,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43404,10 +43416,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionModel:1784",
+    "symbolID": "ptools:sectionModel:1788",
     "symbolName": "sectionModel",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1784,
+    "line": 1788,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43416,10 +43428,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionRowIDs:1786",
+    "symbolID": "ptools:sectionRowIDs:1790",
     "symbolName": "sectionRowIDs",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1786,
+    "line": 1790,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43428,10 +43440,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:seenRows:1792",
+    "symbolID": "ptools:seenRows:1796",
     "symbolName": "seenRows",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1792,
+    "line": 1796,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -43440,10 +43452,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:existingRows:1794",
+    "symbolID": "ptools:existingRows:1798",
     "symbolName": "existingRows",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1794,
+    "line": 1798,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43452,10 +43464,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:width:1807",
+    "symbolID": "ptools:width:1811",
     "symbolName": "width",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1807,
+    "line": 1811,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43464,10 +43476,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:animated:1838",
+    "symbolID": "ptools:animated:1842",
     "symbolName": "animated",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1838,
+    "line": 1842,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43476,10 +43488,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:reloadSectionsRows:1850",
+    "symbolID": "ptools:reloadSectionsRows:1854",
     "symbolName": "reloadSectionsRows",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1850,
+    "line": 1854,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43488,44 +43500,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:1861",
+    "symbolID": "ptools:snapshot:1865",
     "symbolName": "snapshot",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1861,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:containerWidth:1862",
-    "symbolName": "containerWidth",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1862,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:allRowsToReload:1864",
-    "symbolName": "allRowsToReload",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1864,
-    "ownerTarget": "ptools",
-    "kind": "var",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:seenRows:1865",
-    "symbolName": "seenRows",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 1865,
     "ownerTarget": "ptools",
@@ -43536,32 +43512,44 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionModel:1874",
+    "symbolID": "ptools:containerWidth:1866",
+    "symbolName": "containerWidth",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1866,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:allRowsToReload:1868",
+    "symbolName": "allRowsToReload",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1868,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:seenRows:1869",
+    "symbolName": "seenRows",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1869,
+    "ownerTarget": "ptools",
+    "kind": "var",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:sectionModel:1878",
     "symbolName": "sectionModel",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1874,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:sectionSnapshot:1876",
-    "symbolName": "sectionSnapshot",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1876,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:sectionRowIDs:1878",
-    "symbolName": "sectionRowIDs",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 1878,
     "ownerTarget": "ptools",
@@ -43572,10 +43560,34 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:existingRows:1884",
+    "symbolID": "ptools:sectionSnapshot:1880",
+    "symbolName": "sectionSnapshot",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1880,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:sectionRowIDs:1882",
+    "symbolName": "sectionRowIDs",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 1882,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:existingRows:1888",
     "symbolName": "existingRows",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1884,
+    "line": 1888,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43584,10 +43596,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:animated:1936",
+    "symbolID": "ptools:animated:1940",
     "symbolName": "animated",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1936,
+    "line": 1940,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43596,10 +43608,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:reloadAllData:1962",
+    "symbolID": "ptools:reloadAllData:1966",
     "symbolName": "reloadAllData",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1962,
+    "line": 1966,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43608,10 +43620,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:1976",
+    "symbolID": "ptools:snapshot:1980",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1976,
+    "line": 1980,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -43620,10 +43632,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:allSections:1979",
+    "symbolID": "ptools:allSections:1983",
     "symbolName": "allSections",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1979,
+    "line": 1983,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43632,10 +43644,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:allExistingItems:1994",
+    "symbolID": "ptools:allExistingItems:1998",
     "symbolName": "allExistingItems",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 1994,
+    "line": 1998,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43644,10 +43656,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:softReloadAllData:2027",
+    "symbolID": "ptools:softReloadAllData:2031",
     "symbolName": "softReloadAllData",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2027,
+    "line": 2031,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43656,10 +43668,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:2036",
+    "symbolID": "ptools:snapshot:2040",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2036,
+    "line": 2040,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -43668,10 +43680,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:allItems:2039",
+    "symbolID": "ptools:allItems:2043",
     "symbolName": "allItems",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2039,
+    "line": 2043,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43680,10 +43692,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:reloadItemContent:2065",
+    "symbolID": "ptools:reloadItemContent:2069",
     "symbolName": "reloadItemContent",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2065,
+    "line": 2069,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43692,10 +43704,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:reloadSectionContent:2076",
+    "symbolID": "ptools:reloadSectionContent:2080",
     "symbolName": "reloadSectionContent",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2076,
+    "line": 2080,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43704,10 +43716,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:reconfigureSections:2089",
+    "symbolID": "ptools:reconfigureSections:2093",
     "symbolName": "reconfigureSections",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2089,
+    "line": 2093,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43716,10 +43728,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:reloadItemCell:2100",
+    "symbolID": "ptools:reloadItemCell:2104",
     "symbolName": "reloadItemCell",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2100,
+    "line": 2104,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43728,10 +43740,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:2109",
+    "symbolID": "ptools:snapshot:2113",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2109,
+    "line": 2113,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43740,10 +43752,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:rowIDs:2110",
+    "symbolID": "ptools:rowIDs:2114",
     "symbolName": "rowIDs",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2110,
+    "line": 2114,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43752,10 +43764,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:replacementSnapshot:2116",
+    "symbolID": "ptools:replacementSnapshot:2120",
     "symbolName": "replacementSnapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2116,
+    "line": 2120,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -43764,10 +43776,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:reloadSectionCells:2129",
+    "symbolID": "ptools:reloadSectionCells:2133",
     "symbolName": "reloadSectionCells",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2129,
+    "line": 2133,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43776,10 +43788,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:2138",
+    "symbolID": "ptools:snapshot:2142",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2138,
+    "line": 2142,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43788,10 +43800,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:rowIDs:2139",
+    "symbolID": "ptools:rowIDs:2143",
     "symbolName": "rowIDs",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2139,
+    "line": 2143,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43800,10 +43812,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:replacementSnapshot:2145",
+    "symbolID": "ptools:replacementSnapshot:2149",
     "symbolName": "replacementSnapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2145,
+    "line": 2149,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -43812,10 +43824,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:updateRow:2158",
+    "symbolID": "ptools:updateRow:2162",
     "symbolName": "updateRow",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2158,
+    "line": 2162,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43824,10 +43836,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:updateRows:2167",
+    "symbolID": "ptools:updateRows:2171",
     "symbolName": "updateRows",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2167,
+    "line": 2171,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43836,10 +43848,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:indexPaths:2175",
+    "symbolID": "ptools:indexPaths:2179",
     "symbolName": "indexPaths",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2175,
+    "line": 2179,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43848,10 +43860,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:updateItemContent:2181",
+    "symbolID": "ptools:updateItemContent:2185",
     "symbolName": "updateItemContent",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2181,
+    "line": 2185,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43860,10 +43872,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:enqueueContentRefresh:2193",
+    "symbolID": "ptools:enqueueContentRefresh:2197",
     "symbolName": "enqueueContentRefresh",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2193,
+    "line": 2197,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "private",
@@ -43872,10 +43884,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:completionHandler:2198",
+    "symbolID": "ptools:completionHandler:2202",
     "symbolName": "completionHandler",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2198,
+    "line": 2202,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43884,10 +43896,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:reloadVisibleContent:2224",
+    "symbolID": "ptools:reloadVisibleContent:2228",
     "symbolName": "reloadVisibleContent",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2224,
+    "line": 2228,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43896,10 +43908,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:invalidateSectionLayout:2231",
+    "symbolID": "ptools:invalidateSectionLayout:2235",
     "symbolName": "invalidateSectionLayout",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2231,
+    "line": 2235,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43908,10 +43920,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:2240",
+    "symbolID": "ptools:snapshot:2244",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2240,
+    "line": 2244,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43920,10 +43932,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:invalidateItemLayout:2256",
+    "symbolID": "ptools:invalidateItemLayout:2260",
     "symbolName": "invalidateItemLayout",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2256,
+    "line": 2260,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43932,10 +43944,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sections:2265",
+    "symbolID": "ptools:sections:2269",
     "symbolName": "sections",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2265,
+    "line": 2269,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -43944,10 +43956,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:width:2266",
+    "symbolID": "ptools:width:2270",
     "symbolName": "width",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2266,
+    "line": 2270,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -43956,10 +43968,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:extension:PTCollectionView:2286",
+    "symbolID": "ptools:extension:PTCollectionView:2290",
     "symbolName": "PTCollectionView",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2286,
+    "line": 2290,
     "ownerTarget": "ptools",
     "kind": "extension",
     "accessLevel": "internal",
@@ -43968,10 +43980,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:getRow:2288",
+    "symbolID": "ptools:getRow:2292",
     "symbolName": "getRow",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2288,
+    "line": 2292,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -43980,20 +43992,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:getRows:2293",
+    "symbolID": "ptools:getRows:2297",
     "symbolName": "getRows",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2293,
-    "ownerTarget": "ptools",
-    "kind": "func",
-    "accessLevel": "public",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:getRow:2297",
-    "symbolName": "getRow",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 2297,
     "ownerTarget": "ptools",
@@ -44004,22 +44004,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:2298",
-    "symbolName": "snapshot",
+    "symbolID": "ptools:getRow:2301",
+    "symbolName": "getRow",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2298,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:getAllRows:2303",
-    "symbolName": "getAllRows",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2303,
+    "line": 2301,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -44028,10 +44016,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:2304",
+    "symbolID": "ptools:snapshot:2302",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2304,
+    "line": 2302,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -44040,23 +44028,23 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:sectionIdentifiers:2305",
-    "symbolName": "sectionIdentifiers",
-    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2305,
-    "ownerTarget": "ptools",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "ptools:targetSection:2307",
-    "symbolName": "targetSection",
+    "symbolID": "ptools:getAllRows:2307",
+    "symbolName": "getAllRows",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 2307,
     "ownerTarget": "ptools",
+    "kind": "func",
+    "accessLevel": "public",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:snapshot:2308",
+    "symbolName": "snapshot",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 2308,
+    "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
     "extensionReceiverType": "",
@@ -44064,10 +44052,34 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:getSectionRowsMap:2311",
-    "symbolName": "getSectionRowsMap",
+    "symbolID": "ptools:sectionIdentifiers:2309",
+    "symbolName": "sectionIdentifiers",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 2309,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:targetSection:2311",
+    "symbolName": "targetSection",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
     "line": 2311,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:getSectionRowsMap:2315",
+    "symbolName": "getSectionRowsMap",
+    "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
+    "line": 2315,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -44076,10 +44088,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:rowsMap:2312",
+    "symbolID": "ptools:rowsMap:2316",
     "symbolName": "rowsMap",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2312,
+    "line": 2316,
     "ownerTarget": "ptools",
     "kind": "var",
     "accessLevel": "internal",
@@ -44088,10 +44100,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:getSectionIndex:2321",
+    "symbolID": "ptools:getSectionIndex:2325",
     "symbolName": "getSectionIndex",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2321,
+    "line": 2325,
     "ownerTarget": "ptools",
     "kind": "func",
     "accessLevel": "public",
@@ -44100,10 +44112,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:snapshot:2322",
+    "symbolID": "ptools:snapshot:2326",
     "symbolName": "snapshot",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2322,
+    "line": 2326,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -44112,10 +44124,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "ptools:index:2323",
+    "symbolID": "ptools:index:2327",
     "symbolName": "index",
     "declarationPath": "PooToolsSource/Base/PTCollectionView.swift",
-    "line": 2323,
+    "line": 2327,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",
@@ -44908,6 +44920,30 @@
     "symbolName": "frame",
     "declarationPath": "PooToolsSource/Base/PTCollectionViewSkeleton.swift",
     "line": 274,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:diameter:294",
+    "symbolName": "diameter",
+    "declarationPath": "PooToolsSource/Base/PTCollectionViewSkeleton.swift",
+    "line": 294,
+    "ownerTarget": "ptools",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "ptools:circleFrame:295",
+    "symbolName": "circleFrame",
+    "declarationPath": "PooToolsSource/Base/PTCollectionViewSkeleton.swift",
+    "line": 295,
     "ownerTarget": "ptools",
     "kind": "let",
     "accessLevel": "internal",

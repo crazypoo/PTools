@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory.rb
-Source revision: 4a2379802d43285d4e157cddb704274bc4aea549
-Generated at: 2026-10-15T14:43:49Z
+Source revision: a3d7346c36485d8c3f7e3c68d423fbe9b1d18a5f
+Generated at: 2026-10-16T02:19:51Z
 -->
 
 # PTools 当前缓存盘点
@@ -22,14 +22,14 @@ Generated at: 2026-10-15T14:43:49Z
 | PooToolsSource/Base/PTAudioCache.swift:260 | disk or custom cache | /// 获取音频时长（一定基于 cache 文件） |
 | PooToolsSource/Base/PTAudioCache.swift:300 | disk or custom cache | /// 创建播放用 PlayerItem（只用 cache 文件） |
 | PooToolsSource/Base/PTBaseDecorationFunction.swift:16 | disk or custom cache | // English: Cache the shadow geometry to avoid rebuilding the path on every layout pass. |
-| PooToolsSource/Base/PTCollectionView.swift:121 | disk or custom cache | // English: Invalidate every geometry cache when a runtime layout contract changes. |
-| PooToolsSource/Base/PTCollectionView.swift:765 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
-| PooToolsSource/Base/PTCollectionView.swift:766 | disk or custom cache | return cache.doubleValue |
-| PooToolsSource/Base/PTCollectionView.swift:1415 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
-| PooToolsSource/Base/PTCollectionView.swift:1416 | disk or custom cache | return cache |
-| PooToolsSource/Base/PTCollectionView.swift:1526 | disk or custom cache | if let cache = waterfallCache[key] { |
-| PooToolsSource/Base/PTCollectionView.swift:1527 | disk or custom cache | return (cache.items, cache.contentHeight) |
-| PooToolsSource/Base/PTCollectionView.swift:2253 | disk or custom cache | // English: Invalidate only the geometry cache for the requested rows. |
+| PooToolsSource/Base/PTCollectionView.swift:125 | disk or custom cache | // English: Invalidate every geometry cache when a runtime layout contract changes. |
+| PooToolsSource/Base/PTCollectionView.swift:769 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
+| PooToolsSource/Base/PTCollectionView.swift:770 | disk or custom cache | return cache.doubleValue |
+| PooToolsSource/Base/PTCollectionView.swift:1419 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
+| PooToolsSource/Base/PTCollectionView.swift:1420 | disk or custom cache | return cache |
+| PooToolsSource/Base/PTCollectionView.swift:1530 | disk or custom cache | if let cache = waterfallCache[key] { |
+| PooToolsSource/Base/PTCollectionView.swift:1531 | disk or custom cache | return (cache.items, cache.contentHeight) |
+| PooToolsSource/Base/PTCollectionView.swift:2257 | disk or custom cache | // English: Invalidate only the geometry cache for the requested rows. |
 | PooToolsSource/Base/PTCollectionViewLayoutSupport.swift:5 | disk or custom cache | //  English: Keep pure layout cache keys outside the collection-view facade. |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:10 | disk or custom cache | // English: Keep the reusable cache type separate from PTCollectionView's facade and layout code. |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:15 | NSCache | private let cache = NSCache<WrappedKey, Value>() |

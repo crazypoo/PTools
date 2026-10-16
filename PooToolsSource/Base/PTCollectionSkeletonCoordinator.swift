@@ -37,6 +37,13 @@ extension PTCollectionView {
             self.collectionView.isSkeletonPresentationSuppressed = true
             PTUnavailableManager.hideUnavailableView(in: self)
             self.skeletonVisibleSince = ContinuousClock.now
+            // English: Hide real cells while keeping the skeleton layer's original visual contrast.
+            // Español: Oculta las celdas reales y conserva el contraste visual original de la capa skeleton.
+            // 中文：隐藏真实 Cell，同时保留骨架层原有的视觉对比度。
+            if self.skeletonUnderlyingCollectionAlpha == nil {
+                self.skeletonUnderlyingCollectionAlpha = self.collectionView.alpha
+            }
+            self.collectionView.alpha = 0
             self.skeletonOverlayView.isHidden = false
             self.skeletonOverlayView.alpha = 1
             self.skeletonOverlayView.isUserInteractionEnabled = configuration.interactionPolicy != .passthrough
@@ -141,6 +148,11 @@ extension PTCollectionView {
             self.skeletonOverlayView.stopShimmer()
             self.skeletonOverlayView.isHidden = true
             self.skeletonOverlayView.alpha = 1
+            // English: Restore the caller's collection alpha after the skeleton is fully hidden.
+            // Español: Restaura el alpha de la colección después de ocultar por completo el skeleton.
+            // 中文：骨架完全隐藏后恢复调用方原先设置的 Collection alpha。
+            self.collectionView.alpha = self.skeletonUnderlyingCollectionAlpha ?? 1
+            self.skeletonUnderlyingCollectionAlpha = nil
             self.reconcilePresentation()
         }
         if duration > 0, !UIAccessibility.isReduceMotionEnabled {
