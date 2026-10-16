@@ -6,6 +6,11 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.65.3 — 2026-10-16
+
+- 修复 SwiftPM 独立编译 `PooToolsWhatsNewsKit` 时访问内部 `HSL` 类型导致的 `cannot find 'HSL' in scope` 错误。
+- 改用 Core 已公开的 `lightened(amount:)` API，保持按钮高亮背景颜色行为，不扩大内部颜色实现的访问级别。
+
 ## 5.65.2 — 2026-10-16
 
 - 修复 SwiftPM 独立编译 `PooToolsBanner` 时错误依赖 `UIStackView.removeAllArrangedSubviews()` 扩展的问题，改用 UIKit 原生移除排列子视图，保持 Banner target 轻量且不依赖聚合模块。

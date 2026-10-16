@@ -8534,7 +8534,7 @@
   {
     "symbolName": "addSubviews",
     "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 374,
+    "line": 377,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "requiredModule": "ptools",
     "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
@@ -8543,7 +8543,7 @@
   {
     "symbolName": "addSubviews",
     "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 376,
+    "line": 379,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "requiredModule": "ptools",
     "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",
@@ -8615,7 +8615,7 @@
   {
     "symbolName": "PTAppBaseConfig",
     "referencePath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 379,
+    "line": 382,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "requiredModule": "ptools",
     "currentImports": "PToolsUIFoundation;SnapKit;UIKit;ptools",

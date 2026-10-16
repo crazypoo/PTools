@@ -834,7 +834,7 @@
     }
   ],
   "generator": "Scripts/report_semantic_capability_ownership.sh",
-  "source_revision": "572d47945fc3e7f7006539a8975811bc86ffbb59",
-  "generated_at": "2026-10-16T13:59:52Z",
+  "source_revision": "6e273aeca2aa2ab5d7b926a50e1f001e4572ae03",
+  "generated_at": "2026-10-16T15:13:12Z",
   "source_file_count": 1189
 }

@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: 572d47945fc3e7f7006539a8975811bc86ffbb59
-Generated at: 2026-10-16T13:59:58Z
+Source revision: 6e273aeca2aa2ab5d7b926a50e1f001e4572ae03
+Generated at: 2026-10-16T15:13:18Z
 -->
 
 # PTools 当前公开 API 清单
@@ -10991,7 +10991,7 @@ Generated at: 2026-10-16T13:59:58Z
 | PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:242 | var | public | public var iKnowTapHandler:PTActionTask? |
 | PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:244 | func | public | public func setContentLRSpace(@PTClampedPropertyWrapper(range:0...100) values:CGFloat = 48) { |
 | PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:335 | init | public | public init(titleItem: PTWhatsNewsTitleItem? = nil, iKnowItem:PTWhatsNewsIKnowItem = PTWhatsNewsIKnowItem(), newsItem:[PTWhatsNewsItem]) { |
-| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:417 | func | public | public func whatsNewsShow(vc:UIViewController) { |
+| PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift:420 | func | public | public func whatsNewsShow(vc:UIViewController) { |
 | PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift:41 | init | public | public init() { |
 | PooToolsSource/WhereIsMyEye/PTEyeTrackingManager.swift:15 | protocol | public | public protocol PTEyeTrackingDelegate: NSObjectProtocol { |
 | PooToolsSource/WhereIsMyEye/PTEyeTrackingManager.swift:40 | enum | public | @objc public enum PTEyeTrackingState: Int { |

@@ -353,7 +353,10 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         iKnowButton.normalTitleFont = iKnowItem.titleFont
         iKnowButton.hightlightTitleFont = iKnowButton.normalTitleFont
         iKnowButton.configBackgroundColor = iKnowItem.backgroundColor
-        iKnowButton.configBackgroundHightlightColor = HSL(color: iKnowButton.configBackgroundColor).lighter(amount: 0.5).toDynamicColor()
+        // English: Use the public color transformation API so this standalone target does not cross the internal HSL boundary.
+        // Español: Usa la API pública de transformación de color para que este target independiente no cruce el límite HSL interno.
+        // 中文：使用公开的颜色转换 API，避免独立 target 跨越内部 HSL 类型边界。
+        iKnowButton.configBackgroundHightlightColor = iKnowButton.configBackgroundColor.lightened(amount: 0.5)
 
         if iKnowItem.image != nil {
             iKnowButton.imageSize = CGSize(width: 44, height: 44)

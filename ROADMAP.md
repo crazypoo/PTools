@@ -1,8 +1,14 @@
 # PTools 路线图
 
-> 当前代码基线：`5.65.2`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.65.3`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.65.1`；`5.65.2` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.65.2`；`5.65.3` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.65.3 WhatsNewsKit SwiftPM 颜色类型边界修复
+
+- ✅ `PTWhatsNewsViewController` 改用公开的 `lightened(amount:)` 颜色 API，移除对内部 `HSL` 类型的跨 target 访问。
+- ✅ 保留原有按钮高亮颜色行为，不扩大 `HSL` 的访问级别。
+- ⬜ 仍需在真实宿主的 SwiftPM Debug/Release 和真机环境完成最终回归。
 
 ## 5.65.2 SwiftPM 独立 Target 修复
 

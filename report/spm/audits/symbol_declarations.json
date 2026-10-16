@@ -469200,10 +469200,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:viewDidLoad:370",
+    "symbolID": "PooToolsWhatsNewsKit:viewDidLoad:373",
     "symbolName": "viewDidLoad",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 370,
+    "line": 373,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "func",
     "accessLevel": "public",
@@ -469212,10 +469212,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:showNewsData:409",
+    "symbolID": "PooToolsWhatsNewsKit:showNewsData:412",
     "symbolName": "showNewsData",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 409,
+    "line": 412,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "func",
     "accessLevel": "internal",
@@ -469224,10 +469224,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:rows:410",
+    "symbolID": "PooToolsWhatsNewsKit:rows:413",
     "symbolName": "rows",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 410,
+    "line": 413,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "let",
     "accessLevel": "internal",
@@ -469236,10 +469236,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsWhatsNewsKit:whatsNewsShow:417",
+    "symbolID": "PooToolsWhatsNewsKit:whatsNewsShow:420",
     "symbolName": "whatsNewsShow",
     "declarationPath": "PooToolsSource/WhatsNewsKit/PTWhatsNewsViewController.swift",
-    "line": 417,
+    "line": 420,
     "ownerTarget": "PooToolsWhatsNewsKit",
     "kind": "func",
     "accessLevel": "public",
