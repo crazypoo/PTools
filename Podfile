@@ -65,6 +65,10 @@ target 'PooTools_Example' do
 #https://github.com/helele90/APPAnalyze
 
   pod 'PooTools/InputAll', :path => './'
+  # English: Include the acknowledgement UI and Core contract in the Example target for the clickable demo.
+  # Español: Incluye la UI de acknowledgements y el contrato Core en el target Example para el demo interactivo.
+  # 中文：将致谢 UI 和 Core 契约加入 Example Target，确保 Demo 可以真实点击运行。
+  pod 'PooTools/Acknowledgements', :path => './'
   # English: Include the opt-in PooTools features used directly by the example target.
   # Español: Incluye las funciones opt-in de PooTools que el target de ejemplo usa directamente.
   # 中文：显式加入示例 Target 直接使用的 PooTools 可选功能。

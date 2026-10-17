@@ -135,6 +135,8 @@ enum PTDemoRegistry {
         make("device.phone-call", "PooToolsTelephony", "打电话", .permissionsDevice, .action, .action, .simulatorLimited, legacy: "打电话", tags: ["telephony"]),
         make("storage.clear-cache", "PToolsStorage", "清理缓存", .storageData, .action, .action, .runnable, legacy: "清理缓存", tags: ["cache"]),
         make("security.biometrics", "PooToolsBioID", "TouchID", .securityPrivacy, .interactive, .action, .physicalDeviceRequired, [.biometrics, .physicalDevice], legacy: "TouchID", tags: ["biometric"]),
+        make("security.acknowledgements", "PToolsAcknowledgements", "开源许可证", .securityPrivacy, .interactive, .push, .runnable, tags: ["license", "offline", "spm", "cocoapods"]),
+        make("security.acknowledgements-headless", "PToolsAcknowledgementsCore", "许可证纯数据", .securityPrivacy, .interactive, .push, .runnable, tags: ["license", "headless", "query", "export"]),
         make("device.rotation", "PooToolsRotation", "旋转屏幕", .permissionsDevice, .action, .action, .simulatorLimited, legacy: "旋转屏幕", tags: ["orientation"]),
         make("ui.share", "PooToolsShare", "分享", .uiComponents, .interactive, .sheet, .runnable, legacy: "分享", tags: ["share"]),
         make("network.check-update", "PooToolsCheckUpdate", "检测更新", .networkConnectivity, .scenario, .sheet, .runnable, legacy: "检测更新", tags: ["update"]),
@@ -338,6 +340,16 @@ final class PTDemoCoordinator {
             return PTImageClarityDemoViewController()
         case "ui.rich-text-attachment-multiline":
             return PTRichTextAttachmentMultilineDemoViewController()
+        case "security.acknowledgements":
+            guard let manifest = PTDemoAcknowledgementsData.manifest else {
+                return PTFuncDetailViewController(descriptor: descriptor)
+            }
+            return PTAcknowledgementsViewController(
+                configuration: PTDemoAcknowledgementsData.configuration,
+                dataSource: PTInMemoryAcknowledgementsDataSource(manifest: manifest)
+            )
+        case "security.acknowledgements-headless":
+            return PTAcknowledgementsHeadlessDemoViewController()
         case "infrastructure.database":
             return PTDatabaseInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
         case "infrastructure.auth":
@@ -387,6 +399,98 @@ final class PTDemoCoordinator {
         case .sheet, .inline, .action:
             UIViewController.currentPresentToSheet(vc: viewController, sizes: sizes)
         }
+    }
+}
+
+// English: The demo uses a local fixture so it proves the UI and headless APIs without network access.
+// Español: El demo usa un fixture local para demostrar la UI y las APIs headless sin red.
+// 中文：Demo 使用本地 Fixture，确保 UI 和纯数据 API 在无网络时也能真实运行。
+@MainActor
+private enum PTDemoAcknowledgementsData {
+    static let configuration: PTAcknowledgementsConfiguration = {
+        var value = PTAcknowledgementsConfiguration()
+        value.title = "开源许可证"
+        value.footer = "SAMPLE · 构建期清单 / Manifest de compilación / Build-time manifest"
+        value.grouping = .licenseType
+        return value
+    }()
+
+    static let manifest: PTLicenseManifest? = {
+        let license = PTLicenseDocument(
+            fileName: "LICENSE",
+            text: "Permission is hereby granted, free of charge, to use this sample.\n"
+        )
+        let entries = [
+            PTAcknowledgement(
+                id: "sample.ptools.acknowledgements",
+                name: "PTools Acknowledgements",
+                version: "5.66.0",
+                sourceManagers: [.manual],
+                licenseExpression: "MIT",
+                licenseTexts: [license],
+                verification: .verified
+            ),
+            PTAcknowledgement(
+                id: "sample.foundation",
+                name: "Foundation",
+                version: nil,
+                sourceManagers: [.manual],
+                licenseExpression: "Apple SDK",
+                verification: .review
+            )
+        ]
+        return try? PTAcknowledgementsProvider.make(
+            entries: entries,
+            generatorVersion: "demo",
+            appTarget: "PooTools_Example"
+        )
+    }()
+}
+
+// English: This screen demonstrates Core queries, statistics, and typed failure handling without the built-in list UI.
+// Español: Esta pantalla demuestra consultas, estadísticas y errores tipados de Core sin la UI de lista integrada.
+// 中文：这个页面展示 Core 查询、统计和类型化错误处理，不依赖内置列表 UI。
+@MainActor
+private final class PTAcknowledgementsHeadlessDemoViewController: PTBaseViewController {
+    private let textView = UITextView()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = "许可证纯数据"
+        view.backgroundColor = .systemBackground
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.isEditable = false
+        textView.adjustsFontForContentSizeCategory = true
+        textView.font = .preferredFont(forTextStyle: .body)
+        textView.textColor = .label
+        textView.backgroundColor = .clear
+        view.addSubview(textView)
+        NSLayoutConstraint.activate([
+            textView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
+            textView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+            textView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            textView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        textView.text = makeText()
+    }
+
+    private func makeText() -> String {
+        guard let manifest = PTDemoAcknowledgementsData.manifest else {
+            return "无法创建本地示例清单 / No se pudo crear el manifest local / Unable to create local manifest"
+        }
+        let statistics = manifest.statistics()
+        let names = manifest.search("PTools").map(\.name).joined(separator: ", ")
+        let jsonSize = (try? manifest.export(.json).count) ?? 0
+        let missingText = manifest.validationIssues().filter { $0.code == "missing-license-text" }.count
+        return [
+            "Headless Core Demo",
+            "条目数 / Entradas / Entries: \(statistics.totalDependencies)",
+            "已验证 / Verificadas / Verified: \(statistics.verificationCounts[PTAcknowledgementVerification.verified.rawValue, default: 0])",
+            "缺少原文 / Sin texto / Missing text: \(missingText)",
+            "搜索 PTools / Búsqueda / Search: \(names)",
+            "JSON 导出 / Export JSON: \(jsonSize) bytes",
+            "\n数据只来自内存 Fixture，不访问网络。\nDatos locales; sin red.\nLocal fixture; no network."
+        ].joined(separator: "\n")
     }
 }
 

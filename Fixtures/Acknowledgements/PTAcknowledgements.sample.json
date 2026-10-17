@@ -1,0 +1,24 @@
+{
+  "appTarget" : "PToolsExample",
+  "entries" : [
+    {
+      "id" : "spm:example/fixture@1.0.0",
+      "licenseExpression" : "MIT",
+      "licenseTexts" : [
+        {
+          "fileName" : "LICENSE",
+          "sha256" : "dbdea559ed4ac91681d4f3ba90e01e08e13d202a7abea5ed57ac4ae303ec8ac3",
+          "text" : "Permission is hereby granted.\n"
+        }
+      ],
+      "name" : "Fixture",
+      "notices" : [ ],
+      "sourceManagers" : [ "swiftPM" ],
+      "verification" : "verified",
+      "version" : "1.0.0"
+    }
+  ],
+  "generatedAt" : null,
+  "generatorVersion" : "fixture",
+  "schemaVersion" : 1
+}

@@ -6,6 +6,14 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.66.0 — 2026-10-18
+
+- 新增 `PToolsAcknowledgementsCore`：Foundation-only 的离线许可证清单模型、读取、查询、筛选、统计、原文、导出、typed error 和 actor Repository。
+- 新增可选 `PToolsAcknowledgements` UIKit 模块：列表、搜索、分组、详情、复制和分享；UIKit 目标可用时，列表与详情页优先复用 `PTBaseViewController`。
+- 新增 `pt-acknowledgements` 构建期生成器，支持 Package.resolved、Podfile.lock、本地 checkout 和手工覆盖，不在 App 运行时联网扫描。
+- 新增 Example 可点击 Demo、Core-only 测试/fixture、生成与 strict 验证脚本及三语模块指南。
+- 保持 iOS 17+ / Swift 6+；Core 继续为 Foundation-only，并保留 macOS、watchOS、visionOS 的跨平台使用边界。
+
 ## 5.65.8 — 2026-10-18
 
 - 修复 `PToolsNetworkModelCore` 已有 target 未发布为 SwiftPM product 的问题；类型化网络响应契约现在可以被独立消费者直接导入。

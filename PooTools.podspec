@@ -33,6 +33,37 @@ Pod::Spec.new do |s|
         subspec.frameworks = 'Foundation'
     end
 
+    # English: Publish the offline acknowledgements data contract without UIKit or the generator.
+    # Español: Publica el contrato offline de acknowledgements sin UIKit ni el generador.
+    # 中文：公开不依赖 UIKit 和生成器的离线致谢数据契约。
+    s.subspec 'AcknowledgementsCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsAcknowledgementsCore/*.{h,m,swift}'
+        subspec.frameworks = 'Foundation'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_ACKNOWLEDGEMENTS_CORE POOTOOLS_COCOAPODS"
+        }
+    end
+
+    # English: Keep the UIKit acknowledgements screens optional and dependent on the Core contract.
+    # Español: Mantiene opcionales las pantallas UIKit y dependientes del contrato Core.
+    # 中文：将 UIKit 致谢页面保持为可选层，并依赖 Core 契约。
+    s.subspec 'Acknowledgements' do |subspec|
+        subspec.dependency 'PooTools/AcknowledgementsCore'
+        # English: Reuse PTBaseViewController for the UIKit screen when the PTools UI layer is selected.
+        # Español: Reutiliza PTBaseViewController para la pantalla UIKit cuando se selecciona la capa UI de PTools.
+        # 中文：选择 PTools UI 层时复用 PTBaseViewController。
+        subspec.dependency 'PooTools/Core'
+        # English: Reuse the canonical PTSearchViewController instead of creating a second search pipeline.
+        # Español: Reutiliza PTSearchViewController como canal de búsqueda único en lugar de crear otro pipeline.
+        # 中文：复用唯一的 PTSearchViewController 搜索管线，避免重复实现搜索逻辑。
+        subspec.dependency 'PooTools/Search'
+        subspec.source_files = 'PooToolsSource/PToolsAcknowledgements/**/*.{h,m,swift}'
+        subspec.frameworks = 'UIKit', 'Foundation'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_ACKNOWLEDGEMENTS POOTOOLS_COCOAPODS"
+        }
+    end
+
     # English: Publish the Foundation-only PTModel core without SmartCodable or KakaJSON.
     # Español: Publica el núcleo PTModel basado solo en Foundation sin SmartCodable ni KakaJSON.
     # 中文：公开仅依赖 Foundation 的 PTModel 核心，不引入 SmartCodable 或 KakaJSON。

@@ -28,6 +28,14 @@ let package = Package(
         // Español: Publica las capas basadas solo en Foundation para que los clientes dependan del módulo mínimo estable.
         // 中文：公开仅依赖 Foundation 的分层模块，让调用方按需依赖最小稳定模块。
         .library(name: "PToolsCore", targets: ["PToolsCore"]),
+        // English: Publish the offline license manifest contract without UIKit or the generator.
+        // Español: Publica el contrato offline del manifest de licencias sin UIKit ni el generador.
+        // 中文：公开离线许可证 Manifest 契约，不引入 UIKit 或生成器。
+        .library(name: "PToolsAcknowledgementsCore", targets: ["PToolsAcknowledgementsCore"]),
+        // English: Keep the optional UIKit renderer separate from the headless data product.
+        // Español: Mantiene el renderer UIKit opcional separado del producto de datos headless.
+        // 中文：将可选 UIKit 展示层与纯数据产品分离。
+        .library(name: "PToolsAcknowledgements", targets: ["PToolsAcknowledgements"]),
         // English: Publish the dependency-free PTModel contracts and conversion core.
         // Español: Publica los contratos y el núcleo de conversión PTModel sin dependencias de terceros.
         // 中文：公开不依赖第三方的 PTModel 契约和转换核心。
@@ -62,6 +70,10 @@ let package = Package(
         .executable(name: "PTModelLegacyKakaJSONFixture", targets: ["PTModelLegacyKakaJSONFixture"]),
         .executable(name: "PTModelMixedLegacyFixture", targets: ["PTModelMixedLegacyFixture"]),
         .executable(name: "PTModelOnlyFixture", targets: ["PTModelOnlyFixture"]),
+        // English: Run dependency collection and strict license validation on the macOS build host.
+        // Español: Ejecuta la recopilación y validación estricta en el host macOS de compilación.
+        // 中文：在 macOS 构建主机上执行依赖收集和严格许可证校验。
+        .executable(name: "pt-acknowledgements", targets: ["PTAcknowledgementsGenerator"]),
         // English: Publish the Foundation-only device identity and capability layer independently.
         // Español: Publica de forma independiente la capa de identidad y capacidades basada solo en Foundation.
         // 中文：独立公开仅依赖 Foundation 的设备身份与能力层。
@@ -366,6 +378,28 @@ let package = Package(
                 .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
+        .target(
+            name: "PToolsAcknowledgementsCore",
+            path: "PooToolsSource/PToolsAcknowledgementsCore",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
+        ),
+        .target(
+            name: "PToolsAcknowledgements",
+            dependencies: [
+                "PToolsAcknowledgementsCore",
+                .target(name: "PooToolsSearch", condition: .when(platforms: [.iOS, .tvOS, .visionOS])),
+                // English: Reuse the PTools base controller on UIKit platforms without coupling the headless product.
+                // Español: Reutiliza el controlador base de PTools en plataformas UIKit sin acoplar el producto headless.
+                // 中文：在 UIKit 平台复用 PTools 基类，同时不耦合纯数据产品。
+                .target(name: "ptools", condition: .when(platforms: [.iOS, .tvOS, .visionOS]))
+            ],
+            path: "PooToolsSource/PToolsAcknowledgements",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
+        ),
         // English: PTModelCore has no UIKit, SmartCodable, KakaJSON, or runtime reflection dependency.
         // Español: PTModelCore no depende de UIKit, SmartCodable, KakaJSON ni reflexión en tiempo de ejecución.
         // 中文：PTModelCore 不依赖 UIKit、SmartCodable、KakaJSON 或运行时反射。
@@ -458,6 +492,14 @@ let package = Package(
             name: "PTModelOnlyFixture",
             dependencies: ["PToolsModel"],
             path: "Fixtures/PTModelConsumers/PTModelOnlyApp"
+        ),
+        .executableTarget(
+            name: "PTAcknowledgementsGenerator",
+            dependencies: ["PToolsAcknowledgementsCore"],
+            path: "Tools/PTAcknowledgementsGenerator",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
         ),
         // English: PToolsDevice has no PTools or third-party dependency and is safe to reuse across Apple platforms.
         // Español: PToolsDevice no depende de PTools ni de terceros y puede reutilizarse en plataformas Apple.
@@ -1115,6 +1157,14 @@ let package = Package(
             name: "PToolsCoreTests",
             dependencies: ["PToolsCore"],
             path: "Tests/PooToolsCoreTests"
+        ),
+        .testTarget(
+            name: "PToolsAcknowledgementsCoreTests",
+            dependencies: ["PToolsAcknowledgementsCore"],
+            path: "Tests/PToolsAcknowledgementsCoreTests",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
         ),
         // English: Keep model conversion tests independent from UIKit and legacy model frameworks.
         // Español: Mantiene las pruebas de conversión independientes de UIKit y de los frameworks heredados.

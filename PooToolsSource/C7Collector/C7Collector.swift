@@ -87,8 +87,10 @@ extension C7Collector {
             return nil
         }
         delegate?.captureOutput?(self, pixelBuffer: pixelBuffer)
-        let texture = pixelBuffer.c7.toMTLTexture(textureCache: HarbethContext.shared.cvMetalTextureCache)
-        let dest = HarbethIO(element: texture, filters: filters)
+        guard let texture = pixelBuffer.c7.toMTLTexture(textureCache: Harbeth.Device.sharedTextureCache()) else {
+            return nil
+        }
+        let dest = HarbethIO<MTLTexture>(element: texture, filters: filters)
         guard let texture = try? dest.output() else {
             return nil
         }
@@ -101,13 +103,13 @@ extension C7Collector {
             return
         }
         delegate?.captureOutput?(self, pixelBuffer: pixelBuffer)
-        guard let texture = pixelBuffer.c7.toMTLTexture(textureCache: HarbethContext.shared.cvMetalTextureCache) else {
+        guard let texture = pixelBuffer.c7.toMTLTexture(textureCache: Harbeth.Device.sharedTextureCache()) else {
             return
         }
-        var dest = HarbethIO(element: texture, filters: filters)
+        var dest = HarbethIO<MTLTexture>(element: texture, filters: filters)
         dest.transmitOutputRealTimeCommit = true
         
-        dest.transmitOutput(success: { [weak self] desTexture in
+        dest.transmitOutput(success: { [weak self] (desTexture: MTLTexture) in
             let textureBox = PTSystemTextureBox(value: desTexture)
             guard let outputImage = desTexture.c7.toImage() else { return }
             let imageBox = PTSystemImageBox(value: outputImage)
