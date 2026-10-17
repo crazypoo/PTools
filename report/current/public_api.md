@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: 006e0ce7bc03d83a9975c28592ab72db02d84f0c
-Generated at: 2026-10-16T16:50:26Z
+Source revision: 4c508f23263c51171d48163d641a4d808069b81a
+Generated at: 2026-10-17T00:59:28Z
 -->
 
 # PTools 当前公开 API 清单
@@ -4568,12 +4568,12 @@ Generated at: 2026-10-16T16:50:26Z
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:108 | func | public | public func didReceive(_ payloads: [MXDiagnosticPayload]) { |
 | PooToolsSource/MXMetricKitManager/MetricsManager.swift:146 | func | public | public func uploadPendingMetrics() { |
 | PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:396 | class | open | open class func centerOfScrollVIewContent(scrollView:UIScrollView) -> CGPoint { |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:700 | func | public | public func viewForZooming(in scrollView: UIScrollView) -> UIView? { |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:705 | func | public | public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) { |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:710 | func | public | public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { } |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:712 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { } |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:714 | func | public | public func scrollViewDidZoom(_ scrollView: UIScrollView) { |
-| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:724 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:699 | func | public | public func viewForZooming(in scrollView: UIScrollView) -> UIView? { |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:704 | func | public | public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) { |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:709 | func | public | public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { } |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:711 | func | public | public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { } |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:713 | func | public | public func scrollViewDidZoom(_ scrollView: UIScrollView) { |
+| PooToolsSource/MediaViewer/PTMediaBrowserCell.swift:723 | func | public | public func scrollViewDidScroll(_ scrollView: UIScrollView) { |
 | PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift:14 | typealias | public | public typealias PTViewerSaveBlock = (_ finish:Bool) -> Void |
 | PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift:15 | typealias | public | public typealias PTViewerIndexBlock = (_ dataIndex:Int) -> Void |
 | PooToolsSource/MediaViewer/PTMediaBrowserConfig.swift:16 | typealias | public | public typealias PTViewerEXIndexBlock = (_ dataIndex:Int,_ image:UIImage?) -> Void |

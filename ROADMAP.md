@@ -1,8 +1,15 @@
 # PTools 路线图
 
-> 当前代码基线：`5.65.5`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.65.6`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.65.4`；`5.65.5` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.65.5`；`5.65.6` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.65.6 SwiftPM Core 视频资源入口收口
+
+- ✅ 将 `URL.pt_isVideoResource` 提升为 Core 的公开跨 target API，保留内部视频扩展名集合实现。
+- ✅ MediaViewer 和 ScrollBanner 不再直接访问 `GlobalVideoExts`，统一复用 Core 视频资源判定逻辑。
+- ✅ 将 `pt_isVideoResource` 纳入全模块 SwiftPM 符号归属审计，覆盖同类隐式依赖。
+- ⬜ 仍需在真实宿主项目中完成独立 SwiftPM Debug/Release 与真机回归。
 
 ## 5.65.5 SwiftPM UI Foundation 边界收口
 

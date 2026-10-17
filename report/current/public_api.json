@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "006e0ce7bc03d83a9975c28592ab72db02d84f0c",
-  "generated_at": "2026-10-16T16:50:26Z",
+  "source_revision": "4c508f23263c51171d48163d641a4d808069b81a",
+  "generated_at": "2026-10-17T00:59:28Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -36450,7 +36450,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func viewForZooming(in scrollView: UIScrollView) -> UIView?",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 700,
+      "line": 699,
       "access": "public",
       "kind": "func",
       "declaration": "public func viewForZooming(in scrollView: UIScrollView) -> UIView? {"
@@ -36458,7 +36458,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 705,
+      "line": 704,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {"
@@ -36466,7 +36466,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 710,
+      "line": 709,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) { }"
@@ -36474,7 +36474,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 712,
+      "line": 711,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { }"
@@ -36482,7 +36482,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidZoom(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 714,
+      "line": 713,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidZoom(_ scrollView: UIScrollView) {"
@@ -36490,7 +36490,7 @@
     {
       "key": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift|public|func|public func scrollViewDidScroll(_ scrollView: UIScrollView)",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 724,
+      "line": 723,
       "access": "public",
       "kind": "func",
       "declaration": "public func scrollViewDidScroll(_ scrollView: UIScrollView) {"

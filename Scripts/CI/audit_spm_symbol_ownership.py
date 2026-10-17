@@ -97,6 +97,10 @@ KNOWN_SYMBOLS = {
     "PTVideoCoverCache": "ptools",
     "PTVideoExportError": "ptools",
     "PTVideoThumbnailService": "ptools",
+    # English: Probe the public URL media classifier used by independent media targets.
+    # Español: Comprueba el clasificador público de medios URL usado por los targets multimedia independientes.
+    # 中文：检查独立媒体 target 使用的公开 URL 媒体分类入口。
+    "pt_isVideoResource": "ptools",
     "PTSymbolResolver": "PToolsSymbols",
     "PTSymbol": "PToolsSymbols",
     "PTFeedbackCenter": "PToolsCore",

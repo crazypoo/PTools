@@ -89,8 +89,7 @@ public class PTBannerCell: PTBaseNormalCell {
         imageView.imageSet = placeholder
 
         if let mediaURL = mediaURL(from: data.media) {
-            let mediaEX = mediaURL.pathExtension.lowercased()
-            if GlobalVideoExts.contains(mediaEX) {
+            if mediaURL.pt_isVideoResource {
                 videoURL = mediaURL.absoluteString
                 playButton.isHidden = !showPlayButton
                 playButton.isUserInteractionEnabled = showPlayButton

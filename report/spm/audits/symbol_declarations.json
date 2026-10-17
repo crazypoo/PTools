@@ -134238,7 +134238,7 @@
     "line": 183,
     "ownerTarget": "ptools",
     "kind": "extension",
-    "accessLevel": "internal",
+    "accessLevel": "public",
     "extensionReceiverType": "URL",
     "availability": "",
     "conditionalCompilationBranch": ""
@@ -289524,8 +289524,8 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:pathExtension:465",
-    "symbolName": "pathExtension",
+    "symbolID": "PooToolsMediaViewer:mediaURL:465",
+    "symbolName": "mediaURL",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
     "line": 465,
     "ownerTarget": "PooToolsMediaViewer",
@@ -289536,10 +289536,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:hideAnimation:487",
+    "symbolID": "PooToolsMediaViewer:hideAnimation:486",
     "symbolName": "hideAnimation",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 487,
+    "line": 486,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "internal",
@@ -289548,10 +289548,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:targetTemp:494",
+    "symbolID": "PooToolsMediaViewer:targetTemp:493",
     "symbolName": "targetTemp",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 494,
+    "line": 493,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "let",
     "accessLevel": "internal",
@@ -289560,10 +289560,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:bounceToOriginal:514",
+    "symbolID": "PooToolsMediaViewer:bounceToOriginal:513",
     "symbolName": "bounceToOriginal",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 514,
+    "line": 513,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "internal",
@@ -289572,11 +289572,59 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:extension:PTMediaBrowserCell:537",
+    "symbolID": "PooToolsMediaViewer:extension:PTMediaBrowserCell:536",
     "symbolName": "PTMediaBrowserCell",
+    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+    "line": 536,
+    "ownerTarget": "PooToolsMediaViewer",
+    "kind": "extension",
+    "accessLevel": "internal",
+    "extensionReceiverType": "PTMediaBrowserCell",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsMediaViewer:setImageTypeView:537",
+    "symbolName": "setImageTypeView",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
     "line": 537,
     "ownerTarget": "PooToolsMediaViewer",
+    "kind": "func",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsMediaViewer:baseLoadImageData:544",
+    "symbolName": "baseLoadImageData",
+    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+    "line": 544,
+    "ownerTarget": "PooToolsMediaViewer",
+    "kind": "func",
+    "accessLevel": "private",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsMediaViewer:handleImageLoadFinish:554",
+    "symbolName": "handleImageLoadFinish",
+    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+    "line": 554,
+    "ownerTarget": "PooToolsMediaViewer",
+    "kind": "func",
+    "accessLevel": "private",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsMediaViewer:extension:PTMediaBrowserCell:577",
+    "symbolName": "PTMediaBrowserCell",
+    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+    "line": 577,
+    "ownerTarget": "PooToolsMediaViewer",
     "kind": "extension",
     "accessLevel": "internal",
     "extensionReceiverType": "PTMediaBrowserCell",
@@ -289584,59 +289632,11 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:setImageTypeView:538",
-    "symbolName": "setImageTypeView",
-    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 538,
-    "ownerTarget": "PooToolsMediaViewer",
-    "kind": "func",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsMediaViewer:baseLoadImageData:545",
-    "symbolName": "baseLoadImageData",
-    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 545,
-    "ownerTarget": "PooToolsMediaViewer",
-    "kind": "func",
-    "accessLevel": "private",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsMediaViewer:handleImageLoadFinish:555",
-    "symbolName": "handleImageLoadFinish",
-    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 555,
-    "ownerTarget": "PooToolsMediaViewer",
-    "kind": "func",
-    "accessLevel": "private",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsMediaViewer:extension:PTMediaBrowserCell:578",
-    "symbolName": "PTMediaBrowserCell",
+    "symbolID": "PooToolsMediaViewer:videoUrlLoad:578",
+    "symbolName": "videoUrlLoad",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
     "line": 578,
     "ownerTarget": "PooToolsMediaViewer",
-    "kind": "extension",
-    "accessLevel": "internal",
-    "extensionReceiverType": "PTMediaBrowserCell",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsMediaViewer:videoUrlLoad:579",
-    "symbolName": "videoUrlLoad",
-    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 579,
-    "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "internal",
     "extensionReceiverType": "",
@@ -289644,10 +289644,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:handleVideoLoading:590",
+    "symbolID": "PooToolsMediaViewer:handleVideoLoading:589",
     "symbolName": "handleVideoLoading",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 590,
+    "line": 589,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "internal",
@@ -289656,10 +289656,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:setupVideoView:613",
+    "symbolID": "PooToolsMediaViewer:setupVideoView:612",
     "symbolName": "setupVideoView",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 613,
+    "line": 612,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "private",
@@ -289668,23 +289668,23 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:videoPlay:631",
+    "symbolID": "PooToolsMediaViewer:videoPlay:630",
     "symbolName": "videoPlay",
+    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+    "line": 630,
+    "ownerTarget": "PooToolsMediaViewer",
+    "kind": "func",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsMediaViewer:videoController:631",
+    "symbolName": "videoController",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
     "line": 631,
     "ownerTarget": "PooToolsMediaViewer",
-    "kind": "func",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsMediaViewer:videoController:632",
-    "symbolName": "videoController",
-    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 632,
-    "ownerTarget": "PooToolsMediaViewer",
     "kind": "let",
     "accessLevel": "internal",
     "extensionReceiverType": "",
@@ -289692,10 +289692,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:handleVideoLoadError:657",
+    "symbolID": "PooToolsMediaViewer:handleVideoLoadError:656",
     "symbolName": "handleVideoLoadError",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 657,
+    "line": 656,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "private",
@@ -289704,10 +289704,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:videoAVItem:666",
+    "symbolID": "PooToolsMediaViewer:videoAVItem:665",
     "symbolName": "videoAVItem",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 666,
+    "line": 665,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "private",
@@ -289716,23 +289716,23 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:extension:PTMediaBrowserCell:699",
+    "symbolID": "PooToolsMediaViewer:extension:PTMediaBrowserCell:698",
     "symbolName": "PTMediaBrowserCell",
+    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+    "line": 698,
+    "ownerTarget": "PooToolsMediaViewer",
+    "kind": "extension",
+    "accessLevel": "internal",
+    "extensionReceiverType": "PTMediaBrowserCell",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsMediaViewer:viewForZooming:699",
+    "symbolName": "viewForZooming",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
     "line": 699,
     "ownerTarget": "PooToolsMediaViewer",
-    "kind": "extension",
-    "accessLevel": "internal",
-    "extensionReceiverType": "PTMediaBrowserCell",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsMediaViewer:viewForZooming:700",
-    "symbolName": "viewForZooming",
-    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 700,
-    "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "public",
     "extensionReceiverType": "",
@@ -289740,10 +289740,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:scrollViewDidEndZooming:705",
+    "symbolID": "PooToolsMediaViewer:scrollViewDidEndZooming:704",
     "symbolName": "scrollViewDidEndZooming",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 705,
+    "line": 704,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "public",
@@ -289752,10 +289752,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:scrollViewDidEndDragging:710",
+    "symbolID": "PooToolsMediaViewer:scrollViewDidEndDragging:709",
     "symbolName": "scrollViewDidEndDragging",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 710,
+    "line": 709,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "public",
@@ -289764,10 +289764,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:scrollViewDidEndDecelerating:712",
+    "symbolID": "PooToolsMediaViewer:scrollViewDidEndDecelerating:711",
     "symbolName": "scrollViewDidEndDecelerating",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 712,
+    "line": 711,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "public",
@@ -289776,10 +289776,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:scrollViewDidZoom:714",
+    "symbolID": "PooToolsMediaViewer:scrollViewDidZoom:713",
     "symbolName": "scrollViewDidZoom",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 714,
+    "line": 713,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "public",
@@ -289788,10 +289788,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:centerPoint:716",
+    "symbolID": "PooToolsMediaViewer:centerPoint:715",
     "symbolName": "centerPoint",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 716,
+    "line": 715,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "let",
     "accessLevel": "internal",
@@ -289800,10 +289800,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:scrollViewDidScroll:724",
+    "symbolID": "PooToolsMediaViewer:scrollViewDidScroll:723",
     "symbolName": "scrollViewDidScroll",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 724,
+    "line": 723,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "public",
@@ -289812,10 +289812,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:extension:PTMediaBrowserCell:729",
+    "symbolID": "PooToolsMediaViewer:extension:PTMediaBrowserCell:728",
     "symbolName": "PTMediaBrowserCell",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 729,
+    "line": 728,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "extension",
     "accessLevel": "internal",
@@ -289824,23 +289824,23 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:extension:PTMediaBrowserCell:731",
+    "symbolID": "PooToolsMediaViewer:extension:PTMediaBrowserCell:730",
     "symbolName": "PTMediaBrowserCell",
+    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+    "line": 730,
+    "ownerTarget": "PooToolsMediaViewer",
+    "kind": "extension",
+    "accessLevel": "internal",
+    "extensionReceiverType": "PTMediaBrowserCell",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsMediaViewer:showLoading:731",
+    "symbolName": "showLoading",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
     "line": 731,
     "ownerTarget": "PooToolsMediaViewer",
-    "kind": "extension",
-    "accessLevel": "internal",
-    "extensionReceiverType": "PTMediaBrowserCell",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsMediaViewer:showLoading:732",
-    "symbolName": "showLoading",
-    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 732,
-    "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "private",
     "extensionReceiverType": "",
@@ -289848,10 +289848,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:hideLoading:736",
+    "symbolID": "PooToolsMediaViewer:hideLoading:735",
     "symbolName": "hideLoading",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 736,
+    "line": 735,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "private",
@@ -289860,10 +289860,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:createReloadButton:740",
+    "symbolID": "PooToolsMediaViewer:createReloadButton:739",
     "symbolName": "createReloadButton",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 740,
+    "line": 739,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "func",
     "accessLevel": "internal",
@@ -289872,8 +289872,20 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:viewportWidth:746",
+    "symbolID": "PooToolsMediaViewer:viewportWidth:745",
     "symbolName": "viewportWidth",
+    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+    "line": 745,
+    "ownerTarget": "PooToolsMediaViewer",
+    "kind": "let",
+    "accessLevel": "internal",
+    "extensionReceiverType": "",
+    "availability": "",
+    "conditionalCompilationBranch": ""
+  },
+  {
+    "symbolID": "PooToolsMediaViewer:reloadMaxWidth:746",
+    "symbolName": "reloadMaxWidth",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
     "line": 746,
     "ownerTarget": "PooToolsMediaViewer",
@@ -289884,22 +289896,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:reloadMaxWidth:747",
-    "symbolName": "reloadMaxWidth",
-    "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 747,
-    "ownerTarget": "PooToolsMediaViewer",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsMediaViewer:reloadWidth:749",
+    "symbolID": "PooToolsMediaViewer:reloadWidth:748",
     "symbolName": "reloadWidth",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 749,
+    "line": 748,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "var",
     "accessLevel": "internal",
@@ -289908,10 +289908,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsMediaViewer:baseHeight:750",
+    "symbolID": "PooToolsMediaViewer:baseHeight:749",
     "symbolName": "baseHeight",
     "declarationPath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 750,
+    "line": 749,
     "ownerTarget": "PooToolsMediaViewer",
     "kind": "var",
     "accessLevel": "internal",
@@ -422160,22 +422160,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsScrollBanner:mediaEX:92",
-    "symbolName": "mediaEX",
-    "declarationPath": "PooToolsSource/ScrollBanner/PTBannerCell.swift",
-    "line": 92,
-    "ownerTarget": "PooToolsScrollBanner",
-    "kind": "let",
-    "accessLevel": "internal",
-    "extensionReceiverType": "",
-    "availability": "",
-    "conditionalCompilationBranch": ""
-  },
-  {
-    "symbolID": "PooToolsScrollBanner:image:101",
+    "symbolID": "PooToolsScrollBanner:image:100",
     "symbolName": "image",
     "declarationPath": "PooToolsSource/ScrollBanner/PTBannerCell.swift",
-    "line": 101,
+    "line": 100,
     "ownerTarget": "PooToolsScrollBanner",
     "kind": "let",
     "accessLevel": "internal",
@@ -422184,10 +422172,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsScrollBanner:mediaURL:118",
+    "symbolID": "PooToolsScrollBanner:mediaURL:117",
     "symbolName": "mediaURL",
     "declarationPath": "PooToolsSource/ScrollBanner/PTBannerCell.swift",
-    "line": 118,
+    "line": 117,
     "ownerTarget": "PooToolsScrollBanner",
     "kind": "func",
     "accessLevel": "private",
@@ -422196,10 +422184,10 @@
     "conditionalCompilationBranch": ""
   },
   {
-    "symbolID": "PooToolsScrollBanner:decoded:126",
+    "symbolID": "PooToolsScrollBanner:decoded:125",
     "symbolName": "decoded",
     "declarationPath": "PooToolsSource/ScrollBanner/PTBannerCell.swift",
-    "line": 126,
+    "line": 125,
     "ownerTarget": "PooToolsScrollBanner",
     "kind": "let",
     "accessLevel": "internal",

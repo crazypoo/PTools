@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "006e0ce7bc03d83a9975c28592ab72db02d84f0c",
-  "generated_at": "2026-10-16T16:51:38Z",
+  "source_revision": "4c508f23263c51171d48163d641a4d808069b81a",
+  "generated_at": "2026-10-17T01:00:30Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -4076,7 +4076,7 @@
     },
     {
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "lines": 761,
+      "lines": 760,
       "classification": "ok"
     },
     {
@@ -5396,7 +5396,7 @@
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTBannerCell.swift",
-      "lines": 129,
+      "lines": 128,
       "classification": "ok"
     },
     {

@@ -462,9 +462,8 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     
     func loadDataUrl(loadUrl:String, currentID: UUID) {
         if !loadUrl.isEmpty {
-            let pathExtension = URL(string: loadUrl)?.pathExtension
-                ?? URL(fileURLWithPath: loadUrl).pathExtension
-            if GlobalVideoExts.contains(pathExtension.lowercased()) {
+            let mediaURL = URL(string: loadUrl) ?? URL(fileURLWithPath: loadUrl)
+            if mediaURL.pt_isVideoResource {
                 self.videoUrlLoad(url: loadUrl,currentID:currentID)
             } else {
                 if !loadUrl.stringIsEmpty() {

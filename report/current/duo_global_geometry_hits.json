@@ -1,8 +1,8 @@
 {
   "generator": "Scripts/audit_duo_uikit_coverage.py",
   "generated_by": "Scripts/audit_duo_uikit_coverage.py",
-  "source_revision": "006e0ce7bc03d83a9975c28592ab72db02d84f0c",
-  "generated_at": "2026-10-16T17:09:44.202375+00:00",
+  "source_revision": "4c508f23263c51171d48163d641a4d808069b81a",
+  "generated_at": "2026-10-17T00:58:53.543497+00:00",
   "hits": [
     {
       "kind": "statusBarHeight",
@@ -2431,13 +2431,13 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 749,
+      "line": 748,
       "text": "var reloadWidth = reloadButton.sizeFor(height: 34).width + 16"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 753,
+      "line": 752,
       "text": "baseHeight = reloadButton.sizeFor(lineSpacing: 2.5,width: reloadMaxWidth).height + 16"
     },
     {

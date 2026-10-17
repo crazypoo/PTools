@@ -6,6 +6,11 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.65.6 — 2026-10-17
+
+- 修复 `PooToolsScrollBanner` 和 `PooToolsMediaViewer` 跨 SwiftPM target 访问 Core 内部 `GlobalVideoExts` 导致的独立编译失败；统一改用 Core 公开的 `URL.pt_isVideoResource` 视频资源判定入口。
+- 将 `URL.pt_isVideoResource` 纳入跨 target 符号审计，避免 CocoaPods 聚合可见性再次掩盖 SwiftPM 直接依赖问题。
+
 ## 5.65.5 — 2026-10-17
 
 - 修复 `PooToolsInput/YoshikoTextField` 独立 SwiftPM target 缺少 `PToolsUIFoundation` 显式导入的问题。

@@ -576,6 +576,15 @@
     "ownerCandidates": "ptools"
   },
   {
+    "symbolName": "pt_isVideoResource",
+    "referencePath": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
+    "line": 492,
+    "ownerTarget": "ptools",
+    "requiredModule": "ptools",
+    "currentImports": "AVKit;SnapKit;UIKit",
+    "ownerCandidates": "ptools"
+  },
+  {
     "symbolName": "PTAppStoreFunction",
     "referencePath": "PooToolsSource/ApplicationFunction/PTOpenSystemFunction.swift",
     "line": 124,
@@ -5634,6 +5643,15 @@
     "ownerCandidates": "ptools"
   },
   {
+    "symbolName": "pt_isVideoResource",
+    "referencePath": "PooToolsSource/Category/UIView+PTEX.swift",
+    "line": 1971,
+    "ownerTarget": "ptools",
+    "requiredModule": "ptools",
+    "currentImports": "AVFoundation;Photos;SnapKit;UIKit;WebKit",
+    "ownerCandidates": "ptools"
+  },
+  {
     "symbolName": "appfont",
     "referencePath": "PooToolsSource/Category/UIViewController+PTEX.swift",
     "line": 300,
@@ -6285,6 +6303,24 @@
     "symbolName": "PTVideoThumbnailService",
     "referencePath": "PooToolsSource/Core/PTLoadImageFunction.swift",
     "line": 960,
+    "ownerTarget": "ptools",
+    "requiredModule": "ptools",
+    "currentImports": "AVFoundation;ImageIO;Kingfisher;UIKit;os",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "pt_isVideoResource",
+    "referencePath": "PooToolsSource/Core/PTLoadImageFunction.swift",
+    "line": 505,
+    "ownerTarget": "ptools",
+    "requiredModule": "ptools",
+    "currentImports": "AVFoundation;ImageIO;Kingfisher;UIKit;os",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "pt_isVideoResource",
+    "referencePath": "PooToolsSource/Core/PTLoadImageFunction.swift",
+    "line": 520,
     "ownerTarget": "ptools",
     "requiredModule": "ptools",
     "currentImports": "AVFoundation;ImageIO;Kingfisher;UIKit;os",
@@ -12521,7 +12557,7 @@
   {
     "symbolName": "stringIsEmpty",
     "referencePath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 470,
+    "line": 469,
     "ownerTarget": "PooToolsMediaViewer",
     "requiredModule": "ptools",
     "currentImports": "AVFoundation;AVKit;Kingfisher;Photos;PhotosUI;SnapKit;UIKit;ptools",
@@ -12539,7 +12575,7 @@
   {
     "symbolName": "PTNSLogConsole",
     "referencePath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 646,
+    "line": 645,
     "ownerTarget": "PooToolsMediaViewer",
     "requiredModule": "ptools",
     "currentImports": "AVFoundation;AVKit;Kingfisher;Photos;PhotosUI;SnapKit;UIKit;ptools",
@@ -12548,7 +12584,7 @@
   {
     "symbolName": "PTNSLogConsole",
     "referencePath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 653,
+    "line": 652,
     "ownerTarget": "PooToolsMediaViewer",
     "requiredModule": "ptools",
     "currentImports": "AVFoundation;AVKit;Kingfisher;Photos;PhotosUI;SnapKit;UIKit;ptools",
@@ -12557,7 +12593,16 @@
   {
     "symbolName": "PTSceneContext",
     "referencePath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-    "line": 489,
+    "line": 488,
+    "ownerTarget": "PooToolsMediaViewer",
+    "requiredModule": "ptools",
+    "currentImports": "AVFoundation;AVKit;Kingfisher;Photos;PhotosUI;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "pt_isVideoResource",
+    "referencePath": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+    "line": 466,
     "ownerTarget": "PooToolsMediaViewer",
     "requiredModule": "ptools",
     "currentImports": "AVFoundation;AVKit;Kingfisher;Photos;PhotosUI;SnapKit;UIKit;ptools",
@@ -18246,6 +18291,15 @@
     "symbolName": "addSubviews",
     "referencePath": "PooToolsSource/ScrollBanner/PTBannerCell.swift",
     "line": 37,
+    "ownerTarget": "PooToolsScrollBanner",
+    "requiredModule": "ptools",
+    "currentImports": "AVFoundation;PToolsUIFoundation;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "pt_isVideoResource",
+    "referencePath": "PooToolsSource/ScrollBanner/PTBannerCell.swift",
+    "line": 92,
     "ownerTarget": "PooToolsScrollBanner",
     "requiredModule": "ptools",
     "currentImports": "AVFoundation;PToolsUIFoundation;SnapKit;UIKit;ptools",
