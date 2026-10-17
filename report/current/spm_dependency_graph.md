@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: 8d3d43f7ab95fd135e57d711d8bf256d6d9978af
-Generated at: 2026-10-17T15:29:46Z
+Source revision: af22c3f0c20a85694d1b43a576d68ebcf796f3a6
+Generated at: 2026-10-17T17:36:18Z
 -->
 
 # SwiftPM Dependency Graph
@@ -60,6 +60,7 @@ Generated at: 2026-10-17T15:29:46Z
 | `PToolsDevice` | `PToolsDevice` |
 | `PToolsDocuments` | `PToolsDocuments` |
 | `PToolsFeedback` | `PToolsFeedback` |
+| `PToolsFontCatalogCore` | `PToolsFontCatalogCore` |
 | `PToolsForm` | `PToolsForm` |
 | `PToolsHTTPFilePortal` | `PToolsHTTPFilePortal` |
 | `PToolsHTTPServer` | `PToolsHTTPServer` |
@@ -72,6 +73,7 @@ Generated at: 2026-10-17T15:29:46Z
 | `PToolsModelLegacyKakaJSON` | `PToolsModelLegacyKakaJSON` |
 | `PToolsModelLegacySmartCodable` | `PToolsModelLegacySmartCodable` |
 | `PToolsModelUIKit` | `PToolsModelUIKit` |
+| `PToolsNetworkModelCore` | `PToolsNetworkModelCore` |
 | `PToolsNotifications` | `PToolsNotifications` |
 | `PToolsObservability` | `PToolsObservability` |
 | `PToolsObservabilityCore` | `PToolsObservabilityCore` |

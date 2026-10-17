@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "8d3d43f7ab95fd135e57d711d8bf256d6d9978af",
-  "generated_at": "2026-10-17T15:28:04Z",
+  "source_revision": "af22c3f0c20a85694d1b43a576d68ebcf796f3a6",
+  "generated_at": "2026-10-17T17:28:24Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -44,6 +44,7 @@
     "PToolsDevice",
     "PToolsDocuments",
     "PToolsFeedback",
+    "PToolsFontCatalogCore",
     "PToolsForm",
     "PToolsHTTPFilePortal",
     "PToolsHTTPServer",
@@ -56,6 +57,7 @@
     "PToolsModelLegacyKakaJSON",
     "PToolsModelLegacySmartCodable",
     "PToolsModelUIKit",
+    "PToolsNetworkModelCore",
     "PToolsNotifications",
     "PToolsObservability",
     "PToolsObservabilityCore",
@@ -1805,5 +1807,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "c496fd26ad44da480706e72a287ded2e5fc3bb5f1a7594d7b3d571154ec17a62"
+  "fingerprint": "f87227e6ceb148000a14fe1b6a01019d254ad32732ea1fcb7986f1901a5835da"
 }

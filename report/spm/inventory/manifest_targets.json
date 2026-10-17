@@ -1191,6 +1191,7 @@
     "product_memberships": [
       "ptools",
       "PToolsCore",
+      "PToolsNetworkModelCore",
       "PToolsTheme",
       "PToolsAccessibility",
       "PToolsContentState",
@@ -1735,6 +1736,7 @@
     "path": "PooToolsSource",
     "product_memberships": [
       "ptools",
+      "PToolsFontCatalogCore",
       "PToolsContentState",
       "PToolsForm",
       "PToolsDocuments",
@@ -2257,6 +2259,7 @@
     "product_memberships": [
       "PToolsModelCore",
       "PToolsModel",
+      "PToolsNetworkModelCore",
       "PToolsModelUIKit",
       "PTModelBenchmark",
       "PTModelOnlyFixture",
@@ -2310,6 +2313,7 @@
     "path": "PooToolsSource/PToolsModelLegacyKakaJSON",
     "product_memberships": [
       "PToolsModelLegacyKakaJSON",
+      "PToolsNetworkModelCore",
       "PTModelLegacyKakaJSONFixture",
       "PTModelMixedLegacyFixture",
       "PToolsRealtime",
@@ -2345,6 +2349,7 @@
     "path": "PooToolsSource/PToolsModelLegacySmartCodable",
     "product_memberships": [
       "PToolsModelLegacySmartCodable",
+      "PToolsNetworkModelCore",
       "PTModelLegacySmartCodableFixture",
       "PTModelMixedLegacyFixture",
       "PToolsRealtime",
@@ -2474,6 +2479,7 @@
     "name": "PToolsNetworkModelCore",
     "path": "PooToolsSource",
     "product_memberships": [
+      "PToolsNetworkModelCore",
       "PToolsRealtime",
       "PooToolsNetWork",
       "PooToolsNetwork",

@@ -38,6 +38,14 @@ let package = Package(
         // 中文：将旧模型适配器保持为可选，避免新项目被迫引入第三方 codec。
         .library(name: "PToolsModelLegacySmartCodable", targets: ["PToolsModelLegacySmartCodable"]),
         .library(name: "PToolsModelLegacyKakaJSON", targets: ["PToolsModelLegacyKakaJSON"]),
+        // English: Publish the Foundation-only response bridge so typed Network consumers do not depend on an internal target.
+        // Español: Publica el puente de respuestas basado solo en Foundation para que los consumidores de Network no dependan de un target interno.
+        // 中文：公开仅依赖 Foundation 的响应桥接层，避免类型化 Network 调用方依赖内部 target。
+        .library(name: "PToolsNetworkModelCore", targets: ["PToolsNetworkModelCore"]),
+        // English: Publish the Foundation-only font catalog so clients can use PTFont metadata without the UIKit umbrella.
+        // Español: Publica el catálogo de fuentes basado solo en Foundation para usar metadatos PTFont sin el umbrella de UIKit.
+        // 中文：公开仅依赖 Foundation 的字体目录，让调用方无需引入 UIKit umbrella 即可使用 PTFont 元数据。
+        .library(name: "PToolsFontCatalogCore", targets: ["PToolsFontCatalogCore"]),
         // English: Keep UIKit and Combine model adapters optional and out of the Foundation-only core.
         // Español: Mantiene opcionales los adaptadores de UIKit y Combine, fuera del núcleo Foundation-only.
         // 中文：将 UIKit 和 Combine 模型适配器保持为可选产品，不进入 Foundation-only Core。

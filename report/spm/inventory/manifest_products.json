@@ -430,6 +430,17 @@
     }
   },
   {
+    "name": "PToolsFontCatalogCore",
+    "targets": [
+      "PToolsFontCatalogCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
     "name": "PToolsForm",
     "targets": [
       "PToolsForm"
@@ -554,6 +565,17 @@
     "name": "PToolsModelUIKit",
     "targets": [
       "PToolsModelUIKit"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsNetworkModelCore",
+    "targets": [
+      "PToolsNetworkModelCore"
     ],
     "type": {
       "library": [

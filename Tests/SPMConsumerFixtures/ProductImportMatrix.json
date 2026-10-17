@@ -473,6 +473,18 @@
       "status": "not_run"
     },
     {
+      "product": "PToolsFontCatalogCore",
+      "targets": [
+        "PToolsFontCatalogCore"
+      ],
+      "modules": [
+        "PToolsFontCatalogCore"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsFontCatalogCore",
+      "status": "not_run"
+    },
+    {
       "product": "PToolsForm",
       "targets": [
         "PToolsForm"
@@ -614,6 +626,18 @@
       ],
       "kind": "library",
       "targetName": "SPMConsumer_PToolsModelUIKit",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsNetworkModelCore",
+      "targets": [
+        "PToolsNetworkModelCore"
+      ],
+      "modules": [
+        "PToolsNetworkModelCore"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsNetworkModelCore",
       "status": "not_run"
     },
     {

@@ -19,7 +19,7 @@ def main() -> int:
     root = Path(__file__).resolve().parents[2]
     failures: list[str] = []
     if args.allow_not_run:
-        failures.append("--allow-not-run is not accepted by the 5.65.7 release gate")
+        failures.append("--allow-not-run is not accepted by the active release gate")
     inventory = root / "report/spm/inventory"
     audits = root / "report/spm/audits"
     onepass = root / "report/spm/onepass"
@@ -31,14 +31,19 @@ def main() -> int:
         onepass / "api_surface.csv", onepass / "product_import_map.json", onepass / "ownership_parity.csv",
         onepass / "dependency_violations.csv", onepass / "macro_resource_matrix.csv", onepass / "all_findings.csv",
         onepass / "babobuy_5656_issue_matrix.csv", onepass / "summary.md",
+        root / "report/spm/spm_product_matrix.csv",
     ]
     for path in required:
         if not path.is_file():
             failures.append(f"missing report: {path.relative_to(root)}")
+    if failures:
+        for item in failures:
+            print(f"FAIL: {item}")
+        return 1
 
     version = (root / "VERSION").read_text().strip()
-    if version != "5.65.7":
-        failures.append(f"expected VERSION 5.65.7, got {version}")
+    if not version or len(version.split(".")) != 3:
+        failures.append(f"VERSION is not semantic: {version}")
     for name in ["README.md", "CHANGELOG.md", "ROADMAP.md"]:
         path = root / name
         if not path.is_file() or version not in path.read_text(errors="replace"):
@@ -81,7 +86,7 @@ def main() -> int:
         for item in failures:
             print(f"FAIL: {item}")
         return 1
-    print("PASS: SwiftPM 5.65.7 release gate")
+    print(f"PASS: SwiftPM {version} release gate")
     return 0
 
 

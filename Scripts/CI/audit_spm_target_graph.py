@@ -157,7 +157,7 @@ def main() -> int:
         "owners": {source: sorted(owners) for source, owners in sorted(source_owners.items())},
     })
     with (inventory / "source_ownership_anomalies.csv").open("w", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["kind", "target", "source", "path", "owners"])
+        writer = csv.DictWriter(handle, fieldnames=["kind", "target", "source", "path", "owners"], lineterminator="\n")
         writer.writeheader()
         for anomaly in anomalies:
             writer.writerow({
@@ -180,7 +180,7 @@ def main() -> int:
     package_platforms = [platform.get("platformName", platform.get("platform", ""))
                          for platform in manifest.get("platforms", [])]
     with (inventory / "platform_support.csv").open("w", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["product", "targets", "type", "package_platforms", "iOS_applicable"])
+        writer = csv.DictWriter(handle, fieldnames=["product", "targets", "type", "package_platforms", "iOS_applicable"], lineterminator="\n")
         writer.writeheader()
         for product in products:
             writer.writerow({
@@ -199,7 +199,7 @@ def main() -> int:
                 if row.get("product"):
                     previous_matrix[row["product"]] = row
     with matrix_path.open("w", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["product", "targets", "type", "status", "evidence"])
+        writer = csv.DictWriter(handle, fieldnames=["product", "targets", "type", "status", "evidence"], lineterminator="\n")
         writer.writeheader()
         for product in products:
             previous = previous_matrix.get(product["name"], {})

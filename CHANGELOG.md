@@ -6,6 +6,12 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.65.8 — 2026-10-18
+
+- 修复 `PToolsNetworkModelCore` 已有 target 未发布为 SwiftPM product 的问题；类型化网络响应契约现在可以被独立消费者直接导入。
+- 修复 `PToolsFontCatalogCore` 已有 target 未发布为 SwiftPM product 的问题；字体元数据和目录不再要求调用方依赖完整 `ptools` 聚合模块。
+- 将两个新增公开 product 纳入消费者 fixture、依赖矩阵和发布门禁，继续保持 iOS 17+ / Swift 6+ 边界。
+
 ## 5.65.7 — 2026-10-17
 
 - 修复 `PooToolsBioID` 独立 SwiftPM target 缺少 `PooToolsKeyChain` 直接依赖和显式导入的问题，继续复用唯一的 `PTBiologyVerifyStatus` 定义。

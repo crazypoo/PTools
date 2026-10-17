@@ -1,17 +1,24 @@
 # PTools 路线图
 
-> 当前代码基线：`5.65.7`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.65.8`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.65.5`；`5.65.7` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.65.7`；`5.65.8` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.65.8 SwiftPM Core 公共产品边界修复
+
+- ✅ 将已存在的 `PToolsNetworkModelCore` target 发布为公开 product，业务方可以直接导入 `PTModelNetworkResponse` 等类型化响应契约。
+- ✅ 将已存在的 `PToolsFontCatalogCore` target 发布为公开 product，业务方可以直接导入 `PTFont`、`PTFontCatalog` 和兼容字体目录，而不依赖 `ptools` 聚合入口。
+- ✅ 将两个公共 product 纳入 SwiftPM consumer fixture、Debug/Release 构建矩阵和包/依赖矩阵。
+- ⬜ 仍需在真实宿主项目中完成 SwiftPM 5.65.8 的最终真机回归；本轮不修改 YD1688 的业务兼容外观。
 
 ## 5.65.7 SwiftPM 全模块消费者矩阵收口
 
 - ✅ `PooToolsBioID` 显式依赖并导入 `PooToolsKeyChain`，复用 `PTBiologyVerifyStatus` 的唯一实现。
 - ✅ `PooToolsScrollBanner`、`PooToolsGuide` 和 `PooToolsMediaViewer` 显式导入 `PooToolsPageControl`，保持 target 依赖与源码边界一致。
-- ✅ 生成全部 150 个 library product 的独立 iOS Xcode consumer target，Debug/Release 构建逐 product 记录日志和 xcresult。
+- ✅ 生成全部 152 个 library product 的独立 iOS Xcode consumer target，Debug/Release 构建逐 product 记录日志和 xcresult。
 - ✅ 新增 API surface、ownership parity、依赖违规、条件编译/资源矩阵和历史问题矩阵报告。
 - ✅ 新增一键审计、诊断合并、严格发布门禁及 GitHub Actions 矩阵工作流；`not_run`、外部宿主和真机验证不再被伪装为通过。
-- ⬜ 当前工作树完成静态审计和关键产品验证后，仍需执行完整 150 × Debug/Release 矩阵及 BaboBuy/YD1688 真机宿主回归。
+- ⬜ 当前工作树完成静态审计和关键产品验证后，仍需执行完整 152 × Debug/Release 矩阵及 BaboBuy/YD1688 真机宿主回归。
 
 ## 5.65.6 SwiftPM Core 视频资源入口收口
 

@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: 8d3d43f7ab95fd135e57d711d8bf256d6d9978af
-Generated at: 2026-10-17T15:29:47Z
+Source revision: af22c3f0c20a85694d1b43a576d68ebcf796f3a6
+Generated at: 2026-10-17T17:36:20Z
 -->
 
 # SwiftPM / CocoaPods Module Parity
 
 - Status: `baseline`
-- Fingerprint: `c496fd26ad44da480706e72a287ded2e5fc3bb5f1a7594d7b3d571154ec17a62`
+- Fingerprint: `f87227e6ceb148000a14fe1b6a01019d254ad32732ea1fcb7986f1901a5835da`
 - Matched modules: `123`
 - SwiftPM-only modules: `30`
 - CocoaPods-only modules: `33`

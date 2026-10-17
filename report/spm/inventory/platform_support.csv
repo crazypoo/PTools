@@ -39,6 +39,7 @@ PToolsDeepLink,PToolsDeepLink,"{""library"": [""automatic""]}",ios;macos;tvos;wa
 PToolsDevice,PToolsDevice,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsDocuments,PToolsDocuments,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsFeedback,PToolsFeedback,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsFontCatalogCore,PToolsFontCatalogCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsForm,PToolsForm,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsHTTPFilePortal,PToolsHTTPFilePortal,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsHTTPServer,PToolsHTTPServer,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
@@ -51,6 +52,7 @@ PToolsModelCore,PToolsModelCore,"{""library"": [""automatic""]}",ios;macos;tvos;
 PToolsModelLegacyKakaJSON,PToolsModelLegacyKakaJSON,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsModelLegacySmartCodable,PToolsModelLegacySmartCodable,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsModelUIKit,PToolsModelUIKit,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsNetworkModelCore,PToolsNetworkModelCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsNotifications,PToolsNotifications,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsObservability,PToolsObservability,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsObservabilityCore,PToolsObservabilityCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes

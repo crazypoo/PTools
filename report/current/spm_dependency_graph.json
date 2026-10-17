@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "8d3d43f7ab95fd135e57d711d8bf256d6d9978af",
-  "generated_at": "2026-10-17T15:29:46Z",
+  "source_revision": "af22c3f0c20a85694d1b43a576d68ebcf796f3a6",
+  "generated_at": "2026-10-17T17:36:18Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -469,6 +469,17 @@
       ]
     },
     {
+      "name": "PToolsFontCatalogCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsFontCatalogCore"
+      ]
+    },
+    {
       "name": "PToolsForm",
       "type": {
         "library": [
@@ -598,6 +609,17 @@
       },
       "targets": [
         "PToolsModelUIKit"
+      ]
+    },
+    {
+      "name": "PToolsNetworkModelCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsNetworkModelCore"
       ]
     },
     {

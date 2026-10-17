@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_dependency_matrix.rb
-Source revision: 8d3d43f7ab95fd135e57d711d8bf256d6d9978af
-Generated at: 2026-10-17T15:24:38Z
-Version source: 5.65.7
+Source revision: af22c3f0c20a85694d1b43a576d68ebcf796f3a6
+Generated at: 2026-10-17T17:24:56Z
+Version source: 5.65.8
 -->
 
 # Direct Dependency Matrix
@@ -25,7 +25,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `BackgroundTasks` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `BankCard` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Banner` | `Logging`, `Overlay`, `PToolsCore`, `PToolsLogging`, `PToolsOverlay`, `PToolsSymbols`, `Symbols` | — | No direct third-party dependency | Keep; review direct drift |
-| `BilogyID` | `BioID`, `Core`, `FaceIDPermission`, `KeyChain`, `PTFaceIDPermission`, `ptools` | — | No direct third-party dependency | Deprecate alias |
+| `BilogyID` | `BioID`, `Core`, `FaceIDPermission`, `KeyChain`, `PTFaceIDPermission`, `PooToolsKeyChain`, `ptools` | — | No direct third-party dependency | Deprecate alias |
 | `Bluetooth` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `BluetoothPermission` | `Core`, `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `Calendar` | `CalendarPermission`, `Core`, `PTCalendarPermission`, `PTRemindersPermission`, `RemindersPermission`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
@@ -33,7 +33,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `CameraPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `CheckBox` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `CheckDirtyWord` | — | — | No direct third-party dependency | Keep; review direct drift |
-| `CheckUpdate` | `NetWork`, `PooToolsNetWork`, `ptools` | `SwiftJWT` | 6.0 review | Keep; review direct drift |
+| `CheckUpdate` | `NetWork`, `PooToolsHud`, `PooToolsLoading`, `PooToolsNetWork`, `ptools` | `SwiftJWT` | 6.0 review | Keep; review direct drift |
 | `ChinesePinyin` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Circle` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `CodeView` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
@@ -58,13 +58,13 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `FaceIDPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `Feedback` | `PToolsCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `Flag` | `Core` | — | No direct third-party dependency | Keep; review direct drift |
-| `Form` | `Accessibility`, `CheckBox`, `ContentState`, `Core`, `Input`, `PToolsAccessibility`, `PToolsContentState`, `PToolsCore`, `PToolsTheme`, `Picker`, `PooToolsCheckBox`, `PooToolsPicker`, `PooToolsSlider`, `Slider`, `Stepper`, `Theme`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
+| `Form` | `Accessibility`, `CheckBox`, `ContentState`, `Core`, `Input`, `PToolsAccessibility`, `PToolsContentState`, `PToolsCore`, `PToolsTheme`, `Picker`, `PooToolsCheckBox`, `PooToolsInput`, `PooToolsPicker`, `PooToolsSlider`, `PooToolsStepper`, `Slider`, `Stepper`, `Theme`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `GCDWebServer` | `HTTPFilePortal` | — | No direct third-party dependency | Keep; review direct drift |
 | `Guide` | `Core`, `PageControl`, `PooToolsPageControl`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `HTTPFilePortal` | `HTTPServer`, `PToolsHTTPServer` | — | No direct third-party dependency | Keep; review direct drift |
 | `HTTPServer` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `HandSign` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
-| `HarbethKit` | `CameraPermission`, `Core`, `PTCameraPermission`, `PToolsSymbols`, `PooToolsMediaViewer`, `Symbols`, `ptools` | `Harbeth` | 6.0 review | Keep; review direct drift |
+| `HarbethKit` | `CameraPermission`, `Core`, `PTCameraPermission`, `PToolsSymbols`, `PooToolsHud`, `PooToolsLoading`, `PooToolsMediaViewer`, `Symbols`, `ptools` | `Harbeth` | 6.0 review | Keep; review direct drift |
 | `HealthPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `HeartRate` | `CameraPermission`, `Core`, `PTCameraPermission`, `ptools` | `Lottie`, `lottie-ios` | 6.0 review | Keep; review direct drift |
 | `Hud` | `Core`, `PooToolsProgressBar`, `ProgressBar`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
@@ -79,7 +79,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `Layout` | `Core`, `ptools` | `CollectionViewPagingLayout` | 6.0 review | Keep; review direct drift |
 | `LivePhoto` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Loading` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
-| `Location` | `Core`, `LocationPermission`, `PTLocationPermission`, `PToolsStorage`, `Storage`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
+| `Location` | `Core`, `LocationPermission`, `PTLocationPermission`, `PToolsStorage`, `PToolsStorageCore`, `Storage`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `LocationPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `Logging` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `MXMetricManagerKit` | `Core` | — | No direct third-party dependency | Keep; review direct drift |
@@ -88,7 +88,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `MediaCore` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `MediaViewer` | `Core`, `LivePhoto`, `MediaCore`, `PToolsUIFoundation`, `PageControl`, `PooToolsLivePhoto`, `PooToolsMediaCore`, `PooToolsPageControl`, `PooToolsProgressBar`, `ProgressBar`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `MeidaPermission` | `MediaPermission`, `PToolsPermissionCore` | — | No direct third-party dependency | Deprecate alias |
-| `MessageKit` | `Core`, `CustomerLabel`, `PToolsSymbols`, `PooToolsCustomerLabel`, `Symbols`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
+| `MessageKit` | `Core`, `CustomerLabel`, `PToolsSymbols`, `PooToolsCustomerLabel`, `PooToolsNetWork`, `PooToolsProgressBar`, `Symbols`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `MicPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `Model` | `ModelCore`, `PToolsModelCore`, `PToolsModelMacroPlugin` | — | No direct third-party dependency | Keep; review direct drift |
 | `ModelCore` | — | — | No direct third-party dependency | Keep; review direct drift |
@@ -146,7 +146,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `PageControl` | `Core`, `PToolsCore`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `PagingControl` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `PhoneInfo` | — | — | No direct third-party dependency | Keep; review direct drift |
-| `PhotoPicker` | `Core`, `ImagePicker`, `Loading`, `MediaCore`, `PTCameraPermission`, `PToolsSymbols`, `PooToolsImagePicker`, `PooToolsLoading`, `PooToolsMediaCore`, `Symbols`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
+| `PhotoPicker` | `Core`, `ImagePicker`, `Loading`, `MediaCore`, `PTCameraPermission`, `PToolsSymbols`, `PToolsUIFoundation`, `PooToolsImagePicker`, `PooToolsLoading`, `PooToolsMediaCore`, `Symbols`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Picker` | `Core`, `PToolsCore`, `ptools` | `SnapKit` | 6.0 review | Keep; review direct drift |
 | `Ping` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Popover` | `Overlay`, `PToolsCore`, `PToolsOverlay`, `PToolsSymbols`, `Symbols` | — | No direct third-party dependency | Keep; review direct drift |

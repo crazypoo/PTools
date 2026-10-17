@@ -11,6 +11,8 @@
 | 能力 | CocoaPods | Swift Package Manager | 典型用途 |
 | --- | --- | --- | --- |
 | Core / UIKit Base | `PooTools/Core` | `ptools` | Base、Category、Theme、列表和基础权限 |
+| Network model contracts | — | `PToolsNetworkModelCore` | `PTModelNetworkResponse`、响应快照和类型化解码契约 |
+| Font catalog contracts | — | `PToolsFontCatalogCore` | `PTFont`、`PTFontCatalog` 和 5.x `FontName` 兼容目录 |
 | Overlay 基础设施 | `PooTools/Overlay` | `PToolsOverlay` | 多 Scene 浮层、Host、Window、命中测试和层级 |
 | Banner 通知条 | `PooTools/Banner` | `PooToolsBanner` | 原生 UIKit 顶部/底部通知条、队列和无障碍 |
 | MediaCore | `PooTools/MediaCore` | `PooToolsMediaCore` | 媒体值类型、来源、元数据和并发契约 |

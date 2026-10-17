@@ -1,4 +1,4 @@
-# PTools 5.64.5 SwiftPM Product / Module 矩阵
+# PTools 5.65.8 SwiftPM Product / Module 矩阵
 
 PTools 的 SwiftPM product 名称不总是等于 Swift `import` 名称。调用方应按实际 product 和 module 组合声明依赖，不要依赖 `PooToolsAll` 的传递可见性。
 
@@ -9,6 +9,8 @@ PTools 的 SwiftPM product 名称不总是等于 Swift `import` 名称。调用�
 | `ptools` | `ptools` | 默认 Core 与 Category 聚合入口 |
 | `PToolsCore` | `PToolsCore` | Foundation / UIKit Core 边界中的显式类型 |
 | `PToolsUIFoundation` | `PToolsUIFoundation` | UI Foundation 与富文本基础能力 |
+| `PToolsNetworkModelCore` | `PToolsNetworkModelCore` | 类型化 Network 响应、快照和模型解码契约 |
+| `PToolsFontCatalogCore` | `PToolsFontCatalogCore` | Foundation-only 字体元数据、目录和 FontName 兼容入口 |
 | `PToolsSymbols` | `PToolsSymbols` | SF Symbols 类型化解析 |
 | `PooToolsNetwork` | `PooToolsNetWork` | 网络请求实现；product 名称保留历史拼写 |
 | `PooToolsVideoCache` | `ptools` | 兼容聚合 product，实际模块由 Core 提供 |
