@@ -30,7 +30,10 @@ class PTMediaLibCell: PTBaseNormalCell {
     private let requestCoordinator = PTMediaRequestCoordinator()
     private var imageIdentifier: String = ""
 
-    var selectedBlock: (@Sendable (@escaping PTBoolTask) -> Void)?
+    // English: Keep the selection callback on MainActor so the cell never sends UIKit state through a detached closure.
+    // Español: Mantén el callback de selección en MainActor para no enviar el estado UIKit mediante un cierre separado.
+    // 中文：选择回调固定在 MainActor，避免通过脱离上下文的闭包传递 UIKit 状态。
+    var selectedBlock: (@MainActor @Sendable (@escaping @MainActor @Sendable (Bool) -> Void) -> Void)?
 
     // English: The presenter supplies a frozen selection policy so the cell does not read mutable global limits.
     // Español: El presentador proporciona una política de selección congelada para que la celda no lea límites globales mutables.
@@ -258,10 +261,8 @@ class PTMediaLibCell: PTBaseNormalCell {
         view.addActionHandlers { [weak self] sender in
             guard let self = self, self.enableSelect else { return }
             self.selectedBlock? { isSelected in
-                Task { @MainActor in
-                    sender.isSelected = isSelected
-                    if isSelected { self.fetchBigImage() } else { self.cancelFetchBigImage() }
-                }
+                sender.isSelected = isSelected
+                if isSelected { self.fetchBigImage() } else { self.cancelFetchBigImage() }
             }
         }
         view.cornerRadius = 12.5

@@ -12,6 +12,7 @@ import SnapKit
 import Kingfisher
 #if SWIFT_PACKAGE
 import ptools
+import PooToolsPageControl
 #endif
 
 public enum PTGuidePageControlSelection {

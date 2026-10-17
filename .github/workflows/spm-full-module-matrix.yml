@@ -1,0 +1,47 @@
+name: SwiftPM full module matrix
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - Package.swift
+      - PooToolsSource/**
+      - Scripts/CI/**
+      - Tests/SPMConsumerFixtures/**
+
+jobs:
+  inventory:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare SwiftPM inventory
+        run: bash Scripts/CI/run_spm_onepass_audit.sh --inventory-only
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ptools-spm-inventory
+          path: report/spm/onepass
+
+  consumer-matrix:
+    needs: inventory
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build every iOS consumer product
+        run: bash Scripts/CI/run_spm_onepass_audit.sh --build-all --configurations Debug,Release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ptools-spm-consumer-matrix
+          path: |
+            report/spm/onepass
+            report/spm/spm_product_matrix.csv
+
+  gate:
+    needs: consumer-matrix
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: ptools-spm-consumer-matrix
+      - name: Validate SwiftPM release gate
+        run: python3 Scripts/CI/validate_spm_release_gate.py

@@ -10,6 +10,7 @@ import UIKit
 #if SWIFT_PACKAGE
 import ptools
 import PToolsSymbols
+import PooToolsHarbethKit
 #endif
 
 @MainActor

@@ -8,6 +8,8 @@
 import UIKit
 #if SWIFT_PACKAGE
 import ptools
+import PooToolsNetWork
+import PooToolsProgressBar
 #endif
 import AVFoundation
 import SnapKit
@@ -308,13 +310,13 @@ public class PTChatMediaCell: PTChatBaseCell {
     public func mediaDownloadFunction(urlReal:URL) {
         let generation = loadGeneration
         loadingView.removeFromSuperview()
-        self.loadingView.hubTapCallback = { [weak self] in
-            PTMainActorBridge.perform { [weak self] in
-                guard let self else { return }
-                self.loadingView.removeFromSuperview()
-                self.mediaPlayImageView.setImage(PTChatConfig.share.mediaDownloadPauseImage, for: .normal)
-                Network.share.suspend(fileUrl: urlReal.absoluteString)
-            }
+        self.loadingView.hubTapCallback = {
+            Network.share.suspend(fileUrl: urlReal.absoluteString)
+        }
+        self.loadingView.mainActorHubTapCallback = { [weak self] in
+            guard let self else { return }
+            self.loadingView.removeFromSuperview()
+            self.mediaPlayImageView.setImage(PTChatConfig.share.mediaDownloadPauseImage, for: .normal)
         }
         if loadingView.superview == nil {
             dataContent.addSubview(loadingView)

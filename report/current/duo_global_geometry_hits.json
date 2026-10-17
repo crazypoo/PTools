@@ -1,8 +1,8 @@
 {
   "generator": "Scripts/audit_duo_uikit_coverage.py",
   "generated_by": "Scripts/audit_duo_uikit_coverage.py",
-  "source_revision": "4c508f23263c51171d48163d641a4d808069b81a",
-  "generated_at": "2026-10-17T00:58:53.543497+00:00",
+  "source_revision": "8d3d43f7ab95fd135e57d711d8bf256d6d9978af",
+  "generated_at": "2026-10-17T15:29:52.815062+00:00",
   "hits": [
     {
       "kind": "statusBarHeight",
@@ -415,32 +415,32 @@
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 232,
+      "line": 234,
       "text": "self.originImageView.image = self.originImageView.image?.transformImage(size: CGSizeMake(CGFloat.kSCREEN_WIDTH, CGFloat.kSCREEN_HEIGHT))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 402,
+      "line": 404,
       "text": "view.frame = CGRect(x: 0, y: 0, width: 70, height: 70)"
     },
     {
       "kind": "statusBarHeight",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 550,
+      "line": 552,
       "text": "make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 5)"
     },
     {
       "kind": "statusBarHeight",
       "path": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
-      "line": 807,
+      "line": 809,
       "text": "make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 5)"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/C7Collector/PTHarBethFilter.swift",
-      "line": 46,
-      "text": "var texureSize:CGSize = CGSizeMake(CGFloat.kSCREEN_WIDTH, CGFloat.kSCREEN_HEIGHT)"
+      "line": 47,
+      "text": "public var texureSize:CGSize = CGSizeMake(CGFloat.kSCREEN_WIDTH, CGFloat.kSCREEN_HEIGHT)"
     },
     {
       "kind": "kSCREEN",
@@ -1195,31 +1195,31 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Guide/PTGuidePageHUD.swift",
-      "line": 208,
+      "line": 209,
       "text": "make.width.equalTo(movieStartButton.sizeFor(height: 50).width + 10)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Guide/PTGuidePageHUD.swift",
-      "line": 221,
+      "line": 222,
       "text": "let skipButtonWidth = UIView.sizeFor(string: viewModel.skipName, font: viewModel.skipFont, height: 44).width + 10 + skipButtonWidthOffset"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Guide/PTGuidePageHUD.swift",
-      "line": 305,
+      "line": 306,
       "text": "make.width.equalTo(startButton.sizeFor(height: 44).width + 10)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Guide/PTGuidePageHUD.swift",
-      "line": 399,
+      "line": 400,
       "text": "let frame = PTAdaptiveVisibleRegionResolver.controlFrame(size: CGSize(width: skipButtonWidth(), height: 44),"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Guide/PTGuidePageHUD.swift",
-      "line": 433,
+      "line": 434,
       "text": "max(44, UIView.sizeFor(string: viewModel.skipName, font: viewModel.skipFont, height: 44).width + 25)"
     },
     {
@@ -2431,13 +2431,13 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 748,
+      "line": 757,
       "text": "var reloadWidth = reloadButton.sizeFor(height: 34).width + 16"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
-      "line": 752,
+      "line": 761,
       "text": "baseHeight = reloadButton.sizeFor(lineSpacing: 2.5,width: reloadMaxWidth).height + 16"
     },
     {
@@ -2462,7 +2462,7 @@
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
       "line": 118,
-      "text": "public var chatMeHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.white).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))"
+      "text": "public var chatMeHighlightedBubbleImage:UIImage = DynamicColor.white.lightened(amount: 0.8).createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -2474,7 +2474,7 @@
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MessageKit/PTChatConfig.swift",
       "line": 122,
-      "text": "public var chatOtherHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.systemBlue).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))"
+      "text": "public var chatOtherHighlightedBubbleImage:UIImage = DynamicColor.systemBlue.lightened(amount: 0.8).createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -2485,7 +2485,7 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/MessageKit/PTChatTextCell.swift",
-      "line": 142,
+      "line": 143,
       "text": "var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont, lineSpacing: PTChatConfig.share.textLineSpace, width: maxContentWidth).height + 40"
     },
     {
@@ -3151,7 +3151,7 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibCell.swift",
-      "line": 125,
+      "line": 128,
       "text": "let width = videoTimeLabel.sizeFor(height: 15).width + 8"
     },
     {
@@ -3205,7 +3205,7 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/ProgressBar/PTMediaBrowserLoadingView.swift",
-      "line": 125,
+      "line": 132,
       "text": "public func hudShow(hudSize:CGSize = .init(width: 64, height: 64)) {"
     },
     {
@@ -3313,13 +3313,13 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 480,
+      "line": 483,
       "text": "make.size.equalTo(CGSize(width: 36, height: 36))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 491,
+      "line": 494,
       "text": "make.size.equalTo(CGSize(width: 36, height: 36))"
     },
     {
@@ -3481,67 +3481,67 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 433,
+      "line": 436,
       "text": "make.width.equalTo(UIView.sizeFor(string: self.currentOutputType.name, font: .appfont(size: 14),height: 34).width + 25)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 550,
+      "line": 553,
       "text": "let customItem = NSCollectionLayoutGroupCustomItem(frame: CGRect(x: groupW, y: 0, width: cellWidth, height: cellHeight), zIndex: 1000+index)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1105,
+      "line": 1108,
       "text": "let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1116,
+      "line": 1119,
       "text": "self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1127,
+      "line": 1130,
       "text": "let height: CGFloat = 160.0"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1164,
+      "line": 1167,
       "text": "make.width.equalTo(UIView.sizeFor(string: self.currentOutputType.name, font: .appfont(size: 14),height: 34).width + 25)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1317,
+      "line": 1320,
       "text": "generator.maximumSize = CGSize(width: 600, height: 600)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1330,
+      "line": 1333,
       "text": "playerItem.asset.getVideoFirstImage(maximumSize: CGSize(width: 600, height: 600)) { image in"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1349,
+      "line": 1352,
       "text": "let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1360,
+      "line": 1363,
       "text": "self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1365,
+      "line": 1368,
       "text": "let height: CGFloat = 160.0"
     },
     {

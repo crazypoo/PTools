@@ -28,6 +28,10 @@ public let PTLoadingItemSpace :CGFloat = 10
 public class PTMediaBrowserLoadingView: UIView {
     
     public var hubTapCallback:PTActionTask?
+    // English: Keep UI-owned tap work on MainActor without changing the legacy callback contract.
+    // Español: Mantén el trabajo de UI del toque en MainActor sin cambiar el contrato del callback heredado.
+    // 中文：在不改变旧回调契约的前提下，将界面点击处理固定在 MainActor。
+    public var mainActorHubTapCallback: (@MainActor @Sendable () -> Void)?
     
     // 记录手势，防止重复添加
     private var tapGesture: UITapGestureRecognizer?
@@ -120,6 +124,9 @@ public class PTMediaBrowserLoadingView: UIView {
     
     @objc private func handleTap() {
         self.hubTapCallback?()
+        if let callback = mainActorHubTapCallback {
+            PTMainActorBridge.perform(callback)
+        }
     }
 
     public func hudShow(hudSize:CGSize = .init(width: 64, height: 64)) {

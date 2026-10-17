@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "4c508f23263c51171d48163d641a4d808069b81a",
-  "generated_at": "2026-10-17T01:00:08Z",
+  "source_revision": "8d3d43f7ab95fd135e57d711d8bf256d6d9978af",
+  "generated_at": "2026-10-17T15:29:46Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -4300,6 +4300,17 @@
           }
         },
         {
+          "name": "PooToolsInput",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsInput",
+              null
+            ]
+          }
+        },
+        {
           "name": "PooToolsPicker",
           "kind": "internal",
           "package": null,
@@ -4317,6 +4328,17 @@
           "declaration": {
             "byName": [
               "PooToolsSlider",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsStepper",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsStepper",
               null
             ]
           }
@@ -6486,6 +6508,17 @@
           }
         },
         {
+          "name": "PooToolsKeyChain",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsKeyChain",
+              null
+            ]
+          }
+        },
+        {
           "name": "ptools",
           "kind": "internal",
           "package": null,
@@ -6658,6 +6691,28 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PooToolsHud",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsHud",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsLoading",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsLoading",
+              null
+            ]
+          }
+        },
         {
           "name": "PooToolsNetWork",
           "kind": "internal",
@@ -7272,10 +7327,35 @@
     {
       "name": "PooToolsFilterCamera",
       "type": "regular",
-      "path": "PooToolsSource/FilterCamera",
-      "sources": [],
+      "path": "PooToolsSource",
+      "sources": [
+        "C7Collector/PTFilterCameraViewController.swift",
+        "FilterCamera/PTFilterCameraCompatibility.swift"
+      ],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PTCameraPermission",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PTCameraPermission",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsSymbols",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSymbols",
+              null
+            ]
+          }
+        },
         {
           "name": "PooToolsHarbethKit",
           "kind": "internal",
@@ -7283,6 +7363,17 @@
           "declaration": {
             "byName": [
               "PooToolsHarbethKit",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsImageEditor",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsImageEditor",
               null
             ]
           }
@@ -7297,9 +7388,32 @@
               null
             ]
           }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -7415,7 +7529,18 @@
       "name": "PooToolsHarbethKit",
       "type": "regular",
       "path": "PooToolsSource/C7Collector",
-      "sources": [],
+      "sources": [
+        "C7CameraConfig.swift",
+        "C7Collector.swift",
+        "C7CollectorCamera.swift",
+        "C7CollectorVideo.swift",
+        "PTC7VideoExportService.swift",
+        "PTCameraAnimationUtils.swift",
+        "PTCameraFilterConfig.swift",
+        "PTFilterImageCell.swift",
+        "PTHarBethFilter.swift",
+        "PTTakePictureReviewer.swift"
+      ],
       "resources": [],
       "internal_dependencies": [
         {
@@ -7436,6 +7561,28 @@
           "declaration": {
             "byName": [
               "PToolsSymbols",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsHud",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsHud",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsLoading",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsLoading",
               null
             ]
           }
@@ -8213,6 +8360,17 @@
           }
         },
         {
+          "name": "PToolsStorageCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsStorageCore",
+              null
+            ]
+          }
+        },
+        {
           "name": "ptools",
           "kind": "internal",
           "package": null,
@@ -8385,6 +8543,28 @@
           "declaration": {
             "byName": [
               "PooToolsCustomerLabel",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsNetWork",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsNetWork",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsProgressBar",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsProgressBar",
               null
             ]
           }
@@ -8891,6 +9071,17 @@
           "declaration": {
             "byName": [
               "PToolsSymbols",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsUIFoundation",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsUIFoundation",
               null
             ]
           }

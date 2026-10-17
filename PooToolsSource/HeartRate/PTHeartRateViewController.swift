@@ -254,25 +254,31 @@ open class PTHeartRateViewController: PTBaseViewController {
     private func startMeasurement() {
         toggleTorch(status: true)
         timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                let average = self.pulseDetector.getAverage()
-                let pulse = average > 0 ? 60.0 / average : -60
-                if pulse == -60 {
-                    UIView.animate(withDuration: 0.2, animations: {
-                        self.pulseRate.alpha = 0
-                    }) { finished in
-                        self.pulseRate.isHidden = finished
-                    }
-                } else {
-                    UIView.animate(withDuration: 0.2, animations: {
-                        self.pulseRate.alpha = 1.0
-                    }) { _ in
-                        self.pulseRate.isHidden = false
-                        self.pulseRate.text = "\(lroundf(pulse)) BPM"
-                    }
-                }
+        // English: A selector keeps the MainActor-owned controller out of a sendable Timer closure.
+        // Español: Un selector evita capturar el controlador aislado en MainActor dentro de un cierre Timer enviable.
+        // 中文：使用 selector，避免在可发送的 Timer 闭包中捕获 MainActor 对象。
+        timer = Timer.scheduledTimer(timeInterval: 1.0,
+                                     target: self,
+                                     selector: #selector(handleMeasurementTimer(_:)),
+                                     userInfo: nil,
+                                     repeats: true)
+    }
+
+    @objc private func handleMeasurementTimer(_ timer: Timer) {
+        let average = pulseDetector.getAverage()
+        let pulse = average > 0 ? 60.0 / average : -60
+        if pulse == -60 {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.pulseRate.alpha = 0
+            }) { finished in
+                self.pulseRate.isHidden = finished
+            }
+        } else {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.pulseRate.alpha = 1.0
+            }) { _ in
+                self.pulseRate.isHidden = false
+                self.pulseRate.text = "\(lroundf(pulse)) BPM"
             }
         }
     }

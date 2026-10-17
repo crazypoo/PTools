@@ -128,7 +128,7 @@ open class PTUpdateTipsViewController: PTBaseViewController {
         return view
     }()
     
-    lazy var contentView : UIView = {
+    public lazy var contentView : UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         return view

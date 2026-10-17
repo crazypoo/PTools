@@ -1395,15 +1395,6 @@
     },
     {
       "kind": "dependency",
-      "module": "BilogyID",
-      "field": "internal_dependencies",
-      "reason": "CocoaPods keeps legacy Core and KeyChain; SwiftPM uses split Core.",
-      "owner": "architecture",
-      "expiration": "2026-12-31",
-      "classification": "INTENTIONAL"
-    },
-    {
-      "kind": "dependency",
       "module": "BluetoothPermission",
       "field": "internal_dependencies",
       "reason": "SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core.",
@@ -1932,15 +1923,6 @@
       "classification": "INTENTIONAL"
     },
     {
-      "kind": "dependency",
-      "module": "Form",
-      "field": "internal_dependencies",
-      "reason": "SwiftPM uses the stable Picker, CheckBox and Slider targets and native fallbacks; CocoaPods retains legacy Input and Stepper compatibility dependencies for the 5.x subspec contract.",
-      "owner": "p1-form",
-      "expiration": "2026-12-31",
-      "classification": "INTENTIONAL"
-    },
-    {
       "kind": "settings",
       "module": "Form",
       "reason": "SwiftPM enables strict concurrency for the standalone form target; CocoaPods inherits the aggregate target compiler contract.",
@@ -2130,6 +2112,24 @@
       "field": "internal_dependencies",
       "reason": "SwiftPM imports PToolsUIFoundation directly for PTRichText; CocoaPods receives the same UI foundation through the aggregate Core contract.",
       "owner": "ui-foundation",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Location",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM declares the permission and storage targets explicitly so the standalone Location product has complete symbols; CocoaPods receives them through the aggregate Core subspec.",
+      "owner": "system-services",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "MessageKit",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM declares the customer-label and symbol targets explicitly so the standalone MessageKit product has complete symbols; CocoaPods receives them through the aggregate Core subspec.",
+      "owner": "message-kit",
       "expiration": "2027-03-31",
       "classification": "INTENTIONAL"
     }

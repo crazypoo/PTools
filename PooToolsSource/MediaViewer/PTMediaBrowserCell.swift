@@ -15,6 +15,9 @@ import Photos
 import PhotosUI
 #if SWIFT_PACKAGE
 import ptools
+import PooToolsProgressBar
+import PooToolsLivePhoto
+import PooToolsPageControl
 #endif
 
 @MainActor
@@ -282,11 +285,20 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         if viewConfig.imageLongTapAction {
             let longTap = UILongPressGestureRecognizer { [weak self] sender in
                 guard let self = self else { return }
-                if let _ = sender as? UILongPressGestureRecognizer {
-                    if !self.imageLongTaped {
-                        self.longTapWakeUp?()
-                        self.imageLongTaped = true
-                    }
+                guard let longTap = sender as? UILongPressGestureRecognizer else { return }
+
+                // English: Fire once when the gesture begins and keep the guard active until it ends.
+                // Español: Ejecuta una sola vez al comenzar el gesto y mantiene la protección hasta que termine.
+                // 中文：手势开始时只执行一次，并保持保护状态直到手势结束。
+                switch longTap.state {
+                case .began:
+                    guard !self.imageLongTaped else { return }
+                    self.imageLongTaped = true
+                    self.longTapWakeUp?()
+                case .ended, .cancelled, .failed:
+                    self.imageLongTaped = false
+                default:
+                    break
                 }
             }
             longTap.numberOfTapsRequired = 1
@@ -345,7 +357,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func adjustFrame(normal:Bool = true,fixed:PTActionTask? = nil) {
+    func adjustFrame(normal: Bool = true, fixed: (@MainActor () -> Void)? = nil) {
         // English: Scroll-view bounds may carry a content offset; media frames must use zero-origin content coordinates.
         // Español: Los bounds del scroll pueden incluir contentOffset; los frames multimedia deben empezar en cero.
         // 中文：ScrollView 的 bounds 可能带有 contentOffset，媒体 frame 必须使用零起点内容坐标。
@@ -442,9 +454,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                     }
                     self.livePhoto.livePhoto = livePhotoTarget
                     self.adjustFrame(normal: false) {
-                        PTGCDManager.shared.runOnMain {
-                            self.livePhoto.startPlayback(with: .hint)
-                        }
+                        self.livePhoto.startPlayback(with: .hint)
                     }
                     self.livePhoto.isHidden = false
                     self.hideLoading()
@@ -666,8 +676,8 @@ extension PTMediaBrowserCell {
         reloadButton.isHidden = true
         imageView.image = UIImage()
         gifImage = nil
-        avItem.generateThumbnail { image in
-            Task { @MainActor in
+        avItem.generateThumbnail { [weak self] image in
+                guard let self else { return }
                 guard self.loadIdentifier == currentID else { return }
                 if image != nil {
                     self.currentCellType = .Video
@@ -690,7 +700,6 @@ extension PTMediaBrowserCell {
                     self.hideLoading()
                     self.createReloadButton()
                 }
-            }
         }
     }
 }

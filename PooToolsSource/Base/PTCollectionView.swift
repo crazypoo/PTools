@@ -697,6 +697,16 @@ extension PTCollectionView {
         self.waterfallCache.removeAll()
         self.fallbackLayouts.removeAll()
     }
+
+    // English: Invalidate cached layout metrics for external modules after changing the runtime layout.
+    // Español: Invalida las métricas de diseño en caché para módulos externos tras cambiar el diseño en tiempo de ejecución.
+    // 中文：外部模块修改运行时布局后，统一使缓存的布局指标失效。
+    @MainActor
+    public func invalidateRuntimeLayout() {
+        runtimeLayoutRevision &+= 1
+        clearLayoutCaches()
+        contentCollectionView.collectionViewLayout.invalidateLayout()
+    }
 }
 
 //MARK: 触摸事件

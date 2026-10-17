@@ -115,11 +115,11 @@ public class PTChatConfig: NSObject {
     ///自己消息的聊天氣泡
     public var chatMeBubbleImage:UIImage = UIColor.white.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
     ///自己消息的聊天Hightlight氣泡
-    public var chatMeHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.white).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
+    public var chatMeHighlightedBubbleImage:UIImage = DynamicColor.white.lightened(amount: 0.8).createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
     ///別人消息的聊天氣泡
     public var chatOtherBubbleImage:UIImage = UIColor.systemBlue.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
     ///別人消息的聊天Hightlight氣泡
-    public var chatOtherHighlightedBubbleImage:UIImage = HSL(color: DynamicColor.systemBlue).lighter(amount: 0.8).toDynamicColor().createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
+    public var chatOtherHighlightedBubbleImage:UIImage = DynamicColor.systemBlue.lightened(amount: 0.8).createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
     ///等待消息的圖片
     public var chatWaitImage:UIImage = "📀".emojiToImage(emojiFont: .appfont(size: 20))
     ///異常消息的圖片

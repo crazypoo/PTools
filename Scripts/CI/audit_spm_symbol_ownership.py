@@ -107,6 +107,22 @@ KNOWN_SYMBOLS = {
     "PTLoadImageFunction": "ptools",
     "PTDarkModeOption": "ptools",
     "PTAppBaseConfig": "ptools",
+    # English: Keep the biometric status owned by the KeyChain target in SwiftPM.
+    # Español: Mantén el estado biométrico propiedad del target KeyChain en SwiftPM.
+    # 中文：在 SwiftPM 中保持生物识别状态由 KeyChain target 负责。
+    "PTBiologyVerifyStatus": "PooToolsKeyChain",
+    # English: Keep ScrollBanner's page-control contracts on their owning target.
+    # Español: Mantén los contratos de control de páginas de ScrollBanner en su target propietario.
+    # 中文：保持 ScrollBanner 的分页控制协议归属于其唯一 target。
+    "PTFilledPageControl": "PooToolsPageControl",
+    "PTPillPageControl": "PooToolsPageControl",
+    "PTSnakePageControl": "PooToolsPageControl",
+    "PTImagePageControl": "PooToolsPageControl",
+    "PTScrollingPageControl": "PooToolsPageControl",
+    "PTPageProgressControllable": "PooToolsPageControl",
+    "PTPageControllable": "PooToolsPageControl",
+    "PTMediaBrowserLoadingView": "PooToolsProgressBar",
+    "PTLivePhoto": "PooToolsLivePhoto",
 }
 
 
@@ -248,7 +264,7 @@ def main() -> int:
                     "severity": severity,
                     "status": status,
                     "fixStrategy": fix_strategy,
-                    "fixCommit": "working-tree-5.65.5" if status != "open" else "",
+                    "fixCommit": "working-tree-5.65.7" if status != "open" else "",
                     "buildEvidence": "pending-isolated-consumer" if status != "closed" else "static-dependency-check",
                 })
 

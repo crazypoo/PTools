@@ -11,7 +11,9 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.65.6`，真机/宿主回归与发布证据完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.65.7`，真机/宿主回归与发布证据完成前不创建正式 tag。
+
+`5.65.7` 修复 SwiftPM 独立消费者的 BioID → KeyChain 和 ScrollBanner/Guide/MediaViewer → PageControl 依赖边界；新增覆盖全部 library products 的 iOS Xcode consumer host、Debug/Release 矩阵、诊断合并和发布门禁。BaboBuy/YD1688 属于外部宿主，必须在真实项目中完成最终回归。
 
 `5.65.6` 修复 MediaViewer、ScrollBanner 跨 SwiftPM target 访问 Core 内部视频扩展名集合的问题，统一使用公开的 `URL.pt_isVideoResource` 入口；并将该入口纳入全模块符号审计。
 

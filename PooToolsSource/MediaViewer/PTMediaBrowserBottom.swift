@@ -14,6 +14,9 @@ import ptools
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif
+#if SWIFT_PACKAGE
+import PooToolsPageControl
+#endif
 
 let PageControlHeight:CGFloat = 20
 let PageControlBottomSpace:CGFloat = 5

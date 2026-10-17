@@ -1,8 +1,17 @@
 # PTools 路线图
 
-> 当前代码基线：`5.65.6`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.65.7`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.65.5`；`5.65.6` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.65.5`；`5.65.7` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.65.7 SwiftPM 全模块消费者矩阵收口
+
+- ✅ `PooToolsBioID` 显式依赖并导入 `PooToolsKeyChain`，复用 `PTBiologyVerifyStatus` 的唯一实现。
+- ✅ `PooToolsScrollBanner`、`PooToolsGuide` 和 `PooToolsMediaViewer` 显式导入 `PooToolsPageControl`，保持 target 依赖与源码边界一致。
+- ✅ 生成全部 150 个 library product 的独立 iOS Xcode consumer target，Debug/Release 构建逐 product 记录日志和 xcresult。
+- ✅ 新增 API surface、ownership parity、依赖违规、条件编译/资源矩阵和历史问题矩阵报告。
+- ✅ 新增一键审计、诊断合并、严格发布门禁及 GitHub Actions 矩阵工作流；`not_run`、外部宿主和真机验证不再被伪装为通过。
+- ⬜ 当前工作树完成静态审计和关键产品验证后，仍需执行完整 150 × Debug/Release 矩阵及 BaboBuy/YD1688 真机宿主回归。
 
 ## 5.65.6 SwiftPM Core 视频资源入口收口
 

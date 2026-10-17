@@ -127,8 +127,8 @@ internal final class PTBadgeState {
 // MARK: - 统一内容和尺寸
 
 @MainActor
-internal enum PTBadgeContentResolver {
-    static func content(style: PTBadgeStyle, value: Any) -> PTBadgeContent {
+public enum PTBadgeContentResolver {
+    public static func content(style: PTBadgeStyle, value: Any) -> PTBadgeContent {
         switch style {
         case .redDot:
             return .redDot

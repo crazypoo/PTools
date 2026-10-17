@@ -9,6 +9,10 @@
 import UIKit
 import LocalAuthentication
 import Security
+#if SWIFT_PACKAGE
+import PooToolsKeyChain
+import ptools
+#endif
 
 @objc public enum PTBiometryStatus: Int {
     case none, touchID, faceID, opticID

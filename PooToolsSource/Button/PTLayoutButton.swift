@@ -775,7 +775,7 @@ public class PTLayoutButton: UIButton {
 
 extension PTLayoutButton {
     @MainActor
-    func layoutLoadImage(contentData:Any,
+    public func layoutLoadImage(contentData:Any,
                          iCloudDocumentName:String = "",
                          borderWidth:CGFloat? = nil,
                          borderColor:UIColor? = nil,

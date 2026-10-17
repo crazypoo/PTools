@@ -52,7 +52,7 @@ public class PTAdjustSliderView: UIView {
     
     lazy var separator: UIView = {
         let view = UIView()
-        view.backgroundColor = HSL(color: .white).lighter(amount: 0.8).toDynamicColor()
+        view.backgroundColor = .white
         return view
     }()
     

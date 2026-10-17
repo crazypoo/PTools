@@ -1,8 +1,6 @@
 # SwiftPM consumer fixtures
 
-This directory records the product/import matrix generated from the package manifest.
-It intentionally does not claim a build: isolated product builds require an iOS Xcode host.
+Generated sources cover every library product and are consumed by `Tests/SPMConsumerHost`.
+The generated status is `not_run` until the independent Xcode target is built.
 
-Use `Scripts/CI/build_spm_consumer_matrix.sh --require-build` with `SPM_CONSUMER_FIXTURE_PROJECT` and `SPM_CONSUMER_SCHEME` configured to record real Debug/Release evidence.
-
-这个目录只保存由 manifest 生成的 product/import 矩阵；`not_run` 不是通过。
+生成源码覆盖每个 library product；只有 Xcode 独立 consumer target 构建成功后才能记录 pass。

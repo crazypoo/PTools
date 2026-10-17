@@ -10,6 +10,8 @@ import UIKit
 @preconcurrency import EventKit
 #if SWIFT_PACKAGE
 import ptools
+import PTCalendarPermission
+import PTRemindersPermission
 #endif
 
 private struct PTSendableEventStoreBox: @unchecked Sendable {

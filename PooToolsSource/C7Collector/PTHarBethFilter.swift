@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreImage
 
 // English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
 // Español: Importa explícitamente el target Core para las compilaciones SwiftPM independientes.
@@ -43,9 +44,9 @@ public class PTHarBethFilter:NSObject {
         fatalError("init(coder:) has not been implemented")
     }
 
-    var texureSize:CGSize = CGSizeMake(CGFloat.kSCREEN_WIDTH, CGFloat.kSCREEN_HEIGHT)
+    public var texureSize:CGSize = CGSizeMake(CGFloat.kSCREEN_WIDTH, CGFloat.kSCREEN_HEIGHT)
     
-    static func overTexture(size: CGSize? = nil) -> MTLTexture? {
+    public static func overTexture(size: CGSize? = nil) -> MTLTexture? {
         let color = UIColor.green.withAlphaComponent(0.5)
         let targetSize = size ?? PTHarBethFilter.share.texureSize
         guard targetSize.width.isFinite, targetSize.height.isFinite,
@@ -144,9 +145,9 @@ public class PTHarBethFilter:NSObject {
                     return filter
                 })
             case .cigaussian:
-                var filter = CIGaussianBlur()
+                var filter = C7GaussianBlur()
                 filter.radius = 15
-                return (filter, (CIGaussianBlur.range.value, CIGaussianBlur.range.min, CIGaussianBlur.range.max), {
+                return (filter, (C7GaussianBlur.range.value, C7GaussianBlur.range.min, C7GaussianBlur.range.max), {
                     filter.radius = $0
                     return filter
                 })

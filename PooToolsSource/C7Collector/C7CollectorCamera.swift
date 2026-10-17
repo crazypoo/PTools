@@ -53,7 +53,7 @@ public final class C7CollectorCamera: C7Collector {
     private var microPhontIsAvailable = true
     private var restartRecordAfterSwitchCamera = false
     
-    var animateLayer: CAShapeLayer!
+    public var animateLayer: CAShapeLayer!
     
     private var videoRotationAngle: CGFloat = 90
     private var cacheVideoRotationAngle: CGFloat = 90
@@ -565,10 +565,10 @@ extension C7CollectorCamera: @MainActor AVCaptureFileOutputRecordingDelegate {
     
     private func startRecordAnimation() {
         UIView.animate(withDuration: 0.1, animations: {
-            self.largeCircleView.layer.transform = CATransform3DScale(CATransform3DIdentity, PTFilterCameraViewController.largeCircleRecordScale, PTFilterCameraViewController.largeCircleRecordScale, 1)
-            self.smallCircleView.layer.transform = CATransform3DScale(CATransform3DIdentity, PTFilterCameraViewController.smallCircleRecordScale, PTFilterCameraViewController.smallCircleRecordScale, 1)
-            self.borderLayer.strokeColor = PTFilterCameraViewController.cameraBtnRecodingBorderColor.cgColor
-            self.borderLayer.lineWidth = PTFilterCameraViewController.animateLayerWidth
+            self.largeCircleView.layer.transform = CATransform3DScale(CATransform3DIdentity, C7CameraConfig.largeCircleRecordScale, C7CameraConfig.largeCircleRecordScale, 1)
+            self.smallCircleView.layer.transform = CATransform3DScale(CATransform3DIdentity, C7CameraConfig.smallCircleRecordScale, C7CameraConfig.smallCircleRecordScale, 1)
+            self.borderLayer.strokeColor = C7CameraConfig.cameraBtnRecodingBorderColor.cgColor
+            self.borderLayer.lineWidth = C7CameraConfig.animateLayerWidth
         }) { _ in
             self.largeCircleView.layer.addSublayer(self.animateLayer)
             let animation = CABasicAnimation(keyPath: "strokeEnd")
@@ -582,8 +582,8 @@ extension C7CollectorCamera: @MainActor AVCaptureFileOutputRecordingDelegate {
     
     private func stopRecordAnimation() {
         Task { @MainActor in
-            self.borderLayer.strokeColor = PTFilterCameraViewController.cameraBtnNormalColor.cgColor
-            self.borderLayer.lineWidth = PTFilterCameraViewController.borderLayerWidth
+            self.borderLayer.strokeColor = C7CameraConfig.cameraBtnNormalColor.cgColor
+            self.borderLayer.lineWidth = C7CameraConfig.borderLayerWidth
             self.animateLayer.speed = 1
             self.animateLayer.timeOffset = 0
             self.animateLayer.beginTime = 0

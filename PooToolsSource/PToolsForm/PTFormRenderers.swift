@@ -10,6 +10,8 @@ import PToolsCore
 import PooToolsPicker
 import PooToolsCheckBox
 import PooToolsSlider
+import PooToolsInput
+import PooToolsStepper
 #else
 #if canImport(PToolsCore)
 import PToolsCore

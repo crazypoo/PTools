@@ -435,7 +435,10 @@ public class PTMediaLibManager: NSObject {
     /// Unified typed image-data request boundary.
     @discardableResult
     public class func requestImageData(for asset: PHAsset,
-                                      progress: (@Sendable (CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil,
+                                      // English: PhotoKit owns this callback; UI consumers hop back to MainActor before touching the cell.
+                                      // Español: PhotoKit posee este callback; los consumidores de UI vuelven a MainActor antes de tocar la celda.
+                                      // 中文：该回调由 PhotoKit 持有；UI 消费方会先回到 MainActor 再操作 Cell。
+                                      progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil,
                                       completion: @escaping @MainActor @Sendable (PTMediaImageDataRequestResult) -> Void) -> PHImageRequestID {
         guard !asset.localIdentifier.isEmpty else {
             Task { @MainActor in

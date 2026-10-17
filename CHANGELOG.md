@@ -6,6 +6,13 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.65.7 — 2026-10-17
+
+- 修复 `PooToolsBioID` 独立 SwiftPM target 缺少 `PooToolsKeyChain` 直接依赖和显式导入的问题，继续复用唯一的 `PTBiologyVerifyStatus` 定义。
+- 修复 `PooToolsScrollBanner`、`PooToolsGuide` 和 `PooToolsMediaViewer` 使用 PageControl 公共类型但未显式导入 `PooToolsPageControl` 的问题。
+- 新增覆盖全部 SwiftPM library products 的实际 iOS Xcode consumer host、Debug/Release 构建矩阵、日志与 xcresult 留存、诊断合并和严格发布门禁。
+- 新增 API surface、ownership parity、dependency、macro/resource、历史问题矩阵和 CI workflow；`not_run` 不再被视为通过，BaboBuy/YD1688 继续标记为外部宿主验证项。
+
 ## 5.65.6 — 2026-10-17
 
 - 修复 `PooToolsScrollBanner` 和 `PooToolsMediaViewer` 跨 SwiftPM target 访问 Core 内部 `GlobalVideoExts` 导致的独立编译失败；统一改用 Core 公开的 `URL.pt_isVideoResource` 视频资源判定入口。

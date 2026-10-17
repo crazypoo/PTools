@@ -349,6 +349,12 @@ open class PTChatBaseCell: PTBaseNormalCell {
     }
 }
 
+// English: MainActor isolation makes the shared chat-cell base safe to capture in UI tasks.
+// Español: La aislación MainActor hace segura la captura de la base común de celdas de chat en tareas de UI.
+// 中文：共享聊天 Cell 基类由 MainActor 隔离，因此可以安全地被界面任务捕获。
+@MainActor
+extension PTChatBaseCell: Sendable {}
+
 // MARK: - Convenience Methods for Layout Constraints
 extension ConstraintMaker {
     @MainActor func rightOrLeftEqualToSuperView(belongToMe: Bool,equalView:UIView? = nil, inset: CGFloat) {

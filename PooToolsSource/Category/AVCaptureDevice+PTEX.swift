@@ -12,6 +12,14 @@ import AVFoundation
 public struct VideoSpec {
     public var fps: Int32?
     public var size: CGSize?
+
+    // English: Keep the public video specification constructible by every SwiftPM consumer target.
+    // Español: Mantiene la especificación de vídeo construible desde cualquier target consumidor de SwiftPM.
+    // 中文：让所有 SwiftPM Consumer target 都可以直接构造视频规格。
+    public init(fps: Int32? = nil, size: CGSize? = nil) {
+        self.fps = fps
+        self.size = size
+    }
 }
 
 public extension AVCaptureDevice {

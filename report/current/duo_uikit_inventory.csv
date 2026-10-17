@@ -145,7 +145,7 @@ PooToolsSource/C7Collector/C7Collector.swift,C7Collector,yes,ui-helper,C7Collect
 PooToolsSource/C7Collector/C7CollectorCamera.swift,C7Collector,yes,view,C7Collector,not-layout,medium,needs-review,,,inventory
 PooToolsSource/C7Collector/C7CollectorVideo.swift,C7Collector,yes,not-ui,C7Collector,not-layout,none,not-applicable,,,inventory
 PooToolsSource/C7Collector/PTC7VideoExportService.swift,C7Collector,no,not-ui,C7Collector,not-layout,none,not-applicable,,,inventory
-PooToolsSource/C7Collector/PTCameraAnimationUtils.swift,C7Collector,no,ui-helper,C7Collector,not-layout,medium,needs-review,,,inventory
+PooToolsSource/C7Collector/PTCameraAnimationUtils.swift,C7Collector,yes,ui-helper,C7Collector,not-layout,medium,needs-review,,,inventory
 PooToolsSource/C7Collector/PTCameraFilterConfig.swift,C7Collector,yes,ui-helper,C7Collector,not-layout,medium,needs-review,,,candidate
 PooToolsSource/C7Collector/PTFilterCameraViewController.swift,C7Collector,yes,view-controller,C7Collector,global-geometry-risk,high,needs-review,,,candidate
 PooToolsSource/C7Collector/PTFilterImageCell.swift,C7Collector,yes,ui-helper,C7Collector,local-or-unclassified,medium,needs-review,,,inventory

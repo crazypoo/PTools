@@ -145,7 +145,7 @@ public class PTCameraFilterConfig: NSObject {
     /// Camera focus mode. Defaults to continuousAutoFocus
     public var focusMode: PTCameraFilterConfig.FocusMode = .continuousAutoFocus
     @objc public enum FocusMode: Int {
-        var avFocusMode: AVCaptureDevice.FocusMode {
+        public var avFocusMode: AVCaptureDevice.FocusMode {
             switch self {
             case .autoFocus:
                 return .autoFocus
@@ -161,7 +161,7 @@ public class PTCameraFilterConfig: NSObject {
     /// Camera exposure mode. Defaults to continuousAutoExposure
     public var exposureMode: PTCameraFilterConfig.ExposureMode = .continuousAutoExposure
     @objc public enum ExposureMode: Int {
-        var avFocusMode: AVCaptureDevice.ExposureMode {
+        public var avFocusMode: AVCaptureDevice.ExposureMode {
             switch self {
             case .autoExpose:
                 return .autoExpose

@@ -44,13 +44,13 @@ public enum PTModelUIKitCodec {
     // Español: Codifica geometría UIKit común como objetos JSON compactos y estables.
     // 中文：将常用 UIKit 几何值编码为紧凑稳定的 JSON 对象。
     public static func jsonValue(_ point: CGPoint) throws -> PTJSONValue {
-        .object(["x": .number(try PTJSONNumber(String(point.x))),
-                 "y": .number(try PTJSONNumber(String(point.y)))])
+        .object(["x": .number(try PTJSONNumber(String(Double(point.x)))),
+                 "y": .number(try PTJSONNumber(String(Double(point.y))))])
     }
 
     public static func jsonValue(_ size: CGSize) throws -> PTJSONValue {
-        .object(["width": .number(try PTJSONNumber(String(size.width))),
-                 "height": .number(try PTJSONNumber(String(size.height)))])
+        .object(["width": .number(try PTJSONNumber(String(Double(size.width)))),
+                 "height": .number(try PTJSONNumber(String(Double(size.height))))])
     }
 
     public static func jsonValue(_ rect: CGRect) throws -> PTJSONValue {
@@ -59,20 +59,22 @@ public enum PTModelUIKitCodec {
 
     public static func point(from value: PTJSONValue) throws -> CGPoint {
         let object = try object(from: value)
-        return CGPoint(x: try number(object, key: "x"), y: try number(object, key: "y"))
+        return CGPoint(x: CGFloat(try number(object, key: "x")),
+                      y: CGFloat(try number(object, key: "y")))
     }
 
     public static func size(from value: PTJSONValue) throws -> CGSize {
         let object = try object(from: value)
-        return CGSize(width: try number(object, key: "width"), height: try number(object, key: "height"))
+        return CGSize(width: CGFloat(try number(object, key: "width")),
+                     height: CGFloat(try number(object, key: "height")))
     }
 
     public static func rect(from value: PTJSONValue) throws -> CGRect {
         let object = try object(from: value)
-        guard let origin = object["origin"], let size = object["size"] else {
+        guard let origin = object["origin"], let sizeValue = object["size"] else {
             throw PTModelError.conversionFailed("CGRect requires origin and size")
         }
-        return CGRect(origin: try point(from: origin), size: try size(from: size))
+        return CGRect(origin: try point(from: origin), size: try size(from: sizeValue))
     }
 
     private static func object(from value: PTJSONValue) throws -> [String: PTJSONValue] {
@@ -82,10 +84,9 @@ public enum PTModelUIKitCodec {
         return object
     }
 
-    private static func number<T: BinaryFloatingPoint>(_ object: [String: PTJSONValue],
-                                                       key: String) throws -> T {
+    private static func number(_ object: [String: PTJSONValue], key: String) throws -> Double {
         guard let value = object[key], case .number(let number) = value,
-              let result = number.doubleValue.flatMap(T.init) else {
+              let result = number.doubleValue else {
             throw PTModelError.conversionFailed("Missing geometry value: \(key)")
         }
         return result

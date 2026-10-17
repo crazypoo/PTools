@@ -158,7 +158,7 @@ public class PTChatFileCell: PTChatBaseCell {
         } else {
             // 在线文件大小
             url.getFileSizeOnline { [weak self] fileSize in
-                PTMainActorBridge.perform { [weak self] in
+                Task { @MainActor [weak self] in
                     guard let self, self.fileInfoGeneration == generation else { return }
                     let fileSizeString = FileManager.pt.covertUInt64ToString(with: fileSize)
                     self.setFileInfo(name: url.lastPathComponent, size: fileSizeString)

@@ -8,6 +8,7 @@
 import UIKit
 #if SWIFT_PACKAGE
 import ptools
+import PooToolsCustomerLabel
 #endif
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation

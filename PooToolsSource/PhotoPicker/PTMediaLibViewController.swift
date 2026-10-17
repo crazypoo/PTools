@@ -153,9 +153,7 @@ public class PTMediaLibView: UIView {
         let itemWidth = max(1, (width - CGFloat(config.rowCount - 1) * config.cellLeadingSpace) / CGFloat(max(1, config.rowCount)))
         guard abs(config.itemHeight - itemWidth) > 0.5 else { return }
         config.itemHeight = itemWidth
-        collectionView.runtimeLayoutRevision &+= 1
-        collectionView.clearLayoutCaches()
-        collectionView.contentCollectionView.collectionViewLayout.invalidateLayout()
+        collectionView.invalidateRuntimeLayout()
     }
 }
 
@@ -200,9 +198,7 @@ private extension PTMediaLibView {
 
             // 配置选择回调
             cell.selectedBlock = { [weak self] isSelected in
-                Task { @MainActor in
-                    self?.cellSelectedFunction(cellModel: cellModel, cell: cell, isSelected: isSelected)
-                }
+                self?.cellSelectedFunction(cellModel: cellModel, cell: cell, isSelected: isSelected)
             }
             
             // 配置编辑按钮
@@ -534,7 +530,9 @@ extension PTMediaLibView {
     ///   - cellModel: 当前点击的数据模型
     ///   - cell: 当前点击的 UI 单元格
     ///   - isSelected: 选择状态回调（通常用于同步按钮内部状态）
-    func cellSelectedFunction(cellModel: PTMediaModel, cell: PTMediaLibCell, isSelected: PTBoolTask? = nil) {
+    func cellSelectedFunction(cellModel: PTMediaModel,
+                              cell: PTMediaLibCell,
+                              isSelected: (@MainActor @Sendable (Bool) -> Void)? = nil) {
         let config = PTMediaLibConfig.share
         
         // --- 情况 A: 准备选中该资源 ---
@@ -583,7 +581,9 @@ extension PTMediaLibView {
     }
     
     /// 重置 Cell 状态（取消选中）
-    func cellStatusReset(cellModel: PTMediaModel, cell: PTMediaLibCell, isSelected: PTBoolTask? = nil) {
+    func cellStatusReset(cellModel: PTMediaModel,
+                         cell: PTMediaLibCell,
+                         isSelected: (@MainActor @Sendable (Bool) -> Void)? = nil) {
         let config = PTMediaLibConfig.share
         
         // 1. 如果该资源正在执行导出操作（如视频），立即取消

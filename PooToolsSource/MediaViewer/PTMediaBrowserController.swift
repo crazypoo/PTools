@@ -14,6 +14,10 @@ import ptools
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif
+#if SWIFT_PACKAGE
+import PooToolsPageControl
+import PooToolsProgressBar
+#endif
 
 let numberOfVisibleLines = 2
 
@@ -158,9 +162,6 @@ public class PTMediaBrowserController: PTBaseViewController {
                     Task { @MainActor in
                         self.toolBarControl(hide: true)
                         self.moreAction(sender: self.bottomControl.moreActionButton)
-                        PTGCDManager.shared.delayOnMain(time: 0.5) {
-                            cell.imageLongTaped = false
-                        }
                     }
                 }
                 cell.videoPlayHandler = { [weak self] videoController in

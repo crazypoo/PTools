@@ -13,12 +13,28 @@ import UIKit
 // 中文：独立 SwiftPM 编译时，显式导入 Core 聚合 target。
 #if SWIFT_PACKAGE
 import ptools
+import PooToolsHud
+import PooToolsLoading
 #endif
 import AVFoundation
 
 @MainActor
 public class C7CameraConfig: NSObject {
     public static let share = C7CameraConfig()
+
+    // English: Keep camera control metrics in the implementation target so the collector does not depend on a view controller.
+    // Español: Mantiene las métricas de control de cámara en el target de implementación para que el collector no dependa de un controlador.
+    // 中文：将相机控制尺寸集中在实现 target 中，避免采集器反向依赖控制器。
+    public static let largeCircleRadius: CGFloat = 80
+    public static let borderLayerWidth: CGFloat = 1.8
+    public static let smallCircleRadius: CGFloat = 65
+    public static let largeCircleRecordScale: CGFloat = 1.2
+    public static let smallCircleRecordScale: CGFloat = 0.5
+    public static let cameraBtnRecodingBorderColor: UIColor = .white.withAlphaComponent(0.8)
+    public static let cameraBtnNormalColor: UIColor = .white
+    public static let toolBarHeight: CGFloat = 120
+    public static let animateLayerWidth: CGFloat = 5
+    public static let filterCollectionHeight: CGFloat = 108
 
     // English: Camera flows can own an independent configuration instead of mutating the shared default.
     // Español: Los flujos de cámara pueden poseer una configuración independiente sin mutar el valor compartido.

@@ -13,6 +13,7 @@ import UIKit
 // 中文：独立 SwiftPM 编译时，显式导入 Core 聚合 target。
 #if SWIFT_PACKAGE
 import ptools
+import PooToolsProgressBar
 #endif
 
 /// 高性能且高度可定制的 Swift 版 ProgressHUD

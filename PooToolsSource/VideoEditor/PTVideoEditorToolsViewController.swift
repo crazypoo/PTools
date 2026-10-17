@@ -16,6 +16,9 @@ import Photos
 #if SWIFT_PACKAGE
 import ptools
 import PToolsSymbols
+import PooToolsHarbethKit
+import PooToolsHud
+import PooToolsLoading
 #endif
 
 public let OutputFilePath = FileManager.pt.DocumnetsDirectory() + "/AudioEditor"

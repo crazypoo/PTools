@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "4c508f23263c51171d48163d641a4d808069b81a",
-  "generated_at": "2026-10-16T23:53:38Z",
+  "source_revision": "8d3d43f7ab95fd135e57d711d8bf256d6d9978af",
+  "generated_at": "2026-10-17T15:28:04Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -470,19 +470,6 @@
   ],
   "dependency_drift": [
     {
-      "module": "BilogyID",
-      "field": "internal_dependencies",
-      "spm": [
-        "Core",
-        "FaceIDPermission"
-      ],
-      "cocoapods": [
-        "Core",
-        "FaceIDPermission",
-        "KeyChain"
-      ]
-    },
-    {
       "module": "BluetoothPermission",
       "field": "internal_dependencies",
       "spm": [
@@ -497,6 +484,8 @@
       "field": "internal_dependencies",
       "spm": [
         "Core",
+        "Hud",
+        "Loading",
         "NetWork"
       ],
       "cocoapods": [
@@ -564,37 +553,13 @@
       ]
     },
     {
-      "module": "Form",
-      "field": "internal_dependencies",
-      "spm": [
-        "Accessibility",
-        "CheckBox",
-        "ContentState",
-        "Core",
-        "PToolsCore",
-        "Picker",
-        "Slider",
-        "Theme"
-      ],
-      "cocoapods": [
-        "Accessibility",
-        "CheckBox",
-        "ContentState",
-        "Core",
-        "Input",
-        "PToolsCore",
-        "Picker",
-        "Slider",
-        "Stepper",
-        "Theme"
-      ]
-    },
-    {
       "module": "HarbethKit",
       "field": "internal_dependencies",
       "spm": [
         "CameraPermission",
         "Core",
+        "Hud",
+        "Loading",
         "MediaViewer",
         "Symbols"
       ],
@@ -656,6 +621,21 @@
       ]
     },
     {
+      "module": "Location",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "LocationPermission",
+        "Storage",
+        "StorageCore"
+      ],
+      "cocoapods": [
+        "Core",
+        "LocationPermission",
+        "Storage"
+      ]
+    },
+    {
       "module": "MediaViewer",
       "field": "internal_dependencies",
       "spm": [
@@ -682,6 +662,22 @@
       ],
       "cocoapods": [
         "MeidaPermission"
+      ]
+    },
+    {
+      "module": "MessageKit",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "CustomerLabel",
+        "NetWork",
+        "ProgressBar",
+        "Symbols"
+      ],
+      "cocoapods": [
+        "Core",
+        "CustomerLabel",
+        "Symbols"
       ]
     },
     {
@@ -737,6 +733,7 @@
         "ImagePicker",
         "Loading",
         "MediaCore",
+        "PToolsUIFoundation",
         "Symbols"
       ],
       "cocoapods": [
@@ -1808,13 +1805,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "e47f1a14cb4e3eb26d8a45d296ff0872fdc678c40d5a76bc5360720e6fc3aa7c",
-  "schemaVersion": 1,
-  "generatedAt": "2026-10-16T23:53:38Z",
-  "repository": "crazypoo/PTools",
-  "branch": "master",
-  "sourceRevision": "4c508f23263c51171d48163d641a4d808069b81a",
-  "sourceVersion": "5.65.6",
-  "generatorVersion": "Scripts/validate_module_parity.sh",
-  "sourceInputsDigest": "a87b93f96939b4e60d1a69bd9a8ed165943fd5ee7941c29c3cda17d8649b691d"
+  "fingerprint": "c496fd26ad44da480706e72a287ded2e5fc3bb5f1a7594d7b3d571154ec17a62"
 }

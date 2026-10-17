@@ -9,6 +9,7 @@
 import UIKit
 #if SWIFT_PACKAGE
 import ptools
+import PooToolsHarbethKit
 #endif
 import SnapKit
 

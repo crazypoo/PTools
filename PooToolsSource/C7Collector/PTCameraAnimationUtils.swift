@@ -8,17 +8,17 @@
 
 import UIKit
 
-class PTCameraAnimationUtils: NSObject {
-    enum AnimationType: String {
+public class PTCameraAnimationUtils: NSObject {
+    public enum AnimationType: String {
         case fade = "opacity"
         case scale = "transform.scale"
         case rotate = "transform.rotation"
     }
     
-    class func animation(type: PTCameraAnimationUtils.AnimationType,
-                         fromValue: CGFloat,
-                         toValue: CGFloat,
-                         duration: TimeInterval) -> CAAnimation {
+    public class func animation(type: PTCameraAnimationUtils.AnimationType,
+                                fromValue: CGFloat,
+                                toValue: CGFloat,
+                                duration: TimeInterval) -> CAAnimation {
         let animation = CABasicAnimation(keyPath: type.rawValue)
         animation.fromValue = fromValue
         animation.toValue = toValue

@@ -17,6 +17,17 @@ import ptools
 import CoreVideo
 import Harbeth
 
+// English: Harbeth has finished producing these SDK objects before they cross to MainActor.
+// Español: Harbeth ya terminó de producir estos objetos del SDK antes de cruzar a MainActor.
+// 中文：Harbeth 在对象跨到 MainActor 前已经完成生成，跨 actor 期间只读这些系统对象。
+private struct PTSystemTextureBox: @unchecked Sendable {
+    let value: MTLTexture
+}
+
+private struct PTSystemImageBox: @unchecked Sendable {
+    let value: UIImage
+}
+
 @objc public protocol C7CollectorImageDelegate: NSObjectProtocol {
     
     /// The filter image is returned in the child thread.
@@ -40,8 +51,7 @@ import Harbeth
 }
 
 @MainActor
-public class C7Collector: NSObject, Cacheable {
-    
+public class C7Collector: NSObject {
     public var filters: [C7FilterProtocol] = []
     public var videoSettings: [String : Sendable] = [
         kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA
@@ -64,7 +74,9 @@ public class C7Collector: NSObject, Cacheable {
     }
     
     open func setupInit() {
-        let _ = textureCache
+        // English: Harbeth owns the shared texture cache and supplies it at conversion time.
+        // Español: Harbeth posee la caché de texturas compartida y la proporciona al convertir.
+        // 中文：共享纹理缓存由 Harbeth 持有，在转换时统一提供。
     }
 }
 
@@ -75,7 +87,7 @@ extension C7Collector {
             return nil
         }
         delegate?.captureOutput?(self, pixelBuffer: pixelBuffer)
-        let texture = pixelBuffer.c7.toMTLTexture(textureCache: textureCache)
+        let texture = pixelBuffer.c7.toMTLTexture(textureCache: HarbethContext.shared.cvMetalTextureCache)
         let dest = HarbethIO(element: texture, filters: filters)
         guard let texture = try? dest.output() else {
             return nil
@@ -89,21 +101,25 @@ extension C7Collector {
             return
         }
         delegate?.captureOutput?(self, pixelBuffer: pixelBuffer)
-        guard let texture = pixelBuffer.c7.toMTLTexture(textureCache: textureCache) else {
+        guard let texture = pixelBuffer.c7.toMTLTexture(textureCache: HarbethContext.shared.cvMetalTextureCache) else {
             return
         }
         var dest = HarbethIO(element: texture, filters: filters)
         dest.transmitOutputRealTimeCommit = true
         
         dest.transmitOutput(success: { [weak self] desTexture in
+            let textureBox = PTSystemTextureBox(value: desTexture)
+            guard let outputImage = desTexture.c7.toImage() else { return }
+            let imageBox = PTSystemImageBox(value: outputImage)
+
             // 💡 修复点：一进入闭包，立刻切回主线程！
-            Task { @MainActor in
+            Task { @MainActor [weak self, textureBox, imageBox] in
                 guard let self = self else { return }
                 
                 // 现在下面的所有 self 调用都是绝对安全的了
-                self.delegate?.captureOutput?(self, texture: desTexture)
+                self.delegate?.captureOutput?(self, texture: textureBox.value)
                 
-                guard var image = desTexture.c7.toImage() else { return }
+                var image = imageBox.value
                 
                 if self.autoCorrectDirection {
                     image = image.c7.fixOrientation()

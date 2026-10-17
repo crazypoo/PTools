@@ -1129,6 +1129,7 @@
       "PooToolsNetWork",
       "PooToolsNetwork",
       "PooToolsCheckUpdate",
+      "PooToolsMessageKit",
       "PooToolsSocketKit",
       "PooToolsDEBUG",
       "PooToolsDEBUGTrackingEyes",
@@ -1858,8 +1859,10 @@
       "PToolsCore",
       "PToolsTheme",
       "PooToolsCheckBox",
+      "PooToolsInput",
       "PooToolsPicker",
       "PooToolsSlider",
+      "PooToolsStepper",
       "ptools"
     ],
     "name": "PToolsForm",
@@ -2261,6 +2264,7 @@
       "PooToolsNetWork",
       "PooToolsNetwork",
       "PooToolsCheckUpdate",
+      "PooToolsMessageKit",
       "PooToolsSocketKit",
       "PooToolsDEBUG",
       "PooToolsDEBUGTrackingEyes",
@@ -2312,6 +2316,7 @@
       "PooToolsNetWork",
       "PooToolsNetwork",
       "PooToolsCheckUpdate",
+      "PooToolsMessageKit",
       "PooToolsSocketKit",
       "PooToolsDEBUG",
       "PooToolsDEBUGTrackingEyes",
@@ -2346,6 +2351,7 @@
       "PooToolsNetWork",
       "PooToolsNetwork",
       "PooToolsCheckUpdate",
+      "PooToolsMessageKit",
       "PooToolsSocketKit",
       "PooToolsDEBUG",
       "PooToolsDEBUGTrackingEyes",
@@ -2472,6 +2478,7 @@
       "PooToolsNetWork",
       "PooToolsNetwork",
       "PooToolsCheckUpdate",
+      "PooToolsMessageKit",
       "PooToolsSocketKit",
       "PooToolsDEBUG",
       "PooToolsDEBUGTrackingEyes",
@@ -3740,6 +3747,7 @@
   {
     "dependencies": [
       "PTFaceIDPermission",
+      "PooToolsKeyChain",
       "ptools"
     ],
     "name": "PooToolsBioID",
@@ -3894,6 +3902,8 @@
   },
   {
     "dependencies": [
+      "PooToolsHud",
+      "PooToolsLoading",
       "PooToolsNetWork",
       "ptools"
     ],
@@ -4681,17 +4691,22 @@
   },
   {
     "dependencies": [
+      "PTCameraPermission",
+      "PToolsSymbols",
       "PooToolsHarbethKit",
-      "PooToolsMediaViewer"
+      "PooToolsImageEditor",
+      "PooToolsMediaViewer",
+      "ptools"
     ],
     "name": "PooToolsFilterCamera",
-    "path": "PooToolsSource/FilterCamera",
+    "path": "PooToolsSource",
     "product_memberships": [
       "PooToolsFilterCamera"
     ],
     "resources": [],
-    "source_count": 1,
+    "source_count": 2,
     "sources": [
+      "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
       "PooToolsSource/FilterCamera/PTFilterCameraCompatibility.swift"
     ],
     "swift_settings": [
@@ -4791,6 +4806,8 @@
     "dependencies": [
       "PTCameraPermission",
       "PToolsSymbols",
+      "PooToolsHud",
+      "PooToolsLoading",
       "PooToolsMediaViewer",
       "ptools"
     ],
@@ -4804,7 +4821,7 @@
       "PooToolsAll"
     ],
     "resources": [],
-    "source_count": 11,
+    "source_count": 10,
     "sources": [
       "PooToolsSource/C7Collector/C7CameraConfig.swift",
       "PooToolsSource/C7Collector/C7Collector.swift",
@@ -4813,7 +4830,6 @@
       "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
       "PooToolsSource/C7Collector/PTCameraAnimationUtils.swift",
       "PooToolsSource/C7Collector/PTCameraFilterConfig.swift",
-      "PooToolsSource/C7Collector/PTFilterCameraViewController.swift",
       "PooToolsSource/C7Collector/PTFilterImageCell.swift",
       "PooToolsSource/C7Collector/PTHarBethFilter.swift",
       "PooToolsSource/C7Collector/PTTakePictureReviewer.swift"
@@ -4886,6 +4902,11 @@
     "path": "PooToolsSource/Hud",
     "product_memberships": [
       "PooToolsHud",
+      "PooToolsHarbethKit",
+      "PooToolsFilterCamera",
+      "PooToolsImageEditor",
+      "PooToolsVideoEditor",
+      "PooToolsCheckUpdate",
       "PooToolsAll"
     ],
     "resources": [],
@@ -4960,6 +4981,7 @@
     "name": "PooToolsImageEditor",
     "path": "PooToolsSource/ImageEditor",
     "product_memberships": [
+      "PooToolsFilterCamera",
       "PooToolsImageEditor",
       "PooToolsAll"
     ],
@@ -5016,6 +5038,7 @@
     "product_memberships": [
       "PooToolsImagePicker",
       "PooToolsPhotoPicker",
+      "PooToolsFilterCamera",
       "PooToolsImageEditor",
       "PooToolsScanQRCode",
       "PooToolsAll"
@@ -5055,6 +5078,7 @@
     "name": "PooToolsInput",
     "path": "PooToolsSource/Input",
     "product_memberships": [
+      "PToolsForm",
       "PooToolsInput",
       "PooToolsAll"
     ],
@@ -5154,6 +5178,7 @@
       "PToolsConfiguration",
       "PToolsWidgetCore",
       "PToolsAuth",
+      "PooToolsBioID",
       "PooToolsKeyChain",
       "PooToolsLocation",
       "PooToolsDEBUG",
@@ -5342,10 +5367,13 @@
       "PooToolsNetWork",
       "PooToolsNetwork",
       "PooToolsPhotoPicker",
+      "PooToolsHarbethKit",
+      "PooToolsFilterCamera",
       "PooToolsImageEditor",
       "PooToolsVideoEditor",
       "PooToolsCheckUpdate",
       "PooToolsScanQRCode",
+      "PooToolsMessageKit",
       "PooToolsSocketKit",
       "PooToolsDEBUG",
       "PooToolsDEBUGTrackingEyes",
@@ -5381,6 +5409,7 @@
     "dependencies": [
       "PTLocationPermission",
       "PToolsStorage",
+      "PToolsStorageCore",
       "ptools"
     ],
     "name": "PooToolsLocation",
@@ -5500,6 +5529,8 @@
     "dependencies": [
       "PToolsSymbols",
       "PooToolsCustomerLabel",
+      "PooToolsNetWork",
+      "PooToolsProgressBar",
       "ptools"
     ],
     "name": "PooToolsMessageKit",
@@ -5600,6 +5631,7 @@
       "PooToolsNetWork",
       "PooToolsNetwork",
       "PooToolsCheckUpdate",
+      "PooToolsMessageKit",
       "PooToolsSocketKit",
       "PooToolsDEBUG",
       "PooToolsDEBUGTrackingEyes",
@@ -5886,6 +5918,7 @@
     "dependencies": [
       "PTCameraPermission",
       "PToolsSymbols",
+      "PToolsUIFoundation",
       "PooToolsImagePicker",
       "PooToolsLoading",
       "PooToolsMediaCore",
@@ -5895,6 +5928,7 @@
     "path": "PooToolsSource",
     "product_memberships": [
       "PooToolsPhotoPicker",
+      "PooToolsFilterCamera",
       "PooToolsImageEditor",
       "PooToolsScanQRCode",
       "PooToolsAll"
@@ -6069,6 +6103,8 @@
       "PooToolsFilterCamera",
       "PooToolsImageEditor",
       "PooToolsVideoEditor",
+      "PooToolsCheckUpdate",
+      "PooToolsMessageKit",
       "PooToolsAll"
     ],
     "resources": [],
@@ -6720,6 +6756,7 @@
     "name": "PooToolsStepper",
     "path": "PooToolsSource/Stepper",
     "product_memberships": [
+      "PToolsForm",
       "PooToolsStepper",
       "PooToolsAll"
     ],

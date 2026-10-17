@@ -6,6 +6,10 @@ PooToolsSource/Category/AVExport+PTEX.swift
 PooToolsSource/Category/PHAsset+PTEX.swift
 PooToolsSource/Category/PTVideoThumbnailService.swift
 PooToolsSource/C7Collector/C7CollectorCamera.swift
+# Harbeth output texture and image boxes cross one callback boundary and are consumed read-only on MainActor.
+# Las cajas de textura e imagen de salida de Harbeth cruzan un único callback y se consumen solo en MainActor.
+# Harbeth 输出纹理和图片包装器只跨越一次回调边界，并且仅在 MainActor 上只读使用。
+PooToolsSource/C7Collector/C7Collector.swift
 PooToolsSource/C7Collector/PTC7VideoExportService.swift
 # system-framework-boundary: CMSampleBuffer crosses one AVFoundation callback boundary and is never mutated by the box.
 # límite del sistema: CMSampleBuffer cruza un único callback de AVFoundation y la caja nunca lo modifica.

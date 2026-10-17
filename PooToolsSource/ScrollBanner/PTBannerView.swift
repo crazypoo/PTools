@@ -13,6 +13,9 @@ import SnapKit
 import PToolsUIFoundation
 #endif
 #if SWIFT_PACKAGE
+import PooToolsPageControl
+#endif
+#if SWIFT_PACKAGE
 import ptools
 #endif
 

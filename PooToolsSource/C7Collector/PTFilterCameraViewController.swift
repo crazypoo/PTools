@@ -23,6 +23,8 @@ import PToolsSymbols
 // Español: SwiftPM mantiene MediaViewer explícito porque este target usa sus tipos de revisión.
 // 中文：SwiftPM 显式依赖 MediaViewer，因为本 target 使用其中的预览控制器类型。
 import PooToolsMediaViewer
+import PooToolsImageEditor
+import PTCameraPermission
 #endif
 import Photos
 

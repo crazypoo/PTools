@@ -17,6 +17,7 @@ import ptools
 import CoreLocation
 #if SWIFT_PACKAGE
 import PToolsStorage
+import PToolsStorageCore
 #endif
 
 @MainActor

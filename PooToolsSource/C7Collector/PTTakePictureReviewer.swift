@@ -25,10 +25,10 @@ public class PTTakePictureReviewer:UIView {
     let ItemWidth:CGFloat = 88
     let ItemHeight:CGFloat = 164
     
-    var dismissTask:PTActionTask?
+    public var dismissTask:PTActionTask?
     
-    var actionHandle:PTScreenShotImageHandle?
-    var reviewHandle:PTActionTask?
+    public var actionHandle:PTScreenShotImageHandle?
+    public var reviewHandle:PTActionTask?
     
     private var AnimationValue:CGFloat {
         ItemWidth + PTAppBaseConfig.share.defaultViewSpace
@@ -109,7 +109,7 @@ public class PTTakePictureReviewer:UIView {
         PTAnimationFunction.animationIn(animationView: self, animationType: .Left, transformValue: AnimationValue)
     }
     
-    func dismissAlert() {
+    public func dismissAlert() {
         PTAnimationFunction.animationOut(animationView: self, animationType: .Left, toValue: -AnimationValue, animation: {
             Task { @MainActor in
                 self.alpha = 0

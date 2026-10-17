@@ -11,6 +11,9 @@ import SwiftJWT
 import Alamofire
 #if SWIFT_PACKAGE
 import ptools
+import PooToolsHud
+import PooToolsLoading
+import PooToolsNetWork
 #endif
 
 struct IpadScreenshotUrls: PTCodableModelProtocol, Sendable {
