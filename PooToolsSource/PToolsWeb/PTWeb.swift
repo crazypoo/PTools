@@ -4,6 +4,7 @@
 
 #if canImport(UIKit)
 import UIKit
+import SnapKit
 import WebKit
 #if SWIFT_PACKAGE
 import PToolsWebBridge
@@ -25,13 +26,9 @@ public final class PTWebViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(webView)
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            webView.topAnchor.constraint(equalTo: view.topAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        webView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         bridge = PTWebBridge(webView: webView)
         bridge.installBootstrap()
     }

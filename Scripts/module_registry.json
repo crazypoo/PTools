@@ -1358,6 +1358,46 @@
       "owner": "application-infrastructure",
       "expiration": "2027-03-31",
       "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PTAcknowledgementsGenerator",
+      "reason": "SwiftPM exposes the acknowledgements generator as a build-time support target; CocoaPods has no equivalent shipped target.",
+      "owner": "acknowledgements",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsAcknowledgements",
+      "reason": "SwiftPM exposes acknowledgements as an explicit product; CocoaPods keeps the feature under the aggregate compatibility surface.",
+      "owner": "acknowledgements",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsAcknowledgementsCore",
+      "reason": "SwiftPM exposes the headless acknowledgements core target; CocoaPods keeps the data contract under the aggregate compatibility surface.",
+      "owner": "acknowledgements",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "Acknowledgements",
+      "reason": "CocoaPods retains the historical acknowledgements subspec name; SwiftPM uses the explicit PToolsAcknowledgements product.",
+      "owner": "acknowledgements",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "AcknowledgementsCore",
+      "reason": "CocoaPods retains the historical headless acknowledgements subspec name; SwiftPM uses PToolsAcknowledgementsCore.",
+      "owner": "acknowledgements",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
     }
   ],
   "known_drift": [
@@ -2131,6 +2171,249 @@
       "reason": "SwiftPM declares the customer-label and symbol targets explicitly so the standalone MessageKit product has complete symbols; CocoaPods receives them through the aggregate Core subspec.",
       "owner": "message-kit",
       "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Banner",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because Banner owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-foundation",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "ContentState",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because ContentState owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-foundation",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "CustomerLabel",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because CustomerLabel owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-components",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "CustomerNumberKeyboard",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because CustomerNumberKeyboard owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-components",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "DEBUG",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because DEBUG owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "debug",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Documents",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because Documents owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "documents",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Form",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because Form owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-foundation",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Guide",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because Guide owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-components",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "HandSign",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because HandSign owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-components",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "HarbethKit",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because HarbethKit owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "media",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Hud",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because Hud owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-components",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "ImagePicker",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because ImagePicker owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "media",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Instructions",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because Instructions owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-components",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "LaunchTimeProfiler",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because LaunchTimeProfiler owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "debug",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Loading",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because Loading owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-components",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "MediaViewer",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because MediaViewer owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "media",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "MessageKit",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because MessageKit owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-components",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "PDF",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because PDF owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "documents",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "PhotoPicker",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because PhotoPicker owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "media",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Ping",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because Ping owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "network",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "ProgressBar",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because ProgressBar owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-components",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "ScanQRCode",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because ScanQRCode owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "media",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "ScrollBanner",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because ScrollBanner owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-components",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Search",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because Search owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-components",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Segmented",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because Segmented owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-components",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Stepper",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because Stepper owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-components",
+      "expiration": "2027-03-03",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "WhatsNewsKit",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly because WhatsNewsKit owns SnapKit layout code; CocoaPods receives SnapKit through the aggregate Core subspec.",
+      "owner": "ui-components",
+      "expiration": "2027-03-03",
       "classification": "INTENTIONAL"
     }
   ]

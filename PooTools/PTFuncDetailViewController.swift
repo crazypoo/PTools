@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 import Alamofire
 import SnapKit
 import Photos
@@ -301,13 +302,9 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             pagingView.hostViewController = self
             pagingView.pageContainer.cachePolicy = .keepAllLoaded
             view.addSubview(pagingView)
-            pagingView.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                pagingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                pagingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                pagingView.topAnchor.constraint(equalTo: view.topAnchor),
-                pagingView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            ])
+            pagingView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
             pagingView.setPinnedHeader(PTPagingPinnedHeader(height: 44) { segmentedView })
 
             let ids = ["all", "pending", "shipping", "delivered", "problem"]

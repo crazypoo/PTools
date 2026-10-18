@@ -1,6 +1,32 @@
 [
   {
     "dependencies": [
+      "PToolsAcknowledgementsCore"
+    ],
+    "name": "PTAcknowledgementsGenerator",
+    "path": "Tools/PTAcknowledgementsGenerator",
+    "product_memberships": [
+      "pt-acknowledgements"
+    ],
+    "resources": [],
+    "source_count": 1,
+    "sources": [
+      "Tools/PTAcknowledgementsGenerator/main.swift"
+    ],
+    "swift_settings": [
+      {
+        "kind": {
+          "enableUpcomingFeature": {
+            "_0": "StrictConcurrency"
+          }
+        },
+        "tool": "swift"
+      }
+    ],
+    "type": "executable"
+  },
+  {
+    "dependencies": [
       "PToolsPermissionCore"
     ],
     "name": "PTBluetoothPermission",
@@ -794,6 +820,95 @@
     "type": "regular"
   },
   {
+    "dependencies": [
+      "PToolsAcknowledgementsCore",
+      "PooToolsSearch",
+      "ptools"
+    ],
+    "name": "PToolsAcknowledgements",
+    "path": "PooToolsSource/PToolsAcknowledgements",
+    "product_memberships": [
+      "PToolsAcknowledgements"
+    ],
+    "resources": [],
+    "source_count": 4,
+    "sources": [
+      "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementDetailViewController.swift",
+      "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsConfiguration.swift",
+      "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsPresenter.swift",
+      "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsSearchViewController.swift"
+    ],
+    "swift_settings": [
+      {
+        "kind": {
+          "enableUpcomingFeature": {
+            "_0": "StrictConcurrency"
+          }
+        },
+        "tool": "swift"
+      }
+    ],
+    "type": "regular"
+  },
+  {
+    "dependencies": [],
+    "name": "PToolsAcknowledgementsCore",
+    "path": "PooToolsSource/PToolsAcknowledgementsCore",
+    "product_memberships": [
+      "PToolsAcknowledgementsCore",
+      "PToolsAcknowledgements",
+      "pt-acknowledgements"
+    ],
+    "resources": [],
+    "source_count": 9,
+    "sources": [
+      "PooToolsSource/PToolsAcknowledgementsCore/PTAcknowledgement.swift",
+      "PooToolsSource/PToolsAcknowledgementsCore/PTAcknowledgementsDataSource.swift",
+      "PooToolsSource/PToolsAcknowledgementsCore/PTAcknowledgementsError.swift",
+      "PooToolsSource/PToolsAcknowledgementsCore/PTAcknowledgementsProvider.swift",
+      "PooToolsSource/PToolsAcknowledgementsCore/PTAcknowledgementsQuery.swift",
+      "PooToolsSource/PToolsAcknowledgementsCore/PTLicenseExporter.swift",
+      "PooToolsSource/PToolsAcknowledgementsCore/PTLicenseHash.swift",
+      "PooToolsSource/PToolsAcknowledgementsCore/PTLicenseManifest.swift",
+      "PooToolsSource/PToolsAcknowledgementsCore/PTLicenseStatistics.swift"
+    ],
+    "swift_settings": [
+      {
+        "kind": {
+          "enableUpcomingFeature": {
+            "_0": "StrictConcurrency"
+          }
+        },
+        "tool": "swift"
+      }
+    ],
+    "type": "regular"
+  },
+  {
+    "dependencies": [
+      "PToolsAcknowledgementsCore"
+    ],
+    "name": "PToolsAcknowledgementsCoreTests",
+    "path": "Tests/PToolsAcknowledgementsCoreTests",
+    "product_memberships": [],
+    "resources": [],
+    "source_count": 1,
+    "sources": [
+      "Tests/PToolsAcknowledgementsCoreTests/PTAcknowledgementsCoreTests.swift"
+    ],
+    "swift_settings": [
+      {
+        "kind": {
+          "enableUpcomingFeature": {
+            "_0": "StrictConcurrency"
+          }
+        },
+        "tool": "swift"
+      }
+    ],
+    "type": "test"
+  },
+  {
     "dependencies": [],
     "name": "PToolsActivities",
     "path": "PooToolsSource/PToolsActivities",
@@ -1191,6 +1306,7 @@
     "product_memberships": [
       "ptools",
       "PToolsCore",
+      "PToolsAcknowledgements",
       "PToolsNetworkModelCore",
       "PToolsTheme",
       "PToolsAccessibility",
@@ -1380,6 +1496,7 @@
     "path": "PooToolsSource/PToolsDate",
     "product_memberships": [
       "ptools",
+      "PToolsAcknowledgements",
       "PToolsContentState",
       "PToolsForm",
       "PToolsDocuments",
@@ -1555,6 +1672,7 @@
     "path": "PooToolsSource/PToolsDevice",
     "product_memberships": [
       "ptools",
+      "PToolsAcknowledgements",
       "PToolsDevice",
       "PToolsContentState",
       "PToolsForm",
@@ -1736,6 +1854,7 @@
     "path": "PooToolsSource",
     "product_memberships": [
       "ptools",
+      "PToolsAcknowledgements",
       "PToolsFontCatalogCore",
       "PToolsContentState",
       "PToolsForm",
@@ -2014,6 +2133,7 @@
     "product_memberships": [
       "ptools",
       "PToolsLogging",
+      "PToolsAcknowledgements",
       "PToolsContentState",
       "PToolsForm",
       "PToolsDocuments",
@@ -2712,6 +2832,7 @@
     "path": "PooToolsSource/PToolsPermissionCore",
     "product_memberships": [
       "ptools",
+      "PToolsAcknowledgements",
       "PToolsNotifications",
       "PToolsContentState",
       "PToolsForm",
@@ -3162,6 +3283,7 @@
     "path": "PooToolsSource/PToolsSymbols",
     "product_memberships": [
       "ptools",
+      "PToolsAcknowledgements",
       "PToolsContentState",
       "PToolsForm",
       "PToolsDocuments",
@@ -3428,6 +3550,7 @@
     "path": "PooToolsSource/PToolsUIFoundation",
     "product_memberships": [
       "ptools",
+      "PToolsAcknowledgements",
       "PToolsTheme",
       "PToolsAccessibility",
       "PToolsContentState",
@@ -6356,6 +6479,7 @@
     "name": "PooToolsSearch",
     "path": "PooToolsSource/Search",
     "product_memberships": [
+      "PToolsAcknowledgements",
       "PooToolsSearch",
       "PooToolsAll"
     ],
@@ -6404,6 +6528,7 @@
     "name": "PooToolsSearchBar",
     "path": "PooToolsSource/SearchBar",
     "product_memberships": [
+      "PToolsAcknowledgements",
       "PooToolsSearchBar",
       "PooToolsSearch",
       "PooToolsDEBUG",
@@ -7103,6 +7228,7 @@
     "path": "PooToolsSource",
     "product_memberships": [
       "ptools",
+      "PToolsAcknowledgements",
       "PToolsContentState",
       "PToolsForm",
       "PToolsDocuments",

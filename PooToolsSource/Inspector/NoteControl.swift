@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -55,7 +56,9 @@ final class NoteControl: BaseControl {
         }
 
         $0.tintColor = icon.color
-        $0.widthAnchor.constraint(equalToConstant: CGSize.regularIconSize.width).isActive = true
+        $0.snp.makeConstraints { make in
+            make.width.equalTo(CGSize.regularIconSize.width)
+        }
     }
 
     private lazy var header = SectionHeader(
@@ -87,6 +90,8 @@ final class NoteControl: BaseControl {
 
         contentView.addArrangedSubviews(imageView, header)
 
-        header.heightAnchor.constraint(greaterThanOrEqualTo: imageView.heightAnchor).isActive = true
+        header.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(imageView.snp.height)
+        }
     }
 }

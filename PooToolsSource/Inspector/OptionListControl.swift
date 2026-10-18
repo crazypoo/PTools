@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -89,7 +90,9 @@ final class OptionListControl: BaseFormControl {
 
         contentView.addArrangedSubview(accessoryControl)
 
-        accessoryControl.widthAnchor.constraint(greaterThanOrEqualTo: contentContainerView.widthAnchor, multiplier: 1 / 2).isActive = true
+        accessoryControl.snp.makeConstraints { make in
+            make.width.greaterThanOrEqualTo(contentContainerView.snp.width).multipliedBy(1 / 2)
+        }
 
         updateViews()
 

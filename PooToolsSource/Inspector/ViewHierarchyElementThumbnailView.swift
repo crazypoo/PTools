@@ -9,6 +9,7 @@ import AVFoundation
 import ptools
 #endif
 import UIKit
+import SnapKit
 
 class ViewHierarchyElementThumbnailView: BaseView {
     enum State {
@@ -39,12 +40,7 @@ class ViewHierarchyElementThumbnailView: BaseView {
         }
     }
 
-    private lazy var heightConstraint_inspector = snapshotContainerView.heightAnchor.constraint(
-        equalToConstant: .zero
-    ).then {
-        $0.priority = .init(rawValue: 999)
-        $0.isActive = true
-    }
+    private var heightConstraint_inspector: Constraint?
 
     // MARK: - Init
 
@@ -97,6 +93,10 @@ class ViewHierarchyElementThumbnailView: BaseView {
         contentView.installView(statusContentView, .centerXY)
 
         contentView.addArrangedSubview(snapshotContainerView)
+
+        snapshotContainerView.snp.makeConstraints { make in
+            heightConstraint_inspector = make.height.equalTo(0).priority(999).constraint
+        }
     }
 
     override func layoutSubviews() {
@@ -113,7 +113,7 @@ class ViewHierarchyElementThumbnailView: BaseView {
             return
         }
 
-        heightConstraint_inspector.constant = proportionalFrame.height
+        heightConstraint_inspector?.update(offset: proportionalFrame.height)
     }
 
     var aspectRatio: CGFloat {
@@ -149,7 +149,7 @@ class ViewHierarchyElementThumbnailView: BaseView {
 
                 newSnapshot.contentMode = contentMode
                 snapshotContainerView.contentView.addArrangedSubview(newSnapshot)
-                heightConstraint_inspector.constant = proportionalFrame.height
+                heightConstraint_inspector?.update(offset: proportionalFrame.height)
 
             case .isHidden:
                 showEmptyStatus(icon: .eyeSlashFill, message: "View is hidden.")
@@ -188,7 +188,7 @@ class ViewHierarchyElementThumbnailView: BaseView {
 
         statusContentView.addArrangedSubview(label)
 
-        heightConstraint_inspector.constant = frame.width
+        heightConstraint_inspector?.update(offset: frame.width)
     }
 
     private func calculateFrame(with snapshotSize: CGSize) -> CGRect {

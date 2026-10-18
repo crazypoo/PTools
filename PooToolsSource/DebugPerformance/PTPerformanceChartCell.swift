@@ -26,7 +26,6 @@ class PTPerformanceChartCell: PTBaseNormalCell {
         super.init(frame: frame)
         
         contentView.addSubview(chartView)
-        chartView.translatesAutoresizingMaskIntoConstraints = false
         chartView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().inset(12)

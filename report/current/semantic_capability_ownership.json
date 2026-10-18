@@ -704,6 +704,7 @@
         "PooToolsSource/Animation/PTListAnimation.swift",
         "PooToolsSource/Base/PTTabBarItemView.swift",
         "PooToolsSource/Base/PTTabBarView.swift",
+        "PooToolsSource/Category/AVPlayerItem+PTEX.swift",
         "PooToolsSource/Category/PHAsset+PTEX.swift",
         "PooToolsSource/Category/UICollectionView+PTEX.swift",
         "PooToolsSource/Category/UIControl+PTEX.swift",
@@ -728,7 +729,6 @@
         "PooToolsSource/LocalConsole/LocalConsole.swift",
         "PooToolsSource/LocationPermission/PTPermissionLocation.swift",
         "PooToolsSource/MessageKit/PTChatBaseCell.swift",
-        "PooToolsSource/MessageKit/PTChatFileCell.swift",
         "PooToolsSource/MessageKit/PTChatMediaCell.swift",
         "PooToolsSource/MessageKit/PTChatView.swift",
         "PooToolsSource/MessageKit/PTChatVoiceCell.swift",
@@ -736,12 +736,13 @@
         "PooToolsSource/PToolsCore/PTMainActorBridge.swift",
         "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
         "PooToolsSource/ProgressBar/PTCircularProgressView.swift",
+        "PooToolsSource/ProgressBar/PTMediaBrowserLoadingView.swift",
         "PooToolsSource/Router/PTRouter.swift",
         "PooToolsSource/ScreenShot/UIView+PTSnapShot.swift",
         "PooToolsSource/ScreenShot/UIWindow+PTSnapShot.swift",
         "PooToolsSource/VideoEditor/CropPickerView.swift"
       ],
-      "match_count": 39
+      "match_count": 40
     },
     {
       "capability": "overlay_host",
@@ -834,7 +835,7 @@
     }
   ],
   "generator": "Scripts/report_semantic_capability_ownership.sh",
-  "source_revision": "4c508f23263c51171d48163d641a4d808069b81a",
-  "generated_at": "2026-10-17T00:59:23Z",
-  "source_file_count": 1189
+  "source_revision": "85cd0fa1019fd0965e4966b5435710c618b02da7",
+  "generated_at": "2026-10-17T19:53:01Z",
+  "source_file_count": 1202
 }

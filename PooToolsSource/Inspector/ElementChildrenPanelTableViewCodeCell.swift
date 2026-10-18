@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -126,9 +127,13 @@ final class ElementChildrenPanelTableViewCodeCell: UITableViewCell, @MainActor E
 
         contentView.installView(containerStackView, priority: .required)
 
-        disclosureIconContainer.widthAnchor.constraint(equalToConstant: 16).isActive = true
+        disclosureIconContainer.snp.makeConstraints { make in
+            make.width.equalTo(16)
+        }
 
-        disclosureIcon.centerYAnchor.constraint(equalTo: elementDescriptionView.iconImageView.centerYAnchor).isActive = true
+        disclosureIcon.snp.makeConstraints { make in
+            make.centerY.equalTo(elementDescriptionView.iconImageView.snp.centerY)
+        }
     }
 
     override func prepareForReuse() {

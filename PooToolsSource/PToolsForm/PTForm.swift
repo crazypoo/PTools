@@ -6,6 +6,7 @@ import Foundation
 
 #if canImport(UIKit)
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 import PToolsCore
@@ -733,14 +734,13 @@ final class PTFormFieldCell: UICollectionViewCell {
         rootStack.addArrangedSubview(fieldContainer)
         rootStack.addArrangedSubview(issueLabel)
         contentView.addSubview(rootStack)
-        rootStack.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            rootStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            rootStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            rootStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            rootStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            fieldContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: 36),
-        ])
+        rootStack.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.bottom.equalToSuperview().inset(8)
+        }
+        fieldContainer.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(36)
+        }
         titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.adjustsFontForContentSizeCategory = true
         subtitleLabel.font = .preferredFont(forTextStyle: .subheadline)
@@ -786,13 +786,9 @@ final class PTFormFieldCell: UICollectionViewCell {
         let view = renderer.makeView(context: context, onChange: onChange)
         renderedView = view
         fieldContainer.addSubview(view)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            view.leadingAnchor.constraint(equalTo: fieldContainer.leadingAnchor),
-            view.trailingAnchor.constraint(equalTo: fieldContainer.trailingAnchor),
-            view.topAnchor.constraint(equalTo: fieldContainer.topAnchor),
-            view.bottomAnchor.constraint(equalTo: fieldContainer.bottomAnchor)
-        ])
+        view.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         titleLabel.text = field.title
         subtitleLabel.text = field.subtitle
         subtitleLabel.isHidden = field.subtitle == nil
@@ -958,13 +954,9 @@ public final class PTFormViewController: PTBaseViewController {
             self.listView.contentCollectionView.reloadData()
         }
         view.addSubview(listView)
-        listView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            listView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            listView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            listView.topAnchor.constraint(equalTo: view.topAnchor),
-            listView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        listView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         listView.viewConfig.sectionEdges = NSDirectionalEdgeInsets(top: configuration.contentInsets.top,
                                                                      leading: configuration.contentInsets.leading,
                                                                      bottom: configuration.contentInsets.bottom,

@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -16,10 +17,6 @@ final class Icon: BaseView {
     // Español: Guarda el tamaño solicitado antes de que BaseView ejecute setup.
     // 中文：在 BaseView 执行 setup 前保存请求的图标尺寸。
     private let iconSize: CGSize
-
-    private lazy var widthConstraint_inspector = widthAnchor.constraint(equalToConstant: iconSize.width)
-
-    private lazy var heightConstraint_inspector = heightAnchor.constraint(equalToConstant: iconSize.height)
 
     @MainActor init(_ glpyh: Glyph, color: UIColor? = nil, size: CGSize = CGSize(width: 16, height: 16)) {
         self.glpyh = glpyh
@@ -54,11 +51,10 @@ final class Icon: BaseView {
 
         isUserInteractionEnabled = false
 
-        translatesAutoresizingMaskIntoConstraints = false
-
-        widthConstraint_inspector.isActive = true
-
-        heightConstraint_inspector.isActive = true
+        snp.makeConstraints { make in
+            make.width.equalTo(iconSize.width)
+            make.height.equalTo(iconSize.height)
+        }
     }
 
     override func draw(_ rect: CGRect) {

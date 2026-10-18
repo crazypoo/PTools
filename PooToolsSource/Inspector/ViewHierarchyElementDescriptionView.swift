@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -122,9 +123,7 @@ final class ViewHierarchyElementDescriptionView: BaseView, DataReloadingProtocol
         $0.setContentHuggingPriority(.defaultLow, for: .vertical)
     }
 
-    private(set) lazy var collapseButton = IconButton(.chevronDown).then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-    }
+    private(set) lazy var collapseButton = IconButton(.chevronDown)
 
     private(set) lazy var iconContainerView = BaseView().then {
         $0.backgroundColor = colorStyle.highlightBackgroundColor
@@ -136,8 +135,10 @@ final class ViewHierarchyElementDescriptionView: BaseView, DataReloadingProtocol
     private(set) lazy var iconImageView = UIImageView().then {
         $0.clipsToBounds = false
         $0.contentMode = .scaleAspectFit
-        $0.widthAnchor.constraint(equalToConstant: CGSize.elementIconSize.width).isActive = true
-        $0.widthAnchor.constraint(equalTo: $0.heightAnchor).isActive = true
+        $0.snp.makeConstraints { make in
+            make.width.equalTo(CGSize.elementIconSize.width)
+            make.height.equalTo(CGSize.elementIconSize.width)
+        }
     }
 
     private(set) lazy var elementIconAndDescriptionLabel = UIStackView.horizontal().then {
@@ -159,13 +160,12 @@ final class ViewHierarchyElementDescriptionView: BaseView, DataReloadingProtocol
 
         contentView.addSubview(collapseButton)
 
-        collapseButton.centerYAnchor.constraint(
-            equalTo: elementIconAndDescriptionLabel.topAnchor
-        ).isActive = true
+        collapseButton.snp.makeConstraints { make in
+            make.centerY.equalTo(elementIconAndDescriptionLabel.snp.top)
+        }
 
-        elementIconAndDescriptionLabel.leadingAnchor.constraint(
-            equalTo: collapseButton.trailingAnchor,
-            constant: elementInspectorAppearance.verticalMargins * 3 / 2
-        ).isActive = true
+        elementIconAndDescriptionLabel.snp.makeConstraints { make in
+            make.leading.equalTo(collapseButton.snp.trailing).offset(elementInspectorAppearance.verticalMargins * 3 / 2)
+        }
     }
 }

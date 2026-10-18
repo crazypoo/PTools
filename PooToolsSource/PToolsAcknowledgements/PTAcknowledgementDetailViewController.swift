@@ -4,6 +4,7 @@
 
 #if canImport(UIKit)
 import UIKit
+import SnapKit
 #if canImport(PToolsAcknowledgementsCore)
 import PToolsAcknowledgementsCore
 #endif
@@ -48,7 +49,6 @@ public final class PTAcknowledgementDetailViewController: PTBaseViewController {
     }
 
     private func configureTextView() {
-        textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isEditable = false
         textView.isSelectable = true
         textView.adjustsFontForContentSizeCategory = true
@@ -57,12 +57,11 @@ public final class PTAcknowledgementDetailViewController: PTBaseViewController {
         textView.backgroundColor = .systemBackground
         textView.text = makeText()
         view.addSubview(textView)
-        NSLayoutConstraint.activate([
-            textView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            textView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            textView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
-            textView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        textView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(12)
+            make.bottom.equalToSuperview()
+        }
     }
 
     private func makeText() -> String {

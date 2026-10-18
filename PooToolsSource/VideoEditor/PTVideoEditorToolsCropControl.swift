@@ -51,7 +51,6 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
     
     private var cropView: CropPickerView = {
         let view = CropPickerView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.cropLineColor = .white
         view.dimBackgroundColor = UIColor(white: 0, alpha: 0.6)
         return view

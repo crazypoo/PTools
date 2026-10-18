@@ -20,6 +20,8 @@ PTSiriPermission,PTSiriPermission,"{""library"": [""automatic""]}",ios;macos;tvo
 PTSpeechPermission,PTSpeechPermission,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PTTrackingPermission,PTTrackingPermission,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsAccessibility,PToolsAccessibility,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsAcknowledgements,PToolsAcknowledgements,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsAcknowledgementsCore,PToolsAcknowledgementsCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsActivities,PToolsActivities,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsAppIntegrity,PToolsAppIntegrity,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsAppIntents,PToolsAppIntents,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
@@ -155,4 +157,5 @@ PooToolsVision,PooToolsVision,"{""library"": [""automatic""]}",ios;macos;tvos;wa
 PooToolsWebKit,PooToolsWebKit,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PooToolsWhatsNewsKit,PooToolsWhatsNewsKit,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PooToolsiOS17Tips,PooToolsiOS17Tips,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+pt-acknowledgements,PTAcknowledgementsGenerator,"{""executable"": null}",ios;macos;tvos;watchos;visionos,yes
 ptools,ptools,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes

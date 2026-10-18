@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 // Called when the button's highlighted is false.
 protocol LineButtonDelegate: AnyObject {
@@ -33,10 +34,10 @@ class LineButton: UIButton {
         super.init(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
         
         self.setTitle(nil, for: .normal)
-        self.translatesAutoresizingMaskIntoConstraints = false
         if type != .center {
-            self.widthConstraint(constant: 50)
-            self.heightConstraint(constant: 50)
+            self.snp.makeConstraints { make in
+                make.width.height.equalTo(50)
+            }
             self.alpha = 0
         }
     }

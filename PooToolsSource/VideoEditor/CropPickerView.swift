@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 // English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
 // Español: Importa explícitamente el target Core para las compilaciones SwiftPM independientes.
@@ -157,17 +158,20 @@ public class CropPickerView: UIView {
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         self.addSubview(scrollView)
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        self.edgesConstraint(subView: scrollView)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         return scrollView
     }()
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         self.scrollView.addSubview(imageView)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        self.scrollView.edgesConstraint(subView: imageView)
-        self.scrollView.sizeConstraint(subView: imageView)
+        imageView.snp.makeConstraints { make in
+            make.edges.equalTo(self.scrollView.contentLayoutGuide)
+            make.width.equalTo(self.scrollView.frameLayoutGuide)
+            make.height.equalTo(self.scrollView.frameLayoutGuide)
+        }
         return imageView
     }()
     
@@ -175,8 +179,9 @@ public class CropPickerView: UIView {
         self.scrollView.alpha = 1
         let view = CropDimView()
         self.addSubview(view)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        self.edgesConstraint(subView: view)
+        view.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         return view
     }()
     
@@ -184,11 +189,12 @@ public class CropPickerView: UIView {
         self.dimView.alpha = 1
         let cropView = CropView()
         self.addSubview(cropView)
-        cropView.translatesAutoresizingMaskIntoConstraints = false
-        self.cropLeadingConstraint = self.leadingConstraint(subView: cropView, constant: 0).priority(945)
-        self.cropTrailingConstraint = self.trailingConstraint(subView: cropView, constant: 0).priority(945)
-        self.cropTopConstraint = self.topConstraint(subView: cropView, constant: 0).priority(945)
-        self.cropBottomConstraint = self.bottomConstraint(subView: cropView, constant: 0).priority(945)
+        cropView.snp.makeConstraints { make in
+            self.cropLeadingConstraint = CropLayoutConstraint(make.leading.equalToSuperview().priority(945).constraint)
+            self.cropTrailingConstraint = CropLayoutConstraint(make.trailing.equalToSuperview().priority(945).constraint)
+            self.cropTopConstraint = CropLayoutConstraint(make.top.equalToSuperview().priority(945).constraint)
+            self.cropBottomConstraint = CropLayoutConstraint(make.bottom.equalToSuperview().priority(945).constraint)
+        }
         return cropView
     }()
     
@@ -198,8 +204,10 @@ public class CropPickerView: UIView {
         let button = LineButton(.leftTop)
         let cropView = self.cropView
         self.addSubview(button)
-        self.topConstraint(item: cropView, subView: button, constant: 10)
-        self.leadingConstraint(item: cropView, subView: button, constant: 10)
+        button.snp.makeConstraints { make in
+            make.top.equalTo(cropView.snp.top).offset(10)
+            make.leading.equalTo(cropView.snp.leading).offset(10)
+        }
         button.addTarget(self, action: #selector(self.cropButtonLeftTopDrag(_:forEvent:)), for: .touchDragInside)
         return button
     }()
@@ -208,8 +216,10 @@ public class CropPickerView: UIView {
         let button = LineButton(.leftBottom)
         let cropView = self.cropView
         self.addSubview(button)
-        self.bottomConstraint(item: cropView, subView: button, constant: -10)
-        self.leadingConstraint(item: cropView, subView: button, constant: 10)
+        button.snp.makeConstraints { make in
+            make.bottom.equalTo(cropView.snp.bottom).offset(-10)
+            make.leading.equalTo(cropView.snp.leading).offset(10)
+        }
         button.addTarget(self, action: #selector(self.cropButtonLeftBottomDrag(_:forEvent:)), for: .touchDragInside)
         return button
     }()
@@ -218,8 +228,10 @@ public class CropPickerView: UIView {
         let button = LineButton(.rightTop)
         let cropView = self.cropView
         self.addSubview(button)
-        self.topConstraint(item: cropView, subView: button, constant: 10)
-        self.trailingConstraint(item: cropView, subView: button, constant: -10)
+        button.snp.makeConstraints { make in
+            make.top.equalTo(cropView.snp.top).offset(10)
+            make.trailing.equalTo(cropView.snp.trailing).offset(-10)
+        }
         button.addTarget(self, action: #selector(self.cropButtonRightTopDrag(_:forEvent:)), for: .touchDragInside)
         return button
     }()
@@ -228,8 +240,10 @@ public class CropPickerView: UIView {
         let button = LineButton(.rightBottom)
         let cropView = self.cropView
         self.addSubview(button)
-        self.bottomConstraint(item: cropView, subView: button, constant: -10)
-        self.trailingConstraint(item: cropView, subView: button, constant: -10)
+        button.snp.makeConstraints { make in
+            make.bottom.equalTo(cropView.snp.bottom).offset(-10)
+            make.trailing.equalTo(cropView.snp.trailing).offset(-10)
+        }
         button.addTarget(self, action: #selector(self.cropButtonRightBottomDrag(_:forEvent:)), for: .touchDragInside)
         return button
     }()
@@ -238,8 +252,10 @@ public class CropPickerView: UIView {
         let button = LineButton(.top)
         let cropView = self.cropView
         self.addSubview(button)
-        self.topConstraint(item: cropView, subView: button, constant: 10)
-        self.centerXConstraint(item: cropView, subView: button)
+        button.snp.makeConstraints { make in
+            make.top.equalTo(cropView.snp.top).offset(10)
+            make.centerX.equalTo(cropView)
+        }
         button.addTarget(self, action: #selector(self.cropButtonTopDrag(_:forEvent:)), for: .touchDragInside)
         return button
     }()
@@ -248,8 +264,10 @@ public class CropPickerView: UIView {
         let button = LineButton(.left)
         let cropView = self.cropView
         self.addSubview(button)
-        self.centerYConstraint(item: cropView, subView: button)
-        self.leadingConstraint(item: cropView, subView: button, constant: 10)
+        button.snp.makeConstraints { make in
+            make.centerY.equalTo(cropView)
+            make.leading.equalTo(cropView.snp.leading).offset(10)
+        }
         button.addTarget(self, action: #selector(self.cropButtonLeftDrag(_:forEvent:)), for: .touchDragInside)
         return button
     }()
@@ -258,8 +276,10 @@ public class CropPickerView: UIView {
         let button = LineButton(.right)
         let cropView = self.cropView
         self.addSubview(button)
-        self.centerYConstraint(item: cropView, subView: button)
-        self.trailingConstraint(item: cropView, subView: button, constant: -10)
+        button.snp.makeConstraints { make in
+            make.centerY.equalTo(cropView)
+            make.trailing.equalTo(cropView.snp.trailing).offset(-10)
+        }
         button.addTarget(self, action: #selector(self.cropButtonRightDrag(_:forEvent:)), for: .touchDragInside)
         return button
     }()
@@ -268,8 +288,10 @@ public class CropPickerView: UIView {
         let button = LineButton(.bottom)
         let cropView = self.cropView
         self.addSubview(button)
-        self.bottomConstraint(item: cropView, subView: button, constant: -10)
-        self.centerXConstraint(item: cropView, subView: button)
+        button.snp.makeConstraints { make in
+            make.bottom.equalTo(cropView.snp.bottom).offset(-10)
+            make.centerX.equalTo(cropView)
+        }
         button.addTarget(self, action: #selector(self.cropButtonBottomDrag(_:forEvent:)), for: .touchDragInside)
         return button
     }()
@@ -277,34 +299,26 @@ public class CropPickerView: UIView {
     private lazy var centerButton: LineButton = {
         let button = LineButton(.center)
         self.addSubview(button)
-        button.widthConstraint(constant: 80, relatedBy: .equal).priority = UILayoutPriority(700)
-        button.heightConstraint(constant: 80, relatedBy: .equal).priority = UILayoutPriority(700)
-        self.centerXConstraint(item: self.cropView, subView: button)
-        self.centerYConstraint(item: self.cropView, subView: button)
-        
-        let leading = NSLayoutConstraint(item: self.leftButton, attribute: .trailing, relatedBy: .greaterThanOrEqual, toItem: button, attribute: .leading, multiplier: 1, constant: 0)
-        let trailing = NSLayoutConstraint(item: self.rightButton, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: button, attribute: .trailing, multiplier: 1, constant: 0)
-        let top = NSLayoutConstraint(item: self.topButton, attribute: .bottom, relatedBy: .greaterThanOrEqual, toItem: button, attribute: .top, multiplier: 1, constant: 0)
-        let bottom = NSLayoutConstraint(item: self.bottomButton, attribute: .top, relatedBy: .greaterThanOrEqual, toItem: button, attribute: .bottom, multiplier: 1, constant: 0)
-        
-        leading.priority = UILayoutPriority(600)
-        trailing.priority = UILayoutPriority(600)
-        top.priority = UILayoutPriority(600)
-        bottom.priority = UILayoutPriority(600)
-        
-        self.addConstraints([leading, trailing, top, bottom])
+        button.snp.makeConstraints { make in
+            make.width.height.equalTo(80).priority(700)
+            make.center.equalTo(self.cropView)
+            make.leading.lessThanOrEqualTo(self.leftButton.snp.trailing).priority(600)
+            make.trailing.lessThanOrEqualTo(self.rightButton.snp.leading).priority(600)
+            make.top.lessThanOrEqualTo(self.topButton.snp.bottom).priority(600)
+            make.bottom.lessThanOrEqualTo(self.bottomButton.snp.top).priority(600)
+        }
         button.addTarget(self, action: #selector(self.centerDoubleTap(_:)), for: .touchDownRepeat)
         button.addTarget(self, action: #selector(self.cropButtonCenterDrag(_:forEvent:)), for: .touchDragInside)
         return button
     }()
     
-    private var cropLeadingConstraint: NSLayoutConstraint?
+    private var cropLeadingConstraint: CropLayoutConstraint?
     
-    private var cropTrailingConstraint: NSLayoutConstraint?
+    private var cropTrailingConstraint: CropLayoutConstraint?
     
-    private var cropTopConstraint: NSLayoutConstraint?
+    private var cropTopConstraint: CropLayoutConstraint?
     
-    private var cropBottomConstraint: NSLayoutConstraint?
+    private var cropBottomConstraint: CropLayoutConstraint?
     
     private var lineButtonTouchPoint: CGPoint?
     
@@ -350,10 +364,10 @@ public class CropPickerView: UIView {
     }
     
     public func imageAdjustment(_ point: CGPoint, duration: TimeInterval = 0.4, animated: Bool) {
-        self.cropLeadingConstraint?.constant = -point.x
-        self.cropTrailingConstraint?.constant = point.x
-        self.cropTopConstraint?.constant = -point.y
-        self.cropBottomConstraint?.constant = point.y
+        self.cropLeadingConstraint?.update(offset: -point.x)
+        self.cropTrailingConstraint?.update(offset: point.x)
+        self.cropTopConstraint?.update(offset: -point.y)
+        self.cropBottomConstraint?.update(offset: point.y)
         if animated {
             self.dimLayerMask(duration, animated: animated)
             UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: {
@@ -479,6 +493,27 @@ public class CropPickerView: UIView {
         }
     }
     
+}
+
+// English: Keep the crop inset value beside SnapKit so drag calculations stay type-safe.
+// Español: Conserva el valor del inset junto a SnapKit para mantener seguras las operaciones de arrastre.
+// 中文：在 SnapKit 约束旁保存裁剪内缩值，保证拖动计算类型安全。
+private final class CropLayoutConstraint {
+    private let constraint: Constraint
+    var constant: CGFloat {
+        didSet {
+            constraint.update(offset: constant)
+        }
+    }
+
+    init(_ constraint: Constraint) {
+        self.constraint = constraint
+        self.constant = 0
+    }
+
+    func update(offset: CGFloat) {
+        constant = offset
+    }
 }
 
 // MARK: Private Method Init

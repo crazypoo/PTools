@@ -3,6 +3,7 @@
 // 中文：替换旧第三方 Cell 继承体系的原生可复用分段 Cell。
 
 import UIKit
+import SnapKit
 
 #if canImport(ptools)
 import ptools
@@ -148,18 +149,18 @@ public class PTMainSegmentCell: UICollectionViewCell {
     private let contentStack = UIStackView()
     private let badgeView = PTInlineBadgeView()
     private var imageTask: Task<Void, Never>?
-    private var imageWidthConstraint: NSLayoutConstraint?
-    private var imageHeightConstraint: NSLayoutConstraint?
-    private var contentLeadingConstraint: NSLayoutConstraint?
-    private var contentTrailingConstraint: NSLayoutConstraint?
-    private var contentTopConstraint: NSLayoutConstraint?
-    private var contentBottomConstraint: NSLayoutConstraint?
-    private var separatorLeadingConstraint: NSLayoutConstraint?
-    private var separatorTrailingConstraint: NSLayoutConstraint?
-    private var separatorTopConstraint: NSLayoutConstraint?
-    private var separatorBottomConstraint: NSLayoutConstraint?
-    private var separatorWidthConstraint: NSLayoutConstraint?
-    private var separatorHeightConstraint: NSLayoutConstraint?
+    private var imageWidthConstraint: Constraint?
+    private var imageHeightConstraint: Constraint?
+    private var contentLeadingConstraint: Constraint?
+    private var contentTrailingConstraint: Constraint?
+    private var contentTopConstraint: Constraint?
+    private var contentBottomConstraint: Constraint?
+    private var separatorLeadingConstraint: Constraint?
+    private var separatorTrailingConstraint: Constraint?
+    private var separatorTopConstraint: Constraint?
+    private var separatorBottomConstraint: Constraint?
+    private var separatorWidthConstraint: Constraint?
+    private var separatorHeightConstraint: Constraint?
     private var separatorStyle: PTSegmentItemSeparatorStyle = .legacyDefault
     private var separatorLayoutContext = PTSegmentCellLayoutContext(index: 0, itemCount: 1)
 
@@ -194,38 +195,26 @@ public class PTMainSegmentCell: UICollectionViewCell {
         contentStack.axis = .horizontal
         contentStack.alignment = .center
         contentStack.spacing = 6
-        contentStack.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(contentStack)
-        contentLeadingConstraint = contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
-        contentTrailingConstraint = contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
-        contentTopConstraint = contentStack.topAnchor.constraint(equalTo: contentView.topAnchor)
-        contentBottomConstraint = contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        NSLayoutConstraint.activate([
-            contentLeadingConstraint,
-            contentTrailingConstraint,
-            contentTopConstraint,
-            contentBottomConstraint
-        ].compactMap { $0 })
+        contentStack.snp.makeConstraints { make in
+            contentLeadingConstraint = make.leading.equalToSuperview().constraint
+            contentTrailingConstraint = make.trailing.equalToSuperview().constraint
+            contentTopConstraint = make.top.equalToSuperview().constraint
+            contentBottomConstraint = make.bottom.equalToSuperview().constraint
+        }
         separatorView.backgroundColor = .separator
         separatorView.isAccessibilityElement = false
         separatorView.accessibilityElementsHidden = true
         separatorView.isUserInteractionEnabled = false
-        separatorView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(separatorView)
-        separatorLeadingConstraint = separatorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
-        separatorTrailingConstraint = separatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
-        separatorTopConstraint = separatorView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10)
-        separatorBottomConstraint = separatorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
-        separatorWidthConstraint = separatorView.widthAnchor.constraint(equalToConstant: 1)
-        separatorHeightConstraint = separatorView.heightAnchor.constraint(equalToConstant: 0)
-        separatorBottomConstraint?.priority = .defaultHigh
-        NSLayoutConstraint.activate([
-            separatorLeadingConstraint,
-            separatorTopConstraint,
-            separatorBottomConstraint,
-            separatorWidthConstraint,
-            separatorHeightConstraint
-        ].compactMap { $0 })
+        separatorView.snp.makeConstraints { make in
+            separatorLeadingConstraint = make.leading.equalToSuperview().constraint
+            separatorTrailingConstraint = make.trailing.equalToSuperview().constraint
+            separatorTopConstraint = make.top.equalToSuperview().offset(10).constraint
+            separatorBottomConstraint = make.bottom.equalToSuperview().offset(-10).priority(750).constraint
+            separatorWidthConstraint = make.width.equalTo(1).constraint
+            separatorHeightConstraint = make.height.equalTo(0).constraint
+        }
         applySeparator(style: separatorStyle, context: separatorLayoutContext)
         badgeView.setContentHuggingPriority(.required, for: .horizontal)
         badgeView.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -254,10 +243,10 @@ public class PTMainSegmentCell: UICollectionViewCell {
         applySeparator(style: style.itemSeparatorStyle, context: layoutContext)
         removeStackContent()
         applySelection(selected, style: style)
-        contentLeadingConstraint?.constant = style.itemInsets.left
-        contentTrailingConstraint?.constant = -style.itemInsets.right
-        contentTopConstraint?.constant = style.itemInsets.top
-        contentBottomConstraint?.constant = -style.itemInsets.bottom
+        contentLeadingConstraint?.update(offset: style.itemInsets.left)
+        contentTrailingConstraint?.update(offset: -style.itemInsets.right)
+        contentTopConstraint?.update(offset: style.itemInsets.top)
+        contentBottomConstraint?.update(offset: -style.itemInsets.bottom)
         contentStack.spacing = style.imageSpacing
         switch item.content {
         case .title(let title):
@@ -341,8 +330,8 @@ public class PTMainSegmentCell: UICollectionViewCell {
         badgeView.reset()
         badgeView.removeFromSuperview()
         contentStack.axis = .horizontal
-        imageWidthConstraint?.isActive = false
-        imageHeightConstraint?.isActive = false
+        imageWidthConstraint?.deactivate()
+        imageHeightConstraint?.deactivate()
         indicatorContentFrame = .zero
     }
 
@@ -387,16 +376,20 @@ public class PTMainSegmentCell: UICollectionViewCell {
     /// 中文：复用同一组宽高约束，避免 Cell 重用时不断累积冲突约束。
     private func updateImageSizeConstraints(style: PTSegmentStyle) {
         if imageWidthConstraint == nil {
-            imageWidthConstraint = imageIcon.widthAnchor.constraint(equalToConstant: 1)
+            imageIcon.snp.makeConstraints { make in
+                imageWidthConstraint = make.width.equalTo(1).constraint
+            }
         }
         if imageHeightConstraint == nil {
-            imageHeightConstraint = imageIcon.heightAnchor.constraint(equalToConstant: 1)
+            imageIcon.snp.makeConstraints { make in
+                imageHeightConstraint = make.height.equalTo(1).constraint
+            }
         }
         let size = PTSegmentMeasurement.renderedImageSide(style: style)
-        imageWidthConstraint?.constant = size
-        imageHeightConstraint?.constant = size
-        imageWidthConstraint?.isActive = true
-        imageHeightConstraint?.isActive = true
+        imageWidthConstraint?.update(offset: size)
+        imageHeightConstraint?.update(offset: size)
+        imageWidthConstraint?.activate()
+        imageHeightConstraint?.activate()
     }
 
     private func loadImage(source: PTImageSource,
@@ -459,28 +452,28 @@ public class PTMainSegmentCell: UICollectionViewCell {
         guard case .line(let rawConfiguration) = style else {
             separatorView.isHidden = true
             separatorView.backgroundColor = .clear
-            separatorLeadingConstraint?.isActive = true
-            separatorTrailingConstraint?.isActive = false
-            separatorTopConstraint?.constant = 0
-            separatorBottomConstraint?.constant = 0
-            separatorWidthConstraint?.constant = 1
-            separatorHeightConstraint?.constant = 0
+            separatorLeadingConstraint?.activate()
+            separatorTrailingConstraint?.deactivate()
+            separatorTopConstraint?.update(offset: 0)
+            separatorBottomConstraint?.update(offset: 0)
+            separatorWidthConstraint?.update(offset: 1)
+            separatorHeightConstraint?.update(offset: 0)
             return
         }
 
         let configuration = rawConfiguration.normalized
         separatorView.isHidden = !resolveSeparatorVisibility(style: .line(configuration), context: context)
         separatorView.backgroundColor = configuration.color
-        separatorTopConstraint?.constant = configuration.topInset
-        separatorBottomConstraint?.constant = -configuration.bottomInset
-        separatorWidthConstraint?.constant = configuration.thickness
+        separatorTopConstraint?.update(offset: configuration.topInset)
+        separatorBottomConstraint?.update(offset: -configuration.bottomInset)
+        separatorWidthConstraint?.update(offset: configuration.thickness)
         switch configuration.placement {
         case .leading:
-            separatorLeadingConstraint?.isActive = true
-            separatorTrailingConstraint?.isActive = false
+            separatorLeadingConstraint?.activate()
+            separatorTrailingConstraint?.deactivate()
         case .trailing:
-            separatorLeadingConstraint?.isActive = false
-            separatorTrailingConstraint?.isActive = true
+            separatorLeadingConstraint?.deactivate()
+            separatorTrailingConstraint?.activate()
         }
         updateSeparatorHeight(configuration: configuration)
     }
@@ -490,11 +483,11 @@ public class PTMainSegmentCell: UICollectionViewCell {
     /// 中文：限制分隔线高度，避免上下内边距过大时生成负高度约束。
     private func updateSeparatorHeight(configuration: PTSegmentItemSeparatorConfiguration? = nil) {
         guard case .line(let rawConfiguration) = separatorStyle else {
-            separatorHeightConstraint?.constant = 0
+            separatorHeightConstraint?.update(offset: 0)
             return
         }
         let value = (configuration ?? rawConfiguration).normalized
-        separatorHeightConstraint?.constant = max(0, bounds.height - value.topInset - value.bottomInset)
+        separatorHeightConstraint?.update(offset: max(0, bounds.height - value.topInset - value.bottomInset))
     }
 
     private func accessibilityText(for content: PTSegmentContent) -> String? {

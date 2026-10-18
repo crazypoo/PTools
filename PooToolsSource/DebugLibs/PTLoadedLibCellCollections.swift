@@ -43,7 +43,6 @@ class PTloadedLibHeader : PTBaseCollectionReusableView {
         let indicator: UIActivityIndicatorView
         indicator = UIActivityIndicatorView(style: .medium)
         indicator.hidesWhenStopped = true
-        indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
     }()
 

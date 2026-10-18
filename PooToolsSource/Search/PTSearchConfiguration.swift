@@ -30,6 +30,10 @@ public struct PTSearchConfiguration: Sendable, Equatable {
     public var enablesRefresh: Bool
     public var paginationPageSize: Int
     public var historyMaximumCount: Int
+    // English: Controls the content height of the embedded search bar.
+    // Español: Controla la altura de contenido de la barra de búsqueda integrada.
+    // 中文：控制内嵌搜索框的内容高度。
+    public var searchBarHeight: CGFloat
     public var mode: PTSearchMode
     public var placement: PTSearchPlacement
     public var visualStyle: PTSearchVisualStyle
@@ -52,7 +56,8 @@ public struct PTSearchConfiguration: Sendable, Equatable {
                 historyMaximumCount: Int = 20,
                 mode: PTSearchMode = .custom,
                 placement: PTSearchPlacement = .contentTop,
-                visualStyle: PTSearchVisualStyle = .automatic) {
+                visualStyle: PTSearchVisualStyle = .automatic,
+                searchBarHeight: CGFloat = 32) {
         self.minimumCharacters = max(0, minimumCharacters)
         self.debounceInterval = debounceInterval
         self.searchWhileTyping = searchWhileTyping
@@ -69,6 +74,7 @@ public struct PTSearchConfiguration: Sendable, Equatable {
         self.enablesRefresh = enablesRefresh
         self.paginationPageSize = max(1, paginationPageSize)
         self.historyMaximumCount = max(1, historyMaximumCount)
+        self.searchBarHeight = max(32, searchBarHeight)
         self.mode = mode
         self.placement = placement
         self.visualStyle = visualStyle

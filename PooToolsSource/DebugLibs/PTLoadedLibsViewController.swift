@@ -104,7 +104,6 @@ class PTLoadedLibsViewController: PTBaseViewController {
         let control = UISegmentedControl(items: ["All", "Public", "Private"])
         control.selectedSegmentIndex = 0
         control.addTarget(self, action: #selector(filterChanged), for: .valueChanged)
-        control.translatesAutoresizingMaskIntoConstraints = false
         return control
     }()
     
@@ -275,7 +274,6 @@ class PTClassExplorerViewController: PTBaseViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .black
         tableView.separatorColor = .darkGray
         tableView.delegate = self

@@ -3,6 +3,7 @@
 // 中文：原生引导浮层使用的轻量遮罩和内容视图。
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import PToolsOverlay
 #endif
@@ -116,10 +117,10 @@ final class PTInstructionCardView: UIView {
     private let actionStack = UIStackView()
     private let contentStack = UIStackView()
     private let arrowLayer = CAShapeLayer()
-    private var leadingConstraint: NSLayoutConstraint!
-    private var trailingConstraint: NSLayoutConstraint!
-    private var topConstraint: NSLayoutConstraint!
-    private var bottomConstraint: NSLayoutConstraint!
+    private var leadingConstraint: Constraint!
+    private var trailingConstraint: Constraint!
+    private var topConstraint: Constraint!
+    private var bottomConstraint: Constraint!
     private var arrowPoint: CGPoint?
     private var arrowPlacement: PTPopoverPlacement = .automatic
     private var arrowAppearance = PTArrowAppearance()
@@ -168,10 +169,10 @@ final class PTInstructionCardView: UIView {
         layer.cornerRadius = configuration.cardCornerRadius
         titleLabel.textColor = configuration.titleColor
         messageLabel.textColor = configuration.messageColor
-        leadingConstraint.constant = configuration.contentPadding
-        trailingConstraint.constant = -configuration.contentPadding
-        topConstraint.constant = configuration.contentPadding
-        bottomConstraint.constant = -configuration.contentPadding
+        leadingConstraint.update(offset: configuration.contentPadding)
+        trailingConstraint.update(offset: -configuration.contentPadding)
+        topConstraint.update(offset: configuration.contentPadding)
+        bottomConstraint.update(offset: -configuration.contentPadding)
         accessibilityIdentifier = "pt.instructions.content"
         titleLabel.accessibilityIdentifier = "pt.instructions.title"
         messageLabel.accessibilityIdentifier = "pt.instructions.message"
@@ -260,12 +261,12 @@ final class PTInstructionCardView: UIView {
         actionStack.alignment = .center
         contentStack.addArrangedSubview(actionStack)
         addSubview(contentStack)
-        contentStack.translatesAutoresizingMaskIntoConstraints = false
-        leadingConstraint = contentStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 18)
-        trailingConstraint = contentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -18)
-        topConstraint = contentStack.topAnchor.constraint(equalTo: topAnchor, constant: 16)
-        bottomConstraint = contentStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16)
-        NSLayoutConstraint.activate([leadingConstraint, trailingConstraint, topConstraint, bottomConstraint])
+        contentStack.snp.makeConstraints { make in
+            leadingConstraint = make.leading.equalToSuperview().offset(18).constraint
+            trailingConstraint = make.trailing.equalToSuperview().offset(-18).constraint
+            topConstraint = make.top.equalToSuperview().offset(16).constraint
+            bottomConstraint = make.bottom.equalToSuperview().offset(-16).constraint
+        }
     }
 
     private func makeButton(title: String,

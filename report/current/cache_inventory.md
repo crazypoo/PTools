@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory.rb
-Source revision: 4c508f23263c51171d48163d641a4d808069b81a
-Generated at: 2026-10-17T01:00:30Z
+Source revision: 85cd0fa1019fd0965e4966b5435710c618b02da7
+Generated at: 2026-10-17T19:53:08Z
 -->
 
 # PTools 当前缓存盘点
@@ -23,13 +23,13 @@ Generated at: 2026-10-17T01:00:30Z
 | PooToolsSource/Base/PTAudioCache.swift:300 | disk or custom cache | /// 创建播放用 PlayerItem（只用 cache 文件） |
 | PooToolsSource/Base/PTBaseDecorationFunction.swift:16 | disk or custom cache | // English: Cache the shadow geometry to avoid rebuilding the path on every layout pass. |
 | PooToolsSource/Base/PTCollectionView.swift:131 | disk or custom cache | // English: Invalidate every geometry cache when a runtime layout contract changes. |
-| PooToolsSource/Base/PTCollectionView.swift:775 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
-| PooToolsSource/Base/PTCollectionView.swift:776 | disk or custom cache | return cache.doubleValue |
-| PooToolsSource/Base/PTCollectionView.swift:1425 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
-| PooToolsSource/Base/PTCollectionView.swift:1426 | disk or custom cache | return cache |
-| PooToolsSource/Base/PTCollectionView.swift:1536 | disk or custom cache | if let cache = waterfallCache[key] { |
-| PooToolsSource/Base/PTCollectionView.swift:1537 | disk or custom cache | return (cache.items, cache.contentHeight) |
-| PooToolsSource/Base/PTCollectionView.swift:2263 | disk or custom cache | // English: Invalidate only the geometry cache for the requested rows. |
+| PooToolsSource/Base/PTCollectionView.swift:785 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
+| PooToolsSource/Base/PTCollectionView.swift:786 | disk or custom cache | return cache.doubleValue |
+| PooToolsSource/Base/PTCollectionView.swift:1435 | disk or custom cache | if let cache = layoutCache.get(forKey: key) { |
+| PooToolsSource/Base/PTCollectionView.swift:1436 | disk or custom cache | return cache |
+| PooToolsSource/Base/PTCollectionView.swift:1546 | disk or custom cache | if let cache = waterfallCache[key] { |
+| PooToolsSource/Base/PTCollectionView.swift:1547 | disk or custom cache | return (cache.items, cache.contentHeight) |
+| PooToolsSource/Base/PTCollectionView.swift:2273 | disk or custom cache | // English: Invalidate only the geometry cache for the requested rows. |
 | PooToolsSource/Base/PTCollectionViewLayoutSupport.swift:5 | disk or custom cache | //  English: Keep pure layout cache keys outside the collection-view facade. |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:10 | disk or custom cache | // English: Keep the reusable cache type separate from PTCollectionView's facade and layout code. |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:15 | NSCache | private let cache = NSCache<WrappedKey, Value>() |
@@ -54,22 +54,23 @@ Generated at: 2026-10-17T01:00:30Z
 | PooToolsSource/Base/PTVideoCoverCache.swift:528 | disk or custom cache | // Keep invalid dimensions out of integer conversion and make the cache key deterministic. |
 | PooToolsSource/Base/PTVideoCoverCache.swift:542 | disk or custom cache | // English: Version the key because this cache now stores pixel-bounded covers. |
 | PooToolsSource/Button/PTActionLayoutButton.swift:103 | disk or custom cache | // English: Cache the last layout size to avoid rebuilding identical constraints. |
+| PooToolsSource/C7Collector/C7Collector.swift:77 | disk or custom cache | // English: Harbeth owns the shared texture cache and supplies it at conversion time. |
 | PooToolsSource/Category/FileManager+PTEX.swift:24 | disk or custom cache | - 3.1、Library/Cache |
 | PooToolsSource/Category/FileManager+PTEX.swift:27 | disk or custom cache | - 系统不会清理 cache 目录中的文件 |
 | PooToolsSource/Category/FileManager+PTEX.swift:28 | disk or custom cache | - 就要求程序开发时, "必须提供 cache 目录的清理解决方案" |
-| PooToolsSource/Category/NSImageView+PTEX.swift:73 | NSCache | cache = NSCache() |
-| PooToolsSource/Category/NSImageView+PTEX.swift:258 | disk or custom cache | /// Update cache for the current imageView. |
-| PooToolsSource/Category/NSImageView+PTEX.swift:266 | disk or custom cache | cache?.removeAllObjects() |
-| PooToolsSource/Category/NSImageView+PTEX.swift:293 | disk or custom cache | if haveCache, let image = cache?.object(forKey: displayOrderIndex as AnyObject) as? NSImage { |
-| PooToolsSource/Category/NSImageView+PTEX.swift:353 | disk or custom cache | cache?.removeAllObjects() |
-| PooToolsSource/Category/NSImageView+PTEX.swift:385 | NSCache | /// Prepare the cache by adding every images of the gif to an NSCache object. |
-| PooToolsSource/Category/NSImageView+PTEX.swift:387 | disk or custom cache | guard let cache = self.cache else { return } |
-| PooToolsSource/Category/NSImageView+PTEX.swift:389 | disk or custom cache | cache.removeAllObjects() |
-| PooToolsSource/Category/NSImageView+PTEX.swift:398 | disk or custom cache | cache.setObject(NSImage(cgImage: cgImage, size: .zero), forKey: i as AnyObject) |
-| PooToolsSource/Category/NSImageView+PTEX.swift:504 | NSCache | private var cache: NSCache<AnyObject, AnyObject>? { |
-| PooToolsSource/Category/NSImageView+PTEX.swift:505 | NSCache | get { return (objc_getAssociatedObject(self, AssociatedKeys.NSImageViewGIFCacheKey!) as? NSCache) } |
+| PooToolsSource/Category/NSImageView+PTEX.swift:74 | NSCache | cache = NSCache() |
+| PooToolsSource/Category/NSImageView+PTEX.swift:243 | disk or custom cache | /// Update cache for the current imageView. |
+| PooToolsSource/Category/NSImageView+PTEX.swift:251 | disk or custom cache | cache?.removeAllObjects() |
+| PooToolsSource/Category/NSImageView+PTEX.swift:278 | disk or custom cache | if haveCache, let image = cache?.object(forKey: displayOrderIndex as AnyObject) as? NSImage { |
+| PooToolsSource/Category/NSImageView+PTEX.swift:338 | disk or custom cache | cache?.removeAllObjects() |
+| PooToolsSource/Category/NSImageView+PTEX.swift:370 | NSCache | /// Prepare the cache by adding every images of the gif to an NSCache object. |
+| PooToolsSource/Category/NSImageView+PTEX.swift:372 | disk or custom cache | guard let cache = self.cache else { return } |
+| PooToolsSource/Category/NSImageView+PTEX.swift:374 | disk or custom cache | cache.removeAllObjects() |
+| PooToolsSource/Category/NSImageView+PTEX.swift:383 | disk or custom cache | cache.setObject(NSImage(cgImage: cgImage, size: .zero), forKey: i as AnyObject) |
+| PooToolsSource/Category/NSImageView+PTEX.swift:489 | NSCache | private var cache: NSCache<AnyObject, AnyObject>? { |
+| PooToolsSource/Category/NSImageView+PTEX.swift:490 | NSCache | get { return (objc_getAssociatedObject(self, AssociatedKeys.NSImageViewGIFCacheKey!) as? NSCache) } |
 | PooToolsSource/Category/UIApplication+PTEX.swift:27 | disk or custom cache | PTNSLogConsole("Failed to delete launch screen cache: \(result.error)",levelType: .error,loggerType: .uiApplication) |
-| PooToolsSource/Category/UIImageView+PTEX.swift:193 | NSCache | cache = NSCache() |
+| PooToolsSource/Category/UIImageView+PTEX.swift:194 | NSCache | cache = NSCache() |
 | PooToolsSource/Category/UIImageView+PTEX.swift:350 | disk or custom cache | /// Update cache for the current imageView. |
 | PooToolsSource/Category/UIImageView+PTEX.swift:358 | disk or custom cache | cache?.removeAllObjects() |
 | PooToolsSource/Category/UIImageView+PTEX.swift:385 | disk or custom cache | if haveCache, let image = cache?.object(forKey: displayOrderIndex as AnyObject) as? UIImage { |

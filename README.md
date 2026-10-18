@@ -11,7 +11,9 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.66.0`，真机/宿主回归与发布证据完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.66.1`，真机/宿主回归与发布证据完成前不创建正式 tag。
+
+`5.66.1` 修复 `PTSearchViewController` 清空输入框后列表被错误清空的问题；点击 clear button 会恢复调用方提供的完整未筛选数据，并保留搜索过程中的结果状态隔离。
 
 5.66.0 新增离线开源许可证能力：只需要 Foundation 的 `PToolsAcknowledgementsCore` 可提供清单查询、统计和导出；需要 UIKit 页面时使用 `PToolsAcknowledgements`。UIKit 适配层可用时，`PTAcknowledgementsViewController` 和 `PTAcknowledgementDetailViewController` 都优先继承 `PTBaseViewController`，复用 PTools 的导航与生命周期逻辑。构建期生成和接入方式见 [PTAcknowledgements 指南](docs/guides/PTACKNOWLEDGEMENTS_GUIDE.md)。
 

@@ -3,24 +3,26 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: af22c3f0c20a85694d1b43a576d68ebcf796f3a6
-Generated at: 2026-10-17T17:36:20Z
+Source revision: 85cd0fa1019fd0965e4966b5435710c618b02da7
+Generated at: 2026-10-17T19:53:12Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.65.8`
+- Podspec: `PooTools` `5.66.1`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
-- Subspec count: `162`
+- Subspec count: `164`
 
 ## Subspecs
 
 | Subspec | Local dependencies | Third-party dependencies | Source directories | Frameworks | Resources |
 | --- | --- | --- | --- | --- | --- |
 | `Accessibility` | `PooTools/PToolsUIFoundation` | — | `PToolsAccessibility` | Foundation, UIKit | — |
+| `Acknowledgements` | `PooTools/AcknowledgementsCore`, `PooTools/Core`, `PooTools/Search` | — | `PToolsAcknowledgements` | Foundation, UIKit | — |
+| `AcknowledgementsCore` | — | — | `PToolsAcknowledgementsCore` | Foundation | — |
 | `Activities` | — | — | `PToolsActivities` | ActivityKit, Foundation | — |
 | `AppIntegrity` | — | — | `PToolsAppIntegrity` | DeviceCheck, Foundation | — |
 | `AppIntents` | `PooTools/RouteCore` | — | `PToolsAppIntents` | AppIntents, Foundation | — |

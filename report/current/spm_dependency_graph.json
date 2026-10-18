@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "af22c3f0c20a85694d1b43a576d68ebcf796f3a6",
-  "generated_at": "2026-10-17T17:36:18Z",
+  "source_revision": "85cd0fa1019fd0965e4966b5435710c618b02da7",
+  "generated_at": "2026-10-17T19:53:11Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -257,6 +257,28 @@
       },
       "targets": [
         "PToolsAccessibility"
+      ]
+    },
+    {
+      "name": "PToolsAcknowledgements",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsAcknowledgements"
+      ]
+    },
+    {
+      "name": "PToolsAcknowledgementsCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsAcknowledgementsCore"
       ]
     },
     {
@@ -1865,6 +1887,15 @@
       ]
     },
     {
+      "name": "pt-acknowledgements",
+      "type": {
+        "executable": null
+      },
+      "targets": [
+        "PTAcknowledgementsGenerator"
+      ]
+    },
+    {
       "name": "ptools",
       "type": {
         "library": [
@@ -2283,6 +2314,38 @@
     "target_6_0_range": "0-2"
   },
   "targets": [
+    {
+      "name": "PTAcknowledgementsGenerator",
+      "type": "executable",
+      "path": "Tools/PTAcknowledgementsGenerator",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsAcknowledgementsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsAcknowledgementsCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
     {
       "name": "PTBluetoothPermission",
       "type": "regular",
@@ -3199,6 +3262,137 @@
       ]
     },
     {
+      "name": "PToolsAcknowledgements",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsAcknowledgements",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsAcknowledgementsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsAcknowledgementsCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [
+        {
+          "name": "{\"target\"=>[\"PooToolsSearch\", {\"platformNames\"=>[\"ios\", \"tvos\", \"visionos\"]}]}",
+          "kind": "unknown",
+          "package": null,
+          "declaration": {
+            "target": [
+              "PooToolsSearch",
+              {
+                "platformNames": [
+                  "ios",
+                  "tvos",
+                  "visionos"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "{\"target\"=>[\"ptools\", {\"platformNames\"=>[\"ios\", \"tvos\", \"visionos\"]}]}",
+          "kind": "unknown",
+          "package": null,
+          "declaration": {
+            "target": [
+              "ptools",
+              {
+                "platformNames": [
+                  "ios",
+                  "tvos",
+                  "visionos"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsAcknowledgementsCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsAcknowledgementsCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsAcknowledgementsCoreTests",
+      "type": "test",
+      "path": "Tests/PToolsAcknowledgementsCoreTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsAcknowledgementsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsAcknowledgementsCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsActivities",
       "type": "regular",
       "path": "PooToolsSource/PToolsActivities",
@@ -3849,7 +4043,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -4134,7 +4340,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -4377,7 +4595,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -6260,7 +6490,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -6482,7 +6724,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -7023,7 +7277,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -7211,7 +7477,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -7486,7 +7764,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -7526,7 +7816,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -7640,6 +7942,17 @@
           "declaration": {
             "byName": [
               "Harbeth",
+              null
+            ]
+          }
+        },
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
               null
             ]
           }
@@ -7760,7 +8073,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -7906,6 +8231,17 @@
               null
             ]
           }
+        },
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
         }
       ],
       "unknown_dependencies": [],
@@ -7958,7 +8294,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -8083,7 +8431,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -8159,7 +8519,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -8199,7 +8571,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -8331,7 +8715,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -8519,7 +8915,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -8603,7 +9011,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -8926,7 +9346,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -9153,7 +9585,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -9256,7 +9700,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -9366,7 +9822,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -9627,7 +10095,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -9689,7 +10169,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -9751,7 +10243,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -9859,7 +10363,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -10227,7 +10743,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -10435,6 +10963,17 @@
               null
             ]
           }
+        },
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
         }
       ],
       "unknown_dependencies": [],
@@ -10575,7 +11114,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {

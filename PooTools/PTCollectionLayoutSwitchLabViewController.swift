@@ -8,6 +8,7 @@
 //
 
 import UIKit
+import SnapKit
 import PooTools
 
 @MainActor
@@ -36,13 +37,9 @@ private final class PTCollectionLayoutSwitchCell: PTBaseNormalCell {
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.textAlignment = .center
         contentView.addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4)
-        ])
+        titleLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+        }
         contentView.layer.cornerRadius = 8
         contentView.layer.masksToBounds = true
     }
@@ -79,14 +76,10 @@ private final class PTCollectionLayoutSwitchNestedItemCell: UICollectionViewCell
         titleLabel.font = .preferredFont(forTextStyle: .caption1)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.textColor = .secondaryLabel
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 2),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -2)
-        ])
+        titleLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4))
+        }
         contentView.backgroundColor = .tertiarySystemBackground
         contentView.layer.cornerRadius = 6
         contentView.layer.masksToBounds = true
@@ -125,14 +118,10 @@ private final class PTCollectionLayoutSwitchNestedCell: UICollectionViewCell {
         nestedList.configureCell = { _, cell, context in
             (cell as? PTCollectionLayoutSwitchNestedItemCell)?.render(row: context.row)
         }
-        nestedList.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(nestedList)
-        NSLayoutConstraint.activate([
-            nestedList.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            nestedList.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-            nestedList.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            nestedList.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
-        ])
+        nestedList.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(8)
+        }
     }
 
     required init?(coder: NSCoder) { nil }
@@ -284,19 +273,16 @@ final class PTCollectionLayoutSwitchLabViewController: PTBaseViewController {
         ])
         controls.axis = .vertical
         controls.spacing = 5
-        controls.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(controls)
         view.addSubview(list)
-        list.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            controls.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
-            controls.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8),
-            controls.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            list.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            list.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            list.topAnchor.constraint(equalTo: controls.bottomAnchor, constant: 8),
-            list.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        controls.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(8)
+        }
+        list.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalTo(controls.snp.bottom).offset(8)
+        }
     }
 
     private func makeControlRow(_ title: String, _ control: UIView) -> UIView {

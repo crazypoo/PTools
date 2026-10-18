@@ -1,14 +1,15 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_sendable_exceptions.rb",
-  "source_revision": "4c508f23263c51171d48163d641a4d808069b81a",
-  "generated_at": "2026-10-17T00:59:29Z",
+  "source_revision": "85cd0fa1019fd0965e4966b5435710c618b02da7",
+  "generated_at": "2026-10-17T19:53:08Z",
   "generated_from": "PooToolsSource/**/*.swift",
   "allowlist": [
     "PooToolsSource/Category/AVExport+PTEX.swift",
     "PooToolsSource/Category/PHAsset+PTEX.swift",
     "PooToolsSource/Category/PTVideoThumbnailService.swift",
     "PooToolsSource/C7Collector/C7CollectorCamera.swift",
+    "PooToolsSource/C7Collector/C7Collector.swift",
     "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
     "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
     "PooToolsSource/LivePhoto/PTLivePhoto.swift",
@@ -45,6 +46,18 @@
   ],
   "declarations": [
     {
+      "path": "PooToolsSource/C7Collector/C7Collector.swift",
+      "line": 23,
+      "declaration": "private struct PTSystemTextureBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
+      "path": "PooToolsSource/C7Collector/C7Collector.swift",
+      "line": 27,
+      "declaration": "private struct PTSystemImageBox: @unchecked Sendable {",
+      "allowlisted": true
+    },
+    {
       "path": "PooToolsSource/C7Collector/C7CollectorCamera.swift",
       "line": 24,
       "declaration": "private struct PTSystemPixelBufferBox: @unchecked Sendable {",
@@ -70,19 +83,19 @@
     },
     {
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 15,
+      "line": 17,
       "declaration": "private struct PTSendableEventStoreBox: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 19,
+      "line": 21,
       "declaration": "public struct PTSendableEventArrayBox: @unchecked Sendable {",
       "allowlisted": true
     },
     {
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 27,
+      "line": 29,
       "declaration": "public struct PTSendableReminderArrayBox: @unchecked Sendable {",
       "allowlisted": true
     },
@@ -334,7 +347,7 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1536,
+      "line": 1539,
       "declaration": "private struct PTC7SafeBox:@unchecked Sendable {",
       "allowlisted": true
     },

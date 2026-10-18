@@ -50,7 +50,6 @@ public extension UITextView {
             label.font = self.font ?? UIFont.systemFont(ofSize: 14)
             label.textColor = UIColor.lightGray
             label.isUserInteractionEnabled = false
-            label.translatesAutoresizingMaskIntoConstraints = false
             addSubview(label)
             
             // 约束：跟随 textContainerInset 变化
@@ -108,7 +107,6 @@ public extension UITextView {
             
             // ⭐️ 核心优化：直接添加到 UITextView 内部，不依赖外部视图！
             addSubview(label)
-            label.translatesAutoresizingMaskIntoConstraints = false
             
             label.snp.makeConstraints { make in
                 // 使用 frameLayoutGuide 让它悬浮在右下角，不会随着文本滚动而消失

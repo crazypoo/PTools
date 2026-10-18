@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -32,7 +33,7 @@ final class SeparatorView: BaseView {
 
     var thickness: CGFloat {
         didSet {
-            thicknessConstraint.constant = thicknesInPixels
+            thicknessConstraint?.update(offset: thicknesInPixels)
         }
     }
 
@@ -44,7 +45,7 @@ final class SeparatorView: BaseView {
         }
     }
 
-    private lazy var thicknessConstraint = heightAnchor.constraint(equalToConstant: thicknesInPixels)
+    private var thicknessConstraint: Constraint?
 
     convenience init(color: UIColor, thickness: CGFloat = 1, frame: CGRect = .zero) {
         self.init(style: .color(color), thickness: thickness, frame: frame)
@@ -66,6 +67,8 @@ final class SeparatorView: BaseView {
 
     override func setup() {
         super.setup()
-        thicknessConstraint.isActive = true
+        snp.makeConstraints { make in
+            thicknessConstraint = make.height.equalTo(thicknesInPixels).constraint
+        }
     }
 }

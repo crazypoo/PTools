@@ -8,6 +8,9 @@
 //
 
 import UIKit
+#if canImport(SnapKit)
+import SnapKit
+#endif
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif
@@ -47,14 +50,11 @@ private final class PTSearchDefaultCell: UICollectionViewCell {
         titleLabel.numberOfLines = 0
         titleLabel.textColor = .label
         PTUIAccessibility.applyDynamicType(to: titleLabel, font: .preferredFont(forTextStyle: .body))
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
-        ])
+        titleLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.bottom.equalToSuperview().inset(10)
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -96,6 +96,10 @@ open class PTSearchViewController<Item: Sendable>: PTListViewController {
     private var currentSnapshot: PTSearchSnapshot?
     private var currentSuggestions: [String] = []
     private var currentHistory: [String] = []
+    // English: Keep the caller-provided unfiltered collection so clearing the field can restore it.
+    // Español: Conserva la colección sin filtrar del caller para restaurarla al limpiar el campo.
+    // 中文：保存调用方提供的未筛选数据，清空输入框时恢复列表。
+    private var unfilteredItems: [Item] = []
     private var pagination: PTSearchPagination
     private var isSearchActive = false
     private var presentationContext: PTSearchPresentationContext?
@@ -163,7 +167,6 @@ open class PTSearchViewController<Item: Sendable>: PTListViewController {
         case .contentTop, .navigationBarExpanded:
             guard searchBar.superview == nil else { return }
             view.addSubview(searchBar)
-            searchBar.translatesAutoresizingMaskIntoConstraints = false
         case .navigationBar:
             break
         case .custom:
@@ -175,29 +178,27 @@ open class PTSearchViewController<Item: Sendable>: PTListViewController {
         switch searchConfiguration.placement {
         case .contentTop, .navigationBarExpanded:
             let safeArea = view.safeAreaLayoutGuide
-            listView.translatesAutoresizingMaskIntoConstraints = false
-            var constraints = [
-                searchBar.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-                searchBar.topAnchor.constraint(equalTo: safeArea.topAnchor),
-                searchBar.heightAnchor.constraint(greaterThanOrEqualToConstant: 44),
-                listView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-                listView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-                listView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
-                listView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8)
-            ]
+            searchBar.snp.remakeConstraints { make in
+                make.leading.top.equalTo(safeArea)
+                make.height.equalTo(searchConfiguration.searchBarHeight)
+            }
+            listView.snp.remakeConstraints { make in
+                make.leading.trailing.bottom.equalTo(safeArea)
+                make.top.equalTo(searchBar.snp.bottom).offset(8)
+            }
             if searchConfiguration.showsCancelButton {
-                cancelButton.translatesAutoresizingMaskIntoConstraints = false
                 view.addSubview(cancelButton)
-                constraints.append(contentsOf: [
-                    searchBar.trailingAnchor.constraint(equalTo: cancelButton.leadingAnchor, constant: -8),
-                    cancelButton.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-                    cancelButton.centerYAnchor.constraint(equalTo: searchBar.centerYAnchor)
-                ])
+                cancelButton.snp.remakeConstraints { make in
+                    make.leading.equalTo(searchBar.snp.trailing).offset(8)
+                    make.trailing.equalTo(safeArea)
+                    make.centerY.equalTo(searchBar)
+                }
             } else {
-                constraints.append(searchBar.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor))
+                searchBar.snp.makeConstraints { make in
+                    make.trailing.equalTo(safeArea)
+                }
                 cancelButton.isHidden = true
             }
-            NSLayoutConstraint.activate(constraints)
         case .navigationBar, .custom:
             super.installListViewConstraints(listView)
         }
@@ -349,35 +350,45 @@ open class PTSearchViewController<Item: Sendable>: PTListViewController {
     // Español: Reemplaza el array canónico y renderiza mediante la API diffable de PTCollectionView.
     // 中文：替换规范结果数组，并通过 PTCollectionView 的 Diffable API 渲染。
     public func setResults(_ results: [Item], animated: Bool = true) {
+        unfilteredItems = results
         invalidateRunningRequests()
         applyResults(results, stateKeyword: keyword, animated: animated)
     }
 
     public func appendResults(_ results: [Item], animated: Bool = true) {
+        let updated = items + results
+        if keyword.isEmpty { unfilteredItems = updated }
         invalidateRunningRequests()
-        applyResults(items + results, stateKeyword: keyword, animated: animated)
+        applyResults(updated, stateKeyword: keyword, animated: animated)
     }
 
     public func prependResults(_ results: [Item], animated: Bool = true) {
+        let updated = results + items
+        if keyword.isEmpty { unfilteredItems = updated }
         invalidateRunningRequests()
-        applyResults(results + items, stateKeyword: keyword, animated: animated)
+        applyResults(updated, stateKeyword: keyword, animated: animated)
     }
 
     public func removeResult(at index: Int, animated: Bool = true) {
         guard items.indices.contains(index) else { return }
         var updated = items
         updated.remove(at: index)
-        setResults(updated, animated: animated)
+        if keyword.isEmpty { unfilteredItems = updated }
+        invalidateRunningRequests()
+        applyResults(updated, stateKeyword: keyword, animated: animated)
     }
 
     public func replaceResult(at index: Int, with item: Item, animated: Bool = true) {
         guard items.indices.contains(index) else { return }
         var updated = items
         updated[index] = item
-        setResults(updated, animated: animated)
+        if keyword.isEmpty { unfilteredItems = updated }
+        invalidateRunningRequests()
+        applyResults(updated, stateKeyword: keyword, animated: animated)
     }
 
     public func clearResults(animated: Bool = true) {
+        unfilteredItems.removeAll(keepingCapacity: true)
         invalidateRunningRequests()
         applyResults([], stateKeyword: keyword, animated: animated)
     }
@@ -582,7 +593,9 @@ open class PTSearchViewController<Item: Sendable>: PTListViewController {
 
         guard !nextKeyword.isEmpty else {
             currentSuggestions.removeAll(keepingCapacity: true)
-            if searchConfiguration.clearOnEmptyKeyword { applyResults([], stateKeyword: "", animated: false) }
+            if searchConfiguration.clearOnEmptyKeyword {
+                applyResults(unfilteredItems, stateKeyword: "", animated: false)
+            }
             if searchConfiguration.automaticallyShowsHistory {
                 transition(to: currentHistory.isEmpty ? .focused : .history)
             } else {

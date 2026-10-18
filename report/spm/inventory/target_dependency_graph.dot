@@ -1,4 +1,5 @@
 digraph PToolsSwiftPM {
+  "PTAcknowledgementsGenerator" -> "PToolsAcknowledgementsCore";
   "PTBluetoothPermission" -> "PToolsPermissionCore";
   "PTCalendarPermission" -> "PToolsPermissionCore";
   "PTCameraPermission" -> "PToolsPermissionCore";
@@ -21,6 +22,11 @@ digraph PToolsSwiftPM {
   "PTSpeechPermission" -> "PToolsPermissionCore";
   "PTTrackingPermission" -> "PToolsPermissionCore";
   "PToolsAccessibility" -> "PToolsUIFoundation";
+  "PToolsAcknowledgements" -> "PToolsAcknowledgementsCore";
+  "PToolsAcknowledgements" -> "PooToolsSearch";
+  "PToolsAcknowledgements" -> "ptools";
+  "PToolsAcknowledgementsCore";
+  "PToolsAcknowledgementsCoreTests" -> "PToolsAcknowledgementsCore";
   "PToolsActivities";
   "PToolsAdvancedTests" -> "PToolsBluetooth";
   "PToolsAdvancedTests" -> "PToolsConnectivity";

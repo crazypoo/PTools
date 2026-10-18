@@ -5,18 +5,16 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
 
 final class WireframeView: LayerView {
-    private lazy var leadingAnchorConstraint = layoutGuideView.leadingAnchor.constraint(equalTo: leadingAnchor).then { $0.isActive = true }
-
-    private lazy var topAnchorConstraint = layoutGuideView.topAnchor.constraint(equalTo: topAnchor).then { $0.isActive = true }
-
-    private lazy var bottomAnchorConstraint = layoutGuideView.bottomAnchor.constraint(equalTo: bottomAnchor).then { $0.isActive = true }
-
-    private lazy var trailingAnchorConstraint = layoutGuideView.trailingAnchor.constraint(equalTo: trailingAnchor).then { $0.isActive = true }
+    private var leadingConstraint: Constraint?
+    private var topConstraint: Constraint?
+    private var bottomConstraint: Constraint?
+    private var trailingConstraint: Constraint?
 
     @MainActor
     override init(
@@ -36,7 +34,6 @@ final class WireframeView: LayerView {
     }
 
     private lazy var layoutGuideView = UIView().then {
-        $0.translatesAutoresizingMaskIntoConstraints = false
         $0.layer.borderColor = borderColor?.cgColor
         $0.layer.borderWidth = borderWidth
         $0.alpha = 1 / 4
@@ -46,11 +43,20 @@ final class WireframeView: LayerView {
         super.didMoveToSuperview()
 
         guard superview != nil else {
+            layoutGuideView.snp.removeConstraints()
             layoutGuideView.removeFromSuperview()
             return
         }
 
-        contentView.installView(layoutGuideView)
+        guard layoutGuideView.superview == nil else { return }
+
+        contentView.addSubview(layoutGuideView)
+        layoutGuideView.snp.makeConstraints { make in
+            leadingConstraint = make.leading.equalToSuperview().constraint
+            topConstraint = make.top.equalToSuperview().constraint
+            bottomConstraint = make.bottom.equalToSuperview().constraint
+            trailingConstraint = make.trailing.equalToSuperview().constraint
+        }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -75,9 +81,9 @@ final class WireframeView: LayerView {
             return
         }
 
-        leadingAnchorConstraint.constant = superview.layoutMarginsGuide.layoutFrame.minX
-        topAnchorConstraint.constant = superview.layoutMarginsGuide.layoutFrame.minY
-        bottomAnchorConstraint.constant = superview.layoutMarginsGuide.layoutFrame.maxY - superview.bounds.maxY
-        trailingAnchorConstraint.constant = superview.layoutMarginsGuide.layoutFrame.maxX - superview.bounds.maxX
+        leadingConstraint?.update(offset: superview.layoutMarginsGuide.layoutFrame.minX)
+        topConstraint?.update(offset: superview.layoutMarginsGuide.layoutFrame.minY)
+        bottomConstraint?.update(offset: superview.layoutMarginsGuide.layoutFrame.maxY - superview.bounds.maxY)
+        trailingConstraint?.update(offset: superview.layoutMarginsGuide.layoutFrame.maxX - superview.bounds.maxX)
     }
 }

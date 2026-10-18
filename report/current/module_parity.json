@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "af22c3f0c20a85694d1b43a576d68ebcf796f3a6",
-  "generated_at": "2026-10-17T17:28:24Z",
+  "source_revision": "85cd0fa1019fd0965e4966b5435710c618b02da7",
+  "generated_at": "2026-10-17T19:46:51Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -25,6 +25,8 @@
     "PTSpeechPermission",
     "PTTrackingPermission",
     "PToolsAccessibility",
+    "PToolsAcknowledgements",
+    "PToolsAcknowledgementsCore",
     "PToolsActivities",
     "PToolsAppIntegrity",
     "PToolsAppIntents",
@@ -160,6 +162,7 @@
     "PooToolsWebKit",
     "PooToolsWhatsNewsKit",
     "PooToolsiOS17Tips",
+    "pt-acknowledgements",
     "ptools"
   ],
   "aggregate_products": {
@@ -319,11 +322,14 @@
     "iOS17Tips"
   ],
   "spm_only": [
+    "PTAcknowledgementsGenerator",
     "PTModelBenchmark",
     "PTModelLegacyKakaJSONFixture",
     "PTModelLegacySmartCodableFixture",
     "PTModelMixedLegacyFixture",
     "PTModelOnlyFixture",
+    "PToolsAcknowledgements",
+    "PToolsAcknowledgementsCore",
     "PToolsAppIntegrity",
     "PToolsAuth",
     "PToolsAuthCore",
@@ -351,6 +357,8 @@
     "PToolsWebCore"
   ],
   "pod_only": [
+    "Acknowledgements",
+    "AcknowledgementsCore",
     "AppIntegrity",
     "Appz",
     "Auth",
@@ -472,6 +480,14 @@
   ],
   "dependency_drift": [
     {
+      "module": "Banner",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
       "module": "BluetoothPermission",
       "field": "internal_dependencies",
       "spm": [
@@ -516,6 +532,14 @@
       ]
     },
     {
+      "module": "ContentState",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
       "module": "Core",
       "field": "internal_dependencies",
       "spm": [
@@ -555,6 +579,62 @@
       ]
     },
     {
+      "module": "CustomerLabel",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "CustomerNumberKeyboard",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "DEBUG",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "Documents",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "Form",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "Guide",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "HandSign",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
       "module": "HarbethKit",
       "field": "internal_dependencies",
       "spm": [
@@ -570,6 +650,25 @@
         "Core",
         "Symbols"
       ]
+    },
+    {
+      "module": "HarbethKit",
+      "field": "third_party_dependencies",
+      "spm": [
+        "Harbeth",
+        "SnapKit"
+      ],
+      "cocoapods": [
+        "Harbeth"
+      ]
+    },
+    {
+      "module": "Hud",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
     },
     {
       "module": "ImageEditor",
@@ -594,7 +693,16 @@
       "module": "ImageEditor",
       "field": "third_party_dependencies",
       "spm": [
-        "Harbeth"
+        "Harbeth",
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "ImagePicker",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
       ],
       "cocoapods": []
     },
@@ -621,6 +729,30 @@
         "Core",
         "Overlay"
       ]
+    },
+    {
+      "module": "Instructions",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "LaunchTimeProfiler",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "Loading",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
     },
     {
       "module": "Location",
@@ -657,6 +789,14 @@
       ]
     },
     {
+      "module": "MediaViewer",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
       "module": "MeidaPermission",
       "field": "internal_dependencies",
       "spm": [
@@ -681,6 +821,14 @@
         "CustomerLabel",
         "Symbols"
       ]
+    },
+    {
+      "module": "MessageKit",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
     },
     {
       "module": "Model",
@@ -716,6 +864,14 @@
       ]
     },
     {
+      "module": "PDF",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
       "module": "PageControl",
       "field": "internal_dependencies",
       "spm": [
@@ -747,6 +903,14 @@
       ]
     },
     {
+      "module": "PhotoPicker",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
       "module": "Picker",
       "field": "internal_dependencies",
       "spm": [
@@ -766,6 +930,14 @@
       "cocoapods": []
     },
     {
+      "module": "Ping",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
       "module": "Popover",
       "field": "internal_dependencies",
       "spm": [
@@ -777,6 +949,14 @@
         "Overlay",
         "Symbols"
       ]
+    },
+    {
+      "module": "ProgressBar",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
     },
     {
       "module": "RateView",
@@ -818,6 +998,14 @@
       ]
     },
     {
+      "module": "ScanQRCode",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
       "module": "ScrollBanner",
       "field": "internal_dependencies",
       "spm": [
@@ -829,6 +1017,30 @@
         "Core",
         "PageControl"
       ]
+    },
+    {
+      "module": "ScrollBanner",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "Search",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
+    },
+    {
+      "module": "Segmented",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
     },
     {
       "module": "SiriPermission",
@@ -847,6 +1059,14 @@
       "cocoapods": [
         "PToolsUIFoundation"
       ]
+    },
+    {
+      "module": "Stepper",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
     },
     {
       "module": "TipsView",
@@ -884,7 +1104,8 @@
       "module": "VideoEditor",
       "field": "third_party_dependencies",
       "spm": [
-        "Harbeth"
+        "Harbeth",
+        "SnapKit"
       ],
       "cocoapods": []
     },
@@ -898,6 +1119,14 @@
       "cocoapods": [
         "Core"
       ]
+    },
+    {
+      "module": "WhatsNewsKit",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
     },
     {
       "module": "WidgetCore",
@@ -1807,5 +2036,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "f87227e6ceb148000a14fe1b6a01019d254ad32732ea1fcb7986f1901a5835da"
+  "fingerprint": "07cb3fdf5c0e6c0e94ec52fc803cc6863659e00c19af0cc80d09ee5fa2ea95c4"
 }

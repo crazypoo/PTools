@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -41,10 +42,6 @@ final class LengthMeasurementView: BaseView {
         frame: bounds
     )
 
-    private lazy var topAnchorConstraint = contentView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor)
-
-    private lazy var leadingAnchorConstraint = contentView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor)
-
     init(axis: NSLayoutConstraint.Axis, color: UIColor, name: String? = nil, frame: CGRect = .zero) {
         self.axis = axis
         self.color = color
@@ -79,9 +76,9 @@ final class LengthMeasurementView: BaseView {
 
         installView(contentView, .centerXY)
 
-        topAnchorConstraint.isActive = true
-
-        leadingAnchorConstraint.isActive = true
+        contentView.snp.makeConstraints { make in
+            make.top.leading.greaterThanOrEqualToSuperview()
+        }
     }
 
     override func layoutSubviews() {

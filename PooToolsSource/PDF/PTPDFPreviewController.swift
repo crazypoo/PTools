@@ -4,6 +4,7 @@
 
 #if canImport(UIKit) && canImport(PDFKit)
 import UIKit
+import SnapKit
 import PDFKit
 import UniformTypeIdentifiers
 
@@ -27,13 +28,9 @@ public final class PTPDFPreviewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(pdfView)
-        pdfView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            pdfView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            pdfView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            pdfView.topAnchor.constraint(equalTo: view.topAnchor),
-            pdfView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        pdfView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         pdfView.autoScales = true
         pdfView.displayMode = .singlePageContinuous
         pdfView.document = PDFDocument(url: url)

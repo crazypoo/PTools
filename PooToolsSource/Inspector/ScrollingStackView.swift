@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -16,6 +17,8 @@ final class ScrollingStackView: UIScrollView {
         $0.axis = .vertical
 
         installView($0, priority: .required)
-        widthAnchor.constraint(equalTo: $0.widthAnchor).isActive = true
+        $0.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+        }
     }
 }

@@ -9,6 +9,7 @@
 #if !os(macOS)
 
 import UIKit
+import SnapKit
 import Kingfisher
 import ImageIO
 import Photos
@@ -255,16 +256,15 @@ public extension UIImageView {
         return task
     }
     
-    // 优化：使用 Anchor API 代替老式的 NSLayoutConstraint 初始化
+    // English: Keep the loader centered through the shared SnapKit layout contract.
+    // Español: Mantiene el loader centrado mediante el contrato de layout compartido de SnapKit.
+    // 中文：通过共享的 SnapKit 布局契约保持加载器居中。
     private func createLoader(from view: UIView? = nil) -> UIView {
         let loader = view ?? UIActivityIndicatorView()
         addSubview(loader)
-        loader.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            loader.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            loader.centerYAnchor.constraint(equalTo: self.centerYAnchor)
-        ])
+        loader.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
         
         (loader as? UIActivityIndicatorView)?.startAnimating()
         

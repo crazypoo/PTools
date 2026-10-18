@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 // English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
 // Español: Importa explícitamente el target Core para las compilaciones SwiftPM independientes.
@@ -169,7 +170,6 @@ public class PTProgressHUD: UIView {
         let view = UIVisualEffectView(effect: effect)
         view.layer.cornerRadius = 10.0
         view.clipsToBounds = true
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -178,7 +178,6 @@ public class PTProgressHUD: UIView {
         stack.axis = .vertical
         stack.alignment = .center
         stack.spacing = 10
-        stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
     
@@ -211,10 +210,10 @@ public class PTProgressHUD: UIView {
     private var didCompletePresentation = true
     
     // 动态约束引用
-    private var bezelCenterXConstraint: NSLayoutConstraint!
-    private var bezelCenterYConstraint: NSLayoutConstraint!
-    private var stackPaddingConstraints: [NSLayoutConstraint] = []
-    private var squareConstraint: NSLayoutConstraint?
+    private var bezelCenterXConstraint: Constraint!
+    private var bezelCenterYConstraint: Constraint!
+    private var stackPaddingConstraints: [Constraint] = []
+    private var squareConstraint: Constraint?
     
     
     /// 安全获取当前的 Key Window (兼容 iOS 13+ SceneDelegate 机制)
@@ -259,43 +258,41 @@ public class PTProgressHUD: UIView {
         bezelView.contentView.addSubview(stackView)
         
         // 核心约束
-        bezelCenterXConstraint = bezelView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
-        bezelCenterYConstraint = bezelView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
-        
-        stackPaddingConstraints = [
-            stackView.topAnchor.constraint(equalTo: bezelView.contentView.topAnchor, constant: margin),
-            stackView.bottomAnchor.constraint(equalTo: bezelView.contentView.bottomAnchor, constant: -margin),
-            stackView.leadingAnchor.constraint(equalTo: bezelView.contentView.leadingAnchor, constant: margin),
-            stackView.trailingAnchor.constraint(equalTo: bezelView.contentView.trailingAnchor, constant: -margin)
-        ]
-        
-        NSLayoutConstraint.activate([
-            bezelCenterXConstraint,
-            bezelCenterYConstraint,
-            bezelView.widthAnchor.constraint(greaterThanOrEqualToConstant: 80),
-            bezelView.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, multiplier: 0.8)
-        ] + stackPaddingConstraints)
+        bezelView.snp.makeConstraints { make in
+            bezelCenterXConstraint = make.centerX.equalToSuperview().offset(offset.x).constraint
+            bezelCenterYConstraint = make.centerY.equalToSuperview().offset(offset.y).constraint
+            make.width.greaterThanOrEqualTo(80)
+            make.width.lessThanOrEqualToSuperview().multipliedBy(0.8)
+        }
+        stackView.snp.makeConstraints { make in
+            stackPaddingConstraints = [
+                make.top.equalTo(bezelView.contentView).offset(margin).constraint,
+                make.bottom.equalTo(bezelView.contentView).offset(-margin).constraint,
+                make.leading.equalTo(bezelView.contentView).offset(margin).constraint,
+                make.trailing.equalTo(bezelView.contentView).offset(-margin).constraint
+            ]
+        }
         
         updateIndicators()
     }
     
     /// 动态更新布局 (偏移量、内边距、正方形)
     private func updateLayout() {
-        bezelCenterXConstraint.constant = offset.x
-        bezelCenterYConstraint.constant = offset.y
-        
-        stackPaddingConstraints[0].constant = margin
-        stackPaddingConstraints[1].constant = -margin
-        stackPaddingConstraints[2].constant = margin
-        stackPaddingConstraints[3].constant = -margin
+        bezelCenterXConstraint.update(offset: offset.x)
+        bezelCenterYConstraint.update(offset: offset.y)
+        stackPaddingConstraints[0].update(offset: margin)
+        stackPaddingConstraints[1].update(offset: -margin)
+        stackPaddingConstraints[2].update(offset: margin)
+        stackPaddingConstraints[3].update(offset: -margin)
         
         if isSquare {
             if squareConstraint == nil {
-                squareConstraint = bezelView.heightAnchor.constraint(equalTo: bezelView.widthAnchor)
-                squareConstraint?.isActive = true
+                bezelView.snp.makeConstraints { make in
+                    squareConstraint = make.height.equalTo(bezelView.snp.width).constraint
+                }
             }
         } else {
-            squareConstraint?.isActive = false
+            squareConstraint?.deactivate()
             squareConstraint = nil
         }
         
@@ -331,25 +328,19 @@ public class PTProgressHUD: UIView {
             // 3. 圆角与约束设置
             progressBar.layer.cornerRadius = 3.0 // 添加一点圆角更精致
             progressBar.clipsToBounds = true
-            progressBar.translatesAutoresizingMaskIntoConstraints = false
-            
-            // 4. 设定尺寸：你的进度条需要明确的宽和高
-            NSLayoutConstraint.activate([
-                progressBar.widthAnchor.constraint(equalToConstant: 120),
-                progressBar.heightAnchor.constraint(equalToConstant: 6) // 设置进度条的粗细
-            ])
+            progressBar.snp.makeConstraints { make in
+                make.width.equalTo(120)
+                make.height.equalTo(6)
+            }
             
             indicatorView = progressBar
         case .determinateRing, .determinatePie: // 新增的环形和饼状图
             let style: PTCircularProgressStyle = (mode == .determinateRing) ? .loop : .pie
             let circularView = PTCircularProgressView(style: style)
             circularView.progressColor = indicatorColor
-            circularView.translatesAutoresizingMaskIntoConstraints = false
-            // 圆形进度条通常需要一个正方形的固定大小
-            NSLayoutConstraint.activate([
-                circularView.widthAnchor.constraint(equalToConstant: 45),
-                circularView.heightAnchor.constraint(equalToConstant: 45)
-            ])
+            circularView.snp.makeConstraints { make in
+                make.width.height.equalTo(45)
+            }
             indicatorView = circularView
         case .customView(let view):
             indicatorView = view

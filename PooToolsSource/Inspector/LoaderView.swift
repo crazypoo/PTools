@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -66,9 +67,10 @@ final class LoaderView: LayerViewComponent {
 
         addInspectorViews()
 
-        checkmarkLabel.widthAnchor.constraint(equalTo: activityIndicator.widthAnchor).isActive = true
-
-        checkmarkLabel.heightAnchor.constraint(equalTo: activityIndicator.heightAnchor).isActive = true
+        checkmarkLabel.snp.makeConstraints { make in
+            make.width.equalTo(activityIndicator.snp.width)
+            make.height.equalTo(activityIndicator.snp.height)
+        }
     }
 
     func addInspectorViews() {

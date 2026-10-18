@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -130,17 +131,15 @@ class InspectorElementSectionFormView: BaseView {
     }
 
     private func installSeparators() {
-        topSeparatorView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(topSeparatorView)
-        topSeparatorView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        topSeparatorView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        topSeparatorView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        topSeparatorView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview()
+        }
 
-        bottomSeparatorView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(bottomSeparatorView)
-        bottomSeparatorView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        bottomSeparatorView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        bottomSeparatorView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        bottomSeparatorView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+        }
     }
 
     private func hideContent(_ hide: Bool) {

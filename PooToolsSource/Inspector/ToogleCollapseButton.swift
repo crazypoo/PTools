@@ -5,14 +5,17 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
 
 final class ToogleCollapseButton: BaseControl {
     private lazy var imageView = UIImageView(image: .expandSymbol, highlightedImage: .collapseSymbol).then {
-        $0.widthAnchor.constraint(equalToConstant: CGSize.regularIconSize.width).isActive = true
-        $0.heightAnchor.constraint(equalToConstant: CGSize.regularIconSize.height).isActive = true
+        $0.snp.makeConstraints { make in
+            make.width.equalTo(CGSize.regularIconSize.width)
+            make.height.equalTo(CGSize.regularIconSize.height)
+        }
     }
 
     private lazy var activityIndicatorView = UIActivityIndicatorView().then {

@@ -3,6 +3,7 @@
 // 中文：标准、增长、浮动和紧凑 Banner 的 UIKit 渲染器。
 
 import UIKit
+import SnapKit
 #if canImport(PToolsSymbols)
 import PToolsSymbols
 #endif
@@ -22,10 +23,10 @@ public final class PooToolsBannerView: UIView {
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
     private let actionStack = UIStackView()
-    private var contentLeadingConstraint: NSLayoutConstraint!
-    private var contentTrailingConstraint: NSLayoutConstraint!
-    private var contentTopConstraint: NSLayoutConstraint!
-    private var contentBottomConstraint: NSLayoutConstraint!
+    private var contentLeadingConstraint: Constraint?
+    private var contentTrailingConstraint: Constraint?
+    private var contentTopConstraint: Constraint?
+    private var contentBottomConstraint: Constraint?
     private var panStartTransform: CGAffineTransform = .identity
 
     public init(banner: PTBanner,
@@ -69,44 +70,34 @@ public final class PooToolsBannerView: UIView {
         configureActions()
         applyAppearance()
         let insets = banner.configuration.contentInsets
-        contentLeadingConstraint.constant = insets.leading
-        contentTrailingConstraint.constant = -insets.trailing
-        contentTopConstraint.constant = insets.top
-        contentBottomConstraint.constant = -insets.bottom
+        contentLeadingConstraint?.update(offset: insets.leading)
+        contentTrailingConstraint?.update(offset: -insets.trailing)
+        contentTopConstraint?.update(offset: insets.top)
+        contentBottomConstraint?.update(offset: -insets.bottom)
         accessibilityValue = accessibilityText
         setNeedsLayout()
     }
 
     private func setupView() {
         isUserInteractionEnabled = true
-        translatesAutoresizingMaskIntoConstraints = false
         accessibilityIdentifier = "pt.banner"
         layer.masksToBounds = false
 
-        blurView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(blurView)
-        NSLayoutConstraint.activate([
-            blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            blurView.topAnchor.constraint(equalTo: topAnchor),
-            blurView.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        blurView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
 
         contentStack.axis = .horizontal
         contentStack.alignment = .center
         contentStack.spacing = 10
-        contentStack.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentStack)
-        contentLeadingConstraint = contentStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: banner.configuration.contentInsets.leading)
-        contentTrailingConstraint = contentStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -banner.configuration.contentInsets.trailing)
-        contentTopConstraint = contentStack.topAnchor.constraint(equalTo: topAnchor, constant: banner.configuration.contentInsets.top)
-        contentBottomConstraint = contentStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -banner.configuration.contentInsets.bottom)
-        NSLayoutConstraint.activate([
-            contentLeadingConstraint,
-            contentTrailingConstraint,
-            contentTopConstraint,
-            contentBottomConstraint
-        ])
+        contentStack.snp.makeConstraints { make in
+            contentLeadingConstraint = make.leading.equalToSuperview().offset(banner.configuration.contentInsets.leading).constraint
+            contentTrailingConstraint = make.trailing.equalToSuperview().offset(-banner.configuration.contentInsets.trailing).constraint
+            contentTopConstraint = make.top.equalToSuperview().offset(banner.configuration.contentInsets.top).constraint
+            contentBottomConstraint = make.bottom.equalToSuperview().offset(-banner.configuration.contentInsets.bottom).constraint
+        }
 
         textStack.axis = .vertical
         textStack.alignment = .fill
@@ -182,10 +173,9 @@ public final class PooToolsBannerView: UIView {
     // 中文：将每个附件居中，避免自定义 View 位置不明确。
     private func addAccessory(_ view: UIView, to container: UIView) {
         container.addSubview(view)
-        NSLayoutConstraint.activate([
-            view.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            view.centerYAnchor.constraint(equalTo: container.centerYAnchor)
-        ])
+        view.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
     }
 
     private func makeAccessory(_ accessory: PTBannerAccessory) -> UIView {
@@ -210,13 +200,11 @@ public final class PooToolsBannerView: UIView {
             progress.progress = Float(min(max(value, 0), 1))
             view = progress
         }
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.setContentHuggingPriority(.required, for: .horizontal)
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
-        NSLayoutConstraint.activate([
-            view.widthAnchor.constraint(lessThanOrEqualToConstant: 32),
-            view.heightAnchor.constraint(lessThanOrEqualToConstant: 32)
-        ])
+        view.snp.makeConstraints { make in
+            make.width.height.lessThanOrEqualTo(32)
+        }
         return view
     }
 
@@ -240,13 +228,9 @@ public final class PooToolsBannerView: UIView {
             actionStack.addArrangedSubview(button)
         }
         trailingContainer.addSubview(actionStack)
-        actionStack.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            actionStack.leadingAnchor.constraint(equalTo: trailingContainer.leadingAnchor),
-            actionStack.trailingAnchor.constraint(equalTo: trailingContainer.trailingAnchor),
-            actionStack.topAnchor.constraint(equalTo: trailingContainer.topAnchor),
-            actionStack.bottomAnchor.constraint(equalTo: trailingContainer.bottomAnchor)
-        ])
+        actionStack.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         trailingContainer.isHidden = false
     }
 

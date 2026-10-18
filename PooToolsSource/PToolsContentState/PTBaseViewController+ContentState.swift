@@ -4,6 +4,7 @@
 
 #if canImport(UIKit)
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -18,22 +19,15 @@ public extension PTBaseViewController {
         guard host.superview !== target else { return host }
         host.removeFromSuperview()
         target.addSubview(host)
-        host.translatesAutoresizingMaskIntoConstraints = false
         if useSafeArea && container == nil {
             let guide = target.safeAreaLayoutGuide
-            NSLayoutConstraint.activate([
-                host.leadingAnchor.constraint(equalTo: guide.leadingAnchor),
-                host.trailingAnchor.constraint(equalTo: guide.trailingAnchor),
-                host.topAnchor.constraint(equalTo: guide.topAnchor),
-                host.bottomAnchor.constraint(equalTo: guide.bottomAnchor)
-            ])
+            host.snp.makeConstraints { make in
+                make.edges.equalTo(guide)
+            }
         } else {
-            NSLayoutConstraint.activate([
-                host.leadingAnchor.constraint(equalTo: target.leadingAnchor),
-                host.trailingAnchor.constraint(equalTo: target.trailingAnchor),
-                host.topAnchor.constraint(equalTo: target.topAnchor),
-                host.bottomAnchor.constraint(equalTo: target.bottomAnchor)
-            ])
+            host.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
         }
         return host
     }

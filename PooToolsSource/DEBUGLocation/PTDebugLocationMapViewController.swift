@@ -89,7 +89,6 @@ class PTDebugLocationMapViewController: PTBaseViewController {
             )
 
             mapView.setRegion(region, animated: true)
-            mapView.translatesAutoresizingMaskIntoConstraints = false
         }
     }
     

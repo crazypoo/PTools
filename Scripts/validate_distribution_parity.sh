@@ -57,7 +57,10 @@ for product_name, expected_targets in expected_products.items():
 expected_target_paths = {
     "PooToolsWebKit": "PooToolsSource/WebKit",
     "PooToolsHarbethKit": "PooToolsSource/C7Collector",
-    "PooToolsFilterCamera": "PooToolsSource/FilterCamera",
+    # FilterCamera keeps a compatibility source outside its historical directory, so its target path is the shared source root.
+    # FilterCamera conserva una fuente de compatibilidad fuera de su directorio histórico, por lo que el target usa la raíz compartida.
+    # FilterCamera 保留了历史目录之外的兼容源文件，因此 target 使用共享源码根目录。
+    "PooToolsFilterCamera": "PooToolsSource",
     "PooToolsMediaViewer": "PooToolsSource/MediaViewer",
     "ptools": "PooToolsSource",
 }
@@ -67,6 +70,19 @@ for target_name, expected_path in expected_target_paths.items():
         fail(f"SwiftPM target is missing: {target_name}")
     if target.get("path") != expected_path:
         fail(f"{target_name} path is {target.get('path')!r}, expected {expected_path!r}")
+
+filter_target = targets["PooToolsFilterCamera"]
+expected_filter_sources = {
+    "C7Collector/PTFilterCameraViewController.swift",
+    "FilterCamera/PTFilterCameraCompatibility.swift",
+}
+actual_filter_sources = set(filter_target.get("sources", []))
+missing_filter_sources = expected_filter_sources - actual_filter_sources
+if missing_filter_sources:
+    fail(
+        "PooToolsFilterCamera sources are missing: "
+        + ", ".join(sorted(missing_filter_sources))
+    )
 
 
 def pod_block(name: str) -> str:

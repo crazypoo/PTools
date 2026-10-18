@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -81,17 +82,17 @@ final class InspectorHighlightView: LayerView {
     }
 
     var verticalAlignmentOffset: CGFloat {
-        get {
-            verticalAlignmentConstraint.constant
-        }
+        get { verticalAlignmentOffsetValue }
         set {
-            verticalAlignmentConstraint.constant = newValue
+            verticalAlignmentOffsetValue = newValue
+            verticalAlignmentConstraint?.update(offset: newValue)
         }
     }
 
     override var sourceView: UIView { draggableView }
 
-    private lazy var verticalAlignmentConstraint = elementNameView.centerYAnchor.constraint(equalTo: centerYAnchor)
+    private var verticalAlignmentConstraint: Constraint?
+    private var verticalAlignmentOffsetValue: CGFloat = .zero
 
     // MARK: - Components
 
@@ -349,8 +350,9 @@ private extension InspectorHighlightView {
         updateViews()
 
         contentView.installView(elementNameView, .centerX)
-
-        verticalAlignmentConstraint.isActive = true
+        elementNameView.snp.makeConstraints { make in
+            verticalAlignmentConstraint = make.centerY.equalTo(self.snp.centerY).offset(verticalAlignmentOffsetValue).constraint
+        }
 
         updateViewsIfNeeded()
 

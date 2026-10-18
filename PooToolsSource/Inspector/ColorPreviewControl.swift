@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -42,8 +43,10 @@ final class ColorPreviewControl: BaseFormControl {
     private lazy var colorDisplayControl = ColorDisplayControl().then {
         $0.color = selectedColor
 
-        $0.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        $0.widthAnchor.constraint(equalTo: $0.heightAnchor, multiplier: 2).isActive = true
+        $0.snp.makeConstraints { make in
+            make.height.equalTo(20)
+            make.width.equalTo(40)
+        }
     }
 
     private lazy var colorDisplayLabel = UILabel(

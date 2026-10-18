@@ -8,6 +8,7 @@
 //
 
 import UIKit
+import SnapKit
 import PooTools
 import SnapKit
 
@@ -23,14 +24,10 @@ private final class PTCollectionSkeletonDemoCell: UICollectionViewCell {
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.textColor = .label
         titleLabel.textAlignment = .center
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
-        ])
+        titleLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
+        }
         contentView.backgroundColor = .secondarySystemBackground
         contentView.layer.cornerRadius = 10
         contentView.layer.masksToBounds = true
@@ -106,7 +103,6 @@ final class PTCollectionSkeletonLabViewController: PTBaseViewController {
         ])
         controls.axis = .vertical
         controls.spacing = 8
-        controls.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(controls)
         controls.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -121,7 +117,6 @@ final class PTCollectionSkeletonLabViewController: PTBaseViewController {
         list.configureCell = { _, cell, context in
             (cell as? PTCollectionSkeletonDemoCell)?.render(row: context.row)
         }
-        list.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(list)
         list.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()

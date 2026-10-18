@@ -4,6 +4,7 @@
 //
 
 import UIKit
+import SnapKit
 import PooTools
 
 // English: This model keeps Demo identifiers stable so state restoration never stores UIKit instances.
@@ -126,13 +127,9 @@ private class PT5_61SplitDemoTableViewController: PTBaseViewController, UITableV
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "pt-5-61-split-demo-cell")
         view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -260,12 +257,10 @@ private final class PT5_61SplitDemoDetailViewController: PTBaseViewController {
         label.numberOfLines = 0
         label.textColor = .label
         view.addSubview(label)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+        label.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(24)
+            make.centerY.equalToSuperview()
+        }
     }
 }
 
@@ -299,13 +294,11 @@ private final class PT5_61SplitDemoInspectorViewController: PTBaseViewController
         stack.spacing = 12
         stack.alignment = .fill
         view.addSubview(stack)
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            stack.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
-        ])
+        stack.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+            make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide).offset(-16)
+        }
         refreshState()
     }
 

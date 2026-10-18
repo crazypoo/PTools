@@ -6,6 +6,11 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.66.1 — 2026-10-18
+
+- 修复 `PTSearchViewController` 清空搜索框后把调用方提供的完整结果错误清空的问题；现在点击 clear button 会恢复未筛选数据。
+- `setResults`、增删改结果入口统一维护未筛选结果快照，搜索中的结果更新不会覆盖清空后应恢复的数据。
+
 ## 5.66.0 — 2026-10-18
 
 - 新增 `PToolsAcknowledgementsCore`：Foundation-only 的离线许可证清单模型、读取、查询、筛选、统计、原文、导出、typed error 和 actor Repository。

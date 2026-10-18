@@ -221,6 +221,28 @@
     }
   },
   {
+    "name": "PToolsAcknowledgements",
+    "targets": [
+      "PToolsAcknowledgements"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsAcknowledgementsCore",
+    "targets": [
+      "PToolsAcknowledgementsCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
     "name": "PToolsActivities",
     "targets": [
       "PToolsActivities"
@@ -1823,6 +1845,15 @@
       "library": [
         "automatic"
       ]
+    }
+  },
+  {
+    "name": "pt-acknowledgements",
+    "targets": [
+      "PTAcknowledgementsGenerator"
+    ],
+    "type": {
+      "executable": null
     }
   },
   {

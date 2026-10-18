@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -37,7 +38,6 @@ class PTPingActivityIndicator {
     //MARK: UI
     lazy var mLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
@@ -67,12 +67,16 @@ private extension PTPingActivityIndicator {
         mIndicatorWindow.addSubview(mLabel)
         if mIndicatorWindow.frame.size.height > 30 {
             mLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
-            mLabel.centerXAnchor.constraint(equalTo: mIndicatorWindow.rightAnchor, constant: -56).isActive = true
-            mLabel.topAnchor.constraint(equalTo: mIndicatorWindow.topAnchor).isActive = true
+            mLabel.snp.makeConstraints { make in
+                make.centerX.equalTo(mIndicatorWindow.snp.trailing).offset(-56)
+                make.top.equalToSuperview()
+            }
         } else {
             mLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
-            mLabel.centerXAnchor.constraint(equalTo: mIndicatorWindow.centerXAnchor, constant: mIndicatorWindow.frame.size.width/8).isActive = true
-            mLabel.centerYAnchor.constraint(equalTo: mIndicatorWindow.centerYAnchor).isActive = true
+            mLabel.snp.makeConstraints { make in
+                make.centerX.equalToSuperview().offset(mIndicatorWindow.frame.size.width / 8)
+                make.centerY.equalToSuperview()
+            }
         }
     }
 }

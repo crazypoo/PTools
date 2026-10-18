@@ -1,4 +1,5 @@
 import UIKit
+import SnapKit
 
 #if canImport(ptools)
 import ptools
@@ -36,17 +37,13 @@ internal final class PTInlineBadgeView: UIView {
                                                selector: #selector(reduceMotionStatusDidChange),
                                                name: UIAccessibility.reduceMotionStatusDidChangeNotification,
                                                object: nil)
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         label.numberOfLines = 1
         label.isAccessibilityElement = false
         addSubview(label)
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: leadingAnchor),
-            label.trailingAnchor.constraint(equalTo: trailingAnchor),
-            label.topAnchor.constraint(equalTo: topAnchor),
-            label.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        label.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
 
     deinit {

@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -96,12 +97,9 @@ class BaseFormControl: BaseControl {
     }
 
     private func installSeparator() {
-        separator.translatesAutoresizingMaskIntoConstraints = false
-
         containerView.addSubview(separator)
-
-        separator.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
-        separator.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
-        separator.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
+        separator.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalTo(containerView)
+        }
     }
 }

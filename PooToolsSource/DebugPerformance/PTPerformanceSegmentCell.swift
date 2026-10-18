@@ -20,7 +20,6 @@ class PTPerformanceSegmentCell: PTBaseNormalCell {
     lazy var segmentedControl: UISegmentedControl = {
         let segmentedControl = UISegmentedControl()
         segmentedControl.isUserInteractionEnabled = true
-        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
         segmentedControl.overrideUserInterfaceStyle = .dark
         return segmentedControl

@@ -73,8 +73,6 @@ open class PTNavigationBarContainer: UIView {
         addSubviews([backgroundView,contentView])
         contentView.addSubviews([topBarContainer, largeTitleContainer])
         topBarContainer.addSubviews([leftContainer, rightContainer, titleContainer])
-        leftContainer.translatesAutoresizingMaskIntoConstraints = false
-        rightContainer.translatesAutoresizingMaskIntoConstraints = false
         largeTitleContainer.addSubview(largeTitleLabel)
         clipsToBounds = false
         backgroundView.isUserInteractionEnabled = false

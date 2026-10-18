@@ -10,6 +10,7 @@
 
 import ImageIO
 import AppKit
+import SnapKit
 
 public typealias PTGIFImageTask = (NSImageView) -> Void
 public typealias PTGIFImageFailTask = (NSImageView,URL,Error?) -> Void
@@ -144,25 +145,9 @@ public extension NSImageView {
         }()
         
         addSubview(loader)
-        loader.translatesAutoresizingMaskIntoConstraints = false
-        
-        addConstraint(NSLayoutConstraint(
-            item: loader,
-            attribute: .centerX,
-            relatedBy: .equal,
-            toItem: self,
-            attribute: .centerX,
-            multiplier: 1,
-            constant: 0))
-        
-        addConstraint(NSLayoutConstraint(
-            item: loader,
-            attribute: .centerY,
-            relatedBy: .equal,
-            toItem: self,
-            attribute: .centerY,
-            multiplier: 1,
-            constant: 0))
+        loader.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
         
         (loader as? NSProgressIndicator)?.startAnimation(nil)
         

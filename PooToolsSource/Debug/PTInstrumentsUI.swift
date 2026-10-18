@@ -3,6 +3,7 @@
 // 中文：这些轻量视图只负责渲染 PTInstruments 快照，不新增第二套诊断数据源。
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -200,17 +201,14 @@ public final class PTInstrumentEventInspectorViewController: PTBaseViewControlle
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         pt_Title = "Event"
-        textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isEditable = false
         textView.font = UIFont.preferredFont(forTextStyle: .body)
         textView.text = makeText()
         view.addSubview(textView)
-        NSLayoutConstraint.activate([
-            textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            textView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            textView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
-        ])
+        textView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.bottom.equalTo(view.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0))
+        }
     }
 
     private func makeText() -> String {
@@ -376,22 +374,20 @@ public final class PTInstrumentDashboardViewController: PTBaseViewController {
     }
 
     private func setupViews() {
-        summaryLabel.translatesAutoresizingMaskIntoConstraints = false
         summaryLabel.numberOfLines = 0
         summaryLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
         summaryLabel.textColor = .secondaryLabel
-        timelineView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(summaryLabel)
         view.addSubview(timelineView)
-        NSLayoutConstraint.activate([
-            summaryLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            summaryLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            summaryLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            timelineView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            timelineView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            timelineView.topAnchor.constraint(equalTo: summaryLabel.bottomAnchor, constant: 12),
-            timelineView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+        summaryLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+        }
+        timelineView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(summaryLabel.snp.bottom).offset(12)
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
     }
 
     private static func summaryText(_ summary: [String: Double]) -> String {

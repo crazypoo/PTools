@@ -424,7 +424,7 @@ private enum PTDemoAcknowledgementsData {
             PTAcknowledgement(
                 id: "sample.ptools.acknowledgements",
                 name: "PTools Acknowledgements",
-                version: "5.66.0",
+                version: "5.66.1",
                 sourceManagers: [.manual],
                 licenseExpression: "MIT",
                 licenseTexts: [license],
@@ -458,19 +458,17 @@ private final class PTAcknowledgementsHeadlessDemoViewController: PTBaseViewCont
         super.viewDidLoad()
         navigationItem.title = "许可证纯数据"
         view.backgroundColor = .systemBackground
-        textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isEditable = false
         textView.adjustsFontForContentSizeCategory = true
         textView.font = .preferredFont(forTextStyle: .body)
         textView.textColor = .label
         textView.backgroundColor = .clear
         view.addSubview(textView)
-        NSLayoutConstraint.activate([
-            textView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
-            textView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
-            textView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            textView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        textView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view.layoutMarginsGuide)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+            make.bottom.equalToSuperview()
+        }
         textView.text = makeText()
     }
 
@@ -562,7 +560,9 @@ private final class PTDuoRegressionDemoViewController: PTBaseViewController {
             actionButton.setTitle(actionTitle, for: .normal)
             actionButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
             actionButton.addTarget(self, action: #selector(runAction), for: .primaryActionTriggered)
-            actionButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+            actionButton.snp.makeConstraints { make in
+                make.height.greaterThanOrEqualTo(44)
+            }
             stack.addArrangedSubview(actionButton)
         }
 
@@ -716,7 +716,9 @@ private final class PTDuoFormKeyboardSearchDemoViewController: PTBaseViewControl
         let input = UITextField()
         input.borderStyle = .roundedRect
         input.placeholder = "输入内容"
-        input.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+        input.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(44)
+        }
         let footer = UILabel()
         footer.numberOfLines = 0
         footer.textColor = .secondaryLabel
@@ -1060,12 +1062,10 @@ private class PTApplicationInfrastructureDemoViewController: PTBaseViewControlle
         [titleLabel, moduleLabel, contractLabel, tagLabel, button, resetButton, statusLabel].forEach(stack.addArrangedSubview)
 
         view.addSubview(stack)
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            stack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20)
-        ])
+        stack.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+        }
     }
 
     @objc private func runContractCheck() {
@@ -1321,12 +1321,10 @@ private final class PT5_61NetworkSpeedDemoViewController: PTBaseViewController {
         button.addTarget(self, action: #selector(startOrCancel), for: .touchUpInside)
         [downloadField, uploadField, button, statusLabel].forEach(stack.addArrangedSubview)
         view.addSubview(stack)
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            stack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20)
-        ])
+        stack.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+        }
     }
 
     @objc private func startOrCancel() {
@@ -1383,12 +1381,10 @@ private final class PT5_61PingDemoViewController: PTBaseViewController {
         stack.axis = .vertical
         stack.spacing = 12
         view.addSubview(stack)
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            stack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20)
-        ])
+        stack.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -1766,13 +1762,11 @@ private final class PTCollectionRefreshLabCell: PTBaseNormalCell {
         contentView.layer.cornerRadius = 10
         contentView.layer.masksToBounds = true
         titleLabel.numberOfLines = 1
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-        ])
+        titleLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
+        }
     }
 
     @available(*, unavailable)
@@ -1895,25 +1889,22 @@ private final class PTCollectionRefreshLabViewController: PTBaseViewController {
         view.addSubview(dataModeControl)
         view.addSubview(statusLabel)
         view.addSubview(collectionView)
-        modeControl.translatesAutoresizingMaskIntoConstraints = false
-        dataModeControl.translatesAutoresizingMaskIntoConstraints = false
-        statusLabel.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            modeControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 12),
-            modeControl.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -12),
-            modeControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
-            dataModeControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 12),
-            dataModeControl.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -12),
-            dataModeControl.topAnchor.constraint(equalTo: modeControl.bottomAnchor, constant: 8),
-            statusLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 12),
-            statusLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -12),
-            statusLabel.topAnchor.constraint(equalTo: dataModeControl.bottomAnchor, constant: 6),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: 6),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        modeControl.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(12)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(12)
+        }
+        dataModeControl.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(12)
+            make.top.equalTo(modeControl.snp.bottom).offset(8)
+        }
+        statusLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(12)
+            make.top.equalTo(dataModeControl.snp.bottom).offset(6)
+        }
+        collectionView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalTo(statusLabel.snp.bottom).offset(6)
+        }
 
         collectionView.contentCollectionView.register(PTCollectionRefreshLabCell.self, forCellWithReuseIdentifier: "PTCollectionRefreshLabCell")
         collectionView.cellInCollectionV2 = { [weak self] collectionView, context in
@@ -2815,7 +2806,9 @@ private final class PTInputStylesDemoViewController: PTBaseViewController {
         button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
         button.backgroundColor = .secondarySystemBackground
         button.layer.cornerRadius = 12
-        button.heightAnchor.constraint(greaterThanOrEqualToConstant: 50).isActive = true
+        button.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(50)
+        }
         button.addTarget(self, action: #selector(shakeDemo), for: .primaryActionTriggered)
         stackView.addArrangedSubview(button)
     }

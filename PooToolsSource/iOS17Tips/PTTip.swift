@@ -189,7 +189,6 @@ public class PTTip: NSObject {
             tipUIView.tintColor = .red
             tipUIView.cornerRadius = 6.0
             tipUIView.imageSize = CGSize(width: 40, height: 40)
-            tipUIView.translatesAutoresizingMaskIntoConstraints = false
         }
         
         viewObservationTask?.cancel()

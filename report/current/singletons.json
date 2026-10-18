@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons.rb",
-  "source_revision": "4c508f23263c51171d48163d641a4d808069b81a",
-  "generated_at": "2026-10-17T00:59:29Z",
-  "shared_call_count": 1677,
+  "source_revision": "85cd0fa1019fd0965e4966b5435710c618b02da7",
+  "generated_at": "2026-10-17T19:53:08Z",
+  "shared_call_count": 1675,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -115,7 +115,7 @@
     },
     {
       "path": "PooToolsSource/BioID/PTBiologyID.swift",
-      "line": 23,
+      "line": 27,
       "declaration": "public static let shared = PTBiometricsManager()",
       "name": "shared",
       "category": "C",
@@ -133,7 +133,7 @@
     },
     {
       "path": "PooToolsSource/C7Collector/C7CameraConfig.swift",
-      "line": 21,
+      "line": 23,
       "declaration": "public static let share = C7CameraConfig()",
       "name": "share",
       "category": "D",
@@ -151,7 +151,7 @@
     },
     {
       "path": "PooToolsSource/C7Collector/PTHarBethFilter.swift",
-      "line": 28,
+      "line": 29,
       "declaration": "public static let share = PTHarBethFilter(name: \"\", type: .cigaussian)",
       "name": "share",
       "category": "C",
@@ -196,7 +196,7 @@
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 341,
+      "line": 344,
       "declaration": "@MainActor public static let share = PTCheckUpdateFunction()",
       "name": "share",
       "category": "C",
@@ -664,7 +664,7 @@
     },
     {
       "path": "PooToolsSource/Location/PTGetGPSData.swift",
-      "line": 25,
+      "line": 26,
       "declaration": "public static let share = PTGetGPSData()",
       "name": "share",
       "category": "C",
@@ -1006,7 +1006,7 @@
     },
     {
       "path": "PooToolsSource/Ping/PTPingActivityIndicator.swift",
-      "line": 13,
+      "line": 17,
       "declaration": "static let shared = PTPingActivityIndicator()",
       "name": "shared",
       "category": "C",
@@ -1114,7 +1114,7 @@
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 22,
+      "line": 25,
       "declaration": "public static let shared = PTBannerScheduler()",
       "name": "shared",
       "category": "D",
@@ -1150,7 +1150,7 @@
     },
     {
       "path": "PooToolsSource/VideoEditor/PTVideoEditorConfig.swift",
-      "line": 18,
+      "line": 19,
       "declaration": "public static let share = PTVideoEditorConfig()",
       "name": "share",
       "category": "C",

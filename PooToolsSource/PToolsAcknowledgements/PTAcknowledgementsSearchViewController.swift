@@ -4,6 +4,10 @@
 
 #if canImport(UIKit) && (canImport(PooToolsSearch) || POOTOOLS_SEARCH)
 import UIKit
+import SnapKit
+#if canImport(ptools)
+import ptools
+#endif
 #if canImport(PToolsAcknowledgementsCore)
 import PToolsAcknowledgementsCore
 #endif
@@ -37,14 +41,10 @@ private final class PTAcknowledgementCell: UICollectionViewCell, PTCellRegistera
         let stack = UIStackView(arrangedSubviews: [titleLabel, detailLabel])
         stack.axis = .vertical
         stack.spacing = 4
-        stack.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(stack)
-        NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            stack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            stack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            stack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
-        ])
+        stack.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16))
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -96,14 +96,12 @@ private final class PTAcknowledgementsHeader: PTBaseCollectionReusableView, @Mai
         titleLabel.numberOfLines = 1
         titleLabel.textColor = .secondaryLabel
         PTUIAccessibility.applyDynamicType(to: titleLabel, font: .preferredFont(forTextStyle: .subheadline))
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(titleLabel)
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4)
-        ])
+        titleLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.equalToSuperview().offset(8)
+            make.bottom.equalToSuperview().offset(-4)
+        }
     }
 
     func configure(title: String?) {

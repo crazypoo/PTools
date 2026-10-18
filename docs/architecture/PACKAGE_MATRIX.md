@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: af22c3f0c20a85694d1b43a576d68ebcf796f3a6
-Generated at: 2026-10-17T17:24:49Z
-Version source: 5.65.8
+Source revision: 85cd0fa1019fd0965e4966b5435710c618b02da7
+Generated at: 2026-10-17T19:52:07Z
+Version source: 5.66.1
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -137,6 +137,8 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `WhatsNewsKit` | A | `PooTools/WhatsNewsKit` | `PooToolsWhatsNewsKit` | Keep; review drift |
 | `WidgetCore` | A | `PooTools/WidgetCore` | `PToolsWidgetCore` | Keep; review drift |
 | `iOS17Tips` | A | `PooTools/iOS17Tips` | `PooToolsiOS17Tips` | Keep; review drift |
+| `Acknowledgements` | B | `PooTools/Acknowledgements` | — | Parity decision before 6.0 |
+| `AcknowledgementsCore` | B | `PooTools/AcknowledgementsCore` | — | Parity decision before 6.0 |
 | `AppIntegrity` | B | `PooTools/AppIntegrity` | — | Parity decision before 6.0 |
 | `Appz` | B | `PooTools/Appz` | — | Parity decision before 6.0 |
 | `Auth` | B | `PooTools/Auth` | — | Parity decision before 6.0 |
@@ -170,11 +172,14 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `WebBridge` | B | `PooTools/WebBridge` | — | Parity decision before 6.0 |
 | `WebCore` | B | `PooTools/WebCore` | — | Parity decision before 6.0 |
 | `ZipArchive` | B | `PooTools/ZipArchive` | — | Parity decision before 6.0 |
+| `PTAcknowledgementsGenerator` | C | — | `PTAcknowledgementsGenerator` | Parity decision before 6.0 |
 | `PTModelBenchmark` | C | — | `PTModelBenchmark` | Parity decision before 6.0 |
 | `PTModelLegacyKakaJSONFixture` | C | — | `PTModelLegacyKakaJSONFixture` | Parity decision before 6.0 |
 | `PTModelLegacySmartCodableFixture` | C | — | `PTModelLegacySmartCodableFixture` | Parity decision before 6.0 |
 | `PTModelMixedLegacyFixture` | C | — | `PTModelMixedLegacyFixture` | Parity decision before 6.0 |
 | `PTModelOnlyFixture` | C | — | `PTModelOnlyFixture` | Parity decision before 6.0 |
+| `PToolsAcknowledgements` | C | — | `PToolsAcknowledgements` | Parity decision before 6.0 |
+| `PToolsAcknowledgementsCore` | C | — | `PToolsAcknowledgementsCore` | Parity decision before 6.0 |
 | `PToolsAppIntegrity` | C | — | `PToolsAppIntegrity` | Parity decision before 6.0 |
 | `PToolsAuth` | C | — | `PToolsAuth` | Parity decision before 6.0 |
 | `PToolsAuthCore` | C | — | `PToolsAuthCore` | Parity decision before 6.0 |

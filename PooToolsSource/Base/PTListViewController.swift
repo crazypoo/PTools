@@ -8,6 +8,7 @@
 //
 
 import UIKit
+import SnapKit
 
 @MainActor
 @objcMembers
@@ -40,12 +41,9 @@ open class PTListViewController: PTBaseViewController {
     // 中文：默认布局铺满安全区，子类可以替换为全屏或自定义布局。
     open func installListViewConstraints(_ listView: PTCollectionView) {
         let safeArea = view.safeAreaLayoutGuide
-        NSLayoutConstraint.activate([
-            listView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            listView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-            listView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            listView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
-        ])
+        listView.snp.makeConstraints { make in
+            make.edges.equalTo(safeArea)
+        }
     }
 
     // English: Called after the base large-title transition has been updated.
@@ -62,7 +60,6 @@ open class PTListViewController: PTBaseViewController {
         super.viewDidLoad()
 
         let listView = self.listView
-        listView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(listView)
         configureListView(listView)
         prepareListViewLayout(listView)

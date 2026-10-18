@@ -245,6 +245,30 @@
       "status": "not_run"
     },
     {
+      "product": "PToolsAcknowledgements",
+      "targets": [
+        "PToolsAcknowledgements"
+      ],
+      "modules": [
+        "PToolsAcknowledgements"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsAcknowledgements",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsAcknowledgementsCore",
+      "targets": [
+        "PToolsAcknowledgementsCore"
+      ],
+      "modules": [
+        "PToolsAcknowledgementsCore"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsAcknowledgementsCore",
+      "status": "not_run"
+    },
+    {
       "product": "PToolsActivities",
       "targets": [
         "PToolsActivities"
@@ -1985,6 +2009,16 @@
       "kind": "library",
       "targetName": "SPMConsumer_PooToolsiOS17Tips",
       "status": "not_run"
+    },
+    {
+      "product": "pt-acknowledgements",
+      "targets": [
+        "PTAcknowledgementsGenerator"
+      ],
+      "modules": [],
+      "kind": "executable",
+      "targetName": "",
+      "status": "not_applicable"
     },
     {
       "product": "ptools",

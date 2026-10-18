@@ -376,7 +376,6 @@ private class DashboardViewController: PTBaseViewController, UITableViewDataSour
         tableView.verticalScrollIndicatorInsets.bottom = collectionInset
 
         view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -465,13 +464,9 @@ private class MilestoneCell: UITableViewCell {
         stack.axis = .vertical
         stack.spacing = 4
         contentView.addSubview(stack)
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            stack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
-            stack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            stack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
-        ])
+        stack.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16))
+        }
     }
     
     required init?(coder: NSCoder) { fatalError() }

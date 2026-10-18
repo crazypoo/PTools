@@ -3,6 +3,7 @@
 // 中文：负责 Scene、堆叠布局、定时器和生命周期的 Banner Presenter。
 
 import UIKit
+import SnapKit
 #if canImport(PToolsCore)
 import PToolsCore
 #endif
@@ -181,7 +182,9 @@ public final class PTBannerPresenter {
                           keyboardAvoidance: banner.configuration.keyboardAvoidance)
         stack.addArrangedSubview(view)
         if banner.configuration.maximumVisibleHeight > 0 {
-            view.heightAnchor.constraint(lessThanOrEqualToConstant: banner.configuration.maximumVisibleHeight).isActive = true
+            view.snp.makeConstraints { make in
+                make.height.lessThanOrEqualTo(banner.configuration.maximumVisibleHeight)
+            }
         }
         let record = Record(banner: banner, handle: handle, view: view, completion: completion)
         records[handle.id] = record
@@ -269,25 +272,22 @@ public final class PTBannerPresenter {
         stack.axis = .vertical
         stack.alignment = .fill
         stack.spacing = 8
-        stack.translatesAutoresizingMaskIntoConstraints = false
         host.containerView.addSubview(stack)
         host.containerView.interactiveContentViews.append(stack)
 
         let horizontalInset: CGFloat = 12
-        var constraints = [NSLayoutConstraint](arrayLiteral:
-            stack.leadingAnchor.constraint(equalTo: host.containerView.leadingAnchor, constant: horizontalInset),
-            stack.trailingAnchor.constraint(equalTo: host.containerView.trailingAnchor, constant: -horizontalInset)
-        )
-        switch position {
-        case .top:
-            constraints.append(stack.topAnchor.constraint(equalTo: host.containerView.safeAreaLayoutGuide.topAnchor, constant: 8))
-        case .bottom:
-            constraints.append(stack.bottomAnchor.constraint(equalTo: host.containerView.safeAreaLayoutGuide.bottomAnchor, constant: -8))
-            if keyboardAvoidance == .automatic {
-                constraints.append(stack.bottomAnchor.constraint(lessThanOrEqualTo: host.containerView.keyboardLayoutGuide.topAnchor, constant: -8))
+        stack.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(horizontalInset)
+            switch position {
+            case .top:
+                make.top.equalTo(host.containerView.safeAreaLayoutGuide.snp.top).offset(8)
+            case .bottom:
+                make.bottom.equalTo(host.containerView.safeAreaLayoutGuide.snp.bottom).offset(-8)
+                if keyboardAvoidance == .automatic {
+                    make.bottom.lessThanOrEqualTo(host.containerView.keyboardLayoutGuide.snp.top).offset(-8)
+                }
             }
         }
-        NSLayoutConstraint.activate(constraints)
         stacks[position] = stack
         return stack
     }

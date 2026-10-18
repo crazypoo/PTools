@@ -2617,6 +2617,45 @@
     "PooToolsSource/PToolsAccessibility/PTAccessibility.swift": [
       "PToolsAccessibility"
     ],
+    "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementDetailViewController.swift": [
+      "PToolsAcknowledgements"
+    ],
+    "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsConfiguration.swift": [
+      "PToolsAcknowledgements"
+    ],
+    "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsPresenter.swift": [
+      "PToolsAcknowledgements"
+    ],
+    "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsSearchViewController.swift": [
+      "PToolsAcknowledgements"
+    ],
+    "PooToolsSource/PToolsAcknowledgementsCore/PTAcknowledgement.swift": [
+      "PToolsAcknowledgementsCore"
+    ],
+    "PooToolsSource/PToolsAcknowledgementsCore/PTAcknowledgementsDataSource.swift": [
+      "PToolsAcknowledgementsCore"
+    ],
+    "PooToolsSource/PToolsAcknowledgementsCore/PTAcknowledgementsError.swift": [
+      "PToolsAcknowledgementsCore"
+    ],
+    "PooToolsSource/PToolsAcknowledgementsCore/PTAcknowledgementsProvider.swift": [
+      "PToolsAcknowledgementsCore"
+    ],
+    "PooToolsSource/PToolsAcknowledgementsCore/PTAcknowledgementsQuery.swift": [
+      "PToolsAcknowledgementsCore"
+    ],
+    "PooToolsSource/PToolsAcknowledgementsCore/PTLicenseExporter.swift": [
+      "PToolsAcknowledgementsCore"
+    ],
+    "PooToolsSource/PToolsAcknowledgementsCore/PTLicenseHash.swift": [
+      "PToolsAcknowledgementsCore"
+    ],
+    "PooToolsSource/PToolsAcknowledgementsCore/PTLicenseManifest.swift": [
+      "PToolsAcknowledgementsCore"
+    ],
+    "PooToolsSource/PToolsAcknowledgementsCore/PTLicenseStatistics.swift": [
+      "PToolsAcknowledgementsCore"
+    ],
     "PooToolsSource/PToolsActivities/PTActivities.swift": [
       "PToolsActivities"
     ],
@@ -3574,6 +3613,9 @@
     "PooToolsSource/iOS17Tips/PTTip.swift": [
       "PooToolsiOS17Tips"
     ],
+    "Tests/PToolsAcknowledgementsCoreTests/PTAcknowledgementsCoreTests.swift": [
+      "PToolsAcknowledgementsCoreTests"
+    ],
     "Tests/PToolsAdvancedTests/PTAdvancedTests.swift": [
       "PToolsAdvancedTests"
     ],
@@ -3708,7 +3750,10 @@
     ],
     "Tests/PooToolsCoreTests/PTCoreContractTests.swift": [
       "PToolsCoreTests"
+    ],
+    "Tools/PTAcknowledgementsGenerator/main.swift": [
+      "PTAcknowledgementsGenerator"
     ]
   },
-  "source_count": 1236
+  "source_count": 1251
 }

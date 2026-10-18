@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -506,13 +507,34 @@ extension UIView {
              .centerY,
              .centerXY,
              .spacing:
-            let constraints = viewBinding.constraints(for: view, inside: self)
+            view.snp.makeConstraints { make in
+                switch viewBinding {
+                case .centerX:
+                    make.centerX.equalToSuperview().priority(priority)
 
-            view.translatesAutoresizingMaskIntoConstraints = false
+                case .centerY:
+                    make.centerY.equalToSuperview().priority(priority)
 
-            constraints.forEach {
-                $0.priority = priority
-                $0.isActive = true
+                case .centerXY:
+                    make.center.equalToSuperview().priority(priority)
+
+                case let .spacing(top, leading, bottom, trailing):
+                    if let top {
+                        make.top.equalToSuperview().offset(top).priority(priority)
+                    }
+                    if let leading {
+                        make.leading.equalToSuperview().offset(leading).priority(priority)
+                    }
+                    if let bottom {
+                        make.bottom.equalToSuperview().offset(-bottom).priority(priority)
+                    }
+                    if let trailing {
+                        make.trailing.equalToSuperview().offset(-trailing).priority(priority)
+                    }
+
+                case .autoResizingMask:
+                    break
+                }
             }
         }
     }
@@ -527,49 +549,6 @@ extension UIView {
         set {
             isHidden = false
             isHidden = newValue
-        }
-    }
-}
-
-private extension ViewBinding {
-    @MainActor func constraints(for view: UIView, inside superview: UIView) -> [NSLayoutConstraint] {
-        switch self {
-        case .centerX:
-            return [
-                view.centerXAnchor.constraint(equalTo: superview.centerXAnchor)
-            ]
-
-        case .centerY:
-            return [
-                view.centerYAnchor.constraint(equalTo: superview.centerYAnchor)
-            ]
-
-        case .centerXY:
-            return [
-                view.centerXAnchor.constraint(equalTo: superview.centerXAnchor),
-                view.centerYAnchor.constraint(equalTo: superview.centerYAnchor)
-            ]
-
-        case .autoResizingMask:
-            return []
-
-        case let .spacing(top, leading, bottom, trailing):
-            var constraints = [NSLayoutConstraint]()
-
-            if let top = top {
-                constraints.append(view.topAnchor.constraint(equalTo: superview.topAnchor, constant: top))
-            }
-            if let leading = leading {
-                constraints.append(view.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: leading))
-            }
-            if let bottom = bottom {
-                constraints.append(view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -bottom))
-            }
-            if let trailing = trailing {
-                constraints.append(view.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -trailing))
-            }
-
-            return constraints
         }
     }
 }

@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -48,7 +49,9 @@ final class ImagePreviewControl: BaseFormControl {
         $0.setContentHuggingPriority(.required, for: .horizontal)
         $0.setContentHuggingPriority(.required, for: .vertical)
 
-        $0.heightAnchor.constraint(equalToConstant: elementInspectorAppearance.horizontalMargins).isActive = true
+        $0.snp.makeConstraints { make in
+            make.height.equalTo(elementInspectorAppearance.horizontalMargins)
+        }
 
         $0.installView(imageView)
     }

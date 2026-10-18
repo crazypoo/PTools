@@ -57,7 +57,10 @@ pod_source_line = podspec.lines.find { |line| line.include?("PooToolsSource/Core
 pod_dirs = pod_source_line ? pod_source_line.scan(%r{PooToolsSource/([^/]+)/(?:\*\*/)?\*\.}).flatten.to_set : Set.new
 
 package = File.read(File.join(repo_root, "Package.swift"))
-package_target = package.match(/\.target\(\s*name: "ptools".*?sources: \s*\[(.*?)\]/m)
+# English: Match the real multiline target declaration, not a conditional dependency named `ptools`.
+# Español: Coincide con la declaración multilinea real del target, no con una dependencia condicional llamada `ptools`.
+# 中文：匹配真正的多行 target 声明，避免误匹配名为 `ptools` 的条件依赖。
+package_target = package.match(/^\s*\.target\(\s*\n\s*name: "ptools",.*?^\s*sources:\s*\[(.*?)\]/m)
 # English: Normalize explicit file entries back to their Core directory so a physical split does not look like drift.
 # Español: Normaliza las entradas de archivos explícitas a su directorio Core para que una división física no parezca una desviación.
 # 中文：将显式文件入口归一化回 Core 目录，避免文件拆分被误判为目录契约漂移。

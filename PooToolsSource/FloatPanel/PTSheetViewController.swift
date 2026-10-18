@@ -909,7 +909,6 @@ public class PTSheetViewController: PTBaseViewController {
         view.addSubview(self.view)
         self.didMove(toParent: parent)
         
-        self.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.snp.remakeConstraints { make in
             make.edges.equalToSuperview()
         }

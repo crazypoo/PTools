@@ -5,6 +5,7 @@
 //
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -93,14 +94,12 @@ final class ElementInspectorViewCode: BaseView {
             separatorView.isSafelyHidden = true
 
             if let backgroundView = newContent?.view {
-                backgroundView.translatesAutoresizingMaskIntoConstraints = false
                 scrollView.addSubview(backgroundView)
-
-                [backgroundView.topAnchor.constraint(equalTo: separatorView.bottomAnchor),
-                 backgroundView.leadingAnchor.constraint(equalTo: scrollView.readableContentGuide.leadingAnchor),
-                 backgroundView.trailingAnchor.constraint(equalTo: scrollView.readableContentGuide.trailingAnchor),
-                 backgroundView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)]
-                    .forEach { $0.isActive = true }
+                backgroundView.snp.makeConstraints { make in
+                    make.top.equalTo(separatorView.snp.bottom)
+                    make.leading.trailing.equalTo(scrollView.readableContentGuide)
+                    make.bottom.equalTo(scrollView.snp.bottom)
+                }
             }
 
         case .panelView:

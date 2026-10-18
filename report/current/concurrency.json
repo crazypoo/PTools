@@ -2,12 +2,12 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "4c508f23263c51171d48163d641a4d808069b81a",
-  "generated_at": "2026-10-17T00:59:28Z",
+  "source_revision": "85cd0fa1019fd0965e4966b5435710c618b02da7",
+  "generated_at": "2026-10-17T19:53:07Z",
   "counts": {
     "main_queue_async": 26,
     "task_detached": 31,
-    "unchecked_sendable": 51
+    "unchecked_sendable": 53
   },
   "locations": [
     {
@@ -60,6 +60,18 @@
     },
     {
       "rule": "unchecked_sendable",
+      "path": "PooToolsSource/C7Collector/C7Collector.swift",
+      "line": 23,
+      "text": "private struct PTSystemTextureBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/C7Collector/C7Collector.swift",
+      "line": 27,
+      "text": "private struct PTSystemImageBox: @unchecked Sendable {"
+    },
+    {
+      "rule": "unchecked_sendable",
       "path": "PooToolsSource/C7Collector/C7CollectorCamera.swift",
       "line": 24,
       "text": "private struct PTSystemPixelBufferBox: @unchecked Sendable {"
@@ -85,19 +97,19 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 15,
+      "line": 17,
       "text": "private struct PTSendableEventStoreBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 19,
+      "line": 21,
       "text": "public struct PTSendableEventArrayBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
-      "line": 27,
+      "line": 29,
       "text": "public struct PTSendableReminderArrayBox: @unchecked Sendable {"
     },
     {
@@ -265,13 +277,13 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "line": 308,
+      "line": 306,
       "text": "DispatchQueue.main.async { self.updateIndicators() }"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "line": 496,
+      "line": 488,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in"
     },
     {
@@ -607,7 +619,7 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/VideoEditor/CropPickerView.swift",
-      "line": 539,
+      "line": 574,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {"
     },
     {
@@ -625,7 +637,7 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1536,
+      "line": 1539,
       "text": "private struct PTC7SafeBox:@unchecked Sendable {"
     },
     {

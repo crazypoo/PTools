@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 // English: Button configuration and loading state are UI mutations owned by MainActor.
 // Español: La configuración y el estado de carga del botón son mutaciones de UI propiedad de MainActor.
@@ -19,7 +20,6 @@ open class PTBaseButton: UIButton {
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
         indicator.hidesWhenStopped = true
-        indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.isUserInteractionEnabled = false
         return indicator
     }()
@@ -69,10 +69,9 @@ open class PTBaseButton: UIButton {
 
         if activityIndicator.superview == nil {
             addSubview(activityIndicator)
-            NSLayoutConstraint.activate([
-                activityIndicator.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-                activityIndicator.centerYAnchor.constraint(equalTo: self.centerYAnchor)
-            ])
+            activityIndicator.snp.makeConstraints { make in
+                make.center.equalToSuperview()
+            }
         }
         
         activityIndicator.color = loadingIndicatorColor

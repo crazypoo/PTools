@@ -3,6 +3,7 @@
 // 中文：轻量时间线视图把阶段渲染限制在 UI 边界内。
 
 import UIKit
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -31,17 +32,13 @@ public final class PTNetworkTimelineView: UIView {
         super.init(frame: frame)
         addSubview(phaseStack)
         addSubview(insightLabel)
-        phaseStack.translatesAutoresizingMaskIntoConstraints = false
-        insightLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            phaseStack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            phaseStack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            phaseStack.topAnchor.constraint(equalTo: topAnchor),
-            insightLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            insightLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            insightLabel.topAnchor.constraint(equalTo: phaseStack.bottomAnchor, constant: 4),
-            insightLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        phaseStack.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview()
+        }
+        insightLabel.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalTo(phaseStack.snp.bottom).offset(4)
+        }
         backgroundColor = .secondarySystemBackground
         layer.cornerRadius = 10
         layer.masksToBounds = true
@@ -71,7 +68,9 @@ public final class PTNetworkTimelineView: UIView {
             name.font = .preferredFont(forTextStyle: .caption2)
             name.textColor = .secondaryLabel
             name.setContentHuggingPriority(.required, for: .horizontal)
-            name.widthAnchor.constraint(equalToConstant: 52).isActive = true
+            name.snp.makeConstraints { make in
+                make.width.equalTo(52)
+            }
 
             let progress = UIProgressView(progressViewStyle: .default)
             progress.progressTintColor = .tintColor

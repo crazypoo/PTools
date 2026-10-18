@@ -137,7 +137,6 @@ open class PTActivityViewController:UIActivityViewController {
     /// 毛玻璃
     private lazy var preview: UIVisualEffectView = {
         let preview = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
-        preview.translatesAutoresizingMaskIntoConstraints = false
         preview.layer.cornerRadius = previewCornerRadius
         preview.clipsToBounds = true
         preview.alpha = 1
@@ -173,7 +172,6 @@ open class PTActivityViewController:UIActivityViewController {
     
     private lazy var previewImageView : UIImageView = {
         let view = UIImageView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = previewImageCornerRadius
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true

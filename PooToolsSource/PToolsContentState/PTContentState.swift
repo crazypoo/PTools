@@ -10,6 +10,7 @@ import PToolsConnectivity
 
 #if canImport(UIKit)
 import UIKit
+import SnapKit
 #endif
 
 public struct PTEmptyState: Codable, Hashable, Sendable {
@@ -106,16 +107,28 @@ public final class PTContentStateView: UIView {
         addSubview(messageLabel)
         addSubview(retryButton)
         addSubview(offlineLabel)
-        [contentHost, activityIndicator, titleLabel, messageLabel, retryButton, offlineLabel].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-        NSLayoutConstraint.activate([
-            contentHost.leadingAnchor.constraint(equalTo: leadingAnchor), contentHost.trailingAnchor.constraint(equalTo: trailingAnchor),
-            contentHost.topAnchor.constraint(equalTo: topAnchor), contentHost.bottomAnchor.constraint(equalTo: bottomAnchor),
-            activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor), activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor), titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -18),
-            messageLabel.centerXAnchor.constraint(equalTo: centerXAnchor), messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            retryButton.centerXAnchor.constraint(equalTo: centerXAnchor), retryButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 12),
-            offlineLabel.centerXAnchor.constraint(equalTo: centerXAnchor), offlineLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8)
-        ])
+        contentHost.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        activityIndicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+        titleLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(-18)
+        }
+        messageLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+        }
+        retryButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(messageLabel.snp.bottom).offset(12)
+        }
+        offlineLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(8)
+        }
         titleLabel.textAlignment = .center; titleLabel.numberOfLines = 0
         messageLabel.textAlignment = .center; messageLabel.numberOfLines = 0
         offlineLabel.text = "Offline"; offlineLabel.textAlignment = .center
