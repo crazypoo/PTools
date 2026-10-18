@@ -3,9 +3,6 @@
 // 中文：这些轻量视图只负责渲染 PTInstruments 快照，不新增第二套诊断数据源。
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -208,7 +205,7 @@ public final class PTInstrumentEventInspectorViewController: PTBaseViewControlle
         textView.font = UIFont.preferredFont(forTextStyle: .body)
         textView.text = makeText()
         view.addSubview(textView)
-        textView.ptLayout.makeConstraints { make in
+        textView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
             make.top.bottom.equalTo(view.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0))
         }
@@ -382,13 +379,13 @@ public final class PTInstrumentDashboardViewController: PTBaseViewController {
         summaryLabel.textColor = .secondaryLabel
         view.addSubview(summaryLabel)
         view.addSubview(timelineView)
-        summaryLabel.ptLayout.makeConstraints { make in
+        summaryLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
         }
-        timelineView.ptLayout.makeConstraints { make in
+        timelineView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(summaryLabel.ptLayout.bottom).offset(12)
+            make.top.equalTo(summaryLabel.snp.bottom).offset(12)
             make.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }

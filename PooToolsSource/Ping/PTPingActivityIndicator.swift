@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -70,13 +67,13 @@ private extension PTPingActivityIndicator {
         mIndicatorWindow.addSubview(mLabel)
         if mIndicatorWindow.frame.size.height > 30 {
             mLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
-            mLabel.ptLayout.makeConstraints { make in
-                make.centerX.equalTo(mIndicatorWindow.ptLayout.trailing).offset(-56)
+            mLabel.snp.makeConstraints { make in
+                make.centerX.equalTo(mIndicatorWindow.snp.trailing).offset(-56)
                 make.top.equalToSuperview()
             }
         } else {
             mLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
-            mLabel.ptLayout.makeConstraints { make in
+            mLabel.snp.makeConstraints { make in
                 make.centerX.equalToSuperview().offset(mIndicatorWindow.frame.size.width / 8)
                 make.centerY.equalToSuperview()
             }

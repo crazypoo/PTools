@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "80126150505961e259cce5e08ada67962265c063",
-  "generated_at": "2026-10-18T05:02:35Z",
+  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
+  "generated_at": "2026-10-18T02:40:25Z",
   "name": "PooTools",
-  "version": "5.67.1",
+  "version": "5.67.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -271,7 +271,6 @@
       "name": "PooTools/Banner",
       "short_name": "Banner",
       "local_dependencies": [
-        "PooTools/ConstraintLayout",
         "PooTools/Logging",
         "PooTools/Overlay",
         "PooTools/PToolsCore",
@@ -691,7 +690,6 @@
       "name": "PooTools/Core",
       "short_name": "Core",
       "local_dependencies": [
-        "PooTools/ConstraintLayout",
         "PooTools/Date",
         "PooTools/Device",
         "PooTools/Logging",
@@ -2596,7 +2594,6 @@
       "name": "PooTools/RateView",
       "short_name": "RateView",
       "local_dependencies": [
-        "PooTools/ConstraintLayout",
         "PooTools/PToolsUIFoundation"
       ],
       "third_party_dependencies": [
@@ -2976,7 +2973,6 @@
       "name": "PooTools/Slider",
       "short_name": "Slider",
       "local_dependencies": [
-        "PooTools/ConstraintLayout",
         "PooTools/PToolsUIFoundation"
       ],
       "third_party_dependencies": [
@@ -3473,7 +3469,6 @@
       "name": "PooTools/Web",
       "short_name": "Web",
       "local_dependencies": [
-        "PooTools/ConstraintLayout",
         "PooTools/WebBridge"
       ],
       "third_party_dependencies": [],

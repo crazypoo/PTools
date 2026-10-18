@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -105,7 +102,7 @@ public class PTDevMaskView: PTBaseMaskView {
 
         let imageContent = UIImageView()
         addSubview(imageContent)
-        imageContent.ptLayout.makeConstraints { make in
+        imageContent.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
@@ -124,27 +121,27 @@ public class PTDevMaskView: PTBaseMaskView {
             PTPermission.camera.request {
                 Task { @MainActor in
                     self.addSubviews([self.eyeTracking,self.eyeTrackingLabel,self.eyeTrackingFocus,self.eyeTrackingLabelFocus])
-                    self.eyeTracking.ptLayout.makeConstraints { make in
+                    self.eyeTracking.snp.makeConstraints { make in
                         make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                         make.bottom.equalToSuperview().inset(CGFloat.kTabbarHeight_Total)
                         make.width.equalTo(51)
                         make.height.equalTo(31)
                     }
                     
-                    self.eyeTrackingLabel.ptLayout.makeConstraints { make in
-                        make.left.equalTo(self.eyeTracking.ptLayout.right).offset(10)
+                    self.eyeTrackingLabel.snp.makeConstraints { make in
+                        make.left.equalTo(self.eyeTracking.snp.right).offset(10)
                         make.centerY.equalTo(self.eyeTracking)
                     }
                     
-                    self.eyeTrackingFocus.ptLayout.makeConstraints { make in
+                    self.eyeTrackingFocus.snp.makeConstraints { make in
                         make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                        make.bottom.equalTo(self.eyeTracking.ptLayout.top).offset(-10)
+                        make.bottom.equalTo(self.eyeTracking.snp.top).offset(-10)
                         make.width.equalTo(51)
                         make.height.equalTo(31)
                     }
                     
-                    self.eyeTrackingLabelFocus.ptLayout.makeConstraints { make in
-                        make.left.equalTo(self.eyeTrackingFocus.ptLayout.right).offset(10)
+                    self.eyeTrackingLabelFocus.snp.makeConstraints { make in
+                        make.left.equalTo(self.eyeTrackingFocus.snp.right).offset(10)
                         make.centerY.equalTo(self.eyeTrackingFocus)
                     }
 
@@ -176,7 +173,7 @@ public class PTDevMaskView: PTBaseMaskView {
             let touchPointSize:CGFloat = 64
             let animation = PTTouchAnimationView(touchPoint: point)
             addSubview(animation)
-            animation.ptLayout.makeConstraints { make in
+            animation.snp.makeConstraints { make in
                 make.width.height.equalTo(touchPointSize)
                 make.left.equalTo(point.x / 2)
                 make.top.equalTo(point.y / 2)

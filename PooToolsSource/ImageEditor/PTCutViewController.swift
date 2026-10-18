@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 #if SWIFT_PACKAGE
@@ -372,23 +369,23 @@ class PTCutViewController: PTBaseViewController {
         view.backgroundColor = .black
         
         view.addSubviews([mainScrollView,shadowView,overlayView,bottomToolView,ratioCollectionView])
-        mainScrollView.ptLayout.makeConstraints { make in
+        mainScrollView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview()
         }
-        shadowView.ptLayout.makeConstraints { make in
+        shadowView.snp.makeConstraints { make in
             make.edges.equalTo(self.mainScrollView)
         }
         
-        bottomToolView.ptLayout.makeConstraints { make in
+        bottomToolView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.ptLayout.bottom)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
             make.height.equalTo(54)
         }
         
-        ratioCollectionView.ptLayout.makeConstraints { make in
+        ratioCollectionView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.bottom.equalTo(self.bottomToolView.ptLayout.top)
+            make.bottom.equalTo(self.bottomToolView.snp.top)
             make.height.equalTo(PTCutViewController.cutRatioHeight)
         }
 
@@ -401,13 +398,13 @@ class PTCutViewController: PTBaseViewController {
         containerView.addSubview(imageView)
         
         bottomToolView.addSubviews([revertBtn,rotateBtn])
-        revertBtn.ptLayout.makeConstraints { make in
+        revertBtn.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.size.equalTo(44)
             make.bottom.equalToSuperview().inset(5)
         }
         
-        rotateBtn.ptLayout.makeConstraints { make in
+        rotateBtn.snp.makeConstraints { make in
             make.size.bottom.equalTo(self.revertBtn)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }

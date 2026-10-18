@@ -5,9 +5,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -15,7 +12,7 @@ import ptools
 
 final class ToogleCollapseButton: BaseControl {
     private lazy var imageView = UIImageView(image: .expandSymbol, highlightedImage: .collapseSymbol).then {
-        $0.ptLayout.makeConstraints { make in
+        $0.snp.makeConstraints { make in
             make.width.equalTo(CGSize.regularIconSize.width)
             make.height.equalTo(CGSize.regularIconSize.height)
         }

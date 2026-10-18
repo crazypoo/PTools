@@ -8,9 +8,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 //MARK: 索引设置
@@ -57,7 +54,7 @@ extension PTCollectionView {
         indexLayoutSignature = signature
 
         let visible = region.visibleRect
-        indexContainerView.ptLayout.remakeConstraints { make in
+        indexContainerView.snp.remakeConstraints { make in
             make.right.equalToSuperview().offset(-(bounds.width - visible.maxX + config.indexContainerRightOffset))
             make.top.equalToSuperview().offset(visible.minY + config.containerTopOffset)
             make.bottom.equalToSuperview().offset(-(bounds.height - visible.maxY + config.containerBottomOffset))
@@ -146,7 +143,7 @@ extension PTCollectionView {
         
         indexContainerView.addSubview(stackView)
         
-        stackView.ptLayout.makeConstraints { make in
+        stackView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
@@ -172,7 +169,7 @@ extension PTCollectionView {
             label.layer.cornerRadius = config.itemSize.height / 2
             label.clipsToBounds = true
             label.isUserInteractionEnabled = true
-            label.ptLayout.makeConstraints { make in
+            label.snp.makeConstraints { make in
                 make.size.equalTo(config.itemSize)
             }
             

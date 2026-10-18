@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif
@@ -113,10 +110,6 @@ open class PTBaseViewController: UIViewController, PTNavigationConfigurable, PTA
         
     open override func viewDidLoad() {
         super.viewDidLoad()
-        // English: Install the diagnostics bridge before base-owned constraints are created.
-        // Español: Instala el puente de diagnóstico antes de crear las restricciones de la base.
-        // 中文：在基类创建自有约束之前安装诊断桥，确保首个布局错误可追踪。
-        PTLayoutConsoleBridge.install()
         setupBaseConfigs()
         if let sheet = self.sheetViewController,let nav = sheet.childViewController as? UINavigationController {
             PTNavigationBarManager.shared.bind(to: nav)
@@ -290,7 +283,7 @@ open class PTBaseViewController: UIViewController, PTNavigationConfigurable, PTA
 
         // 加 customView
         container.addSubview(customView)
-        customView.ptLayout.makeConstraints { make in
+        customView.snp.makeConstraints { make in
             make.edges.equalToSuperview() // 填满 container
         }
         
@@ -298,7 +291,7 @@ open class PTBaseViewController: UIViewController, PTNavigationConfigurable, PTA
         if let action = action {
             let button = UIButton(type: .custom)
             container.addSubview(button)
-            button.ptLayout.makeConstraints { make in
+            button.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
             button.addActionHandlers { _ in
@@ -861,33 +854,33 @@ fileprivate class PTBaseScreenShotAlert:UIView {
         dismissTask = dismiss
         
         addSubviews([closeButton,feedback,line,share,shareImageView])
-        closeButton.ptLayout.makeConstraints { make in
+        closeButton.snp.makeConstraints { make in
             make.right.top.equalToSuperview().inset(5)
             make.width.height.equalTo(15)
         }
         
-        feedback.ptLayout.makeConstraints { make in
+        feedback.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(5)
             make.bottom.equalToSuperview()
             make.height.equalTo(24)
         }
         
-        line.ptLayout.makeConstraints { make in
+        line.snp.makeConstraints { make in
             make.left.right.equalTo(self.feedback)
             make.height.equalTo(1)
-            make.top.equalTo(self.feedback.ptLayout.top)
+            make.top.equalTo(self.feedback.snp.top)
         }
         
-        share.ptLayout.makeConstraints { make in
+        share.snp.makeConstraints { make in
             make.left.right.height.equalTo(self.feedback)
-            make.bottom.equalTo(self.line.ptLayout.top)
+            make.bottom.equalTo(self.line.snp.top)
         }
         
         shareImageView.image = screenShotImage
-        shareImageView.ptLayout.makeConstraints { make in
+        shareImageView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(5)
-            make.top.equalTo(closeButton.ptLayout.bottom).offset(5)
-            make.bottom.equalTo(self.share.ptLayout.top).offset(-5)
+            make.top.equalTo(closeButton.snp.bottom).offset(5)
+            make.bottom.equalTo(self.share.snp.top).offset(-5)
         }
         
         PTUtils.getCurrentVC()?.view.addSubview(self)

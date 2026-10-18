@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -49,7 +46,7 @@ class PTMediaBrowserNav: UIView {
         }
 
         addSubviews([navBar])
-        navBar.ptLayout.makeConstraints { make in
+        navBar.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight)
         }

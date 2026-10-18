@@ -5,9 +5,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -93,8 +90,8 @@ final class OptionListControl: BaseFormControl {
 
         contentView.addArrangedSubview(accessoryControl)
 
-        accessoryControl.ptLayout.makeConstraints { make in
-            make.width.greaterThanOrEqualTo(contentContainerView.ptLayout.width).multipliedBy(1 / 2)
+        accessoryControl.snp.makeConstraints { make in
+            make.width.greaterThanOrEqualTo(contentContainerView.snp.width).multipliedBy(1 / 2)
         }
 
         updateViews()

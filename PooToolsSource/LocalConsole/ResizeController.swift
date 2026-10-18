@@ -6,9 +6,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -49,10 +46,10 @@ class ResizeController {
     @MainActor lazy var bottomGrabber: UIView = {
         let view = UIView()
         LocalConsole.shared.consoleWindow.view.addSubview(view)
-        view.ptLayout.makeConstraints { make in
+        view.snp.makeConstraints { make in
             make.size.equalTo(CGSizeMake(116, 20))
             make.centerX.equalTo(self.consoleOutlineView)
-            make.top.equalTo(self.consoleOutlineView.ptLayout.bottom).offset(10)
+            make.top.equalTo(self.consoleOutlineView.snp.bottom).offset(10)
         }
                 
         bottomGrabberPillView.backgroundColor = .randomColor
@@ -60,7 +57,7 @@ class ResizeController {
         bottomGrabberPillView.layer.cornerRadius = 2.5
         bottomGrabberPillView.layer.cornerCurve = .continuous
         view.addSubview(bottomGrabberPillView)
-        bottomGrabberPillView.ptLayout.makeConstraints { make in
+        bottomGrabberPillView.snp.makeConstraints { make in
             make.size.equalTo(CGSizeMake(36, 5))
             make.centerX.centerY.equalToSuperview()
         }
@@ -83,10 +80,10 @@ class ResizeController {
     @MainActor lazy var rightGrabber: UIView = {
         let view = UIView()
         LocalConsole.shared.consoleWindow.view.addSubview(view)
-        view.ptLayout.makeConstraints { make in
+        view.snp.makeConstraints { make in
             make.size.equalTo(CGSizeMake(20, 116))
             make.centerY.equalTo(self.consoleOutlineView)
-            make.left.equalTo(self.consoleOutlineView.ptLayout.right).offset(10)
+            make.left.equalTo(self.consoleOutlineView.snp.right).offset(10)
         }
         
         rightGrabberPillView.backgroundColor = .randomColor
@@ -94,7 +91,7 @@ class ResizeController {
         rightGrabberPillView.layer.cornerRadius = 2.5
         rightGrabberPillView.layer.cornerCurve = .continuous
         view.addSubview(rightGrabberPillView)
-        rightGrabberPillView.ptLayout.makeConstraints { make in
+        rightGrabberPillView.snp.makeConstraints { make in
             make.size.equalTo(CGSizeMake(5, 36))
             make.centerX.centerY.equalToSuperview()
         }
@@ -217,7 +214,7 @@ class ResizeController {
         guard outline.superview !== terminal else { return }
         outline.removeFromSuperview()
         terminal.addSubview(outline)
-        outline.ptLayout.remakeConstraints { make in
+        outline.snp.remakeConstraints { make in
             make.top.left.equalToSuperview().offset(-6)
             make.bottom.right.equalToSuperview().offset(6)
         }
@@ -423,19 +420,19 @@ class PlatterView: UIView {
         doneButton.roundOriginToPixel()
         
         fontSizeTitle.text = "PT Console font".localized()
-        fontSizeTitle.ptLayout.makeConstraints { make in
-            make.left.equalTo(resetButton.ptLayout.left)
-            make.bottom.equalTo(doneButton.ptLayout.top).offset(-30)
+        fontSizeTitle.snp.makeConstraints { make in
+            make.left.equalTo(resetButton.snp.left)
+            make.bottom.equalTo(doneButton.snp.top).offset(-30)
         }
         
-        fontText.ptLayout.makeConstraints { make in
-            make.left.equalTo(fontSizeTitle.ptLayout.right)
-            make.right.equalTo(doneButton.ptLayout.right)
+        fontText.snp.makeConstraints { make in
+            make.left.equalTo(fontSizeTitle.snp.right)
+            make.right.equalTo(doneButton.snp.right)
             make.centerY.equalTo(fontSizeTitle)
         }
         
-        colorButton.ptLayout.makeConstraints { make in
-            make.bottom.equalTo(fontSizeTitle.ptLayout.top).offset(-15)
+        colorButton.snp.makeConstraints { make in
+            make.bottom.equalTo(fontSizeTitle.snp.top).offset(-15)
             make.height.width.equalTo(doneButton)
             make.centerX.equalToSuperview()
         }

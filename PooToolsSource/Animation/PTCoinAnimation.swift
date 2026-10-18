@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 @objcMembers
@@ -47,11 +44,11 @@ public class PTCoinAnimation: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        showLabel.ptLayout.makeConstraints { make in
+        showLabel.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
         }
         
-        backgroundView.ptLayout.makeConstraints { make in
+        backgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         

@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 import PooToolsSearchBar
@@ -114,7 +111,7 @@ class PTLoadedLibsViewController: PTBaseViewController {
         let view = PTNavTitleContainer()
         view.addSubviews([searchBar])
         view.bounds = .init(origin: .zero, size: .init(width: (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 88), height: 32))
-        searchBar.ptLayout.makeConstraints { make in
+        searchBar.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         return view
@@ -168,13 +165,13 @@ class PTLoadedLibsViewController: PTBaseViewController {
         super.viewDidLoad()
 
         view.addSubviews([segmentedControl, newCollectionView])
-        segmentedControl.ptLayout.makeConstraints { make in
+        segmentedControl.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.height.equalTo(44)
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
         }
-        newCollectionView.ptLayout.makeConstraints { make in
-            make.top.equalTo(self.segmentedControl.ptLayout.bottom).offset(10)
+        newCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(self.segmentedControl.snp.bottom).offset(10)
             make.left.right.bottom.equalToSuperview()
         }
         
@@ -345,7 +342,7 @@ class PTClassExplorerViewController: PTBaseViewController {
         pt_Title = classNames
         view.addSubviews([tableView])
 
-        tableView.ptLayout.makeConstraints { make in
+        tableView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
         }

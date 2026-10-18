@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 import PooToolsNetWork
@@ -212,7 +209,7 @@ public class PTDebugViewController: PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubviews([newCollectionView])
-        newCollectionView.ptLayout.makeConstraints { make in
+        newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
         }

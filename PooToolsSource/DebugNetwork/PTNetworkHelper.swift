@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -88,7 +85,7 @@ final class PTNetworkHelper {
             floatingView?.tag = PTNetworkFloatingTap
             floatingView?.autoDocking = false
             floatingView?.addSubview(speedLabel)
-            speedLabel.ptLayout.makeConstraints { make in
+            speedLabel.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
         }

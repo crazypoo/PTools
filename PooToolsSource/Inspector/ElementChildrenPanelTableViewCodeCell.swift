@@ -5,9 +5,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -130,12 +127,12 @@ final class ElementChildrenPanelTableViewCodeCell: UITableViewCell, @MainActor E
 
         contentView.installView(containerStackView, priority: .required)
 
-        disclosureIconContainer.ptLayout.makeConstraints { make in
+        disclosureIconContainer.snp.makeConstraints { make in
             make.width.equalTo(16)
         }
 
-        disclosureIcon.ptLayout.makeConstraints { make in
-            make.centerY.equalTo(elementDescriptionView.iconImageView.ptLayout.centerY)
+        disclosureIcon.snp.makeConstraints { make in
+            make.centerY.equalTo(elementDescriptionView.iconImageView.snp.centerY)
         }
     }
 

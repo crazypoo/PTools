@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import Photos
 import SnapKit
 import UniformTypeIdentifiers
@@ -73,7 +70,7 @@ public class PTMediaLibCameraContainerViewController: PTBaseViewController {
         addChild(picker)
         view.addSubview(picker.view)
 
-        picker.view.ptLayout.makeConstraints { make in
+        picker.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         picker.didMove(toParent: self)

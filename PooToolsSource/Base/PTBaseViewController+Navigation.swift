@@ -8,9 +8,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 // English: The title container participates in navigation-bar layout on MainActor.
@@ -82,7 +79,7 @@ open class PTNavigationBarContainer: UIView {
         contentView.backgroundColor = .clear
         topBarContainer.backgroundColor = .clear
         largeTitleContainer.backgroundColor = .clear
-        topBarContainer.ptLayout.makeConstraints { make in
+        topBarContainer.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             if let findCurrent = PTUtils.getCurrentVC(), let sheet = findCurrent.sheetViewController {
                 let offset = sheet.options.useFullScreenMode ? 0 : sheet.options.pullBarHeight
@@ -93,8 +90,8 @@ open class PTNavigationBarContainer: UIView {
             make.height.equalTo(CGFloat.kNavBarHeight)
         }
         
-        largeTitleContainer.ptLayout.makeConstraints { make in
-            make.top.equalTo(topBarContainer.ptLayout.bottom)
+        largeTitleContainer.snp.makeConstraints { make in
+            make.top.equalTo(topBarContainer.snp.bottom)
             make.left.right.equalToSuperview()
             make.height.equalTo(0) // LargeTitle 高度
         }
@@ -115,7 +112,7 @@ open class PTNavigationBarContainer: UIView {
         largeTitleLabel.numberOfLines = 0
         largeTitleLabel.lineBreakMode = .byTruncatingTail
         largeTitleLabel.alpha = 0
-        largeTitleLabel.ptLayout.makeConstraints { make in
+        largeTitleLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.bottom.top.equalToSuperview()
         }
@@ -211,7 +208,7 @@ extension PTNavigationBarContainer {
 
         for (view, size) in measuredViews {
             stack.addArrangedSubview(view)
-            view.ptLayout.remakeConstraints { make in
+            view.snp.remakeConstraints { make in
                 make.width.equalTo(size.width)
                 make.height.equalTo(size.height)
             }
@@ -306,7 +303,7 @@ extension PTNavigationBarContainer {
             let stretch = abs(progress)
             let height = maxHeight + stretch * 40   // 拉伸幅度
             
-            largeTitleContainer.ptLayout.updateConstraints { make in
+            largeTitleContainer.snp.updateConstraints { make in
                 make.height.equalTo(height)
             }
             largeTitleBackgroundHeight = height
@@ -328,7 +325,7 @@ extension PTNavigationBarContainer {
         // ===== 正常收缩 =====
         let height = maxHeight * (1 - p)
         
-        largeTitleContainer.ptLayout.updateConstraints { make in
+        largeTitleContainer.snp.updateConstraints { make in
             make.height.equalTo(height)
         }
         largeTitleBackgroundHeight = height

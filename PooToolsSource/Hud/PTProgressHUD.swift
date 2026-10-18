@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 // English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
@@ -213,10 +210,10 @@ public class PTProgressHUD: UIView {
     private var didCompletePresentation = true
     
     // 动态约束引用
-    private var bezelCenterXConstraint: PTLayoutConstraint!
-    private var bezelCenterYConstraint: PTLayoutConstraint!
-    private var stackPaddingConstraints: [PTLayoutConstraint] = []
-    private var squareConstraint: PTLayoutConstraint?
+    private var bezelCenterXConstraint: Constraint!
+    private var bezelCenterYConstraint: Constraint!
+    private var stackPaddingConstraints: [Constraint] = []
+    private var squareConstraint: Constraint?
     
     
     /// 安全获取当前的 Key Window (兼容 iOS 13+ SceneDelegate 机制)
@@ -261,13 +258,13 @@ public class PTProgressHUD: UIView {
         bezelView.contentView.addSubview(stackView)
         
         // 核心约束
-        bezelView.ptLayout.makeConstraints { make in
+        bezelView.snp.makeConstraints { make in
             bezelCenterXConstraint = make.centerX.equalToSuperview().offset(offset.x).constraint
             bezelCenterYConstraint = make.centerY.equalToSuperview().offset(offset.y).constraint
             make.width.greaterThanOrEqualTo(80)
             make.width.lessThanOrEqualToSuperview().multipliedBy(0.8)
         }
-        stackView.ptLayout.makeConstraints { make in
+        stackView.snp.makeConstraints { make in
             stackPaddingConstraints = [
                 make.top.equalTo(bezelView.contentView).offset(margin).constraint,
                 make.bottom.equalTo(bezelView.contentView).offset(-margin).constraint,
@@ -290,8 +287,8 @@ public class PTProgressHUD: UIView {
         
         if isSquare {
             if squareConstraint == nil {
-                bezelView.ptLayout.makeConstraints { make in
-                    squareConstraint = make.height.equalTo(bezelView.ptLayout.width).constraint
+                bezelView.snp.makeConstraints { make in
+                    squareConstraint = make.height.equalTo(bezelView.snp.width).constraint
                 }
             }
         } else {
@@ -331,7 +328,7 @@ public class PTProgressHUD: UIView {
             // 3. 圆角与约束设置
             progressBar.layer.cornerRadius = 3.0 // 添加一点圆角更精致
             progressBar.clipsToBounds = true
-            progressBar.ptLayout.makeConstraints { make in
+            progressBar.snp.makeConstraints { make in
                 make.width.equalTo(120)
                 make.height.equalTo(6)
             }
@@ -341,7 +338,7 @@ public class PTProgressHUD: UIView {
             let style: PTCircularProgressStyle = (mode == .determinateRing) ? .loop : .pie
             let circularView = PTCircularProgressView(style: style)
             circularView.progressColor = indicatorColor
-            circularView.ptLayout.makeConstraints { make in
+            circularView.snp.makeConstraints { make in
                 make.width.height.equalTo(45)
             }
             indicatorView = circularView

@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -29,7 +26,7 @@ class PTPerformanceChartCell: PTBaseNormalCell {
         super.init(frame: frame)
         
         contentView.addSubview(chartView)
-        chartView.ptLayout.makeConstraints { make in
+        chartView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().inset(12)
             make.bottom.equalToSuperview()

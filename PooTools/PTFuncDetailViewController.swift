@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 import Alamofire
 import SnapKit
@@ -67,7 +64,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             metadataLabel.textAlignment = .center
             metadataLabel.numberOfLines = 0
             view.addSubview(metadataLabel)
-            metadataLabel.ptLayout.makeConstraints { make in
+            metadataLabel.snp.makeConstraints { make in
                 make.edges.equalTo(view.safeAreaLayoutGuide).inset(20)
             }
             return
@@ -77,7 +74,7 @@ class PTFuncDetailViewController: PTBaseViewController {
         self.legacyController = legacyController
         addChild(legacyController)
         view.addSubview(legacyController.view)
-        legacyController.view.ptLayout.makeConstraints { make in
+        legacyController.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         legacyController.didMove(toParent: self)
@@ -197,7 +194,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
                     label.lineBreakMode = .byCharWrapping
                     label.text = uploadInfoString
                     self.view.addSubview(label)
-                    label.ptLayout.makeConstraints { make in
+                    label.snp.makeConstraints { make in
                         make.edges.equalToSuperview()
                     }
                 default:
@@ -209,14 +206,14 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
         case String.dymanicCode:
             let codeView = PTCodeView(numberOfCodes: 4, numberOfLines: 3, changeTimes: 3)
             view.addSubview(codeView)
-            codeView.ptLayout.makeConstraints { make in
+            codeView.snp.makeConstraints { make in
                 make.size.equalTo(150)
                 make.centerX.centerY.equalToSuperview()
             }
         case String.slider:
             let slider = PTSlider(showTitle: true, showRawValue: false)
             view.addSubview(slider)
-            slider.ptLayout.makeConstraints { make in
+            slider.snp.makeConstraints { make in
                 make.width.equalTo(100)
                 make.height.equalTo(80)
                 make.centerX.centerY.equalToSuperview()
@@ -233,7 +230,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
                 Swift.print(score)
             }
             view.addSubview(rate)
-            rate.ptLayout.makeConstraints { make in
+            rate.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.height.equalTo(100)
                 make.centerY.equalToSuperview()
@@ -267,7 +264,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             segView.backgroundColor = DynamicColor.randomColor
             segView.viewDatas = [model1,model2,model3,model4]
             view.addSubview(segView)
-            segView.ptLayout.makeConstraints { make in
+            segView.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.height.equalTo(44)
                 make.centerY.equalToSuperview()
@@ -305,7 +302,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             pagingView.hostViewController = self
             pagingView.pageContainer.cachePolicy = .keepAllLoaded
             view.addSubview(pagingView)
-            pagingView.ptLayout.makeConstraints { make in
+            pagingView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
             pagingView.setPinnedHeader(PTPagingPinnedHeader(height: 44) { segmentedView })
@@ -365,12 +362,12 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             stackView.alignment = .fill
             view.addSubview(scrollView)
             scrollView.addSubview(stackView)
-            scrollView.ptLayout.makeConstraints { make in
+            scrollView.snp.makeConstraints { make in
                 make.edges.equalTo(view.safeAreaLayoutGuide)
             }
-            stackView.ptLayout.makeConstraints { make in
+            stackView.snp.makeConstraints { make in
                 make.edges.equalToSuperview().inset(12)
-                make.width.equalTo(scrollView.ptLayout.width).offset(-24)
+                make.width.equalTo(scrollView.snp.width).offset(-24)
             }
 
             let items = [
@@ -413,7 +410,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
                 row.apply(items: rowItems, animatingDifferences: false)
                 stackView.addArrangedSubview(label)
                 stackView.addArrangedSubview(row)
-                row.ptLayout.makeConstraints { make in
+                row.snp.makeConstraints { make in
                     make.height.equalTo(44)
                 }
             }
@@ -426,10 +423,10 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             view.addSubview(countLabel)
             countLabel.format = "%.2f"
             countLabel.countFrom(starValue: 99999999.99, toValue: 0, duration: 1)
-            countLabel.ptLayout.makeConstraints { make in
+            countLabel.snp.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.top.equalToSuperview().inset(20)
-                make.bottom.equalTo(self.view.ptLayout.centerY)
+                make.bottom.equalTo(self.view.snp.centerY)
             }
             
             let countLabelEx = UILabel()
@@ -438,9 +435,9 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             countLabelEx.font = .appfont(size: 30)
             countLabelEx.count(fromValue: 99999999.99, to: 0, duration: 1,formatter: "%.2f")
             view.addSubview(countLabelEx)
-            countLabelEx.ptLayout.makeConstraints { make in
+            countLabelEx.snp.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.equalTo(countLabel.ptLayout.bottom)
+                make.top.equalTo(countLabel.snp.bottom)
                 make.bottom.equalToSuperview()
             }
             
@@ -455,7 +452,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
                 throughLabel.strikeThroughEnabled = true
             }
             view.addSubview(throughLabel)
-            throughLabel.ptLayout.makeConstraints { make in
+            throughLabel.snp.makeConstraints { make in
                 make.top.equalToSuperview().inset(16)
                 make.left.right.equalToSuperview()
                 make.height.equalTo(44)
@@ -464,9 +461,9 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             let setBtn = UIButton(type: .custom)
             setBtn.backgroundColor = DynamicColor.randomColor
             view.addSubview(setBtn)
-            setBtn.ptLayout.makeConstraints { make in
+            setBtn.snp.makeConstraints { make in
                 make.size.equalTo(64)
-                make.top.equalTo(throughLabel.ptLayout.bottom).offset(10)
+                make.top.equalTo(throughLabel.snp.bottom).offset(10)
                 make.centerX.equalToSuperview()
             }
             setBtn.addActionHandlers { sender in
@@ -479,7 +476,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             let view = UIButton(type: .custom)
             view.backgroundColor = DynamicColor.randomColor
             self.view.addSubview(view)
-            view.ptLayout.makeConstraints { make in
+            view.snp.makeConstraints { make in
                 make.size.equalTo(64)
                 make.centerX.centerY.equalToSuperview()
             }
@@ -579,7 +576,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             }
             
             view.addSubview(label)
-            label.ptLayout.makeConstraints { make in
+            label.snp.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(20)
                 make.top.equalToSuperview().inset(40)
                 make.height.equalTo(300)
@@ -599,7 +596,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
 //            layoutBtn.configBackgroundColor = .AlmondColor
 //            layoutBtn.configBackgroundSelectedColor = .systemBlue
             view.addSubview(layoutBtn)
-            layoutBtn.ptLayout.makeConstraints { make in
+            layoutBtn.snp.makeConstraints { make in
                 make.width.height.equalTo(100)
                 make.centerX.centerY.equalToSuperview()
             }
@@ -666,24 +663,24 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             progressBar.textDistance = 15
             progressBar.delegate = self
             view.addSubviews([verProgress,horProgress,progressBar])
-            verProgress.ptLayout.makeConstraints { make in
+            verProgress.snp.makeConstraints { make in
                 make.top.equalToSuperview().inset(20)
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
                 make.width.equalTo(22)
             }
             
-            horProgress.ptLayout.makeConstraints { make in
+            horProgress.snp.makeConstraints { make in
                 make.top.equalTo(verProgress)
-                make.left.equalTo(verProgress.ptLayout.right).offset(10)
+                make.left.equalTo(verProgress.snp.right).offset(10)
                 make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.height.equalTo(22)
             }
             
-            progressBar.ptLayout.makeConstraints { make in
+            progressBar.snp.makeConstraints { make in
                 make.centerY.equalToSuperview()
                 // 只需要指定左右边距，高度会自动根据 intrinsicContentSize 撑开！
-                make.left.equalTo(verProgress.ptLayout.right).offset(20)
+                make.left.equalTo(verProgress.snp.right).offset(20)
 //                make.right.equalToSuperview().inset(20)
                 make.right.equalTo(horProgress)
                 make.height.equalTo(64)
@@ -726,30 +723,30 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             contentLabel.numberOfLines = 0
             contentLabel.textAlignment = .center
             view.addSubviews([returnButton,contentLabel,switchDES,switchAESECB,switchAESCBC])
-            returnButton.ptLayout.makeConstraints { make in
+            returnButton.snp.makeConstraints { make in
                 make.size.equalTo(34)
                 make.top.equalToSuperview().inset(20)
                 make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             }
-            contentLabel.ptLayout.makeConstraints { make in
-                make.top.equalTo(returnButton.ptLayout.bottom).offset(5)
+            contentLabel.snp.makeConstraints { make in
+                make.top.equalTo(returnButton.snp.bottom).offset(5)
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             }
             
-            switchDES.ptLayout.makeConstraints { make in
+            switchDES.snp.makeConstraints { make in
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.height.equalTo(34)
-                make.top.equalTo(contentLabel.ptLayout.bottom).offset(10)
+                make.top.equalTo(contentLabel.snp.bottom).offset(10)
             }
             
-            switchAESECB.ptLayout.makeConstraints { make in
+            switchAESECB.snp.makeConstraints { make in
                 make.top.bottom.equalTo(switchDES)
-                make.left.equalTo(switchDES.ptLayout.right).offset(20)
+                make.left.equalTo(switchDES.snp.right).offset(20)
             }
             
-            switchAESCBC.ptLayout.makeConstraints { make in
+            switchAESCBC.snp.makeConstraints { make in
                 make.top.bottom.equalTo(switchDES)
-                make.left.equalTo(switchAESECB.ptLayout.right).offset(20)
+                make.left.equalTo(switchAESECB.snp.right).offset(20)
             }
             
             switchDES.addSwitchAction { sender in
@@ -842,7 +839,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             sortButton.sortTypeHandler = { type in
                 PTNSLogConsole("\(type.rawValue)")
             }
-            sortButton.ptLayout.makeConstraints { make in
+            sortButton.snp.makeConstraints { make in
                 make.height.equalTo(44)
                 make.left.right.equalToSuperview()
                 make.top.equalToSuperview().inset(20)
@@ -865,7 +862,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             let config = PTBannerConfiguration()
             let banner1 = PTBannerView(viewConfig: config)
             view.addSubviews([banner1])
-            banner1.ptLayout.makeConstraints { make in
+            banner1.snp.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.top.equalToSuperview().inset(20)
                 make.height.equalTo(190)
@@ -904,7 +901,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
                 return nil
             }
             view.addSubviews([aaaaaaa])
-            aaaaaaa.ptLayout.makeConstraints { make in
+            aaaaaaa.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.top.equalToSuperview().inset(20)
                 make.height.equalTo(UICollectionView.tagShowLayoutHeight(data: tagModels,topContentSpace: cConfig.contentTopSpace, bottomContentSpace: cConfig.contentBottomSpace,itemLeadingSpace: cConfig.cellLeadingSpace,itemTrailingSpace: cConfig.cellTrailingSpace,itemContentSpace: cConfig.tagCellContentSpace).groupHeight)
@@ -951,17 +948,17 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             }
             
             view.addSubviews([aaaaaa,codeInputView])
-            aaaaaa.ptLayout.makeConstraints { make in
+            aaaaaa.snp.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.height.equalTo(56)
                 make.top.equalToSuperview().inset(20)
             }
             
-            codeInputView.ptLayout.makeConstraints { make in
+            codeInputView.snp.makeConstraints { make in
                 make.centerX.equalToSuperview()
                 make.width.equalTo(CGFloat.kSCREEN_WIDTH - 48)
                 make.height.equalTo(GobalPaymentSmallBoxWidth + 2)
-                make.top.equalTo(aaaaaa.ptLayout.bottom).offset(10)
+                make.top.equalTo(aaaaaa.snp.bottom).offset(10)
             }
         case String.Stepper:
             let stepper = PTStepper()
@@ -979,7 +976,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
                 PTNSLogConsole("\(type),\(value)")
             }
             view.addSubviews([stepper])
-            stepper.ptLayout.makeConstraints { make in
+            stepper.snp.makeConstraints { make in
                 make.centerX.centerY.equalToSuperview()
                 make.width.equalTo(100)
                 make.height.equalTo(24)
@@ -987,7 +984,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
         case String.LoginDesc:
             let aaaaa = PTLoginDescButton(config: PTLoginDescConfig())
             view.addSubviews([aaaaa])
-            aaaaa.ptLayout.makeConstraints { make in
+            aaaaa.snp.makeConstraints { make in
                 make.centerX.centerY.equalToSuperview()
 //                make.width.equalTo(100)
                 make.height.equalTo(24)
@@ -1027,7 +1024,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             let stepper = PTStepperView()
             stepper.viewConfigSet(viewConfig: config)
             view.addSubviews([stepper])
-            stepper.ptLayout.makeConstraints { make in
+            stepper.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
                 make.bottom.equalToSuperview()
@@ -1244,35 +1241,35 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             }
             
             view.addSubviews([livePhotoView,showImageView,videoImageView,progressView,createButton])
-            livePhotoView.ptLayout.makeConstraints { make in
+            livePhotoView.snp.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
                 make.height.equalTo(150)
             }
             
-            showImageView.ptLayout.makeConstraints { make in
+            showImageView.snp.makeConstraints { make in
                 make.left.equalTo(livePhotoView)
-                make.top.equalTo(livePhotoView.ptLayout.bottom).offset(10)
-                make.right.equalTo(self.view.ptLayout.centerX).offset(-5)
+                make.top.equalTo(livePhotoView.snp.bottom).offset(10)
+                make.right.equalTo(self.view.snp.centerX).offset(-5)
                 make.height.equalTo(livePhotoView)
             }
             
-            videoImageView.ptLayout.makeConstraints { make in
-                make.left.equalTo(self.view.ptLayout.centerX).offset(5)
+            videoImageView.snp.makeConstraints { make in
+                make.left.equalTo(self.view.snp.centerX).offset(5)
                 make.top.bottom.equalTo(showImageView)
                 make.right.equalTo(livePhotoView)
             }
             
-            progressView.ptLayout.makeConstraints { make in
-                make.top.equalTo(showImageView.ptLayout.bottom).offset(10)
+            progressView.snp.makeConstraints { make in
+                make.top.equalTo(showImageView.snp.bottom).offset(10)
                 make.left.right.equalTo(livePhotoView)
                 make.height.equalTo(20)
             }
             
-            createButton.ptLayout.makeConstraints { make in
+            createButton.snp.makeConstraints { make in
                 make.left.right.equalTo(livePhotoView)
                 make.height.equalTo(34)
-                make.top.equalTo(progressView.ptLayout.bottom).offset(10)
+                make.top.equalTo(progressView.snp.bottom).offset(10)
             }
         default:
             break

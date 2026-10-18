@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import Lottie
 
 open class PTGAnimationImageView: UIView {
@@ -72,12 +69,12 @@ open class PTGAnimationImageView: UIView {
         lottieView.isHidden = true
         lottieView.loopMode = .autoReverse
         addSubviews([lottieView,imageBG])
-        lottieView.ptLayout.makeConstraints { make in
+        lottieView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
         imageBG.isHidden = true
-        imageBG.ptLayout.makeConstraints { make in
+        imageBG.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }

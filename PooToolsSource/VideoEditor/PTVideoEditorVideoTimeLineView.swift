@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -45,7 +42,7 @@ extension PTVideoEditorVideoTimeLineView {
             imageView.image = UIImage(cgImage: value, scale: 1.0, orientation: .up)
             addSubview(imageView)
 
-            imageView.ptLayout.makeConstraints { make in
+            imageView.snp.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
                 make.width.equalTo(width)
                 make.left.equalToSuperview().inset(CGFloat(index) * width)

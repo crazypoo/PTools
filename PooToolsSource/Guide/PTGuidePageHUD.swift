@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import AVKit
 import SnapKit
 import Kingfisher
@@ -170,7 +167,7 @@ fileprivate extension PTGuidePageHUD {
         guidePageView.contentSize = .zero
         addSubviews([guidePageView, skipButton])
         
-        guidePageView.ptLayout.makeConstraints { make in
+        guidePageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
@@ -186,7 +183,7 @@ fileprivate extension PTGuidePageHUD {
         player.entersFullScreenWhenPlaybackBegins = true
         addSubview(player.view)
         
-        player.view.ptLayout.makeConstraints { make in
+        player.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         player.player?.play()
@@ -208,11 +205,11 @@ fileprivate extension PTGuidePageHUD {
             movieStartButton.alpha = 1
         }
         
-        movieStartButton.ptLayout.makeConstraints { make in
+        movieStartButton.snp.makeConstraints { make in
             make.width.equalTo(movieStartButton.sizeFor(height: 50).width + 10)
             make.height.equalTo(50)
             make.centerX.equalTo(self.player.view)
-            make.bottom.equalTo(self.player.view.safeAreaLayoutGuide.ptLayout.bottom).offset(-20)
+            make.bottom.equalTo(self.player.view.safeAreaLayoutGuide.snp.bottom).offset(-20)
         }
     }
     
@@ -224,7 +221,7 @@ fileprivate extension PTGuidePageHUD {
         
         let skipButtonWidth = UIView.sizeFor(string: viewModel.skipName, font: viewModel.skipFont, height: 44).width + 10 + skipButtonWidthOffset
         
-        skipButton.ptLayout.makeConstraints { make in
+        skipButton.snp.makeConstraints { make in
             make.width.equalTo(skipButtonWidth)
             make.height.equalTo(44)
             make.left.top.equalToSuperview()
@@ -256,23 +253,23 @@ fileprivate extension PTGuidePageHUD {
         }
         addSubviews(pageViews)
         
-        forwardButton.ptLayout.makeConstraints { make in
+        forwardButton.snp.makeConstraints { make in
             make.width.height.equalTo(44)
-            make.bottom.equalTo(self.safeAreaLayoutGuide.ptLayout.bottom).offset(-10)
-            make.left.equalTo(self.safeAreaLayoutGuide.ptLayout.left).offset(PTAppBaseConfig.share.defaultViewSpace)
+            make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).offset(-10)
+            make.left.equalTo(self.safeAreaLayoutGuide.snp.left).offset(PTAppBaseConfig.share.defaultViewSpace)
         }
         
-        nextButton.ptLayout.makeConstraints { make in
+        nextButton.snp.makeConstraints { make in
             make.width.height.bottom.equalTo(self.forwardButton)
-            make.right.equalTo(self.safeAreaLayoutGuide.ptLayout.right).inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.right.equalTo(self.safeAreaLayoutGuide.snp.right).inset(PTAppBaseConfig.share.defaultViewSpace)
         }
 
         if let control = imagePageControl {
-            control.ptLayout.makeConstraints { make in
+            control.snp.makeConstraints { make in
                 make.height.equalTo(20)
                 make.centerY.equalTo(self.forwardButton)
-                make.left.equalTo(self.forwardButton.ptLayout.right).offset(10)
-                make.right.equalTo(self.nextButton.ptLayout.left).offset(-10)
+                make.left.equalTo(self.forwardButton.snp.right).offset(10)
+                make.right.equalTo(self.nextButton.snp.left).offset(-10)
             }
         }
     }
@@ -285,7 +282,7 @@ fileprivate extension PTGuidePageHUD {
             guidePageView.addSubview(imageView)
             contentImageViews.append(imageView)
             
-            imageView.ptLayout.makeConstraints { make in
+            imageView.snp.makeConstraints { make in
                 make.top.equalToSuperview()
                 make.width.equalTo(1)
                 make.height.equalTo(1)
@@ -305,13 +302,13 @@ fileprivate extension PTGuidePageHUD {
                 }
                 
                 imageView.addSubview(startButton)
-                startButton.ptLayout.makeConstraints { make in
+                startButton.snp.makeConstraints { make in
                     make.width.equalTo(startButton.sizeFor(height: 44).width + 10)
                     make.height.equalTo(44)
                     make.centerX.equalTo(imageView)
                     
                     if let control = self.imagePageControl, case .pageControl = viewModel.pageControl {
-                        make.bottom.equalTo(control.ptLayout.top).offset(-10)
+                        make.bottom.equalTo(control.snp.top).offset(-10)
                     } else {
                         make.centerY.equalTo(self.forwardButton)
                     }
@@ -390,7 +387,7 @@ fileprivate extension PTGuidePageHUD {
             : 0
         guidePageView.contentSize = CGSize(width: pageWidth * CGFloat(contentImageViews.count), height: pageHeight)
         for (index, imageView) in contentImageViews.enumerated() {
-            imageView.ptLayout.updateConstraints { make in
+            imageView.snp.updateConstraints { make in
                 make.top.equalToSuperview()
                 make.left.equalToSuperview().offset(pageWidth * CGFloat(index))
                 make.width.equalTo(pageWidth)
@@ -399,7 +396,7 @@ fileprivate extension PTGuidePageHUD {
         }
 
         let visibleRect = region.visibleRect
-        skipButton.ptLayout.remakeConstraints { make in
+        skipButton.snp.remakeConstraints { make in
             let frame = PTAdaptiveVisibleRegionResolver.controlFrame(size: CGSize(width: skipButtonWidth(), height: 44),
                                                                      in: region,
                                                                      preferred: .trailing,
@@ -409,22 +406,22 @@ fileprivate extension PTGuidePageHUD {
             make.width.equalTo(frame.width)
             make.height.equalTo(frame.height)
         }
-        forwardButton.ptLayout.remakeConstraints { make in
+        forwardButton.snp.remakeConstraints { make in
             make.width.height.equalTo(44)
             make.left.equalToSuperview().offset(visibleRect.minX + PTAppBaseConfig.share.defaultViewSpace)
             make.bottom.equalToSuperview().offset(-(bounds.height - visibleRect.maxY + 10))
         }
-        nextButton.ptLayout.remakeConstraints { make in
+        nextButton.snp.remakeConstraints { make in
             make.width.height.equalTo(44)
             make.right.equalToSuperview().offset(-(bounds.width - visibleRect.maxX + PTAppBaseConfig.share.defaultViewSpace))
             make.bottom.equalTo(forwardButton)
         }
         if let control = imagePageControl {
-            control.ptLayout.remakeConstraints { make in
+            control.snp.remakeConstraints { make in
                 make.height.equalTo(20)
                 make.centerY.equalTo(forwardButton)
-                make.left.equalTo(forwardButton.ptLayout.right).offset(10)
-                make.right.equalTo(nextButton.ptLayout.left).offset(-10)
+                make.left.equalTo(forwardButton.snp.right).offset(10)
+                make.right.equalTo(nextButton.snp.left).offset(-10)
             }
         }
         guidePageView.layoutIfNeeded()
@@ -455,7 +452,7 @@ extension PTGuidePageHUD {
     
     public func guideShow() {
         viewModel.mainView.addSubview(self)
-        self.ptLayout.makeConstraints { make in
+        self.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         

@@ -4,9 +4,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 import PooTools
 
@@ -130,7 +127,7 @@ private class PT5_61SplitDemoTableViewController: PTBaseViewController, UITableV
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "pt-5-61-split-demo-cell")
         view.addSubview(tableView)
-        tableView.ptLayout.makeConstraints { make in
+        tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -260,7 +257,7 @@ private final class PT5_61SplitDemoDetailViewController: PTBaseViewController {
         label.numberOfLines = 0
         label.textColor = .label
         view.addSubview(label)
-        label.ptLayout.makeConstraints { make in
+        label.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(24)
             make.centerY.equalToSuperview()
         }
@@ -297,7 +294,7 @@ private final class PT5_61SplitDemoInspectorViewController: PTBaseViewController
         stack.spacing = 12
         stack.alignment = .fill
         view.addSubview(stack)
-        stack.ptLayout.makeConstraints { make in
+        stack.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
             make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide).offset(-16)

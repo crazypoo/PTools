@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
@@ -113,37 +110,37 @@ public class PTSignView: UIView {
         self.viewConfig = viewConfig
         
         addSubviews([devMaskView, viewNavView, signView])
-        devMaskView.ptLayout.makeConstraints { make in
+        devMaskView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        viewNavView.ptLayout.makeConstraints { make in
+        viewNavView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(44)
             make.bottom.equalToSuperview().inset(240)
         }
         
         viewNavView.addSubviews([saveBtn, clearBtn, infoLabel])
-        saveBtn.ptLayout.makeConstraints { make in
+        saveBtn.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(20)
             make.centerY.equalToSuperview()
         }
         
-        clearBtn.ptLayout.makeConstraints { make in
+        clearBtn.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(20)
             make.centerY.equalTo(self.saveBtn)
         }
-        infoLabel.ptLayout.makeConstraints { make in
-            make.left.equalTo(self.clearBtn.ptLayout.right).offset(10)
-            make.right.equalTo(self.saveBtn.ptLayout.left).offset(-10)
+        infoLabel.snp.makeConstraints { make in
+            make.left.equalTo(self.clearBtn.snp.right).offset(10)
+            make.right.equalTo(self.saveBtn.snp.left).offset(-10)
             make.top.bottom.equalToSuperview()
             make.centerX.equalToSuperview()
         }
         infoLabel.isHidden = true
         
-        signView.ptLayout.makeConstraints { make in
+        signView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(self.viewNavView.ptLayout.bottom)
+            make.top.equalTo(self.viewNavView.snp.bottom)
         }
     }
     
@@ -157,7 +154,7 @@ public class PTSignView: UIView {
         // 中文：优先使用明确的承载视图，兜底到当前场景，并移除强制解包。
         guard let container = hostView ?? PTSceneContext.activeWindow() else { return }
         container.addSubview(self)
-        self.ptLayout.makeConstraints { make in
+        self.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }

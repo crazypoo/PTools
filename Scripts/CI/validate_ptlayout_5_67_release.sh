@@ -10,7 +10,7 @@ python3 "$repo_root/Scripts/CI/validate_layout_negative_fixtures_567.py"
 python3 "$repo_root/Scripts/CI/validate_layout_source_ownership_567.py"
 python3 "$repo_root/Scripts/CI/validate_layout_no_snapkit_dependency_567.py"
 python3 "$repo_root/Scripts/CI/validate_layout_demo_catalog_567.py"
-python3 "$repo_root/Scripts/CI/validate_layout_migration_coverage_567.py"
+python3 "$repo_root/Scripts/CI/audit_layout_567.py"
 bash "$repo_root/Scripts/CI/run_ptlayout_differential_tests.sh"
 git -C "$repo_root" diff --check
-printf 'PTLayout %s static gates: passed; Xcode Debug/Release and external host runtime remain explicit gates\n' "$(cat "$repo_root/VERSION")"
+printf 'PTLayout 5.67 static release gates: passed; Xcode Debug/Release and external host runtime remain explicit gates\n'

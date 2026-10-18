@@ -4,9 +4,6 @@
 
 #if canImport(UIKit)
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if canImport(PToolsAcknowledgementsCore)
 import PToolsAcknowledgementsCore
@@ -71,7 +68,7 @@ public final class PTAcknowledgementDetailViewController: PTBaseViewController {
         textView.backgroundColor = .systemBackground
         textView.text = makeText()
         view.addSubview(textView)
-        textView.ptLayout.makeConstraints { make in
+        textView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(12)
             make.bottom.equalToSuperview()

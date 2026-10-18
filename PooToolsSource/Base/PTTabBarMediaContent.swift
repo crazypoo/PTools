@@ -8,9 +8,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import Lottie
 import SnapKit
 #if canImport(PToolsCore)
@@ -41,13 +38,13 @@ final public class PTTabBarImageContent: @MainActor PTTabBarItemContent {
         imageView.contentMode = .scaleAspectFit
 
         container.addSubviews([imageView, lottieView])
-        imageView.ptLayout.makeConstraints { make in
+        imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
         lottieView.isHidden = true
         lottieView.loopMode = .autoReverse
-        lottieView.ptLayout.makeConstraints { make in
+        lottieView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         NotificationCenter.default.addObserver(self,

@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif
@@ -82,7 +79,7 @@ open class PTLoginDescButton: UIView {
         stackView.spacing = sanitizedNonNegative(viewConfig.itemSpace)
         verLine.backgroundColor = viewConfig.textColor_line
         verLine.isHidden = leftDesc.isHidden || rightDesc.isHidden
-        verLine.ptLayout.remakeConstraints { make in
+        verLine.snp.remakeConstraints { make in
             make.width.equalTo(sanitizedNonNegative(viewConfig.lineWidth))
             make.top.bottom.equalToSuperview().inset(sanitizedNonNegative(viewConfig.lineTopNBottomSpace))
         }
@@ -94,7 +91,7 @@ open class PTLoginDescButton: UIView {
         stackView.axis = .horizontal
         stackView.alignment = .fill
         addSubview(stackView)
-        stackView.ptLayout.makeConstraints { make in
+        stackView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         stackView.addArrangedSubview(leftDesc)

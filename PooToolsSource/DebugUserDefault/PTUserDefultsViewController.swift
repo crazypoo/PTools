@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -84,7 +81,7 @@ class PTUserDefultsViewController: PTBaseViewController {
         PTNSLogConsole(dic,levelType: PTLogMode,loggerType: .userDefaults)
         
         view.addSubview(newCollectionView)
-        newCollectionView.ptLayout.makeConstraints { make in
+        newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview()
         }

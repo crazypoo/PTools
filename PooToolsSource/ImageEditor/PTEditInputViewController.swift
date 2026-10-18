@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import PToolsSymbols
@@ -28,8 +25,8 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
     
     // 用于节流的高频绘制任务
     private var drawBgTask: Task<Void, Never>?
-    private var toolViewBottomConstraint: PTLayoutConstraint?
-    private var textViewHeightConstraint: PTLayoutConstraint?
+    private var toolViewBottomConstraint: Constraint?
+    private var textViewHeightConstraint: Constraint?
     
     private let image: UIImage?
     
@@ -210,39 +207,39 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
         
         view.addSubviews([textView,toolView,formatScrollView])
         
-        textView.ptLayout.makeConstraints { make in
+        textView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             textViewHeightConstraint = make.height.equalTo(200).constraint
-            make.top.equalTo(self.view.safeAreaLayoutGuide.ptLayout.top).offset(10)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(10)
         }
         
-        toolView.ptLayout.makeConstraints { make in
+        toolView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            toolViewBottomConstraint = make.bottom.equalTo(self.view.safeAreaLayoutGuide.ptLayout.bottom).constraint
+            toolViewBottomConstraint = make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).constraint
             make.height.equalTo(54)
         }
         toolView.addSubviews([textStyleBtn,drawColorButton])
         
-        textStyleBtn.ptLayout.makeConstraints { make in
+        textStyleBtn.snp.makeConstraints { make in
             make.size.equalTo(44)
             make.centerY.equalToSuperview()
-            make.right.equalTo(self.toolView.ptLayout.centerX).offset(-15)
+            make.right.equalTo(self.toolView.snp.centerX).offset(-15)
         }
         
-        drawColorButton.ptLayout.makeConstraints { make in
+        drawColorButton.snp.makeConstraints { make in
             make.size.centerY.equalTo(self.textStyleBtn)
-            make.left.equalTo(self.toolView.ptLayout.centerX).offset(15)
+            make.left.equalTo(self.toolView.snp.centerX).offset(15)
         }
         
         formatScrollView.addSubview(formatStackView)
         
         // 布局格式栏 (紧贴在 toolView 上方)
-        formatScrollView.ptLayout.makeConstraints { make in
+        formatScrollView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(15)
-            make.bottom.equalTo(toolView.ptLayout.top)
+            make.bottom.equalTo(toolView.snp.top)
             make.height.equalTo(44)
         }
-        formatStackView.ptLayout.makeConstraints { make in
+        formatStackView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             make.height.equalToSuperview()
         }
@@ -310,7 +307,7 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
             btn.addActionHandlers { _ in
                 config.2(btn)
             }
-            btn.ptLayout.makeConstraints { make in
+            btn.snp.makeConstraints { make in
                 make.size.equalTo(34)
             }
             formatStackView.addArrangedSubview(btn)

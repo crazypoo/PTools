@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 
 // English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
 // Español: Importa explícitamente el target Core para las compilaciones SwiftPM independientes.
@@ -187,32 +184,32 @@ open class PTHeartRateViewController: PTBaseViewController {
         // Do any additional setup after loading the view.
         
         view.addSubviews([player,previewLayerShadowView,pulseRate,validFrames])
-        player.ptLayout.makeConstraints { make in
+        player.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
             make.height.equalTo(88)
         }
         
-        previewLayerShadowView.ptLayout.makeConstraints { make in
+        previewLayerShadowView.snp.makeConstraints { make in
             make.size.equalTo(120)
             make.centerX.equalToSuperview()
-            make.top.equalTo(player.ptLayout.bottom).offset(10)
+            make.top.equalTo(player.snp.bottom).offset(10)
         }
         
         previewLayerShadowView.addSubview(previewLayer)
-        previewLayer.ptLayout.makeConstraints { make in
+        previewLayer.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
-        pulseRate.ptLayout.makeConstraints { make in
-            make.top.equalTo(self.previewLayerShadowView.ptLayout.bottom).offset(10)
+        pulseRate.snp.makeConstraints { make in
+            make.top.equalTo(self.previewLayerShadowView.snp.bottom).offset(10)
             make.left.right.equalToSuperview()
             make.height.equalTo(200)
         }
         
-        validFrames.ptLayout.makeConstraints { make in
+        validFrames.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalTo(self.pulseRate.ptLayout.bottom)
+            make.top.equalTo(self.pulseRate.snp.bottom)
         }
         
         if !deviceInfo.isSimulator {

@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 import PooToolsShare
@@ -205,7 +202,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
         newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
 
         view.addSubviews([newCollectionView])
-        newCollectionView.ptLayout.makeConstraints { make in
+        newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview()
         }

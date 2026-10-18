@@ -8,9 +8,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import Lottie
 import SnapKit
 #if canImport(PToolsCore)
@@ -218,13 +215,13 @@ final public class PTTabBarItemView: UIControl {
         lastResolvedContentOffset = resolvedOffset
         lastResolvedContentSize = resolvedSize
 
-        contentContainerView.ptLayout.remakeConstraints { make in
+        contentContainerView.snp.remakeConstraints { make in
             make.edges.equalToSuperview()
         }
-        content.view.ptLayout.remakeConstraints { make in
+        content.view.snp.remakeConstraints { make in
             make.size.equalTo(resolvedSize)
         }
-        contentStackView.ptLayout.remakeConstraints { make in
+        contentStackView.snp.remakeConstraints { make in
             make.centerX.equalToSuperview().offset(resolvedOffset.horizontal)
             make.centerY.equalToSuperview().offset(resolvedOffset.vertical)
             make.leading.greaterThanOrEqualToSuperview()

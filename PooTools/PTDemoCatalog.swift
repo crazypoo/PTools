@@ -3,9 +3,6 @@
 // 中文：Example Demo Catalog 2.0 的稳定元数据与路由基础类型。
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import PooTools
 import SnapKit
 
@@ -479,7 +476,7 @@ private final class PTAcknowledgementsHeadlessDemoViewController: PTBaseViewCont
         textView.textColor = .label
         textView.backgroundColor = .clear
         view.addSubview(textView)
-        textView.ptLayout.makeConstraints { make in
+        textView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.layoutMarginsGuide)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
             make.bottom.equalToSuperview()
@@ -575,7 +572,7 @@ private final class PTDuoRegressionDemoViewController: PTBaseViewController {
             actionButton.setTitle(actionTitle, for: .normal)
             actionButton.titleLabel?.font = .preferredFont(forTextStyle: .headline)
             actionButton.addTarget(self, action: #selector(runAction), for: .primaryActionTriggered)
-            actionButton.ptLayout.makeConstraints { make in
+            actionButton.snp.makeConstraints { make in
                 make.height.greaterThanOrEqualTo(44)
             }
             stack.addArrangedSubview(actionButton)
@@ -584,10 +581,10 @@ private final class PTDuoRegressionDemoViewController: PTBaseViewController {
         stack.addArrangedSubview(statusLabel)
         view.addSubview(scrollView)
         scrollView.addSubview(stack)
-        scrollView.ptLayout.makeConstraints { make in
+        scrollView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        stack.ptLayout.makeConstraints { make in
+        stack.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide).inset(20)
             make.width.equalTo(scrollView.frameLayoutGuide).offset(-40)
         }
@@ -731,7 +728,7 @@ private final class PTDuoFormKeyboardSearchDemoViewController: PTBaseViewControl
         let input = UITextField()
         input.borderStyle = .roundedRect
         input.placeholder = "输入内容"
-        input.ptLayout.makeConstraints { make in
+        input.snp.makeConstraints { make in
             make.height.greaterThanOrEqualTo(44)
         }
         let footer = UILabel()
@@ -744,10 +741,10 @@ private final class PTDuoFormKeyboardSearchDemoViewController: PTBaseViewControl
 
         view.addSubview(scrollView)
         scrollView.addSubview(stack)
-        scrollView.ptLayout.makeConstraints { make in
+        scrollView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        stack.ptLayout.makeConstraints { make in
+        stack.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide).inset(20)
             make.width.equalTo(scrollView.frameLayoutGuide).offset(-40)
         }
@@ -871,10 +868,10 @@ private final class PTDuoAdaptiveScenarioViewController: PTBaseViewController {
 
         view.addSubview(scrollView)
         scrollView.addSubview(stack)
-        scrollView.ptLayout.makeConstraints { make in
+        scrollView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
-        stack.ptLayout.makeConstraints { make in
+        stack.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide)
             make.width.equalTo(scrollView.frameLayoutGuide)
         }
@@ -991,13 +988,13 @@ private final class PTControlMenuDemoViewController: PTBaseViewController {
 
         [descriptionLabel, longPressButton, selectionButton, nativeButton, loadingButton, statusLabel].forEach {
             stack.addArrangedSubview($0)
-            $0.ptLayout.makeConstraints { make in
+            $0.snp.makeConstraints { make in
                 make.height.greaterThanOrEqualTo(44)
             }
         }
 
         view.addSubview(stack)
-        stack.ptLayout.makeConstraints { make in
+        stack.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
         }
@@ -1077,7 +1074,7 @@ private class PTApplicationInfrastructureDemoViewController: PTBaseViewControlle
         [titleLabel, moduleLabel, contractLabel, tagLabel, button, resetButton, statusLabel].forEach(stack.addArrangedSubview)
 
         view.addSubview(stack)
-        stack.ptLayout.makeConstraints { make in
+        stack.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
         }
@@ -1336,7 +1333,7 @@ private final class PT5_61NetworkSpeedDemoViewController: PTBaseViewController {
         button.addTarget(self, action: #selector(startOrCancel), for: .touchUpInside)
         [downloadField, uploadField, button, statusLabel].forEach(stack.addArrangedSubview)
         view.addSubview(stack)
-        stack.ptLayout.makeConstraints { make in
+        stack.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
         }
@@ -1396,7 +1393,7 @@ private final class PT5_61PingDemoViewController: PTBaseViewController {
         stack.axis = .vertical
         stack.spacing = 12
         view.addSubview(stack)
-        stack.ptLayout.makeConstraints { make in
+        stack.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
         }
@@ -1461,7 +1458,7 @@ private final class PTTabBarInsetsDemoViewController: PTBaseViewController {
         modeScrollView.showsHorizontalScrollIndicator = false
         modeScrollView.alwaysBounceHorizontal = true
         modeScrollView.addSubview(modeControl)
-        modeControl.ptLayout.makeConstraints { make in
+        modeControl.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             make.width.equalTo(900)
             make.height.equalTo(32)
@@ -1481,14 +1478,14 @@ private final class PTTabBarInsetsDemoViewController: PTBaseViewController {
         stack.alignment = .fill
         stack.spacing = 12
         view.addSubview(stack)
-        stack.ptLayout.makeConstraints { make in
+        stack.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
             make.top.equalTo(view.safeAreaLayoutGuide).inset(16)
         }
-        modeScrollView.ptLayout.makeConstraints { make in
+        modeScrollView.snp.makeConstraints { make in
             make.height.equalTo(36)
         }
-        previewContainer.ptLayout.makeConstraints { make in
+        previewContainer.snp.makeConstraints { make in
             make.height.equalTo(CGFloat.kTabbarHeight_Total)
         }
         rebuildPreview()
@@ -1647,7 +1644,7 @@ private final class PTTabBarInsetsDemoViewController: PTBaseViewController {
         ]
         bar.setup(configs: configs)
         previewContainer.addSubview(bar)
-        bar.ptLayout.makeConstraints { make in
+        bar.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         previewContainer.layoutIfNeeded()
@@ -1704,12 +1701,12 @@ private final class PTGradientRenderingDemoViewController: PTBaseViewController 
         stack.alignment = .fill
         stack.spacing = 18
         view.addSubview(stack)
-        stack.ptLayout.makeConstraints { make in
+        stack.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(24)
             make.centerY.equalToSuperview()
         }
-        label.ptLayout.makeConstraints { $0.height.equalTo(56) }
-        imageView.ptLayout.makeConstraints { $0.height.equalTo(120) }
+        label.snp.makeConstraints { $0.height.equalTo(56) }
+        imageView.snp.makeConstraints { $0.height.equalTo(120) }
         renderGradients()
     }
 
@@ -1778,7 +1775,7 @@ private final class PTCollectionRefreshLabCell: PTBaseNormalCell {
         contentView.layer.masksToBounds = true
         titleLabel.numberOfLines = 1
         contentView.addSubview(titleLabel)
-        titleLabel.ptLayout.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
         }
@@ -1904,21 +1901,21 @@ private final class PTCollectionRefreshLabViewController: PTBaseViewController {
         view.addSubview(dataModeControl)
         view.addSubview(statusLabel)
         view.addSubview(collectionView)
-        modeControl.ptLayout.makeConstraints { make in
+        modeControl.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(12)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(12)
         }
-        dataModeControl.ptLayout.makeConstraints { make in
+        dataModeControl.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(12)
-            make.top.equalTo(modeControl.ptLayout.bottom).offset(8)
+            make.top.equalTo(modeControl.snp.bottom).offset(8)
         }
-        statusLabel.ptLayout.makeConstraints { make in
+        statusLabel.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(12)
-            make.top.equalTo(dataModeControl.ptLayout.bottom).offset(6)
+            make.top.equalTo(dataModeControl.snp.bottom).offset(6)
         }
-        collectionView.ptLayout.makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalTo(statusLabel.ptLayout.bottom).offset(6)
+            make.top.equalTo(statusLabel.snp.bottom).offset(6)
         }
 
         collectionView.contentCollectionView.register(PTCollectionRefreshLabCell.self, forCellWithReuseIdentifier: "PTCollectionRefreshLabCell")
@@ -2172,10 +2169,10 @@ private final class PTImageClarityDemoViewController: PTBaseViewController {
 
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
-        scrollView.ptLayout.makeConstraints { make in
+        scrollView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        stackView.ptLayout.makeConstraints { make in
+        stackView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide).inset(20)
             make.width.equalTo(scrollView.frameLayoutGuide).offset(-40)
         }
@@ -2217,11 +2214,11 @@ private final class PTImageClarityDemoViewController: PTBaseViewController {
 
         container.addSubview(label)
         container.addSubview(imageView)
-        label.ptLayout.makeConstraints { make in
+        label.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
-        imageView.ptLayout.makeConstraints { make in
-            make.top.equalTo(label.ptLayout.bottom).offset(8)
+        imageView.snp.makeConstraints { make in
+            make.top.equalTo(label.snp.bottom).offset(8)
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(height)
         }
@@ -2301,15 +2298,15 @@ private final class PTRichTextAttachmentMultilineDemoViewController: PTBaseViewC
         previewScrollView.addSubview(previewContentView)
         previewContentView.addSubview(richContainer)
         richContainer.addSubview(richLabel)
-        richLabel.ptLayout.makeConstraints { make in
+        richLabel.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(8)
         }
-        previewContentView.ptLayout.makeConstraints { make in
+        previewContentView.snp.makeConstraints { make in
             make.edges.equalTo(previewScrollView.contentLayoutGuide)
             make.height.equalTo(previewScrollView.frameLayoutGuide)
             make.width.equalTo(366)
         }
-        richContainer.ptLayout.makeConstraints { make in
+        richContainer.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(80)
         }
@@ -2324,16 +2321,16 @@ private final class PTRichTextAttachmentMultilineDemoViewController: PTBaseViewC
         stackView.addArrangedSubview(previewScrollView)
         stackView.addArrangedSubview(plainLabel)
         stackView.addArrangedSubview(statusLabel)
-        previewScrollView.ptLayout.makeConstraints { make in
+        previewScrollView.snp.makeConstraints { make in
             make.height.equalTo(120)
         }
 
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
-        scrollView.ptLayout.makeConstraints { make in
+        scrollView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        stackView.ptLayout.makeConstraints { make in
+        stackView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide).inset(16)
             make.width.equalTo(scrollView.frameLayoutGuide).offset(-32)
         }
@@ -2349,12 +2346,12 @@ private final class PTRichTextAttachmentMultilineDemoViewController: PTBaseViewC
         let offset = [-7, 0, 7][max(0, min(offsetControl.selectedSegmentIndex, 2))]
         let lineBreakMode: NSLineBreakMode = breakControl.selectedSegmentIndex == 0 ? .byWordWrapping : .byCharWrapping
 
-        previewContentView.ptLayout.remakeConstraints { make in
+        previewContentView.snp.remakeConstraints { make in
             make.edges.equalTo(previewScrollView.contentLayoutGuide)
             make.height.equalTo(previewScrollView.frameLayoutGuide)
             make.width.equalTo(width)
         }
-        richContainer.ptLayout.updateConstraints { make in
+        richContainer.snp.updateConstraints { make in
             make.height.equalTo(height)
         }
         richLabel.lineBreakMode = lineBreakMode
@@ -2458,10 +2455,10 @@ private final class PTInputStylesDemoViewController: PTBaseViewController {
 
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
-        scrollView.ptLayout.makeConstraints { make in
+        scrollView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        stackView.ptLayout.makeConstraints { make in
+        stackView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide).inset(20)
             make.width.equalTo(scrollView.frameLayoutGuide).offset(-40)
         }
@@ -2486,11 +2483,11 @@ private final class PTInputStylesDemoViewController: PTBaseViewController {
 
         container.addSubview(label)
         container.addSubview(field)
-        label.ptLayout.makeConstraints { make in
+        label.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
-        field.ptLayout.makeConstraints { make in
-            make.top.equalTo(label.ptLayout.bottom).offset(8)
+        field.snp.makeConstraints { make in
+            make.top.equalTo(label.snp.bottom).offset(8)
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(height)
         }
@@ -2821,7 +2818,7 @@ private final class PTInputStylesDemoViewController: PTBaseViewController {
         button.titleLabel?.font = .preferredFont(forTextStyle: .headline)
         button.backgroundColor = .secondarySystemBackground
         button.layer.cornerRadius = 12
-        button.ptLayout.makeConstraints { make in
+        button.snp.makeConstraints { make in
             make.height.greaterThanOrEqualTo(50)
         }
         button.addTarget(self, action: #selector(shakeDemo), for: .primaryActionTriggered)

@@ -5,9 +5,7 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -47,7 +45,7 @@ final class SeparatorView: BaseView {
         }
     }
 
-    private var thicknessConstraint: PTLayoutConstraint?
+    private var thicknessConstraint: Constraint?
 
     convenience init(color: UIColor, thickness: CGFloat = 1, frame: CGRect = .zero) {
         self.init(style: .color(color), thickness: thickness, frame: frame)
@@ -69,7 +67,7 @@ final class SeparatorView: BaseView {
 
     override func setup() {
         super.setup()
-        ptLayout.makeConstraints { make in
+        snp.makeConstraints { make in
             thicknessConstraint = make.height.equalTo(thicknesInPixels).constraint
         }
     }

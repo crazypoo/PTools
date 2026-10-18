@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SwiftJWT
 import Alamofire
 #if SWIFT_PACKAGE
@@ -554,7 +551,7 @@ public class PTCheckUpdateFunction: NSObject {
         } tipContentView: { contentView in
             let tipsContent = PTUpdateTipsContentView(oV: oV, nV: nV, descriptionString: descriptionString)
             contentView.addSubview(tipsContent)
-            tipsContent.ptLayout.makeConstraints { make in
+            tipsContent.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
         }

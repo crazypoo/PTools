@@ -8,9 +8,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 import PooTools
 
@@ -40,7 +37,7 @@ private final class PTCollectionLayoutSwitchCell: PTBaseNormalCell {
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.textAlignment = .center
         contentView.addSubview(titleLabel)
-        titleLabel.ptLayout.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
         }
         contentView.layer.cornerRadius = 8
@@ -80,7 +77,7 @@ private final class PTCollectionLayoutSwitchNestedItemCell: UICollectionViewCell
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.textColor = .secondaryLabel
         contentView.addSubview(titleLabel)
-        titleLabel.ptLayout.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4))
         }
         contentView.backgroundColor = .tertiarySystemBackground
@@ -122,7 +119,7 @@ private final class PTCollectionLayoutSwitchNestedCell: UICollectionViewCell {
             (cell as? PTCollectionLayoutSwitchNestedItemCell)?.render(row: context.row)
         }
         contentView.addSubview(nestedList)
-        nestedList.ptLayout.makeConstraints { make in
+        nestedList.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(8)
         }
     }
@@ -278,13 +275,13 @@ final class PTCollectionLayoutSwitchLabViewController: PTBaseViewController {
         controls.spacing = 5
         view.addSubview(controls)
         view.addSubview(list)
-        controls.ptLayout.makeConstraints { make in
+        controls.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(8)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(8)
         }
-        list.ptLayout.makeConstraints { make in
+        list.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalTo(controls.ptLayout.bottom).offset(8)
+            make.top.equalTo(controls.snp.bottom).offset(8)
         }
     }
 

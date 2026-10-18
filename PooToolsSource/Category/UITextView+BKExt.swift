@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 // MARK: - 扩展 UITextView，添加 placeholder 和 字数限制功能
@@ -56,7 +53,7 @@ public extension UITextView {
             addSubview(label)
             
             // 约束：跟随 textContainerInset 变化
-            label.ptLayout.makeConstraints { make in
+            label.snp.makeConstraints { make in
                 make.left.equalToSuperview().inset(self.textContainerInset.left + 5) // +5 稍微对齐光标
                 make.top.equalToSuperview().inset(self.textContainerInset.top)
                 make.width.equalToSuperview().offset(-(self.textContainerInset.left + self.textContainerInset.right + 10))
@@ -111,7 +108,7 @@ public extension UITextView {
             // ⭐️ 核心优化：直接添加到 UITextView 内部，不依赖外部视图！
             addSubview(label)
             
-            label.ptLayout.makeConstraints { make in
+            label.snp.makeConstraints { make in
                 // 使用 frameLayoutGuide 让它悬浮在右下角，不会随着文本滚动而消失
                 make.right.equalTo(self.frameLayoutGuide).offset(-self.textContainerInset.right - 5)
                 make.bottom.equalTo(self.frameLayoutGuide).offset(-self.textContainerInset.bottom - 5)

@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 import PooToolsHarbethKit
@@ -72,10 +69,10 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         super.viewDidLoad()
         
         view.addSubview(filterCollectionView)
-        filterCollectionView.ptLayout.makeConstraints { make in
+        filterCollectionView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.bottom.equalTo(self.doneButton.ptLayout.top).offset(-5)
-            make.top.equalTo(self.titleStack.ptLayout.bottom).offset(5)
+            make.bottom.equalTo(self.doneButton.snp.top).offset(-5)
+            make.top.equalTo(self.titleStack.snp.bottom).offset(5)
         }
         
         generateFilterImages {

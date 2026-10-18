@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -59,16 +56,16 @@ open class PTVideoEditorBaseFloatingViewController: PTBaseViewController {
         view.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
         view.addSubviews([titleStack,doneButton])
         
-        titleStack.ptLayout.makeConstraints { make in
+        titleStack.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(16)
             make.height.equalTo(34)
             make.width.equalTo(100)
             make.centerX.equalToSuperview()
         }
-        doneButton.ptLayout.makeConstraints { make in
-            make.right.equalTo(self.view.safeAreaLayoutGuide.ptLayout.right).inset(PTAppBaseConfig.share.defaultViewSpace)
+        doneButton.snp.makeConstraints { make in
+            make.right.equalTo(self.view.safeAreaLayoutGuide.snp.right).inset(PTAppBaseConfig.share.defaultViewSpace)
             make.size.equalTo(PTAppBaseConfig.share.navBarButtonSize)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.ptLayout.bottom).inset((CGFloat.kTabbarHeight - PTAppBaseConfig.share.navBarButtonSize) / 2)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset((CGFloat.kTabbarHeight - PTAppBaseConfig.share.navBarButtonSize) / 2)
         }
 
     }

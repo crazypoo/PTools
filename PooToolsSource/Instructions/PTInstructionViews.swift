@@ -3,9 +3,6 @@
 // 中文：原生引导浮层使用的轻量遮罩和内容视图。
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import PToolsOverlay
@@ -120,10 +117,10 @@ final class PTInstructionCardView: UIView {
     private let actionStack = UIStackView()
     private let contentStack = UIStackView()
     private let arrowLayer = CAShapeLayer()
-    private var leadingConstraint: PTLayoutConstraint!
-    private var trailingConstraint: PTLayoutConstraint!
-    private var topConstraint: PTLayoutConstraint!
-    private var bottomConstraint: PTLayoutConstraint!
+    private var leadingConstraint: Constraint!
+    private var trailingConstraint: Constraint!
+    private var topConstraint: Constraint!
+    private var bottomConstraint: Constraint!
     private var arrowPoint: CGPoint?
     private var arrowPlacement: PTPopoverPlacement = .automatic
     private var arrowAppearance = PTArrowAppearance()
@@ -264,7 +261,7 @@ final class PTInstructionCardView: UIView {
         actionStack.alignment = .center
         contentStack.addArrangedSubview(actionStack)
         addSubview(contentStack)
-        contentStack.ptLayout.makeConstraints { make in
+        contentStack.snp.makeConstraints { make in
             leadingConstraint = make.leading.equalToSuperview().offset(18).constraint
             trailingConstraint = make.trailing.equalToSuperview().offset(-18).constraint
             topConstraint = make.top.equalToSuperview().offset(16).constraint

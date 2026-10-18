@@ -5,9 +5,7 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
+import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -53,7 +51,7 @@ final class Icon: BaseView {
 
         isUserInteractionEnabled = false
 
-        ptLayout.makeConstraints { make in
+        snp.makeConstraints { make in
             make.width.equalTo(iconSize.width)
             make.height.equalTo(iconSize.height)
         }

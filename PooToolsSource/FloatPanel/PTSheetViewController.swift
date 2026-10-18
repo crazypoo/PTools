@@ -8,9 +8,6 @@
 
 #if os(iOS) || os(tvOS) || os(watchOS)
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import CoreGraphics
 import SnapKit
 
@@ -195,8 +192,8 @@ public class PTSheetViewController: PTBaseViewController {
     private var didNotifyDismissal: Bool = false
     private var lastLayoutBounds: CGRect = .zero
     private var lastLayoutSafeAreaInsets: UIEdgeInsets = .zero
-    private var sheetHeightConstraint: PTLayoutConstraint?
-    private var sheetTopConstraint: PTLayoutConstraint?
+    private var sheetHeightConstraint: Constraint?
+    private var sheetTopConstraint: Constraint?
     private var currentHeight: CGFloat = 0
     private var originalAdditionalSafeAreaInsets: UIEdgeInsets = .zero
     
@@ -532,7 +529,7 @@ public class PTSheetViewController: PTBaseViewController {
     
     private func addOverlay() {
         self.view.addSubview(self.overlayView)
-        self.overlayView.ptLayout.makeConstraints { make in
+        self.overlayView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         self.overlayView.isUserInteractionEnabled = false
@@ -542,7 +539,7 @@ public class PTSheetViewController: PTBaseViewController {
     private func addBlurBackground() {
         self.overlayView.addSubview(self.blurView)
         self.updateBlurAppearance()
-        self.blurView.ptLayout.makeConstraints { make in
+        self.blurView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         self.blurView.isUserInteractionEnabled = false
@@ -556,9 +553,9 @@ public class PTSheetViewController: PTBaseViewController {
         self.view.addSubview(overlayTapView)
         self.overlayTapView.accessibilityLabel = "PT Sheet dismiss".localized()
         
-        overlayTapView.ptLayout.makeConstraints { make in
+        overlayTapView.snp.makeConstraints { make in
             make.left.right.top.equalToSuperview()
-            make.bottom.equalTo(self.contentViewController.view.ptLayout.top)
+            make.bottom.equalTo(self.contentViewController.view.snp.top)
         }
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(overlayTapped))
@@ -607,7 +604,7 @@ public class PTSheetViewController: PTBaseViewController {
             }
         }
         
-        self.contentViewController.view.ptLayout.makeConstraints { make in
+        self.contentViewController.view.snp.makeConstraints { make in
             make.left.equalToSuperview().priority(999)
             make.left.greaterThanOrEqualToSuperview().inset(self.options.horizontalPadding)
             if let maxWidth = self.options.maxWidth {
@@ -622,9 +619,9 @@ public class PTSheetViewController: PTBaseViewController {
         }
         
         self.view.addSubview(overlayControlView)
-        overlayControlView.ptLayout.makeConstraints { make in
+        overlayControlView.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
-            make.bottom.equalTo(self.contentViewController.view.ptLayout.top)
+            make.bottom.equalTo(self.contentViewController.view.snp.top)
         }
     }
     
@@ -912,7 +909,7 @@ public class PTSheetViewController: PTBaseViewController {
         view.addSubview(self.view)
         self.didMove(toParent: parent)
         
-        self.view.ptLayout.remakeConstraints { make in
+        self.view.snp.remakeConstraints { make in
             make.edges.equalToSuperview()
         }
         self.animateIn(size: size, duration: duration, completion: completion)

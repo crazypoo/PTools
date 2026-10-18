@@ -5,9 +5,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -94,7 +91,7 @@ final class InspectorHighlightView: LayerView {
 
     override var sourceView: UIView { draggableView }
 
-    private var verticalAlignmentConstraint: PTLayoutConstraint?
+    private var verticalAlignmentConstraint: Constraint?
     private var verticalAlignmentOffsetValue: CGFloat = .zero
 
     // MARK: - Components
@@ -353,8 +350,8 @@ private extension InspectorHighlightView {
         updateViews()
 
         contentView.installView(elementNameView, .centerX)
-        elementNameView.ptLayout.makeConstraints { make in
-            verticalAlignmentConstraint = make.centerY.equalTo(self.ptLayout.centerY).offset(verticalAlignmentOffsetValue).constraint
+        elementNameView.snp.makeConstraints { make in
+            verticalAlignmentConstraint = make.centerY.equalTo(self.snp.centerY).offset(verticalAlignmentOffsetValue).constraint
         }
 
         updateViewsIfNeeded()

@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -75,10 +72,10 @@ public class PTRateView: UIView {
         backgroundStarView.clipsToBounds = true
         foregroundStarView.clipsToBounds = true
 
-        backgroundStarView.ptLayout.makeConstraints { make in
+        backgroundStarView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        foregroundStarView.ptLayout.makeConstraints { make in
+        foregroundStarView.snp.makeConstraints { make in
             make.left.top.bottom.equalToSuperview()
             make.width.equalTo(0)
         }
@@ -146,7 +143,7 @@ public class PTRateView: UIView {
 
     private func updateForegroundWidth(animated: Bool) {
         let width = bounds.width * scorePercent
-        foregroundStarView.ptLayout.updateConstraints { make in
+        foregroundStarView.snp.updateConstraints { make in
             make.width.equalTo(width)
         }
         

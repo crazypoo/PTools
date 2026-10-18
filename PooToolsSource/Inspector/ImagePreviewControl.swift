@@ -5,9 +5,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -52,7 +49,7 @@ final class ImagePreviewControl: BaseFormControl {
         $0.setContentHuggingPriority(.required, for: .horizontal)
         $0.setContentHuggingPriority(.required, for: .vertical)
 
-        $0.ptLayout.makeConstraints { make in
+        $0.snp.makeConstraints { make in
             make.height.equalTo(elementInspectorAppearance.horizontalMargins)
         }
 

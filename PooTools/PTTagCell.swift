@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 import PooTools
 
@@ -35,7 +32,7 @@ class PTTagCell: PTBaseNormalCell {
         
         contentView.viewCorner(radius: 0,borderWidth: 1,borderColor: DynamicColor.randomColor)
         contentView.addSubviews([tagLabel])
-        tagLabel.ptLayout.makeConstraints { make in
+        tagLabel.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }

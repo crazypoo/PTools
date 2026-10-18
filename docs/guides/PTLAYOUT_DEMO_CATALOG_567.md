@@ -1,4 +1,4 @@
-# PTLayout Lab 5.67.1 Demo Catalog
+# PTLayout Lab 5.67.0 Demo Catalog
 
 <!-- English: Stable IDs are the contract used by the Example catalog and UI automation. -->
 <!-- Español: Los IDs estables son el contrato del catálogo Example y de la automatización UI. -->

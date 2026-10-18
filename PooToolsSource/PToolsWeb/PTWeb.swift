@@ -4,9 +4,6 @@
 
 #if canImport(UIKit)
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 import WebKit
 #if SWIFT_PACKAGE
@@ -29,7 +26,7 @@ public final class PTWebViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(webView)
-        webView.ptLayout.makeConstraints { make in
+        webView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         bridge = PTWebBridge(webView: webView)

@@ -4,6 +4,8 @@
 
 import UIKit
 import PooTools
+import SnapKit
+
 #if canImport(PToolsConstraintLayout)
 import PToolsConstraintLayout
 #endif
@@ -59,21 +61,31 @@ final class PTLayoutLabViewController: PTBaseViewController {
         stack.spacing = 16
         stack.alignment = .fill
         view.addSubview(stack)
-        stack.ptLayout.makeConstraints { make in
+        stack.snp.makeConstraints { make in
             make.leading.trailing.equalTo(view.layoutMarginsGuide)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
             make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide).inset(20)
         }
-        sampleView.ptLayout.makeConstraints { make in
+        #if !canImport(PToolsConstraintLayout)
+        sampleView.snp.makeConstraints { make in
             make.height.equalTo(120)
         }
+        #endif
     }
 
     @objc private func runScenario() {
+        #if canImport(PToolsConstraintLayout)
         let result = runPTLayoutScenario()
         statusLabel.text = result
+        #else
+        sampleView.snp.remakeConstraints { make in
+            make.height.equalTo(120)
+        }
+        statusLabel.text = "PToolsConstraintLayout 未链接；当前使用兼容布局。\nProducto no enlazado; usando fallback de compatibilidad.\nThe standalone product is not linked; compatibility fallback is active."
+        #endif
     }
 
+    #if canImport(PToolsConstraintLayout)
     private func runPTLayoutScenario() -> String {
         switch demoID.rawValue {
         case "ui.layout.missing-superview-no-crash":
@@ -131,4 +143,5 @@ final class PTLayoutLabViewController: PTBaseViewController {
         }
         return "\(expected)；安装约束数：\(result.changeCount)"
     }
+    #endif
 }

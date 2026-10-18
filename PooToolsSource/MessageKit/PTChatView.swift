@@ -6,9 +6,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -322,7 +319,7 @@ public class PTChatView: UIView {
         
         listContentInset()
         addSubviews([listCollection])
-        listCollection.ptLayout.makeConstraints { make in
+        listCollection.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -343,7 +340,7 @@ public class PTChatView: UIView {
         // English: Size the message list to the local visible pane so cells and sender metadata share one coordinate space.
         // Español: Ajusta la lista de mensajes al panel visible local para compartir un solo sistema de coordenadas.
         // 中文：让消息列表使用局部可视面板，使 Cell 和发送者信息处于同一坐标系。
-        listCollection.ptLayout.remakeConstraints { make in
+        listCollection.snp.remakeConstraints { make in
             make.left.equalToSuperview().offset(visibleRect.minX)
             make.right.equalToSuperview().inset(max(0, bounds.width - visibleRect.maxX))
             make.top.bottom.equalToSuperview()
@@ -356,7 +353,7 @@ public class PTChatView: UIView {
 
         listContentInset()
         addSubviews([listCollection])
-        listCollection.ptLayout.makeConstraints { make in
+        listCollection.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }

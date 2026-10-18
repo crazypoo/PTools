@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 // English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
@@ -120,7 +117,7 @@ public class PTMediaBrowserLoadingView: UIView {
         
         // 将绘制组件添加到容器中
         addSubview(circularProgressView)
-        circularProgressView.ptLayout.makeConstraints { make in
+        circularProgressView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(PTLoadingItemSpace / 2) // 留出一点边距
         }
     }
@@ -136,12 +133,12 @@ public class PTMediaBrowserLoadingView: UIView {
         guard self.superview == nil else { return }
                 
         AppWindows?.addSubview(backgroundView)
-        backgroundView.ptLayout.makeConstraints { make in
+        backgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
         backgroundView.addSubview(self)
-        self.ptLayout.makeConstraints { make in
+        self.snp.makeConstraints { make in
             make.size.equalTo(hudSize)
             make.centerX.centerY.equalToSuperview()
         }

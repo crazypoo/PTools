@@ -6,9 +6,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -58,7 +55,7 @@ public class PTChatMapCell: PTChatBaseCell {
     // 提前设置视图和约束
     private func setupSubviews() {
         dataContent.addSubview(appleMap)
-        appleMap.ptLayout.makeConstraints { make in
+        appleMap.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -76,13 +73,13 @@ public class PTChatMapCell: PTChatBaseCell {
 
     private func updateConstraintsForCellModel(_ cellModel: PTChatListModel) {
         dataContent.viewCorner(radius: PTChatConfig.share.mapMessageImageCorner)
-        dataContent.ptLayout.remakeConstraints { make in
+        dataContent.snp.remakeConstraints { make in
             if cellModel.belongToMe {
-                make.right.equalTo(self.userIcon.ptLayout.left).offset(-PTChatBaseCell.dataContentUserIconInset)
+                make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.dataContentUserIconInset)
             } else {
-                make.left.equalTo(self.userIcon.ptLayout.right).offset(PTChatBaseCell.dataContentUserIconInset)
+                make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.dataContentUserIconInset)
             }
-            make.top.equalTo(self.senderNameLabel.ptLayout.bottom)
+            make.top.equalTo(self.senderNameLabel.snp.bottom)
             make.height.equalTo(PTChatConfig.share.mapMessageImageHeight)
             make.width.equalTo(PTChatConfig.share.mapMessageImageWidth)
         }

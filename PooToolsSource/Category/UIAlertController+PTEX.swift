@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 @MainActor
@@ -181,7 +178,7 @@ public extension UIAlertController {
                 messageLabel.textAlignment = .center
                 messageLabel.adjustsFontForContentSizeCategory = true
                 customerView.addSubview(messageLabel)
-                messageLabel.ptLayout.makeConstraints { make in
+                messageLabel.snp.makeConstraints { make in
                     make.edges.equalToSuperview().inset(10)
                 }
             }
@@ -285,11 +282,11 @@ public extension UIAlertController {
                 stackView.axis = .vertical
                 stackView.spacing = 6
                 customerView.addSubview(stackView)
-                stackView.ptLayout.makeConstraints { make in
+                stackView.snp.makeConstraints { make in
                     make.edges.equalToSuperview().inset(10)
                 }
                 fields.forEach { field in
-                    field.ptLayout.makeConstraints { make in
+                    field.snp.makeConstraints { make in
                         make.height.equalTo(44)
                     }
                 }
@@ -401,16 +398,16 @@ public extension UIAlertController {
                                                       customerViewHeight:250,
                                                       customerViewCallback: { customerView in
             customerView.addSubviews([feedBackTitleText,feedBackContent])
-            feedBackTitleText.ptLayout.makeConstraints { make in
+            feedBackTitleText.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.top.equalToSuperview()
                 make.height.equalTo(feedBackTitleHeight)
             }
             
-            feedBackContent.ptLayout.makeConstraints { make in
+            feedBackContent.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.bottom.equalToSuperview()
-                make.top.equalTo(feedBackTitleText.ptLayout.bottom)
+                make.top.equalTo(feedBackTitleText.snp.bottom)
             }
             
             feedBackContent.pt_wordCountLabel?.backgroundColor = .clear

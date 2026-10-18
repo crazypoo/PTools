@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
@@ -116,31 +113,31 @@ class PTPermissionSettingCell: PTBaseNormalCell {
         contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
         
         contentView.addSubviews([infoLabel,line1,statusLabel,line2,settingView])
-        infoLabel.ptLayout.makeConstraints { make in
+        infoLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(10)
         }
         
-        line1.ptLayout.makeConstraints { make in
+        line1.snp.makeConstraints { make in
             make.left.right.equalTo(self.infoLabel)
             make.height.equalTo(1)
-            make.top.equalTo(self.infoLabel.ptLayout.bottom).offset(10)
+            make.top.equalTo(self.infoLabel.snp.bottom).offset(10)
         }
         
-        statusLabel.ptLayout.makeConstraints { make in
-            make.top.equalTo(self.line1.ptLayout.bottom)
+        statusLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.line1.snp.bottom)
             make.left.right.equalTo(self.infoLabel)
             make.height.equalTo(PTPermissionSettingCell.CellHeight)
         }
         
-        line2.ptLayout.makeConstraints { make in
+        line2.snp.makeConstraints { make in
             make.left.right.equalTo(self.infoLabel)
             make.height.equalTo(1)
-            make.top.equalTo(self.statusLabel.ptLayout.bottom)
+            make.top.equalTo(self.statusLabel.snp.bottom)
         }
         
-        settingView.ptLayout.makeConstraints { make in
-            make.top.equalTo(self.line2.ptLayout.bottom)
+        settingView.snp.makeConstraints { make in
+            make.top.equalTo(self.line2.snp.bottom)
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(PTPermissionSettingCell.CellHeight)
         }
@@ -151,16 +148,16 @@ class PTPermissionSettingCell: PTBaseNormalCell {
     
     func createSettingViews() {
         settingView.addSubviews([settingImage,settingLabel])
-        settingImage.ptLayout.makeConstraints { make in
+        settingImage.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.centerY.equalToSuperview()
             make.size.equalTo(20)
         }
         
-        settingLabel.ptLayout.makeConstraints { make in
+        settingLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.bottom.equalToSuperview()
-            make.right.equalTo(self.settingImage.ptLayout.left).offset(-10)
+            make.right.equalTo(self.settingImage.snp.left).offset(-10)
         }
     }
     

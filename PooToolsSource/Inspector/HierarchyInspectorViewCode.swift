@@ -5,9 +5,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -48,11 +45,11 @@ final class HierarchyInspectorViewCode: BaseView {
 
     // MARK: - Constraints
 
-    private var tableViewHeightConstraint: PTLayoutConstraint?
+    private var tableViewHeightConstraint: Constraint?
 
-    private var bottomAnchorConstraint: PTLayoutConstraint?
+    private var bottomAnchorConstraint: Constraint?
 
-    private var customConstraints: [PTLayoutConstraint] = []
+    private var customConstraints: [Constraint] = []
 
     private var tableViewHeight: CGFloat = .zero
 
@@ -100,7 +97,7 @@ final class HierarchyInspectorViewCode: BaseView {
             customConstraints.forEach { $0.deactivate() }
         }
         else {
-            customConstraints.forEach { _ = $0.activate() }
+            customConstraints.forEach { $0.activate() }
         }
     }
 
@@ -141,17 +138,17 @@ final class HierarchyInspectorViewCode: BaseView {
         blurView.contentView.installView(stackView)
 
         contentView.addSubview(blurView)
-        tableView.ptLayout.makeConstraints { make in
+        tableView.snp.makeConstraints { make in
             tableViewHeightConstraint = make.height.equalTo(0).priority(UILayoutPriority.defaultLow.rawValue).constraint
         }
-        blurView.ptLayout.makeConstraints { make in
+        blurView.snp.makeConstraints { make in
             customConstraints = [
-                make.top.equalTo(safeAreaLayoutGuide.ptLayout.top).offset(verticalMargin).priority(UILayoutPriority.defaultHigh.rawValue).constraint,
-                make.centerX.equalTo(safeAreaLayoutGuide.ptLayout.centerX).priority(UILayoutPriority.defaultHigh.rawValue).constraint,
-                make.width.lessThanOrEqualTo(readableContentGuide.ptLayout.width).offset(-horizontalMargin * 4).priority(UILayoutPriority.defaultHigh.rawValue).constraint,
+                make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(verticalMargin).priority(UILayoutPriority.defaultHigh.rawValue).constraint,
+                make.centerX.equalTo(safeAreaLayoutGuide.snp.centerX).priority(UILayoutPriority.defaultHigh.rawValue).constraint,
+                make.width.lessThanOrEqualTo(readableContentGuide.snp.width).offset(-horizontalMargin * 4).priority(UILayoutPriority.defaultHigh.rawValue).constraint,
                 make.width.greaterThanOrEqualTo(Inspector.sharedInstance.configuration.elementInspectorConfiguration.panelPreferredCompressedSize.width).priority(UILayoutPriority.defaultHigh.rawValue).constraint
             ]
-            let bottomConstraint = make.bottom.lessThanOrEqualTo(safeAreaLayoutGuide.ptLayout.bottom).offset(-verticalMargin).priority(UILayoutPriority.defaultHigh.rawValue).constraint
+            let bottomConstraint = make.bottom.lessThanOrEqualTo(safeAreaLayoutGuide.snp.bottom).offset(-verticalMargin).priority(UILayoutPriority.defaultHigh.rawValue).constraint
             bottomAnchorConstraint = bottomConstraint
             customConstraints.append(bottomConstraint)
         }

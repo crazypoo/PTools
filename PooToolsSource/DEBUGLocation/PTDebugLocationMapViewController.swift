@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -73,7 +70,7 @@ class PTDebugLocationMapViewController: PTBaseViewController {
         
         view.addSubview(mapView)
         
-        mapView.ptLayout.makeConstraints { make in
+        mapView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview()
         }

@@ -4,9 +4,6 @@
 
 #if canImport(UIKit)
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -155,7 +152,7 @@ public final class PTFormDefaultSectionHeader: PTBaseCollectionReusableView {
         stack.axis = .vertical
         stack.spacing = 2
         addSubview(stack)
-        stack.ptLayout.makeConstraints { make in
+        stack.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIEdgeInsets(top: 6, left: 16, bottom: 6, right: 16))
         }
         titleLabel.font = .preferredFont(forTextStyle: .headline)
@@ -192,7 +189,7 @@ public final class PTFormDefaultSectionFooter: PTBaseCollectionReusableView {
 
     private func setup() {
         addSubview(label)
-        label.ptLayout.makeConstraints { make in
+        label.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16))
         }
         label.numberOfLines = 0
@@ -218,7 +215,7 @@ private final class PTFormMissingSectionView: PTBaseCollectionReusableView {
         label.textColor = .systemRed
         label.numberOfLines = 0
         addSubview(label)
-        label.ptLayout.makeConstraints { make in
+        label.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16))
         }
     }

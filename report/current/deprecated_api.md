@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_current_summaries.rb
-Source revision: 80126150505961e259cce5e08ada67962265c063
-Generated at: 2026-10-18T05:02:43Z
+Source revision: a868c0a22374e9a4016e85a100ccc814895d9cc3
+Generated at: 2026-10-18T03:14:35Z
 -->
 
 # PTools 当前弃用入口清单
@@ -13,10 +13,10 @@ Generated at: 2026-10-18T05:02:43Z
 
 | 位置 | 旧入口 | 推荐入口 |
 | --- | --- | --- |
-| `PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:75` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:76` | `heightlightColor` | `highlightColor` |
-| `PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:91` | `heightlightColor` | `highlightColor` |
-| `PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:101` | `heightlightColor` | `highlightColor` |
+| `PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:72` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:73` | `heightlightColor` | `highlightColor` |
+| `PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:88` | `heightlightColor` | `highlightColor` |
+| `PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift:98` | `heightlightColor` | `highlightColor` |
 | `PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift:111` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift:118` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Base/PTAppBaseConfig.swift:114` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
@@ -24,8 +24,8 @@ Generated at: 2026-10-18T05:02:43Z
 | `PooToolsSource/Base/PTAppBaseConfig.swift:169` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Base/PTBaseNavControl.swift:219` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Base/PTBaseNavControl.swift:220` | `GobalNavControl` | `globalNavControl` |
-| `PooToolsSource/Base/PTBaseViewController.swift:241` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/Button/PTActionLayoutButton.swift:723` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Base/PTBaseViewController.swift:234` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Button/PTActionLayoutButton.swift:720` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Category/PHAsset+PTEX.swift:251` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Category/PHAsset+PTEX.swift:272` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Category/PHPhotoLibrary+PTEX.swift:15` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
@@ -44,7 +44,7 @@ Generated at: 2026-10-18T05:02:43Z
 | `PooToolsSource/Category/UserDefaults+PTEX.swift:102` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Category/UserDefaults+PTEX.swift:119` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Category/UserDefaults+PTEX.swift:135` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:755` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift:752` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Core/PTAppUserdefault.swift:43` | `PTCoreUserDefultsWrapper` | `PTCoreUserDefaultsWrapper` |
 | `PooToolsSource/Core/PTAppUserdefault.swift:45` | `PTCoreUserDefultsWrapper` | `PTCoreUserDefaultsWrapper` |
 | `PooToolsSource/Core/PTAppUserdefault.swift:133` | `PTCoreUserDefultsWrapper` | `PTCoreUserDefaultsWrapper` |
@@ -64,7 +64,7 @@ Generated at: 2026-10-18T05:02:43Z
 | `PooToolsSource/Debug/PTDevFunction.swift:37` | `gobalWebImageLoadOption` | `webImageLoadOptions` |
 | `PooToolsSource/DebugLibs/PTLoadedLibsFunction.swift:15` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/DebugNetwork/PTHttpModel.swift:32` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/DebugNetwork/PTNetworkWatcherCell.swift:75` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/DebugNetwork/PTNetworkWatcherCell.swift:72` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/FloatPanel/PTSheetEXCombos.swift:15` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/FloatPanel/PTSheetEXCombos.swift:24` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/FloatPanel/PTSheetEXCombos.swift:34` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
@@ -383,14 +383,14 @@ Generated at: 2026-10-18T05:02:43Z
 | `PooToolsSource/ImagePicker/PTImagePicker.swift:867` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/ImagePicker/PTImagePicker.swift:888` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/ImagePicker/PTImagePicker.swift:903` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/Input/HoshiTextField.swift:256` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:83` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Input/HoshiTextField.swift:253` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/Input/PTFloatingPlaseholderTextField.swift:80` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Input/TextFieldEffects.swift:153` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Inspector/InspectorElementProperty.swift:12` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Inspector/InspectorElementProperty.swift:126` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Inspector/InspectorElementSectionDataSource.swift:12` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Inspector/RootViewControllerProtocol.swift:14` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/LocalConsole/ResizeController.swift:608` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/LocalConsole/ResizeController.swift:605` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/NetWork/Network+LegacyCompatibility.swift:63` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/NetWork/Network+LegacyCompatibility.swift:74` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/NetWork/Network+LegacyCompatibility.swift:88` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
@@ -413,8 +413,8 @@ Generated at: 2026-10-18T05:02:43Z
 | `PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:314` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:321` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/PToolsCore/PTCoreValueTypes.swift:180` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/PToolsForm/PTForm.swift:909` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/PToolsForm/PTForm.swift:922` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/PToolsForm/PTForm.swift:906` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/PToolsForm/PTForm.swift:919` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/PToolsModelCore/PTModelSemantics.swift:242` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/PToolsNotifications/PTNotifications.swift:370` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/PhotoPicker/PTMediaLibListModel.swift:172` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
@@ -430,7 +430,7 @@ Generated at: 2026-10-18T05:02:43Z
 | `PooToolsSource/Router/PTRouter.swift:802` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/Router/PTRouter.swift:821` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/ScrollBanner/PTCycleScrollView.swift:39` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/SegmentControl/PTMainSegmentCell.swift:526` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/SegmentControl/PTMainSegmentCell.swift:523` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/SegmentControl/PTMainSegmentDataSource.swift:8` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/SegmentControl/PTMainSegmentModel.swift:22` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/SegmentControl/PTSegmentedTypes.swift:26` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
@@ -439,6 +439,6 @@ Generated at: 2026-10-18T05:02:43Z
 | `PooToolsSource/SegmentControl/PTSegmentedTypes.swift:192` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/SegmentControl/PTSegmentedTypes.swift:203` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/SegmentControl/PTSegmentedTypes.swift:214` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/SignView/PTSignView.swift:168` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/SignView/PTSignView.swift:165` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 
 扫描数量：`427`。该数量用于发现漂移，不代表可以自动删除公开 API。

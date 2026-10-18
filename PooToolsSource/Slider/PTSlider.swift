@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 public enum PTSliderTitlePosition: Int {
@@ -113,9 +110,9 @@ public class PTSlider: UISlider {
         
         // 动态更新 Floating Label 的 X 坐标
         if isLabelFloatingWithThumb, !lastThumbBounds.isEmpty {
-            sliderValueLabel.ptLayout.updateConstraints { make in
+            sliderValueLabel.snp.updateConstraints { make in
                 // lastThumbBounds.midX 是相对于整个 slider width 的中心偏移
-                make.centerX.equalTo(self.ptLayout.leading).offset(lastThumbBounds.midX)
+                make.centerX.equalTo(self.snp.leading).offset(lastThumbBounds.midX)
             }
         }
     }
@@ -146,20 +143,20 @@ public class PTSlider: UISlider {
     // MARK: - Label Handling
     
     private func updateLabelConstraints() {
-        sliderValueLabel.ptLayout.remakeConstraints { make in
+        sliderValueLabel.snp.remakeConstraints { make in
             // 如果不悬浮跟随，默认居中
             if !isLabelFloatingWithThumb {
                 make.centerX.equalToSuperview()
             } else {
-                make.centerX.equalTo(self.ptLayout.leading).offset(bounds.midX) // 临时占位，layoutSubviews 中会修正
+                make.centerX.equalTo(self.snp.leading).offset(bounds.midX) // 临时占位，layoutSubviews 中会修正
             }
             
             // 使用 remakeConstraints 安全切换上下方
             switch titleStyle {
             case .top:
-                make.bottom.equalTo(self.ptLayout.centerY).offset(-15)
+                make.bottom.equalTo(self.snp.centerY).offset(-15)
             case .bottom:
-                make.top.equalTo(self.ptLayout.centerY).offset(15)
+                make.top.equalTo(self.snp.centerY).offset(15)
             }
         }
     }

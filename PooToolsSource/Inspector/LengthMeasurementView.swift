@@ -5,9 +5,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -79,7 +76,7 @@ final class LengthMeasurementView: BaseView {
 
         installView(contentView, .centerXY)
 
-        contentView.ptLayout.makeConstraints { make in
+        contentView.snp.makeConstraints { make in
             make.top.leading.greaterThanOrEqualToSuperview()
         }
     }

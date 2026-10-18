@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 #if SWIFT_PACKAGE
@@ -51,13 +48,13 @@ class PTImageCutRatioCell: PTBaseNormalCell {
         super.init(frame: frame)
         
         contentView.addSubviews([imageView,titleLabel])
-        imageView.ptLayout.makeConstraints { make in
+        imageView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(7.5)
             make.top.equalToSuperview().inset(5)
-            make.height.equalTo(imageView.ptLayout.width)
+            make.height.equalTo(imageView.snp.width)
         }
         
-        titleLabel.ptLayout.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.bottom.equalToSuperview()
             make.left.right.equalToSuperview()
         }

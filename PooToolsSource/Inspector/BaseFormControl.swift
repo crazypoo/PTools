@@ -5,9 +5,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -101,7 +98,7 @@ class BaseFormControl: BaseControl {
 
     private func installSeparator() {
         containerView.addSubview(separator)
-        separator.ptLayout.makeConstraints { make in
+        separator.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(containerView)
         }
     }

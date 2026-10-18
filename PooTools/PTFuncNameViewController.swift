@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import PToolsDevice
@@ -295,7 +292,7 @@ class PTFuncNameViewController: PTBaseViewController {
             self.showCollectionViewData()
         }
         emptyView.addSubviews([emptyReloadButton])
-        emptyReloadButton.ptLayout.makeConstraints { make in
+        emptyReloadButton.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
@@ -511,13 +508,13 @@ class PTFuncNameViewController: PTBaseViewController {
     lazy var navTitleView:PTNavTitleContainer = {
         let view = PTNavTitleContainer()
         view.addSubview(searchBar)
-        searchBar.ptLayout.makeConstraints { make in
+        searchBar.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(32)
             make.centerY.equalToSuperview()
         }
         view.frame = CGRect(origin: .zero, size: .init(width: CGFloat.kSCREEN_WIDTH - 150, height: PTAppBaseConfig.share.bavTitleContainerHeight))
-        view.ptLayout.makeConstraints { make in
+        view.snp.makeConstraints { make in
             make.size.equalTo(CGSize.init(width: CGFloat.kSCREEN_WIDTH - 150, height: PTAppBaseConfig.share.bavTitleContainerHeight))
         }
         return view
@@ -574,7 +571,7 @@ class PTFuncNameViewController: PTBaseViewController {
         popoverButton.backgroundColor = .secondarySystemBackground
         
         popoverContent.view.addSubview(popoverButton)
-        popoverButton.ptLayout.makeConstraints { make in
+        popoverButton.snp.makeConstraints { make in
             make.size.equalTo(50)
             make.centerY.centerX.equalToSuperview()
         }
@@ -591,20 +588,20 @@ class PTFuncNameViewController: PTBaseViewController {
         customSwitch.isOn = true
         customSwitch.thumbColor = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
         popoverContent.view.addSubview(customSwitch)
-        customSwitch.ptLayout.makeConstraints { make in
+        customSwitch.snp.makeConstraints { make in
             make.height.equalTo(20)
             make.width.equalTo(30)
-            make.top.equalTo(popoverButton.ptLayout.bottom).offset(10)
+            make.top.equalTo(popoverButton.snp.bottom).offset(10)
             make.centerX.equalToSuperview()
         }
 
         let testButton = UIButton(type: .custom)
         testButton.backgroundColor = .tertiarySystemBackground
         popoverContent.view.addSubview(testButton)
-        testButton.ptLayout.makeConstraints { make in
+        testButton.snp.makeConstraints { make in
             make.size.equalTo(50)
             make.centerX.equalToSuperview()
-            make.top.equalTo(customSwitch.ptLayout.bottom).offset(10)
+            make.top.equalTo(customSwitch.snp.bottom).offset(10)
         }
         testButton.addActionHandlers { sender in
             let vc = PTTestVC()
@@ -641,7 +638,7 @@ class PTFuncNameViewController: PTBaseViewController {
         let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total
         
         view.addSubview(collectionView)
-        collectionView.ptLayout.makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.right.bottom.equalToSuperview()
             make.left.right.equalToSuperview()
@@ -808,7 +805,7 @@ class PTFuncNameViewController: PTBaseViewController {
         buttonView.layer.cornerRadius = 30
         buttonView.accessibilityIdentifier = "expandableButton"
         view.addSubview(buttonView)
-        buttonView.ptLayout.makeConstraints { make in
+        buttonView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(20) // 固定左侧
             make.centerY.equalToSuperview()
         }
@@ -900,7 +897,7 @@ class PTFuncNameViewController: PTBaseViewController {
             // 此时 myCollectionView 内部的 layoutCache、heightCache 会在最新的横/竖屏宽度下进行按需精准重新计算，UI 绝不会再发生任何错位或挤压
             PTNSLogConsole("【旋转闭环】屏幕尺寸已稳定，最新宽度: \(size.width)")
             self?.collectionView.reloadAllData(animated: false)
-            self?.collectionView.ptLayout.remakeConstraints { make in
+            self?.collectionView.snp.remakeConstraints { make in
                 make.top.equalToSuperview()
                 make.right.bottom.equalToSuperview()
                 make.left.right.equalToSuperview()

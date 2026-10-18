@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 import Photos
 #if canImport(PToolsUIFoundation)
@@ -129,7 +126,7 @@ class PTMediaLibCell: PTBaseNormalCell {
         // 💡 只有在显示时才更新约束，减少 Layout Engine 负担
         if !videoTimeLabel.isHidden {
             let width = videoTimeLabel.sizeFor(height: 15).width + 8
-            videoTimeLabel.ptLayout.updateConstraints { make in
+            videoTimeLabel.snp.updateConstraints { make in
                 make.width.equalTo(width)
             }
         }
@@ -279,28 +276,28 @@ class PTMediaLibCell: PTBaseNormalCell {
         contentView.addSubviews([imageView, coverView, containerView, videoTimeLabel])
         containerView.addSubviews([selectButton, mediaTypeImageView, editButton])
         
-        imageView.ptLayout.makeConstraints { $0.edges.equalToSuperview() }
-        coverView.ptLayout.makeConstraints { $0.edges.equalToSuperview() }
-        containerView.ptLayout.makeConstraints { $0.edges.equalToSuperview() }
+        imageView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        coverView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        containerView.snp.makeConstraints { $0.edges.equalToSuperview() }
         
-        selectButton.ptLayout.makeConstraints { make in
+        selectButton.snp.makeConstraints { make in
             make.size.equalTo(25)
             make.top.right.equalToSuperview().inset(7.5)
         }
         
-        mediaTypeImageView.ptLayout.makeConstraints { make in
+        mediaTypeImageView.snp.makeConstraints { make in
             make.size.equalTo(25)
             make.left.bottom.equalToSuperview().inset(7.5)
         }
         
-        videoTimeLabel.ptLayout.makeConstraints { make in
+        videoTimeLabel.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(7.5)
             make.centerY.equalTo(mediaTypeImageView)
             make.height.equalTo(15)
             make.width.equalTo(0)
         }
         
-        editButton.ptLayout.makeConstraints { make in
+        editButton.snp.makeConstraints { make in
             make.size.equalTo(25)
             make.top.left.equalToSuperview().inset(7.5)
         }
@@ -389,22 +386,22 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
         super.init(frame: frame)
         contentView.addSubviews([imageView, selectedButton, contentLabel])
         
-        imageView.ptLayout.makeConstraints { make in
+        imageView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(5)
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.width.equalTo(imageView.ptLayout.height)
+            make.width.equalTo(imageView.snp.height)
         }
         
-        selectedButton.ptLayout.makeConstraints { make in
+        selectedButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.size.equalTo(20)
             make.centerY.equalToSuperview()
         }
         
-        contentLabel.ptLayout.makeConstraints { make in
-            make.left.equalTo(imageView.ptLayout.right).offset(10)
+        contentLabel.snp.makeConstraints { make in
+            make.left.equalTo(imageView.snp.right).offset(10)
             make.top.bottom.equalTo(imageView)
-            make.right.equalTo(selectedButton.ptLayout.left).offset(-10)
+            make.right.equalTo(selectedButton.snp.left).offset(-10)
         }
     }
     
@@ -428,7 +425,7 @@ class PTCameraCell: PTBaseNormalCell {
         super.init(frame: frame)
         contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubview(imageView)
-        imageView.ptLayout.makeConstraints { $0.edges.equalToSuperview() }
+        imageView.snp.makeConstraints { $0.edges.equalToSuperview() }
     }
     
     required init?(coder: NSCoder) { fatalError() }

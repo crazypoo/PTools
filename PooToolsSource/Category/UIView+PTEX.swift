@@ -8,9 +8,6 @@
 
 #if canImport(UIKit) && (os(iOS) || os(tvOS))
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 import WebKit
 import Photos
@@ -1117,7 +1114,7 @@ public extension UIView {
             } else {
                 label = UILabel()
                 addSubview(label)
-                label.ptLayout.makeConstraints { $0.center.equalToSuperview() }
+                label.snp.makeConstraints { $0.center.equalToSuperview() }
                 viewShapeLayerProgressLabel = label
             }
             label.font = valueLabelFont

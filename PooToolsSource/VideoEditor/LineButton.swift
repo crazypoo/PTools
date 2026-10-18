@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 // Called when the button's highlighted is false.
@@ -38,7 +35,7 @@ class LineButton: UIButton {
         
         self.setTitle(nil, for: .normal)
         if type != .center {
-            self.ptLayout.makeConstraints { make in
+            self.snp.makeConstraints { make in
                 make.width.height.equalTo(50)
             }
             self.alpha = 0

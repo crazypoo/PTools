@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -188,9 +185,9 @@ public class PTStepper: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        addButton.ptLayout.remakeConstraints { make in
+        addButton.snp.remakeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.width.equalTo(self.addButton.ptLayout.height)
+            make.width.equalTo(self.addButton.snp.height)
             switch self.viewShowType {
             case .LTR:
                 make.left.equalToSuperview()
@@ -199,7 +196,7 @@ public class PTStepper: UIView {
             }
         }
         
-        reduceButton.ptLayout.remakeConstraints { make in
+        reduceButton.snp.remakeConstraints { make in
             make.height.width.equalTo(self.addButton)
             switch self.viewShowType {
             case .LTR:
@@ -209,14 +206,14 @@ public class PTStepper: UIView {
             }
         }
         
-        numberText.ptLayout.remakeConstraints { make in
+        numberText.snp.remakeConstraints { make in
             switch self.viewShowType {
             case .LTR:
-                make.left.equalTo(self.addButton.ptLayout.right).offset(self.contentSpace)
-                make.right.equalTo(self.reduceButton.ptLayout.left).offset(-self.contentSpace)
+                make.left.equalTo(self.addButton.snp.right).offset(self.contentSpace)
+                make.right.equalTo(self.reduceButton.snp.left).offset(-self.contentSpace)
             case .RTL:
-                make.right.equalTo(self.addButton.ptLayout.left).offset(-self.contentSpace)
-                make.left.equalTo(self.reduceButton.ptLayout.right).offset(self.contentSpace)
+                make.right.equalTo(self.addButton.snp.left).offset(-self.contentSpace)
+                make.left.equalTo(self.reduceButton.snp.right).offset(self.contentSpace)
             }
             make.top.bottom.equalToSuperview()
         }

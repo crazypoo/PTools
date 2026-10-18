@@ -8,9 +8,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 import PooTools
 import SnapKit
@@ -28,7 +25,7 @@ private final class PTCollectionSkeletonDemoCell: UICollectionViewCell {
         titleLabel.textColor = .label
         titleLabel.textAlignment = .center
         contentView.addSubview(titleLabel)
-        titleLabel.ptLayout.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
         }
         contentView.backgroundColor = .secondarySystemBackground
@@ -107,7 +104,7 @@ final class PTCollectionSkeletonLabViewController: PTBaseViewController {
         controls.axis = .vertical
         controls.spacing = 8
         view.addSubview(controls)
-        controls.ptLayout.makeConstraints { make in
+        controls.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 12)
         }
@@ -121,9 +118,9 @@ final class PTCollectionSkeletonLabViewController: PTBaseViewController {
             (cell as? PTCollectionSkeletonDemoCell)?.render(row: context.row)
         }
         view.addSubview(list)
-        list.ptLayout.makeConstraints { make in
+        list.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(controls.ptLayout.bottom)
+            make.top.equalTo(controls.snp.bottom)
         }
     }
 

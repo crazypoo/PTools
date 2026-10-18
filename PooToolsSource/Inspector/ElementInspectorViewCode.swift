@@ -5,9 +5,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -98,10 +95,10 @@ final class ElementInspectorViewCode: BaseView {
 
             if let backgroundView = newContent?.view {
                 scrollView.addSubview(backgroundView)
-                backgroundView.ptLayout.makeConstraints { make in
-                    make.top.equalTo(separatorView.ptLayout.bottom)
+                backgroundView.snp.makeConstraints { make in
+                    make.top.equalTo(separatorView.snp.bottom)
                     make.leading.trailing.equalTo(scrollView.readableContentGuide)
-                    make.bottom.equalTo(scrollView.ptLayout.bottom)
+                    make.bottom.equalTo(scrollView.snp.bottom)
                 }
             }
 

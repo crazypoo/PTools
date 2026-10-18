@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "80126150505961e259cce5e08ada67962265c063",
-  "generated_at": "2026-10-18T05:02:36Z",
+  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
+  "generated_at": "2026-10-18T03:14:35Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -3290,17 +3290,6 @@
               null
             ]
           }
-        },
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
         }
       ],
       "third_party_dependencies": [
@@ -4064,17 +4053,6 @@
           }
         },
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "PToolsTheme",
           "kind": "internal",
           "package": null,
@@ -4383,17 +4361,6 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "PooToolsPDF",
           "kind": "internal",
           "package": null,
@@ -4556,17 +4523,6 @@
           "declaration": {
             "byName": [
               "PToolsAccessibility",
-              null
-            ]
-          }
-        },
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
               null
             ]
           }
@@ -6555,17 +6511,6 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "PToolsWebBridge",
           "kind": "internal",
           "package": null,
@@ -6766,17 +6711,6 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
         {
           "name": "PToolsCore",
           "kind": "internal",
@@ -7065,17 +6999,6 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
         {
           "name": "PooToolsHud",
           "kind": "internal",
@@ -7375,17 +7298,6 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "ptools",
           "kind": "internal",
           "package": null,
@@ -7471,17 +7383,6 @@
           "declaration": {
             "byName": [
               "PToolsConnectivity",
-              null
-            ]
-          }
-        },
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
               null
             ]
           }
@@ -7777,17 +7678,6 @@
           }
         },
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "PToolsSymbols",
           "kind": "internal",
           "package": null,
@@ -7884,17 +7774,6 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "PooToolsPageControl",
           "kind": "internal",
           "package": null,
@@ -7957,17 +7836,6 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
         {
           "name": "ptools",
           "kind": "internal",
@@ -8038,17 +7906,6 @@
           "declaration": {
             "byName": [
               "PTCameraPermission",
-              null
-            ]
-          }
-        },
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
               null
             ]
           }
@@ -8172,17 +8029,6 @@
           }
         },
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "ptools",
           "kind": "internal",
           "package": null,
@@ -8247,17 +8093,6 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
         {
           "name": "PooToolsProgressBar",
           "kind": "internal",
@@ -8361,17 +8196,6 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
         {
           "name": "PToolsCore",
           "kind": "internal",
@@ -8554,17 +8378,6 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "PToolsCore",
           "kind": "internal",
           "package": null,
@@ -8649,17 +8462,6 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
         {
           "name": "PToolsOverlay",
           "kind": "internal",
@@ -8800,17 +8602,6 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
         {
           "name": "ptools",
           "kind": "internal",
@@ -8955,17 +8746,6 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
         {
           "name": "ptools",
           "kind": "internal",
@@ -9112,17 +8892,6 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "PToolsUIFoundation",
           "kind": "internal",
           "package": null,
@@ -9229,17 +8998,6 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
         {
           "name": "PToolsSymbols",
           "kind": "internal",
@@ -9620,17 +9378,6 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "ptools",
           "kind": "internal",
           "package": null,
@@ -9734,17 +9481,6 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "ptools",
           "kind": "internal",
           "package": null,
@@ -9833,17 +9569,6 @@
           "declaration": {
             "byName": [
               "PTCameraPermission",
-              null
-            ]
-          }
-        },
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
               null
             ]
           }
@@ -9956,17 +9681,6 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "PToolsCore",
           "kind": "internal",
           "package": null,
@@ -10029,17 +9743,6 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
         {
           "name": "ptools",
           "kind": "internal",
@@ -10163,17 +9866,6 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "ptools",
           "kind": "internal",
           "package": null,
@@ -10225,17 +9917,6 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
         {
           "name": "ptools",
           "kind": "internal",
@@ -10425,17 +10106,6 @@
           }
         },
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "PToolsCore",
           "kind": "internal",
           "package": null,
@@ -10521,17 +10191,6 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "PToolsUIFoundation",
           "kind": "internal",
           "package": null,
@@ -10605,17 +10264,6 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
         {
           "name": "PToolsUIFoundation",
           "kind": "internal",
@@ -10811,17 +10459,6 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "PooToolsCustomerLabel",
           "kind": "internal",
           "package": null,
@@ -10883,19 +10520,7 @@
       "path": "PooToolsSource/Slider",
       "sources": [],
       "resources": [],
-      "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        }
-      ],
+      "internal_dependencies": [],
       "third_party_dependencies": [
         {
           "name": "SnapKit",
@@ -11162,17 +10787,6 @@
       "resources": [],
       "internal_dependencies": [
         {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
-        {
           "name": "ptools",
           "kind": "internal",
           "package": null,
@@ -11315,17 +10929,6 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
         {
           "name": "PToolsCore",
           "kind": "internal",
@@ -11543,17 +11146,6 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
-        {
-          "name": "PToolsConstraintLayout",
-          "kind": "internal",
-          "package": null,
-          "declaration": {
-            "byName": [
-              "PToolsConstraintLayout",
-              null
-            ]
-          }
-        },
         {
           "name": "PToolsUIFoundation",
           "kind": "internal",

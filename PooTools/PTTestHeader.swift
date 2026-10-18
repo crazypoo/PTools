@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 import PooTools
 
@@ -37,7 +34,7 @@ class PTTestHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryRegis
         super.init(frame: frame)
         
         addSubview(headerTitle)
-        headerTitle.ptLayout.makeConstraints { make in
+        headerTitle.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.bottom.equalToSuperview().inset(5)
         }
@@ -70,7 +67,7 @@ class PTTestFooter: PTBaseCollectionReusableView {
         super.init(frame: frame)
         
         addSubview(headerTitle)
-        headerTitle.ptLayout.makeConstraints { make in
+        headerTitle.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.bottom.equalToSuperview().inset(5)
         }

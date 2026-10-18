@@ -176,7 +176,6 @@ Pod::Spec.new do |s|
     # 中文：发布原生 UIKit Banner，避免旧通知依赖进入 Core。
     s.subspec 'Banner' do |subspec|
         subspec.dependency 'PooTools/Overlay'
-        subspec.dependency 'PooTools/ConstraintLayout'
         subspec.dependency 'PooTools/Symbols'
         subspec.dependency 'PooTools/Logging'
         subspec.dependency 'PooTools/PToolsCore'
@@ -503,7 +502,6 @@ Pod::Spec.new do |s|
 
     s.subspec 'Web' do |subspec|
         subspec.dependency 'PooTools/WebBridge'
-        subspec.dependency 'PooTools/ConstraintLayout'
         subspec.source_files = 'PooToolsSource/PToolsWeb/**/*.swift'
         subspec.frameworks = 'Foundation', 'UIKit', 'WebKit'
     end
@@ -538,7 +536,6 @@ Pod::Spec.new do |s|
 
     s.subspec "Core" do |subspec|
         subspec.dependency 'PooTools/PToolsCore'
-        subspec.dependency 'PooTools/ConstraintLayout'
         subspec.dependency 'PooTools/Device'
         subspec.dependency 'PooTools/Date'
         subspec.dependency 'PooTools/PToolsUIFoundation'
@@ -791,7 +788,6 @@ Pod::Spec.new do |s|
     
     s.subspec 'RateView' do |subspec|
         subspec.dependency 'PooTools/PToolsUIFoundation'
-        subspec.dependency 'PooTools/ConstraintLayout'
         subspec.dependency 'SnapKit'
         subspec.source_files = 'PooToolsSource/RateView/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -855,7 +851,6 @@ Pod::Spec.new do |s|
     
     s.subspec 'Slider' do |subspec|
         subspec.dependency 'PooTools/PToolsUIFoundation'
-        subspec.dependency 'PooTools/ConstraintLayout'
         subspec.dependency 'SnapKit'
         subspec.source_files = 'PooToolsSource/Slider/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {

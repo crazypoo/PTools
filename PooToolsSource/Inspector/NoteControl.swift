@@ -5,9 +5,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -59,7 +56,7 @@ final class NoteControl: BaseControl {
         }
 
         $0.tintColor = icon.color
-        $0.ptLayout.makeConstraints { make in
+        $0.snp.makeConstraints { make in
             make.width.equalTo(CGSize.regularIconSize.width)
         }
     }
@@ -93,8 +90,8 @@ final class NoteControl: BaseControl {
 
         contentView.addArrangedSubviews(imageView, header)
 
-        header.ptLayout.makeConstraints { make in
-            make.height.greaterThanOrEqualTo(imageView.ptLayout.height)
+        header.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(imageView.snp.height)
         }
     }
 }

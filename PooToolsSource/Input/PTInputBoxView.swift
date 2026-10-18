@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if canImport(PToolsCore)
 import PToolsCore
@@ -137,7 +134,7 @@ public class PTInputBoxView: UIView {
         addSubview(stackView)
         
         // 使用 SnapKit 布局 StackView，让其居中并自适应内容
-        stackView.ptLayout.makeConstraints { make in
+        stackView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.height.equalTo(config.inputBoxHeight)
         }
@@ -146,7 +143,7 @@ public class PTInputBoxView: UIView {
             let containerView = UIView()
             
             // 设置容器的宽高约束
-            containerView.ptLayout.makeConstraints { make in
+            containerView.snp.makeConstraints { make in
                 make.width.equalTo(config.inputBoxWidth)
             }
             
@@ -161,7 +158,7 @@ public class PTInputBoxView: UIView {
             label.clipsToBounds = true
             
             containerView.addSubview(label)
-            label.ptLayout.makeConstraints { make in
+            label.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
             visualLabels.append(label)
@@ -171,7 +168,7 @@ public class PTInputBoxView: UIView {
                 let underLine = UIView()
                 underLine.backgroundColor = config.underLineColor
                 containerView.addSubview(underLine)
-                underLine.ptLayout.makeConstraints { make in
+                underLine.snp.makeConstraints { make in
                     make.leading.trailing.bottom.equalToSuperview()
                     make.height.equalTo(config.underLineHeight)
                 }

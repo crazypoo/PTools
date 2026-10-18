@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if canImport(PToolsCore)
 import PToolsCore
@@ -45,10 +42,10 @@ public class PTActionCell:UIView {
         backgroundColor = UIColor.ptPresentationMaterialSurface
 
         addSubviews([blur,cellButton])
-        blur.ptLayout.makeConstraints { make in
+        blur.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        cellButton.ptLayout.makeConstraints { make in
+        cellButton.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -268,7 +265,7 @@ public class PTActionSheetController: PTAlertController {
         super.viewDidLoad()
         
         view.addSubviews([alertContent])
-        alertContent.ptLayout.makeConstraints { make in
+        alertContent.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
@@ -284,7 +281,7 @@ public class PTActionSheetController: PTAlertController {
     // 分离取消按钮的设置
     private func setupCancelButton() {
         alertContent.addSubviews([cancelBtn])
-        cancelBtn.ptLayout.makeConstraints { make in
+        cancelBtn.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(sheetConfig.viewSpace)
             make.height.equalTo(sheetConfig.rowHeight)
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 5)
@@ -313,10 +310,10 @@ public class PTActionSheetController: PTAlertController {
             
             alertContent.addSubview(destructiveView)
             let destructiveY = -(sheetConfig.separatorHeight + (sheetConfig.separatorHeight + sheetConfig.rowHeight) * CGFloat(index))
-            destructiveView.ptLayout.makeConstraints { make in
+            destructiveView.snp.makeConstraints { make in
                 make.left.right.equalTo(cancelBtn)
                 make.height.equalTo(sheetConfig.rowHeight)
-                make.bottom.equalTo(cancelBtn.ptLayout.top).offset(destructiveY)
+                make.bottom.equalTo(cancelBtn.snp.top).offset(destructiveY)
             }
             destructiveView.superGradient(radius:sheetConfig.cornerRadii,corner: .allCorners)
         }
@@ -340,7 +337,7 @@ public class PTActionSheetController: PTAlertController {
         btn.setBackgroundColor(item.highlightColor, state: .highlighted)
 
         let edge = item.contentEdgeValue
-        btn.ptLayout.remakeConstraints { make in
+        btn.snp.remakeConstraints { make in
             make.top.bottom.equalToSuperview()
             switch item.itemAlignment {
             case .left, .leading:
@@ -425,9 +422,9 @@ public class PTActionSheetController: PTAlertController {
         // 添加子視圖和佈局約束
         alertContent.addSubviews([contentScrollerView])
 
-        contentScrollerView.ptLayout.makeConstraints { make in
+        contentScrollerView.snp.makeConstraints { make in
             make.left.right.equalTo(cancelBtn)
-            make.bottom.equalTo(cancelBtn.ptLayout.top).offset(contentItemsBottom)
+            make.bottom.equalTo(cancelBtn.snp.top).offset(contentItemsBottom)
             make.height.equalTo(realContentSize)
         }
     }
@@ -436,10 +433,10 @@ public class PTActionSheetController: PTAlertController {
     private func setupTitleLabel() {
         if let titleView = titleLabel {
             alertContent.addSubview(titleView)
-            titleView.ptLayout.makeConstraints { make in
+            titleView.snp.makeConstraints { make in
                 make.left.right.equalTo(cancelBtn)
                 make.height.equalTo(sheetConfig.rowHeight)
-                make.bottom.equalTo(contentScrollerView.ptLayout.top)
+                make.bottom.equalTo(contentScrollerView.snp.top)
             }
         }
     }
@@ -468,12 +465,12 @@ public class PTActionSheetController: PTAlertController {
                 let line = UIView()
                 line.backgroundColor = .lightGray
                 contentScrollerView.addSubview(line)
-                line.ptLayout.makeConstraints { make in
+                line.snp.makeConstraints { make in
                     make.width.equalTo(contentWidth)
                     make.centerX.equalToSuperview()
                     make.height.equalTo(sheetConfig.lineHeight)
                     if let prev = previousView {
-                        make.top.equalTo(prev.ptLayout.bottom)
+                        make.top.equalTo(prev.snp.bottom)
                     } else {
                         make.top.equalToSuperview()
                     }
@@ -490,11 +487,11 @@ public class PTActionSheetController: PTAlertController {
             contentScrollerView.addSubview(button)
             
             // --- 约束部分（修复坑3：为最后一个元素封底） ---
-            button.ptLayout.makeConstraints { make in
+            button.snp.makeConstraints { make in
                 make.width.equalTo(contentWidth)
                 make.centerX.equalToSuperview()
                 make.height.equalTo(sheetConfig.rowHeight)
-                make.top.equalTo(previousView?.ptLayout.bottom ?? contentScrollerView.ptLayout.top)
+                make.top.equalTo(previousView?.snp.bottom ?? contentScrollerView.snp.top)
                 
                 // 🌟 关键：如果是最后一个元素，必须加上 bottom 约束，撑开 ScrollView！
                 if index == lastIndex {

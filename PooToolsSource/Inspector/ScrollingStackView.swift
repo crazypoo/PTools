@@ -5,9 +5,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -20,7 +17,7 @@ final class ScrollingStackView: UIScrollView {
         $0.axis = .vertical
 
         installView($0, priority: .required)
-        $0.ptLayout.makeConstraints { make in
+        $0.snp.makeConstraints { make in
             make.width.equalToSuperview()
         }
     }

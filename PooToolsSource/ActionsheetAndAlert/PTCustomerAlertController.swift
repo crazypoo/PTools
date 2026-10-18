@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if canImport(PToolsCore)
 import PToolsCore
@@ -145,26 +142,26 @@ public class PTCustomerAlertController: PTAlertController {
     fileprivate var contentWidth: CGFloat = 0
 
     private var actionButtons = [UIButton]()
-    private var actionButtonHeightConstraints = [PTLayoutConstraint]()
-    private var compactActionTopConstraint: PTLayoutConstraint?
-    private var compactActionLeadingConstraint: PTLayoutConstraint?
-    private var compactActionBottomConstraint: PTLayoutConstraint?
-    private var compactActionTrailingConstraint: PTLayoutConstraint?
+    private var actionButtonHeightConstraints = [Constraint]()
+    private var compactActionTopConstraint: Constraint?
+    private var compactActionLeadingConstraint: Constraint?
+    private var compactActionBottomConstraint: Constraint?
+    private var compactActionTrailingConstraint: Constraint?
 
-    private var contentWidthConstraint: PTLayoutConstraint?
-    private var contentHeightConstraint: PTLayoutConstraint?
+    private var contentWidthConstraint: Constraint?
+    private var contentHeightConstraint: Constraint?
 
     /// legacy customView 的 fallback 高度。
     /// priority 低于 UILabel 默认 vertical hugging，
     /// 因此有完整 Auto Layout 的 message 不会被强行撑高。
-    private var customerViewFallbackHeightConstraint: PTLayoutConstraint?
+    private var customerViewFallbackHeightConstraint: Constraint?
 
     /// Body 的最小视觉高度。
     /// 注意这不是“文字高度”，只是 Alert 的视觉底座。
-    var bodyHeaderMinimumHeightConstraint: PTLayoutConstraint?
+    var bodyHeaderMinimumHeightConstraint: Constraint?
 
-    private var compactActionHeightConstraint: PTLayoutConstraint?
-    private var actionViewportHeightConstraint: PTLayoutConstraint?
+    private var compactActionHeightConstraint: Constraint?
+    private var actionViewportHeightConstraint: Constraint?
 
     private var layoutSignature: PTCustomerAlertLayoutSignature?
     private var actionLayoutMode: PTCustomerAlertActionLayoutMode = .fitted
@@ -507,9 +504,9 @@ public class PTCustomerAlertController: PTAlertController {
         view.backgroundColor = .clear
         view.addSubview(contentView)
 
-        contentView.ptLayout.makeConstraints { make in
-            make.centerX.equalTo(view.safeAreaLayoutGuide.ptLayout.centerX)
-            make.centerY.equalTo(view.safeAreaLayoutGuide.ptLayout.centerY)
+        contentView.snp.makeConstraints { make in
+            make.centerX.equalTo(view.safeAreaLayoutGuide.snp.centerX)
+            make.centerY.equalTo(view.safeAreaLayoutGuide.snp.centerY)
             contentWidthConstraint = make.width.equalTo(contentWidth).constraint
             contentHeightConstraint = make.height.equalTo(1).constraint
         }
@@ -517,7 +514,7 @@ public class PTCustomerAlertController: PTAlertController {
 
     private func configureSurface() {
         contentView.addSubview(surfaceBackgroundView)
-        surfaceBackgroundView.ptLayout.makeConstraints { make in
+        surfaceBackgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -554,19 +551,19 @@ public class PTCustomerAlertController: PTAlertController {
         bodyScrollView.addSubview(bodyContentView)
         bodyContentView.addSubview(bodyHeaderView)
 
-        bodyScrollView.ptLayout.makeConstraints { make in
+        bodyScrollView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
         }
 
-        bodyContentView.ptLayout.makeConstraints { make in
-            make.top.equalTo(bodyScrollView.contentLayoutGuide.ptLayout.top)
-            make.leading.equalTo(bodyScrollView.contentLayoutGuide.ptLayout.leading)
-            make.trailing.equalTo(bodyScrollView.contentLayoutGuide.ptLayout.trailing)
-            make.bottom.equalTo(bodyScrollView.contentLayoutGuide.ptLayout.bottom)
-            make.width.equalTo(bodyScrollView.frameLayoutGuide.ptLayout.width)
+        bodyContentView.snp.makeConstraints { make in
+            make.top.equalTo(bodyScrollView.contentLayoutGuide.snp.top)
+            make.leading.equalTo(bodyScrollView.contentLayoutGuide.snp.leading)
+            make.trailing.equalTo(bodyScrollView.contentLayoutGuide.snp.trailing)
+            make.bottom.equalTo(bodyScrollView.contentLayoutGuide.snp.bottom)
+            make.width.equalTo(bodyScrollView.frameLayoutGuide.snp.width)
         }
 
-        bodyHeaderView.ptLayout.makeConstraints { make in
+        bodyHeaderView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             bodyHeaderMinimumHeightConstraint = make
                 .height
@@ -579,16 +576,16 @@ public class PTCustomerAlertController: PTAlertController {
         if buttons.count > 2 {
             configureScrollableActions()
 
-            bodyScrollView.ptLayout.makeConstraints { make in
+            bodyScrollView.snp.makeConstraints { make in
                 make.bottom.equalToSuperview()
             }
         } else {
-            bodyHeaderView.ptLayout.makeConstraints { make in
+            bodyHeaderView.snp.makeConstraints { make in
                 make.bottom.equalToSuperview()
             }
 
             if buttons.isEmpty {
-                bodyScrollView.ptLayout.makeConstraints { make in
+                bodyScrollView.snp.makeConstraints { make in
                     make.bottom.equalToSuperview()
                 }
             } else {
@@ -613,7 +610,7 @@ public class PTCustomerAlertController: PTAlertController {
         // 关键：headerContentView 垂直居中。
         // 当 bodyHeaderView 因 minimumBodyHeight 比真实内容更高时，
         // 多余高度自动平均分到内容上下，而不是全部出现在 msg 下方。
-        headerContentView.ptLayout.makeConstraints { make in
+        headerContentView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
             make.top.greaterThanOrEqualToSuperview().offset(alertContentInsets.top)
@@ -625,14 +622,14 @@ public class PTCustomerAlertController: PTAlertController {
             headerContentView.addSubview(titleMessage)
             headerContentView.addSubview(customView)
 
-            titleMessage.ptLayout.makeConstraints { make in
+            titleMessage.snp.makeConstraints { make in
                 make.top.equalToSuperview()
                 make.leading.equalToSuperview().offset(alertContentInsets.left)
                 make.trailing.equalToSuperview().offset(-alertContentInsets.right)
             }
 
-            customView.ptLayout.makeConstraints { make in
-                make.top.equalTo(titleMessage.ptLayout.bottom).offset(titleMessageSpacing)
+            customView.snp.makeConstraints { make in
+                make.top.equalTo(titleMessage.snp.bottom).offset(titleMessageSpacing)
                 make.leading.trailing.bottom.equalToSuperview()
 
                 // 兼容旧 frame 布局；Auto Layout 内容本身优先。
@@ -646,7 +643,7 @@ public class PTCustomerAlertController: PTAlertController {
         case (true, false):
             headerContentView.addSubview(titleMessage)
 
-            titleMessage.ptLayout.makeConstraints { make in
+            titleMessage.snp.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
                 make.leading.equalToSuperview().offset(alertContentInsets.left)
                 make.trailing.equalToSuperview().offset(-alertContentInsets.right)
@@ -655,7 +652,7 @@ public class PTCustomerAlertController: PTAlertController {
         case (false, true):
             headerContentView.addSubview(customView)
 
-            customView.ptLayout.makeConstraints { make in
+            customView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
 
                 // 兼容旧 frame 布局；Auto Layout 内容本身优先。
@@ -681,18 +678,18 @@ public class PTCustomerAlertController: PTAlertController {
         bodyContentView.addSubview(actionScrollView)
         actionScrollView.addSubview(actionStackView)
 
-        actionScrollView.ptLayout.makeConstraints { make in
-            make.top.equalTo(bodyHeaderView.ptLayout.bottom)
+        actionScrollView.snp.makeConstraints { make in
+            make.top.equalTo(bodyHeaderView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
             actionViewportHeightConstraint = make.height.equalTo(1).constraint
         }
 
-        actionStackView.ptLayout.makeConstraints { make in
-            make.top.equalTo(actionScrollView.contentLayoutGuide.ptLayout.top)
-            make.leading.equalTo(actionScrollView.contentLayoutGuide.ptLayout.leading)
-            make.trailing.equalTo(actionScrollView.contentLayoutGuide.ptLayout.trailing)
-            make.bottom.equalTo(actionScrollView.contentLayoutGuide.ptLayout.bottom)
-            make.width.equalTo(actionScrollView.frameLayoutGuide.ptLayout.width)
+        actionStackView.snp.makeConstraints { make in
+            make.top.equalTo(actionScrollView.contentLayoutGuide.snp.top)
+            make.leading.equalTo(actionScrollView.contentLayoutGuide.snp.leading)
+            make.trailing.equalTo(actionScrollView.contentLayoutGuide.snp.trailing)
+            make.bottom.equalTo(actionScrollView.contentLayoutGuide.snp.bottom)
+            make.width.equalTo(actionScrollView.frameLayoutGuide.snp.width)
         }
 
         // English: Use spacing and margins instead of separator views so long titles remain measurable.
@@ -707,7 +704,7 @@ public class PTCustomerAlertController: PTAlertController {
             actionButtons.append(button)
             actionStackView.addArrangedSubview(button)
 
-            button.ptLayout.makeConstraints { make in
+            button.snp.makeConstraints { make in
                 actionButtonHeightConstraints.append(
                     make.height.equalTo(minimumButtonRowHeight).constraint
                 )
@@ -720,9 +717,9 @@ public class PTCustomerAlertController: PTAlertController {
     private func configureCompactActions(in surfaceContentView: UIView) {
         surfaceContentView.addSubview(compactActionView)
 
-        compactActionView.ptLayout.makeConstraints { make in
+        compactActionView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalTo(bodyScrollView.ptLayout.bottom)
+            make.top.equalTo(bodyScrollView.snp.bottom)
             compactActionHeightConstraint = make
                 .height
                 .equalTo(minimumButtonRowHeight + actionSectionInsets.top + actionSectionInsets.bottom)
@@ -731,7 +728,7 @@ public class PTCustomerAlertController: PTAlertController {
 
         compactActionView.addSubview(compactActionStackView)
 
-        compactActionStackView.ptLayout.makeConstraints { make in
+        compactActionStackView.snp.makeConstraints { make in
             compactActionTopConstraint = make.top
                 .equalToSuperview()
                 .offset(actionSectionInsets.top)
@@ -755,7 +752,7 @@ public class PTCustomerAlertController: PTAlertController {
             actionButtons.append(button)
             compactActionStackView.addArrangedSubview(button)
 
-            button.ptLayout.makeConstraints { make in
+            button.snp.makeConstraints { make in
                 actionButtonHeightConstraints.append(
                     make.height.equalTo(minimumButtonRowHeight).constraint
                 )

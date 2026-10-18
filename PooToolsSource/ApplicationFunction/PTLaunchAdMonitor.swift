@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import AVKit
 import SnapKit
 
@@ -239,7 +236,7 @@ public class PTLaunchAdMonitor: NSObject {
         }
 
         guard hostView != nil else { return }
-        contentView.ptLayout.remakeConstraints { $0.edges.equalToSuperview() }
+        contentView.snp.remakeConstraints { $0.edges.equalToSuperview() }
         
         skipButton.setTitle(skipName, for: .normal)
         skipButton.titleLabel?.font = skipFont
@@ -270,7 +267,7 @@ public class PTLaunchAdMonitor: NSObject {
             companyLabel.font = comNameFont
             companyLabel.textColor = .black
             companyLabel.text = ltdString
-            companyLabel.ptLayout.remakeConstraints { make in
+            companyLabel.snp.remakeConstraints { make in
                 make.left.right.bottom.equalToSuperview()
                 make.height.equalTo(bottomViewHeight)
             }
@@ -292,16 +289,16 @@ public class PTLaunchAdMonitor: NSObject {
             contentView.layer.insertSublayer(playerLayer, below: loadImageView.layer)
         }
         
-        loadImageView.ptLayout.remakeConstraints { make in
+        loadImageView.snp.remakeConstraints { make in
             make.left.top.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(bottomViewHeight)
         }
         
-        actionButton.ptLayout.remakeConstraints { make in
+        actionButton.snp.remakeConstraints { make in
             make.edges.equalTo(loadImageView)
         }
         
-        skipButton.ptLayout.remakeConstraints { make in
+        skipButton.snp.remakeConstraints { make in
             make.height.equalTo(self.baseSkipButtonSize)
             make.width.equalTo(self.preferredSkipWidth)
             make.left.top.equalToSuperview()
@@ -331,7 +328,7 @@ public class PTLaunchAdMonitor: NSObject {
 
         isUpdatingSkipPlacement = true
         skipPlacementSignature = signature
-        skipButton.ptLayout.remakeConstraints { make in
+        skipButton.snp.remakeConstraints { make in
             make.left.equalToSuperview().offset(frame.minX)
             make.top.equalToSuperview().offset(frame.minY)
             make.width.equalTo(frame.width)
@@ -351,9 +348,9 @@ public class PTLaunchAdMonitor: NSObject {
         let signature = "\(contentView.bounds.integral)|\(bottomInset)|\(bottomViewHeight)"
         guard signature != companyPlacementSignature else { return }
         companyPlacementSignature = signature
-        companyLabel.ptLayout.remakeConstraints { make in
+        companyLabel.snp.remakeConstraints { make in
             make.left.right.equalToSuperview()
-            make.bottom.equalTo(contentView.safeAreaLayoutGuide.ptLayout.bottom)
+            make.bottom.equalTo(contentView.safeAreaLayoutGuide.snp.bottom)
             make.height.equalTo(bottomViewHeight)
         }
     }

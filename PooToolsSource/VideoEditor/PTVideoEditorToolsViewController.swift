@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 // AVFoundation editor objects are retained and used on the MainActor;
 // asynchronous export helpers use explicit system compatibility boxes.
 @preconcurrency import AVFoundation
@@ -435,7 +432,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInva
                     self.muteButton.isSelected = false
                     self.muteButton.isUserInteractionEnabled = false
                 }
-                self.outputTypeButton.ptLayout.updateConstraints { make in
+                self.outputTypeButton.snp.updateConstraints { make in
                     make.width.equalTo(UIView.sizeFor(string: self.currentOutputType.name, font: .appfont(size: 14),height: 34).width + 25)
                 }
             }
@@ -1046,49 +1043,49 @@ public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInva
         self.setupLifecycleNotifications()
 
         view.addSubviews([imageContent,playContent,bottomContent,timeLineContent])
-        imageContent.ptLayout.makeConstraints { make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide.ptLayout.top).offset(10)
+        imageContent.snp.makeConstraints { make in
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(10)
             make.left.right.equalToSuperview()
-            make.height.equalTo(self.imageContent.ptLayout.width)
+            make.height.equalTo(self.imageContent.snp.width)
         }
 
         imageContent.addSubviews([originImageView])
-        originImageView.ptLayout.makeConstraints { make in
+        originImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
         originImageView.addSubviews([originFilterImageView,dimView])
-        originFilterImageView.ptLayout.makeConstraints { make in
+        originFilterImageView.snp.makeConstraints { make in
             make.edges.equalTo(self.originImageView)
         }
 
-        dimView.ptLayout.makeConstraints { make in
+        dimView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         dimFrame = nil
                 
-        playContent.ptLayout.makeConstraints { make in
-            make.top.equalTo(self.imageContent.ptLayout.bottom).offset(7.5)
+        playContent.snp.makeConstraints { make in
+            make.top.equalTo(self.imageContent.snp.bottom).offset(7.5)
             make.left.right.equalToSuperview()
             make.height.equalTo(44)
         }
         
         playContentSet()
         
-        bottomContent.ptLayout.makeConstraints { make in
+        bottomContent.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(60)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.ptLayout.bottom)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
         PTGCDManager.shared.delayOnMain(time: 0.35) {
             self.bottomContentSet()
         }
         
-        timeLineContent.ptLayout.makeConstraints { make in
+        timeLineContent.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalTo(self.playContent.ptLayout.bottom)
-            make.bottom.equalTo(self.bottomContent.ptLayout.top)
+            make.top.equalTo(self.playContent.snp.bottom)
+            make.bottom.equalTo(self.bottomContent.snp.top)
         }
         
         timeLineContentSet()
@@ -1146,46 +1143,46 @@ public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInva
     func playContentSet() {
         playContent.addSubviews([playerButton,muteButton,centerLine,currentTimeLabel,videoTimeLabel,outputTypeButton])
         
-        playerButton.ptLayout.makeConstraints { make in
+        playerButton.snp.makeConstraints { make in
             make.size.equalTo(34)
             make.centerY.equalToSuperview()
             make.left.equalToSuperview().inset(10)
         }
         
-        muteButton.ptLayout.makeConstraints { make in
+        muteButton.snp.makeConstraints { make in
             make.size.centerY.equalTo(self.playerButton)
-            make.left.equalTo(self.playerButton.ptLayout.right).offset(10)
+            make.left.equalTo(self.playerButton.snp.right).offset(10)
         }
 
-        centerLine.ptLayout.makeConstraints { make in
+        centerLine.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(12.5)
             make.width.equalTo(1.5)
             make.centerX.equalToSuperview()
         }
         
-        outputTypeButton.ptLayout.makeConstraints { make in
+        outputTypeButton.snp.makeConstraints { make in
             make.height.equalTo(34)
             make.right.equalToSuperview().inset(10)
             make.centerY.equalToSuperview()
             make.width.equalTo(UIView.sizeFor(string: self.currentOutputType.name, font: .appfont(size: 14),height: 34).width + 25)
         }
         
-        currentTimeLabel.ptLayout.makeConstraints { make in
-            make.right.equalTo(self.centerLine.ptLayout.left).offset(-5)
+        currentTimeLabel.snp.makeConstraints { make in
+            make.right.equalTo(self.centerLine.snp.left).offset(-5)
             make.centerY.equalToSuperview()
-            make.left.lessThanOrEqualTo(self.muteButton.ptLayout.right).offset(10)
+            make.left.lessThanOrEqualTo(self.muteButton.snp.right).offset(10)
         }
         
-        videoTimeLabel.ptLayout.makeConstraints { make in
-            make.left.equalTo(self.centerLine.ptLayout.left).offset(5)
+        videoTimeLabel.snp.makeConstraints { make in
+            make.left.equalTo(self.centerLine.snp.left).offset(5)
             make.centerY.equalToSuperview()
-            make.right.lessThanOrEqualTo(self.outputTypeButton.ptLayout.left).offset(-10)
+            make.right.lessThanOrEqualTo(self.outputTypeButton.snp.left).offset(-10)
         }
     }
     
     func timeLineContentSet() {
         timeLineContent.addSubviews([timeLineScroll])
-        timeLineScroll.ptLayout.makeConstraints { make in
+        timeLineScroll.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
@@ -1193,9 +1190,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInva
         timeLineScroll.contentInset = UIEdgeInsets(top: 0, left: horizontal, bottom: 0, right: horizontal)
         
         timeLineScroll.addSubview(timeLineView)
-        timeLineView.ptLayout.makeConstraints { make in
+        timeLineView.snp.makeConstraints { make in
             make.height.equalTo(64)
-            make.width.equalTo(self.timeLineContent.ptLayout.width)
+            make.width.equalTo(self.timeLineContent.snp.width)
             make.centerY.centerX.equalTo(timeLineScroll)
         }
         
@@ -1204,7 +1201,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController, PTMediaInva
     
     func bottomContentSet() {
         bottomContent.addSubviews([bottomControlCollection])
-        bottomControlCollection.ptLayout.makeConstraints { make in
+        bottomControlCollection.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         

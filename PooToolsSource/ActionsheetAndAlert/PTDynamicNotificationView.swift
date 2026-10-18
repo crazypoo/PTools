@@ -7,9 +7,7 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
+import SnapKit
 
 @MainActor
 public class PTDynamicNotificationView: UIView {
@@ -38,14 +36,14 @@ public class PTDynamicNotificationView: UIView {
         )
         viewCorner(radius: 15)
         addSubviews([cameraArea, contentViews])
-        cameraArea.ptLayout.makeConstraints { make in
+        cameraArea.snp.makeConstraints { make in
             make.width.equalTo(CGFloat.ScaleW(w: 104))
             make.height.equalTo(CGFloat.ScaleW(w: 36.67))
             make.centerX.top.equalToSuperview()
         }
-        contentViews.ptLayout.makeConstraints { make in
+        contentViews.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(cameraArea.ptLayout.bottom)
+            make.top.equalTo(cameraArea.snp.bottom)
         }
         content(contentViews)
 
@@ -79,10 +77,10 @@ public class PTDynamicNotificationView: UIView {
             removeFromSuperview()
             containerView.addSubview(self)
         }
-        ptLayout.remakeConstraints { make in
+        snp.remakeConstraints { make in
             make.left.right.equalToSuperview().inset(10)
             make.height.equalTo(contentHeight)
-            make.top.equalTo(containerView.safeAreaLayoutGuide.ptLayout.top).offset(10)
+            make.top.equalTo(containerView.safeAreaLayoutGuide.snp.top).offset(10)
         }
 
         alpha = 1

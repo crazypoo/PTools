@@ -5,19 +5,16 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
 #endif
 
 final class WireframeView: LayerView {
-    private var leadingConstraint: PTLayoutConstraint?
-    private var topConstraint: PTLayoutConstraint?
-    private var bottomConstraint: PTLayoutConstraint?
-    private var trailingConstraint: PTLayoutConstraint?
+    private var leadingConstraint: Constraint?
+    private var topConstraint: Constraint?
+    private var bottomConstraint: Constraint?
+    private var trailingConstraint: Constraint?
 
     @MainActor
     override init(
@@ -46,7 +43,7 @@ final class WireframeView: LayerView {
         super.didMoveToSuperview()
 
         guard superview != nil else {
-            layoutGuideView.ptLayout.removeConstraints()
+            layoutGuideView.snp.removeConstraints()
             layoutGuideView.removeFromSuperview()
             return
         }
@@ -54,7 +51,7 @@ final class WireframeView: LayerView {
         guard layoutGuideView.superview == nil else { return }
 
         contentView.addSubview(layoutGuideView)
-        layoutGuideView.ptLayout.makeConstraints { make in
+        layoutGuideView.snp.makeConstraints { make in
             leadingConstraint = make.leading.equalToSuperview().constraint
             topConstraint = make.top.equalToSuperview().constraint
             bottomConstraint = make.bottom.equalToSuperview().constraint

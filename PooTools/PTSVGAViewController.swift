@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 import CryptoKit
 import SVGAPlayer
@@ -210,7 +207,7 @@ extension PTSVGAViewController: SVGAPlayerSwiftEditionDelegate {
 private extension PTSVGAViewController {
     func setupOperationBar() {
         view.addSubview(operationBar)
-        operationBar.ptLayout.makeConstraints { make in
+        operationBar.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(CGFloat.kTabbarHeight_Total + CGFloat.kNavBarHeight)
         }
@@ -241,20 +238,20 @@ private extension PTSVGAViewController {
         reverseSwitch.isOn = false
         reverseSwitch.addTarget(self, action: #selector(toggleReverse(_:)), for: .valueChanged)
         operationBar.addSubviews([playRemoteBtn,playLocalBtn,reverseSwitch])
-        playRemoteBtn.ptLayout.makeConstraints { make in
+        playRemoteBtn.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.height.equalTo(CGFloat.kNavBarHeight)
             make.top.equalToSuperview()
             make.width.equalTo(playRemoteBtn.sizeFor().width)
         }
         
-        playLocalBtn.ptLayout.makeConstraints { make in
-            make.left.equalTo(playRemoteBtn.ptLayout.right).offset(20)
+        playLocalBtn.snp.makeConstraints { make in
+            make.left.equalTo(playRemoteBtn.snp.right).offset(20)
             make.height.top.equalTo(playRemoteBtn)
             make.width.equalTo(playLocalBtn.sizeFor().width)
         }
 
-        reverseSwitch.ptLayout.makeConstraints { make in
+        reverseSwitch.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.height.equalTo(34)
             make.top.equalToSuperview().inset(5)
@@ -267,9 +264,9 @@ private extension PTSVGAViewController {
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         operationBar.addSubview(stackView)
-        stackView.ptLayout.makeConstraints { make in
+        stackView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalTo(reverseSwitch.ptLayout.bottom).offset(5)
+            make.top.equalTo(reverseSwitch.snp.bottom).offset(5)
             make.height.equalTo(CGFloat.kTabbarHeight)
         }
         
@@ -303,10 +300,10 @@ private extension PTSVGAViewController {
     func setupPlayer() {
         player.contentMode = .scaleAspectFit
         view.addSubview(player)
-        player.ptLayout.makeConstraints { make in
+        player.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-            make.bottom.equalTo(operationBar.ptLayout.top)
+            make.bottom.equalTo(operationBar.snp.top)
         }
         
         player.isAnimated = true
@@ -317,10 +314,10 @@ private extension PTSVGAViewController {
         progressView.trackTintColor = .clear
         progressView.alpha = 0
         view.addSubview(progressView)
-        progressView.ptLayout.makeConstraints { make in
+        progressView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(3)
-            make.bottom.equalTo(operationBar.ptLayout.top)
+            make.bottom.equalTo(operationBar.snp.top)
         }
     }
     

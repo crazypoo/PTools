@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 @MainActor
@@ -60,11 +57,11 @@ open class PTBaseDecorationView: UICollectionReusableView {
         addSubview(bgView)
         bgView.addSubview(bgImageView)
         
-        bgView.ptLayout.makeConstraints { make in
+        bgView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        bgImageView.ptLayout.makeConstraints { make in
+        bgImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }

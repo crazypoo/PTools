@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import AVFoundation
 import SnapKit
 #if canImport(PToolsUIFoundation)
@@ -269,12 +266,12 @@ public class PTBannerView: UIView {
 
     private func setupViewHierarchy() {
         addSubviews([collectionView,titleBackgroundView])
-        collectionView.ptLayout.makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
         updatePageControlHeight()
-        titleBackgroundView.ptLayout.makeConstraints { make in
+        titleBackgroundView.snp.makeConstraints { make in
             make.height.equalTo(pageControlHeight + viewConfig.pageControlBottom * 2)
             make.bottom.left.right.equalToSuperview()
         }
@@ -319,7 +316,7 @@ public class PTBannerView: UIView {
         titleBackgroundView.backgroundColor = viewConfig.titleBackgroundColor
         descTitleView.numberOfLines = viewConfig.numberOfLines
         collectionView.backgroundColor = viewConfig.collectionViewBackgroundColor
-        titleBackgroundView.ptLayout.updateConstraints { make in
+        titleBackgroundView.snp.updateConstraints { make in
             make.height.equalTo(pageControlHeight + viewConfig.pageControlBottom * 2)
         }
         setupNavigationButtonsIfNeeded()
@@ -475,7 +472,7 @@ public class PTBannerView: UIView {
 
         let previousFrame = navigationButtonFrames?.first.flatMap(validNavigationButtonFrame)
         let nextFrame = navigationButtonFrames?.dropFirst().first.flatMap(validNavigationButtonFrame)
-        previousButton.ptLayout.remakeConstraints { make in
+        previousButton.snp.remakeConstraints { make in
             if let previousFrame {
                 make.leading.equalToSuperview().offset(previousFrame.minX)
                 make.top.equalToSuperview().offset(previousFrame.minY)
@@ -486,7 +483,7 @@ public class PTBannerView: UIView {
                 make.size.equalTo(CGSize(width: 36, height: 36))
             }
         }
-        nextButton.ptLayout.remakeConstraints { make in
+        nextButton.snp.remakeConstraints { make in
             if let nextFrame {
                 make.leading.equalToSuperview().offset(nextFrame.minX)
                 make.top.equalToSuperview().offset(nextFrame.minY)
@@ -714,7 +711,7 @@ public class PTBannerView: UIView {
     private func updateTitleHeight(_ descHeight: CGFloat) {
         let safeHeight = descHeight.isFinite ? max(0, descHeight) : pageControlHeight + viewConfig.pageControlBottom * 2
 
-        titleBackgroundView.ptLayout.updateConstraints {
+        titleBackgroundView.snp.updateConstraints {
             $0.height.equalTo(safeHeight)
         }
     }
@@ -1076,7 +1073,7 @@ extension PTBannerView {
         case .none,.system,.image:
             if let pageControl = self.customPageControl as? UIPageControl {
                 let pointSize = pageControl.size(forNumberOfPages: self.bannerModel.count)
-                pageControl.ptLayout.makeConstraints { make in
+                pageControl.snp.makeConstraints { make in
                     make.height.equalTo(self.pageControlHeight)
                     make.bottom.equalToSuperview().inset(self.viewConfig.pageControlBottom)
                     switch self.viewConfig.pageControlPosition {
@@ -1093,7 +1090,7 @@ extension PTBannerView {
                     }
                 }
             } else {
-                self.customPageControl.ptLayout.makeConstraints { make in
+                self.customPageControl.snp.makeConstraints { make in
                     make.height.equalTo(self.pageControlHeight)
                     make.bottom.equalToSuperview().inset(self.viewConfig.pageControlBottom)
                     switch self.viewConfig.pageControlPosition {
@@ -1107,7 +1104,7 @@ extension PTBannerView {
                 }
             }
         default:
-            self.customPageControl.ptLayout.makeConstraints { make in
+            self.customPageControl.snp.makeConstraints { make in
                 make.height.equalTo(self.pageControlHeight)
                 make.bottom.equalToSuperview().inset(self.viewConfig.pageControlBottom)
                 switch self.viewConfig.pageControlPosition {
@@ -1122,9 +1119,9 @@ extension PTBannerView {
         }
         
         titleBackgroundView.addSubviews([descTitleView])
-        descTitleView.ptLayout.makeConstraints { make in
+        descTitleView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(self.viewConfig.titleLeading)
-            make.bottom.equalTo(self.customPageControl.ptLayout.top).offset(-self.viewConfig.titleNPageControlSpacing)
+            make.bottom.equalTo(self.customPageControl.snp.top).offset(-self.viewConfig.titleNPageControlSpacing)
             make.top.equalToSuperview().inset(self.viewConfig.pageControlBottom)
         }
     }

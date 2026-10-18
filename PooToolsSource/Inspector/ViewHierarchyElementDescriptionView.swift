@@ -5,9 +5,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -138,7 +135,7 @@ final class ViewHierarchyElementDescriptionView: BaseView, DataReloadingProtocol
     private(set) lazy var iconImageView = UIImageView().then {
         $0.clipsToBounds = false
         $0.contentMode = .scaleAspectFit
-        $0.ptLayout.makeConstraints { make in
+        $0.snp.makeConstraints { make in
             make.width.equalTo(CGSize.elementIconSize.width)
             make.height.equalTo(CGSize.elementIconSize.width)
         }
@@ -163,12 +160,12 @@ final class ViewHierarchyElementDescriptionView: BaseView, DataReloadingProtocol
 
         contentView.addSubview(collapseButton)
 
-        collapseButton.ptLayout.makeConstraints { make in
-            make.centerY.equalTo(elementIconAndDescriptionLabel.ptLayout.top)
+        collapseButton.snp.makeConstraints { make in
+            make.centerY.equalTo(elementIconAndDescriptionLabel.snp.top)
         }
 
-        elementIconAndDescriptionLabel.ptLayout.makeConstraints { make in
-            make.leading.equalTo(collapseButton.ptLayout.trailing).offset(elementInspectorAppearance.verticalMargins * 3 / 2)
+        elementIconAndDescriptionLabel.snp.makeConstraints { make in
+            make.leading.equalTo(collapseButton.snp.trailing).offset(elementInspectorAppearance.verticalMargins * 3 / 2)
         }
     }
 }

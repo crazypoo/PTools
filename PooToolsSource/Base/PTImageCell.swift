@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 open class PTImageCell: PTBaseNormalCell {
@@ -54,11 +51,11 @@ open class PTImageCell: PTBaseNormalCell {
 
     private func setupUI() {
         contentView.addSubviews([imageView,effectView])
-        imageView.ptLayout.makeConstraints { make in
+        imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        effectView.ptLayout.makeConstraints { make in
+        effectView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         effectView.isHidden = true

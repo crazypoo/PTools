@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 @preconcurrency import AVFoundation
 import SnapKit
 
@@ -106,32 +103,32 @@ open class PTPlayerViewController: PTBaseViewController {
         
         // 添加子视图
         view.addSubviews([videoNavBar,playPauseButton, slider, currentTimeLabel, durationLabel])
-        videoNavBar.ptLayout.makeConstraints { make in
+        videoNavBar.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
             make.left.right.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight)
         }
         
-        playPauseButton.ptLayout.makeConstraints { make in
+        playPauseButton.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.size.equalTo(24)
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 20)
         }
         
-        durationLabel.ptLayout.makeConstraints { make in
+        durationLabel.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.centerY.equalTo(self.playPauseButton)
         }
         
-        currentTimeLabel.ptLayout.makeConstraints { make in
-            make.right.equalTo(self.durationLabel.ptLayout.left).offset(-8)
+        currentTimeLabel.snp.makeConstraints { make in
+            make.right.equalTo(self.durationLabel.snp.left).offset(-8)
             make.centerY.equalTo(self.playPauseButton)
         }
         
-        slider.ptLayout.makeConstraints { make in
+        slider.snp.makeConstraints { make in
             make.centerY.equalTo(self.playPauseButton)
-            make.left.equalTo(self.playPauseButton.ptLayout.right).offset(10)
-            make.right.equalTo(self.currentTimeLabel.ptLayout.left).offset(-10)
+            make.left.equalTo(self.playPauseButton.snp.right).offset(10)
+            make.right.equalTo(self.currentTimeLabel.snp.left).offset(-10)
         }
     }
     

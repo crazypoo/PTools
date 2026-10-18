@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons.rb",
-  "source_revision": "80126150505961e259cce5e08ada67962265c063",
-  "generated_at": "2026-10-18T05:01:49Z",
+  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
+  "generated_at": "2026-10-18T02:38:26Z",
   "shared_call_count": 1675,
   "declarations": [
     {
@@ -25,7 +25,7 @@
     },
     {
       "path": "PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift",
-      "line": 105,
+      "line": 102,
       "declaration": "public static let share = PTLaunchAdMonitor()",
       "name": "share",
       "category": "D",
@@ -34,7 +34,7 @@
     },
     {
       "path": "PooToolsSource/Banner/PTBannerPresenter.swift",
-      "line": 416,
+      "line": 413,
       "declaration": "public static let shared = PTBannerCenter()",
       "name": "shared",
       "category": "C",
@@ -79,7 +79,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
-      "line": 187,
+      "line": 184,
       "declaration": "public static let shared = PTNavigationBarManager()",
       "name": "shared",
       "category": "D",
@@ -196,7 +196,7 @@
     },
     {
       "path": "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
-      "line": 347,
+      "line": 344,
       "declaration": "@MainActor public static let share = PTCheckUpdateFunction()",
       "name": "share",
       "category": "C",
@@ -385,7 +385,7 @@
     },
     {
       "path": "PooToolsSource/DebugColor/PTColorPickPlugin.swift",
-      "line": 31,
+      "line": 28,
       "declaration": "public static let share = PTColorPickPlugin()",
       "name": "share",
       "category": "D",
@@ -394,7 +394,7 @@
     },
     {
       "path": "PooToolsSource/DebugColor/PTColorPickPlugin.swift",
-      "line": 280,
+      "line": 277,
       "declaration": "static let share = PTColorPickWindow()",
       "name": "share",
       "category": "D",
@@ -466,7 +466,7 @@
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTNetworkHelper.swift",
-      "line": 23,
+      "line": 20,
       "declaration": "static let shared = PTNetworkHelper()",
       "name": "shared",
       "category": "C",
@@ -475,7 +475,7 @@
     },
     {
       "path": "PooToolsSource/DebugPerformance/PTDebugPerformanceToolKit.swift",
-      "line": 20,
+      "line": 17,
       "declaration": "static let shared = PTDebugPerformanceToolKit.init()",
       "name": "shared",
       "category": "C",
@@ -493,7 +493,7 @@
     },
     {
       "path": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift",
-      "line": 23,
+      "line": 20,
       "declaration": "public static let share = PTViewRulerPlugin.init()",
       "name": "share",
       "category": "D",
@@ -583,7 +583,7 @@
     },
     {
       "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
-      "line": 28,
+      "line": 25,
       "declaration": "public static let shared = PTLaunchProfiler()",
       "name": "shared",
       "category": "D",
@@ -592,7 +592,7 @@
     },
     {
       "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
-      "line": 203,
+      "line": 200,
       "declaration": "public static let shared = LaunchVisualizer()",
       "name": "shared",
       "category": "D",
@@ -601,7 +601,7 @@
     },
     {
       "path": "PooToolsSource/LaunchTimeProfiler/PTLaunchProfiler.swift",
-      "line": 270,
+      "line": 267,
       "declaration": "static let share = EntryWindow()",
       "name": "share",
       "category": "D",
@@ -619,7 +619,7 @@
     },
     {
       "path": "PooToolsSource/Loading/PTHudView.swift",
-      "line": 44,
+      "line": 41,
       "declaration": "public static let share = PTHudConfig()",
       "name": "share",
       "category": "D",
@@ -628,7 +628,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 162,
+      "line": 159,
       "declaration": "static let shared = PTConsoleWindow()",
       "name": "shared",
       "category": "D",
@@ -637,7 +637,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 411,
+      "line": 408,
       "declaration": "public static let shared = LocalConsole()",
       "name": "shared",
       "category": "D",
@@ -646,7 +646,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/ResizeController.swift",
-      "line": 23,
+      "line": 20,
       "declaration": "public static let shared = ResizeController()",
       "name": "shared",
       "category": "D",
@@ -970,7 +970,7 @@
     },
     {
       "path": "PooToolsSource/PermissionCore/PTPermissionViewController.swift",
-      "line": 21,
+      "line": 18,
       "declaration": "public static let share = PTPermissionStatic()",
       "name": "share",
       "category": "C",
@@ -997,7 +997,7 @@
     },
     {
       "path": "PooToolsSource/Picker/PTBasePickerView.swift",
-      "line": 134,
+      "line": 132,
       "declaration": "public static var shared = PTPickerStyle()",
       "name": "shared",
       "category": "D",
@@ -1006,7 +1006,7 @@
     },
     {
       "path": "PooToolsSource/Ping/PTPingActivityIndicator.swift",
-      "line": 20,
+      "line": 17,
       "declaration": "static let shared = PTPingActivityIndicator()",
       "name": "shared",
       "category": "C",
@@ -1114,7 +1114,7 @@
     },
     {
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 28,
+      "line": 25,
       "declaration": "public static let shared = PTBannerScheduler()",
       "name": "shared",
       "category": "D",

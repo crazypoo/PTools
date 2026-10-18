@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -48,7 +45,7 @@ class PTVideoEditorToolsSpeedControl: PTVideoEditorBaseFloatingViewController {
         
         view.addSubviews([slider])
         let inset: CGFloat = 28.0
-        slider.ptLayout.makeConstraints { make in
+        slider.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(inset)
             make.height.equalTo(48)
             make.centerY.equalToSuperview()

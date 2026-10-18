@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -168,7 +165,7 @@ fileprivate extension PTVideoEditorToolsTrimmingControl {
     }
 
     func setupConstraints() {
-        timeline.ptLayout.makeConstraints { make in
+        timeline.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }

@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if canImport(PToolsSymbols)
 import PToolsSymbols
@@ -71,8 +68,8 @@ open class PTBaseTabBarViewController: UITabBarController {
                 viewIfLoaded?.setNeedsLayout()
                 return
             }
-            accessoryContainerView.ptLayout.updateConstraints { make in
-                make.bottom.equalTo(ptCustomBar.ptLayout.top).offset(-(PTAppBaseConfig.share.tabBarAccessoryBottomSpacing + (centerRaisedSet ? PTAppBaseConfig.share.tabbarCenterButtonSize / 2 : 0)))
+            accessoryContainerView.snp.updateConstraints { make in
+                make.bottom.equalTo(ptCustomBar.snp.top).offset(-(PTAppBaseConfig.share.tabBarAccessoryBottomSpacing + (centerRaisedSet ? PTAppBaseConfig.share.tabbarCenterButtonSize / 2 : 0)))
             }
         }
     }
@@ -229,7 +226,7 @@ open class PTBaseTabBarViewController: UITabBarController {
         delegate = self
 
         view.addSubview(ptCustomBar)
-        ptCustomBar.ptLayout.makeConstraints {
+        ptCustomBar.snp.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.bottom.equalToSuperview()
             $0.height.equalTo(CGFloat.kTabbarHeight_Total)
@@ -331,7 +328,7 @@ open class PTBaseTabBarViewController: UITabBarController {
         guard !isTabBarMinimized else { return }
         if geometry.axis == .verticalEdge, !geometry.customRailRect.isEmpty {
             let rail = geometry.customRailRect
-            ptCustomBar.ptLayout.remakeConstraints { make in
+            ptCustomBar.snp.remakeConstraints { make in
                 make.left.equalToSuperview().offset(rail.minX)
                 make.top.equalToSuperview().offset(rail.minY)
                 make.width.equalTo(rail.width)
@@ -354,7 +351,7 @@ open class PTBaseTabBarViewController: UITabBarController {
                              width: accessoryWidth,
                              height: accessoryHeight)
                     : geometry.accessoryRect
-                accessoryContainerView.ptLayout.remakeConstraints { make in
+                accessoryContainerView.snp.remakeConstraints { make in
                     make.left.equalToSuperview().offset(accessory.minX)
                     make.top.equalToSuperview().offset(accessory.minY)
                     make.width.equalTo(accessory.width)
@@ -362,14 +359,14 @@ open class PTBaseTabBarViewController: UITabBarController {
                 }
             }
         } else {
-            ptCustomBar.ptLayout.remakeConstraints { make in
+            ptCustomBar.snp.remakeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.bottom.equalToSuperview()
                 make.height.equalTo(CGFloat.kTabbarHeight_Total)
             }
-            accessoryContainerView.ptLayout.remakeConstraints { make in
+            accessoryContainerView.snp.remakeConstraints { make in
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.tabbarBar26LRSpacing)
-                make.bottom.equalTo(ptCustomBar.ptLayout.top).offset(-(PTAppBaseConfig.share.tabBarAccessoryBottomSpacing + (centerRaisedSet ? PTAppBaseConfig.share.tabbarCenterButtonSize / 2 : 0)))
+                make.bottom.equalTo(ptCustomBar.snp.top).offset(-(PTAppBaseConfig.share.tabBarAccessoryBottomSpacing + (centerRaisedSet ? PTAppBaseConfig.share.tabbarCenterButtonSize / 2 : 0)))
                 make.height.equalTo(currentAccessoryContentView == nil ? 0 : PTAppBaseConfig.share.tabBarAccessoryHeight)
             }
         }
@@ -387,22 +384,22 @@ open class PTBaseTabBarViewController: UITabBarController {
                                     blurStyle: PTAppBaseConfig.share.tab26Mode ? .systemUltraThinMaterial : .systemMaterial,
                                     fallbackColor: .secondarySystemBackground)
         accessoryContainerView.addSubview(accessoryBlurView)
-        accessoryBlurView.ptLayout.makeConstraints { make in
+        accessoryBlurView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
         // 2. 添加顶部半透明高光线
         topBorderLine.backgroundColor = UIColor.white.withAlphaComponent(0.2)
         accessoryContainerView.addSubview(topBorderLine)
-        topBorderLine.ptLayout.makeConstraints { make in
+        topBorderLine.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
             make.height.equalTo(0.5)
         }
         
         // 3. 基础容器约束 (初始高度为 0)
-        accessoryContainerView.ptLayout.makeConstraints { make in
+        accessoryContainerView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.tabbarBar26LRSpacing)
-            make.bottom.equalTo(ptCustomBar.ptLayout.top).offset(-(PTAppBaseConfig.share.tabBarAccessoryBottomSpacing + (centerRaisedSet ? PTAppBaseConfig.share.tabbarCenterButtonSize / 2 : 0)))
+            make.bottom.equalTo(ptCustomBar.snp.top).offset(-(PTAppBaseConfig.share.tabBarAccessoryBottomSpacing + (centerRaisedSet ? PTAppBaseConfig.share.tabbarCenterButtonSize / 2 : 0)))
             make.height.equalTo(0)
         }
         accessoryContainerInstalled = true
@@ -614,7 +611,7 @@ open class PTBaseTabBarViewController: UITabBarController {
             
             // 🌟 将更新约束的逻辑单独提取出来
             let updateConstraints = {
-                self.ptCustomBar.ptLayout.remakeConstraints { make in
+                self.ptCustomBar.snp.remakeConstraints { make in
                     if let geometry = self.adaptiveBarGeometry,
                        geometry.axis == .verticalEdge,
                        !geometry.customRailRect.isEmpty,
@@ -643,7 +640,7 @@ open class PTBaseTabBarViewController: UITabBarController {
             
             if animated {
                 // 有滑动动画时，先更新约束，再在动画块里强刷布局
-                _ = updateConstraints()
+                updateConstraints()
                 UIView.animate(withDuration: PTUIAccessibility.animationDuration(0.4),
                                delay: 0,
                                usingSpringWithDamping: 0.8,
@@ -656,7 +653,7 @@ open class PTBaseTabBarViewController: UITabBarController {
             } else {
                 // 🌟 修复点 2：在无动画（例如 Push 转场）时，只更新约束方程！
                 // 绝不调用 self.view.layoutIfNeeded()，让系统在下一个生命周期自然渲染，防止打断 B 界面的 ScrollView 布局！
-                _ = updateConstraints()
+                updateConstraints()
             }
         }
     }
@@ -785,7 +782,7 @@ extension PTBaseTabBarViewController {
         // 1. 将新视图添加到卡槽顶层 (盖在 blurView 和 borderLine 上面)
         if let newView = newContentView {
             accessoryContainerView.addSubview(newView)
-            newView.ptLayout.remakeConstraints { make in
+            newView.snp.remakeConstraints { make in
                 // 顶部避开 0.5pt 的高光线
                 make.top.equalToSuperview().offset(0.5)
                 make.left.right.bottom.equalToSuperview()
@@ -800,7 +797,7 @@ extension PTBaseTabBarViewController {
         let targetHeight: CGFloat = (newContentView != nil) ? standardHeight : 0
         
         // 更新高度约束
-        accessoryContainerView.ptLayout.updateConstraints { make in
+        accessoryContainerView.snp.updateConstraints { make in
             make.height.equalTo(targetHeight)
         }
         accessoryContainerView.viewCorner(radius: standardHeight / 2)

@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 // English: Import the split Core target explicitly for semantic feedback in standalone SwiftPM builds.
@@ -358,7 +355,7 @@ public class PTCollectionView: UIView {
         self.registerClassCells(classs: ["CELL":UICollectionViewCell.self])
 
         addSubview(collectionView)
-        collectionView.ptLayout.makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         if viewConfig.canMoveItem {
@@ -384,7 +381,7 @@ public class PTCollectionView: UIView {
 
         skeletonOverlayView.isHidden = true
         addSubview(skeletonOverlayView)
-        skeletonOverlayView.ptLayout.makeConstraints { make in
+        skeletonOverlayView.snp.makeConstraints { make in
             make.edges.equalTo(collectionView)
         }
     }

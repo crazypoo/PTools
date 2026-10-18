@@ -3,9 +3,6 @@
 // 中文：标准、增长、浮动和紧凑 Banner 的 UIKit 渲染器。
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if canImport(PToolsSymbols)
 import PToolsSymbols
@@ -26,10 +23,10 @@ public final class PooToolsBannerView: UIView {
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
     private let actionStack = UIStackView()
-    private var contentLeadingConstraint: PTLayoutConstraint?
-    private var contentTrailingConstraint: PTLayoutConstraint?
-    private var contentTopConstraint: PTLayoutConstraint?
-    private var contentBottomConstraint: PTLayoutConstraint?
+    private var contentLeadingConstraint: Constraint?
+    private var contentTrailingConstraint: Constraint?
+    private var contentTopConstraint: Constraint?
+    private var contentBottomConstraint: Constraint?
     private var panStartTransform: CGAffineTransform = .identity
 
     public init(banner: PTBanner,
@@ -87,7 +84,7 @@ public final class PooToolsBannerView: UIView {
         layer.masksToBounds = false
 
         addSubview(blurView)
-        blurView.ptLayout.makeConstraints { make in
+        blurView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
@@ -95,7 +92,7 @@ public final class PooToolsBannerView: UIView {
         contentStack.alignment = .center
         contentStack.spacing = 10
         addSubview(contentStack)
-        contentStack.ptLayout.makeConstraints { make in
+        contentStack.snp.makeConstraints { make in
             contentLeadingConstraint = make.leading.equalToSuperview().offset(banner.configuration.contentInsets.leading).constraint
             contentTrailingConstraint = make.trailing.equalToSuperview().offset(-banner.configuration.contentInsets.trailing).constraint
             contentTopConstraint = make.top.equalToSuperview().offset(banner.configuration.contentInsets.top).constraint
@@ -176,7 +173,7 @@ public final class PooToolsBannerView: UIView {
     // 中文：将每个附件居中，避免自定义 View 位置不明确。
     private func addAccessory(_ view: UIView, to container: UIView) {
         container.addSubview(view)
-        view.ptLayout.makeConstraints { make in
+        view.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
     }
@@ -205,7 +202,7 @@ public final class PooToolsBannerView: UIView {
         }
         view.setContentHuggingPriority(.required, for: .horizontal)
         view.setContentCompressionResistancePriority(.required, for: .horizontal)
-        view.ptLayout.makeConstraints { make in
+        view.snp.makeConstraints { make in
             make.width.height.lessThanOrEqualTo(32)
         }
         return view
@@ -231,7 +228,7 @@ public final class PooToolsBannerView: UIView {
             actionStack.addArrangedSubview(button)
         }
         trailingContainer.addSubview(actionStack)
-        actionStack.ptLayout.makeConstraints { make in
+        actionStack.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         trailingContainer.isHidden = false

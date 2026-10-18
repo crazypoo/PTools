@@ -7,9 +7,7 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
+import SnapKit
 
 public class PTTagLabelScrollView: UIScrollView {
 
@@ -63,7 +61,7 @@ public class PTTagLabelScrollView: UIScrollView {
         
         addSubview(stackView)
         
-        stackView.ptLayout.makeConstraints { make in
+        stackView.snp.makeConstraints { make in
             // 现代 UIScrollView 布局：明确区分内容区域（content）与视口区域（frame）
             make.edges.equalTo(self.contentLayoutGuide)
             make.height.equalTo(self.frameLayoutGuide) // 锁定高度，允许内部宽度自由撑开
@@ -99,9 +97,7 @@ public class PTTagLabelScrollView: UIScrollView {
                 
                 stackView.addArrangedSubview(label)
                 
-                // English: UIStackView owns arranged-subview constraints; no extra layout call is needed.
-                // Español: UIStackView posee las restricciones de sus arranged subviews; no hace falta otra llamada.
-                // 中文：UIStackView 负责排列子视图约束，不再额外添加布局约束。
+                // 删除了内部冗余的 snp.makeConstraints，避免与 StackView 机制冲突
             }
             
             // 更新文本

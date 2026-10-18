@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
@@ -47,17 +44,17 @@ public class PTUpdateTipsContentView : UIView {
             let height = tempHeight * CGFloat(index) + CGFloat(index) * 10
             
             addSubview(valueLabel)
-            valueLabel.ptLayout.makeConstraints { (make) in
-                make.right.equalTo(self.ptLayout.right)
-                make.top.equalTo(self.ptLayout.top).offset(height)
+            valueLabel.snp.makeConstraints { (make) in
+                make.right.equalTo(self.snp.right)
+                make.top.equalTo(self.snp.top).offset(height)
                 make.size.equalTo(CGSize(width: baseContentSize.width, height:tempHeight))
             }
             
             addSubview(nameLabel)
-            nameLabel.ptLayout.makeConstraints { (make) in
-                make.right.equalTo(valueLabel.ptLayout.left).offset(-15)
-                make.left.equalTo(self.ptLayout.left)
-                make.top.equalTo(self.ptLayout.top).offset(height)
+            nameLabel.snp.makeConstraints { (make) in
+                make.right.equalTo(valueLabel.snp.left).offset(-15)
+                make.left.equalTo(self.snp.left)
+                make.top.equalTo(self.snp.top).offset(height)
                 make.height.equalTo(tempHeight)
             }
         }
@@ -65,9 +62,9 @@ public class PTUpdateTipsContentView : UIView {
         let scrollView = UIScrollView()
         scrollView.contentSize = baseContentSize
         addSubview(scrollView)
-        scrollView.ptLayout.makeConstraints { (make) in
-            make.right.equalTo(self.ptLayout.right)
-            make.top.equalTo(self.ptLayout.top).offset(90)
+        scrollView.snp.makeConstraints { (make) in
+            make.right.equalTo(self.snp.right)
+            make.top.equalTo(self.snp.top).offset(90)
             make.width.equalTo(baseContentSize.width)
             make.bottom.equalToSuperview()
         }
@@ -79,9 +76,9 @@ public class PTUpdateTipsContentView : UIView {
         let valueLabel = UILabel()
         valueLabel.numberOfLines = 0
         scrollView.addSubview(valueLabel)
-        valueLabel.ptLayout.makeConstraints { (make) in
-            make.top.equalTo(scrollView.ptLayout.top)
-            make.left.equalTo(scrollView.ptLayout.left)
+        valueLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(scrollView.snp.top)
+            make.left.equalTo(scrollView.snp.left)
             make.size.equalTo(CGSize(width: baseContentSize.width, height: tmpHight))
         }
         
@@ -106,10 +103,10 @@ public class PTUpdateTipsContentView : UIView {
         nameLabel.backgroundColor = .clear
         nameLabel.numberOfLines = 0
         addSubview(nameLabel)
-        nameLabel.ptLayout.makeConstraints { (make) in
-            make.right.equalTo(scrollView.ptLayout.left).offset(-15)
-            make.left.equalTo(self.ptLayout.left)
-            make.top.equalTo(scrollView.ptLayout.top)
+        nameLabel.snp.makeConstraints { (make) in
+            make.right.equalTo(scrollView.snp.left).offset(-15)
+            make.left.equalTo(self.snp.left)
+            make.top.equalTo(scrollView.snp.top)
             make.height.equalTo(tempHeight)
         }
     }
@@ -199,7 +196,7 @@ open class PTUpdateTipsViewController: PTBaseViewController {
         view.backgroundColor = .clear
         // Do any additional setup after loading the view.
         view.addSubview(whiteView)
-        whiteView.ptLayout.makeConstraints { (make) in
+        whiteView.snp.makeConstraints { (make) in
             make.center.equalTo(view)
             make.size.equalTo(CGSize(width: 335, height: 278))
         }
@@ -212,10 +209,10 @@ open class PTUpdateTipsViewController: PTBaseViewController {
         
         if !(titleString).stringIsEmpty() {
             whiteView.addSubviews([titleLabel])
-            titleLabel.ptLayout.makeConstraints { (make) in
+            titleLabel.snp.makeConstraints { (make) in
                 make.centerX.equalTo(whiteView)
-                make.top.equalTo(whiteView.ptLayout.top).offset(10)
-                make.right.equalTo(whiteView.ptLayout.right).offset(-15)
+                make.top.equalTo(whiteView.snp.top).offset(10)
+                make.right.equalTo(whiteView.snp.right).offset(-15)
                 make.height.equalTo(titleLabel.font.pointSize + 5)
             }
         }
@@ -224,17 +221,17 @@ open class PTUpdateTipsViewController: PTBaseViewController {
         
         if hasCancel {
             whiteView.addSubview(closeButton)
-            closeButton.ptLayout.makeConstraints { (make) in
+            closeButton.snp.makeConstraints { (make) in
                 make.size.equalTo(CGSize(width: 100, height: 40))
                 make.bottom.equalToSuperview().inset(10)
-                make.right.equalTo(whiteView.ptLayout.centerX).offset(-10)
+                make.right.equalTo(whiteView.snp.centerX).offset(-10)
             }
         }
         
-        downLoadButton.ptLayout.makeConstraints { (make) in
+        downLoadButton.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview().inset(10)
             if hasCancel {
-                make.left.equalTo(whiteView.ptLayout.centerX).offset(10)
+                make.left.equalTo(whiteView.snp.centerX).offset(10)
                 make.size.equalTo(CGSize(width: 100, height: 40))
             } else {
                 make.centerX.equalToSuperview()
@@ -242,12 +239,12 @@ open class PTUpdateTipsViewController: PTBaseViewController {
             }
         }
         
-        contentView.ptLayout.makeConstraints { (make) in
-            make.left.equalTo(whiteView.ptLayout.left).offset(15)
+        contentView.snp.makeConstraints { (make) in
+            make.left.equalTo(whiteView.snp.left).offset(15)
             make.right.equalTo(whiteView).offset(-15)
-            make.bottom.equalTo(downLoadButton.ptLayout.top).offset(-10)
+            make.bottom.equalTo(downLoadButton.snp.top).offset(-10)
             if !(titleString).stringIsEmpty() {
-                make.top.equalTo(titleLabel.ptLayout.bottom).offset(15)
+                make.top.equalTo(titleLabel.snp.bottom).offset(15)
             } else {
                 make.top.equalToSuperview().inset(15)
             }

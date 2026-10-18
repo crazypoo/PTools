@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -200,14 +197,14 @@ fileprivate class PTWhatsNewsCell:PTBaseNormalCell {
     }
     
     func subMakeContent() {
-        imageView.ptLayout.makeConstraints { make in
+        imageView.snp.makeConstraints { make in
             make.left.equalToSuperview()
             make.top.equalToSuperview().inset(7.5)
             make.height.equalTo(49)
         }
         
-        titleLabel.ptLayout.makeConstraints { make in
-            make.left.equalTo(imageView.ptLayout.right).offset(10)
+        titleLabel.snp.makeConstraints { make in
+            make.left.equalTo(imageView.snp.right).offset(10)
             make.top.bottom.equalToSuperview().inset(7.5)
             make.right.equalToSuperview()
         }
@@ -222,15 +219,15 @@ fileprivate class PTWhatsNewsCell:PTBaseNormalCell {
             subMakeContent()
         } else {
             imageView.isHidden = true
-            imageView.ptLayout.makeConstraints { make in
+            imageView.snp.makeConstraints { make in
                 make.left.equalToSuperview()
                 make.top.equalToSuperview().inset(7.5)
                 make.height.equalTo(49)
                 make.width.equalTo(0)
             }
             
-            titleLabel.ptLayout.makeConstraints { make in
-                make.left.equalTo(self.imageView.ptLayout.right)
+            titleLabel.snp.makeConstraints { make in
+                make.left.equalTo(self.imageView.snp.right)
                 make.top.bottom.equalToSuperview().inset(7.5)
                 make.right.equalToSuperview()
             }
@@ -381,30 +378,30 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         } else {
             view.addSubviews([titleLabel,iKnowButton,collectionView])
         }
-        titleLabel.ptLayout.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight)
         }
         
-        iKnowButton.ptLayout.makeConstraints { make in
+        iKnowButton.snp.makeConstraints { make in
             make.left.right.equalTo(titleLabel)
             make.height.equalTo(54)
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarHeight_Total)
         }
         
         if !iKnowItems.privacy.stringIsEmpty() {
-            privacyButton.ptLayout.makeConstraints { make in
+            privacyButton.snp.makeConstraints { make in
                 make.centerX.equalTo(self.iKnowButton)
-                make.bottom.equalTo(self.iKnowButton.ptLayout.top).offset(-7.5)
+                make.bottom.equalTo(self.iKnowButton.snp.top).offset(-7.5)
                 make.left.right.lessThanOrEqualTo(self.iKnowButton)
             }
         }
-        collectionView.ptLayout.makeConstraints { make in
-            make.top.equalTo(self.titleLabel.ptLayout.bottom).offset(10)
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(self.titleLabel.snp.bottom).offset(10)
             if !self.iKnowItems.privacy.stringIsEmpty() {
-                make.bottom.equalTo(self.privacyButton.ptLayout.top).offset(-20)
+                make.bottom.equalTo(self.privacyButton.snp.top).offset(-20)
             } else {
-                make.bottom.equalTo(self.iKnowButton.ptLayout.top).offset(-20)
+                make.bottom.equalTo(self.iKnowButton.snp.top).offset(-20)
             }
             make.left.right.equalToSuperview().inset(contentViewSpace / 2)
         }

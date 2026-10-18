@@ -6,9 +6,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -147,8 +144,8 @@ public class PTChatTypingIndicator: UIView {
     private func setupView() {
         dots.forEach { dot in
           dot.backgroundColor = dotColor
-          dot.ptLayout.makeConstraints { make in
-              make.height.equalTo(dot.ptLayout.width)
+          dot.snp.makeConstraints { make in
+              make.height.equalTo(dot.snp.width)
           }
           stackView.addArrangedSubview(dot)
         }
@@ -156,7 +153,7 @@ public class PTChatTypingIndicator: UIView {
         stackView.alignment = .center
         stackView.distribution = .fillEqually
         addSubview(stackView)
-        stackView.ptLayout.makeConstraints { make in
+        stackView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }

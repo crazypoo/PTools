@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 #if SWIFT_PACKAGE
@@ -48,14 +45,14 @@ class PTAdjustToolCell: PTBaseNormalCell {
         super.init(frame: frame)
         
         contentView.addSubviews([imageView,nameLabel])
-        imageView.ptLayout.makeConstraints { make in
+        imageView.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview().inset(7.5)
-            make.height.equalTo(imageView.ptLayout.width)
+            make.height.equalTo(imageView.snp.width)
         }
         
-        nameLabel.ptLayout.makeConstraints { make in
+        nameLabel.snp.makeConstraints { make in
             make.bottom.left.right.equalToSuperview().inset(7.5)
-            make.top.equalTo(self.imageView.ptLayout.bottom)
+            make.top.equalTo(self.imageView.snp.bottom)
         }
     }
     

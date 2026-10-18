@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import PooTools
 
 class PTTabBarTestOneViewController: PTBaseViewController {
@@ -24,7 +21,7 @@ class PTTabBarTestOneViewController: PTBaseViewController {
         searchBar.placeholder = "搜索..."
         
         view.addSubview(searchBar)
-        searchBar.ptLayout.makeConstraints { make in
+        searchBar.snp.makeConstraints { make in
             // 自动垂直居中填满父容器即可
             make.centerY.equalToSuperview()
             make.left.right.equalToSuperview().inset(12)
@@ -46,7 +43,7 @@ class PTTabBarTestOneViewController: PTBaseViewController {
             self.pt_Title = "2222222222222"
         }
         view.addSubviews([buttons])
-        buttons.ptLayout.makeConstraints { make in
+        buttons.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.size.equalTo(64)
         }

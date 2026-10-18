@@ -12,9 +12,6 @@ public struct PTLayoutProfileSnapshot: Sendable {
     public let updateCount: Int
     public let remakeCount: Int
     public let prepareCount: Int
-    /// English: Counts constraints handed to UIKit by PTLayout; it is cumulative install-event data, not the current active total.
-    /// Español: Cuenta las restricciones entregadas a UIKit por PTLayout; es un acumulado de instalaciones, no el total activo actual.
-    /// 中文：统计 PTLayout 交给 UIKit 的约束数量；这是累计安装事件，不是当前激活约束总数。
     public let installedConstraintCount: Int
 
     public init(makeCount: Int,

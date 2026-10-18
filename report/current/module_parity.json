@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "80126150505961e259cce5e08ada67962265c063",
-  "generated_at": "2026-10-18T04:59:41Z",
+  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
+  "generated_at": "2026-10-18T01:57:29Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -484,24 +484,6 @@
   "dependency_drift": [
     {
       "module": "Banner",
-      "field": "internal_dependencies",
-      "spm": [
-        "Logging",
-        "Overlay",
-        "PToolsConstraintLayout",
-        "PToolsCore",
-        "Symbols"
-      ],
-      "cocoapods": [
-        "ConstraintLayout",
-        "Logging",
-        "Overlay",
-        "PToolsCore",
-        "Symbols"
-      ]
-    },
-    {
-      "module": "Banner",
       "field": "third_party_dependencies",
       "spm": [
         "SnapKit"
@@ -525,8 +507,7 @@
         "Core",
         "Hud",
         "Loading",
-        "NetWork",
-        "PToolsConstraintLayout"
+        "NetWork"
       ],
       "cocoapods": [
         "NetWork"
@@ -555,23 +536,6 @@
     },
     {
       "module": "ContentState",
-      "field": "internal_dependencies",
-      "spm": [
-        "Accessibility",
-        "Connectivity",
-        "Core",
-        "PToolsConstraintLayout",
-        "Theme"
-      ],
-      "cocoapods": [
-        "Accessibility",
-        "Connectivity",
-        "Core",
-        "Theme"
-      ]
-    },
-    {
-      "module": "ContentState",
       "field": "third_party_dependencies",
       "spm": [
         "SnapKit"
@@ -593,7 +557,6 @@
         "Symbols"
       ],
       "cocoapods": [
-        "ConstraintLayout",
         "Date",
         "Device",
         "Logging",
@@ -621,17 +584,6 @@
     },
     {
       "module": "CustomerLabel",
-      "field": "internal_dependencies",
-      "spm": [
-        "Core",
-        "PToolsConstraintLayout"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
-    },
-    {
-      "module": "CustomerLabel",
       "field": "third_party_dependencies",
       "spm": [
         "SnapKit"
@@ -648,57 +600,11 @@
     },
     {
       "module": "DEBUG",
-      "field": "internal_dependencies",
-      "spm": [
-        "BackgroundTasks",
-        "Connectivity",
-        "Core",
-        "DeepLink",
-        "NetWork",
-        "Notifications",
-        "Overlay",
-        "PDF",
-        "PToolsConstraintLayout",
-        "RouteCore",
-        "SearchBar",
-        "Share",
-        "Storage",
-        "Symbols"
-      ],
-      "cocoapods": [
-        "BackgroundTasks",
-        "Connectivity",
-        "Core",
-        "DeepLink",
-        "NetWork",
-        "Notifications",
-        "Overlay",
-        "PDF",
-        "RouteCore",
-        "SearchBar",
-        "Share",
-        "Storage",
-        "Symbols"
-      ]
-    },
-    {
-      "module": "DEBUG",
       "field": "third_party_dependencies",
       "spm": [
         "SnapKit"
       ],
       "cocoapods": []
-    },
-    {
-      "module": "Documents",
-      "field": "internal_dependencies",
-      "spm": [
-        "PDF",
-        "PToolsConstraintLayout"
-      ],
-      "cocoapods": [
-        "PDF"
-      ]
     },
     {
       "module": "Documents",
@@ -710,35 +616,6 @@
     },
     {
       "module": "Form",
-      "field": "internal_dependencies",
-      "spm": [
-        "Accessibility",
-        "CheckBox",
-        "ContentState",
-        "Core",
-        "Input",
-        "PToolsConstraintLayout",
-        "PToolsCore",
-        "Picker",
-        "Slider",
-        "Stepper",
-        "Theme"
-      ],
-      "cocoapods": [
-        "Accessibility",
-        "CheckBox",
-        "ContentState",
-        "Core",
-        "Input",
-        "PToolsCore",
-        "Picker",
-        "Slider",
-        "Stepper",
-        "Theme"
-      ]
-    },
-    {
-      "module": "Form",
       "field": "third_party_dependencies",
       "spm": [
         "SnapKit"
@@ -747,35 +624,11 @@
     },
     {
       "module": "Guide",
-      "field": "internal_dependencies",
-      "spm": [
-        "Core",
-        "PToolsConstraintLayout",
-        "PageControl"
-      ],
-      "cocoapods": [
-        "Core",
-        "PageControl"
-      ]
-    },
-    {
-      "module": "Guide",
       "field": "third_party_dependencies",
       "spm": [
         "SnapKit"
       ],
       "cocoapods": []
-    },
-    {
-      "module": "HandSign",
-      "field": "internal_dependencies",
-      "spm": [
-        "Core",
-        "PToolsConstraintLayout"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
     },
     {
       "module": "HandSign",
@@ -794,7 +647,6 @@
         "Hud",
         "Loading",
         "MediaViewer",
-        "PToolsConstraintLayout",
         "Symbols"
       ],
       "cocoapods": [
@@ -816,19 +668,6 @@
     },
     {
       "module": "HeartRate",
-      "field": "internal_dependencies",
-      "spm": [
-        "CameraPermission",
-        "Core",
-        "PToolsConstraintLayout"
-      ],
-      "cocoapods": [
-        "CameraPermission",
-        "Core"
-      ]
-    },
-    {
-      "module": "HeartRate",
       "field": "third_party_dependencies",
       "spm": [
         "SnapKit",
@@ -836,19 +675,6 @@
       ],
       "cocoapods": [
         "lottie-ios"
-      ]
-    },
-    {
-      "module": "Hud",
-      "field": "internal_dependencies",
-      "spm": [
-        "Core",
-        "PToolsConstraintLayout",
-        "ProgressBar"
-      ],
-      "cocoapods": [
-        "Core",
-        "ProgressBar"
       ]
     },
     {
@@ -866,7 +692,6 @@
         "Core",
         "HarbethKit",
         "MediaCore",
-        "PToolsConstraintLayout",
         "PToolsCore",
         "PhotoPicker",
         "Symbols"
@@ -901,7 +726,6 @@
       "field": "internal_dependencies",
       "spm": [
         "Core",
-        "PToolsConstraintLayout",
         "PToolsCore",
         "PToolsUIFoundation"
       ],
@@ -914,8 +738,7 @@
       "module": "Instructions",
       "field": "internal_dependencies",
       "spm": [
-        "Overlay",
-        "PToolsConstraintLayout"
+        "Overlay"
       ],
       "cocoapods": [
         "Core",
@@ -932,33 +755,11 @@
     },
     {
       "module": "LaunchTimeProfiler",
-      "field": "internal_dependencies",
-      "spm": [
-        "Core",
-        "PToolsConstraintLayout"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
-    },
-    {
-      "module": "LaunchTimeProfiler",
       "field": "third_party_dependencies",
       "spm": [
         "SnapKit"
       ],
       "cocoapods": []
-    },
-    {
-      "module": "Loading",
-      "field": "internal_dependencies",
-      "spm": [
-        "Core",
-        "PToolsConstraintLayout"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
     },
     {
       "module": "Loading",
@@ -990,7 +791,6 @@
         "Core",
         "LivePhoto",
         "MediaCore",
-        "PToolsConstraintLayout",
         "PToolsUIFoundation",
         "PageControl",
         "ProgressBar"
@@ -1028,7 +828,6 @@
         "Core",
         "CustomerLabel",
         "NetWork",
-        "PToolsConstraintLayout",
         "ProgressBar",
         "Symbols"
       ],
@@ -1081,17 +880,6 @@
     },
     {
       "module": "PDF",
-      "field": "internal_dependencies",
-      "spm": [
-        "Core",
-        "PToolsConstraintLayout"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
-    },
-    {
-      "module": "PDF",
       "field": "third_party_dependencies",
       "spm": [
         "SnapKit"
@@ -1104,17 +892,6 @@
       "spm": [
         "Core",
         "PToolsCore"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
-    },
-    {
-      "module": "PagingControl",
-      "field": "internal_dependencies",
-      "spm": [
-        "Core",
-        "PToolsConstraintLayout"
       ],
       "cocoapods": [
         "Core"
@@ -1137,7 +914,6 @@
         "ImagePicker",
         "Loading",
         "MediaCore",
-        "PToolsConstraintLayout",
         "PToolsUIFoundation",
         "Symbols"
       ],
@@ -1162,7 +938,6 @@
       "field": "internal_dependencies",
       "spm": [
         "Core",
-        "PToolsConstraintLayout",
         "PToolsCore"
       ],
       "cocoapods": [
@@ -1176,17 +951,6 @@
         "SnapKit"
       ],
       "cocoapods": []
-    },
-    {
-      "module": "Ping",
-      "field": "internal_dependencies",
-      "spm": [
-        "Core",
-        "PToolsConstraintLayout"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
     },
     {
       "module": "Ping",
@@ -1211,17 +975,6 @@
     },
     {
       "module": "ProgressBar",
-      "field": "internal_dependencies",
-      "spm": [
-        "Core",
-        "PToolsConstraintLayout"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
-    },
-    {
-      "module": "ProgressBar",
       "field": "third_party_dependencies",
       "spm": [
         "SnapKit"
@@ -1232,11 +985,9 @@
       "module": "RateView",
       "field": "internal_dependencies",
       "spm": [
-        "Core",
-        "PToolsConstraintLayout"
+        "Core"
       ],
       "cocoapods": [
-        "ConstraintLayout",
         "PToolsUIFoundation"
       ]
     },
@@ -1260,7 +1011,6 @@
         "CameraPermission",
         "Core",
         "ImagePicker",
-        "PToolsConstraintLayout",
         "PToolsCore",
         "PhotoPicker"
       ],
@@ -1283,7 +1033,6 @@
       "field": "internal_dependencies",
       "spm": [
         "Core",
-        "PToolsConstraintLayout",
         "PToolsUIFoundation",
         "PageControl"
       ],
@@ -1302,21 +1051,6 @@
     },
     {
       "module": "Search",
-      "field": "internal_dependencies",
-      "spm": [
-        "Core",
-        "PToolsConstraintLayout",
-        "PToolsUIFoundation",
-        "SearchBar"
-      ],
-      "cocoapods": [
-        "Core",
-        "PToolsUIFoundation",
-        "SearchBar"
-      ]
-    },
-    {
-      "module": "Search",
       "field": "third_party_dependencies",
       "spm": [
         "SnapKit"
@@ -1332,19 +1066,6 @@
       "cocoapods": []
     },
     {
-      "module": "Share",
-      "field": "internal_dependencies",
-      "spm": [
-        "Core",
-        "CustomerLabel",
-        "PToolsConstraintLayout"
-      ],
-      "cocoapods": [
-        "Core",
-        "CustomerLabel"
-      ]
-    },
-    {
       "module": "SiriPermission",
       "field": "internal_dependencies",
       "spm": [
@@ -1357,23 +1078,9 @@
     {
       "module": "Slider",
       "field": "internal_dependencies",
-      "spm": [
-        "PToolsConstraintLayout"
-      ],
+      "spm": [],
       "cocoapods": [
-        "ConstraintLayout",
         "PToolsUIFoundation"
-      ]
-    },
-    {
-      "module": "Stepper",
-      "field": "internal_dependencies",
-      "spm": [
-        "Core",
-        "PToolsConstraintLayout"
-      ],
-      "cocoapods": [
-        "Core"
       ]
     },
     {
@@ -1403,7 +1110,6 @@
         "HarbethKit",
         "Loading",
         "MediaCore",
-        "PToolsConstraintLayout",
         "PToolsCore",
         "ProgressBar",
         "Symbols"
@@ -1431,7 +1137,6 @@
       "field": "internal_dependencies",
       "spm": [
         "Core",
-        "PToolsConstraintLayout",
         "PToolsUIFoundation"
       ],
       "cocoapods": [
@@ -2362,5 +2067,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "013163fa4a9e0cbc7c6a1b868d64bd5a988d47a108631e4d97ef988ff56ea8b6"
+  "fingerprint": "536dfe06d4513880c1d0a6e2f35879c65060eeade2f5b68ff4221a91a4b8e144"
 }

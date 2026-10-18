@@ -7,9 +7,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -22,7 +19,7 @@ public class PTStepperHorizontalCell: PTBaseNormalCell {
     public var cellModel: PTStepperListModel! {
         didSet {
             Task { @MainActor in
-                self.circleView.ptLayout.updateConstraints { make in
+                self.circleView.snp.updateConstraints { make in
                     make.size.equalTo(self.cellModel.stopCircleWidth)
                 }
                 if self.cellModel.stopFinish {
@@ -39,11 +36,11 @@ public class PTStepperHorizontalCell: PTBaseNormalCell {
                 }
             }
             
-            leftLine.ptLayout.updateConstraints { make in
+            leftLine.snp.updateConstraints { make in
                 make.height.equalTo(self.cellModel.stopLineHeight)
             }
             
-            rightLine.ptLayout.updateConstraints { make in
+            rightLine.snp.updateConstraints { make in
                 make.height.equalTo(self.cellModel.stopLineHeight)
             }
             rightLine.backgroundColor = self.cellModel.stopFinish ? self.cellModel.stopSelectedColor : self.cellModel.stopNormalColor
@@ -98,36 +95,36 @@ public class PTStepperHorizontalCell: PTBaseNormalCell {
         super.init(frame: frame)
         
         contentView.addSubviews([circleView,leftLine,rightLine,infoLabel,stopLabel,stopImage])
-        circleView.ptLayout.makeConstraints { make in
+        circleView.snp.makeConstraints { make in
             make.centerX.top.equalToSuperview()
             make.size.equalTo(0)
         }
         
-        leftLine.ptLayout.makeConstraints { make in
+        leftLine.snp.makeConstraints { make in
             make.left.equalToSuperview()
-            make.right.equalTo(self.circleView.ptLayout.left)
+            make.right.equalTo(self.circleView.snp.left)
             make.centerY.equalTo(self.circleView)
             make.height.equalTo(0)
         }
         
-        rightLine.ptLayout.makeConstraints { make in
+        rightLine.snp.makeConstraints { make in
             make.right.equalToSuperview()
-            make.left.equalTo(self.circleView.ptLayout.right)
+            make.left.equalTo(self.circleView.snp.right)
             make.centerY.equalTo(self.circleView)
             make.height.equalTo(0)
         }
 
-        infoLabel.ptLayout.makeConstraints { make in
+        infoLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(7.5)
-            make.top.equalTo(self.circleView.ptLayout.bottom)
+            make.top.equalTo(self.circleView.snp.bottom)
             make.bottom.equalToSuperview().inset(7.5)
         }
         
-        stopLabel.ptLayout.makeConstraints { make in
+        stopLabel.snp.makeConstraints { make in
             make.edges.equalTo(self.circleView)
         }
         
-        stopImage.ptLayout.makeConstraints { make in
+        stopImage.snp.makeConstraints { make in
             make.edges.equalTo(self.circleView)
         }
     }
@@ -145,7 +142,7 @@ public class PTStepperVerticalCell: PTBaseNormalCell {
     public var cellModel: PTStepperListModel! {
         didSet {
             Task { @MainActor in
-                self.circleView.ptLayout.updateConstraints { make in
+                self.circleView.snp.updateConstraints { make in
                     make.size.equalTo(self.cellModel.stopCircleWidth)
                 }
                 if self.cellModel.stopFinish {
@@ -162,7 +159,7 @@ public class PTStepperVerticalCell: PTBaseNormalCell {
                 }
             }
             
-            verticalLine.ptLayout.updateConstraints { make in
+            verticalLine.snp.updateConstraints { make in
                 make.width.equalTo(self.cellModel.stopLineHeight)
             }
 
@@ -213,35 +210,35 @@ public class PTStepperVerticalCell: PTBaseNormalCell {
         super.init(frame: frame)
         
         contentView.addSubviews([circleView,verticalLine,infoLabel,stopLabel,stopImage,descLabel])
-        circleView.ptLayout.makeConstraints { make in
+        circleView.snp.makeConstraints { make in
             make.left.top.equalToSuperview()
             make.size.equalTo(0)
         }
         
-        verticalLine.ptLayout.makeConstraints { make in
+        verticalLine.snp.makeConstraints { make in
             make.centerX.equalTo(self.circleView)
-            make.top.equalTo(self.circleView.ptLayout.bottom)
+            make.top.equalTo(self.circleView.snp.bottom)
             make.bottom.equalToSuperview()
             make.width.equalTo(0)
         }
         
-        infoLabel.ptLayout.makeConstraints { make in
-            make.left.equalTo(self.circleView.ptLayout.right).offset(PTStepperVerticalCell.circleRight)
+        infoLabel.snp.makeConstraints { make in
+            make.left.equalTo(self.circleView.snp.right).offset(PTStepperVerticalCell.circleRight)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.bottom.equalTo(self.circleView)
         }
         
-        stopLabel.ptLayout.makeConstraints { make in
+        stopLabel.snp.makeConstraints { make in
             make.edges.equalTo(self.circleView)
         }
         
-        stopImage.ptLayout.makeConstraints { make in
+        stopImage.snp.makeConstraints { make in
             make.edges.equalTo(self.circleView)
         }
         
-        descLabel.ptLayout.makeConstraints { make in
+        descLabel.snp.makeConstraints { make in
             make.left.right.equalTo(self.infoLabel)
-            make.top.equalTo(self.infoLabel.ptLayout.bottom)
+            make.top.equalTo(self.infoLabel.snp.bottom)
             make.bottom.equalTo(self.verticalLine)
         }
     }

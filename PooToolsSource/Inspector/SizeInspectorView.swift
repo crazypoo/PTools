@@ -5,9 +5,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -18,23 +15,23 @@ final class SizeInspectorView: BaseView {
 
     private lazy var verticalMeasurementView = LengthMeasurementView(axis: .vertical, color: .systemPurple)
 
-    private var verticalMeasurementViewCenterXConstraint: PTLayoutConstraint?
+    private var verticalMeasurementViewCenterXConstraint: Constraint?
 
     // MARK: - Width
 
     private lazy var horizontalMeasurementView = LengthMeasurementView(axis: .horizontal, color: .systemPurple)
 
-    private var horizontalMeasurementViewCenterYConstraint: PTLayoutConstraint?
+    private var horizontalMeasurementViewCenterYConstraint: Constraint?
 
     // MARK: - Safe Area Layout Guide
 
     private lazy var safeAreaVerticalMeasurementView = LengthMeasurementView(axis: .vertical, color: .systemGreen)
 
-    private var safeAreaVerticalMeasurementViewCenterXConstraint: PTLayoutConstraint?
+    private var safeAreaVerticalMeasurementViewCenterXConstraint: Constraint?
 
     private lazy var safeAreaHorizontalMeasurementView = LengthMeasurementView(axis: .horizontal, color: .systemGreen, name: "Safe Area")
 
-    private var safeAreaHorizontalMeasurementViewCenterYConstraint: PTLayoutConstraint?
+    private var safeAreaHorizontalMeasurementViewCenterYConstraint: Constraint?
 
     // MARK: - Readable Guide
 
@@ -44,13 +41,13 @@ final class SizeInspectorView: BaseView {
 
     private lazy var readableGuideHorizontalMeasurementView = LengthMeasurementView(axis: .horizontal, color: .systemYellow, name: "Readable Content")
 
-    private var readableGuideHorizontalMeasurementViewCenterYConstraint: PTLayoutConstraint?
+    private var readableGuideHorizontalMeasurementViewCenterYConstraint: Constraint?
 
     // MARK: - Layout Guide
 
     private lazy var layoutGuideHorizontalMeasurementView = LengthMeasurementView(axis: .horizontal, color: .cyan, name: "Layout Margins")
 
-    private var layoutGuideHorizontalMeasurementViewCenterYConstraint: PTLayoutConstraint?
+    private var layoutGuideHorizontalMeasurementViewCenterYConstraint: Constraint?
 
     private lazy var layoutGuideLeadingHorizontalMeasurementView = LengthMeasurementView(axis: .horizontal, color: .cyan, name: " ")
 
@@ -64,67 +61,67 @@ final class SizeInspectorView: BaseView {
         preservesSuperviewLayoutMargins = true
 
         addSubview(verticalMeasurementView)
-        verticalMeasurementView.ptLayout.makeConstraints { make in
+        verticalMeasurementView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().priority(UILayoutPriority.defaultHigh.rawValue)
-            verticalMeasurementViewCenterXConstraint = make.centerX.equalTo(safeAreaLayoutGuide.ptLayout.trailing).priority(UILayoutPriority.defaultHigh.rawValue).constraint
+            verticalMeasurementViewCenterXConstraint = make.centerX.equalTo(safeAreaLayoutGuide.snp.trailing).priority(UILayoutPriority.defaultHigh.rawValue).constraint
         }
 
         addSubview(safeAreaVerticalMeasurementView)
-        safeAreaVerticalMeasurementView.ptLayout.makeConstraints { make in
+        safeAreaVerticalMeasurementView.snp.makeConstraints { make in
             make.top.bottom.equalTo(safeAreaLayoutGuide).priority(UILayoutPriority.defaultHigh.rawValue)
-            safeAreaVerticalMeasurementViewCenterXConstraint = make.centerX.equalTo(safeAreaLayoutGuide.ptLayout.trailing).offset(-100).priority(UILayoutPriority.defaultHigh.rawValue).constraint
+            safeAreaVerticalMeasurementViewCenterXConstraint = make.centerX.equalTo(safeAreaLayoutGuide.snp.trailing).offset(-100).priority(UILayoutPriority.defaultHigh.rawValue).constraint
         }
 
         addSubview(safeAreaHorizontalMeasurementView)
-        safeAreaHorizontalMeasurementView.ptLayout.makeConstraints { make in
+        safeAreaHorizontalMeasurementView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(safeAreaLayoutGuide).priority(UILayoutPriority.defaultHigh.rawValue)
-            safeAreaHorizontalMeasurementViewCenterYConstraint = make.centerY.equalTo(safeAreaLayoutGuide.ptLayout.top).offset(-100).priority(UILayoutPriority.defaultHigh.rawValue).constraint
+            safeAreaHorizontalMeasurementViewCenterYConstraint = make.centerY.equalTo(safeAreaLayoutGuide.snp.top).offset(-100).priority(UILayoutPriority.defaultHigh.rawValue).constraint
         }
 
         addSubview(horizontalMeasurementView)
-        horizontalMeasurementView.ptLayout.makeConstraints { make in
+        horizontalMeasurementView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().priority(UILayoutPriority.defaultHigh.rawValue)
-            horizontalMeasurementViewCenterYConstraint = make.centerY.equalTo(safeAreaLayoutGuide.ptLayout.top).priority(UILayoutPriority.defaultHigh.rawValue).constraint
+            horizontalMeasurementViewCenterYConstraint = make.centerY.equalTo(safeAreaLayoutGuide.snp.top).priority(UILayoutPriority.defaultHigh.rawValue).constraint
         }
 
         addSubview(readableGuideHorizontalMeasurementView)
-        readableGuideHorizontalMeasurementView.ptLayout.makeConstraints { make in
+        readableGuideHorizontalMeasurementView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(readableContentGuide).priority(UILayoutPriority.defaultHigh.rawValue)
-            readableGuideHorizontalMeasurementViewCenterYConstraint = make.centerY.equalTo(safeAreaLayoutGuide.ptLayout.top).offset(-200).priority(UILayoutPriority.defaultHigh.rawValue).constraint
+            readableGuideHorizontalMeasurementViewCenterYConstraint = make.centerY.equalTo(safeAreaLayoutGuide.snp.top).offset(-200).priority(UILayoutPriority.defaultHigh.rawValue).constraint
         }
 
         addSubview(readableGuideLeadingHorizontalMeasurementView)
-        readableGuideLeadingHorizontalMeasurementView.ptLayout.makeConstraints { make in
+        readableGuideLeadingHorizontalMeasurementView.snp.makeConstraints { make in
             make.leading.equalToSuperview().priority(UILayoutPriority.defaultHigh.rawValue)
-            make.trailing.equalTo(readableContentGuide.ptLayout.leading).priority(UILayoutPriority.defaultHigh.rawValue)
-            make.centerY.equalTo(readableGuideHorizontalMeasurementView.ptLayout.centerY).priority(UILayoutPriority.defaultHigh.rawValue)
+            make.trailing.equalTo(readableContentGuide.snp.leading).priority(UILayoutPriority.defaultHigh.rawValue)
+            make.centerY.equalTo(readableGuideHorizontalMeasurementView.snp.centerY).priority(UILayoutPriority.defaultHigh.rawValue)
         }
 
         addSubview(readableGuideTrailingHorizontalMeasurementView)
-        readableGuideTrailingHorizontalMeasurementView.ptLayout.makeConstraints { make in
+        readableGuideTrailingHorizontalMeasurementView.snp.makeConstraints { make in
             make.trailing.equalToSuperview().priority(UILayoutPriority.defaultHigh.rawValue)
-            make.leading.equalTo(readableContentGuide.ptLayout.trailing).priority(UILayoutPriority.defaultHigh.rawValue)
-            make.centerY.equalTo(readableGuideHorizontalMeasurementView.ptLayout.centerY).priority(UILayoutPriority.defaultHigh.rawValue)
+            make.leading.equalTo(readableContentGuide.snp.trailing).priority(UILayoutPriority.defaultHigh.rawValue)
+            make.centerY.equalTo(readableGuideHorizontalMeasurementView.snp.centerY).priority(UILayoutPriority.defaultHigh.rawValue)
         }
 
         addSubview(layoutGuideHorizontalMeasurementView)
-        layoutGuideHorizontalMeasurementView.ptLayout.makeConstraints { make in
+        layoutGuideHorizontalMeasurementView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(layoutMarginsGuide).priority(UILayoutPriority.defaultHigh.rawValue)
-            layoutGuideHorizontalMeasurementViewCenterYConstraint = make.centerY.equalTo(safeAreaLayoutGuide.ptLayout.top).offset(-300).priority(UILayoutPriority.defaultHigh.rawValue).constraint
+            layoutGuideHorizontalMeasurementViewCenterYConstraint = make.centerY.equalTo(safeAreaLayoutGuide.snp.top).offset(-300).priority(UILayoutPriority.defaultHigh.rawValue).constraint
         }
 
         addSubview(layoutGuideLeadingHorizontalMeasurementView)
-        layoutGuideLeadingHorizontalMeasurementView.ptLayout.makeConstraints { make in
+        layoutGuideLeadingHorizontalMeasurementView.snp.makeConstraints { make in
             make.leading.equalToSuperview().priority(UILayoutPriority.defaultHigh.rawValue)
-            make.trailing.equalTo(layoutMarginsGuide.ptLayout.leading).priority(UILayoutPriority.defaultHigh.rawValue)
-            make.centerY.equalTo(layoutGuideHorizontalMeasurementView.ptLayout.centerY).priority(UILayoutPriority.defaultHigh.rawValue)
+            make.trailing.equalTo(layoutMarginsGuide.snp.leading).priority(UILayoutPriority.defaultHigh.rawValue)
+            make.centerY.equalTo(layoutGuideHorizontalMeasurementView.snp.centerY).priority(UILayoutPriority.defaultHigh.rawValue)
         }
 
         addSubview(layoutGuideTrailingHorizontalMeasurementView)
-        layoutGuideTrailingHorizontalMeasurementView.ptLayout.makeConstraints { make in
+        layoutGuideTrailingHorizontalMeasurementView.snp.makeConstraints { make in
             make.trailing.equalToSuperview().priority(UILayoutPriority.defaultHigh.rawValue)
-            make.leading.equalTo(layoutMarginsGuide.ptLayout.trailing).priority(UILayoutPriority.defaultHigh.rawValue)
-            make.centerY.equalTo(layoutGuideHorizontalMeasurementView.ptLayout.centerY).priority(UILayoutPriority.defaultHigh.rawValue)
+            make.leading.equalTo(layoutMarginsGuide.snp.trailing).priority(UILayoutPriority.defaultHigh.rawValue)
+            make.centerY.equalTo(layoutGuideHorizontalMeasurementView.snp.centerY).priority(UILayoutPriority.defaultHigh.rawValue)
         }
     }
 

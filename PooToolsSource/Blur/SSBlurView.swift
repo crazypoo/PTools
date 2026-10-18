@@ -6,9 +6,6 @@
 //
 
 import UIKit
-#if canImport(PToolsConstraintLayout)
-import PToolsConstraintLayout
-#endif
 import SnapKit
 
 /// 高斯模糊视图 (重构为标准的 UIView 子类)
@@ -57,10 +54,10 @@ public class SSBlurView: UIView {
         self.isAccessibilityElement = false
         
         addSubview(blurEffectView)
-        blurEffectView.ptLayout.makeConstraints { $0.edges.equalToSuperview() }
+        blurEffectView.snp.makeConstraints { $0.edges.equalToSuperview() }
         
         blurEffectView.contentView.addSubview(vibrancyView)
-        vibrancyView.ptLayout.makeConstraints { $0.edges.equalToSuperview() }
+        vibrancyView.snp.makeConstraints { $0.edges.equalToSuperview() }
 
         // English: Observe Reduce Motion once and keep the effect state stable when accessibility settings change.
         // Español: Observa Reduce Motion una vez y conserva estable el estado del efecto cuando cambia la accesibilidad.
