@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-18T03:15:04.640094+00:00",
+  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
+  "codes": [
+    "PTL001",
+    "PTL002",
+    "PTL003",
+    "PTL004",
+    "PTL005",
+    "PTL006",
+    "PTL007",
+    "PTL008",
+    "PTL009"
+  ],
+  "sink": "PTLayoutDiagnostics.onFailure",
+  "aggregate_bridge": "PooToolsSource/Core/PTLayoutConsoleBridge.swift",
+  "standalone_fallback": "Swift.print when mode is not production",
+  "deduplication": "owner + code + fileID + line occurrence count",
+  "canonical_source_files": [
+    "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+    "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift",
+    "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift"
+  ]
+}

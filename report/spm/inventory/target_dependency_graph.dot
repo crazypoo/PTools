@@ -64,6 +64,7 @@ digraph PToolsSwiftPM {
   "PToolsConfiguration" -> "PToolsStorage";
   "PToolsConfiguration" -> "PToolsStorageCore";
   "PToolsConnectivity";
+  "PToolsConstraintLayout";
   "PToolsContentState" -> "PToolsAccessibility";
   "PToolsContentState" -> "PToolsConnectivity";
   "PToolsContentState" -> "PToolsTheme";
@@ -364,6 +365,7 @@ digraph PToolsSwiftPM {
   "PooToolsWhatsNewsKit" -> "PToolsUIFoundation";
   "PooToolsWhatsNewsKit" -> "ptools";
   "PooToolsiOS17Tips" -> "ptools";
+  "ptools" -> "PToolsConstraintLayout";
   "ptools" -> "PToolsCore";
   "ptools" -> "PToolsDate";
   "ptools" -> "PToolsDevice";

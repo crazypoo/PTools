@@ -1,0 +1,18 @@
+api,legacy_5_7_1,upstream_6_0_0,ptlayout,compile_evidence,runtime_evidence,notes
+makeConstraints,yes,yes,yes,iOS17 typecheck,pending XCTest,Native target is SnapKit-independent
+updateConstraints,yes,yes,yes,iOS17 typecheck,pending XCTest,Unknown signatures return PTL009
+remakeConstraints,yes,yes,yes,iOS17 typecheck,pending XCTest,Preflight preserves old group
+prepareConstraints,yes,yes,yes,iOS17 typecheck,pending XCTest,Prepared group activates after hierarchy validation
+removeConstraints,yes,yes,yes,iOS17 typecheck,pending XCTest,Only PTLayout-owned handles are removed
+equalToSuperview,yes,yes,yes,iOS17 typecheck,pending XCTest,Missing parent returns PTL001
+lessThanOrEqualToSuperview,enhancement,enhancement,yes,iOS17 typecheck,pending XCTest,PTLayout convenience API
+greaterThanOrEqualToSuperview,enhancement,enhancement,yes,iOS17 typecheck,pending XCTest,PTLayout convenience API
+edges,yes,yes,yes,iOS17 typecheck,pending XCTest,Inset sign mapping covered by fixtures
+size,yes,yes,yes,iOS17 typecheck,pending XCTest,Constant size can be standalone
+center,yes,yes,yes,iOS17 typecheck,pending XCTest,Common ancestor required
+priority,yes,yes,yes,iOS17 typecheck,pending XCTest,Required boundary rebuilds native constraint
+multipliedBy,yes,yes,yes,iOS17 typecheck,pending XCTest,Only size attributes allow multiplier
+dividedBy,yes,yes,yes,iOS17 typecheck,pending XCTest,Zero division returns PTL006
+labeled,yes,yes,yes,iOS17 typecheck,pending XCTest,Supports String and PTLayoutID
+keyboardLayoutGuide,host_api,host_api,yes,iOS17 typecheck,pending visual,Uses UIKit guide directly
+safeAreaLayoutGuide,host_api,host_api,yes,iOS17 typecheck,pending visual,Uses actual safe area

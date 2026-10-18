@@ -173,6 +173,16 @@ enum PTDemoRegistry {
         make("ui.collection-refresh-lab", "PToolsUIFoundation", "Diffable Refresh Lab", .uiComponents, .interactive, .push, .runnable, legacy: "Diffable Refresh Lab", tags: ["collection", "diffable", "content-refresh", "stress"]),
         make("ui.collection-layout-switch-lab", "PToolsUIFoundation", "Collection Layout Switch Lab", .uiComponents, .interactive, .push, .runnable, legacy: "Collection Layout Switch Lab", tags: ["collection", "layout", "runtime-switch", "stress"]),
         make("ui.collection-skeleton-lab", "PToolsUIFoundation", "Collection Skeleton Lab", .uiComponents, .interactive, .push, .runnable, legacy: "Collection Skeleton Lab", tags: ["collection", "skeleton", "loading", "diffable"]),
+        make("ui.layout.snapkit-compatibility", "PToolsConstraintLayout", "PTLayout · SnapKit Compatibility", .uiComponents, .interactive, .push, .runnable, tags: ["layout", "snapkit", "compatibility"]),
+        make("ui.layout.missing-superview-no-crash", "PToolsConstraintLayout", "PTLayout · Missing Superview", .uiComponents, .interactive, .push, .runnable, tags: ["layout", "crash-safe", "PTL001"]),
+        make("ui.layout.size-only-without-parent", "PToolsConstraintLayout", "PTLayout · Standalone Size", .uiComponents, .interactive, .push, .runnable, tags: ["layout", "size", "standalone"]),
+        make("ui.layout.cross-tree-error", "PToolsConstraintLayout", "PTLayout · Cross Tree Error", .uiComponents, .interactive, .push, .runnable, tags: ["layout", "diagnostics", "PTL002"]),
+        make("ui.layout.safe-remake", "PToolsConstraintLayout", "PTLayout · Safe Remake", .uiComponents, .interactive, .push, .runnable, tags: ["layout", "remake", "rollback"]),
+        make("ui.layout.update-mismatch", "PToolsConstraintLayout", "PTLayout · Update Mismatch", .uiComponents, .interactive, .push, .runnable, tags: ["layout", "update", "signature"]),
+        make("ui.layout.safe-area-keyboard-rtl", "PToolsConstraintLayout", "PTLayout · Safe Area / Keyboard / RTL", .uiComponents, .interactive, .push, .runnable, tags: ["layout", "safe-area", "keyboard", "rtl"]),
+        make("ui.layout.profile-compare", "PToolsConstraintLayout", "PTLayout · Profile", .uiComponents, .interactive, .push, .runnable, tags: ["layout", "performance", "profile"]),
+        make("ui.layout.duo-adaptation", "PToolsConstraintLayout", "PTLayout · Duo Adaptation", .uiComponents, .interactive, .push, .runnable, tags: ["layout", "iphone-duo", "safe-area"]),
+        make("ui.layout.lifecycle-reuse", "PToolsConstraintLayout", "PTLayout · Lifecycle / Reuse", .uiComponents, .interactive, .push, .runnable, tags: ["layout", "lifecycle", "reuse"]),
         make("input.input-box", "PooToolsInput", "InputBox", .inputForm, .interactive, .sheet, .runnable, legacy: "InputBox", tags: ["input"]),
         make("input.all-styles", "PooToolsInput", "Input Styles", .inputForm, .interactive, .push, .runnable, legacy: "Input Styles", tags: ["input", "text-field", "text-view", "styles"]),
         make("input.stepper", "PooToolsStepper", "Stepper", .inputForm, .interactive, .sheet, .runnable, legacy: "Stepper", tags: ["input"]),
@@ -332,6 +342,8 @@ final class PTDemoCoordinator {
             return PTCollectionLayoutSwitchLabViewController()
         case "ui.collection-skeleton-lab":
             return PTCollectionSkeletonLabViewController()
+        case let id where id.hasPrefix("ui.layout."):
+            return PTLayoutLabViewController(demoID: descriptor.id)
         case "ui.control-menu":
             return PTControlMenuDemoViewController()
         case "input.all-styles":

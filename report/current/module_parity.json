@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "85cd0fa1019fd0965e4966b5435710c618b02da7",
-  "generated_at": "2026-10-17T19:46:51Z",
+  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
+  "generated_at": "2026-10-18T01:57:29Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -37,6 +37,7 @@
     "PToolsBluetooth",
     "PToolsConfiguration",
     "PToolsConnectivity",
+    "PToolsConstraintLayout",
     "PToolsContentState",
     "PToolsCore",
     "PToolsDatabase",
@@ -333,6 +334,7 @@
     "PToolsAppIntegrity",
     "PToolsAuth",
     "PToolsAuthCore",
+    "PToolsConstraintLayout",
     "PToolsDatabase",
     "PToolsDatabaseCore",
     "PToolsDate",
@@ -363,6 +365,7 @@
     "Appz",
     "Auth",
     "AuthCore",
+    "ConstraintLayout",
     "Database",
     "DatabaseCore",
     "Date",
@@ -545,6 +548,7 @@
       "spm": [
         "Device",
         "Logging",
+        "PToolsConstraintLayout",
         "PToolsCore",
         "PToolsDate",
         "PToolsFontCatalogCore",
@@ -660,6 +664,17 @@
       ],
       "cocoapods": [
         "Harbeth"
+      ]
+    },
+    {
+      "module": "HeartRate",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit",
+        "lottie-ios"
+      ],
+      "cocoapods": [
+        "lottie-ios"
       ]
     },
     {
@@ -881,6 +896,14 @@
       "cocoapods": [
         "Core"
       ]
+    },
+    {
+      "module": "PagingControl",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
     },
     {
       "module": "PhotoPicker",
@@ -1142,6 +1165,14 @@
         "RouteCore",
         "Storage"
       ]
+    },
+    {
+      "module": "iOS17Tips",
+      "field": "third_party_dependencies",
+      "spm": [
+        "SnapKit"
+      ],
+      "cocoapods": []
     }
   ],
   "settings_drift": [
@@ -2036,5 +2067,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "07cb3fdf5c0e6c0e94ec52fc803cc6863659e00c19af0cc80d09ee5fa2ea95c4"
+  "fingerprint": "536dfe06d4513880c1d0a6e2f35879c65060eeade2f5b68ff4221a91a4b8e144"
 }

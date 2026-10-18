@@ -139,6 +139,7 @@
     {"name":"tortoise","swiftName":"tortoise","introducedIOS":"17.0","deprecatedIOS":null,"renamedTo":null,"supportsVariableValue":false},
     {"name":"tortoise.fill","swiftName":"tortoiseFill","introducedIOS":"17.0","deprecatedIOS":null,"renamedTo":null,"supportsVariableValue":false},
     {"name":"trash","swiftName":"trash","introducedIOS":"17.0","deprecatedIOS":null,"renamedTo":null,"supportsVariableValue":false},
+    {"name":"trash.circle","swiftName":"trashCircle","introducedIOS":"17.0","deprecatedIOS":null,"renamedTo":null,"supportsVariableValue":false},
     {"name":"trash.fill","swiftName":"trashFill","introducedIOS":"17.0","deprecatedIOS":null,"renamedTo":null,"supportsVariableValue":false},
     {"name":"tv","swiftName":"tv","introducedIOS":"17.0","deprecatedIOS":null,"renamedTo":null,"supportsVariableValue":false},
     {"name":"video","swiftName":"video","introducedIOS":"17.0","deprecatedIOS":null,"renamedTo":null,"supportsVariableValue":false},

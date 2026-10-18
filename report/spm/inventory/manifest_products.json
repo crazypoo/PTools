@@ -353,6 +353,17 @@
     }
   },
   {
+    "name": "PToolsConstraintLayout",
+    "targets": [
+      "PToolsConstraintLayout"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
     "name": "PToolsContentState",
     "targets": [
       "PToolsContentState"
@@ -891,6 +902,7 @@
       "PToolsModel",
       "PToolsModelUIKit",
       "PToolsModelCombine",
+      "PToolsConstraintLayout",
       "PToolsConnectivity",
       "PToolsStorageCore",
       "PToolsStorage",

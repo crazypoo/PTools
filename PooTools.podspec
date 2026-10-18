@@ -33,6 +33,17 @@ Pod::Spec.new do |s|
         subspec.frameworks = 'Foundation'
     end
 
+    # English: Publish the UIKit-native Auto Layout DSL without SnapKit or the PTools umbrella.
+    # Español: Publica el DSL nativo de Auto Layout para UIKit sin SnapKit ni el umbrella de PTools.
+    # 中文：公开不依赖 SnapKit 和 PTools umbrella 的 UIKit 原生 Auto Layout DSL。
+    s.subspec 'ConstraintLayout' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsConstraintLayout/**/*.swift'
+        subspec.frameworks = 'UIKit', 'Foundation'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_CONSTRAINT_LAYOUT POOTOOLS_COCOAPODS"
+        }
+    end
+
     # English: Publish the offline acknowledgements data contract without UIKit or the generator.
     # Español: Publica el contrato offline de acknowledgements sin UIKit ni el generador.
     # 中文：公开不依赖 UIKit 和生成器的离线致谢数据契约。

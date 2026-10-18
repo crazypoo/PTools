@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_package_matrix.rb
-Source revision: 85cd0fa1019fd0965e4966b5435710c618b02da7
-Generated at: 2026-10-17T19:52:07Z
-Version source: 5.66.1
+Source revision: a868c0a22374e9a4016e85a100ccc814895d9cc3
+Generated at: 2026-10-18T03:14:47Z
+Version source: 5.67.0
 -->
 
 # CocoaPods / SwiftPM Package Matrix
@@ -143,6 +143,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `Appz` | B | `PooTools/Appz` | — | Parity decision before 6.0 |
 | `Auth` | B | `PooTools/Auth` | — | Parity decision before 6.0 |
 | `AuthCore` | B | `PooTools/AuthCore` | — | Parity decision before 6.0 |
+| `ConstraintLayout` | B | `PooTools/ConstraintLayout` | — | Parity decision before 6.0 |
 | `Database` | B | `PooTools/Database` | — | Parity decision before 6.0 |
 | `DatabaseCore` | B | `PooTools/DatabaseCore` | — | Parity decision before 6.0 |
 | `Date` | B | `PooTools/Date` | — | Parity decision before 6.0 |
@@ -183,6 +184,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `PToolsAppIntegrity` | C | — | `PToolsAppIntegrity` | Parity decision before 6.0 |
 | `PToolsAuth` | C | — | `PToolsAuth` | Parity decision before 6.0 |
 | `PToolsAuthCore` | C | — | `PToolsAuthCore` | Parity decision before 6.0 |
+| `PToolsConstraintLayout` | C | — | `PToolsConstraintLayout` | Parity decision before 6.0 |
 | `PToolsDatabase` | C | — | `PToolsDatabase` | Parity decision before 6.0 |
 | `PToolsDatabaseCore` | C | — | `PToolsDatabaseCore` | Parity decision before 6.0 |
 | `PToolsDate` | C | — | `PToolsDate` | Parity decision before 6.0 |

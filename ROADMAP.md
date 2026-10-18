@@ -1,8 +1,17 @@
 # PTools 路线图
 
-> 当前代码基线：`5.66.1`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.67.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.65.7`；`5.66.1` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.65.7`；`5.67.0` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.67.0 PTLayout 3.0 原生约束布局
+
+- ✅ 新增独立 `PToolsConstraintLayout` SwiftPM product 和 CocoaPods `ConstraintLayout` subspec，仅依赖 UIKit/Foundation，不依赖 SnapKit、`ptools` 或 `PooToolsLayout`。
+- ✅ 提供 SnapKit 风格的约束、更新、重建、移除、优先级、Safe Area、键盘、RTL、组约束、布局句柄和结构化诊断入口；旧 `.snp` 兼容边界保持不变。
+- ✅ 缺少父视图、跨层级引用、孤立布局指南、签名不匹配和非法事务均返回诊断，不使用 `fatalError`；批量约束先预检再原子激活。
+- ✅ 增加 56 个具名故障夹具、10 个 Example Demo ID、独立测试目标、迁移清单、依赖/所有权审计和性能采集报告。
+- ✅ PooTools-Example iOS Simulator Debug/Release、SwiftPM manifest、CocoaPods podspec/lock、依赖方向和 PTLayout 静态门禁通过。
+- ⬜ 仍需在 iOS Simulator 上执行独立 XCTest 运行时夹具、视觉回归和同条件性能对比，并完成 watchOS/visionOS/macOS 宿主验证后创建正式 tag。
 
 ## 5.66.1 PTSearchViewController 清空搜索恢复
 

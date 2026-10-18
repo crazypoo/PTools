@@ -6,6 +6,14 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.67.0 — 2026-10-18
+
+- 新增独立的 `PToolsConstraintLayout` 原生约束布局产品，使用 UIKit/Foundation，不依赖 SnapKit、`ptools` 或 `PooToolsLayout`。
+- 提供 SnapKit 风格的约束、组约束、更新、重建、移除、优先级、Safe Area、键盘和 RTL 适配入口；保留现有 `.snp` 兼容边界，不改变旧公开 API。
+- 约束失败统一返回结构化诊断，不在缺少父视图、跨层级引用、孤立布局指南或非法事务时崩溃；批量约束采用预检后原子激活。
+- 增加 PTLayout 56 个故障夹具、10 个 Example Demo ID、迁移清单、依赖边界和性能采集报告；验证夹具由 CI 脚本托管，不作为最终测试 target 发布。
+- 保持 iOS 17+ / Swift 6+；独立 UIKit 产品的 watchOS 不适用，Foundation/非 UIKit 边界继续保留 visionOS 与 macOS 的条件化评估。
+
 ## 5.66.1 — 2026-10-18
 
 - 修复 `PTSearchViewController` 清空搜索框后把调用方提供的完整结果错误清空的问题；现在点击 clear button 会恢复未筛选数据。

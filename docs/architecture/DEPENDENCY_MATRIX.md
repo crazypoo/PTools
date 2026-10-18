@@ -3,9 +3,9 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/generate_dependency_matrix.rb
-Source revision: 85cd0fa1019fd0965e4966b5435710c618b02da7
-Generated at: 2026-10-17T19:52:57Z
-Version source: 5.66.1
+Source revision: a868c0a22374e9a4016e85a100ccc814895d9cc3
+Generated at: 2026-10-18T03:14:47Z
+Version source: 5.67.0
 -->
 
 # Direct Dependency Matrix
@@ -41,10 +41,11 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `CodeView` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `Configuration` | `PToolsStorage`, `PToolsStorageCore`, `Storage` | — | No direct third-party dependency | Keep; review direct drift |
 | `Connectivity` | — | — | No direct third-party dependency | Keep; review direct drift |
+| `ConstraintLayout` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `Contact` | `ContactsPermission`, `Core`, `PTContactsPermission`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `ContactsPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `ContentState` | `Accessibility`, `Connectivity`, `Core`, `PToolsAccessibility`, `PToolsConnectivity`, `PToolsTheme`, `Theme`, `ptools` | `SnapKit` | 6.0 review | Keep; review direct drift |
-| `Core` | `Date`, `Device`, `Logging`, `PToolsCore`, `PToolsDate`, `PToolsDevice`, `PToolsFontCatalogCore`, `PToolsLogging`, `PToolsPermissionCore`, `PToolsSymbols`, `PToolsUIFoundation`, `Symbols` | `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `Kingfisher`, `Lottie`, `SnapKit`, `lottie-ios` | 6.0 review | Keep; review direct drift |
+| `Core` | `Date`, `Device`, `Logging`, `PToolsConstraintLayout`, `PToolsCore`, `PToolsDate`, `PToolsDevice`, `PToolsFontCatalogCore`, `PToolsLogging`, `PToolsPermissionCore`, `PToolsSymbols`, `PToolsUIFoundation`, `Symbols` | `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `Kingfisher`, `Lottie`, `SnapKit`, `lottie-ios` | 6.0 review | Keep; review direct drift |
 | `Country` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `CustomerLabel` | `Core`, `ptools` | `SnapKit` | 6.0 review | Keep; review direct drift |
 | `CustomerNumberKeyboard` | `Core`, `ptools` | `SnapKit` | 6.0 review | Deprecate alias |
@@ -68,7 +69,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `HandSign` | `Core`, `ptools` | `SnapKit` | 6.0 review | Keep; review direct drift |
 | `HarbethKit` | `CameraPermission`, `Core`, `PTCameraPermission`, `PToolsSymbols`, `PooToolsHud`, `PooToolsLoading`, `PooToolsMediaViewer`, `Symbols`, `ptools` | `Harbeth`, `SnapKit` | 6.0 review | Keep; review direct drift |
 | `HealthPermission` | `PToolsPermissionCore` | — | No direct third-party dependency | Keep; review direct drift |
-| `HeartRate` | `CameraPermission`, `Core`, `PTCameraPermission`, `ptools` | `Lottie`, `lottie-ios` | 6.0 review | Keep; review direct drift |
+| `HeartRate` | `CameraPermission`, `Core`, `PTCameraPermission`, `ptools` | `Lottie`, `SnapKit`, `lottie-ios` | 6.0 review | Keep; review direct drift |
 | `Hud` | `Core`, `PooToolsProgressBar`, `ProgressBar`, `ptools` | `SnapKit` | 6.0 review | Keep; review direct drift |
 | `IAP` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
 | `ImageEditor` | `Core`, `HarbethKit`, `MediaCore`, `PToolsCore`, `PToolsSymbols`, `PhotoPicker`, `PooToolsHarbethKit`, `PooToolsMediaCore`, `PooToolsPhotoPicker`, `Symbols`, `ptools` | `Harbeth`, `SnapKit` | 6.0 review | Keep; review direct drift |
@@ -120,6 +121,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `PToolsAppIntegrity` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `PToolsAuth` | `PToolsAuthCore`, `PToolsStorage`, `PToolsStorageCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `PToolsAuthCore` | — | — | No direct third-party dependency | Keep; review direct drift |
+| `PToolsConstraintLayout` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `PToolsCore` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `PToolsDatabase` | `PToolsDatabaseCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `PToolsDatabaseCore` | — | — | No direct third-party dependency | Keep; review direct drift |
@@ -149,7 +151,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `PToolsWebBridge` | `PToolsWebCore` | — | No direct third-party dependency | Keep; review direct drift |
 | `PToolsWebCore` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `PageControl` | `Core`, `PToolsCore`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
-| `PagingControl` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
+| `PagingControl` | `Core`, `ptools` | `SnapKit` | 6.0 review | Keep; review direct drift |
 | `PhoneInfo` | — | — | No direct third-party dependency | Keep; review direct drift |
 | `PhotoPicker` | `Core`, `ImagePicker`, `Loading`, `MediaCore`, `PTCameraPermission`, `PToolsSymbols`, `PToolsUIFoundation`, `PooToolsImagePicker`, `PooToolsLoading`, `PooToolsMediaCore`, `Symbols`, `ptools` | `SnapKit` | 6.0 review | Keep; review direct drift |
 | `Picker` | `Core`, `PToolsCore`, `ptools` | `SnapKit` | 6.0 review | Keep; review direct drift |
@@ -204,7 +206,7 @@ This matrix records direct dependencies only. Transitive dependencies remain own
 | `WhatsNewsKit` | `Core`, `PToolsUIFoundation`, `ptools` | `SnapKit` | 6.0 review | Keep; review direct drift |
 | `WidgetCore` | `DeepLink`, `PToolsDeepLink`, `PToolsRouteCore`, `PToolsStorage`, `PToolsStorageCore`, `RouteCore`, `Storage` | — | No direct third-party dependency | Keep; review direct drift |
 | `ZipArchive` | `Core` | `SSZipArchive` | 6.0 review | Keep; review direct drift |
-| `iOS17Tips` | `Core`, `ptools` | — | No direct third-party dependency | Keep; review direct drift |
+| `iOS17Tips` | `Core`, `ptools` | `SnapKit` | 6.0 review | Keep; review direct drift |
 
 ## Review rules
 

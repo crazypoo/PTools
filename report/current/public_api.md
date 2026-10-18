@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_public_api.rb
-Source revision: 85cd0fa1019fd0965e4966b5435710c618b02da7
-Generated at: 2026-10-17T19:53:07Z
+Source revision: a868c0a22374e9a4016e85a100ccc814895d9cc3
+Generated at: 2026-10-18T02:38:25Z
 -->
 
 # PTools 当前公开 API 清单
@@ -2418,6 +2418,7 @@ Generated at: 2026-10-17T19:53:07Z
 | PooToolsSource/Core/PTImageDownsampler.swift:14 | let | public | public let maximumPixelSize: Int |
 | PooToolsSource/Core/PTImageDownsampler.swift:16 | init | public | public init(maximumPixelSize: Int = PTImageDownsampler.defaultMaximumPixelSize) { |
 | PooToolsSource/Core/PTImageDownsampler.swift:26 | enum | public | public enum PTImageDownsampler { |
+| PooToolsSource/Core/PTLayoutConsoleBridge.swift:10 | enum | public | public enum PTLayoutConsoleBridge { |
 | PooToolsSource/Core/PTLifecycleBag.swift:10 | class | public | public final class PTLifecycleBag { |
 | PooToolsSource/Core/PTLifecycleBag.swift:19 | init | public | public init() {} |
 | PooToolsSource/Core/PTLifecycleBag.swift:21 | func | public | public func store(_ task: Task<Void, Never>) { |
@@ -5387,8 +5388,8 @@ Generated at: 2026-10-17T19:53:07Z
 | PooToolsSource/PToolsAccessibility/PTAccessibility.swift:121 | func | public | public func apply(_ descriptor: PTAccessibilityDescriptor, to view: UIView) { |
 | PooToolsSource/PToolsAccessibility/PTAccessibility.swift:131 | func | public | public func audit(_ view: UIView, minimumHitTarget: CGSize = .init(width: 44, height: 44)) -> [PTAccessibilityAuditIssue] { |
 | PooToolsSource/PToolsAccessibility/PTAccessibility.swift:144 | enum | public | public enum PTAccessibility { |
-| PooToolsSource/PToolsAcknowledgements/PTAcknowledgementDetailViewController.swift:16 | class | public | public final class PTAcknowledgementDetailViewController: PTBaseViewController { |
-| PooToolsSource/PToolsAcknowledgements/PTAcknowledgementDetailViewController.swift:20 | init | public | public init(entry: PTAcknowledgement) { |
+| PooToolsSource/PToolsAcknowledgements/PTAcknowledgementDetailViewController.swift:19 | class | public | public final class PTAcknowledgementDetailViewController: PTBaseViewController { |
+| PooToolsSource/PToolsAcknowledgements/PTAcknowledgementDetailViewController.swift:23 | init | public | public init(entry: PTAcknowledgement) { |
 | PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsConfiguration.swift:9 | struct | public | public struct PTAcknowledgementsConfiguration { |
 | PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsConfiguration.swift:10 | enum | public | public enum Style: Sendable { |
 | PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsConfiguration.swift:25 | enum | public | public enum Grouping: Sendable { |
@@ -6061,6 +6062,161 @@ Generated at: 2026-10-17T19:53:07Z
 | PooToolsSource/PToolsConnectivity/PTConnectivity.swift:144 | func | public | public func current() -> PTConnectivitySnapshot { |
 | PooToolsSource/PToolsConnectivity/PTConnectivity.swift:149 | func | public | public func diagnostics() -> PTConnectivityDiagnosticsSnapshot { |
 | PooToolsSource/PToolsConnectivity/PTConnectivity.swift:156 | func | public | public func snapshots() -> AsyncStream<PTConnectivitySnapshot> { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:13 | enum | public | public enum PTLayoutRelation: String, Hashable { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:20 | enum | public | public enum PTLayoutAttribute: String, Hashable { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:35 | struct | public | public struct PTLayoutPriority: Equatable, Sendable { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:36 | let | public | public let rawValue: Float |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:38 | init | public | public init(_ rawValue: Float) { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:51 | struct | public | public struct PTLayoutID: RawRepresentable, Hashable, Sendable { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:52 | let | public | public let rawValue: String |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:54 | init | public | public init(_ rawValue: String) { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:58 | init | public | public init(rawValue: String) { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:64 | enum | public | public enum PTLayoutDiagnosticMode: String, Sendable { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:71 | enum | public | public enum PTLayoutIssueCode: String, Sendable { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:84 | struct | public | public struct PTLayoutIssue: Error, Equatable, Sendable { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:85 | let | public | public let code: PTLayoutIssueCode |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:86 | let | public | public let owner: String |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:87 | let | public | public let anchor: String |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:88 | let | public | public let relatedTarget: String? |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:89 | let | public | public let fileID: String |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:90 | let | public | public let line: UInt |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:91 | let | public | public let function: String |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:92 | let | public | public let groupID: String? |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:93 | let | public | public let reason: String |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:94 | let | public | public let suggestion: String |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:95 | let | public | public let recovery: String |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:96 | let | public | public let sourceType: String |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:97 | let | public | public let occurrenceCount: Int |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:111 | init | public | public init(code: PTLayoutIssueCode, owner: String, anchor: String, relatedTarget: String? = nil, fileID: String = #fileID, line: UInt = #line, function: String = #function, groupID: String? = nil, reason: String, suggestion: String, recovery: String = "transaction skipped", sourceType: String = "PTLayout", occurrenceCount: Int = 1) { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:127 | var | public | public var message: String { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:133 | struct | public | public struct PTLayoutChanges: Sendable { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:134 | let | public | public let count: Int |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:136 | init | public | public init(count: Int) { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:142 | enum | public | public enum PTLayoutResult { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:146 | var | public | public var isSuccess: Bool { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:151 | var | public | public var issue: PTLayoutIssue? { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:156 | var | public | public var changeCount: Int { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:163 | enum | public | public enum PTLayoutDiagnostics { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:248 | struct | public | public struct PTLayoutAnchor { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:250 | let | public | public let attribute: PTLayoutAttribute |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:260 | struct | public | public struct PTLayoutAnchorGroup { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:271 | var | public | public var top: PTLayoutAnchorGroup { appending(.top) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:272 | var | public | public var bottom: PTLayoutAnchorGroup { appending(.bottom) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:273 | var | public | public var leading: PTLayoutAnchorGroup { appending(.leading) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:274 | var | public | public var trailing: PTLayoutAnchorGroup { appending(.trailing) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:275 | var | public | public var left: PTLayoutAnchorGroup { appending(.left) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:276 | var | public | public var right: PTLayoutAnchorGroup { appending(.right) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:277 | var | public | public var centerX: PTLayoutAnchorGroup { appending(.centerX) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:278 | var | public | public var centerY: PTLayoutAnchorGroup { appending(.centerY) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:279 | var | public | public var width: PTLayoutAnchorGroup { appending(.width) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:280 | var | public | public var height: PTLayoutAnchorGroup { appending(.height) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:281 | var | public | public var firstBaseline: PTLayoutAnchorGroup { appending(.firstBaseline) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:282 | var | public | public var lastBaseline: PTLayoutAnchorGroup { appending(.lastBaseline) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:468 | struct | public | public struct PTLayoutNamespace { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:479 | var | public | public var top: PTLayoutAnchorGroup { group(.top) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:480 | var | public | public var bottom: PTLayoutAnchorGroup { group(.bottom) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:481 | var | public | public var leading: PTLayoutAnchorGroup { group(.leading) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:482 | var | public | public var trailing: PTLayoutAnchorGroup { group(.trailing) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:483 | var | public | public var left: PTLayoutAnchorGroup { group(.left) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:484 | var | public | public var right: PTLayoutAnchorGroup { group(.right) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:485 | var | public | public var centerX: PTLayoutAnchorGroup { group(.centerX) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:486 | var | public | public var centerY: PTLayoutAnchorGroup { group(.centerY) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:487 | var | public | public var width: PTLayoutAnchorGroup { group(.width) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:488 | var | public | public var height: PTLayoutAnchorGroup { group(.height) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:489 | var | public | public var firstBaseline: PTLayoutAnchorGroup { group(.firstBaseline) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:490 | var | public | public var lastBaseline: PTLayoutAnchorGroup { group(.lastBaseline) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:491 | var | public | public var center: PTLayoutAnchorGroup { group(.centerX, .centerY) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:492 | var | public | public var size: PTLayoutAnchorGroup { group(.width, .height) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:493 | var | public | public var edges: PTLayoutAnchorGroup { group(.top, .leading, .bottom, .trailing) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:494 | var | public | public var horizontalEdges: PTLayoutAnchorGroup { group(.leading, .trailing) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:495 | var | public | public var verticalEdges: PTLayoutAnchorGroup { group(.top, .bottom) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:502 | func | public | public func makeConstraints(group: String? = nil, active: Bool = true, file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:527 | func | public | public func prepareConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutConstraintGroup { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:544 | func | public | public func updateConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:551 | func | public | public func updateIfExists(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:558 | func | public | public func upsertConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:568 | func | public | public func remakeConstraints(group: String? = nil, file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:595 | func | public | public func removeConstraints() { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:604 | func | public | public func activate(group: String, deactivating oldGroup: String? = nil) -> PTLayoutResult { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:622 | func | public | public func inspect() -> PTLayoutInspection { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:661 | class | public | public final class PTLayoutMaker { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:668 | var | public | public var top: PTLayoutAnchorGroup { transaction.group(.top) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:669 | var | public | public var bottom: PTLayoutAnchorGroup { transaction.group(.bottom) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:670 | var | public | public var leading: PTLayoutAnchorGroup { transaction.group(.leading) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:671 | var | public | public var trailing: PTLayoutAnchorGroup { transaction.group(.trailing) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:672 | var | public | public var left: PTLayoutAnchorGroup { transaction.group(.left) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:673 | var | public | public var right: PTLayoutAnchorGroup { transaction.group(.right) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:674 | var | public | public var centerX: PTLayoutAnchorGroup { transaction.group(.centerX) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:675 | var | public | public var centerY: PTLayoutAnchorGroup { transaction.group(.centerY) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:676 | var | public | public var width: PTLayoutAnchorGroup { transaction.group(.width) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:677 | var | public | public var height: PTLayoutAnchorGroup { transaction.group(.height) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:678 | var | public | public var firstBaseline: PTLayoutAnchorGroup { transaction.group(.firstBaseline) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:679 | var | public | public var lastBaseline: PTLayoutAnchorGroup { transaction.group(.lastBaseline) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:680 | var | public | public var center: PTLayoutAnchorGroup { transaction.group(.centerX, .centerY) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:681 | var | public | public var size: PTLayoutAnchorGroup { transaction.group(.width, .height) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:682 | var | public | public var edges: PTLayoutAnchorGroup { transaction.group(.top, .leading, .bottom, .trailing) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:683 | var | public | public var horizontalEdges: PTLayoutAnchorGroup { transaction.group(.leading, .trailing) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:684 | var | public | public var verticalEdges: PTLayoutAnchorGroup { transaction.group(.top, .bottom) } |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:690 | func | public | public func aspectRatio(_ ratio: CGFloat, priority: PTLayoutPriority = .required, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:700 | func | public | public func relativeWidth(to view: UIView, ratio: CGFloat, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:710 | func | public | public func relativeHeight(to view: UIView, ratio: CGFloat, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:718 | class | public | public final class PTLayoutRelationMaker { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:728 | func | public | public func offset(_ value: CGFloat) -> Self { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:737 | func | public | public func inset(_ value: CGFloat) -> Self { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:746 | func | public | public func inset(_ value: UIEdgeInsets) -> Self { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:755 | func | public | public func directionalInset(_ value: NSDirectionalEdgeInsets) -> Self { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:764 | func | public | public func multipliedBy(_ value: CGFloat) -> Self { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:770 | func | public | public func dividedBy(_ value: CGFloat) -> Self { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:776 | func | public | public func priority(_ value: PTLayoutPriority) -> Self { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:782 | func | public | public func priority(_ value: UILayoutPriority) -> Self { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:788 | func | public | public func priority(_ value: Float) -> Self { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:794 | func | public | public func labeled(_ value: String) -> Self { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:800 | func | public | public func labeled(_ value: PTLayoutID) -> Self { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:804 | var | public | public var constraint: PTLayoutConstraint { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:814 | enum | public | public enum PTLayoutOperation { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:916 | class | public | public final class PTLayoutConstraint { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:933 | var | public | public var isActive: Bool { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:937 | var | public | public var nativeConstraints: [NSLayoutConstraint] { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:941 | func | public | public func activate() -> PTLayoutResult { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:945 | func | public | public func deactivate() { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:951 | func | public | public func update(offset: CGFloat) -> PTLayoutResult { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:956 | func | public | public func update(inset: UIEdgeInsets) -> PTLayoutResult { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:961 | func | public | public func update(priority: PTLayoutPriority) -> PTLayoutResult { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:986 | class | public | public final class PTLayoutConstraintGroup { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:987 | let | public | public let constraints: [PTLayoutConstraint] |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:996 | func | public | public func activate() -> PTLayoutResult { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1000 | func | public | public func deactivate() { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1004 | var | public | public var isActive: Bool { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1061 | struct | public | public struct PTLayoutInspection { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1062 | let | public | public let owner: String |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1063 | let | public | public let constraints: [PTLayoutInspectionConstraint] |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1065 | init | public | public init(owner: String, constraints: [PTLayoutInspectionConstraint]) { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1070 | func | public | public func dumpConstraints() -> [[String: String]] { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1086 | struct | public | public struct PTLayoutInspectionConstraint { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1087 | let | public | public let identifier: String? |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1088 | let | public | public let firstAttribute: PTLayoutAttribute |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1089 | let | public | public let secondAttribute: PTLayoutAttribute |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1090 | let | public | public let relation: PTLayoutRelation |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1091 | let | public | public let constant: CGFloat |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1092 | let | public | public let priority: Float |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift:1093 | let | public | public let isActive: Bool |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift:9 | enum | public | public enum PTLayoutAxis: Sendable { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift:15 | enum | public | public enum PTLayoutCrossAxisAlignment: Sendable { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift:23 | struct | public | public struct PTLayoutGroupNamespace { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift:24 | let | public | public let views: [UIView] |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift:26 | init | public | public init(views: [UIView]) { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift:35 | func | public | public func distribute(axis: PTLayoutAxis, spacing: CGFloat = 0, alignment: PTLayoutCrossAxisAlignment = .fill, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutResult { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift:85 | func | public | public func equalSizes(file: StaticString = #fileID, line: UInt = #line) -> PTLayoutResult { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift:163 | enum | public | public enum PTLayoutAnimation { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift:10 | struct | public | public struct PTLayoutProfileSnapshot: Sendable { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift:11 | let | public | public let makeCount: Int |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift:12 | let | public | public let updateCount: Int |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift:13 | let | public | public let remakeCount: Int |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift:14 | let | public | public let prepareCount: Int |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift:15 | let | public | public let installedConstraintCount: Int |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift:21 | init | public | public init(makeCount: Int, updateCount: Int, remakeCount: Int, prepareCount: Int, installedConstraintCount: Int) { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift:31 | enum | public | public enum PTLayoutProfiler { |
+| PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift:74 | enum | public | public enum PTLayoutKeyboardSupport { |
 | PooToolsSource/PToolsContentState/PTContentState.swift:16 | struct | public | public struct PTEmptyState: Codable, Hashable, Sendable { |
 | PooToolsSource/PToolsContentState/PTContentState.swift:17 | let | public | public let title: String |
 | PooToolsSource/PToolsContentState/PTContentState.swift:18 | let | public | public let message: String? |
@@ -9882,8 +10038,9 @@ Generated at: 2026-10-17T19:53:07Z
 | PooToolsSource/Search/PTSearchConfiguration.swift:37 | var | public | public var mode: PTSearchMode |
 | PooToolsSource/Search/PTSearchConfiguration.swift:38 | var | public | public var placement: PTSearchPlacement |
 | PooToolsSource/Search/PTSearchConfiguration.swift:39 | var | public | public var visualStyle: PTSearchVisualStyle |
-| PooToolsSource/Search/PTSearchConfiguration.swift:60 | init | public | public init(minimumCharacters: Int = 1, debounceInterval: Duration = .milliseconds(300), searchWhileTyping: Bool = true, searchOnReturn: Bool = true, clearOnCancel: Bool = true, clearOnEmptyKeyword: Bool = true, keepsPreviousResultsWhileLoading: Bool = true, showsCancelButton: Bool = true, dismissKeyboardOnScroll: Bool = true, dismissKeyboardOnSelection: Bool = true, automaticallyShowsHistory: Bool = true, automaticallyShowsSuggestions: Bool = false, enablesPagination: Bool = false, enablesRefresh: Bool = false, paginationPageSize: Int = 20, historyMaximumCount: Int = 20, mode: PTSearchMode = .custom, placement: PTSearchPlacement = .contentTop, visualStyle: PTSearchVisualStyle = .automatic, searchBarHeight: CGFloat = 32) { |
-| PooToolsSource/Search/PTSearchConfiguration.swift:113 | var | public | public var debounceTimeInterval: TimeInterval { |
+| PooToolsSource/Search/PTSearchConfiguration.swift:63 | init | public | public init(minimumCharacters: Int = 1, debounceInterval: Duration = .milliseconds(300), searchWhileTyping: Bool = true, searchOnReturn: Bool = true, clearOnCancel: Bool = true, clearOnEmptyKeyword: Bool = true, keepsPreviousResultsWhileLoading: Bool = true, showsCancelButton: Bool = true, dismissKeyboardOnScroll: Bool = true, dismissKeyboardOnSelection: Bool = true, automaticallyShowsHistory: Bool = true, automaticallyShowsSuggestions: Bool = false, enablesPagination: Bool = false, enablesRefresh: Bool = false, paginationPageSize: Int = 20, historyMaximumCount: Int = 20, mode: PTSearchMode = .custom, placement: PTSearchPlacement = .contentTop, visualStyle: PTSearchVisualStyle = .automatic) { |
+| PooToolsSource/Search/PTSearchConfiguration.swift:105 | init | public | public init(minimumCharacters: Int = 1, debounceInterval: Duration = .milliseconds(300), searchWhileTyping: Bool = true, searchOnReturn: Bool = true, clearOnCancel: Bool = true, clearOnEmptyKeyword: Bool = true, keepsPreviousResultsWhileLoading: Bool = true, showsCancelButton: Bool = true, dismissKeyboardOnScroll: Bool = true, dismissKeyboardOnSelection: Bool = true, automaticallyShowsHistory: Bool = true, automaticallyShowsSuggestions: Bool = false, enablesPagination: Bool = false, enablesRefresh: Bool = false, paginationPageSize: Int = 20, historyMaximumCount: Int = 20, mode: PTSearchMode = .custom, placement: PTSearchPlacement = .contentTop, visualStyle: PTSearchVisualStyle = .automatic, searchBarHeight: CGFloat = 32) { |
+| PooToolsSource/Search/PTSearchConfiguration.swift:158 | var | public | public var debounceTimeInterval: TimeInterval { |
 | PooToolsSource/Search/PTSearchEmptyConfiguration.swift:20 | struct | public | public struct PTSearchEmptyConfiguration { |
 | PooToolsSource/Search/PTSearchEmptyConfiguration.swift:21 | var | public | public var image: UIImage? |
 | PooToolsSource/Search/PTSearchEmptyConfiguration.swift:22 | var | public | public var title: String |

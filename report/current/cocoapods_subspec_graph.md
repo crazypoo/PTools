@@ -3,18 +3,18 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: 85cd0fa1019fd0965e4966b5435710c618b02da7
-Generated at: 2026-10-17T19:53:12Z
+Source revision: a868c0a22374e9a4016e85a100ccc814895d9cc3
+Generated at: 2026-10-18T02:40:25Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.66.1`
+- Podspec: `PooTools` `5.67.0`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
-- Subspec count: `164`
+- Subspec count: `165`
 
 ## Subspecs
 
@@ -48,6 +48,7 @@ Generated at: 2026-10-17T19:53:12Z
 | `CodeView` | `PooTools/Core` | — | `CodeView` | — | — |
 | `Configuration` | `PooTools/Storage` | — | `PToolsConfiguration` | Foundation | — |
 | `Connectivity` | — | — | `PToolsConnectivity` | Foundation, Network | — |
+| `ConstraintLayout` | — | — | `PToolsConstraintLayout` | Foundation, UIKit | — |
 | `Contact` | `PooTools/ContactsPermission`, `PooTools/Core` | — | `Contact` | — | — |
 | `ContactsPermission` | `PooTools/PToolsPermissionCore` | — | `ContactsPermission` | — | — |
 | `ContentState` | `PooTools/Accessibility`, `PooTools/Connectivity`, `PooTools/Core`, `PooTools/Theme` | — | `PToolsContentState` | Foundation, UIKit | — |

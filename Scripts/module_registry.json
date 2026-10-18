@@ -1057,6 +1057,22 @@
     },
     {
       "kind": "spm_only",
+      "module": "PToolsConstraintLayout",
+      "reason": "SwiftPM exposes the standalone UIKit/Foundation constraint layout product; CocoaPods exposes the same source contract through the ConstraintLayout subspec.",
+      "owner": "layout",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "ConstraintLayout",
+      "reason": "CocoaPods uses the ConstraintLayout subspec name while SwiftPM exposes the canonical PToolsConstraintLayout product.",
+      "owner": "layout",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
       "module": "PToolsAppIntegrity",
       "reason": "SwiftPM exposes the opt-in 5.62 application-infrastructure target; CocoaPods keeps the same functionality under the local subspec graph while parity migration is tracked.",
       "owner": "application-infrastructure",
@@ -1476,6 +1492,33 @@
       "reason": "SPM and CocoaPods expose different direct and transitive Core dependencies.",
       "owner": "packaging",
       "expiration": "2026-12-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "HeartRate",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit directly and Lottie through lottie-ios; CocoaPods keeps Lottie in the HeartRate subspec and receives SnapKit from the Core graph.",
+      "owner": "heart-rate",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "PagingControl",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit for the paging control target; CocoaPods receives the compatible layout dependency from the aggregate Core graph.",
+      "owner": "paging-control",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "iOS17Tips",
+      "field": "third_party_dependencies",
+      "reason": "SwiftPM declares SnapKit for the iOS 17 tips target; CocoaPods receives the compatible layout dependency from the aggregate Core graph.",
+      "owner": "ios17-tips",
+      "expiration": "2027-03-31",
       "classification": "INTENTIONAL"
     },
     {

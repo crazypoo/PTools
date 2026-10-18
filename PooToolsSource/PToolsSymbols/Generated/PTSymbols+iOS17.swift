@@ -141,6 +141,7 @@ public extension PTSymbol {
     static let tortoise = PTSymbol(rawValue: "tortoise")
     static let tortoiseFill = PTSymbol(rawValue: "tortoise.fill")
     static let trash = PTSymbol(rawValue: "trash")
+    static let trashCircle = PTSymbol(rawValue: "trash.circle")
     static let trashFill = PTSymbol(rawValue: "trash.fill")
     static let tv = PTSymbol(rawValue: "tv")
     static let video = PTSymbol(rawValue: "video")
@@ -289,6 +290,7 @@ enum PTSymbolCatalogGenerated {
         PTSymbolDescriptor(symbol: .tortoise, swiftName: "tortoise", availability: PTSymbolAvailability(introducedIOS: "17.0", deprecatedIOS: nil), renamedTo: nil, supportsVariableValue: false),
         PTSymbolDescriptor(symbol: .tortoiseFill, swiftName: "tortoiseFill", availability: PTSymbolAvailability(introducedIOS: "17.0", deprecatedIOS: nil), renamedTo: nil, supportsVariableValue: false),
         PTSymbolDescriptor(symbol: .trash, swiftName: "trash", availability: PTSymbolAvailability(introducedIOS: "17.0", deprecatedIOS: nil), renamedTo: nil, supportsVariableValue: false),
+        PTSymbolDescriptor(symbol: .trashCircle, swiftName: "trashCircle", availability: PTSymbolAvailability(introducedIOS: "17.0", deprecatedIOS: nil), renamedTo: nil, supportsVariableValue: false),
         PTSymbolDescriptor(symbol: .trashFill, swiftName: "trashFill", availability: PTSymbolAvailability(introducedIOS: "17.0", deprecatedIOS: nil), renamedTo: nil, supportsVariableValue: false),
         PTSymbolDescriptor(symbol: .tv, swiftName: "tv", availability: PTSymbolAvailability(introducedIOS: "17.0", deprecatedIOS: nil), renamedTo: nil, supportsVariableValue: false),
         PTSymbolDescriptor(symbol: .video, swiftName: "video", availability: PTSymbolAvailability(introducedIOS: "17.0", deprecatedIOS: nil), renamedTo: nil, supportsVariableValue: false),

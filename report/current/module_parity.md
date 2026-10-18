@@ -3,19 +3,19 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: 85cd0fa1019fd0965e4966b5435710c618b02da7
-Generated at: 2026-10-17T19:53:12Z
+Source revision: a868c0a22374e9a4016e85a100ccc814895d9cc3
+Generated at: 2026-10-18T02:40:26Z
 -->
 
 # SwiftPM / CocoaPods Module Parity
 
 - Status: `baseline`
-- Fingerprint: `07cb3fdf5c0e6c0e94ec52fc803cc6863659e00c19af0cc80d09ee5fa2ea95c4`
+- Fingerprint: `536dfe06d4513880c1d0a6e2f35879c65060eeade2f5b68ff4221a91a4b8e144`
 - Matched modules: `123`
-- SwiftPM-only modules: `33`
-- CocoaPods-only modules: `35`
+- SwiftPM-only modules: `34`
+- CocoaPods-only modules: `36`
 - Source-directory drift: `3`
-- Dependency drift: `60`
+- Dependency drift: `63`
 - Swift setting / macro drift: `56`
 
 ## Classification
@@ -23,8 +23,8 @@ Generated at: 2026-10-17T19:53:12Z
 | Class | Modules / count |
 | --- | --- |
 | Matched | `Accessibility`, `Activities`, `AppIntents`, `Audio`, `BackgroundTasks`, `BankCard`, `Banner`, `BilogyID`, `Bluetooth`, `BluetoothPermission`, `Calendar`, `CalendarPermission`, `CameraPermission`, `CheckBox`, `CheckDirtyWord`, `CheckUpdate`, `ChinesePinyin`, `Circle`, `CodeView`, `Configuration`, `Connectivity`, `Contact`, `ContactsPermission`, `ContentState`, `Core`, `Country`, `CustomerLabel`, `CustomerNumberKeyboard`, `DEBUG`, `DEBUG_TrackingEyes`, `DataEncrypt`, `DeepLink`, `Device`, `Documents`, `FaceIDPermission`, `Feedback`, `Form`, `Guide`, `HTTPFilePortal`, `HTTPServer`, `HandSign`, `HarbethKit`, `HealthPermission`, `HeartRate`, `Hud`, `IAP`, `ImageEditor`, `ImagePicker`, `Input`, `Instructions`, `KeyChain`, `LaunchTimeProfiler`, `Layout`, `LivePhoto`, `Loading`, `Location`, `LocationPermission`, `Logging`, `MediaCore`, `MediaViewer`, `MeidaPermission`, `MessageKit`, `MicPermission`, `Model`, `ModelCore`, `Motion`, `MotionPermission`, `NetWork`, `NetworkSpeedTest`, `NotificationPermission`, `Notifications`, `OSSKitSpeech`, `Overlay`, `PDF`, `PToolsCore`, `PToolsModelCombine`, `PToolsModelUIKit`, `PToolsPermissionCore`, `PToolsPermissionUI`, `PToolsUIFoundation`, `PageControl`, `PagingControl`, `PhoneInfo`, `PhotoPicker`, `Picker`, `Ping`, `Popover`, `ProgressBar`, `RateView`, `RemindersPermission`, `RouteCore`, `Router`, `SVG`, `ScanQRCode`, `ScrollBanner`, `Search`, `SearchBar`, `Security`, `Segmented`, `Share`, `Simulation`, `SimulationCore`, `SiriPermission`, `Slider`, `SmartScreenshot`, `SocketKit`, `SpeechRecognizerPermission`, `SpeedPanel`, `SplitView`, `StepCount`, `Stepper`, `Storage`, `StorageCore`, `Symbols`, `Telephony`, `Theme`, `TipsView`, `TrackingPermission`, `VideoEditor`, `Vision`, `WhatsNewsKit`, `WidgetCore`, `iOS17Tips` |
-| SwiftPM only | `PTAcknowledgementsGenerator`, `PTModelBenchmark`, `PTModelLegacyKakaJSONFixture`, `PTModelLegacySmartCodableFixture`, `PTModelMixedLegacyFixture`, `PTModelOnlyFixture`, `PToolsAcknowledgements`, `PToolsAcknowledgementsCore`, `PToolsAppIntegrity`, `PToolsAuth`, `PToolsAuthCore`, `PToolsDatabase`, `PToolsDatabaseCore`, `PToolsDate`, `PToolsFontCatalogCore`, `PToolsMap`, `PToolsMapCore`, `PToolsModelLegacyKakaJSON`, `PToolsModelLegacySmartCodable`, `PToolsModelMacroPlugin`, `PToolsNetworkModelCore`, `PToolsObservability`, `PToolsObservabilityCore`, `PToolsRealtime`, `PToolsRealtimeCore`, `PToolsStoreKit`, `PToolsSync`, `PToolsSyncCore`, `PToolsTransfer`, `PToolsTransferCore`, `PToolsWeb`, `PToolsWebBridge`, `PToolsWebCore` |
-| CocoaPods only | `Acknowledgements`, `AcknowledgementsCore`, `AppIntegrity`, `Appz`, `Auth`, `AuthCore`, `Database`, `DatabaseCore`, `Date`, `Flag`, `GCDWebServer`, `InputAll`, `MXMetricManagerKit`, `Map`, `MapCore`, `ModelLegacyKakaJSON`, `ModelLegacySmartCodable`, `NFCKit`, `NotificationBanner`, `Observability`, `ObservabilityCore`, `PopoverKit`, `Realtime`, `RealtimeCore`, `SecuritySuite`, `StoreKit`, `Sync`, `SyncCore`, `Tabbar`, `Transfer`, `TransferCore`, `Web`, `WebBridge`, `WebCore`, `ZipArchive` |
+| SwiftPM only | `PTAcknowledgementsGenerator`, `PTModelBenchmark`, `PTModelLegacyKakaJSONFixture`, `PTModelLegacySmartCodableFixture`, `PTModelMixedLegacyFixture`, `PTModelOnlyFixture`, `PToolsAcknowledgements`, `PToolsAcknowledgementsCore`, `PToolsAppIntegrity`, `PToolsAuth`, `PToolsAuthCore`, `PToolsConstraintLayout`, `PToolsDatabase`, `PToolsDatabaseCore`, `PToolsDate`, `PToolsFontCatalogCore`, `PToolsMap`, `PToolsMapCore`, `PToolsModelLegacyKakaJSON`, `PToolsModelLegacySmartCodable`, `PToolsModelMacroPlugin`, `PToolsNetworkModelCore`, `PToolsObservability`, `PToolsObservabilityCore`, `PToolsRealtime`, `PToolsRealtimeCore`, `PToolsStoreKit`, `PToolsSync`, `PToolsSyncCore`, `PToolsTransfer`, `PToolsTransferCore`, `PToolsWeb`, `PToolsWebBridge`, `PToolsWebCore` |
+| CocoaPods only | `Acknowledgements`, `AcknowledgementsCore`, `AppIntegrity`, `Appz`, `Auth`, `AuthCore`, `ConstraintLayout`, `Database`, `DatabaseCore`, `Date`, `Flag`, `GCDWebServer`, `InputAll`, `MXMetricManagerKit`, `Map`, `MapCore`, `ModelLegacyKakaJSON`, `ModelLegacySmartCodable`, `NFCKit`, `NotificationBanner`, `Observability`, `ObservabilityCore`, `PopoverKit`, `Realtime`, `RealtimeCore`, `SecuritySuite`, `StoreKit`, `Sync`, `SyncCore`, `Tabbar`, `Transfer`, `TransferCore`, `Web`, `WebBridge`, `WebCore`, `ZipArchive` |
 
 ## Compatibility products
 
@@ -54,7 +54,7 @@ The baseline records existing differences as explicit review items. A later mani
 - `CheckUpdate` / `third_party_dependencies`: SPM=["Swift-JWT"]; CocoaPods=["SwiftJWT"]
 - `Configuration` / `internal_dependencies`: SPM=["Storage", "StorageCore"]; CocoaPods=["Storage"]
 - `ContentState` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
-- `Core` / `internal_dependencies`: SPM=["Device", "Logging", "PToolsCore", "PToolsDate", "PToolsFontCatalogCore", "PToolsPermissionCore", "PToolsUIFoundation", "Symbols"]; CocoaPods=["Date", "Device", "Logging", "PToolsCore", "PToolsUIFoundation", "Symbols"]
+- `Core` / `internal_dependencies`: SPM=["Device", "Logging", "PToolsConstraintLayout", "PToolsCore", "PToolsDate", "PToolsFontCatalogCore", "PToolsPermissionCore", "PToolsUIFoundation", "Symbols"]; CocoaPods=["Date", "Device", "Logging", "PToolsCore", "PToolsUIFoundation", "Symbols"]
 - `Core` / `third_party_dependencies`: SPM=["IQKeyboardManager", "Kingfisher", "SnapKit", "lottie-ios"]; CocoaPods=["IQKeyboardManagerSwift", "IQKeyboardToolbarManager", "Kingfisher", "SnapKit", "lottie-ios"]
 - `CustomerLabel` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `CustomerNumberKeyboard` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
@@ -65,6 +65,7 @@ The baseline records existing differences as explicit review items. A later mani
 - `HandSign` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `HarbethKit` / `internal_dependencies`: SPM=["CameraPermission", "Core", "Hud", "Loading", "MediaViewer", "Symbols"]; CocoaPods=["CameraPermission", "Core", "Symbols"]
 - `HarbethKit` / `third_party_dependencies`: SPM=["Harbeth", "SnapKit"]; CocoaPods=["Harbeth"]
+- `HeartRate` / `third_party_dependencies`: SPM=["SnapKit", "lottie-ios"]; CocoaPods=["lottie-ios"]
 - `Hud` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `ImageEditor` / `internal_dependencies`: SPM=["Core", "HarbethKit", "MediaCore", "PToolsCore", "PhotoPicker", "Symbols"]; CocoaPods=["Core", "HarbethKit", "MediaCore", "PhotoPicker", "Symbols"]
 - `ImageEditor` / `third_party_dependencies`: SPM=["Harbeth", "SnapKit"]; CocoaPods=[]
@@ -84,6 +85,7 @@ The baseline records existing differences as explicit review items. A later mani
 - `NetWork` / `internal_dependencies`: SPM=["Connectivity", "Core", "Loading", "ModelCore", "PToolsCore", "PToolsModelLegacyKakaJSON", "PToolsModelLegacySmartCodable", "PToolsNetworkModelCore"]; CocoaPods=["Connectivity", "Core", "Loading", "ModelCore", "ModelLegacyKakaJSON", "ModelLegacySmartCodable"]
 - `PDF` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `PageControl` / `internal_dependencies`: SPM=["Core", "PToolsCore"]; CocoaPods=["Core"]
+- `PagingControl` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `PhotoPicker` / `internal_dependencies`: SPM=["CameraPermission", "Core", "ImagePicker", "Loading", "MediaCore", "PToolsUIFoundation", "Symbols"]; CocoaPods=["Core", "ImagePicker", "Loading", "MediaCore", "Symbols"]
 - `PhotoPicker` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `Picker` / `internal_dependencies`: SPM=["Core", "PToolsCore"]; CocoaPods=["Core"]
@@ -108,6 +110,7 @@ The baseline records existing differences as explicit review items. A later mani
 - `WhatsNewsKit` / `internal_dependencies`: SPM=["Core", "PToolsUIFoundation"]; CocoaPods=["Core"]
 - `WhatsNewsKit` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `WidgetCore` / `internal_dependencies`: SPM=["DeepLink", "RouteCore", "Storage", "StorageCore"]; CocoaPods=["DeepLink", "RouteCore", "Storage"]
+- `iOS17Tips` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 
 ### Swift settings and macros
 

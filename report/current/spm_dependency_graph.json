@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "85cd0fa1019fd0965e4966b5435710c618b02da7",
-  "generated_at": "2026-10-17T19:53:11Z",
+  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
+  "generated_at": "2026-10-18T03:14:35Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -389,6 +389,17 @@
       },
       "targets": [
         "PToolsConnectivity"
+      ]
+    },
+    {
+      "name": "PToolsConstraintLayout",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsConstraintLayout"
       ]
     },
     {
@@ -950,6 +961,7 @@
         "PToolsBluetooth",
         "PToolsConfiguration",
         "PToolsConnectivity",
+        "PToolsConstraintLayout",
         "PToolsContentState",
         "PToolsDate",
         "PToolsDeepLink",
@@ -3975,6 +3987,26 @@
       "name": "PToolsConnectivity",
       "type": "regular",
       "path": "PooToolsSource/PToolsConnectivity",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsConstraintLayout",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsConstraintLayout",
       "sources": [],
       "resources": [],
       "internal_dependencies": [],
@@ -8021,6 +8053,17 @@
               null
             ]
           }
+        },
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
         }
       ],
       "unknown_dependencies": [],
@@ -9449,7 +9492,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -11166,7 +11221,19 @@
           }
         }
       ],
-      "third_party_dependencies": [],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
       "unknown_dependencies": [],
       "swift_settings": [
         {
@@ -11232,6 +11299,17 @@
         }
       ],
       "internal_dependencies": [
+        {
+          "name": "PToolsConstraintLayout",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsConstraintLayout",
+              null
+            ]
+          }
+        },
         {
           "name": "PToolsCore",
           "kind": "internal",

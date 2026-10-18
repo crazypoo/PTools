@@ -6228,6 +6228,15 @@
     "ownerCandidates": "ptools"
   },
   {
+    "symbolName": "PTNSLogConsole",
+    "referencePath": "PooToolsSource/Core/PTLayoutConsoleBridge.swift",
+    "line": 20,
+    "ownerTarget": "ptools",
+    "requiredModule": "ptools",
+    "currentImports": "Foundation;PToolsConstraintLayout",
+    "ownerCandidates": "ptools"
+  },
+  {
     "symbolName": "createImageWithColor",
     "referencePath": "PooToolsSource/Core/PTLoadImageFunction.swift",
     "line": 280,
@@ -14195,10 +14204,10 @@
   {
     "symbolName": "PTBaseViewController",
     "referencePath": "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementDetailViewController.swift",
-    "line": 16,
+    "line": 19,
     "ownerTarget": "PToolsAcknowledgements",
     "requiredModule": "ptools",
-    "currentImports": "PToolsAcknowledgementsCore;SnapKit;UIKit;ptools",
+    "currentImports": "PToolsAcknowledgementsCore;PToolsSymbols;SnapKit;UIKit;ptools",
     "ownerCandidates": "ptools"
   },
   {
@@ -15807,6 +15816,15 @@
     "symbolName": "PTSymbol",
     "referencePath": "PooToolsSource/PToolsSymbols/Generated/PTSymbols+iOS17.swift",
     "line": 150,
+    "ownerTarget": "PToolsSymbols",
+    "requiredModule": "PToolsSymbols",
+    "currentImports": "",
+    "ownerCandidates": "PToolsSymbols"
+  },
+  {
+    "symbolName": "PTSymbol",
+    "referencePath": "PooToolsSource/PToolsSymbols/Generated/PTSymbols+iOS17.swift",
+    "line": 151,
     "ownerTarget": "PToolsSymbols",
     "requiredModule": "PToolsSymbols",
     "currentImports": "",

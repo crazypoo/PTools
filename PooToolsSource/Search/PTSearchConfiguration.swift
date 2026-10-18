@@ -38,6 +38,51 @@ public struct PTSearchConfiguration: Sendable, Equatable {
     public var placement: PTSearchPlacement
     public var visualStyle: PTSearchVisualStyle
 
+    // English: Preserve the 5.64.4 initializer while keeping the new search-bar height opt-in.
+    // Español: Conserva el inicializador de 5.64.4 y mantiene opcional la nueva altura de la barra.
+    // 中文：保留 5.64.4 初始化器，同时让新的搜索框高度配置保持可选。
+    @_disfavoredOverload
+    public init(minimumCharacters: Int = 1,
+                debounceInterval: Duration = .milliseconds(300),
+                searchWhileTyping: Bool = true,
+                searchOnReturn: Bool = true,
+                clearOnCancel: Bool = true,
+                clearOnEmptyKeyword: Bool = true,
+                keepsPreviousResultsWhileLoading: Bool = true,
+                showsCancelButton: Bool = true,
+                dismissKeyboardOnScroll: Bool = true,
+                dismissKeyboardOnSelection: Bool = true,
+                automaticallyShowsHistory: Bool = true,
+                automaticallyShowsSuggestions: Bool = false,
+                enablesPagination: Bool = false,
+                enablesRefresh: Bool = false,
+                paginationPageSize: Int = 20,
+                historyMaximumCount: Int = 20,
+                mode: PTSearchMode = .custom,
+                placement: PTSearchPlacement = .contentTop,
+                visualStyle: PTSearchVisualStyle = .automatic) {
+        self.init(minimumCharacters: minimumCharacters,
+                  debounceInterval: debounceInterval,
+                  searchWhileTyping: searchWhileTyping,
+                  searchOnReturn: searchOnReturn,
+                  clearOnCancel: clearOnCancel,
+                  clearOnEmptyKeyword: clearOnEmptyKeyword,
+                  keepsPreviousResultsWhileLoading: keepsPreviousResultsWhileLoading,
+                  showsCancelButton: showsCancelButton,
+                  dismissKeyboardOnScroll: dismissKeyboardOnScroll,
+                  dismissKeyboardOnSelection: dismissKeyboardOnSelection,
+                  automaticallyShowsHistory: automaticallyShowsHistory,
+                  automaticallyShowsSuggestions: automaticallyShowsSuggestions,
+                  enablesPagination: enablesPagination,
+                  enablesRefresh: enablesRefresh,
+                  paginationPageSize: paginationPageSize,
+                  historyMaximumCount: historyMaximumCount,
+                  mode: mode,
+                  placement: placement,
+                  visualStyle: visualStyle,
+                  searchBarHeight: 32)
+    }
+
     public init(minimumCharacters: Int = 1,
                 debounceInterval: Duration = .milliseconds(300),
                 searchWhileTyping: Bool = true,

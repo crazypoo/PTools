@@ -1,0 +1,8 @@
+api,consumer,owner,status
+UIView.ptLayout,PToolsConstraintLayout,PTLayout,static-typecheck
+PTLayoutConstraint,PToolsConstraintLayout,PTLayout,static-typecheck
+PTLayoutConstraintGroup,PToolsConstraintLayout,PTLayout,static-typecheck
+PTLayoutDiagnostics,PToolsConstraintLayout,PTLayout,static-typecheck
+PTLayoutProfiler,PToolsConstraintLayout,PTLayout,static-typecheck
+PooTools/ConstraintLayout,CocoaPods,PTLayout,declared
+PTLayoutLabViewController,Example,PTLayout,route-registered

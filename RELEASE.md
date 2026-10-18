@@ -1,5 +1,13 @@
 # PTools 发布清单
 
+## 5.67.0
+
+- [x] `VERSION`、`PooTools.podspec`、`CHANGELOG.md`、`README.md` 和 PTLayout 发布报告同步。
+- [x] `PToolsConstraintLayout` 的 UIKit/Foundation 独立边界、CocoaPods `ConstraintLayout` subspec、SwiftPM product 和聚合入口已登记。
+- [x] 56 个故障夹具、10 个 Demo ID、依赖方向、源码所有权、SnapKit 隔离和迁移覆盖静态门禁通过。
+- [x] PooTools-Example iOS Simulator Debug / Release 构建通过。
+- [ ] 完成外部 iOS 宿主运行时、视觉回归、性能对比和 watchOS/visionOS/macOS 宿主验证后再创建正式 `5.67.0` tag。
+
 ## 5.66.1
 
 - [ ] `VERSION`、`PooTools.podspec`、`CHANGELOG.md`、`README.md` 和 `Podfile.lock` 同步。

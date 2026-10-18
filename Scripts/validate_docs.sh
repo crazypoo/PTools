@@ -5,7 +5,7 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
-allowed_root_documents=(README.md CHANGELOG.md ROADMAP.md)
+allowed_root_documents=(README.md CHANGELOG.md ROADMAP.md RELEASE.md)
 for path in "$repo_root"/*.md "$repo_root"/*.json; do
   [[ -e "$path" ]] || continue
   name="${path##*/}"

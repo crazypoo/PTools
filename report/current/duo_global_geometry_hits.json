@@ -1,8 +1,8 @@
 {
   "generator": "Scripts/audit_duo_uikit_coverage.py",
   "generated_by": "Scripts/audit_duo_uikit_coverage.py",
-  "source_revision": "8d3d43f7ab95fd135e57d711d8bf256d6d9978af",
-  "generated_at": "2026-10-17T15:29:52.815062+00:00",
+  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
+  "generated_at": "2026-10-18T02:40:32.395900+00:00",
   "hits": [
     {
       "kind": "statusBarHeight",
@@ -187,13 +187,13 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Base/PTBaseViewController+Navigation.swift",
-      "line": 174,
+      "line": 172,
       "text": "let fallbackSize = view is UISwitch ? CGSize(width: 51, height: 31) : CGSize(width: defaultSize, height: defaultSize)"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Base/PTBaseViewController+Navigation.swift",
-      "line": 306,
+      "line": 304,
       "text": "let height = maxHeight + stretch * 40"
     },
     {
@@ -649,7 +649,7 @@
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 89,
+      "line": 90,
       "text": "displayScale: window?.screen.scale ?? UIScreen.main.scale)"
     },
     {
@@ -907,7 +907,7 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Debug/PTInstrumentsUI.swift",
-      "line": 138,
+      "line": 139,
       "text": "let sampleRect = CGRect(x: x, y: y + 4, width: 2, height: 10)"
     },
     {
@@ -985,19 +985,19 @@
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugLibs/PTLoadedLibsViewController.swift",
-      "line": 114,
+      "line": 113,
       "text": "view.bounds = .init(origin: .zero, size: .init(width: (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 88), height: 32))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/DebugLibs/PTLoadedLibsViewController.swift",
-      "line": 114,
+      "line": 113,
       "text": "view.bounds = .init(origin: .zero, size: .init(width: (CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 88), height: 32))"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/DebugLibs/PTLoadedLibsViewController.swift",
-      "line": 217,
+      "line": 216,
       "text": "let screenWidth = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 24 - 4.5"
     },
     {
@@ -1471,13 +1471,13 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/Icon.swift",
-      "line": 24,
+      "line": 21,
       "text": "@MainActor init(_ glpyh: Glyph, color: UIColor? = nil, size: CGSize = CGSize(width: 16, height: 16)) {"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/Icon.swift",
-      "line": 80,
+      "line": 76,
       "text": "size: CGSize(16)"
     },
     {
@@ -2107,19 +2107,19 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/InspectorHighlightView.swift",
-      "line": 332,
+      "line": 333,
       "text": "elementNameView.image = element.iconImage?.resized(CGSize(18))"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/InspectorHighlightView.swift",
-      "line": 374,
+      "line": 376,
       "text": "borderWidth = 4 / UIScreen.main.scale"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/InspectorHighlightView.swift",
-      "line": 378,
+      "line": 380,
       "text": "borderWidth = 2 / UIScreen.main.scale"
     },
     {
@@ -2191,13 +2191,13 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Inspector/OptionListControl.swift",
-      "line": 30,
+      "line": 31,
       "text": "private lazy var icon = Icon(.chevronUpDown, color: textColor, size: CGSize(width: 14, height: 14))"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/SeparatorView.swift",
-      "line": 39,
+      "line": 40,
       "text": "var thicknesInPixels: CGFloat { thickness / UIScreen.main.scale }"
     },
     {
@@ -2209,7 +2209,7 @@
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Inspector/UIView+InspectorEX.swift",
-      "line": 611,
+      "line": 590,
       "text": "layer.rasterizationScale = max(maxScale, UIScreen.main.scale)"
     },
     {
@@ -3439,13 +3439,13 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/LineButton.swift",
-      "line": 33,
+      "line": 34,
       "text": "super.init(frame: CGRect(x: 0, y: 0, width: 50, height: 50))"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/VideoEditor/LineButton.swift",
-      "line": 116,
+      "line": 117,
       "text": "super.init(frame: CGRect(x: 0, y: 0, width: 50, height: 50))"
     },
     {

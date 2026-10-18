@@ -232,6 +232,7 @@
         "PooToolsSource/Category/WKWebView+PTEX.swift",
         "PooToolsSource/CheckUpdate/PTCheckUpdateFunction.swift",
         "PooToolsSource/Contact/PTContact.swift",
+        "PooToolsSource/Core/PTLayoutConsoleBridge.swift",
         "PooToolsSource/Core/PTTimeUtils.swift",
         "PooToolsSource/Core/PTUtils.swift",
         "PooToolsSource/Debug/PTDebugFunction.swift",
@@ -307,7 +308,7 @@
         "PooToolsSource/iCloud/PTiCloudKeychainService.swift",
         "PooToolsSource/iOS17Tips/PTTip.swift"
       ],
-      "match_count": 117
+      "match_count": 118
     },
     {
       "capability": "routing",
@@ -835,7 +836,7 @@
     }
   ],
   "generator": "Scripts/report_semantic_capability_ownership.sh",
-  "source_revision": "85cd0fa1019fd0965e4966b5435710c618b02da7",
-  "generated_at": "2026-10-17T19:53:01Z",
-  "source_file_count": 1202
+  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
+  "generated_at": "2026-10-18T02:38:20Z",
+  "source_file_count": 1206
 }

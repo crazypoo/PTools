@@ -1268,6 +1268,105 @@
     "type": "regular"
   },
   {
+    "dependencies": [],
+    "name": "PToolsConstraintLayout",
+    "path": "PooToolsSource/PToolsConstraintLayout",
+    "product_memberships": [
+      "ptools",
+      "PToolsConstraintLayout",
+      "PToolsAcknowledgements",
+      "PToolsContentState",
+      "PToolsForm",
+      "PToolsDocuments",
+      "PooToolsSplitView",
+      "PToolsRealtime",
+      "PooToolsCustomerLabel",
+      "PooToolsProgressBar",
+      "PooToolsPageControl",
+      "PooToolsLoading",
+      "PooToolsHud",
+      "PooToolsLivePhoto",
+      "PooToolsShare",
+      "PooToolsPDF",
+      "PooToolsSVG",
+      "PooToolsNetWork",
+      "PooToolsNetwork",
+      "PooToolsDataEncrypt",
+      "PooToolsSearchBar",
+      "PooToolsSearch",
+      "PooToolsMediaViewer",
+      "PooToolsVideoCache",
+      "PooToolsImagePicker",
+      "PooToolsPhotoPicker",
+      "PooToolsHarbethKit",
+      "PooToolsFilterCamera",
+      "PooToolsWebKit",
+      "PooToolsImageEditor",
+      "PooToolsVideoEditor",
+      "PooToolsStepper",
+      "PooToolsBankCard",
+      "PooToolsBioID",
+      "PooToolsCalendar",
+      "PooToolsTelephony",
+      "PooToolsCodeView",
+      "PooToolsCountry",
+      "PooToolsGuide",
+      "PooToolsInput",
+      "PooToolsKeyboard",
+      "PooToolsMotion",
+      "PooToolsRateView",
+      "PooToolsScrollBanner",
+      "PooToolsSegmented",
+      "PooToolsHandSign",
+      "PooToolsCheckUpdate",
+      "PooToolsLayout",
+      "PooToolsLocation",
+      "PooToolsSmartScreenshot",
+      "PooToolsPagingControl",
+      "PooToolsScanQRCode",
+      "PooToolsStepCount",
+      "PooToolsContact",
+      "PooToolsVision",
+      "PooToolsRouter",
+      "PooToolsPing",
+      "PooToolsSpeedPanel",
+      "PooToolsNetworkSpeedTest",
+      "PooToolsOSSKitSpeech",
+      "PooToolsiOS17Tips",
+      "PooToolsWhatsNewsKit",
+      "PooToolsHeartRate",
+      "PooToolsChinesePinyin",
+      "PooToolsCircle",
+      "PooToolsMessageKit",
+      "PooToolsSocketKit",
+      "PooToolsIAP",
+      "PooToolsTipsView",
+      "PooToolsPicker",
+      "PooToolsDEBUG",
+      "PooToolsDEBUGTrackingEyes",
+      "PooToolsLaunchTimeProfiler",
+      "PooToolsAll"
+    ],
+    "resources": [],
+    "source_count": 3,
+    "sources": [
+      "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift",
+      "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift"
+    ],
+    "swift_settings": [
+      {
+        "kind": {
+          "enableUpcomingFeature": {
+            "_0": "StrictConcurrency"
+          }
+        },
+        "tool": "swift"
+      }
+    ],
+    "type": "regular"
+  },
+  {
     "dependencies": [
       "PToolsAccessibility",
       "PToolsConnectivity",
@@ -7215,6 +7314,7 @@
   },
   {
     "dependencies": [
+      "PToolsConstraintLayout",
       "PToolsCore",
       "PToolsDate",
       "PToolsDevice",
@@ -7309,7 +7409,7 @@
         }
       }
     ],
-    "source_count": 319,
+    "source_count": 320,
     "sources": [
       "PooToolsSource/ActionsheetAndAlert/PTActionSheetController.swift",
       "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -7569,6 +7669,7 @@
       "PooToolsSource/Core/PTGifManager.swift",
       "PooToolsSource/Core/PTImageDownsampler.swift",
       "PooToolsSource/Core/PTLayerExports.swift",
+      "PooToolsSource/Core/PTLayoutConsoleBridge.swift",
       "PooToolsSource/Core/PTLifecycleBag.swift",
       "PooToolsSource/Core/PTLoadImageFunction.swift",
       "PooToolsSource/Core/PTMarcos_swift.swift",

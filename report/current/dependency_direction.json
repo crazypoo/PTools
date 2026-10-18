@@ -1,16 +1,20 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "4c508f23263c51171d48163d641a4d808069b81a",
-  "generated_at": "2026-10-17T01:00:08Z",
+  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
+  "generated_at": "2026-10-18T02:39:14Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
-    "ptools -> local target is forbidden except PToolsCore, PToolsDate, PToolsUIFoundation, PToolsPermissionCore, PToolsLogging, PToolsSymbols, PToolsDevice, and PToolsFontCatalogCore",
+    "ptools -> local target is forbidden except approved local layers, including PToolsConstraintLayout",
     "PT*Permission -> non-ptools target is forbidden except PToolsPermissionCore",
     "MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires",
     "Navigation/Router -> PhotoPicker is forbidden"
   ],
   "edges": [
+    {
+      "source": "PTAcknowledgementsGenerator",
+      "destination": "PToolsAcknowledgementsCore"
+    },
     {
       "source": "PTBluetoothPermission",
       "destination": "PToolsPermissionCore"
@@ -100,6 +104,10 @@
       "destination": "PToolsUIFoundation"
     },
     {
+      "source": "PToolsAcknowledgements",
+      "destination": "PToolsAcknowledgementsCore"
+    },
+    {
       "source": "PToolsAppIntents",
       "destination": "PToolsRouteCore"
     },
@@ -181,11 +189,19 @@
     },
     {
       "source": "PToolsForm",
+      "destination": "PooToolsInput"
+    },
+    {
+      "source": "PToolsForm",
       "destination": "PooToolsPicker"
     },
     {
       "source": "PToolsForm",
       "destination": "PooToolsSlider"
+    },
+    {
+      "source": "PToolsForm",
+      "destination": "PooToolsStepper"
     },
     {
       "source": "PToolsForm",
@@ -377,6 +393,10 @@
     },
     {
       "source": "PooToolsBioID",
+      "destination": "PooToolsKeyChain"
+    },
+    {
+      "source": "PooToolsBioID",
       "destination": "ptools"
     },
     {
@@ -390,6 +410,14 @@
     {
       "source": "PooToolsCalendar",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsCheckUpdate",
+      "destination": "PooToolsHud"
+    },
+    {
+      "source": "PooToolsCheckUpdate",
+      "destination": "PooToolsLoading"
     },
     {
       "source": "PooToolsCheckUpdate",
@@ -497,11 +525,27 @@
     },
     {
       "source": "PooToolsFilterCamera",
+      "destination": "PTCameraPermission"
+    },
+    {
+      "source": "PooToolsFilterCamera",
+      "destination": "PToolsSymbols"
+    },
+    {
+      "source": "PooToolsFilterCamera",
       "destination": "PooToolsHarbethKit"
     },
     {
       "source": "PooToolsFilterCamera",
+      "destination": "PooToolsImageEditor"
+    },
+    {
+      "source": "PooToolsFilterCamera",
       "destination": "PooToolsMediaViewer"
+    },
+    {
+      "source": "PooToolsFilterCamera",
+      "destination": "ptools"
     },
     {
       "source": "PooToolsGuide",
@@ -522,6 +566,14 @@
     {
       "source": "PooToolsHarbethKit",
       "destination": "PToolsSymbols"
+    },
+    {
+      "source": "PooToolsHarbethKit",
+      "destination": "PooToolsHud"
+    },
+    {
+      "source": "PooToolsHarbethKit",
+      "destination": "PooToolsLoading"
     },
     {
       "source": "PooToolsHarbethKit",
@@ -629,6 +681,10 @@
     },
     {
       "source": "PooToolsLocation",
+      "destination": "PToolsStorageCore"
+    },
+    {
+      "source": "PooToolsLocation",
       "destination": "ptools"
     },
     {
@@ -662,6 +718,14 @@
     {
       "source": "PooToolsMessageKit",
       "destination": "PooToolsCustomerLabel"
+    },
+    {
+      "source": "PooToolsMessageKit",
+      "destination": "PooToolsNetWork"
+    },
+    {
+      "source": "PooToolsMessageKit",
+      "destination": "PooToolsProgressBar"
     },
     {
       "source": "PooToolsMessageKit",
@@ -742,6 +806,10 @@
     {
       "source": "PooToolsPhotoPicker",
       "destination": "PToolsSymbols"
+    },
+    {
+      "source": "PooToolsPhotoPicker",
+      "destination": "PToolsUIFoundation"
     },
     {
       "source": "PooToolsPhotoPicker",
@@ -962,6 +1030,10 @@
     {
       "source": "PooToolsiOS17Tips",
       "destination": "ptools"
+    },
+    {
+      "source": "ptools",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "ptools",

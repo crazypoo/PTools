@@ -28,6 +28,10 @@ let package = Package(
         // Español: Publica las capas basadas solo en Foundation para que los clientes dependan del módulo mínimo estable.
         // 中文：公开仅依赖 Foundation 的分层模块，让调用方按需依赖最小稳定模块。
         .library(name: "PToolsCore", targets: ["PToolsCore"]),
+        // English: Publish the native, SnapKit-independent Auto Layout DSL as a separate product.
+        // Español: Publica el DSL nativo de Auto Layout independiente de SnapKit como producto separado.
+        // 中文：将不依赖 SnapKit 的原生 Auto Layout DSL 作为独立产品发布。
+        .library(name: "PToolsConstraintLayout", targets: ["PToolsConstraintLayout"]),
         // English: Publish the offline license manifest contract without UIKit or the generator.
         // Español: Publica el contrato offline del manifest de licencias sin UIKit ni el generador.
         // 中文：公开离线许可证 Manifest 契约，不引入 UIKit 或生成器。
@@ -296,6 +300,7 @@ let package = Package(
         .library(name: "PooToolsAll", targets: [
             "ptools", "PToolsLogging", "PToolsDate", "PToolsSymbols", "PToolsModelCore", "PToolsModel",
             "PToolsModelUIKit", "PToolsModelCombine",
+            "PToolsConstraintLayout",
             "PToolsConnectivity", "PToolsStorageCore", "PToolsStorage", "PToolsRouteCore",
             "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks",
             "PToolsTheme", "PToolsAccessibility", "PToolsContentState", "PToolsForm", "PooToolsSplitView",
@@ -374,6 +379,16 @@ let package = Package(
         .target(
             name: "PToolsCore",
             path: "PooToolsSource/PToolsCore",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
+        ),
+        // English: Keep the native layout engine independent from the PTools umbrella and SnapKit.
+        // Español: Mantiene el motor nativo de layout independiente del umbrella PTools y de SnapKit.
+        // 中文：让原生布局引擎独立于 PTools umbrella 和 SnapKit。
+        .target(
+            name: "PToolsConstraintLayout",
+            path: "PooToolsSource/PToolsConstraintLayout",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]
@@ -955,6 +970,7 @@ let package = Package(
             dependencies: [
                 "PToolsLogging",
                 "PToolsCore",
+                "PToolsConstraintLayout",
                 "PToolsDate",
                 "PToolsUIFoundation",
                 "PToolsPermissionCore",

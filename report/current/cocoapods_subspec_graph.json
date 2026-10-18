@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "85cd0fa1019fd0965e4966b5435710c618b02da7",
-  "generated_at": "2026-10-17T19:53:12Z",
+  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
+  "generated_at": "2026-10-18T02:40:25Z",
   "name": "PooTools",
-  "version": "5.66.1",
+  "version": "5.67.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -12,7 +12,7 @@
     "6.0"
   ],
   "default_subspec": "Core",
-  "subspec_count": 164,
+  "subspec_count": 165,
   "subspecs": [
     {
       "name": "PooTools/Accessibility",
@@ -598,6 +598,27 @@
       ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CONNECTIVITY POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/ConstraintLayout",
+      "short_name": "ConstraintLayout",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsConstraintLayout/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsConstraintLayout"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation",
+        "UIKit"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CONSTRAINT_LAYOUT POOTOOLS_COCOAPODS"
       }
     },
     {

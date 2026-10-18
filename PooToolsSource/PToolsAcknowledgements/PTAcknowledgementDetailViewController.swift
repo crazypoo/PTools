@@ -11,6 +11,9 @@ import PToolsAcknowledgementsCore
 #if canImport(ptools)
 import ptools
 #endif
+#if canImport(PToolsSymbols)
+import PToolsSymbols
+#endif
 
 @MainActor
 public final class PTAcknowledgementDetailViewController: PTBaseViewController {
@@ -37,12 +40,20 @@ public final class PTAcknowledgementDetailViewController: PTBaseViewController {
 
     private func configureActions() {
         let shareButton = UIButton(type: .system)
-        shareButton.setImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
+        #if canImport(PToolsSymbols)
+        shareButton.setImage(UIImage(ptSymbol: .squareAndArrowUp), for: .normal)
+        #else
+        shareButton.setImage(UIImage(), for: .normal)
+        #endif
         shareButton.accessibilityLabel = "分享"
         shareButton.addTarget(self, action: #selector(shareText), for: .touchUpInside)
 
         let copyButton = UIButton(type: .system)
-        copyButton.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
+        #if canImport(PToolsSymbols)
+        copyButton.setImage(UIImage(ptSymbol: .docOnDoc), for: .normal)
+        #else
+        copyButton.setImage(UIImage(), for: .normal)
+        #endif
         copyButton.accessibilityLabel = "复制"
         copyButton.addTarget(self, action: #selector(copyText), for: .touchUpInside)
         setCustomRightButtons(buttons: [shareButton, copyButton])

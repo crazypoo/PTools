@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "85cd0fa1019fd0965e4966b5435710c618b02da7",
-  "generated_at": "2026-10-17T19:53:07Z",
+  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
+  "generated_at": "2026-10-18T02:39:39Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -1251,7 +1251,7 @@
     },
     {
       "path": "PooToolsSource/Category/UIView+PTEX+Constraints.swift",
-      "lines": 186,
+      "lines": 231,
       "classification": "ok"
     },
     {
@@ -1462,6 +1462,11 @@
     {
       "path": "PooToolsSource/Core/PTLayerExports.swift",
       "lines": 27,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/Core/PTLayoutConsoleBridge.swift",
+      "lines": 30,
       "classification": "ok"
     },
     {
@@ -4351,7 +4356,7 @@
     },
     {
       "path": "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementDetailViewController.swift",
-      "lines": 92,
+      "lines": 103,
       "classification": "ok"
     },
     {
@@ -4467,6 +4472,21 @@
     {
       "path": "PooToolsSource/PToolsConnectivity/PTConnectivity.swift",
       "lines": 232,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "lines": 1821,
+      "classification": "architecture_exception"
+    },
+    {
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift",
+      "lines": 180,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift",
+      "lines": 84,
       "classification": "ok"
     },
     {
@@ -4951,7 +4971,7 @@
     },
     {
       "path": "PooToolsSource/PToolsSymbols/Generated/PTSymbols+iOS17.swift",
-      "lines": 299,
+      "lines": 301,
       "classification": "ok"
     },
     {
@@ -5486,7 +5506,7 @@
     },
     {
       "path": "PooToolsSource/Search/PTSearchConfiguration.swift",
-      "lines": 119,
+      "lines": 164,
       "classification": "ok"
     },
     {
@@ -6021,6 +6041,6 @@
     }
   ],
   "warning_count": 18,
-  "architecture_exception_count": 10,
+  "architecture_exception_count": 11,
   "hard_limit_allowlisted_count": 5
 }

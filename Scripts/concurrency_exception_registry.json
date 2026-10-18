@@ -52,6 +52,28 @@
       "removeIn": null
     },
     {
+      "path": "PooToolsSource/C7Collector/C7Collector.swift",
+      "symbol": "PTSystemTextureBox",
+      "category": "SYSTEM_WRAPPER",
+      "systemType": "Harbeth Metal texture callback object",
+      "reason": "The private wrapper crosses one Harbeth callback boundary with a read-only texture reference used to produce a MainActor image.",
+      "protection": "Harbeth completes texture production before the value crosses the boundary; the wrapper is immutable and never mutates the texture.",
+      "owner": "C7Collector",
+      "replacementPlan": "Replace the SDK reference with a Sendable pixel snapshot when Harbeth exposes one for the supported deployment range.",
+      "removeIn": "6.0.0"
+    },
+    {
+      "path": "PooToolsSource/C7Collector/C7Collector.swift",
+      "symbol": "PTSystemImageBox",
+      "category": "SYSTEM_WRAPPER",
+      "systemType": "UIKit image callback object",
+      "reason": "The private wrapper crosses one Harbeth callback boundary with a read-only image reference consumed on MainActor.",
+      "protection": "Harbeth completes image production before the value crosses the boundary; the wrapper is immutable and the image is not mutated by the wrapper.",
+      "owner": "C7Collector",
+      "replacementPlan": "Replace the SDK reference with a Sendable image snapshot when the framework and deployment range provide one.",
+      "removeIn": "6.0.0"
+    },
+    {
       "path": "PooToolsSource/C7Collector/PTC7VideoExportService.swift",
       "symbol": "PTC7FilterBox",
       "category": "SYSTEM_WRAPPER",

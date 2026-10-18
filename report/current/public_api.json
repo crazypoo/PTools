@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "85cd0fa1019fd0965e4966b5435710c618b02da7",
-  "generated_at": "2026-10-17T19:53:07Z",
+  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
+  "generated_at": "2026-10-18T02:38:25Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -19246,6 +19246,14 @@
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTImageDownsampler {"
+    },
+    {
+      "key": "PooToolsSource/Core/PTLayoutConsoleBridge.swift|public|enum|public enum PTLayoutConsoleBridge",
+      "path": "PooToolsSource/Core/PTLayoutConsoleBridge.swift",
+      "line": 10,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutConsoleBridge {"
     },
     {
       "key": "PooToolsSource/Core/PTLifecycleBag.swift|public|class|public final class PTLifecycleBag",
@@ -43002,7 +43010,7 @@
     {
       "key": "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementDetailViewController.swift|public|class|public final class PTAcknowledgementDetailViewController: PTBaseViewController",
       "path": "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementDetailViewController.swift",
-      "line": 16,
+      "line": 19,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTAcknowledgementDetailViewController: PTBaseViewController {"
@@ -43010,7 +43018,7 @@
     {
       "key": "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementDetailViewController.swift|public|init|public init(entry: PTAcknowledgement)",
       "path": "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementDetailViewController.swift",
-      "line": 20,
+      "line": 23,
       "access": "public",
       "kind": "init",
       "declaration": "public init(entry: PTAcknowledgement) {"
@@ -48390,6 +48398,1246 @@
       "access": "public",
       "kind": "func",
       "declaration": "public func snapshots() -> AsyncStream<PTConnectivitySnapshot> {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|enum|public enum PTLayoutRelation: String, Hashable",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 13,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutRelation: String, Hashable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|enum|public enum PTLayoutAttribute: String, Hashable",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 20,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutAttribute: String, Hashable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutPriority: Equatable, Sendable",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 35,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLayoutPriority: Equatable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let rawValue: Float",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 36,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rawValue: Float"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|init|public init(_ rawValue: Float)",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 38,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(_ rawValue: Float) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutID: RawRepresentable, Hashable, Sendable",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 51,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLayoutID: RawRepresentable, Hashable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let rawValue: String",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 52,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let rawValue: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|init|public init(_ rawValue: String)",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 54,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(_ rawValue: String) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|init|public init(rawValue: String)",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 58,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(rawValue: String) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|enum|public enum PTLayoutDiagnosticMode: String, Sendable",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 64,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutDiagnosticMode: String, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|enum|public enum PTLayoutIssueCode: String, Sendable",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 71,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutIssueCode: String, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutIssue: Error, Equatable, Sendable",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 84,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLayoutIssue: Error, Equatable, Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let code: PTLayoutIssueCode",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 85,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let code: PTLayoutIssueCode"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let owner: String",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 86,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let owner: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let anchor: String",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 87,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let anchor: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let relatedTarget: String?",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 88,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let relatedTarget: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let fileID: String",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 89,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let fileID: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let line: UInt",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 90,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let line: UInt"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let function: String",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 91,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let function: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let groupID: String?",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 92,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let groupID: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let reason: String",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 93,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let reason: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let suggestion: String",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 94,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let suggestion: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let recovery: String",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 95,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let recovery: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let sourceType: String",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 96,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let sourceType: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let occurrenceCount: Int",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 97,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let occurrenceCount: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|init|public init(code: PTLayoutIssueCode, owner: String, anchor: String, relatedTarget: String? = nil, fileID: String = #fileID, line: UInt = #line, function: String = #function, groupID: String? = nil, reason: String, suggestion: String, recovery: String = \"transaction skipped\", sourceType: String = \"PTLayout\", occurrenceCount: Int = 1)",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 111,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(code: PTLayoutIssueCode, owner: String, anchor: String, relatedTarget: String? = nil, fileID: String = #fileID, line: UInt = #line, function: String = #function, groupID: String? = nil, reason: String, suggestion: String, recovery: String = \"transaction skipped\", sourceType: String = \"PTLayout\", occurrenceCount: Int = 1) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var message: String",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 127,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var message: String {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutChanges: Sendable",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 133,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLayoutChanges: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let count: Int",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 134,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let count: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|init|public init(count: Int)",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 136,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(count: Int) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|enum|public enum PTLayoutResult",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 142,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var isSuccess: Bool",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 146,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isSuccess: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var issue: PTLayoutIssue?",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 151,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var issue: PTLayoutIssue? {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var changeCount: Int",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 156,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var changeCount: Int {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|enum|public enum PTLayoutDiagnostics",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 163,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutDiagnostics {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutAnchor",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 248,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLayoutAnchor {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let attribute: PTLayoutAttribute",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 250,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let attribute: PTLayoutAttribute"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 260,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLayoutAnchorGroup {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var top: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 271,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var top: PTLayoutAnchorGroup { appending(.top) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var bottom: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 272,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var bottom: PTLayoutAnchorGroup { appending(.bottom) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var leading: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 273,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var leading: PTLayoutAnchorGroup { appending(.leading) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var trailing: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 274,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var trailing: PTLayoutAnchorGroup { appending(.trailing) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var left: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 275,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var left: PTLayoutAnchorGroup { appending(.left) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var right: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 276,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var right: PTLayoutAnchorGroup { appending(.right) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var centerX: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 277,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var centerX: PTLayoutAnchorGroup { appending(.centerX) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var centerY: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 278,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var centerY: PTLayoutAnchorGroup { appending(.centerY) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var width: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 279,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var width: PTLayoutAnchorGroup { appending(.width) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var height: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 280,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var height: PTLayoutAnchorGroup { appending(.height) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var firstBaseline: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 281,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var firstBaseline: PTLayoutAnchorGroup { appending(.firstBaseline) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var lastBaseline: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 282,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var lastBaseline: PTLayoutAnchorGroup { appending(.lastBaseline) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutNamespace",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 468,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLayoutNamespace {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var top: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 479,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var top: PTLayoutAnchorGroup { group(.top) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var bottom: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 480,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var bottom: PTLayoutAnchorGroup { group(.bottom) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var leading: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 481,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var leading: PTLayoutAnchorGroup { group(.leading) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var trailing: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 482,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var trailing: PTLayoutAnchorGroup { group(.trailing) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var left: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 483,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var left: PTLayoutAnchorGroup { group(.left) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var right: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 484,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var right: PTLayoutAnchorGroup { group(.right) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var centerX: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 485,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var centerX: PTLayoutAnchorGroup { group(.centerX) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var centerY: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 486,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var centerY: PTLayoutAnchorGroup { group(.centerY) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var width: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 487,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var width: PTLayoutAnchorGroup { group(.width) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var height: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 488,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var height: PTLayoutAnchorGroup { group(.height) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var firstBaseline: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 489,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var firstBaseline: PTLayoutAnchorGroup { group(.firstBaseline) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var lastBaseline: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 490,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var lastBaseline: PTLayoutAnchorGroup { group(.lastBaseline) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var center: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 491,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var center: PTLayoutAnchorGroup { group(.centerX, .centerY) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var size: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 492,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var size: PTLayoutAnchorGroup { group(.width, .height) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var edges: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 493,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var edges: PTLayoutAnchorGroup { group(.top, .leading, .bottom, .trailing) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var horizontalEdges: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 494,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var horizontalEdges: PTLayoutAnchorGroup { group(.leading, .trailing) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var verticalEdges: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 495,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var verticalEdges: PTLayoutAnchorGroup { group(.top, .bottom) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func makeConstraints(group: String? = nil, active: Bool = true, file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 502,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func makeConstraints(group: String? = nil, active: Bool = true, file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func prepareConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutConstraintGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 527,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func prepareConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutConstraintGroup {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func updateConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 544,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func updateConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func updateIfExists(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 551,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func updateIfExists(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func upsertConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 558,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func upsertConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func remakeConstraints(group: String? = nil, file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 568,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func remakeConstraints(group: String? = nil, file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func removeConstraints()",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 595,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func removeConstraints() {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func activate(group: String, deactivating oldGroup: String? = nil) -> PTLayoutResult",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 604,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func activate(group: String, deactivating oldGroup: String? = nil) -> PTLayoutResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func inspect() -> PTLayoutInspection",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 622,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func inspect() -> PTLayoutInspection {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|class|public final class PTLayoutMaker",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 661,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTLayoutMaker {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var top: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 668,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var top: PTLayoutAnchorGroup { transaction.group(.top) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var bottom: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 669,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var bottom: PTLayoutAnchorGroup { transaction.group(.bottom) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var leading: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 670,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var leading: PTLayoutAnchorGroup { transaction.group(.leading) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var trailing: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 671,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var trailing: PTLayoutAnchorGroup { transaction.group(.trailing) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var left: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 672,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var left: PTLayoutAnchorGroup { transaction.group(.left) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var right: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 673,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var right: PTLayoutAnchorGroup { transaction.group(.right) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var centerX: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 674,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var centerX: PTLayoutAnchorGroup { transaction.group(.centerX) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var centerY: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 675,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var centerY: PTLayoutAnchorGroup { transaction.group(.centerY) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var width: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 676,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var width: PTLayoutAnchorGroup { transaction.group(.width) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var height: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 677,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var height: PTLayoutAnchorGroup { transaction.group(.height) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var firstBaseline: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 678,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var firstBaseline: PTLayoutAnchorGroup { transaction.group(.firstBaseline) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var lastBaseline: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 679,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var lastBaseline: PTLayoutAnchorGroup { transaction.group(.lastBaseline) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var center: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 680,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var center: PTLayoutAnchorGroup { transaction.group(.centerX, .centerY) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var size: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 681,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var size: PTLayoutAnchorGroup { transaction.group(.width, .height) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var edges: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 682,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var edges: PTLayoutAnchorGroup { transaction.group(.top, .leading, .bottom, .trailing) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var horizontalEdges: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 683,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var horizontalEdges: PTLayoutAnchorGroup { transaction.group(.leading, .trailing) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var verticalEdges: PTLayoutAnchorGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 684,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var verticalEdges: PTLayoutAnchorGroup { transaction.group(.top, .bottom) }"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func aspectRatio(_ ratio: CGFloat, priority: PTLayoutPriority = .required, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 690,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func aspectRatio(_ ratio: CGFloat, priority: PTLayoutPriority = .required, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func relativeWidth(to view: UIView, ratio: CGFloat, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 700,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func relativeWidth(to view: UIView, ratio: CGFloat, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func relativeHeight(to view: UIView, ratio: CGFloat, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 710,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func relativeHeight(to view: UIView, ratio: CGFloat, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|class|public final class PTLayoutRelationMaker",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 718,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTLayoutRelationMaker {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func offset(_ value: CGFloat) -> Self",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 728,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func offset(_ value: CGFloat) -> Self {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func inset(_ value: CGFloat) -> Self",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 737,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func inset(_ value: CGFloat) -> Self {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func inset(_ value: UIEdgeInsets) -> Self",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 746,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func inset(_ value: UIEdgeInsets) -> Self {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func directionalInset(_ value: NSDirectionalEdgeInsets) -> Self",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 755,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func directionalInset(_ value: NSDirectionalEdgeInsets) -> Self {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func multipliedBy(_ value: CGFloat) -> Self",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 764,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func multipliedBy(_ value: CGFloat) -> Self {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func dividedBy(_ value: CGFloat) -> Self",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 770,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func dividedBy(_ value: CGFloat) -> Self {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func priority(_ value: PTLayoutPriority) -> Self",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 776,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func priority(_ value: PTLayoutPriority) -> Self {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func priority(_ value: UILayoutPriority) -> Self",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 782,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func priority(_ value: UILayoutPriority) -> Self {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func priority(_ value: Float) -> Self",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 788,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func priority(_ value: Float) -> Self {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func labeled(_ value: String) -> Self",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 794,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func labeled(_ value: String) -> Self {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func labeled(_ value: PTLayoutID) -> Self",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 800,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func labeled(_ value: PTLayoutID) -> Self {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var constraint: PTLayoutConstraint",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 804,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var constraint: PTLayoutConstraint {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|enum|public enum PTLayoutOperation",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 814,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutOperation {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|class|public final class PTLayoutConstraint",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 916,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTLayoutConstraint {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var isActive: Bool",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 933,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isActive: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var nativeConstraints: [NSLayoutConstraint]",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 937,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var nativeConstraints: [NSLayoutConstraint] {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func activate() -> PTLayoutResult",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 941,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func activate() -> PTLayoutResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func deactivate()",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 945,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func deactivate() {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func update(offset: CGFloat) -> PTLayoutResult",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 951,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func update(offset: CGFloat) -> PTLayoutResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func update(inset: UIEdgeInsets) -> PTLayoutResult",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 956,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func update(inset: UIEdgeInsets) -> PTLayoutResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func update(priority: PTLayoutPriority) -> PTLayoutResult",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 961,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func update(priority: PTLayoutPriority) -> PTLayoutResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|class|public final class PTLayoutConstraintGroup",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 986,
+      "access": "public",
+      "kind": "class",
+      "declaration": "public final class PTLayoutConstraintGroup {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let constraints: [PTLayoutConstraint]",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 987,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let constraints: [PTLayoutConstraint]"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func activate() -> PTLayoutResult",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 996,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func activate() -> PTLayoutResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func deactivate()",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1000,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func deactivate() {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var isActive: Bool",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1004,
+      "access": "public",
+      "kind": "var",
+      "declaration": "public var isActive: Bool {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutInspection",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1061,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLayoutInspection {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let owner: String",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1062,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let owner: String"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let constraints: [PTLayoutInspectionConstraint]",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1063,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let constraints: [PTLayoutInspectionConstraint]"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|init|public init(owner: String, constraints: [PTLayoutInspectionConstraint])",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1065,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(owner: String, constraints: [PTLayoutInspectionConstraint]) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func dumpConstraints() -> [[String: String]]",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1070,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func dumpConstraints() -> [[String: String]] {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutInspectionConstraint",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1086,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLayoutInspectionConstraint {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let identifier: String?",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1087,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let identifier: String?"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let firstAttribute: PTLayoutAttribute",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1088,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let firstAttribute: PTLayoutAttribute"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let secondAttribute: PTLayoutAttribute",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1089,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let secondAttribute: PTLayoutAttribute"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let relation: PTLayoutRelation",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1090,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let relation: PTLayoutRelation"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let constant: CGFloat",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1091,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let constant: CGFloat"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let priority: Float",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1092,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let priority: Float"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let isActive: Bool",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 1093,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let isActive: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift|public|enum|public enum PTLayoutAxis: Sendable",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift",
+      "line": 9,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutAxis: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift|public|enum|public enum PTLayoutCrossAxisAlignment: Sendable",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift",
+      "line": 15,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutCrossAxisAlignment: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift|public|struct|public struct PTLayoutGroupNamespace",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift",
+      "line": 23,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLayoutGroupNamespace {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift|public|let|public let views: [UIView]",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift",
+      "line": 24,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let views: [UIView]"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift|public|init|public init(views: [UIView])",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift",
+      "line": 26,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(views: [UIView]) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift|public|func|public func distribute(axis: PTLayoutAxis, spacing: CGFloat = 0, alignment: PTLayoutCrossAxisAlignment = .fill, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutResult",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift",
+      "line": 35,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func distribute(axis: PTLayoutAxis, spacing: CGFloat = 0, alignment: PTLayoutCrossAxisAlignment = .fill, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift|public|func|public func equalSizes(file: StaticString = #fileID, line: UInt = #line) -> PTLayoutResult",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift",
+      "line": 85,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func equalSizes(file: StaticString = #fileID, line: UInt = #line) -> PTLayoutResult {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift|public|enum|public enum PTLayoutAnimation",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift",
+      "line": 163,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutAnimation {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift|public|struct|public struct PTLayoutProfileSnapshot: Sendable",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift",
+      "line": 10,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTLayoutProfileSnapshot: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift|public|let|public let makeCount: Int",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift",
+      "line": 11,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let makeCount: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift|public|let|public let updateCount: Int",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift",
+      "line": 12,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let updateCount: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift|public|let|public let remakeCount: Int",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift",
+      "line": 13,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let remakeCount: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift|public|let|public let prepareCount: Int",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let prepareCount: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift|public|let|public let installedConstraintCount: Int",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift",
+      "line": 15,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let installedConstraintCount: Int"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift|public|init|public init(makeCount: Int, updateCount: Int, remakeCount: Int, prepareCount: Int, installedConstraintCount: Int)",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift",
+      "line": 21,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(makeCount: Int, updateCount: Int, remakeCount: Int, prepareCount: Int, installedConstraintCount: Int) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift|public|enum|public enum PTLayoutProfiler",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift",
+      "line": 31,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutProfiler {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift|public|enum|public enum PTLayoutKeyboardSupport",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift",
+      "line": 74,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutKeyboardSupport {"
     },
     {
       "key": "PooToolsSource/PToolsContentState/PTContentState.swift|public|struct|public struct PTEmptyState: Codable, Hashable, Sendable",
@@ -78960,9 +80208,17 @@
       "declaration": "public var visualStyle: PTSearchVisualStyle"
     },
     {
+      "key": "PooToolsSource/Search/PTSearchConfiguration.swift|public|init|public init(minimumCharacters: Int = 1, debounceInterval: Duration = .milliseconds(300), searchWhileTyping: Bool = true, searchOnReturn: Bool = true, clearOnCancel: Bool = true, clearOnEmptyKeyword: Bool = true, keepsPreviousResultsWhileLoading: Bool = true, showsCancelButton: Bool = true, dismissKeyboardOnScroll: Bool = true, dismissKeyboardOnSelection: Bool = true, automaticallyShowsHistory: Bool = true, automaticallyShowsSuggestions: Bool = false, enablesPagination: Bool = false, enablesRefresh: Bool = false, paginationPageSize: Int = 20, historyMaximumCount: Int = 20, mode: PTSearchMode = .custom, placement: PTSearchPlacement = .contentTop, visualStyle: PTSearchVisualStyle = .automatic)",
+      "path": "PooToolsSource/Search/PTSearchConfiguration.swift",
+      "line": 63,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(minimumCharacters: Int = 1, debounceInterval: Duration = .milliseconds(300), searchWhileTyping: Bool = true, searchOnReturn: Bool = true, clearOnCancel: Bool = true, clearOnEmptyKeyword: Bool = true, keepsPreviousResultsWhileLoading: Bool = true, showsCancelButton: Bool = true, dismissKeyboardOnScroll: Bool = true, dismissKeyboardOnSelection: Bool = true, automaticallyShowsHistory: Bool = true, automaticallyShowsSuggestions: Bool = false, enablesPagination: Bool = false, enablesRefresh: Bool = false, paginationPageSize: Int = 20, historyMaximumCount: Int = 20, mode: PTSearchMode = .custom, placement: PTSearchPlacement = .contentTop, visualStyle: PTSearchVisualStyle = .automatic) {"
+    },
+    {
       "key": "PooToolsSource/Search/PTSearchConfiguration.swift|public|init|public init(minimumCharacters: Int = 1, debounceInterval: Duration = .milliseconds(300), searchWhileTyping: Bool = true, searchOnReturn: Bool = true, clearOnCancel: Bool = true, clearOnEmptyKeyword: Bool = true, keepsPreviousResultsWhileLoading: Bool = true, showsCancelButton: Bool = true, dismissKeyboardOnScroll: Bool = true, dismissKeyboardOnSelection: Bool = true, automaticallyShowsHistory: Bool = true, automaticallyShowsSuggestions: Bool = false, enablesPagination: Bool = false, enablesRefresh: Bool = false, paginationPageSize: Int = 20, historyMaximumCount: Int = 20, mode: PTSearchMode = .custom, placement: PTSearchPlacement = .contentTop, visualStyle: PTSearchVisualStyle = .automatic, searchBarHeight: CGFloat = 32)",
       "path": "PooToolsSource/Search/PTSearchConfiguration.swift",
-      "line": 60,
+      "line": 105,
       "access": "public",
       "kind": "init",
       "declaration": "public init(minimumCharacters: Int = 1, debounceInterval: Duration = .milliseconds(300), searchWhileTyping: Bool = true, searchOnReturn: Bool = true, clearOnCancel: Bool = true, clearOnEmptyKeyword: Bool = true, keepsPreviousResultsWhileLoading: Bool = true, showsCancelButton: Bool = true, dismissKeyboardOnScroll: Bool = true, dismissKeyboardOnSelection: Bool = true, automaticallyShowsHistory: Bool = true, automaticallyShowsSuggestions: Bool = false, enablesPagination: Bool = false, enablesRefresh: Bool = false, paginationPageSize: Int = 20, historyMaximumCount: Int = 20, mode: PTSearchMode = .custom, placement: PTSearchPlacement = .contentTop, visualStyle: PTSearchVisualStyle = .automatic, searchBarHeight: CGFloat = 32) {"
@@ -78970,7 +80226,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchConfiguration.swift|public|var|public var debounceTimeInterval: TimeInterval",
       "path": "PooToolsSource/Search/PTSearchConfiguration.swift",
-      "line": 113,
+      "line": 158,
       "access": "public",
       "kind": "var",
       "declaration": "public var debounceTimeInterval: TimeInterval {"
