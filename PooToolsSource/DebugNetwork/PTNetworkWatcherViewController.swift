@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 import PooToolsSearchBar
@@ -47,8 +50,8 @@ class PTNetworkWatcherViewController: PTBaseViewController {
     private lazy var titleViewContailer: PTNavTitleContainer = {
         let view = PTNavTitleContainer()
         view.addSubviews([searchBar])
-        searchBar.snp.makeConstraints { make in make.edges.equalToSuperview() }
-        view.snp.makeConstraints { make in
+        searchBar.ptLayout.makeConstraints { make in make.edges.equalToSuperview() }
+        view.ptLayout.makeConstraints { make in
             make.width.equalTo(self.titleViewContainerWidth)
             make.height.equalTo(32)
         }
@@ -193,7 +196,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
         newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
 
         view.addSubviews([newCollectionView])
-        newCollectionView.snp.makeConstraints { make in make.edges.equalToSuperview() }
+        newCollectionView.ptLayout.makeConstraints { make in make.edges.equalToSuperview() }
         
         Task { @MainActor [weak self] in
             await self?.refreshData()
@@ -264,7 +267,7 @@ class PTNetworkWatcherViewController: PTBaseViewController {
             floatingView?.tag = PTNetworkTestFloatingTap
             floatingView?.autoDocking = false
             floatingView?.addSubview(speedLabel)
-            speedLabel.snp.makeConstraints { make in make.edges.equalToSuperview() }
+            speedLabel.ptLayout.makeConstraints { make in make.edges.equalToSuperview() }
         }
     }
 }

@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 import Photos
 
@@ -270,13 +273,13 @@ public class PTScanQRController: PTBaseViewController {
         }
         
         view.addSubviews(views)
-        backBtn.snp.makeConstraints { make in
+        backBtn.ptLayout.makeConstraints { make in
             make.width.height.equalTo(44)
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
         }
         
-        photosButton.snp.makeConstraints { make in
+        photosButton.ptLayout.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.centerY.equalTo(self.backBtn)
             make.width.height.equalTo(self.backBtn)
@@ -284,7 +287,7 @@ public class PTScanQRController: PTBaseViewController {
         
         if !deviceIsSimulator {
             if device.hasTorch {
-                flashButton.snp.makeConstraints { make in
+                flashButton.ptLayout.makeConstraints { make in
                     make.width.height.equalTo(self.backBtn)
                     make.centerX.equalToSuperview()
                     make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + CGFloat.ScaleW(w: 10))
@@ -435,9 +438,9 @@ public class PTScanQRController: PTBaseViewController {
             
             if !qrCode {
                 view.addSubview(tipsLabel)
-                tipsLabel.snp.makeConstraints { make in
-                    make.left.equalTo(self.backBtn.snp.right)
-                    make.right.equalTo(self.photosButton.snp.left)
+                tipsLabel.ptLayout.makeConstraints { make in
+                    make.left.equalTo(self.backBtn.ptLayout.right)
+                    make.right.equalTo(self.photosButton.ptLayout.left)
                     make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
                 }
             }
@@ -456,7 +459,7 @@ public class PTScanQRController: PTBaseViewController {
         hasEntered = false
         
         view.addSubview(scanningLine)
-        scanningLine.snp.makeConstraints { make in
+        scanningLine.ptLayout.makeConstraints { make in
             make.left.equalToSuperview().inset(self.scanningLineX)
             make.top.equalToSuperview().inset(self.scanningLineY)
             make.width.equalTo(self.scanningLineW)
@@ -585,7 +588,7 @@ extension PTScanQRController:@MainActor AVCaptureMetadataOutputObjectsDelegate {
                 self.backBtn.isHidden = false
             }
             maskView.addSubview(cancel)
-            cancel.snp.makeConstraints { make in
+            cancel.ptLayout.makeConstraints { make in
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.height.equalTo(44)
                 make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
@@ -597,7 +600,7 @@ extension PTScanQRController:@MainActor AVCaptureMetadataOutputObjectsDelegate {
             tipsLabel.textAlignment = .center
             tipsLabel.textColor = .white
             maskView.addSubview(tipsLabel)
-            tipsLabel.snp.makeConstraints { make in
+            tipsLabel.ptLayout.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.bottom.equalToSuperview().inset(CGFloat.kTabbarHeight_Total)
             }

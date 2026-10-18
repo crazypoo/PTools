@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 @objcMembers
@@ -87,7 +90,7 @@ class PTPopoverMenuContent: PTBaseViewController {
                 
         view.backgroundColor = .clear
         view.addSubviews([collectionView])
-        collectionView.snp.makeConstraints { make in
+        collectionView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
@@ -124,7 +127,7 @@ class PTPopoverMenuContent: PTBaseViewController {
             preferredContentSize = size
         }
 
-        collectionView.snp.remakeConstraints { make in
+        collectionView.ptLayout.remakeConstraints { make in
             switch arrowDirections {
             case .up:
                 make.left.right.bottom.equalToSuperview()

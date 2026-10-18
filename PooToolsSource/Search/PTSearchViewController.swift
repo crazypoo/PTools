@@ -8,6 +8,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if canImport(SnapKit)
 import SnapKit
 #endif
@@ -51,7 +54,7 @@ private final class PTSearchDefaultCell: UICollectionViewCell {
         titleLabel.textColor = .label
         PTUIAccessibility.applyDynamicType(to: titleLabel, font: .preferredFont(forTextStyle: .body))
         contentView.addSubview(titleLabel)
-        titleLabel.snp.makeConstraints { make in
+        titleLabel.ptLayout.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
             make.top.bottom.equalToSuperview().inset(10)
         }
@@ -178,23 +181,23 @@ open class PTSearchViewController<Item: Sendable>: PTListViewController {
         switch searchConfiguration.placement {
         case .contentTop, .navigationBarExpanded:
             let safeArea = view.safeAreaLayoutGuide
-            searchBar.snp.remakeConstraints { make in
+            searchBar.ptLayout.remakeConstraints { make in
                 make.leading.top.equalTo(safeArea)
                 make.height.equalTo(searchConfiguration.searchBarHeight)
             }
-            listView.snp.remakeConstraints { make in
+            listView.ptLayout.remakeConstraints { make in
                 make.leading.trailing.bottom.equalTo(safeArea)
-                make.top.equalTo(searchBar.snp.bottom).offset(8)
+                make.top.equalTo(searchBar.ptLayout.bottom).offset(8)
             }
             if searchConfiguration.showsCancelButton {
                 view.addSubview(cancelButton)
-                cancelButton.snp.remakeConstraints { make in
-                    make.leading.equalTo(searchBar.snp.trailing).offset(8)
+                cancelButton.ptLayout.remakeConstraints { make in
+                    make.leading.equalTo(searchBar.ptLayout.trailing).offset(8)
                     make.trailing.equalTo(safeArea)
                     make.centerY.equalTo(searchBar)
                 }
             } else {
-                searchBar.snp.makeConstraints { make in
+                searchBar.ptLayout.makeConstraints { make in
                     make.trailing.equalTo(safeArea)
                 }
                 cancelButton.isHidden = true

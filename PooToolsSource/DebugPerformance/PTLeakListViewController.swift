@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 import PooToolsSearchBar
@@ -37,10 +40,10 @@ class PTLeakListViewController: PTBaseViewController {
     private lazy var titleViewContailer:PTNavTitleContainer = {
         let view = PTNavTitleContainer()
         view.addSubviews([searchBar])
-        searchBar.snp.makeConstraints { make in
+        searchBar.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        view.snp.makeConstraints { make in
+        view.ptLayout.makeConstraints { make in
             make.width.equalTo(CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 132)
             make.height.equalTo(32)
         }
@@ -115,7 +118,7 @@ class PTLeakListViewController: PTBaseViewController {
         newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
 
         view.addSubviews([newCollectionView])
-        newCollectionView.snp.makeConstraints { make in
+        newCollectionView.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview()
         }

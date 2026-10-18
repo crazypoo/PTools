@@ -6,6 +6,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -66,16 +69,16 @@ public class PTChatFileCell: PTChatBaseCell {
     private func setupSubviews() {
         dataContent.addSubviews([fileImageView, fileNameInfo])
 
-        fileImageView.snp.makeConstraints { make in
+        fileImageView.ptLayout.makeConstraints { make in
             make.right.equalToSuperview().inset(PTChatFileCell.FileCellConentFixbel)
             make.size.equalTo(PTChatFileCell.FileCellImageHeight)
             make.centerY.equalToSuperview()
         }
 
-        fileNameInfo.snp.makeConstraints { make in
+        fileNameInfo.ptLayout.makeConstraints { make in
             make.left.equalToSuperview().inset(PTChatFileCell.FileCellConentFixbel)
             make.top.bottom.equalToSuperview().inset(PTChatFileCell.FileCellConentFixbel)
-            make.right.equalTo(fileImageView.snp.left).offset(-PTChatFileCell.FileCellConentFixbel)
+            make.right.equalTo(fileImageView.ptLayout.left).offset(-PTChatFileCell.FileCellConentFixbel)
         }
     }
 
@@ -93,13 +96,13 @@ public class PTChatFileCell: PTChatBaseCell {
         // 处理URL
         guard let url = extractURL(from: cellModel.msgContent) else {
             fileNameInfo.attributedText = nil
-            dataContent.snp.remakeConstraints { make in
+            dataContent.ptLayout.remakeConstraints { make in
                 if cellModel.belongToMe {
-                    make.right.equalTo(userIcon.snp.left).offset(-PTChatBaseCell.dataContentUserIconInset)
+                    make.right.equalTo(userIcon.ptLayout.left).offset(-PTChatBaseCell.dataContentUserIconInset)
                 } else {
-                    make.left.equalTo(userIcon.snp.right).offset(PTChatBaseCell.dataContentUserIconInset)
+                    make.left.equalTo(userIcon.ptLayout.right).offset(PTChatBaseCell.dataContentUserIconInset)
                 }
-                make.top.equalTo(senderNameLabel.snp.bottom)
+                make.top.equalTo(senderNameLabel.ptLayout.bottom)
                 make.height.equalTo(PTChatFileCell.FileCellHeight)
                 make.width.equalTo(PTChatFileCell.FileConentWidth)
             }
@@ -118,13 +121,13 @@ public class PTChatFileCell: PTChatBaseCell {
         let fileSizeHeight = config.fileSizeFont.pointSize + 2 + PTChatFileCell.FileCellConentFixbel * 2
         cellHeight = max(cellHeight, nameHeight + fileSizeHeight)
 
-        dataContent.snp.remakeConstraints { make in
+        dataContent.ptLayout.remakeConstraints { make in
             if cellModel.belongToMe {
-                make.right.equalTo(userIcon.snp.left).offset(-PTChatBaseCell.dataContentUserIconInset)
+                make.right.equalTo(userIcon.ptLayout.left).offset(-PTChatBaseCell.dataContentUserIconInset)
             } else {
-                make.left.equalTo(userIcon.snp.right).offset(PTChatBaseCell.dataContentUserIconInset)
+                make.left.equalTo(userIcon.ptLayout.right).offset(PTChatBaseCell.dataContentUserIconInset)
             }
-            make.top.equalTo(senderNameLabel.snp.bottom)
+            make.top.equalTo(senderNameLabel.ptLayout.bottom)
             make.height.equalTo(cellHeight)
             make.width.equalTo(PTChatFileCell.FileConentWidth)
         }

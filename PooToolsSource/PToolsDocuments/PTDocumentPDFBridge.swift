@@ -4,6 +4,9 @@
 
 #if canImport(UIKit) && canImport(PDFKit)
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 import PDFKit
 import UniformTypeIdentifiers
@@ -26,7 +29,7 @@ public final class PTDocumentPDFViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(pdfView)
-        pdfView.snp.makeConstraints { make in
+        pdfView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         pdfView.autoScales = true

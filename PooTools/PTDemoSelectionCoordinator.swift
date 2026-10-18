@@ -3,6 +3,9 @@
 // 中文：集中处理 Example Demo Catalog 的选择行为。
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 import Photos
 import Combine
@@ -155,7 +158,7 @@ enum PTDemoSelectionCoordinator {
                     sign.doneBlock = { image in
                         let newImage = UIImageView(image: image)
                         controller.view.addSubview(newImage)
-                        newImage.snp.makeConstraints { make in
+                        newImage.ptLayout.makeConstraints { make in
                             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                             make.top.equalTo(controller.collectionView)
                             make.height.equalTo(150)
@@ -306,7 +309,7 @@ enum PTDemoSelectionCoordinator {
                         case 1:
                             let cycle = PTCycleLoadingView()
                             controller.view.addSubviews([cycle])
-                            cycle.snp.makeConstraints { make in
+                            cycle.ptLayout.makeConstraints { make in
                                 make.size.equalTo(100)
                                 make.centerX.centerY.equalToSuperview()
                             }

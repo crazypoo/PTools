@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
@@ -278,7 +281,7 @@ open class PTStepperView: UIView {
         super.init(frame: frame)
         
         addSubviews([listCollection])
-        listCollection.snp.makeConstraints { make in
+        listCollection.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }

@@ -8,6 +8,9 @@
 
 #if os(iOS) || os(tvOS) || os(watchOS)
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 @MainActor
@@ -89,10 +92,10 @@ public class PTSheetContentViewController: PTBaseViewController {
     }()
     
     private let overflowView = UIView()
-    private var contentTopConstraint: Constraint?
-    private var navigationHeightConstraint: Constraint?
-    private var gripWidthConstraint: Constraint?
-    private var gripHeightConstraint: Constraint?
+    private var contentTopConstraint: PTLayoutConstraint?
+    private var navigationHeightConstraint: PTLayoutConstraint?
+    private var gripWidthConstraint: PTLayoutConstraint?
+    private var gripHeightConstraint: PTLayoutConstraint?
     
     // MARK: - Initialization
     
@@ -189,7 +192,7 @@ public class PTSheetContentViewController: PTBaseViewController {
         case .view(let view):
             overflowView.backgroundColor = .clear
             overflowView.addSubview(view)
-            view.snp.makeConstraints { make in
+            view.ptLayout.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
         case .automatic:
@@ -229,13 +232,13 @@ public class PTSheetContentViewController: PTBaseViewController {
         if let navigationHeightConstraint {
             navigationHeightConstraint.update(offset: measuredHeight)
         } else {
-            navigationController.view.snp.makeConstraints { make in
+            navigationController.view.ptLayout.makeConstraints { make in
                 self.navigationHeightConstraint = make.height.equalTo(measuredHeight).constraint
             }
         }
 
-        self.navigationHeightConstraint?.activate()
-        self.contentTopConstraint?.activate()
+        _ = self.navigationHeightConstraint?.activate()
+        _ = self.contentTopConstraint?.activate()
     }
     
     func updatePreferredHeight() {
@@ -257,7 +260,7 @@ public class PTSheetContentViewController: PTBaseViewController {
             ).height
             self.preferredHeight = measuredHeight.isFinite ? max(0, measuredHeight) : 0
         }
-        self.contentTopConstraint?.activate()
+        _ = self.contentTopConstraint?.activate()
         self.view.layoutIfNeeded()
 
         let scale = max(self.view.window?.screen.scale ?? self.traitCollection.displayScale, 1)
@@ -272,7 +275,7 @@ public class PTSheetContentViewController: PTBaseViewController {
         guard let childView = self.childViewController.view else { return }
         self.childContainerView.addSubview(childView)
 
-        childView.snp.makeConstraints { make in
+        childView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
@@ -286,13 +289,13 @@ public class PTSheetContentViewController: PTBaseViewController {
 
     private func setupContentView() {
         self.view.addSubview(self.contentView)
-        self.contentView.snp.makeConstraints { make in
-            self.contentTopConstraint = make.top.equalTo(self.view.snp.top).constraint
+        self.contentView.ptLayout.makeConstraints { make in
+            self.contentTopConstraint = make.top.equalTo(self.view.ptLayout.top).constraint
             make.leading.trailing.bottom.equalToSuperview()
         }
         
         self.contentView.addSubview(self.contentWrapperView)
-        self.contentWrapperView.snp.makeConstraints { make in
+        self.contentWrapperView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
@@ -300,16 +303,16 @@ public class PTSheetContentViewController: PTBaseViewController {
         self.contentWrapperView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
                 
         self.contentView.addSubview(overflowView)
-        overflowView.snp.makeConstraints { make in
+        overflowView.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalTo(self.contentView.snp.bottom).offset(1)
+            make.top.equalTo(self.contentView.ptLayout.bottom).offset(1)
             make.height.equalTo(200)
         }
     }
     
     private func setupChildContainerView() {
         self.contentWrapperView.addSubview(self.childContainerView)
-        self.childContainerView.snp.makeConstraints { make in
+        self.childContainerView.ptLayout.makeConstraints { make in
             if self.options.shouldExtendBackground {
                 make.top.equalToSuperview()
             } else {
@@ -326,7 +329,7 @@ public class PTSheetContentViewController: PTBaseViewController {
         self.pullBarView.backgroundColor = self.pullBarBackgroundColor
         self.contentWrapperView.addSubview(self.pullBarView)
         
-        self.pullBarView.snp.makeConstraints { make in
+        self.pullBarView.ptLayout.makeConstraints { make in
             make.top.left.right.equalToSuperview()
             make.height.equalTo(self.options.pullBarHeight)
         }
@@ -336,7 +339,7 @@ public class PTSheetContentViewController: PTBaseViewController {
         self.gripView.layer.masksToBounds = true
         pullBarView.addSubview(self.gripView)
 
-        self.gripView.snp.makeConstraints { make in
+        self.gripView.ptLayout.makeConstraints { make in
             make.center.equalToSuperview()
             self.gripWidthConstraint = make.width.equalTo(max(0, self.gripSize.width)).constraint
             self.gripHeightConstraint = make.height.equalTo(max(0, self.gripSize.height)).constraint

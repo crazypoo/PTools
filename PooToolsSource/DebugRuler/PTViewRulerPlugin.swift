@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -110,14 +113,14 @@ fileprivate class PTVisualInfoController:UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         PTGCDManager.shared.delayOnMain(time: 0.1) {
-            self.closeBtn.snp.makeConstraints { make in
+            self.closeBtn.ptLayout.makeConstraints { make in
                 make.size.equalTo(CGFloat.SizeFrom750(x: 44))
                 make.centerY.equalToSuperview()
                 make.right.equalToSuperview().inset(10)
             }
-            self.infoLabel.snp.makeConstraints { make in
+            self.infoLabel.ptLayout.makeConstraints { make in
                 make.left.top.bottom.equalToSuperview().inset(5)
-                make.right.equalTo(self.closeBtn.snp.left).offset(-10)
+                make.right.equalTo(self.closeBtn.ptLayout.left).offset(-10)
             }
         }
     }
@@ -173,10 +176,10 @@ fileprivate class PTRulerInfoView:UIView {
         view.addGestureRecognizer(pan)
         
         view.addSubviews([self.topImage])
-        self.topImage.snp.makeConstraints { make in
+        self.topImage.ptLayout.makeConstraints { make in
             make.top.equalToSuperview()
-            make.bottom.equalTo(view.snp.centerY)
-            make.width.equalTo(self.topImage.snp.height)
+            make.bottom.equalTo(view.ptLayout.centerY)
+            make.width.equalTo(self.topImage.ptLayout.height)
             make.centerX.equalToSuperview()
         }
         
@@ -365,7 +368,7 @@ fileprivate class PTRulerInfoView:UIView {
         }
         visualController.infoLabel.text = stringInfo
         let bottomInset = hostWindow?.safeAreaInsets.bottom ?? 0
-        visualController.snp.remakeConstraints { make in
+        visualController.ptLayout.remakeConstraints { make in
             make.left.right.equalToSuperview().inset(30)
             make.bottom.equalToSuperview().inset(bottomInset)
             make.height.equalTo(base)

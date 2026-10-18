@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 @preconcurrency import AVFoundation
 import SnapKit
 
@@ -103,32 +106,32 @@ open class PTPlayerViewController: PTBaseViewController {
         
         // 添加子视图
         view.addSubviews([videoNavBar,playPauseButton, slider, currentTimeLabel, durationLabel])
-        videoNavBar.snp.makeConstraints { make in
+        videoNavBar.ptLayout.makeConstraints { make in
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
             make.left.right.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight)
         }
         
-        playPauseButton.snp.makeConstraints { make in
+        playPauseButton.ptLayout.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.size.equalTo(24)
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 20)
         }
         
-        durationLabel.snp.makeConstraints { make in
+        durationLabel.ptLayout.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.centerY.equalTo(self.playPauseButton)
         }
         
-        currentTimeLabel.snp.makeConstraints { make in
-            make.right.equalTo(self.durationLabel.snp.left).offset(-8)
+        currentTimeLabel.ptLayout.makeConstraints { make in
+            make.right.equalTo(self.durationLabel.ptLayout.left).offset(-8)
             make.centerY.equalTo(self.playPauseButton)
         }
         
-        slider.snp.makeConstraints { make in
+        slider.ptLayout.makeConstraints { make in
             make.centerY.equalTo(self.playPauseButton)
-            make.left.equalTo(self.playPauseButton.snp.right).offset(10)
-            make.right.equalTo(self.currentTimeLabel.snp.left).offset(-10)
+            make.left.equalTo(self.playPauseButton.ptLayout.right).offset(10)
+            make.right.equalTo(self.currentTimeLabel.ptLayout.left).offset(-10)
         }
     }
     

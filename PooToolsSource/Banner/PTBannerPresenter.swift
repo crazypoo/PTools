@@ -3,6 +3,9 @@
 // 中文：负责 Scene、堆叠布局、定时器和生命周期的 Banner Presenter。
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if canImport(PToolsCore)
 import PToolsCore
@@ -182,7 +185,7 @@ public final class PTBannerPresenter {
                           keyboardAvoidance: banner.configuration.keyboardAvoidance)
         stack.addArrangedSubview(view)
         if banner.configuration.maximumVisibleHeight > 0 {
-            view.snp.makeConstraints { make in
+            view.ptLayout.makeConstraints { make in
                 make.height.lessThanOrEqualTo(banner.configuration.maximumVisibleHeight)
             }
         }
@@ -276,15 +279,15 @@ public final class PTBannerPresenter {
         host.containerView.interactiveContentViews.append(stack)
 
         let horizontalInset: CGFloat = 12
-        stack.snp.makeConstraints { make in
+        stack.ptLayout.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(horizontalInset)
             switch position {
             case .top:
-                make.top.equalTo(host.containerView.safeAreaLayoutGuide.snp.top).offset(8)
+                make.top.equalTo(host.containerView.safeAreaLayoutGuide.ptLayout.top).offset(8)
             case .bottom:
-                make.bottom.equalTo(host.containerView.safeAreaLayoutGuide.snp.bottom).offset(-8)
+                make.bottom.equalTo(host.containerView.safeAreaLayoutGuide.ptLayout.bottom).offset(-8)
                 if keyboardAvoidance == .automatic {
-                    make.bottom.lessThanOrEqualTo(host.containerView.keyboardLayoutGuide.snp.top).offset(-8)
+                    make.bottom.lessThanOrEqualTo(host.containerView.keyboardLayoutGuide.ptLayout.top).offset(-8)
                 }
             }
         }

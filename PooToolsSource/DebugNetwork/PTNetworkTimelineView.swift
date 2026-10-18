@@ -3,6 +3,9 @@
 // 中文：轻量时间线视图把阶段渲染限制在 UI 边界内。
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -32,12 +35,12 @@ public final class PTNetworkTimelineView: UIView {
         super.init(frame: frame)
         addSubview(phaseStack)
         addSubview(insightLabel)
-        phaseStack.snp.makeConstraints { make in
+        phaseStack.ptLayout.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
         }
-        insightLabel.snp.makeConstraints { make in
+        insightLabel.ptLayout.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalTo(phaseStack.snp.bottom).offset(4)
+            make.top.equalTo(phaseStack.ptLayout.bottom).offset(4)
         }
         backgroundColor = .secondarySystemBackground
         layer.cornerRadius = 10
@@ -68,7 +71,7 @@ public final class PTNetworkTimelineView: UIView {
             name.font = .preferredFont(forTextStyle: .caption2)
             name.textColor = .secondaryLabel
             name.setContentHuggingPriority(.required, for: .horizontal)
-            name.snp.makeConstraints { make in
+            name.ptLayout.makeConstraints { make in
                 make.width.equalTo(52)
             }
 

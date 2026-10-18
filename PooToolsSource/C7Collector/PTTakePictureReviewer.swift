@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 
 // English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
 // Español: Importa explícitamente el target Core para las compilaciones SwiftPM independientes.
@@ -70,22 +73,22 @@ public class PTTakePictureReviewer:UIView {
         dismissTask = dismiss
         
         addSubviews([closeButton,feedback,shareImageView])
-        closeButton.snp.makeConstraints { make in
+        closeButton.ptLayout.makeConstraints { make in
             make.right.top.equalToSuperview().inset(5)
             make.width.height.equalTo(15)
         }
         
-        feedback.snp.makeConstraints { make in
+        feedback.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview().inset(5)
             make.bottom.equalToSuperview()
             make.height.equalTo(24)
         }
                         
         shareImageView.image = screenShotImage
-        shareImageView.snp.makeConstraints { make in
+        shareImageView.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview().inset(5)
-            make.top.equalTo(closeButton.snp.bottom).offset(5)
-            make.bottom.equalTo(self.feedback.snp.top).offset(-5)
+            make.top.equalTo(closeButton.ptLayout.bottom).offset(5)
+            make.bottom.equalTo(self.feedback.ptLayout.top).offset(-5)
         }
         
         PTUtils.getCurrentVC()?.view.addSubview(self)

@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
@@ -64,7 +67,7 @@ public class PTFusionHeader: PTBaseCollectionReusableView,@MainActor PTSupplemen
 
     private func setupHeaderUI() {
         addSubview(dataContent)
-        dataContent.snp.makeConstraints { make in
+        dataContent.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -118,7 +121,7 @@ public class PTVersionFooter: PTBaseCollectionReusableView,@MainActor PTSuppleme
 
     private func setupVersionFooterUI() {
         addSubview(verionLabel)
-        verionLabel.snp.makeConstraints { make in
+        verionLabel.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(5)
         }

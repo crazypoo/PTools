@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 
 // English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
 // Español: Importa explícitamente el target Core para las compilaciones SwiftPM independientes.
@@ -47,14 +50,14 @@ public class PTFilterImageCell: PTBaseNormalCell {
         
         contentView.isUserInteractionEnabled = true
         contentView.addSubviews([imageView,nameLabel])
-        imageView.snp.makeConstraints { make in
+        imageView.ptLayout.makeConstraints { make in
             make.top.left.right.equalToSuperview()
-            make.height.equalTo(imageView.snp.width)
+            make.height.equalTo(imageView.ptLayout.width)
         }
         
-        nameLabel.snp.makeConstraints { make in
+        nameLabel.ptLayout.makeConstraints { make in
             make.bottom.left.right.equalToSuperview()
-            make.top.equalTo(self.imageView.snp.bottom)
+            make.top.equalTo(self.imageView.ptLayout.bottom)
         }
     }
     

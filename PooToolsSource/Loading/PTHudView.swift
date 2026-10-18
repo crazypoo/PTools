@@ -15,6 +15,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import Foundation
 import SnapKit
 #if SWIFT_PACKAGE
@@ -87,13 +90,13 @@ public class PTHudView: UIView {
         super.init(frame: frame)
         
         addSubview(centerView)
-        centerView.snp.makeConstraints { make in
+        centerView.ptLayout.makeConstraints { make in
             make.centerY.centerX.equalToSuperview()
             make.width.height.equalTo(hudShare.conterViewSize)
         }
         
         centerView.addSubview(hudView)
-        hudView.snp.makeConstraints { make in
+        hudView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview().inset(loadingHudSpace)
         }
         centerView.layoutIfNeeded()
@@ -124,7 +127,7 @@ public class PTHudView: UIView {
             removeFromSuperview()
             window.addSubview(self)
         }
-        self.snp.remakeConstraints { make in
+        self.ptLayout.remakeConstraints { make in
             make.edges.equalToSuperview()
         }
 

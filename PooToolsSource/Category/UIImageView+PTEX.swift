@@ -9,6 +9,9 @@
 #if !os(macOS)
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 import Kingfisher
 import ImageIO
@@ -262,7 +265,7 @@ public extension UIImageView {
     private func createLoader(from view: UIView? = nil) -> UIView {
         let loader = view ?? UIActivityIndicatorView()
         addSubview(loader)
-        loader.snp.makeConstraints { make in
+        loader.ptLayout.makeConstraints { make in
             make.center.equalToSuperview()
         }
         

@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -53,7 +56,7 @@ class PTDebugSnapshotViewController: PTBaseViewController {
         super.viewDidLoad()
 
         view.addSubviews([snapshotImageView])
-        snapshotImageView.snp.makeConstraints { make in
+        snapshotImageView.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
         }

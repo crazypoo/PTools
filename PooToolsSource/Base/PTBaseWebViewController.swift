@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import WebKit
 import SnapKit
 
@@ -26,7 +29,7 @@ open class PTBaseWebViewController: PTBaseViewController {
     public var hiddenNav = false {
         didSet {
             navigationController?.navigationBar.isHidden = hiddenNav
-            webView.snp.updateConstraints { make in
+            webView.ptLayout.updateConstraints { make in
                 make.top.equalTo(hiddenNav ? 0 : CGFloat.kNavBarHeight_Total)
             }
         }
@@ -116,7 +119,7 @@ open class PTBaseWebViewController: PTBaseViewController {
         navigationItem.largeTitleDisplayMode = .never
         topSpace = hiddenNav ? 0 : CGFloat.kNavBarHeight_Total
         view.addSubviews([webView])
-        webView.snp.makeConstraints { make in
+        webView.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalTo(topSpace)
         }

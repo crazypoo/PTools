@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import Network
 import ObjectiveC
 import Foundation
@@ -64,7 +67,7 @@ class PTTestVC: PTBaseViewController {
         super.viewDidLoad()
         
         view.addSubviews([collectionView])
-        collectionView.snp.makeConstraints { make in
+        collectionView.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview().inset(30)
         }

@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import PToolsSymbols
@@ -84,32 +87,32 @@ public class PTDarkSmartFooter: PTBaseCollectionReusableView,@MainActor PTSupple
         super.init(frame: frame)
         
         addSubview(footerContent)
-        footerContent.snp.makeConstraints { make in
+        footerContent.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.bottom.equalToSuperview()
         }
         
         footerContent.addSubviews([descLabel, themeName, themeNight, themeTime, themeTimeButton])
-        descLabel.snp.makeConstraints { make in
+        descLabel.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(10)
         }
         
-        themeName.snp.makeConstraints { make in
+        themeName.ptLayout.makeConstraints { make in
             make.left.equalTo(self.descLabel)
-            make.top.equalTo(self.descLabel.snp.bottom).offset(10)
+            make.top.equalTo(self.descLabel.ptLayout.bottom).offset(10)
             make.height.equalTo(44)
         }
-        themeNight.snp.makeConstraints { make in
+        themeNight.ptLayout.makeConstraints { make in
             make.right.equalTo(self.descLabel)
             make.top.bottom.equalTo(self.themeName)
         }
-        themeTime.snp.makeConstraints { make in
-            make.top.equalTo(self.themeName.snp.bottom)
+        themeTime.ptLayout.makeConstraints { make in
+            make.top.equalTo(self.themeName.ptLayout.bottom)
             make.left.equalTo(self.descLabel)
             make.height.equalTo(self.themeName)
         }
-        themeTimeButton.snp.makeConstraints { make in
+        themeTimeButton.ptLayout.makeConstraints { make in
             make.right.equalTo(self.descLabel)
             make.centerY.equalTo(self.themeTime)
             make.width.equalTo(PTDarkSmartFooter.imageSize.width + PTDarkSmartFooter.imageContentSpace + UIView.sizeFor(string: PTDarkModeOption.smartPeelingTimeIntervalValue, font: PTDarkSmartFooter.imageContentFont,height: 44).width + 5)

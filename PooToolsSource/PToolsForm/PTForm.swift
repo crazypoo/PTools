@@ -6,6 +6,9 @@ import Foundation
 
 #if canImport(UIKit)
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -734,11 +737,11 @@ final class PTFormFieldCell: UICollectionViewCell {
         rootStack.addArrangedSubview(fieldContainer)
         rootStack.addArrangedSubview(issueLabel)
         contentView.addSubview(rootStack)
-        rootStack.snp.makeConstraints { make in
+        rootStack.ptLayout.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
             make.top.bottom.equalToSuperview().inset(8)
         }
-        fieldContainer.snp.makeConstraints { make in
+        fieldContainer.ptLayout.makeConstraints { make in
             make.height.greaterThanOrEqualTo(36)
         }
         titleLabel.font = .preferredFont(forTextStyle: .headline)
@@ -786,7 +789,7 @@ final class PTFormFieldCell: UICollectionViewCell {
         let view = renderer.makeView(context: context, onChange: onChange)
         renderedView = view
         fieldContainer.addSubview(view)
-        view.snp.makeConstraints { make in
+        view.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         titleLabel.text = field.title
@@ -954,7 +957,7 @@ public final class PTFormViewController: PTBaseViewController {
             self.listView.contentCollectionView.reloadData()
         }
         view.addSubview(listView)
-        listView.snp.makeConstraints { make in
+        listView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         listView.viewConfig.sectionEdges = NSDirectionalEdgeInsets(top: configuration.contentInsets.top,

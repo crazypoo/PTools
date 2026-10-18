@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -246,22 +249,22 @@ fileprivate class PTColorPickInfoView: UIView {
                 
         addSubviews([colorView, closeBtn, colorValueLbl])
         
-        colorView.snp.makeConstraints { make in
+        colorView.ptLayout.makeConstraints { make in
             make.size.equalTo(CGFloat.SizeFrom750(x: 28))
             make.centerY.equalToSuperview()
             make.left.equalToSuperview().inset(CGFloat.SizeFrom750(x: 32))
         }
         
-        closeBtn.snp.makeConstraints { make in
+        closeBtn.ptLayout.makeConstraints { make in
             make.size.equalTo(CGFloat.SizeFrom750(x: 44))
             make.centerY.equalToSuperview()
             make.right.equalToSuperview().inset(CGFloat.SizeFrom750(x: 32))
         }
         
-        colorValueLbl.snp.makeConstraints { make in
+        colorValueLbl.ptLayout.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.left.equalTo(self.colorView.snp.right).offset(8)
-            make.right.equalTo(self.closeBtn.snp.left).offset(-8)
+            make.left.equalTo(self.colorView.ptLayout.right).offset(8)
+            make.right.equalTo(self.closeBtn.ptLayout.left).offset(-8)
         }
         
         // 假设你有扩展方法 viewCorner，这里做个简单兼容实现，你可以改回你自己的
@@ -313,7 +316,7 @@ public class PTColorPickWindow: UIWindow {
         
         addSubview(pickInfoView)
         let bottomInset: CGFloat = 34
-        pickInfoView.snp.makeConstraints { make in
+        pickInfoView.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview().inset(CGFloat.SizeFrom750(x: 30))
             make.bottom.equalToSuperview().inset(bottomInset + CGFloat.SizeFrom750(x: 30))
             make.height.equalTo(CGFloat.SizeFrom750(x: 100))

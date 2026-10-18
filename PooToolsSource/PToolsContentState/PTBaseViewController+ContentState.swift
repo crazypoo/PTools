@@ -4,6 +4,9 @@
 
 #if canImport(UIKit)
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -21,11 +24,11 @@ public extension PTBaseViewController {
         target.addSubview(host)
         if useSafeArea && container == nil {
             let guide = target.safeAreaLayoutGuide
-            host.snp.makeConstraints { make in
+            host.ptLayout.makeConstraints { make in
                 make.edges.equalTo(guide)
             }
         } else {
-            host.snp.makeConstraints { make in
+            host.ptLayout.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
         }

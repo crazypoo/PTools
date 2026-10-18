@@ -10,6 +10,9 @@ import CommonCrypto
 import CryptoSwift
 import SnapKit
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import Photos
 import Combine
 import TipKit
@@ -51,7 +54,7 @@ class PTSwiftViewController: PTBaseViewController {
 //        
 //        layoutBtn.backgroundColor = .systemBlue
 //        view.addSubview(layoutBtn)
-//        layoutBtn.snp.makeConstraints { make in
+//        layoutBtn.ptLayout.makeConstraints { make in
 //            make.width.height.equalTo(100)
 //            make.centerX.centerY.equalToSuperview()
 //        }
@@ -64,7 +67,7 @@ class PTSwiftViewController: PTBaseViewController {
 //        }
         
 //        self.view.addSubview(cycleView)
-//        cycleView.snp.makeConstraints { make in
+//        cycleView.ptLayout.makeConstraints { make in
 //            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
 //            make.height.equalTo(150)
 //            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)

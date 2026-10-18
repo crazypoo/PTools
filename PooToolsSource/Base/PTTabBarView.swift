@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import Lottie
 import SnapKit
 #if canImport(PToolsCore)
@@ -288,7 +291,7 @@ final public class PTTabBarView: UIView {
             glassBackgroundView.clipsToBounds = true
             addSubview(glassBackgroundView)
             
-            glassBackgroundView.snp.makeConstraints {
+            glassBackgroundView.ptLayout.makeConstraints {
                 $0.top.equalToSuperview()
                 if appearanceSnapshot.layout.tab26Mode {
                     $0.left.right.equalToSuperview().inset(appearanceSnapshot.layout.tabbarBar26LRSpacing)
@@ -368,7 +371,7 @@ final public class PTTabBarView: UIView {
         if usesGlassSurfaceContainer && appearanceSnapshot.layout.tabbarCenterMetail {
             effectView.clipsToBounds = true
             centerButton.addSubview(effectView)
-            effectView.snp.makeConstraints { make in
+            effectView.ptLayout.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
             
@@ -449,7 +452,7 @@ final public class PTTabBarView: UIView {
                 centetButtonEffect()
                 centerButton.isHidden = false
                 centerButton.addSubviews([findBig])
-                findBig.snp.remakeConstraints { make in
+                findBig.ptLayout.remakeConstraints { make in
                     make.edges.equalToSuperview().inset(appearanceSnapshot.layout.tabbarCenterInsideOffset)
                 }
 
@@ -468,7 +471,7 @@ final public class PTTabBarView: UIView {
                     }
                 }
 
-                leftStackView.snp.remakeConstraints {
+                leftStackView.ptLayout.remakeConstraints {
                     $0.left.equalToSuperview()
                     $0.top.equalToSuperview().inset(appearanceSnapshot.layout.tabTopSpacing)
                     if appearanceSnapshot.layout.tab26Mode {
@@ -476,31 +479,31 @@ final public class PTTabBarView: UIView {
                     } else {
                         $0.height.equalTo(CGFloat.kTabbarHeight)
                     }
-                    $0.right.equalTo(self.centerButton.snp.left)
+                    $0.right.equalTo(self.centerButton.ptLayout.left)
                 }
 
-                centerButton.snp.remakeConstraints {
+                centerButton.ptLayout.remakeConstraints {
                     $0.centerX.equalToSuperview()
                     if usesGlassSurfaceContainer || appearanceSnapshot.layout.tabbarMetailMode {
-                        $0.centerY.equalTo(glassBackgroundView.snp.top)
+                        $0.centerY.equalTo(glassBackgroundView.ptLayout.top)
                     } else {
-                        $0.centerY.equalTo(self.snp.top)
+                        $0.centerY.equalTo(self.ptLayout.top)
                     }
                     $0.size.equalTo(appearanceSnapshot.layout.tabbarCenterButtonSize)
                 }
                 centerButton.viewCorner(radius: appearanceSnapshot.layout.tabbarCenterButtonSize / 2)
 
-                centerNameLabel.snp.remakeConstraints { make in
+                centerNameLabel.ptLayout.remakeConstraints { make in
                     make.left.right.equalTo(self.centerButton)
-                    make.top.equalTo(self.centerButton.snp.bottom).offset(appearanceSnapshot.layout.tabbarCenterNameContentSpacing)
+                    make.top.equalTo(self.centerButton.ptLayout.bottom).offset(appearanceSnapshot.layout.tabbarCenterNameContentSpacing)
                     make.bottom.greaterThanOrEqualTo(self.rightStackView)
                 }
                 
-                rightStackView.snp.remakeConstraints {
+                rightStackView.ptLayout.remakeConstraints {
                     $0.right.equalToSuperview()
                     $0.top.equalTo(self.leftStackView)
                     $0.height.equalTo(self.leftStackView)
-                    $0.left.equalTo(self.centerButton.snp.right)
+                    $0.left.equalTo(self.centerButton.ptLayout.right)
                 }
                 
                 centerContent?.setSelected(true, animated: true)
@@ -518,7 +521,7 @@ final public class PTTabBarView: UIView {
     private func applyAdaptiveAxisLayout() {
         let vertical = adaptiveAxis == .verticalEdge
         if usesGlassSurfaceContainer, glassBackgroundView.superview != nil {
-            glassBackgroundView.snp.remakeConstraints { make in
+            glassBackgroundView.ptLayout.remakeConstraints { make in
                 if vertical {
                     make.edges.equalToSuperview()
                 } else {
@@ -546,17 +549,17 @@ final public class PTTabBarView: UIView {
                 centerNameLabel.isHidden = true
                 let leftHeight = CGFloat(max(1, leftStackView.arrangedSubviews.count)) * 44
                 let rightHeight = CGFloat(max(1, rightStackView.arrangedSubviews.count)) * 44
-                leftStackView.snp.remakeConstraints { make in
+                leftStackView.ptLayout.remakeConstraints { make in
                     make.left.right.equalToSuperview()
                     make.top.equalToSuperview()
                     make.height.equalTo(leftHeight)
                 }
-                centerButton.snp.remakeConstraints { make in
+                centerButton.ptLayout.remakeConstraints { make in
                     make.centerX.equalToSuperview()
                     make.centerY.equalToSuperview()
                     make.size.equalTo(appearanceSnapshot.layout.tabbarCenterButtonSize)
                 }
-                rightStackView.snp.remakeConstraints { make in
+                rightStackView.ptLayout.remakeConstraints { make in
                     make.left.right.equalToSuperview()
                     make.bottom.equalToSuperview()
                     make.height.equalTo(rightHeight)
@@ -565,7 +568,7 @@ final public class PTTabBarView: UIView {
                 rightStackView.isHidden = true
                 centerButton.isHidden = true
                 centerNameLabel.isHidden = true
-                leftStackView.snp.remakeConstraints { make in
+                leftStackView.ptLayout.remakeConstraints { make in
                     make.edges.equalToSuperview()
                 }
             }
@@ -576,7 +579,7 @@ final public class PTTabBarView: UIView {
         if layoutStyle == .normal || centerButton.isHidden {
             rightStackView.isHidden = true
             centerButton.isHidden = true
-            leftStackView.snp.remakeConstraints { make in
+            leftStackView.ptLayout.remakeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.top.equalToSuperview().inset(appearanceSnapshot.layout.tabTopSpacing)
                 if appearanceSnapshot.layout.tab26Mode {
@@ -587,7 +590,7 @@ final public class PTTabBarView: UIView {
             }
         } else {
             rightStackView.isHidden = false
-            leftStackView.snp.remakeConstraints {
+            leftStackView.ptLayout.remakeConstraints {
                 $0.left.equalToSuperview()
                 $0.top.equalToSuperview().inset(appearanceSnapshot.layout.tabTopSpacing)
                 if appearanceSnapshot.layout.tab26Mode {
@@ -595,22 +598,22 @@ final public class PTTabBarView: UIView {
                 } else {
                     $0.height.equalTo(CGFloat.kTabbarHeight)
                 }
-                    $0.right.equalTo(self.centerButton.snp.left)
+                    $0.right.equalTo(self.centerButton.ptLayout.left)
             }
-            centerButton.snp.remakeConstraints {
+            centerButton.ptLayout.remakeConstraints {
                 $0.centerX.equalToSuperview()
                 if usesGlassSurfaceContainer || appearanceSnapshot.layout.tabbarMetailMode {
-                    $0.centerY.equalTo(glassBackgroundView.snp.top)
+                    $0.centerY.equalTo(glassBackgroundView.ptLayout.top)
                 } else {
-                    $0.centerY.equalTo(self.snp.top)
+                    $0.centerY.equalTo(self.ptLayout.top)
                 }
                 $0.size.equalTo(appearanceSnapshot.layout.tabbarCenterButtonSize)
             }
-            rightStackView.snp.remakeConstraints {
+            rightStackView.ptLayout.remakeConstraints {
                 $0.right.equalToSuperview()
                 $0.top.equalTo(self.leftStackView)
                 $0.height.equalTo(self.leftStackView)
-                $0.left.equalTo(self.centerButton.snp.right)
+                $0.left.equalTo(self.centerButton.ptLayout.right)
             }
         }
     }
@@ -626,7 +629,7 @@ final public class PTTabBarView: UIView {
             leftStackView.addArrangedSubview(item)
         }
 
-        leftStackView.snp.remakeConstraints {
+        leftStackView.ptLayout.remakeConstraints {
             $0.left.right.equalToSuperview()
             $0.top.equalToSuperview().inset(appearanceSnapshot.layout.tabTopSpacing)
             if appearanceSnapshot.layout.tab26Mode {
@@ -765,13 +768,13 @@ final public class PTTabBarView: UIView {
                 : CGSize(width: fallbackSize, height: fallbackSize)
             let fittedSize = PTTabBarLayoutEngine.fittedSize(contentSize: selectedItem.resolvedContentSize,
                                                               inside: availableSize)
-            iconView.snp.remakeConstraints { make in
+            iconView.ptLayout.remakeConstraints { make in
                 make.center.equalToSuperview()
                 make.size.equalTo(fittedSize)
             }
 
             addSubview(minimizedCenterView)
-            minimizedCenterView.snp.makeConstraints { make in
+            minimizedCenterView.ptLayout.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
 
@@ -783,7 +786,7 @@ final public class PTTabBarView: UIView {
 
             // 3. ✅ 修复点 2：安全校验。只有当配置允许展示毛玻璃且它已在视图树中，才去更新约束
             if glassBackgroundView.superview != nil {
-                glassBackgroundView.snp.remakeConstraints { make in
+                glassBackgroundView.ptLayout.remakeConstraints { make in
                     make.edges.equalToSuperview()
                 }
                 glassBackgroundView.layer.cornerRadius = circleRadius
@@ -804,7 +807,7 @@ final public class PTTabBarView: UIView {
             // 3. ✅ 安全校验：恢复毛玻璃背景的正常约束
             if glassBackgroundView.superview != nil {
                 let tabContainerHeight = appearanceSnapshot.layout.tab26Mode ? (CGFloat.kTabbarHeight_Total - appearanceSnapshot.layout.tab26BottomSpacing) : CGFloat.kTabbarHeight_Total
-                glassBackgroundView.snp.remakeConstraints { make in
+                glassBackgroundView.ptLayout.remakeConstraints { make in
                     make.top.equalToSuperview()
                     if appearanceSnapshot.layout.tab26Mode {
                         make.left.right.equalToSuperview().inset(appearanceSnapshot.layout.tabbarBar26LRSpacing)
@@ -854,7 +857,7 @@ final public class PTTabBarView: UIView {
                                     blurStyle: .systemUltraThinMaterialDark,
                                     fallbackColor: appearanceSnapshot.layout.tabSelectedMetailColor)
         sharedSelectionMaskView.addSubview(sharedMaskGlassView)
-        sharedMaskGlassView.snp.makeConstraints { make in
+        sharedMaskGlassView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         

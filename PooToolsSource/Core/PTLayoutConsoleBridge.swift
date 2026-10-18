@@ -2,9 +2,11 @@
 // Español: Conecta los diagnósticos de PTLayout con la consola existente de PTools sin acoplar el producto independiente.
 // 中文：将 PTLayout 诊断接入现有 PTools 控制台，同时不让独立产品反向依赖 PTools。
 
-#if canImport(PToolsConstraintLayout)
+#if canImport(PToolsConstraintLayout) || POOTOOLS_COCOAPODS
 import Foundation
+#if canImport(PToolsConstraintLayout)
 import PToolsConstraintLayout
+#endif
 
 @MainActor
 public enum PTLayoutConsoleBridge {

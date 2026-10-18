@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: a868c0a22374e9a4016e85a100ccc814895d9cc3
-Generated at: 2026-10-18T03:14:35Z
+Source revision: 80126150505961e259cce5e08ada67962265c063
+Generated at: 2026-10-18T05:02:36Z
 -->
 
 # SwiftPM Dependency Graph
@@ -208,7 +208,7 @@ Generated at: 2026-10-18T03:14:35Z
 | `PTSpeechPermission` | `PooToolsSource/SpeechPremission` | PToolsPermissionCore | — | 0 source entries / 0 resources |
 | `PTTrackingPermission` | `PooToolsSource/TrackingPermission` | PToolsPermissionCore | — | 0 source entries / 0 resources |
 | `PToolsAccessibility` | `PooToolsSource/PToolsAccessibility` | PToolsUIFoundation | — | 0 source entries / 0 resources |
-| `PToolsAcknowledgements` | `PooToolsSource/PToolsAcknowledgements` | PToolsAcknowledgementsCore | SnapKit | 0 source entries / 0 resources |
+| `PToolsAcknowledgements` | `PooToolsSource/PToolsAcknowledgements` | PToolsAcknowledgementsCore, PToolsConstraintLayout | SnapKit | 0 source entries / 0 resources |
 | `PToolsAcknowledgementsCore` | `PooToolsSource/PToolsAcknowledgementsCore` | — | — | 0 source entries / 0 resources |
 | `PToolsAcknowledgementsCoreTests` | `Tests/PToolsAcknowledgementsCoreTests` | PToolsAcknowledgementsCore | — | 0 source entries / 0 resources |
 | `PToolsActivities` | `PooToolsSource/PToolsActivities` | — | — | 0 source entries / 0 resources |
@@ -225,7 +225,7 @@ Generated at: 2026-10-18T03:14:35Z
 | `PToolsConfiguration` | `PooToolsSource/PToolsConfiguration` | PToolsStorage, PToolsStorageCore | — | 0 source entries / 0 resources |
 | `PToolsConnectivity` | `PooToolsSource/PToolsConnectivity` | — | — | 0 source entries / 0 resources |
 | `PToolsConstraintLayout` | `PooToolsSource/PToolsConstraintLayout` | — | — | 0 source entries / 0 resources |
-| `PToolsContentState` | `PooToolsSource/PToolsContentState` | PToolsAccessibility, PToolsConnectivity, PToolsTheme, ptools | SnapKit | 0 source entries / 0 resources |
+| `PToolsContentState` | `PooToolsSource/PToolsContentState` | PToolsAccessibility, PToolsConnectivity, PToolsConstraintLayout, PToolsTheme, ptools | SnapKit | 0 source entries / 0 resources |
 | `PToolsCore` | `PooToolsSource/PToolsCore` | — | — | 0 source entries / 0 resources |
 | `PToolsCoreTests` | `Tests/PooToolsCoreTests` | PToolsCore | — | 0 source entries / 0 resources |
 | `PToolsDatabase` | `PooToolsSource/PToolsDatabase` | PToolsDatabaseCore | — | 0 source entries / 0 resources |
@@ -236,12 +236,12 @@ Generated at: 2026-10-18T03:14:35Z
 | `PToolsDeepLink` | `PooToolsSource/PToolsDeepLink` | PToolsRouteCore | — | 0 source entries / 0 resources |
 | `PToolsDevice` | `PooToolsSource/PToolsDevice` | — | — | 0 source entries / 0 resources |
 | `PToolsDeviceTests` | `Tests/PToolsDeviceTests` | PToolsDevice | — | 0 source entries / 0 resources |
-| `PToolsDocuments` | `PooToolsSource/PToolsDocuments` | PooToolsPDF | SnapKit | 0 source entries / 0 resources |
+| `PToolsDocuments` | `PooToolsSource/PToolsDocuments` | PToolsConstraintLayout, PooToolsPDF | SnapKit | 0 source entries / 0 resources |
 | `PToolsFeedback` | `PooToolsSource/PToolsFeedback` | PToolsCore | — | 0 source entries / 0 resources |
 | `PToolsFontCatalogCore` | `PooToolsSource` | — | — | 5 source entries / 0 resources |
 | `PToolsFontRuntimeTests` | `Tests/PToolsFontTests` | PToolsFontCatalogCore, ptools | — | 1 source entries / 0 resources |
 | `PToolsFontTests` | `Tests/PToolsFontTests` | PToolsFontCatalogCore | — | 3 source entries / 0 resources |
-| `PToolsForm` | `PooToolsSource/PToolsForm` | PToolsAccessibility, PToolsContentState, PToolsCore, PToolsTheme, PooToolsCheckBox, PooToolsInput, PooToolsPicker, PooToolsSlider, PooToolsStepper, ptools | SnapKit | 0 source entries / 0 resources |
+| `PToolsForm` | `PooToolsSource/PToolsForm` | PToolsAccessibility, PToolsConstraintLayout, PToolsContentState, PToolsCore, PToolsTheme, PooToolsCheckBox, PooToolsInput, PooToolsPicker, PooToolsSlider, PooToolsStepper, ptools | SnapKit | 0 source entries / 0 resources |
 | `PToolsHTTPFilePortal` | `PooToolsSource/PToolsHTTPFilePortal` | PToolsHTTPServer | — | 0 source entries / 1 resources |
 | `PToolsHTTPServer` | `PooToolsSource/PToolsHTTPServer` | — | — | 0 source entries / 0 resources |
 | `PToolsHTTPServerTests` | `Tests/PToolsHTTPServerTests` | PToolsHTTPServer | — | 0 source entries / 0 resources |
@@ -291,83 +291,83 @@ Generated at: 2026-10-18T03:14:35Z
 | `PToolsTransferCore` | `PooToolsSource/PToolsTransferCore` | — | — | 0 source entries / 0 resources |
 | `PToolsUIFoundation` | `PooToolsSource/PToolsUIFoundation` | PToolsCore | SnapKit | 0 source entries / 0 resources |
 | `PToolsUIFoundationTests` | `Tests/PToolsUIFoundationTests` | PooToolsPagingControl, ptools | — | 0 source entries / 0 resources |
-| `PToolsWeb` | `PooToolsSource/PToolsWeb` | PToolsWebBridge | SnapKit | 0 source entries / 0 resources |
+| `PToolsWeb` | `PooToolsSource/PToolsWeb` | PToolsConstraintLayout, PToolsWebBridge | SnapKit | 0 source entries / 0 resources |
 | `PToolsWebBridge` | `PooToolsSource/PToolsWebBridge` | PToolsWebCore | — | 0 source entries / 0 resources |
 | `PToolsWebCore` | `PooToolsSource/PToolsWebCore` | — | — | 0 source entries / 0 resources |
 | `PToolsWidgetCore` | `PooToolsSource/PToolsWidgetCore` | PToolsDeepLink, PToolsRouteCore, PToolsStorage, PToolsStorageCore | — | 0 source entries / 0 resources |
 | `PooToolsBankCard` | `PooToolsSource/BankCard` | ptools | — | 0 source entries / 0 resources |
-| `PooToolsBanner` | `PooToolsSource/Banner` | PToolsCore, PToolsLogging, PToolsOverlay, PToolsSymbols | SnapKit | 0 source entries / 0 resources |
+| `PooToolsBanner` | `PooToolsSource/Banner` | PToolsConstraintLayout, PToolsCore, PToolsLogging, PToolsOverlay, PToolsSymbols | SnapKit | 0 source entries / 0 resources |
 | `PooToolsBioID` | `PooToolsSource/BioID` | PTFaceIDPermission, PooToolsKeyChain, ptools | — | 0 source entries / 0 resources |
 | `PooToolsCalendar` | `PooToolsSource/Calendar` | PTCalendarPermission, PTRemindersPermission, ptools | — | 0 source entries / 0 resources |
 | `PooToolsCheckBox` | `PooToolsSource/CheckBox` | — | — | 0 source entries / 0 resources |
 | `PooToolsCheckDirtyWord` | `PooToolsSource/CheckDirtyWord` | — | — | 0 source entries / 1 resources |
-| `PooToolsCheckUpdate` | `PooToolsSource/CheckUpdate` | PooToolsHud, PooToolsLoading, PooToolsNetWork, ptools | SwiftJWT | 0 source entries / 0 resources |
+| `PooToolsCheckUpdate` | `PooToolsSource/CheckUpdate` | PToolsConstraintLayout, PooToolsHud, PooToolsLoading, PooToolsNetWork, ptools | SwiftJWT | 0 source entries / 0 resources |
 | `PooToolsChinesePinyin` | `PooToolsSource/Pinyin` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsCircle` | `PooToolsSource/Circle` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsCodeView` | `PooToolsSource/CodeView` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsContact` | `PooToolsSource/Contact` | PTContactsPermission, ptools | — | 0 source entries / 0 resources |
 | `PooToolsCountry` | `PooToolsSource/Country` | ptools | — | 0 source entries / 0 resources |
-| `PooToolsCustomerLabel` | `PooToolsSource/Label` | ptools | SnapKit | 0 source entries / 0 resources |
-| `PooToolsDEBUG` | `PooToolsSource` | PToolsBackgroundTasks, PToolsConnectivity, PToolsDeepLink, PToolsNotifications, PToolsOverlay, PToolsRouteCore, PToolsStorage, PToolsSymbols, PooToolsNetWork, PooToolsPDF, PooToolsSearchBar, PooToolsShare, ptools | SnapKit | 15 source entries / 0 resources |
+| `PooToolsCustomerLabel` | `PooToolsSource/Label` | PToolsConstraintLayout, ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsDEBUG` | `PooToolsSource` | PToolsBackgroundTasks, PToolsConnectivity, PToolsConstraintLayout, PToolsDeepLink, PToolsNotifications, PToolsOverlay, PToolsRouteCore, PToolsStorage, PToolsSymbols, PooToolsNetWork, PooToolsPDF, PooToolsSearchBar, PooToolsShare, ptools | SnapKit | 15 source entries / 0 resources |
 | `PooToolsDEBUGTrackingEyes` | `PooToolsSource/WhereIsMyEye` | PTCameraPermission, PooToolsDEBUG, ptools | — | 0 source entries / 0 resources |
 | `PooToolsDataEncrypt` | `PooToolsSource/AESAndDES` | ptools | CryptoSwift | 0 source entries / 0 resources |
-| `PooToolsFilterCamera` | `PooToolsSource` | PTCameraPermission, PToolsSymbols, PooToolsHarbethKit, PooToolsImageEditor, PooToolsMediaViewer, ptools | SnapKit | 2 source entries / 0 resources |
-| `PooToolsGuide` | `PooToolsSource/Guide` | PooToolsPageControl, ptools | SnapKit | 0 source entries / 0 resources |
-| `PooToolsHandSign` | `PooToolsSource/SignView` | ptools | SnapKit | 0 source entries / 0 resources |
-| `PooToolsHarbethKit` | `PooToolsSource/C7Collector` | PTCameraPermission, PToolsSymbols, PooToolsHud, PooToolsLoading, PooToolsMediaViewer, ptools | Harbeth, SnapKit | 10 source entries / 0 resources |
-| `PooToolsHeartRate` | `PooToolsSource/HeartRate` | PTCameraPermission, ptools | Lottie, SnapKit | 0 source entries / 0 resources |
-| `PooToolsHud` | `PooToolsSource/Hud` | PooToolsProgressBar, ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsFilterCamera` | `PooToolsSource` | PTCameraPermission, PToolsConstraintLayout, PToolsSymbols, PooToolsHarbethKit, PooToolsImageEditor, PooToolsMediaViewer, ptools | SnapKit | 2 source entries / 0 resources |
+| `PooToolsGuide` | `PooToolsSource/Guide` | PToolsConstraintLayout, PooToolsPageControl, ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsHandSign` | `PooToolsSource/SignView` | PToolsConstraintLayout, ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsHarbethKit` | `PooToolsSource/C7Collector` | PTCameraPermission, PToolsConstraintLayout, PToolsSymbols, PooToolsHud, PooToolsLoading, PooToolsMediaViewer, ptools | Harbeth, SnapKit | 10 source entries / 0 resources |
+| `PooToolsHeartRate` | `PooToolsSource/HeartRate` | PTCameraPermission, PToolsConstraintLayout, ptools | Lottie, SnapKit | 0 source entries / 0 resources |
+| `PooToolsHud` | `PooToolsSource/Hud` | PToolsConstraintLayout, PooToolsProgressBar, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsIAP` | `PooToolsSource/IAP` | ptools | — | 0 source entries / 0 resources |
-| `PooToolsImageEditor` | `PooToolsSource/ImageEditor` | PToolsCore, PToolsSymbols, PooToolsHarbethKit, PooToolsMediaCore, PooToolsPhotoPicker, ptools | Harbeth, SnapKit | 0 source entries / 0 resources |
+| `PooToolsImageEditor` | `PooToolsSource/ImageEditor` | PToolsConstraintLayout, PToolsCore, PToolsSymbols, PooToolsHarbethKit, PooToolsMediaCore, PooToolsPhotoPicker, ptools | Harbeth, SnapKit | 0 source entries / 0 resources |
 | `PooToolsImagePicker` | `PooToolsSource/ImagePicker` | PTCameraPermission, ptools | SnapKit | 0 source entries / 0 resources |
-| `PooToolsInput` | `PooToolsSource/Input` | PToolsCore, PToolsUIFoundation, ptools | PhoneNumberKit, SnapKit | 0 source entries / 0 resources |
-| `PooToolsInstructions` | `PooToolsSource/Instructions` | PToolsOverlay | SnapKit | 0 source entries / 0 resources |
+| `PooToolsInput` | `PooToolsSource/Input` | PToolsConstraintLayout, PToolsCore, PToolsUIFoundation, ptools | PhoneNumberKit, SnapKit | 0 source entries / 0 resources |
+| `PooToolsInstructions` | `PooToolsSource/Instructions` | PToolsConstraintLayout, PToolsOverlay | SnapKit | 0 source entries / 0 resources |
 | `PooToolsKeyChain` | `PooToolsSource/KeyChain` | — | — | 0 source entries / 0 resources |
 | `PooToolsKeyboard` | `PooToolsSource/Keyboard` | ptools | SnapKit | 0 source entries / 0 resources |
-| `PooToolsLaunchTimeProfiler` | `PooToolsSource/LaunchTimeProfiler` | ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsLaunchTimeProfiler` | `PooToolsSource/LaunchTimeProfiler` | PToolsConstraintLayout, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsLayout` | `PooToolsSource/Layout` | ptools | CollectionViewPagingLayout | 0 source entries / 0 resources |
 | `PooToolsLivePhoto` | `PooToolsSource/LivePhoto` | ptools | — | 0 source entries / 0 resources |
-| `PooToolsLoading` | `PooToolsSource/Loading` | ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsLoading` | `PooToolsSource/Loading` | PToolsConstraintLayout, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsLocation` | `PooToolsSource/Location` | PTLocationPermission, PToolsStorage, PToolsStorageCore, ptools | — | 0 source entries / 0 resources |
 | `PooToolsMediaCore` | `PooToolsSource/PToolsMediaCore` | — | — | 0 source entries / 0 resources |
-| `PooToolsMediaViewer` | `PooToolsSource/MediaViewer` | PToolsUIFoundation, PooToolsLivePhoto, PooToolsMediaCore, PooToolsPageControl, PooToolsProgressBar, ptools | SnapKit | 0 source entries / 0 resources |
-| `PooToolsMessageKit` | `PooToolsSource/MessageKit` | PToolsSymbols, PooToolsCustomerLabel, PooToolsNetWork, PooToolsProgressBar, ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsMediaViewer` | `PooToolsSource/MediaViewer` | PToolsConstraintLayout, PToolsUIFoundation, PooToolsLivePhoto, PooToolsMediaCore, PooToolsPageControl, PooToolsProgressBar, ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsMessageKit` | `PooToolsSource/MessageKit` | PToolsConstraintLayout, PToolsSymbols, PooToolsCustomerLabel, PooToolsNetWork, PooToolsProgressBar, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsMotion` | `PooToolsSource/Motion` | PTMotionPermission, ptools | — | 0 source entries / 0 resources |
 | `PooToolsNetWork` | `PooToolsSource/NetWork` | PToolsConnectivity, PToolsCore, PToolsModelCore, PToolsModelLegacyKakaJSON, PToolsModelLegacySmartCodable, PToolsNetworkModelCore, PooToolsLoading, ptools | Alamofire | 11 source entries / 0 resources |
 | `PooToolsNetworkSpeedTest` | `PooToolsSource/NetworkSpeedTest` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsOSSKitSpeech` | `PooToolsSource/OSSKit` | PTSpeechPermission, ptools | — | 0 source entries / 0 resources |
-| `PooToolsPDF` | `PooToolsSource/PDF` | ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsPDF` | `PooToolsSource/PDF` | PToolsConstraintLayout, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsPageControl` | `PooToolsSource/PageControl` | PToolsCore, ptools | — | 0 source entries / 0 resources |
-| `PooToolsPagingControl` | `PooToolsSource/SegmentControl` | ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsPagingControl` | `PooToolsSource/SegmentControl` | PToolsConstraintLayout, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsPhoneInfo` | `PooToolsSource/PhoneInfo` | — | — | 0 source entries / 0 resources |
-| `PooToolsPhotoPicker` | `PooToolsSource` | PTCameraPermission, PToolsSymbols, PToolsUIFoundation, PooToolsImagePicker, PooToolsLoading, PooToolsMediaCore, ptools | SnapKit | 1 source entries / 0 resources |
-| `PooToolsPicker` | `PooToolsSource/Picker` | PToolsCore, ptools | SnapKit | 0 source entries / 0 resources |
-| `PooToolsPing` | `PooToolsSource/Ping` | ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsPhotoPicker` | `PooToolsSource` | PTCameraPermission, PToolsConstraintLayout, PToolsSymbols, PToolsUIFoundation, PooToolsImagePicker, PooToolsLoading, PooToolsMediaCore, ptools | SnapKit | 1 source entries / 0 resources |
+| `PooToolsPicker` | `PooToolsSource/Picker` | PToolsConstraintLayout, PToolsCore, ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsPing` | `PooToolsSource/Ping` | PToolsConstraintLayout, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsPopover` | `PooToolsSource/Popover` | PToolsCore, PToolsOverlay, PToolsSymbols | — | 0 source entries / 0 resources |
-| `PooToolsProgressBar` | `PooToolsSource/ProgressBar` | ptools | SnapKit | 0 source entries / 0 resources |
-| `PooToolsRateView` | `PooToolsSource/RateView` | ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsProgressBar` | `PooToolsSource/ProgressBar` | PToolsConstraintLayout, ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsRateView` | `PooToolsSource/RateView` | PToolsConstraintLayout, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsRouter` | `PooToolsSource/Router` | PToolsDeepLink, PToolsRouteCore, ptools | — | 0 source entries / 0 resources |
 | `PooToolsSVG` | `PooToolsSource/KingfisherSVG` | ptools | Kingfisher, PocketSVG | 0 source entries / 0 resources |
-| `PooToolsScanQRCode` | `PooToolsSource/QRCodeScan` | PTCameraPermission, PToolsCore, PooToolsImagePicker, PooToolsPhotoPicker, ptools | SnapKit | 0 source entries / 0 resources |
-| `PooToolsScrollBanner` | `PooToolsSource/ScrollBanner` | PToolsUIFoundation, PooToolsPageControl, ptools | SnapKit | 0 source entries / 0 resources |
-| `PooToolsSearch` | `PooToolsSource/Search` | PToolsUIFoundation, PooToolsSearchBar, ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsScanQRCode` | `PooToolsSource/QRCodeScan` | PTCameraPermission, PToolsConstraintLayout, PToolsCore, PooToolsImagePicker, PooToolsPhotoPicker, ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsScrollBanner` | `PooToolsSource/ScrollBanner` | PToolsConstraintLayout, PToolsUIFoundation, PooToolsPageControl, ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsSearch` | `PooToolsSource/Search` | PToolsConstraintLayout, PToolsUIFoundation, PooToolsSearchBar, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsSearchBar` | `PooToolsSource/SearchBar` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsSecurity` | `PooToolsSource/Security` | — | — | 0 source entries / 0 resources |
 | `PooToolsSegmented` | `PooToolsSource/Segmented` | ptools | SnapKit | 0 source entries / 0 resources |
-| `PooToolsShare` | `PooToolsSource/Share` | PooToolsCustomerLabel, ptools | SnapKit | 0 source entries / 0 resources |
-| `PooToolsSlider` | `PooToolsSource/Slider` | — | SnapKit | 0 source entries / 0 resources |
+| `PooToolsShare` | `PooToolsSource/Share` | PToolsConstraintLayout, PooToolsCustomerLabel, ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsSlider` | `PooToolsSource/Slider` | PToolsConstraintLayout | SnapKit | 0 source entries / 0 resources |
 | `PooToolsSmartScreenshot` | `PooToolsSource/ScreenShot` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsSocketKit` | `PooToolsSource/SocketKit` | PToolsLogging, PooToolsNetWork, ptools | — | 0 source entries / 0 resources |
 | `PooToolsSpeedPanel` | `PooToolsSource/SpeedPanel` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsSplitView` | `PooToolsSource/SplitView` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsStepCount` | `PooToolsSource/HealthKit` | PTHealthPermission, ptools | — | 0 source entries / 0 resources |
-| `PooToolsStepper` | `PooToolsSource/Stepper` | ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsStepper` | `PooToolsSource/Stepper` | PToolsConstraintLayout, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsTelephony` | `PooToolsSource/CallMessageMail` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsTipsView` | `PooToolsSource/TipsView` | PToolsOverlay, ptools | — | 0 source entries / 0 resources |
-| `PooToolsVideoEditor` | `PooToolsSource/VideoEditor` | PToolsCore, PToolsSymbols, PooToolsHarbethKit, PooToolsLoading, PooToolsMediaCore, PooToolsProgressBar, ptools | Harbeth, SnapKit | 0 source entries / 0 resources |
+| `PooToolsVideoEditor` | `PooToolsSource/VideoEditor` | PToolsConstraintLayout, PToolsCore, PToolsSymbols, PooToolsHarbethKit, PooToolsLoading, PooToolsMediaCore, PooToolsProgressBar, ptools | Harbeth, SnapKit | 0 source entries / 0 resources |
 | `PooToolsVision` | `PooToolsSource/Vision` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsWebKit` | `PooToolsSource/WebKit` | ptools | — | 0 source entries / 0 resources |
-| `PooToolsWhatsNewsKit` | `PooToolsSource/WhatsNewsKit` | PToolsUIFoundation, ptools | SnapKit | 0 source entries / 0 resources |
+| `PooToolsWhatsNewsKit` | `PooToolsSource/WhatsNewsKit` | PToolsConstraintLayout, PToolsUIFoundation, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsiOS17Tips` | `PooToolsSource/iOS17Tips` | ptools | SnapKit | 0 source entries / 0 resources |
 | `ptools` | `PooToolsSource` | PToolsConstraintLayout, PToolsCore, PToolsDate, PToolsDevice, PToolsFontCatalogCore, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsUIFoundation | IQKeyboardManagerSwift, Kingfisher, Lottie, SnapKit | 30 source entries / 1 resources |
 

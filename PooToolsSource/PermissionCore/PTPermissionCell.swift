@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
@@ -135,23 +138,23 @@ class PTPermissionCell: PTBaseNormalCell {
         backgroundColor = .clear
         
         contentView.addSubviews([authorizedButton, cellIcon, cellTitle])
-        authorizedButton.snp.makeConstraints { make in
+        authorizedButton.ptLayout.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(10)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             let buttonFont = self.authorizedButton.titleLabel?.font ?? UIFont.systemFont(ofSize: UIFont.labelFontSize)
             make.width.equalTo(UIView.sizeFor(string: "PT Permission Not support".localized(), font: buttonFont, height: 24).width + CGFloat.ScaleW(w: 10))
         }
         
-        cellIcon.snp.makeConstraints { make in
+        cellIcon.ptLayout.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.size.equalTo(44)
             make.centerY.equalToSuperview()
         }
         
-        cellTitle.snp.makeConstraints { make in
-            make.left.equalTo(self.cellIcon.snp.right).offset(PTAppBaseConfig.share.defaultViewSpace)
+        cellTitle.ptLayout.makeConstraints { make in
+            make.left.equalTo(self.cellIcon.ptLayout.right).offset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.bottom.equalToSuperview()
-            make.right.equalTo(self.authorizedButton.snp.left).offset(-PTAppBaseConfig.share.defaultViewSpace)
+            make.right.equalTo(self.authorizedButton.ptLayout.left).offset(-PTAppBaseConfig.share.defaultViewSpace)
         }
     }
     

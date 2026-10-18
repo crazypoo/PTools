@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
@@ -149,7 +152,7 @@ class PTEasySignatureView: UIView {
         addGestureRecognizer(pan)
         
         addSubview(infoLabel)
-        infoLabel.snp.makeConstraints { make in
+        infoLabel.ptLayout.makeConstraints { make in
             make.centerY.centerX.equalToSuperview()
         }
     }

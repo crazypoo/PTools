@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
@@ -67,7 +70,7 @@ public class PTAutoScrollLabel: UIView {
             scrollView.contentInsetAdjustmentBehavior = .never
         }
         addSubview(scrollView)
-        scrollView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        scrollView.ptLayout.makeConstraints { $0.edges.equalToSuperview() }
     }
 
     // MARK: - Configure
@@ -112,7 +115,7 @@ public class PTAutoScrollLabel: UIView {
             scrollView.addSubview(label)
             labels.append(label)
 
-            label.snp.makeConstraints { make in
+            label.ptLayout.makeConstraints { make in
                 make.width.equalToSuperview()
                 make.height.equalToSuperview()
                 make.left.equalTo(0)

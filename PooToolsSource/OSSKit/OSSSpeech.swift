@@ -116,11 +116,11 @@ public enum OSSSpeechRecognitionTaskType: Int, Sendable {
     }
 }
 
-/// English: The delegate is MainActor-isolated and Sendable for Swift 6-safe UI callbacks.
-/// Español: El delegado está aislado en MainActor y es Sendable para callbacks de UI seguros en Swift 6.
-/// 中文：代理隔离在 MainActor 并遵循 Sendable，保证 Swift 6 下 UI 回调安全。
+/// English: The delegate is MainActor-isolated; the engine schedules every callback on MainActor.
+/// Español: El delegado está aislado en MainActor; el motor programa cada callback en MainActor.
+/// 中文：代理隔离在 MainActor；引擎会把所有回调调度到 MainActor 执行。
 @MainActor
-public protocol OSSSpeechDelegate: AnyObject, Sendable {
+public protocol OSSSpeechDelegate: AnyObject {
     func didFinishListening(withText text: String)
     func didFinishListening(withAudioFileURL url: URL, withText text: String)
     func authorizationToMicrophone(withAuthentication type: OSSSpeechKitAuthorizationStatus)

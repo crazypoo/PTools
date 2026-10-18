@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 // English: Button configuration and loading state are UI mutations owned by MainActor.
@@ -69,7 +72,7 @@ open class PTBaseButton: UIButton {
 
         if activityIndicator.superview == nil {
             addSubview(activityIndicator)
-            activityIndicator.snp.makeConstraints { make in
+            activityIndicator.ptLayout.makeConstraints { make in
                 make.center.equalToSuperview()
             }
         }

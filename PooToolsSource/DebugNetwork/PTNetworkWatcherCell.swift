@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -83,14 +86,14 @@ class PTNetworkWatcherCell: PTBaseNormalCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubviews([codeLabel, infoLabel])
-        codeLabel.snp.makeConstraints { make in
+        codeLabel.ptLayout.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.centerY.equalToSuperview()
         }
-        infoLabel.snp.makeConstraints { make in
+        infoLabel.ptLayout.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.bottom.equalToSuperview()
-            make.right.equalTo(self.codeLabel.snp.left).offset(-5)
+            make.right.equalTo(self.codeLabel.ptLayout.left).offset(-5)
         }
     }
     
@@ -117,7 +120,7 @@ class PTNetworkWatcherDetailCell: PTBaseNormalCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubviews([details])
-        details.snp.makeConstraints { make in
+        details.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.bottom.equalToSuperview()
         }

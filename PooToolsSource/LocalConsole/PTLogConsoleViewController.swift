@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -83,7 +86,7 @@ class PTLogConsoleViewController: PTBaseViewController {
         super.viewDidLoad()
 
         view.addSubviews([infoLabel])
-        infoLabel.snp.makeConstraints { make in
+        infoLabel.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)

@@ -3,6 +3,9 @@
 // 中文：替换旧第三方 Cell 继承体系的原生可复用分段 Cell。
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 #if canImport(ptools)
@@ -149,18 +152,18 @@ public class PTMainSegmentCell: UICollectionViewCell {
     private let contentStack = UIStackView()
     private let badgeView = PTInlineBadgeView()
     private var imageTask: Task<Void, Never>?
-    private var imageWidthConstraint: Constraint?
-    private var imageHeightConstraint: Constraint?
-    private var contentLeadingConstraint: Constraint?
-    private var contentTrailingConstraint: Constraint?
-    private var contentTopConstraint: Constraint?
-    private var contentBottomConstraint: Constraint?
-    private var separatorLeadingConstraint: Constraint?
-    private var separatorTrailingConstraint: Constraint?
-    private var separatorTopConstraint: Constraint?
-    private var separatorBottomConstraint: Constraint?
-    private var separatorWidthConstraint: Constraint?
-    private var separatorHeightConstraint: Constraint?
+    private var imageWidthConstraint: PTLayoutConstraint?
+    private var imageHeightConstraint: PTLayoutConstraint?
+    private var contentLeadingConstraint: PTLayoutConstraint?
+    private var contentTrailingConstraint: PTLayoutConstraint?
+    private var contentTopConstraint: PTLayoutConstraint?
+    private var contentBottomConstraint: PTLayoutConstraint?
+    private var separatorLeadingConstraint: PTLayoutConstraint?
+    private var separatorTrailingConstraint: PTLayoutConstraint?
+    private var separatorTopConstraint: PTLayoutConstraint?
+    private var separatorBottomConstraint: PTLayoutConstraint?
+    private var separatorWidthConstraint: PTLayoutConstraint?
+    private var separatorHeightConstraint: PTLayoutConstraint?
     private var separatorStyle: PTSegmentItemSeparatorStyle = .legacyDefault
     private var separatorLayoutContext = PTSegmentCellLayoutContext(index: 0, itemCount: 1)
 
@@ -196,7 +199,7 @@ public class PTMainSegmentCell: UICollectionViewCell {
         contentStack.alignment = .center
         contentStack.spacing = 6
         contentView.addSubview(contentStack)
-        contentStack.snp.makeConstraints { make in
+        contentStack.ptLayout.makeConstraints { make in
             contentLeadingConstraint = make.leading.equalToSuperview().constraint
             contentTrailingConstraint = make.trailing.equalToSuperview().constraint
             contentTopConstraint = make.top.equalToSuperview().constraint
@@ -207,7 +210,7 @@ public class PTMainSegmentCell: UICollectionViewCell {
         separatorView.accessibilityElementsHidden = true
         separatorView.isUserInteractionEnabled = false
         contentView.addSubview(separatorView)
-        separatorView.snp.makeConstraints { make in
+        separatorView.ptLayout.makeConstraints { make in
             separatorLeadingConstraint = make.leading.equalToSuperview().constraint
             separatorTrailingConstraint = make.trailing.equalToSuperview().constraint
             separatorTopConstraint = make.top.equalToSuperview().offset(10).constraint
@@ -376,20 +379,20 @@ public class PTMainSegmentCell: UICollectionViewCell {
     /// 中文：复用同一组宽高约束，避免 Cell 重用时不断累积冲突约束。
     private func updateImageSizeConstraints(style: PTSegmentStyle) {
         if imageWidthConstraint == nil {
-            imageIcon.snp.makeConstraints { make in
+            imageIcon.ptLayout.makeConstraints { make in
                 imageWidthConstraint = make.width.equalTo(1).constraint
             }
         }
         if imageHeightConstraint == nil {
-            imageIcon.snp.makeConstraints { make in
+            imageIcon.ptLayout.makeConstraints { make in
                 imageHeightConstraint = make.height.equalTo(1).constraint
             }
         }
         let size = PTSegmentMeasurement.renderedImageSide(style: style)
         imageWidthConstraint?.update(offset: size)
         imageHeightConstraint?.update(offset: size)
-        imageWidthConstraint?.activate()
-        imageHeightConstraint?.activate()
+        _ = imageWidthConstraint?.activate()
+        _ = imageHeightConstraint?.activate()
     }
 
     private func loadImage(source: PTImageSource,
@@ -452,7 +455,7 @@ public class PTMainSegmentCell: UICollectionViewCell {
         guard case .line(let rawConfiguration) = style else {
             separatorView.isHidden = true
             separatorView.backgroundColor = .clear
-            separatorLeadingConstraint?.activate()
+            _ = separatorLeadingConstraint?.activate()
             separatorTrailingConstraint?.deactivate()
             separatorTopConstraint?.update(offset: 0)
             separatorBottomConstraint?.update(offset: 0)
@@ -469,11 +472,11 @@ public class PTMainSegmentCell: UICollectionViewCell {
         separatorWidthConstraint?.update(offset: configuration.thickness)
         switch configuration.placement {
         case .leading:
-            separatorLeadingConstraint?.activate()
+            _ = separatorLeadingConstraint?.activate()
             separatorTrailingConstraint?.deactivate()
         case .trailing:
             separatorLeadingConstraint?.deactivate()
-            separatorTrailingConstraint?.activate()
+            _ = separatorTrailingConstraint?.activate()
         }
         updateSeparatorHeight(configuration: configuration)
     }

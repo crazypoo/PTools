@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 import Foundation
 #if canImport(PToolsUIFoundation)
@@ -165,26 +168,26 @@ public class PTFloatingPlaseholderTextField: UIView {
         
         addSubviews([actionButton, placeholderLabel, textField])
 
-        actionButton.snp.makeConstraints { make in
+        actionButton.ptLayout.makeConstraints { make in
             make.size.equalTo(self.viewConfig.actionSize)
             make.centerY.equalToSuperview()
             make.right.equalToSuperview().inset(self.viewConfig.insidePadding)
         }
         
-        placeholderLabel.snp.makeConstraints { make in
+        placeholderLabel.ptLayout.makeConstraints { make in
             make.left.equalToSuperview().offset(self.viewConfig.insidePadding + self.viewConfig.placeholderPaddingOffset)
             if self.viewConfig.haveAction {
-                make.right.equalTo(self.actionButton.snp.left).offset(-self.viewConfig.actionSapcing)
+                make.right.equalTo(self.actionButton.ptLayout.left).offset(-self.viewConfig.actionSapcing)
             } else {
                 make.right.equalToSuperview().inset(self.viewConfig.insidePadding)
             }
             make.centerY.equalToSuperview()
         }
 
-        textField.snp.makeConstraints { make in
+        textField.ptLayout.makeConstraints { make in
             make.left.equalToSuperview().inset(self.viewConfig.insidePadding)
             if self.viewConfig.haveAction {
-                make.right.equalTo(self.actionButton.snp.left).offset(-self.viewConfig.actionSapcing)
+                make.right.equalTo(self.actionButton.ptLayout.left).offset(-self.viewConfig.actionSapcing)
             } else {
                 make.right.equalToSuperview().inset(self.viewConfig.insidePadding)
             }
@@ -233,13 +236,13 @@ public class PTFloatingPlaseholderTextField: UIView {
         let topInset = max(0, viewConfig.floatingPlaceholderFont.pointSize / 2 + edges.top)
         let bottomInset = max(0, viewConfig.floatingPlaceholderFont.pointSize / 2 + edges.bottom)
 
-        placeholderLabel.snp.updateConstraints { make in
+        placeholderLabel.ptLayout.updateConstraints { make in
             make.left.equalToSuperview().offset(leftInset + viewConfig.placeholderPaddingOffset)
             if !viewConfig.haveAction {
                 make.right.equalToSuperview().inset(rightInset)
             }
         }
-        textField.snp.updateConstraints { make in
+        textField.ptLayout.updateConstraints { make in
             make.left.equalToSuperview().inset(leftInset)
             if !viewConfig.haveAction {
                 make.right.equalToSuperview().inset(rightInset)
@@ -314,14 +317,14 @@ public class PTFloatingPlaseholderTextField: UIView {
         if isFloating == float && placeholderLabel.attributedText != nil { return }
         isFloating = float
 
-        placeholderLabel.snp.remakeConstraints { make in
+        placeholderLabel.ptLayout.remakeConstraints { make in
             make.left.equalToSuperview().offset(self.viewConfig.insidePadding + self.inputAppearance.leadingSpace + self.viewConfig.placeholderPaddingOffset)
             if float {
                 make.top.equalToSuperview().offset(self.viewConfig.placeholderFloatingTopOffset)
             } else {
                 make.centerY.equalToSuperview()
                 if self.viewConfig.haveAction {
-                    make.right.equalTo(self.actionButton.snp.left).offset(-self.viewConfig.actionSapcing)
+                    make.right.equalTo(self.actionButton.ptLayout.left).offset(-self.viewConfig.actionSapcing)
                 } else {
                     make.right.equalToSuperview().inset(self.viewConfig.insidePadding)
                 }

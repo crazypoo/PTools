@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 #if SWIFT_PACKAGE
@@ -51,7 +54,7 @@ class PTEditToolsCell: PTBaseNormalCell {
         super.init(frame: frame)
         
         contentView.addSubviews([imageView])
-        imageView.snp.makeConstraints { make in
+        imageView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview().inset(5)
         }
     }

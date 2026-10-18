@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 @MainActor
@@ -162,7 +165,7 @@ public class PTDarkModeControl: PTListViewController {
     }
 
     public override func installListViewConstraints(_ listView: PTCollectionView) {
-        listView.snp.makeConstraints { make in
+        listView.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview()
         }
@@ -225,7 +228,7 @@ public class PTDarkModeControl: PTListViewController {
             // English: Keep the list inside the local usable pane while the controller background remains full bleed.
             // Español: Mantiene la lista dentro del panel local utilizable y conserva el fondo a pantalla completa.
             // 中文：列表只占用本地可用面板，控制器背景仍保持全屏铺开。
-            listView.snp.remakeConstraints { make in
+            listView.ptLayout.remakeConstraints { make in
                 make.left.equalToSuperview().offset(visibleRect.minX)
                 make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
                 make.top.bottom.equalToSuperview()

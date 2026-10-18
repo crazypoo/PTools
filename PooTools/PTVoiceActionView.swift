@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 import PooTools
 
@@ -43,7 +46,7 @@ class PTVoiceActionView: PTBaseMaskView {
         super.init(frame: frame)
         
         addSubviews([visualizerView, translateLabel, actionInfoLabel])
-        visualizerView.snp.makeConstraints { make in
+        visualizerView.ptLayout.makeConstraints { make in
             make.width.equalTo(150)
             make.height.equalTo(88)
             make.centerX.equalToSuperview().offset(0)
@@ -52,15 +55,15 @@ class PTVoiceActionView: PTBaseMaskView {
         visualizerView.viewCorner(radius: 5)
         
         translateLabel.isHidden = true
-        translateLabel.snp.makeConstraints { make in
+        translateLabel.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview().inset(20)
-            make.bottom.equalTo(self.visualizerView.snp.top).offset(-5)
+            make.bottom.equalTo(self.visualizerView.ptLayout.top).offset(-5)
             make.height.equalTo(0)
         }
         
-        actionInfoLabel.snp.makeConstraints { make in
+        actionInfoLabel.ptLayout.makeConstraints { make in
             make.centerX.equalTo(self.visualizerView)
-            make.top.equalTo(self.visualizerView.snp.bottom).offset(5)
+            make.top.equalTo(self.visualizerView.ptLayout.bottom).offset(5)
         }
         actionInfoLabel.isHidden = true
     }

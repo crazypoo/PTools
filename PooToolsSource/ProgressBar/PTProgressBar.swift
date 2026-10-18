@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 // English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
@@ -94,7 +97,7 @@ public class PTProgressBar: UIView {
         addSubview(trackView)
         addSubview(progressView)
         
-        trackView.snp.makeConstraints { make in
+        trackView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
@@ -107,7 +110,7 @@ public class PTProgressBar: UIView {
     private func updateConstraints(for progress: CGFloat) {
         let safeProgress = max(0, min(1, progress))
         
-        progressView.snp.remakeConstraints { make in
+        progressView.ptLayout.remakeConstraints { make in
             if showType == .Vertical {
                 make.leading.trailing.bottom.equalToSuperview()
                 if safeProgress == 0 {

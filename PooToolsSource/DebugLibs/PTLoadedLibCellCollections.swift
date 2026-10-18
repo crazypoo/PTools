@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -50,25 +53,25 @@ class PTloadedLibHeader : PTBaseCollectionReusableView {
         super.init(frame: frame)
         
         addSubviews([arrowImage,libName,statusLabel,loadingIndicator])
-        arrowImage.snp.makeConstraints { make in
+        arrowImage.ptLayout.makeConstraints { make in
             make.size.equalTo(24)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.centerY.equalToSuperview()
         }
         
-        libName.snp.makeConstraints { make in
+        libName.ptLayout.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(4.5)
-            make.right.equalTo(self.arrowImage.snp.left).offset(-4.5)
+            make.right.equalTo(self.arrowImage.ptLayout.left).offset(-4.5)
         }
         
-        statusLabel.snp.makeConstraints { make in
+        statusLabel.ptLayout.makeConstraints { make in
             make.right.top.equalTo(self.libName)
             make.height.equalTo(20)
             make.width.equalTo(0)
         }
         
-        loadingIndicator.snp.makeConstraints { make in
+        loadingIndicator.ptLayout.makeConstraints { make in
             make.edges.equalTo(self.arrowImage)
         }
         
@@ -105,7 +108,7 @@ class PTloadedLibHeader : PTBaseCollectionReusableView {
         statusLabel.text = library.isPrivate ? "Private" : "Public"
         statusLabel.textColor = library.isPrivate ? .systemRed : .systemGreen
         statusLabel.backgroundColor = statusLabel.textColor.withAlphaComponent(0.5)
-        statusLabel.snp.updateConstraints { make in
+        statusLabel.ptLayout.updateConstraints { make in
             make.width.equalTo(statusLabel.sizeFor().width + 16)
         }
 

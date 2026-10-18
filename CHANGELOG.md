@@ -6,6 +6,14 @@
 
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.67.1 — 2026-10-18
+
+- 将 PTools 自有 UIKit 程序化布局迁移到 `ptLayout`，保留旧 SnapKit 公开兼容边界、AppKit 路径和布局算法所有权。
+- 修复 PTLayout Group 的批量激活，使跨视图约束在预检后一次性提交，避免失败时留下部分激活约束。
+- 收紧布局审计模型、例外清单、SwiftPM/CocoaPods 依赖门禁和版本化发布报告；普通 PTools `.snp` 调用点必须为零。
+- 更新 PTLayout Console bridge 的确定性安装路径与有界诊断缓存，并明确外部宿主运行时、视觉和性能证据不得由静态脚本冒充。
+- 保持 iOS 17+ / Swift 6+；UIKit 独立布局产品的 watchOS 边界不适用，Foundation/条件化路径继续评估 visionOS 与 macOS。
+
 ## 5.67.0 — 2026-10-18
 
 - 新增独立的 `PToolsConstraintLayout` 原生约束布局产品，使用 UIKit/Foundation，不依赖 SnapKit、`ptools` 或 `PooToolsLayout`。

@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 public protocol PTCellBindable: PTAnyCellBindable {
@@ -210,13 +213,13 @@ open class PTBaseSwipeCell: PTBaseNormalCell {
     private func setupSwipeUI() {
         // 操作按钮放在内容视图下方，内容视图只负责平移显示。
         contentView.addSubview(actionContainer)
-        actionContainer.snp.makeConstraints { make in
+        actionContainer.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
         contentContainer.backgroundColor = .white
         contentView.addSubview(contentContainer)
-        contentContainer.snp.makeConstraints { make in
+        contentContainer.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -255,7 +258,7 @@ open class PTBaseSwipeCell: PTBaseNormalCell {
                 self?.closeActions(animated: true)
             })
             actionContainer.addSubview(button)
-            button.snp.makeConstraints { make in
+            button.ptLayout.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
                 make.width.equalTo(actionWidth)
                 if isLeft {

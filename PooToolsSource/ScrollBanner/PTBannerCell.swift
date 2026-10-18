@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import AVFoundation
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
@@ -36,9 +39,9 @@ public class PTBannerCell: PTBaseNormalCell {
 
         contentView.addSubviews([imageView,playerContainer,playButton])
 
-        imageView.snp.makeConstraints { $0.edges.equalToSuperview() }
-        playerContainer.snp.makeConstraints { $0.edges.equalToSuperview() }
-        playButton.snp.makeConstraints {
+        imageView.ptLayout.makeConstraints { $0.edges.equalToSuperview() }
+        playerContainer.ptLayout.makeConstraints { $0.edges.equalToSuperview() }
+        playButton.ptLayout.makeConstraints {
             $0.center.equalToSuperview()
             $0.size.equalTo(44)
         }

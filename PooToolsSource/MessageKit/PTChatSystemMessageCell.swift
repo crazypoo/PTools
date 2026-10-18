@@ -6,6 +6,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif
@@ -54,7 +57,7 @@ public class PTChatSystemMessageCell: PTBaseNormalCell {
         super.init(frame: frame)
         
         contentView.addSubviews([timeLabel])
-        timeLabel.snp.makeConstraints { make in
+        timeLabel.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -62,7 +65,7 @@ public class PTChatSystemMessageCell: PTBaseNormalCell {
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
         contentView.addSubviews([timeLabel])
-        timeLabel.snp.makeConstraints { make in
+        timeLabel.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }

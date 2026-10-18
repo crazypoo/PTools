@@ -1,4 +1,4 @@
-# PTLayout 3.0 / PTools 5.67.0
+# PTLayout 3.0 / PTools 5.67.1
 
 <!-- English: This guide documents the native product boundary and its evidence level. -->
 <!-- Español: Esta guía documenta el límite del producto nativo y su nivel de evidencia. -->
@@ -41,6 +41,16 @@ The return value is `PTLayoutResult`. Existing call sites may ignore it because 
 ## Compatibility
 
 Existing `.snp` code remains available in its legacy boundary. It is not protected by PTLayout's preflight validation. The native product does not expose SnapKit types in its public API.
+
+## Deferred installation decision
+
+PTLayout 5.67.1 keeps installation explicit: add the view to its intended hierarchy, then call `makeConstraints` or `activate`. It does not auto-attach views, schedule hidden retries, or retain a deferred token. This keeps ownership, cancellation, and Scene lifetime visible to the caller; a future deferred API requires a separately cancellable, weak, timeout-bounded host test.
+
+English: Deferred installation is intentionally not part of the 5.67.1 compatibility contract.
+
+Español: La instalación diferida no forma parte intencionadamente del contrato de compatibilidad 5.67.1.
+
+中文：5.67.1 有意不把延迟安装纳入兼容契约。
 
 ## Platform matrix
 

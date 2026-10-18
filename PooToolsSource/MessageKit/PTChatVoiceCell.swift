@@ -6,6 +6,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -111,13 +114,13 @@ public class PTChatVoiceCell: PTChatBaseCell {
             dataContentStatusView.setBackgroundImage(PTChatConfig.share.chatOtherHighlightedBubbleImage.resizeImage(), for: .highlighted)
         }
         
-        dataContent.snp.remakeConstraints { make in
+        dataContent.ptLayout.remakeConstraints { make in
             if cellModel.belongToMe {
-                make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.dataContentUserIconInset)
+                make.right.equalTo(self.userIcon.ptLayout.left).offset(-PTChatBaseCell.dataContentUserIconInset)
             } else {
-                make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.dataContentUserIconInset)
+                make.left.equalTo(self.userIcon.ptLayout.right).offset(PTChatBaseCell.dataContentUserIconInset)
             }
-            make.top.equalTo(self.senderNameLabel.snp.bottom)
+            make.top.equalTo(self.senderNameLabel.ptLayout.bottom)
             make.height.equalTo(38)
             make.width.equalTo(PTChatConfig.share.audioMessageImageWidth)
         }
@@ -127,21 +130,21 @@ public class PTChatVoiceCell: PTChatBaseCell {
 
     private func setupSubviews() {
         dataContent.addSubviews([playButton, durationLabel, progressView])
-        playButton.snp.makeConstraints { make in
+        playButton.ptLayout.makeConstraints { make in
             make.size.equalTo(25)
             make.left.equalToSuperview().inset(7.5)
             make.centerY.equalToSuperview()
         }
 
-        durationLabel.snp.makeConstraints { make in
+        durationLabel.ptLayout.makeConstraints { make in
             make.right.equalToSuperview().inset(7.5)
             make.centerY.equalToSuperview()
         }
 
-        progressView.snp.makeConstraints { make in
-            make.left.equalTo(playButton.snp.right).offset(5)
+        progressView.ptLayout.makeConstraints { make in
+            make.left.equalTo(playButton.ptLayout.right).offset(5)
             make.centerY.equalToSuperview()
-            make.right.equalTo(durationLabel.snp.left).offset(-5)
+            make.right.equalTo(durationLabel.ptLayout.left).offset(-5)
         }
     }
     

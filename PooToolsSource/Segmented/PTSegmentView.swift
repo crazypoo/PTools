@@ -7,8 +7,10 @@
 //
 
 import UIKit
-import SnapKit
 import Kingfisher
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -132,15 +134,15 @@ public class PTSegmentSubView:UIView {
         }
         
         addSubview(imageBtn)
-        imageBtn.snp.makeConstraints { (make) in
+        imageBtn.ptLayout.makeConstraints { (make) in
             switch config.showType {
             case .UnderLine:
-                make.width.equalTo(contentW as ConstraintRelatableTarget)
+                make.width.equalTo(contentW)
                 make.centerX.equalToSuperview()
                 make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare)
                 make.top.equalToSuperview()
             case .Dog:
-                make.width.equalTo(contentW as ConstraintRelatableTarget)
+                make.width.equalTo(contentW)
                 make.centerX.equalToSuperview()
                 make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare)
                 make.top.equalToSuperview()
@@ -154,7 +156,7 @@ public class PTSegmentSubView:UIView {
         switch config.showType {
         case .UnderLine:
             addSubview(underLine)
-            underLine.snp.makeConstraints { (make) in
+            underLine.ptLayout.makeConstraints { (make) in
                 switch showType {
                 case .TitleImage:
                     make.left.right.equalTo(self.imageBtn)
@@ -176,7 +178,7 @@ public class PTSegmentSubView:UIView {
             }
         case .Dog:
             addSubview(underLine)
-            underLine.snp.makeConstraints { (make) in
+            underLine.ptLayout.makeConstraints { (make) in
                 let lineHight: CGFloat
                 if self.viewConfig.underHight >= self.viewConfig.bottomSquare {
                     lineHight = self.viewConfig.bottomSquare
@@ -402,7 +404,7 @@ public class PTSegmentView: UIView {
                 }
                 
                 self.addSubview(self.scrolView)
-                self.scrolView.snp.makeConstraints { (make) in
+                self.scrolView.ptLayout.makeConstraints { (make) in
                     make.edges.equalToSuperview()
                 }
                 self.scrolView.contentSize = CGSize(width: totalWidth, height: self.frame.size.height)

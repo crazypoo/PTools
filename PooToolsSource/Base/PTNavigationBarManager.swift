@@ -8,6 +8,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 public enum PTScreenShotActionType {
@@ -783,7 +786,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         if isLarge && hasTitle {
             container.setLargeTitleBackgroundVisible(true)
             
-            container.largeTitleContainer.snp.updateConstraints { make in
+            container.largeTitleContainer.ptLayout.updateConstraints { make in
                 make.height.equalTo(container.largeTitleHeight)
             }
             
@@ -799,7 +802,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             // ❗关键：彻底关闭 largeTitle
             container.setLargeTitleBackgroundVisible(false)
             
-            container.largeTitleContainer.snp.updateConstraints { make in
+            container.largeTitleContainer.ptLayout.updateConstraints { make in
                 make.height.equalTo(0)
             }
             
@@ -1037,7 +1040,7 @@ extension PTNavigationBarManager {
                                                                     spacing: spacing)
         container.leftContainerWidth = containerWidth
         
-        container.leftContainer.snp.remakeConstraints { make in
+        container.leftContainer.ptLayout.remakeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -1060,7 +1063,7 @@ extension PTNavigationBarManager {
                                                                     spacing: spacing)
         container.rightContainerWidth = containerWidth
         
-        container.rightContainer.snp.remakeConstraints { make in
+        container.rightContainer.ptLayout.remakeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -1094,7 +1097,7 @@ extension PTNavigationBarManager {
             ? (PTAppBaseConfig.share.defaultViewSpace + container.rightContainerWidth + PTAppBaseConfig.share.navContainerSpacing)
             : PTAppBaseConfig.share.defaultViewSpace
 
-        container.titleContainer.snp.remakeConstraints { make in
+        container.titleContainer.ptLayout.remakeConstraints { make in
             make.bottom.equalToSuperview()
             // 注意：这里保留了你代码里的 self.navOffset()
             make.top.equalToSuperview()
@@ -1111,7 +1114,7 @@ extension PTNavigationBarManager {
             }
         }
         
-        view.snp.makeConstraints { make in
+        view.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview()
             if self.titleLabel {
                 make.top.bottom.equalToSuperview()

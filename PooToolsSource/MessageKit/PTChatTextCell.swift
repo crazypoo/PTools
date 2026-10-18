@@ -6,6 +6,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 import PooToolsCustomerLabel
@@ -57,13 +60,13 @@ public class PTChatTextCell: PTChatBaseCell {
     
     private func setupConstraints(for cellModel: PTChatListModel, contentHeight: CGFloat, contentWidth: CGFloat, contentNumberOfLines: Int) {
         let maxContentWidth = PTChatConfig.contentMaxWidth(containerWidth: PTChatBaseCell.adaptiveContainerWidth(for: contentView))
-        dataContent.snp.remakeConstraints { make in
-            make.top.equalTo(senderNameLabel.snp.bottom)
+        dataContent.ptLayout.remakeConstraints { make in
+            make.top.equalTo(senderNameLabel.ptLayout.bottom)
             make.height.equalTo(contentHeight)
             if cellModel.belongToMe {
-                make.right.equalTo(userIcon.snp.left).offset(-PTChatBaseCell.dataContentUserIconInset)
+                make.right.equalTo(userIcon.ptLayout.left).offset(-PTChatBaseCell.dataContentUserIconInset)
             } else {
-                make.left.equalTo(userIcon.snp.right).offset(PTChatBaseCell.dataContentUserIconInset)
+                make.left.equalTo(userIcon.ptLayout.right).offset(PTChatBaseCell.dataContentUserIconInset)
             }
             if contentNumberOfLines <= 1 && contentWidth <= maxContentWidth {
                 make.width.equalTo(contentWidth)
@@ -72,7 +75,7 @@ public class PTChatTextCell: PTChatBaseCell {
             }
         }
 
-        activeLabel.snp.remakeConstraints { make in
+        activeLabel.ptLayout.remakeConstraints { make in
             make.edges.equalTo(dataContent).inset(UIEdgeInsets(
                 top: 0,
                 left: cellModel.belongToMe ? PTChatConfig.share.textOwnerContentEdges.left : PTChatConfig.share.textOtherContentEdges.left,

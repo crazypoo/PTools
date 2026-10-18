@@ -4,6 +4,9 @@
 
 #if canImport(UIKit) && (canImport(PooToolsSearch) || POOTOOLS_SEARCH)
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if canImport(ptools)
 import ptools
@@ -42,7 +45,7 @@ private final class PTAcknowledgementCell: UICollectionViewCell, PTCellRegistera
         stack.axis = .vertical
         stack.spacing = 4
         contentView.addSubview(stack)
-        stack.snp.makeConstraints { make in
+        stack.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16))
         }
     }
@@ -97,7 +100,7 @@ private final class PTAcknowledgementsHeader: PTBaseCollectionReusableView, @Mai
         titleLabel.textColor = .secondaryLabel
         PTUIAccessibility.applyDynamicType(to: titleLabel, font: .preferredFont(forTextStyle: .subheadline))
         addSubview(titleLabel)
-        titleLabel.snp.makeConstraints { make in
+        titleLabel.ptLayout.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
             make.top.equalToSuperview().offset(8)
             make.bottom.equalToSuperview().offset(-4)

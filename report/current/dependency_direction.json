@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
-  "generated_at": "2026-10-18T02:39:14Z",
+  "source_revision": "80126150505961e259cce5e08ada67962265c063",
+  "generated_at": "2026-10-18T05:02:37Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except approved local layers, including PToolsConstraintLayout",
@@ -108,6 +108,10 @@
       "destination": "PToolsAcknowledgementsCore"
     },
     {
+      "source": "PToolsAcknowledgements",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
       "source": "PToolsAppIntents",
       "destination": "PToolsRouteCore"
     },
@@ -145,6 +149,10 @@
     },
     {
       "source": "PToolsContentState",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PToolsContentState",
       "destination": "PToolsTheme"
     },
     {
@@ -161,6 +169,10 @@
     },
     {
       "source": "PToolsDocuments",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PToolsDocuments",
       "destination": "PooToolsPDF"
     },
     {
@@ -170,6 +182,10 @@
     {
       "source": "PToolsForm",
       "destination": "PToolsAccessibility"
+    },
+    {
+      "source": "PToolsForm",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PToolsForm",
@@ -345,6 +361,10 @@
     },
     {
       "source": "PToolsWeb",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PToolsWeb",
       "destination": "PToolsWebBridge"
     },
     {
@@ -370,6 +390,10 @@
     {
       "source": "PooToolsBankCard",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsBanner",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsBanner",
@@ -413,6 +437,10 @@
     },
     {
       "source": "PooToolsCheckUpdate",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsCheckUpdate",
       "destination": "PooToolsHud"
     },
     {
@@ -453,6 +481,10 @@
     },
     {
       "source": "PooToolsCustomerLabel",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsCustomerLabel",
       "destination": "ptools"
     },
     {
@@ -462,6 +494,10 @@
     {
       "source": "PooToolsDEBUG",
       "destination": "PToolsConnectivity"
+    },
+    {
+      "source": "PooToolsDEBUG",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsDEBUG",
@@ -529,6 +565,10 @@
     },
     {
       "source": "PooToolsFilterCamera",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsFilterCamera",
       "destination": "PToolsSymbols"
     },
     {
@@ -549,6 +589,10 @@
     },
     {
       "source": "PooToolsGuide",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsGuide",
       "destination": "PooToolsPageControl"
     },
     {
@@ -557,11 +601,19 @@
     },
     {
       "source": "PooToolsHandSign",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsHandSign",
       "destination": "ptools"
     },
     {
       "source": "PooToolsHarbethKit",
       "destination": "PTCameraPermission"
+    },
+    {
+      "source": "PooToolsHarbethKit",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsHarbethKit",
@@ -589,7 +641,15 @@
     },
     {
       "source": "PooToolsHeartRate",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsHeartRate",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsHud",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsHud",
@@ -602,6 +662,10 @@
     {
       "source": "PooToolsIAP",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsImageEditor",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsImageEditor",
@@ -637,6 +701,10 @@
     },
     {
       "source": "PooToolsInput",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsInput",
       "destination": "PToolsCore"
     },
     {
@@ -649,11 +717,19 @@
     },
     {
       "source": "PooToolsInstructions",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsInstructions",
       "destination": "PToolsOverlay"
     },
     {
       "source": "PooToolsKeyboard",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsLaunchTimeProfiler",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsLaunchTimeProfiler",
@@ -666,6 +742,10 @@
     {
       "source": "PooToolsLivePhoto",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsLoading",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsLoading",
@@ -686,6 +766,10 @@
     {
       "source": "PooToolsLocation",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsMediaViewer",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsMediaViewer",
@@ -710,6 +794,10 @@
     {
       "source": "PooToolsMediaViewer",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsMessageKit",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsMessageKit",
@@ -785,6 +873,10 @@
     },
     {
       "source": "PooToolsPDF",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsPDF",
       "destination": "ptools"
     },
     {
@@ -797,11 +889,19 @@
     },
     {
       "source": "PooToolsPagingControl",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsPagingControl",
       "destination": "ptools"
     },
     {
       "source": "PooToolsPhotoPicker",
       "destination": "PTCameraPermission"
+    },
+    {
+      "source": "PooToolsPhotoPicker",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsPhotoPicker",
@@ -829,11 +929,19 @@
     },
     {
       "source": "PooToolsPicker",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsPicker",
       "destination": "PToolsCore"
     },
     {
       "source": "PooToolsPicker",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsPing",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsPing",
@@ -853,7 +961,15 @@
     },
     {
       "source": "PooToolsProgressBar",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsProgressBar",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsRateView",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsRateView",
@@ -881,6 +997,10 @@
     },
     {
       "source": "PooToolsScanQRCode",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsScanQRCode",
       "destination": "PToolsCore"
     },
     {
@@ -897,6 +1017,10 @@
     },
     {
       "source": "PooToolsScrollBanner",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsScrollBanner",
       "destination": "PToolsUIFoundation"
     },
     {
@@ -906,6 +1030,10 @@
     {
       "source": "PooToolsScrollBanner",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsSearch",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsSearch",
@@ -929,11 +1057,19 @@
     },
     {
       "source": "PooToolsShare",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsShare",
       "destination": "PooToolsCustomerLabel"
     },
     {
       "source": "PooToolsShare",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsSlider",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsSmartScreenshot",
@@ -969,6 +1105,10 @@
     },
     {
       "source": "PooToolsStepper",
+      "destination": "PToolsConstraintLayout"
+    },
+    {
+      "source": "PooToolsStepper",
       "destination": "ptools"
     },
     {
@@ -982,6 +1122,10 @@
     {
       "source": "PooToolsTipsView",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsVideoEditor",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsVideoEditor",
@@ -1018,6 +1162,10 @@
     {
       "source": "PooToolsWebKit",
       "destination": "ptools"
+    },
+    {
+      "source": "PooToolsWhatsNewsKit",
+      "destination": "PToolsConstraintLayout"
     },
     {
       "source": "PooToolsWhatsNewsKit",

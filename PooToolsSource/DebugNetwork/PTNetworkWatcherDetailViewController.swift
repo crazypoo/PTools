@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 import PooToolsSearchBar
@@ -51,10 +54,10 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
     private lazy var titleViewContailer: PTNavTitleContainer = {
         let view = PTNavTitleContainer()
         view.addSubviews([searchBar])
-        searchBar.snp.makeConstraints { make in
+        searchBar.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        view.snp.makeConstraints { make in
+        view.ptLayout.makeConstraints { make in
             make.width.equalTo(CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 88)
             make.height.equalTo(32)
         }
@@ -163,14 +166,14 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
 
         view.addSubviews([timelineView, newCollectionView])
-        timelineView.snp.makeConstraints { make in
+        timelineView.ptLayout.makeConstraints { make in
             make.top.equalToSuperview().offset(collectionInset_Top)
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.height.equalTo(154)
         }
-        newCollectionView.snp.makeConstraints { make in
+        newCollectionView.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(timelineView.snp.bottom).offset(8)
+            make.top.equalTo(timelineView.ptLayout.bottom).offset(8)
         }
         loadListModel()
     }

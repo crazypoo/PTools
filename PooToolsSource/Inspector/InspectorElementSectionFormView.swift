@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -132,12 +135,12 @@ class InspectorElementSectionFormView: BaseView {
 
     private func installSeparators() {
         addSubview(topSeparatorView)
-        topSeparatorView.snp.makeConstraints { make in
+        topSeparatorView.ptLayout.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
         }
 
         addSubview(bottomSeparatorView)
-        bottomSeparatorView.snp.makeConstraints { make in
+        bottomSeparatorView.ptLayout.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
         }
     }

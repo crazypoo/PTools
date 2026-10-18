@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -149,7 +152,7 @@ class PTDebugPerformanceViewController: PTBaseViewController {
         newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
 
         view.addSubviews([newCollectionView])
-        newCollectionView.snp.makeConstraints { make in
+        newCollectionView.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview()
         }

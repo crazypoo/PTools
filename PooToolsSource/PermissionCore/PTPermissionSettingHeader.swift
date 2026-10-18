@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 class PTPermissionSettingHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryRegisterable {
@@ -38,7 +41,7 @@ class PTPermissionSettingHeader: PTBaseCollectionReusableView,@MainActor PTSuppl
         super.init(frame: frame)
         
         addSubviews([titleView])
-        titleView.snp.makeConstraints { make in
+        titleView.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(PTPermissionSettingHeader.headerHeight)
         }

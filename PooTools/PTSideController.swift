@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 import PooTools
 
@@ -34,7 +37,7 @@ class PTSideController: PTBaseSideController {
                         let button = UIButton(type: .custom)
                         button.backgroundColor = .systemGray
                         vc.view.addSubviews([button])
-                        button.snp.makeConstraints { make in
+                        button.ptLayout.makeConstraints { make in
                             make.size.equalTo(150)
                             make.centerX.centerY.equalToSuperview()
                         }
@@ -103,32 +106,32 @@ class PTSideController: PTBaseSideController {
         super.viewDidLoad()
 
         view.addSubviews([sideInfoLabel,sideButton,checkBox,inspectorButton,lcButton])
-        sideInfoLabel.snp.makeConstraints { make in
+        sideInfoLabel.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
         }
         
-        sideButton.snp.makeConstraints { make in
+        sideButton.ptLayout.makeConstraints { make in
             make.size.equalTo(100)
-            make.top.equalTo(self.sideInfoLabel.snp.bottom).offset(10)
+            make.top.equalTo(self.sideInfoLabel.ptLayout.bottom).offset(10)
             make.centerX.equalToSuperview()
         }
         
-        checkBox.snp.makeConstraints { make in
-            make.top.equalTo(self.sideButton.snp.bottom).offset(10)
+        checkBox.ptLayout.makeConstraints { make in
+            make.top.equalTo(self.sideButton.ptLayout.bottom).offset(10)
             make.centerX.equalToSuperview()
             make.height.width.equalTo(34)
         }
         
-        inspectorButton.snp.makeConstraints { make in
+        inspectorButton.ptLayout.makeConstraints { make in
             make.left.right.equalTo(self.sideButton)
-            make.top.equalTo(self.checkBox.snp.bottom).offset(10)
+            make.top.equalTo(self.checkBox.ptLayout.bottom).offset(10)
             make.height.equalTo(34)
         }
         
-        lcButton.snp.makeConstraints { make in
+        lcButton.ptLayout.makeConstraints { make in
             make.size.centerX.equalTo(self.inspectorButton)
-            make.top.equalTo(self.inspectorButton.snp.bottom).offset(10)
+            make.top.equalTo(self.inspectorButton.ptLayout.bottom).offset(10)
         }
     }
 }

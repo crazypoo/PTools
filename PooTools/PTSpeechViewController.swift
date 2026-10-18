@@ -7,8 +7,18 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import PooTools
 import SnapKit
+
+private extension Notification.Name {
+    // English: A selector-based bridge avoids capturing the MainActor UI controller in a Sendable permission callback.
+    // Español: Un puente basado en selector evita capturar el controlador de UI de MainActor en un callback Sendable.
+    // 中文：使用 selector 桥接，避免在 Sendable 权限回调中捕获 MainActor 界面控制器。
+    static let ptSpeechPermissionDidChange = Notification.Name("PooTools.PTSpeechViewController.permissionDidChange")
+}
 
 @MainActor
 final class PTSpeechViewController: PTBaseViewController {
@@ -28,24 +38,22 @@ final class PTSpeechViewController: PTBaseViewController {
         soundVisualizerMaskView.removeFromSuperview()
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(handleSpeechPermissionChange),
+                                               name: .ptSpeechPermissionDidChange,
+                                               object: nil)
 
         switch PTPermission.speech.status {
         case .notDetermined:
             PTPermission.speech.request {
-                PTGCDManager.shared.runOnMain {
-                    switch PTPermission.speech.status {
-                    case .authorized:
-                        Task { @MainActor in
-                            self.uiSet()
-                        }
-                    default:
-                        Task { @MainActor in
-                            PTAlertTipsViewController.tipsAlertShow(title: "用戶拒絕了", icon: .Error)
-                        }
-                    }
-                }
+                NotificationCenter.default.post(name: .ptSpeechPermissionDidChange, object: nil)
             }
         case .authorized:
             uiSet()
@@ -54,10 +62,19 @@ final class PTSpeechViewController: PTBaseViewController {
             break
         }
     }
+
+    @objc private func handleSpeechPermissionChange() {
+        switch PTPermission.speech.status {
+        case .authorized:
+            uiSet()
+        default:
+            PTAlertTipsViewController.tipsAlertShow(title: "用戶拒絕了", icon: .Error)
+        }
+    }
     
     func uiSet() {
         AppWindows?.addSubview(soundVisualizerMaskView)
-        soundVisualizerMaskView.snp.makeConstraints { make in
+        soundVisualizerMaskView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         soundVisualizerMaskView.alpha = 0
@@ -72,7 +89,7 @@ final class PTSpeechViewController: PTBaseViewController {
         let voiceButton = UIButton(type: .custom)
         voiceButton.backgroundColor = DynamicColor.randomColor
         view.addSubview(voiceButton)
-        voiceButton.snp.makeConstraints { make in
+        voiceButton.ptLayout.makeConstraints { make in
             make.size.equalTo(100)
             make.centerX.centerY.equalToSuperview()
         }
@@ -108,7 +125,7 @@ final class PTSpeechViewController: PTBaseViewController {
                             PTNSLogConsole(newX)
                             if abs(newX) >= (screenCenterX / 2) {
                                 self.soundVisualizerMaskView.visualizerView.backgroundColor = .red
-                                self.soundVisualizerMaskView.visualizerView.snp.updateConstraints { make in
+                                self.soundVisualizerMaskView.visualizerView.ptLayout.updateConstraints { make in
                                     make.width.equalTo(150)
                                     make.centerX.equalToSuperview().offset(-(screenCenterX / 2))
                                 }
@@ -117,7 +134,7 @@ final class PTSpeechViewController: PTBaseViewController {
                                 self.soundVisualizerMaskView.actionInfoLabel.text = "取消发送"
                             } else if abs(newX) <= 44 {
                                 self.soundVisualizerMaskView.visualizerView.backgroundColor = self.soundVisualizerMaskView.visualizerViewBaseBackgroundColor
-                                self.soundVisualizerMaskView.visualizerView.snp.updateConstraints { make in
+                                self.soundVisualizerMaskView.visualizerView.ptLayout.updateConstraints { make in
                                     make.centerX.equalToSuperview().offset(0)
                                     make.width.equalTo(150)
                                 }
@@ -126,7 +143,7 @@ final class PTSpeechViewController: PTBaseViewController {
                                 self.soundVisualizerMaskView.actionInfoLabel.text = ""
                             } else {
                                 self.soundVisualizerMaskView.visualizerView.backgroundColor = .red
-                                self.soundVisualizerMaskView.visualizerView.snp.updateConstraints { make in
+                                self.soundVisualizerMaskView.visualizerView.ptLayout.updateConstraints { make in
                                     make.centerX.equalToSuperview().offset(newX)
                                     make.width.equalTo(150)
                                 }
@@ -140,7 +157,7 @@ final class PTSpeechViewController: PTBaseViewController {
                             self.translateToText = true
 //                            self.sendTranslateText = true
                             PTNSLogConsole("在右边")
-                            self.soundVisualizerMaskView.visualizerView.snp.updateConstraints { make in
+                            self.soundVisualizerMaskView.visualizerView.ptLayout.updateConstraints { make in
                                 make.width.equalTo(CGFloat.kSCREEN_WIDTH - 40)
                             }
                             self.soundVisualizerMaskView.actionInfoLabel.isHidden = false
@@ -148,7 +165,7 @@ final class PTSpeechViewController: PTBaseViewController {
                         } else {
                             self.translateToText = false
                             PTNSLogConsole("在中间")
-                            self.soundVisualizerMaskView.visualizerView.snp.updateConstraints { make in
+                            self.soundVisualizerMaskView.visualizerView.ptLayout.updateConstraints { make in
                                 make.centerX.equalToSuperview().offset(0)
                                 make.width.equalTo(150)
                             }
@@ -161,7 +178,7 @@ final class PTSpeechViewController: PTBaseViewController {
                         // 未超過閾值，顯示「鬆開發送」的提示
                         self.translateToText = false
                         PTNSLogConsole("未超過閾值，顯示「鬆開發送」的提示")
-                        self.soundVisualizerMaskView.visualizerView.snp.updateConstraints { make in
+                        self.soundVisualizerMaskView.visualizerView.ptLayout.updateConstraints { make in
                             make.centerX.equalToSuperview().offset(0)
                         }
                         voiceButton.setTitle("发送", for: .normal)
@@ -199,7 +216,7 @@ final class PTSpeechViewController: PTBaseViewController {
                         self.soundVisualizerMaskView.visualizerView.stop()
                         self.soundVisualizerMaskView.alpha = 0
                         self.soundVisualizerMaskView.visualizerView.backgroundColor = self.soundVisualizerMaskView.visualizerViewBaseBackgroundColor
-                        self.soundVisualizerMaskView.visualizerView.snp.updateConstraints { make in
+                        self.soundVisualizerMaskView.visualizerView.ptLayout.updateConstraints { make in
                             make.centerX.equalToSuperview().offset(0)
                             make.width.equalTo(150)
                         }
@@ -276,12 +293,12 @@ extension PTSpeechViewController: OSSSpeechDelegate {
                 textHeight = textMaxHeight
             }
             
-            soundVisualizerMaskView.translateLabel.snp.updateConstraints { make in
+            soundVisualizerMaskView.translateLabel.ptLayout.updateConstraints { make in
                 make.height.equalTo(textHeight)
             }
         } else {
             soundVisualizerMaskView.translateLabel.isHidden = true
-            soundVisualizerMaskView.translateLabel.snp.updateConstraints { make in
+            soundVisualizerMaskView.translateLabel.ptLayout.updateConstraints { make in
                 make.height.equalTo(0)
             }
         }

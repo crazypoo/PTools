@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 import PooToolsShare
@@ -252,7 +255,7 @@ final class PTConsoleWindow: UIWindow {
         }
 
         addSubview(view)
-        view.snp.makeConstraints { make in
+        view.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         debugView = view
@@ -1699,7 +1702,7 @@ public class PTTerminal:PFloatingButton {
         borderView.layer.cornerCurve = .continuous
         borderView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         addSubview(borderView)
-        borderView.snp.makeConstraints { (make) in
+        borderView.ptLayout.makeConstraints { (make) in
             make.left.right.top.bottom.equalToSuperview()
         }
         
@@ -1712,7 +1715,7 @@ public class PTTerminal:PFloatingButton {
         textView.backgroundColor = .clear
         systemText = textView
         addSubview(textView)
-        textView.snp.makeConstraints { make in
+        textView.ptLayout.makeConstraints { make in
             make.left.right.top.bottom.equalToSuperview().inset(borderLine * 4)
         }
         textView.layer.cornerRadius = layer.cornerRadius - 2
@@ -1725,7 +1728,7 @@ public class PTTerminal:PFloatingButton {
         menuButton.imageView?.contentMode = .scaleAspectFit
         menuButton.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
         addSubview(menuButton)
-        menuButton.snp.makeConstraints { make in
+        menuButton.ptLayout.makeConstraints { make in
             make.width.equalTo(44)
             make.height.equalTo(40)
             make.right.bottom.equalToSuperview().inset(borderLine)

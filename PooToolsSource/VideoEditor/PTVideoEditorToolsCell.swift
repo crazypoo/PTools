@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -39,7 +42,7 @@ class PTVideoEditorToolsCell: PTBaseNormalCell {
         super.init(frame: frame)
 
         contentView.addSubviews([buttonView])
-        buttonView.snp.makeConstraints { make in
+        buttonView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }

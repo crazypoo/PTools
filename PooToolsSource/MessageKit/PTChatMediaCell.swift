@@ -6,6 +6,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 import PooToolsNetWork
@@ -91,11 +94,11 @@ public class PTChatMediaCell: PTChatBaseCell {
     private func setupSubviews() {
         dataContent.addSubviews([contentImageView, mediaPlayImageView])
         
-        contentImageView.snp.makeConstraints { make in
+        contentImageView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        mediaPlayImageView.snp.makeConstraints { make in
+        mediaPlayImageView.ptLayout.makeConstraints { make in
             make.size.equalTo(PTChatConfig.share.mediaPlayButtonSize)
             make.centerX.centerY.equalToSuperview()
         }
@@ -155,13 +158,13 @@ public class PTChatMediaCell: PTChatBaseCell {
     }
 
     private func updateConstraintsForCellModel(_ cellModel: PTChatListModel) {
-        dataContent.snp.remakeConstraints { make in
+        dataContent.ptLayout.remakeConstraints { make in
             if cellModel.belongToMe {
-                make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.dataContentUserIconInset)
+                make.right.equalTo(self.userIcon.ptLayout.left).offset(-PTChatBaseCell.dataContentUserIconInset)
             } else {
-                make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.dataContentUserIconInset)
+                make.left.equalTo(self.userIcon.ptLayout.right).offset(PTChatBaseCell.dataContentUserIconInset)
             }
-            make.top.equalTo(self.senderNameLabel.snp.bottom)
+            make.top.equalTo(self.senderNameLabel.ptLayout.bottom)
             if let _ = cellModel.msgContent as? String {
                 if self.isImage {
                     make.height.equalTo(PTChatConfig.share.imageMessageImageHeight)
@@ -320,7 +323,7 @@ public class PTChatMediaCell: PTChatBaseCell {
         }
         if loadingView.superview == nil {
             dataContent.addSubview(loadingView)
-            loadingView.snp.makeConstraints { make in
+            loadingView.ptLayout.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
         }

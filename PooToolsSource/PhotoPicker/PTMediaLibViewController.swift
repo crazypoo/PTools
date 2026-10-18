@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 import Photos
 import Combine
@@ -123,7 +126,7 @@ public class PTMediaLibView: UIView {
     
     private func setupUI() {
         addSubview(collectionView)
-        collectionView.snp.makeConstraints { $0.edges.equalToSuperview() }
+        collectionView.ptLayout.makeConstraints { $0.edges.equalToSuperview() }
     }
 
     override public func layoutSubviews() {
@@ -140,7 +143,7 @@ public class PTMediaLibView: UIView {
             // English: Keep the photo grid inside the local visible pane while retaining the full-height sheet background.
             // Español: Mantiene la cuadrícula dentro del panel visible local y conserva el fondo de altura completa.
             // 中文：让照片网格保持在当前可视面板内，同时保留全高度的 Sheet 背景。
-            collectionView.snp.remakeConstraints { make in
+            collectionView.ptLayout.remakeConstraints { make in
                 make.left.equalToSuperview().offset(visibleRect.minX)
                 make.right.equalToSuperview().inset(max(0, bounds.width - visibleRect.maxX))
                 make.top.bottom.equalToSuperview()
@@ -880,13 +883,13 @@ public class PTMediaLibViewController: PTBaseViewController {
         cv.contentInset.bottom = bottomInset
         cv.verticalScrollIndicatorInsets.bottom = bottomInset
 
-        mediaListView.snp.makeConstraints {
+        mediaListView.ptLayout.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
             $0.bottom.equalToSuperview()
         }
 
-        fakeNav.snp.makeConstraints {
+        fakeNav.ptLayout.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
             $0.height.equalTo(CGFloat.kNavBarHeight)
@@ -913,7 +916,7 @@ public class PTMediaLibViewController: PTBaseViewController {
             // English: Keep the fake navigation controls inside the local visible pane so the Done button avoids the Duo rail.
             // Español: Mantiene los controles de la barra falsa dentro del panel visible local para evitar la rail Duo.
             // 中文：让伪导航栏控件位于局部可视面板内，避免完成按钮进入 Duo 系统区域。
-            fakeNav.snp.remakeConstraints { make in
+            fakeNav.ptLayout.remakeConstraints { make in
                 make.left.equalToSuperview().offset(visibleRect.minX)
                 make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
                 make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)

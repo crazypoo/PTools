@@ -7,6 +7,9 @@
 
 import UIKit
 import SnapKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -133,7 +136,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
     
     private func setStatusView() {
         dataContent.addSubview(dataContentStatusView)
-        dataContentStatusView.snp.makeConstraints { make in
+        dataContentStatusView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -172,7 +175,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
 
     private func setupTimeLabelConstraints() {
         let timeLabelHeight = PTChatConfig.share.showTimeLabel ? (PTChatConfig.share.chatTimeFont.pointSize + 15) : 0
-        messageTimeLabel.snp.remakeConstraints { make in
+        messageTimeLabel.ptLayout.remakeConstraints { make in
             make.centerX.equalToSuperview()
             make.width.equalTo(self.messageTimeLabel.sizeFor(height: timeLabelHeight).width + PTChatConfig.share.chatTimeContentFixel * 2)
             make.top.equalToSuperview().inset(PTChatBaseCell.timeTopSpace)
@@ -185,9 +188,9 @@ open class PTChatBaseCell: PTBaseNormalCell {
         let visibleRect = adaptiveVisibleRect()
         let leadingInset = visibleRect.minX + PTChatConfig.share.userIconFixelSpace
         let trailingInset = max(0, contentView.bounds.width - visibleRect.maxX) + PTChatConfig.share.userIconFixelSpace
-        userIcon.snp.remakeConstraints { make in
+        userIcon.ptLayout.remakeConstraints { make in
             make.size.equalTo(PTChatConfig.share.messageUserIconSize)
-            make.top.equalTo(messageTimeLabel.snp.bottom).offset(PTChatConfig.share.userIconTopSpacing)
+            make.top.equalTo(messageTimeLabel.ptLayout.bottom).offset(PTChatConfig.share.userIconTopSpacing)
             if cellModel.belongToMe {
                 make.right.equalToSuperview().inset(trailingInset)
             } else {
@@ -201,9 +204,13 @@ open class PTChatBaseCell: PTBaseNormalCell {
         senderNameLabel.text = cellModel.senderName
         senderNameLabel.textColor = cellModel.belongToMe ? PTChatConfig.share.senderNameColor : PTChatConfig.share.receiverNameColor
         senderNameLabel.backgroundColor = cellModel.belongToMe ? PTChatConfig.share.senderNameBackgroundColor : PTChatConfig.share.receiverNameBackgroundColor
-        senderNameLabel.snp.remakeConstraints { make in
+        senderNameLabel.ptLayout.remakeConstraints { make in
             make.top.equalTo(userIcon)
-            make.rightOrLeftEqualToSuperView(belongToMe: cellModel.belongToMe,equalView: userIcon, inset: PTChatBaseCell.dataContentUserIconInset)
+            if cellModel.belongToMe {
+                make.right.equalTo(userIcon.ptLayout.left).offset(-PTChatBaseCell.dataContentUserIconInset)
+            } else {
+                make.left.equalTo(userIcon.ptLayout.right).offset(PTChatBaseCell.dataContentUserIconInset)
+            }
             make.height.equalTo(PTChatConfig.share.showSenderName ? (PTChatConfig.share.senderNameFont.pointSize + 10) : 0)
         }
     }
@@ -214,8 +221,8 @@ open class PTChatBaseCell: PTBaseNormalCell {
         let trailingInset = max(0, contentView.bounds.width - visibleRect.maxX) + PTChatBaseCell.dataContentUserIconInset
         readStatusLabel.isSelected = cellModel.isRead
         readStatusLabel.titleLabel?.textAlignment = cellModel.belongToMe ? .right : .left
-        readStatusLabel.snp.remakeConstraints { make in
-            make.top.equalTo(dataContent.snp.bottom)
+        readStatusLabel.ptLayout.remakeConstraints { make in
+            make.top.equalTo(dataContent.ptLayout.bottom)
             if cellModel.belongToMe {
                 make.right.equalToSuperview().inset(trailingInset)
             } else {
@@ -236,9 +243,13 @@ open class PTChatBaseCell: PTBaseNormalCell {
     }
     
     private func setupWaitImageViewConstraints(cellModel: PTChatListModel) {
-        waitImageView.snp.remakeConstraints { make in
+        waitImageView.ptLayout.remakeConstraints { make in
             make.size.equalTo(PTChatBaseCell.waitImageSize)
-            make.rightOrLeftEqualToDataContent(belongToMe: cellModel.belongToMe,equalView: dataContent, inset: PTChatBaseCell.dataContentWaitImageInset)
+            if cellModel.belongToMe {
+                make.right.equalTo(dataContent.ptLayout.left).offset(-PTChatBaseCell.dataContentWaitImageInset)
+            } else {
+                make.left.equalTo(dataContent.ptLayout.right).offset(PTChatBaseCell.dataContentWaitImageInset)
+            }
             make.bottom.equalTo(dataContent)
         }
     }

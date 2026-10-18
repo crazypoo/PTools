@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
@@ -99,16 +102,16 @@ public final class PTFusionContentView: UIView {
     }()
 
     // MARK: - Constraints（缓存）
-    private var titleLeftToIcon: Constraint?
-    private var titleLeftToSpacing: Constraint?
+    private var titleLeftToIcon: PTLayoutConstraint?
+    private var titleLeftToSpacing: PTLayoutConstraint?
 
-    private var moreWidthConstraint: Constraint?
-    private var moreTopConstraint: Constraint?
-    private var moreBottomConstraint: Constraint?
-    private var moreRightConstraint: Constraint?
+    private var moreWidthConstraint: PTLayoutConstraint?
+    private var moreTopConstraint: PTLayoutConstraint?
+    private var moreBottomConstraint: PTLayoutConstraint?
+    private var moreRightConstraint: PTLayoutConstraint?
     
-    private var leftSpacingWidthConstraint: Constraint?
-    private var rightSpacingWidthConstraint: Constraint?
+    private var leftSpacingWidthConstraint: PTLayoutConstraint?
+    private var rightSpacingWidthConstraint: PTLayoutConstraint?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -135,78 +138,78 @@ private extension PTFusionContentView {
         titleLabel.numberOfLines = 0
         contentLabel.numberOfLines = 0
         
-        leftSpacingView.snp.makeConstraints { make in
+        leftSpacingView.ptLayout.makeConstraints { make in
             make.left.top.bottom.equalToSuperview()
             leftSpacingWidthConstraint = make.width.equalTo(0).constraint
         }
         
-        rightSpacingView.snp.makeConstraints { make in
+        rightSpacingView.ptLayout.makeConstraints { make in
             make.right.top.bottom.equalToSuperview()
             rightSpacingWidthConstraint = make.width.equalTo(0).constraint
         }
         
-        topLineView.snp.makeConstraints { make in
+        topLineView.ptLayout.makeConstraints { make in
             make.top.left.right.equalToSuperview()
             make.height.equalTo(0)
         }
         
-        bottomLineView.snp.makeConstraints { make in
+        bottomLineView.ptLayout.makeConstraints { make in
             make.bottom.left.right.equalToSuperview()
             make.height.equalTo(0)
         }
         
-        topImaginaryLineView.snp.makeConstraints { make in
+        topImaginaryLineView.ptLayout.makeConstraints { make in
             make.edges.equalTo(self.topLineView)
         }
         
-        bottomImaginaryLineView.snp.makeConstraints { make in
+        bottomImaginaryLineView.ptLayout.makeConstraints { make in
             make.edges.equalTo(self.bottomLineView)
         }
         
-        leftIcon.snp.makeConstraints { make in
+        leftIcon.ptLayout.makeConstraints { make in
             make.left.top.bottom.equalToSuperview()
-            make.width.equalTo(leftIcon.snp.height)
+            make.width.equalTo(leftIcon.ptLayout.height)
         }
         
-        rightIcon.snp.makeConstraints { make in
+        rightIcon.ptLayout.makeConstraints { make in
             make.right.equalToSuperview().offset(-16)
             make.top.bottom.equalToSuperview()
-            make.width.equalTo(rightIcon.snp.height)
+            make.width.equalTo(rightIcon.ptLayout.height)
         }
         
-        titleLabel.snp.makeConstraints { make in
+        titleLabel.ptLayout.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            titleLeftToIcon = make.left.equalTo(leftIcon.snp.right).offset(12).constraint
-            titleLeftToSpacing = make.left.equalTo(leftSpacingView.snp.right).constraint
+            titleLeftToIcon = make.left.equalTo(leftIcon.ptLayout.right).offset(12).constraint
+            titleLeftToSpacing = make.left.equalTo(leftSpacingView.ptLayout.right).constraint
         }
         titleLeftToSpacing?.deactivate()
-        titleLeftToIcon?.activate()
+        _ = titleLeftToIcon?.activate()
 
-        contentLabel.snp.makeConstraints { make in
-            make.left.equalTo(titleLabel.snp.right).offset(8)
+        contentLabel.ptLayout.makeConstraints { make in
+            make.left.equalTo(titleLabel.ptLayout.right).offset(8)
             make.top.bottom.equalToSuperview()
-            make.right.lessThanOrEqualTo(rightIcon.snp.left).offset(-8)
+            make.right.lessThanOrEqualTo(rightIcon.ptLayout.left).offset(-8)
         }
         
-        systemSwitch.snp.makeConstraints { make in
+        systemSwitch.ptLayout.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.right.equalToSuperview().inset(16)
         }
         
-        customSwitch.snp.makeConstraints { make in
+        customSwitch.ptLayout.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.right.equalToSuperview().inset(16)
             make.size.equalTo(CGSize.SwitchSize)
         }
         
-        moreButton.snp.makeConstraints { make in
+        moreButton.ptLayout.makeConstraints { make in
             moreRightConstraint = make.right.equalToSuperview().inset(16).constraint
             moreTopConstraint = make.top.equalToSuperview().constraint
             moreBottomConstraint = make.bottom.equalToSuperview().constraint
             moreWidthConstraint = make.width.equalTo(0).constraint
         }
         
-        disclosure.snp.makeConstraints { make in
+        disclosure.ptLayout.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.right.equalToSuperview().offset(-16)
             make.size.equalTo(16)
@@ -259,7 +262,7 @@ extension PTFusionContentView {
         
         if case let .Switch(value) = cellModel.accessoryType,
            case .Framework = value {
-            customSwitch.snp.updateConstraints { make in
+            customSwitch.ptLayout.updateConstraints { make in
                 make.right.equalToSuperview().inset(cellModel.rightSpace)
                 make.size.equalTo(CGSize(width: cellModel.switchControlWidth, height: CGSize.SwitchSize.height))
             }
@@ -294,7 +297,7 @@ extension PTFusionContentView {
         moreBottomConstraint?.update(inset: cellModel.imageBottomOffset)
         moreWidthConstraint?.update(offset: cellModel.cachedMoreWidth)
         
-        disclosure.snp.updateConstraints { make in
+        disclosure.ptLayout.updateConstraints { make in
             make.right.equalToSuperview().inset(cellModel.rightSpace)
             make.size.equalTo(cellModel.moreDisclosureIndicatorSize)
         }
@@ -312,7 +315,7 @@ extension PTFusionContentView {
             }
         }()
         
-        leftIcon.snp.updateConstraints { make in
+        leftIcon.ptLayout.updateConstraints { make in
             make.left.equalToSuperview().inset(cellModel.leftSpace)
             make.top.equalToSuperview().inset(cellModel.imageTopOffset)
             make.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
@@ -323,18 +326,18 @@ extension PTFusionContentView {
         
         if cellModel.layoutState.showLeftIcon {
             titleLeftToSpacing?.deactivate()
-            titleLeftToIcon?.activate()
+            _ = titleLeftToIcon?.activate()
             titleLeftToIcon?.update(offset: cellModel.contentLeftSpace)
         } else {
             titleLeftToIcon?.deactivate()
-            titleLeftToSpacing?.activate()
+            _ = titleLeftToSpacing?.activate()
         }
         
-        rightIcon.snp.remakeConstraints { make in
-            make.right.equalTo(targetView.snp.left).offset(-cellModel.contentRightSpace)
+        rightIcon.ptLayout.remakeConstraints { make in
+            make.right.equalTo(targetView.ptLayout.left).offset(-cellModel.contentRightSpace)
             make.top.equalToSuperview().inset(cellModel.imageTopOffset)
             make.bottom.equalToSuperview().inset(cellModel.imageBottomOffset)
-            make.width.equalTo(rightIcon.snp.height)
+            make.width.equalTo(rightIcon.ptLayout.height)
         }
                  
         var rightTargetSpacing: CGFloat = 0
@@ -366,10 +369,10 @@ extension PTFusionContentView {
             }
         }()
         
-        contentLabel.snp.remakeConstraints { make in
-            make.left.equalTo(titleLabel.snp.right).offset(8)
+        contentLabel.ptLayout.remakeConstraints { make in
+            make.left.equalTo(titleLabel.ptLayout.right).offset(8)
             make.top.bottom.equalToSuperview()
-            make.right.equalTo(contentRightTarget.snp.left).offset(-rightTargetSpacing)
+            make.right.equalTo(contentRightTarget.ptLayout.left).offset(-rightTargetSpacing)
         }
         
         switch cellModel.haveLine {
@@ -397,7 +400,7 @@ extension PTFusionContentView {
         }
         
         topLineView.backgroundColor = cellModel.topLineColor
-        topLineView.snp.updateConstraints { make in
+        topLineView.ptLayout.updateConstraints { make in
             make.height.equalTo(cellModel.topLineHeight)
             make.left.equalToSuperview().inset(cellModel.leftSpace)
             make.right.equalToSuperview().inset(cellModel.rightSpace)
@@ -405,7 +408,7 @@ extension PTFusionContentView {
         topImaginaryLineView.lineColor = cellModel.topLineColor
         
         bottomLineView.backgroundColor = cellModel.bottomLineColor
-        bottomLineView.snp.updateConstraints { make in
+        bottomLineView.ptLayout.updateConstraints { make in
             make.height.equalTo(cellModel.bottomLineHeight)
             make.left.equalToSuperview().inset(cellModel.leftSpace)
             make.right.equalToSuperview().inset(cellModel.rightSpace)
@@ -485,7 +488,7 @@ extension PTFusionCellProtocol {
 
     func setupFusionUI(in view: UIView) {
         view.addSubview(dataContent)
-        dataContent.snp.makeConstraints { make in
+        dataContent.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         bindEvents()

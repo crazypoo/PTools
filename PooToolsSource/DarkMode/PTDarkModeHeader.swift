@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 /// 暗黑模式
@@ -119,7 +122,7 @@ class PTDarkModeHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryR
         super.init(frame: frame)
                 
         addSubviews([contentView])
-        contentView.snp.makeConstraints { make in
+        contentView.ptLayout.makeConstraints { make in
             make.bottom.equalToSuperview()
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(10)
@@ -127,29 +130,29 @@ class PTDarkModeHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryR
         contentView.viewCornerRectCorner(topLeft: 5,topRight: 5, corner: [.topLeft,.topRight])
         
         contentView.addSubviews([titlaLabel, whiteImageView, blackImageView, whiteButton, blackButton])
-        titlaLabel.snp.makeConstraints { make in
+        titlaLabel.ptLayout.makeConstraints { make in
             make.top.equalToSuperview().inset(5)
             make.left.equalToSuperview().inset(10)
         }
-        whiteImageView.snp.makeConstraints { make in
+        whiteImageView.ptLayout.makeConstraints { make in
             make.width.equalTo(80)
             make.height.equalTo(150)
-            make.top.equalTo(self.titlaLabel.snp.bottom).offset(10)
-            make.right.equalTo(self.contentView.snp.centerX).offset(-20)
+            make.top.equalTo(self.titlaLabel.ptLayout.bottom).offset(10)
+            make.right.equalTo(self.contentView.ptLayout.centerX).offset(-20)
         }
-        blackImageView.snp.makeConstraints { make in
+        blackImageView.ptLayout.makeConstraints { make in
             make.top.width.height.equalTo(self.whiteImageView)
-            make.left.equalTo(self.contentView.snp.centerX).offset(20)
+            make.left.equalTo(self.contentView.ptLayout.centerX).offset(20)
         }
         
-        whiteButton.snp.makeConstraints { make in
+        whiteButton.ptLayout.makeConstraints { make in
             make.centerX.equalTo(self.whiteImageView)
-            make.top.equalTo(self.whiteImageView.snp.bottom).offset(10)
+            make.top.equalTo(self.whiteImageView.ptLayout.bottom).offset(10)
         }
         
-        blackButton.snp.makeConstraints { make in
+        blackButton.ptLayout.makeConstraints { make in
             make.centerX.equalTo(self.blackImageView)
-            make.top.equalTo(self.whiteImageView.snp.bottom).offset(10)
+            make.top.equalTo(self.whiteImageView.ptLayout.bottom).offset(10)
         }
         
         registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: Self, _: UITraitCollection) in

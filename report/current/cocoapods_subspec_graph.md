@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: a868c0a22374e9a4016e85a100ccc814895d9cc3
-Generated at: 2026-10-18T02:40:25Z
+Source revision: 80126150505961e259cce5e08ada67962265c063
+Generated at: 2026-10-18T05:02:35Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.67.0`
+- Podspec: `PooTools` `5.67.1`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
@@ -32,7 +32,7 @@ Generated at: 2026-10-18T02:40:25Z
 | `AuthCore` | — | — | `PToolsAuthCore` | Foundation | — |
 | `BackgroundTasks` | — | — | `PToolsBackgroundTasks` | BackgroundTasks, Foundation | — |
 | `BankCard` | `PooTools/Core` | — | `BankCard` | — | — |
-| `Banner` | `PooTools/Logging`, `PooTools/Overlay`, `PooTools/PToolsCore`, `PooTools/Symbols` | — | `Banner` | Foundation, UIKit | — |
+| `Banner` | `PooTools/ConstraintLayout`, `PooTools/Logging`, `PooTools/Overlay`, `PooTools/PToolsCore`, `PooTools/Symbols` | — | `Banner` | Foundation, UIKit | — |
 | `BilogyID` | `PooTools/BioID` | — | — | — | — |
 | `BioID` | `PooTools/Core`, `PooTools/FaceIDPermission`, `PooTools/KeyChain` | — | `BioID` | LocalAuthentication, Security | — |
 | `Bluetooth` | — | — | `PToolsBluetooth` | CoreBluetooth, Foundation | — |
@@ -52,7 +52,7 @@ Generated at: 2026-10-18T02:40:25Z
 | `Contact` | `PooTools/ContactsPermission`, `PooTools/Core` | — | `Contact` | — | — |
 | `ContactsPermission` | `PooTools/PToolsPermissionCore` | — | `ContactsPermission` | — | — |
 | `ContentState` | `PooTools/Accessibility`, `PooTools/Connectivity`, `PooTools/Core`, `PooTools/Theme` | — | `PToolsContentState` | Foundation, UIKit | — |
-| `Core` | `PooTools/Date`, `PooTools/Device`, `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsUIFoundation`, `PooTools/Symbols` | `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `Kingfisher`, `SnapKit`, `lottie-ios` | `ActionsheetAndAlert`, `Animation`, `AppDelegate`, `AppStore`, `ApplicationFunction`, `Badge`, `Base`, `BlackMagic`, `Blur`, `Button`, `Category`, `Colors`, `Core`, `DarkMode`, `FloatPanel`, `Font`, `Foundation`, `Language`, `Line`, `Log`, `PToolsFontCore`, `PermissionCore`, `PhotoLibraryPermission`, `Protocol`, `Rotation`, `SideMenuControl`, `StatusBar`, `Switch`, `iCloud` | AVFoundation, AVKit, AudioToolbox, CoreFoundation, CoreText, Foundation, Photos, UIKit | PooToolsResource |
+| `Core` | `PooTools/ConstraintLayout`, `PooTools/Date`, `PooTools/Device`, `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsUIFoundation`, `PooTools/Symbols` | `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `Kingfisher`, `SnapKit`, `lottie-ios` | `ActionsheetAndAlert`, `Animation`, `AppDelegate`, `AppStore`, `ApplicationFunction`, `Badge`, `Base`, `BlackMagic`, `Blur`, `Button`, `Category`, `Colors`, `Core`, `DarkMode`, `FloatPanel`, `Font`, `Foundation`, `Language`, `Line`, `Log`, `PToolsFontCore`, `PermissionCore`, `PhotoLibraryPermission`, `Protocol`, `Rotation`, `SideMenuControl`, `StatusBar`, `Switch`, `iCloud` | AVFoundation, AVKit, AudioToolbox, CoreFoundation, CoreText, Foundation, Photos, UIKit | PooToolsResource |
 | `Country` | `PooTools/Core` | — | `Country` | — | — |
 | `CustomerLabel` | `PooTools/Core` | — | `Label` | QuartzCore | — |
 | `CustomerNumberKeyboard` | `PooTools/Core` | — | `Keyboard` | — | — |
@@ -135,7 +135,7 @@ Generated at: 2026-10-18T02:40:25Z
 | `Popover` | `PooTools/Overlay`, `PooTools/Symbols` | — | `Popover` | — | — |
 | `PopoverKit` | `PooTools/PToolsCore`, `PooTools/Popover` | — | — | — | — |
 | `ProgressBar` | `PooTools/Core` | — | `ProgressBar` | — | — |
-| `RateView` | `PooTools/PToolsUIFoundation` | `SnapKit` | `RateView` | — | — |
+| `RateView` | `PooTools/ConstraintLayout`, `PooTools/PToolsUIFoundation` | `SnapKit` | `RateView` | — | — |
 | `Realtime` | `PooTools/RealtimeCore`, `PooTools/SocketKit` | — | `PToolsRealtime` | Foundation, Network | — |
 | `RealtimeCore` | — | — | `PToolsRealtimeCore` | Foundation | — |
 | `RemindersPermission` | `PooTools/PToolsPermissionCore` | — | `RemindersPermission` | — | — |
@@ -153,7 +153,7 @@ Generated at: 2026-10-18T02:40:25Z
 | `Simulation` | `PooTools/Bluetooth`, `PooTools/Connectivity`, `PooTools/PToolsCore`, `PooTools/PToolsDevice`, `PooTools/SimulationCore` | — | `PToolsSimulation` | Foundation | — |
 | `SimulationCore` | — | — | `PToolsSimulationCore` | Foundation | — |
 | `SiriPermission` | `PooTools/Core` | — | `SiriPermission` | — | — |
-| `Slider` | `PooTools/PToolsUIFoundation` | `SnapKit` | `Slider` | — | — |
+| `Slider` | `PooTools/ConstraintLayout`, `PooTools/PToolsUIFoundation` | `SnapKit` | `Slider` | — | — |
 | `SmartScreenshot` | `PooTools/Core` | — | `ScreenShot` | — | — |
 | `SocketKit` | `PooTools/Core`, `PooTools/Logging`, `PooTools/Network` | — | `SocketKit` | — | — |
 | `SpeechRecognizerPermission` | `PooTools/PToolsPermissionCore` | — | `SpeechPremission` | — | — |
@@ -177,7 +177,7 @@ Generated at: 2026-10-18T02:40:25Z
 | `VideoCache` | `PooTools/Core` | — | — | — | — |
 | `VideoEditor` | `PooTools/Core`, `PooTools/HarbethKit`, `PooTools/Loading`, `PooTools/MediaCore`, `PooTools/ProgressBar`, `PooTools/Symbols` | — | `VideoEditor` | — | — |
 | `Vision` | `PooTools/Core` | — | `Vision` | — | — |
-| `Web` | `PooTools/WebBridge` | — | `PToolsWeb` | Foundation, UIKit, WebKit | — |
+| `Web` | `PooTools/ConstraintLayout`, `PooTools/WebBridge` | — | `PToolsWeb` | Foundation, UIKit, WebKit | — |
 | `WebBridge` | `PooTools/WebCore` | — | `PToolsWebBridge` | Foundation, WebKit | — |
 | `WebCore` | — | — | `PToolsWebCore` | Foundation | — |
 | `WebKit` | `PooTools/Core` | — | `WebKit` | Foundation, UIKit, WebKit | — |

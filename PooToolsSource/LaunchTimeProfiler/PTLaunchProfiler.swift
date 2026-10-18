@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 
 // English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
 // Español: Importa explícitamente el target Core para las compilaciones SwiftPM independientes.
@@ -285,7 +288,7 @@ private final class EntryWindow: UIWindow {
         backgroundColor = .clear
         
         self.addSubview(gesLabel)
-        gesLabel.snp.makeConstraints { make in
+        gesLabel.ptLayout.makeConstraints { make in
             make.size.equalTo(64)
             make.center.equalToSuperview()
         }
@@ -376,7 +379,7 @@ private class DashboardViewController: PTBaseViewController, UITableViewDataSour
         tableView.verticalScrollIndicatorInsets.bottom = collectionInset
 
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
+        tableView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         tableView.dataSource = self
@@ -464,7 +467,7 @@ private class MilestoneCell: UITableViewCell {
         stack.axis = .vertical
         stack.spacing = 4
         contentView.addSubview(stack)
-        stack.snp.makeConstraints { make in
+        stack.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview().inset(UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16))
         }
     }

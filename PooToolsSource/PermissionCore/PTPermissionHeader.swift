@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 class PTPermissionHeader: PTBaseCollectionReusableView,@MainActor PTSupplementaryRegisterable {
@@ -29,12 +32,12 @@ class PTPermissionHeader: PTBaseCollectionReusableView,@MainActor PTSupplementar
         super.init(frame: frame)
         
         addSubviews([titleLabel, infoLabel])
-        titleLabel.snp.makeConstraints { make in
+        titleLabel.ptLayout.makeConstraints { make in
             make.top.equalToSuperview().inset(CGFloat.ScaleW(w: 5))
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
-        infoLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.titleLabel.snp.bottom).offset(CGFloat.ScaleW(w: 5))
+        infoLabel.ptLayout.makeConstraints { make in
+            make.top.equalTo(self.titleLabel.ptLayout.bottom).offset(CGFloat.ScaleW(w: 5))
             make.left.right.equalTo(self.titleLabel)
             make.bottom.equalToSuperview().inset(CGFloat.ScaleW(w: 5))
         }

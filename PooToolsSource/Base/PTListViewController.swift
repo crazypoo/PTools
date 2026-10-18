@@ -8,6 +8,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 @MainActor
@@ -41,7 +44,7 @@ open class PTListViewController: PTBaseViewController {
     // 中文：默认布局铺满安全区，子类可以替换为全屏或自定义布局。
     open func installListViewConstraints(_ listView: PTCollectionView) {
         let safeArea = view.safeAreaLayoutGuide
-        listView.snp.makeConstraints { make in
+        listView.ptLayout.makeConstraints { make in
             make.edges.equalTo(safeArea)
         }
     }

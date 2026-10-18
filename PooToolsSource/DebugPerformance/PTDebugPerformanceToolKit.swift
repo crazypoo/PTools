@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -235,7 +238,7 @@ final class PTDebugPerformanceToolKit {
             floatingView?.tag = 9999
             floatingView?.autoDocking = false
             floatingView?.addSubview(fpsLabel)
-            fpsLabel.snp.makeConstraints { make in
+            fpsLabel.ptLayout.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
             floatingView?.isHidden = true

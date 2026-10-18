@@ -1,0 +1,23 @@
+{
+  "version": "5.67.1",
+  "source_sha": "80126150505961e259cce5e08ada67962265c063",
+  "swiftpm_manifest": "typechecked",
+  "swiftpm_independent_product": "typechecked_only_host_platform",
+  "cocoapods_constraint_layout": "built_transitive_in_pootools_target_debug_release",
+  "cocoapods_aggregate": "built",
+  "example_debug": "built",
+  "example_release": "built",
+  "external_runtime": "blocked_external_host",
+  "environment": {
+    "xcode": "Xcode-beta 27B5038j",
+    "sdk": "iOS Simulator 27.2",
+    "destination": "generic/platform=iOS Simulator",
+    "architectures": ["arm64", "x86_64"],
+    "signing": "disabled"
+  },
+  "commands": [
+    "xcodebuild -workspace PooTools-Example/PooTools-Example.xcworkspace -scheme PooTools-Example -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build",
+    "xcodebuild -workspace PooTools-Example/PooTools-Example.xcworkspace -scheme PooTools-Example -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build"
+  ],
+  "notes": "Example Debug/Release built successfully and includes CocoaPods PooTools aggregate plus ConstraintLayout target. An isolated UIKit SwiftPM consumer and external device/visual runtime require an iOS host; never inferred from static checks."
+}

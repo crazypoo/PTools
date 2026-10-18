@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 
 @objc public enum PTSortButtonType: Int {
     case Normal
@@ -327,17 +330,17 @@ public class PTSortButton: UIView {
                                    height: min(safeImageSize.height, height))
         }
 
-        titleLabel.snp.remakeConstraints { make in
+        titleLabel.ptLayout.remakeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.left.equalToSuperview().inset(titleLeft)
             make.width.equalTo(measuredTitleWidth)
         }
 
-        upImage.snp.remakeConstraints { make in
-            make.left.equalTo(titleLabel.snp.right).offset(safeContentSpace)
+        upImage.ptLayout.remakeConstraints { make in
+            make.left.equalTo(titleLabel.ptLayout.right).offset(safeContentSpace)
             make.size.equalTo(realImageSize)
             if showType == .Tres {
-                make.bottom.equalTo(titleLabel.snp.centerY).offset(-(safeImageSpace / 2))
+                make.bottom.equalTo(titleLabel.ptLayout.centerY).offset(-(safeImageSpace / 2))
             } else {
                 make.centerY.equalToSuperview()
             }
@@ -345,9 +348,9 @@ public class PTSortButton: UIView {
         }
 
         if showType == .Tres {
-            downImage.snp.remakeConstraints { make in
+            downImage.ptLayout.remakeConstraints { make in
                 make.left.right.equalTo(upImage)
-                make.top.equalTo(upImage.snp.bottom).offset(safeImageSpace)
+                make.top.equalTo(upImage.ptLayout.bottom).offset(safeImageSpace)
                 make.height.equalTo(realImageSize.height)
             }
         }

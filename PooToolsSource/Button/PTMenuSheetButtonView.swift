@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 // English: Import the split Core target explicitly for feedback events in standalone SwiftPM builds.
@@ -175,7 +178,7 @@ public class PTMenuSheetButtonView: UIView {
         mainStackView.spacing = 0
         addSubview(mainStackView)
         
-        mainStackView.snp.makeConstraints { make in
+        mainStackView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
@@ -186,7 +189,7 @@ public class PTMenuSheetButtonView: UIView {
         
         arrowButton = PTMenuSheetArrowButton(frame: CGRect(origin: .zero, size: baseSize))
         arrowButton.addTarget(self, action: #selector(arrowTapped), for: .touchUpInside)
-        arrowButton.snp.makeConstraints { make in
+        arrowButton.ptLayout.makeConstraints { make in
             make.width.equalTo(baseSize.width)
             make.height.equalTo(baseSize.height)
         }
@@ -228,7 +231,7 @@ public class PTMenuSheetButtonView: UIView {
         
         let safeSeparatorWidth = max(0, separatorWidth)
         let safeSeparatorInset = max(0, separatorInset)
-        separatorContainer.snp.remakeConstraints { make in
+        separatorContainer.ptLayout.remakeConstraints { make in
             if isVertical {
                 make.height.equalTo(safeSeparatorWidth)
                 make.width.equalTo(baseSize.width)
@@ -238,7 +241,7 @@ public class PTMenuSheetButtonView: UIView {
             }
         }
 
-        separatorView.snp.remakeConstraints { make in
+        separatorView.ptLayout.remakeConstraints { make in
             if isVertical {
                 make.leading.trailing.equalToSuperview().inset(safeSeparatorInset)
                 make.top.bottom.equalToSuperview()
@@ -264,7 +267,7 @@ public class PTMenuSheetButtonView: UIView {
             button.addTarget(self, action: #selector(itemTapped(_:)), for: .touchUpInside)
 
             let itemSize = item.size ?? baseSize
-            button.snp.makeConstraints { make in
+            button.ptLayout.makeConstraints { make in
                 make.width.equalTo(max(0, itemSize.width))
                 make.height.equalTo(max(0, itemSize.height))
             }

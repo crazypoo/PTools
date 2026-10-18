@@ -3,6 +3,9 @@
 // 中文：集中处理 PTTabBarView 的选择同步和选中表面动画几何。
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 
 // English: Import the split Core target explicitly for feedback events in standalone SwiftPM builds.
 // Español: Importa explícitamente el target Core dividido para los eventos de feedback en SwiftPM independiente.
@@ -35,7 +38,7 @@ extension PTTabBarView {
             let selectedIcon = items[index].imageContent
             items[index].detachContentForMinimize()
             minimizedCenterView.addSubview(selectedIcon)
-            selectedIcon.snp.remakeConstraints { make in
+            selectedIcon.ptLayout.remakeConstraints { make in
                 make.center.equalToSuperview()
                 make.size.equalTo(items[index].itemImageSize())
             }

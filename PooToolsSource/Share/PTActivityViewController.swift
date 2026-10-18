@@ -6,6 +6,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -304,12 +307,12 @@ open class PTActivityViewController:UIActivityViewController {
             self.previewContainer.alpha = 1
         }
         view.addSubview(previewContainer)
-        previewContainer.snp.makeConstraints { make in
+        previewContainer.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
         previewContainer.addSubviews([previewInfoContainer])
-        previewInfoContainer.snp.makeConstraints { make in
+        previewInfoContainer.ptLayout.makeConstraints { make in
             make.edges.equalTo(self.view.safeAreaLayoutGuide)
         }
 
@@ -330,7 +333,7 @@ open class PTActivityViewController:UIActivityViewController {
         let signature = "\(region.signature)|\(contentHeight)|\(previewPadding)"
         guard force || signature != previewLayoutSignature else { return }
         previewLayoutSignature = signature
-        preview.snp.remakeConstraints { make in
+        preview.ptLayout.remakeConstraints { make in
             make.left.equalToSuperview().offset(region.visibleRect.minX - previewInfoContainer.frame.minX + PTAppBaseConfig.share.defaultViewSpace)
             make.right.equalToSuperview().offset(-(view.bounds.width - region.visibleRect.maxX - previewInfoContainer.frame.minX + PTAppBaseConfig.share.defaultViewSpace))
             make.centerY.equalToSuperview()
@@ -360,24 +363,24 @@ open class PTActivityViewController:UIActivityViewController {
             haveImage = true
             preview.contentView.addSubviews([previewImageView,previewLabel])
             previewImageView.image = previewImage
-            previewImageView.snp.makeConstraints { make in
+            previewImageView.ptLayout.makeConstraints { make in
                 make.left.top.equalToSuperview().inset(previewPadding)
                 make.width.equalTo(previewImageSideLength)
                 make.height.equalTo(previewImageSideLength)
             }
             
-            previewLabel.snp.makeConstraints { make in
+            previewLabel.ptLayout.makeConstraints { make in
                 make.right.equalToSuperview().inset(previewPadding)
                 make.top.equalToSuperview().inset(previewPadding)
                 make.bottom.lessThanOrEqualToSuperview().inset(previewPadding)
-                make.left.equalTo(self.previewImageView.snp.right).offset(previewPadding)
+                make.left.equalTo(self.previewImageView.ptLayout.right).offset(previewPadding)
             }
 
         } else {
             haveImage = false
             
             preview.contentView.addSubviews([previewLabel])
-            previewLabel.snp.makeConstraints { make in
+            previewLabel.ptLayout.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(previewPadding)
                 make.top.equalToSuperview().inset(previewPadding)
                 make.bottom.lessThanOrEqualToSuperview().inset(previewPadding)
@@ -395,7 +398,7 @@ open class PTActivityViewController:UIActivityViewController {
         if contentHeight < showContentHeight {
             showContentHeight = contentHeight
         }
-        preview.snp.updateConstraints { make in
+        preview.ptLayout.updateConstraints { make in
             make.height.equalTo(showContentHeight)
         }
     }

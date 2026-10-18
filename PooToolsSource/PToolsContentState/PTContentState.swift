@@ -10,6 +10,9 @@ import PToolsConnectivity
 
 #if canImport(UIKit)
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #endif
 
@@ -107,25 +110,25 @@ public final class PTContentStateView: UIView {
         addSubview(messageLabel)
         addSubview(retryButton)
         addSubview(offlineLabel)
-        contentHost.snp.makeConstraints { make in
+        contentHost.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        activityIndicator.snp.makeConstraints { make in
+        activityIndicator.ptLayout.makeConstraints { make in
             make.center.equalToSuperview()
         }
-        titleLabel.snp.makeConstraints { make in
+        titleLabel.ptLayout.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview().offset(-18)
         }
-        messageLabel.snp.makeConstraints { make in
+        messageLabel.ptLayout.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.top.equalTo(titleLabel.ptLayout.bottom).offset(8)
         }
-        retryButton.snp.makeConstraints { make in
+        retryButton.ptLayout.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(messageLabel.snp.bottom).offset(12)
+            make.top.equalTo(messageLabel.ptLayout.bottom).offset(12)
         }
-        offlineLabel.snp.makeConstraints { make in
+        offlineLabel.ptLayout.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().offset(8)
         }

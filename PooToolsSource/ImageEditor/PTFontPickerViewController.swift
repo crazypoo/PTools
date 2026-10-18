@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 #if SWIFT_PACKAGE
@@ -63,7 +66,7 @@ public class PTFontPickerViewController: PTBaseViewController {
         addChild(picker)
         view.addSubview(picker.view)
 
-        picker.view.snp.makeConstraints { make in
+        picker.view.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         picker.didMove(toParent: self)

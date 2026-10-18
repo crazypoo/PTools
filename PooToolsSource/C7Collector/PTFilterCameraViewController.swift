@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 
 // English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
 // Español: Importa explícitamente el target Core para las compilaciones SwiftPM independientes.
@@ -135,7 +138,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
                     
                     let reviewView = PTFlashImageReviewView(image: image)
                     AppWindows?.addSubview(reviewView)
-                    reviewView.snp.makeConstraints { make in
+                    reviewView.ptLayout.makeConstraints { make in
                         make.edges.equalToSuperview()
                     }
                     reviewView.backButton.addActionHandlers { sender in
@@ -233,7 +236,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
                     self.originImageView.contentMode = .scaleAspectFill
                     self.originImageView.image = self.originImageView.image?.transformImage(size: CGSizeMake(CGFloat.kSCREEN_WIDTH, CGFloat.kSCREEN_HEIGHT))
 
-                    self.originImageView.snp.remakeConstraints { make in
+                    self.originImageView.ptLayout.remakeConstraints { make in
                         make.edges.equalToSuperview()
                     }
                 }
@@ -333,10 +336,10 @@ public class PTFilterCameraViewController: PTBaseViewController {
     func showFilterView(show:Bool) {
         if show {
             view.addSubviews([filterCollectionView])
-            filterCollectionView.snp.makeConstraints { make in
+            filterCollectionView.ptLayout.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.height.equalTo(PTFilterCameraViewController.filterCollectionHeight)
-                make.bottom.equalTo(self.toolBar.snp.top)
+                make.bottom.equalTo(self.toolBar.ptLayout.top)
             }
             view.bringSubviewToFront(filterCollectionView)
             
@@ -537,33 +540,33 @@ public class PTFilterCameraViewController: PTBaseViewController {
     func setupUI() {
         view.backgroundColor = UIColor.black
         view.addSubviews([originImageView,toolBar,flashButton,switchCameraButton,focusCursorView,backBtn,filtersButton])
-        originImageView.snp.makeConstraints { make in
+        originImageView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        toolBar.snp.makeConstraints { make in
+        toolBar.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(CGFloat.kTabbarSaveAreaHeight + PTFilterCameraViewController.toolBarHeight)
         }
         
-        switchCameraButton.snp.makeConstraints { make in
+        switchCameraButton.ptLayout.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.size.equalTo(PTAppBaseConfig.share.navBarButtonSize)
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 5)
         }
         
-        flashButton.snp.makeConstraints { make in
+        flashButton.ptLayout.makeConstraints { make in
             make.size.right.equalTo(self.switchCameraButton)
-            make.top.equalTo(self.switchCameraButton.snp.bottom).offset(10)
+            make.top.equalTo(self.switchCameraButton.ptLayout.bottom).offset(10)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
         
-        filtersButton.snp.makeConstraints { make in
+        filtersButton.ptLayout.makeConstraints { make in
             make.size.right.equalTo(self.flashButton)
-            make.top.equalTo(self.flashButton.snp.bottom).offset(10)
+            make.top.equalTo(self.flashButton.ptLayout.bottom).offset(10)
         }
         
-        backBtn.snp.makeConstraints { make in
+        backBtn.ptLayout.makeConstraints { make in
             make.size.top.equalTo(self.switchCameraButton)
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
@@ -575,13 +578,13 @@ public class PTFilterCameraViewController: PTBaseViewController {
     
     func setupToolBar() {
         toolBar.addSubviews([largeCircleView,smallCircleView,resetButton,useButton])
-        largeCircleView.snp.makeConstraints { make in
+        largeCircleView.ptLayout.makeConstraints { make in
             make.size.equalTo(PTFilterCameraViewController.largeCircleRadius)
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().inset((PTFilterCameraViewController.toolBarHeight - PTFilterCameraViewController.largeCircleRadius) / 2)
         }
         
-        smallCircleView.snp.makeConstraints { make in
+        smallCircleView.ptLayout.makeConstraints { make in
             make.size.equalTo(PTFilterCameraViewController.smallCircleRadius)
             make.centerX.equalToSuperview()
             make.centerY.equalTo(self.largeCircleView)
@@ -658,15 +661,15 @@ public class PTFilterCameraViewController: PTBaseViewController {
             NotificationCenter.default.addObserver(self, selector: #selector(recordVideoPlayFinished), name: .AVPlayerItemDidPlayToEndTime, object: nil)
         }
         
-        resetButton.snp.makeConstraints { make in
+        resetButton.ptLayout.makeConstraints { make in
             make.size.equalTo(34)
             make.centerY.equalTo(self.largeCircleView)
-            make.right.equalTo(self.largeCircleView.snp.left).offset(-10)
+            make.right.equalTo(self.largeCircleView.ptLayout.left).offset(-10)
         }
         
-        useButton.snp.makeConstraints { make in
+        useButton.ptLayout.makeConstraints { make in
             make.size.centerY.equalTo(self.resetButton)
-            make.left.equalTo(self.largeCircleView.snp.right).offset(10)
+            make.left.equalTo(self.largeCircleView.ptLayout.right).offset(10)
         }
     }
     
@@ -803,25 +806,25 @@ class PTFlashImageReviewView:UIView {
         imageView.image = image
         addSubviews([backButton,imageView,editButton,justThisButton])
         
-        backButton.snp.makeConstraints { make in
+        backButton.ptLayout.makeConstraints { make in
             make.size.equalTo(34)
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 5)
         }
         
-        imageView.snp.makeConstraints { make in
+        imageView.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarHeight_Total)
         }
         
-        editButton.snp.makeConstraints { make in
+        editButton.ptLayout.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + (CGFloat.kTabbarHeight - 34) / 2)
             make.size.equalTo(34)
         }
         
-        justThisButton.snp.makeConstraints { make in
+        justThisButton.ptLayout.makeConstraints { make in
             make.bottom.size.equalTo(self.editButton)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }

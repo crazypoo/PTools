@@ -1,4 +1,7 @@
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 #if canImport(ptools)
@@ -41,7 +44,7 @@ internal final class PTInlineBadgeView: UIView {
         label.numberOfLines = 1
         label.isAccessibilityElement = false
         addSubview(label)
-        label.snp.makeConstraints { make in
+        label.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }

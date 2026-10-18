@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 import Photos
 #if SWIFT_PACKAGE
@@ -716,7 +719,7 @@ public class PTEditImageViewController: PTBaseViewController {
 
         adjustEngine.adjustSlider.isHidden = true
         view.addSubviews([mainScrollView,toolCollectionView,ashbinView,adjustEngine.adjustSlider])
-        mainScrollView.snp.makeConstraints { make in
+        mainScrollView.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview()
         }
@@ -724,9 +727,9 @@ public class PTEditImageViewController: PTBaseViewController {
         
         containerView.addSubviews([imageView,mosaicEngine.canvasView,drawEngine.canvasView,eraserCircleView,stickerEngine.canvasView])
         
-        toolCollectionView.snp.makeConstraints { make in
+        toolCollectionView.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.ptLayout.bottom)
             make.height.equalTo(self.toolCollectionHeight)
         }
         
@@ -734,11 +737,11 @@ public class PTEditImageViewController: PTBaseViewController {
         let stringFont:UIFont = .appfont(size: 12)
         let ashBinViewHeight:CGFloat = 88
         let stringW = UIView.sizeFor(string: deleteInfo, font: stringFont,height: ashBinViewHeight).width + 20
-        ashbinView.snp.makeConstraints { make in
+        ashbinView.ptLayout.makeConstraints { make in
             make.width.equalTo(stringW)
             make.height.equalTo(ashBinViewHeight)
             make.centerX.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(CGFloat.kTabbarHeight + 100)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.ptLayout.bottom).inset(CGFloat.kTabbarHeight + 100)
         }
         
         let asbinTipLabel = UILabel()
@@ -750,13 +753,13 @@ public class PTEditImageViewController: PTBaseViewController {
         asbinTipLabel.lineBreakMode = .byCharWrapping
 
         ashbinView.addSubviews([ashbinImgView,asbinTipLabel])
-        ashbinImgView.snp.makeConstraints { make in
+        ashbinImgView.ptLayout.makeConstraints { make in
             make.size.equalTo(44)
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().inset(10)
         }
         
-        asbinTipLabel.snp.makeConstraints { make in
+        asbinTipLabel.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview().inset(10)
         }
         // 设置 Slider 的位置 (把之前 VC 里关于 adjustSlider.frame 的设置搬过来)
@@ -764,9 +767,9 @@ public class PTEditImageViewController: PTBaseViewController {
         case .vertical:
             adjustEngine.adjustSlider.frame = CGRect(x: view.pt.jx_width - 60, y: view.pt.jx_height / 2 - 100, width: 60, height: 200)
         case .horizontal:
-            adjustEngine.adjustSlider.snp.makeConstraints { make in
+            adjustEngine.adjustSlider.ptLayout.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace * 2)
-                make.bottom.equalTo(self.adjustCollectionView.snp.top).offset(-20)
+                make.bottom.equalTo(self.adjustCollectionView.ptLayout.top).offset(-20)
                 make.height.equalTo(60)
             }
         }
@@ -1015,15 +1018,15 @@ extension PTEditImageViewController {
     func showHandDrawBar(show:Bool,isMosaic:Bool = false) {
         if show {
             view.addSubviews([drawBar,drawDismissButton])
-            drawDismissButton.snp.makeConstraints { make in
+            drawDismissButton.ptLayout.makeConstraints { make in
                 make.size.equalTo(PTAppBaseConfig.share.navBarButtonSize)
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset((CGFloat.kNavBarHeight - PTAppBaseConfig.share.navBarButtonSize) / 2)
+                make.top.equalTo(self.view.safeAreaLayoutGuide.ptLayout.top).offset((CGFloat.kNavBarHeight - PTAppBaseConfig.share.navBarButtonSize) / 2)
             }
-            drawBar.snp.makeConstraints { make in
+            drawBar.ptLayout.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.height.equalTo(54)
-                make.bottom.equalTo(self.toolCollectionView.snp.top)
+                make.bottom.equalTo(self.toolCollectionView.ptLayout.top)
             }
             
             var subs = [UIView]()
@@ -1039,12 +1042,12 @@ extension PTEditImageViewController {
             }
             
             drawBar.addSubviews(subs)
-            eraser.snp.makeConstraints { make in
+            eraser.ptLayout.makeConstraints { make in
                 make.size.equalTo(44)
                 make.centerY.equalToSuperview()
                 switch selectedTool?.currentType {
                 case .draw:
-                    make.right.equalTo(self.drawBar.snp.centerX).offset(-15)
+                    make.right.equalTo(self.drawBar.ptLayout.centerX).offset(-15)
                 case .mosaic:
                     make.centerX.equalToSuperview()
                 case .imageSticker,.textSticker:
@@ -1055,9 +1058,9 @@ extension PTEditImageViewController {
             
             switch selectedTool?.currentType {
             case .draw:
-                drawColorButton.snp.makeConstraints { make in
+                drawColorButton.ptLayout.makeConstraints { make in
                     make.size.centerY.equalTo(self.eraser)
-                    make.left.equalTo(self.drawBar.snp.centerX).offset(15)
+                    make.left.equalTo(self.drawBar.ptLayout.centerX).offset(15)
                 }
             default:break
             }
@@ -1229,9 +1232,9 @@ extension PTEditImageViewController {
     func showFilter(show:Bool) {
         if show {
             view.addSubview(filterCollectionView)
-            filterCollectionView.snp.makeConstraints { make in
+            filterCollectionView.ptLayout.makeConstraints { make in
                 make.left.right.equalToSuperview()
-                make.bottom.equalTo(self.toolCollectionView.snp.top)
+                make.bottom.equalTo(self.toolCollectionView.ptLayout.top)
                 make.height.equalTo(PTCutViewController.cutRatioHeight)
             }
             
@@ -1281,9 +1284,9 @@ extension PTEditImageViewController {
         if show {
             adjustEngine.adjustSlider.isHidden = false
             view.addSubviews([adjustCollectionView])
-            adjustCollectionView.snp.makeConstraints { make in
+            adjustCollectionView.ptLayout.makeConstraints { make in
                 make.left.right.equalToSuperview()
-                make.bottom.equalTo(self.toolCollectionView.snp.top)
+                make.bottom.equalTo(self.toolCollectionView.ptLayout.top)
                 make.height.equalTo(self.adjustCollectionViewHeight)
             }
             

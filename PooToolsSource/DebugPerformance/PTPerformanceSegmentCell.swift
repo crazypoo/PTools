@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -29,7 +32,7 @@ class PTPerformanceSegmentCell: PTBaseNormalCell {
         super.init(frame: frame)
         
         contentView.addSubview(segmentedControl)
-        segmentedControl.snp.makeConstraints { make in
+        segmentedControl.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview().inset(16)
             make.top.bottom.equalToSuperview().inset(8)
         }

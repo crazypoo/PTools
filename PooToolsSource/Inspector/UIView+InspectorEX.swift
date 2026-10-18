@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -507,7 +510,7 @@ extension UIView {
              .centerY,
              .centerXY,
              .spacing:
-            view.snp.makeConstraints { make in
+            view.ptLayout.makeConstraints { make in
                 switch viewBinding {
                 case .centerX:
                     make.centerX.equalToSuperview().priority(priority)

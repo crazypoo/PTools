@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 import PooTools
 
@@ -40,7 +43,7 @@ class PTImageListViewController: PTBaseViewController {
         super.viewDidLoad()
 
         view.addSubview(listCollection)
-        listCollection.snp.makeConstraints { make in
+        listCollection.ptLayout.makeConstraints { make in
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
             make.left.right.bottom.equalToSuperview()
         }

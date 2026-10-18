@@ -8,6 +8,9 @@
 
 import Foundation
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit // 🌟 引入 SnapKit 替代繁琐的原生约束
 
 @MainActor
@@ -130,7 +133,7 @@ public class PTEmptyDataSetView: UIView {
     override public func didMoveToSuperview() {
         guard superview != nil else { return }
         
-        // 注意：千万不要在这里写 self.snp.remakeConstraints 了！
+        // 注意：千万不要在这里写 self.ptLayout.remakeConstraints 了！
         // 因为在 UIScrollView extension 里你已经设置了 view.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         // 或者当你赋值给 backgroundView 时，UICollectionView 会自动为你管理它的 Frame。
         
@@ -165,7 +168,7 @@ public class PTEmptyDataSetView: UIView {
         if let customView = customView {
             contentView.isHidden = true
             
-            customView.snp.remakeConstraints { make in
+            customView.ptLayout.remakeConstraints { make in
                 make.centerX.equalToSuperview()
                 make.centerY.equalToSuperview().offset(verticalOffset)
                 
@@ -186,7 +189,7 @@ public class PTEmptyDataSetView: UIView {
         
         // 2. 恢复默认的 ContentView
         contentView.isHidden = false
-        contentView.snp.remakeConstraints { make in
+        contentView.ptLayout.remakeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.centerY.equalToSuperview().offset(verticalOffset)
         }
@@ -197,7 +200,7 @@ public class PTEmptyDataSetView: UIView {
         let width = max(bounds.width, superview?.bounds.width ?? 0)
         let padding = roundf(Float(max(width / 16.0, 16)))
         
-        stackView.snp.remakeConstraints { make in
+        stackView.ptLayout.remakeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(CGFloat(padding))
         }

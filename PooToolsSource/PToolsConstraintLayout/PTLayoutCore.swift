@@ -164,21 +164,42 @@ public enum PTLayoutDiagnostics {
     public static var mode: PTLayoutDiagnosticMode = .diagnostic
     public static var onFailure: (@MainActor (PTLayoutIssue) -> Void)?
 
-    private static var latestIssues: [ObjectIdentifier: PTLayoutIssue] = [:]
+    // English: Weak keys prevent diagnostics from keeping released views alive during long-running debug sessions.
+    // Español: Las claves débiles evitan que los diagnósticos retengan vistas liberadas durante sesiones largas.
+    // 中文：使用弱键，避免长时间调试时诊断缓存持有已经释放的 View。
+    private final class IssueBox: NSObject {
+        let issue: PTLayoutIssue
+
+        init(_ issue: PTLayoutIssue) {
+            self.issue = issue
+        }
+    }
+
+    private static let latestIssues = NSMapTable<UIView, IssueBox>.weakToStrongObjects()
     private static var repeatedIssues: [String: Int] = [:]
+    private static var repeatedIssueOrder: [String] = []
+    private static let maxRepeatedIssues = 2_048
     private static var isReporting = false
 
     public static func latest(for view: UIView) -> PTLayoutIssue? {
-        latestIssues[ObjectIdentifier(view)]
+        latestIssues.object(forKey: view)?.issue
     }
 
     public static func clear(for view: UIView) {
-        latestIssues.removeValue(forKey: ObjectIdentifier(view))
+        latestIssues.removeObject(forKey: view)
     }
 
     internal static func report(_ issue: PTLayoutIssue, ownerView: UIView?) {
         let ownerID = ownerView.map { String(ObjectIdentifier($0).hashValue) } ?? "none"
         let key = "\(ownerID)|\(issue.code.rawValue)|\(issue.fileID)|\(issue.line)"
+        if repeatedIssues[key] == nil {
+            repeatedIssueOrder.append(key)
+            if repeatedIssueOrder.count > maxRepeatedIssues,
+               let evicted = repeatedIssueOrder.first {
+                repeatedIssueOrder.removeFirst()
+                repeatedIssues.removeValue(forKey: evicted)
+            }
+        }
         let count = (repeatedIssues[key] ?? 0) + 1
         repeatedIssues[key] = count
         let updated = PTLayoutIssue(code: issue.code,
@@ -195,7 +216,7 @@ public enum PTLayoutDiagnostics {
                                     sourceType: issue.sourceType,
                                     occurrenceCount: count)
         if let ownerView {
-            latestIssues[ObjectIdentifier(ownerView)] = updated
+            latestIssues.setObject(IssueBox(updated), forKey: ownerView)
         }
 
         guard !isReporting else { return }
@@ -278,6 +299,10 @@ public struct PTLayoutAnchorGroup {
     public var centerY: PTLayoutAnchorGroup { appending(.centerY) }
     public var width: PTLayoutAnchorGroup { appending(.width) }
     public var height: PTLayoutAnchorGroup { appending(.height) }
+    // English: Keep chained size constraints compatible with the migrated SnapKit call sites.
+    // Español: Mantiene compatibles las restricciones de tamaño encadenadas con los usos migrados de SnapKit.
+    // 中文：兼容已迁移 SnapKit 调用中的连续 size 约束写法。
+    public var size: PTLayoutAnchorGroup { appending(.width).appending(.height) }
     public var firstBaseline: PTLayoutAnchorGroup { appending(.firstBaseline) }
     public var lastBaseline: PTLayoutAnchorGroup { appending(.lastBaseline) }
 
@@ -934,6 +959,14 @@ public final class PTLayoutConstraint {
         !entries.isEmpty && entries.allSatisfy { $0.native.isActive }
     }
 
+    // English: Preserve SnapKit's mutable-constant ergonomics for migrated callers.
+    // Español: Conserva la ergonomía de constante mutable de SnapKit para los consumidores migrados.
+    // 中文：为已迁移调用方保留 SnapKit 风格的可变 constant 体验。
+    public var constant: CGFloat {
+        get { entries.first?.constant ?? 0 }
+        set { _ = update(offset: newValue) }
+    }
+
     public var nativeConstraints: [NSLayoutConstraint] {
         entries.map(\.native)
     }
@@ -955,6 +988,15 @@ public final class PTLayoutConstraint {
     @discardableResult
     public func update(inset: UIEdgeInsets) -> PTLayoutResult {
         PTLayoutEngine.update(self, constants: nil, inset: inset)
+    }
+
+    // English: Match SnapKit's scalar inset update for single-edge handles.
+    // Español: Igualala actualización de inset escalar de SnapKit para handles de un solo borde.
+    // 中文：兼容单边约束句柄的 SnapKit 标量 inset 更新方式。
+    @discardableResult
+    public func update(inset: CGFloat) -> PTLayoutResult {
+        let constants = entries.map { PTLayoutEngine.signedInset(inset, for: $0.firstAttribute) }
+        return PTLayoutEngine.update(self, constants: constants, inset: nil)
     }
 
     @discardableResult
@@ -995,6 +1037,14 @@ public final class PTLayoutConstraintGroup {
     @discardableResult
     public func activate() -> PTLayoutResult {
         PTLayoutEngine.activate(self)
+    }
+
+    // English: Activate several prepared groups as one transaction for collection and batch layout helpers.
+    // Español: Activa varios grupos preparados como una sola transacción para helpers de colecciones y lotes.
+    // 中文：为集合和批量布局辅助提供多个已准备约束组的一次性事务激活入口。
+    @discardableResult
+    public static func activateAtomically(_ groups: [PTLayoutConstraintGroup]) -> PTLayoutResult {
+        PTLayoutEngine.activateAtomically(groups)
     }
 
     public func deactivate() {
@@ -1256,6 +1306,35 @@ internal enum PTLayoutEngine {
         // 中文：只有原子激活成功后才登记 prepare 产生的约束组。
         if let owner = group.constraints.first?.owner {
             PTLayoutStoreRegistry.store(for: owner)?.register(group, named: nil)
+        }
+        return .success(PTLayoutChanges(count: allEntries.count))
+    }
+
+    // English: Preflight every group and activate one native batch, so a later failure cannot leave an earlier group active.
+    // Español: Prevalida todos los grupos y activa un solo lote nativo para evitar activaciones parciales.
+    // 中文：先预检全部约束组，再一次性激活原生约束，避免前面的组已生效而后面的组失败。
+    static func activateAtomically(_ groups: [PTLayoutConstraintGroup]) -> PTLayoutResult {
+        let nonEmptyGroups = groups.filter { !$0.constraints.isEmpty }
+        guard !nonEmptyGroups.isEmpty else { return .success(PTLayoutChanges(count: 0)) }
+        let allEntries = nonEmptyGroups.flatMap { $0.constraints }.flatMap(\.entries)
+        guard allEntries.allSatisfy({ entry in
+            entry.first.object != nil && (entry.second == nil || entry.second?.object != nil) &&
+                hierarchyIsValid(first: entry.first, second: entry.second)
+        }) else {
+            let owner = nonEmptyGroups.first?.constraints.first?.owner
+            let issue = PTLayoutIssue(code: .hierarchyChanged,
+                                      owner: owner?.displayName ?? "released-object",
+                                      anchor: "activateAtomically",
+                                      reason: "批量约束激活前视图层级已发生变化，整个事务未激活。",
+                                      suggestion: "重新加入父视图后重新构建全部约束。")
+            PTLayoutDiagnostics.report(issue, ownerView: owner?.owningView)
+            return .failure(issue)
+        }
+        NSLayoutConstraint.activate(allEntries.map(\.native))
+        for group in nonEmptyGroups {
+            if let owner = group.constraints.first?.owner {
+                PTLayoutStoreRegistry.store(for: owner)?.register(group, named: nil)
+            }
         }
         return .success(PTLayoutChanges(count: allEntries.count))
     }

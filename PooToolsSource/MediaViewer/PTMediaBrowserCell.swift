@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 import AVFoundation
 import AVKit
@@ -155,32 +158,32 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         super.init(frame: frame)
                 
         contentView.addSubviews([backgroundImageView,effectView,contentScrolView, playBtn, loading, reloadButton])
-        backgroundImageView.snp.makeConstraints { make in
+        backgroundImageView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        effectView.snp.makeConstraints { make in
+        effectView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
         effectView.isHidden = !viewConfig.dynamicBackground
         backgroundImageView.isHidden = !viewConfig.dynamicBackground
         
-        contentScrolView.snp.makeConstraints { make in
+        contentScrolView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         contentScrolView.addSubviews([imageView,livePhoto])
         
-        playBtn.snp.makeConstraints {
+        playBtn.ptLayout.makeConstraints {
             $0.center.equalToSuperview()
             $0.size.equalTo(viewConfig.playButtonImageSize)
         }
 
-        loading.snp.makeConstraints {
+        loading.ptLayout.makeConstraints {
             $0.center.equalToSuperview()
             $0.size.equalTo(50)
         }
 
-        reloadButton.snp.makeConstraints {
+        reloadButton.ptLayout.makeConstraints {
             $0.center.equalToSuperview()
         }
 
@@ -220,13 +223,13 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         guard signature != lastAdaptiveViewportSignature else { return }
         lastAdaptiveViewportSignature = signature
 
-        contentScrolView.snp.remakeConstraints { make in
+        contentScrolView.ptLayout.remakeConstraints { make in
             make.left.equalToSuperview().offset(visibleRect.minX)
             make.right.equalToSuperview().inset(max(0, contentView.bounds.width - visibleRect.maxX))
             make.top.bottom.equalToSuperview()
         }
         [playBtn, loading, reloadButton].forEach { view in
-            view.snp.remakeConstraints { make in
+            view.ptLayout.remakeConstraints { make in
                 make.center.equalTo(contentScrolView)
                 if view === playBtn {
                     make.size.equalTo(viewConfig.playButtonImageSize)
@@ -760,7 +763,7 @@ extension PTMediaBrowserCell {
             reloadWidth = reloadMaxWidth
             baseHeight = reloadButton.sizeFor(lineSpacing: 2.5,width: reloadMaxWidth).height + 16
         }
-        reloadButton.snp.remakeConstraints { make in
+        reloadButton.ptLayout.remakeConstraints { make in
             make.width.equalTo(reloadWidth)
             make.height.equalTo(baseHeight)
             make.center.equalTo(contentScrolView)

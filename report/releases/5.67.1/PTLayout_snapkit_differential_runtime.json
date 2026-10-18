@@ -1,0 +1,21 @@
+{
+  "version": "5.67.1",
+  "source_sha": "80126150505961e259cce5e08ada67962265c063",
+  "status": "typechecked_only_external_runtime_pending",
+  "engines": [
+    "SnapKit 5.7.1",
+    "SnapKit 6.0.0",
+    "PToolsConstraintLayout"
+  ],
+  "semantic_fields": [
+    "anchor",
+    "relation",
+    "priority",
+    "constant",
+    "multiplier",
+    "owner",
+    "lifecycle"
+  ],
+  "frame_tolerance_points": 0.5,
+  "runtime_command": "external iOS host required"
+}

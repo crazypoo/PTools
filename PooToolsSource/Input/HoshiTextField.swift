@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif // 依赖第三方或自定义的属性字符串库
@@ -319,7 +322,7 @@ open class PTHoshiTextField: UITextField {
         addSubview(floatingLabel)
         
         let labelHeight = floatingLabel.font.pointSize + 5
-        floatingLabel.snp.makeConstraints { make in
+        floatingLabel.ptLayout.makeConstraints { make in
             make.right.equalToSuperview()
             make.left.equalToSuperview().inset(self.leftSpace ?? 0)
             make.top.equalToSuperview().inset((self.bounds.height - labelHeight) / 2)
@@ -351,7 +354,7 @@ open class PTHoshiTextField: UITextField {
             let labelHeight = self.floatingLabel.font.pointSize + 5
             self.floatingLabel.alpha = shouldFloat ? 1 : 0
             
-            self.floatingLabel.snp.updateConstraints { make in
+            self.floatingLabel.ptLayout.updateConstraints { make in
                 make.top.equalToSuperview().inset(shouldFloat ? self.setTextAndPlaceHolderTop() : (self.bounds.height - labelHeight) / 2)
                 make.left.equalToSuperview().inset(self.leftSpace ?? 0)
             }
@@ -384,13 +387,13 @@ open class PTHoshiTextField: UITextField {
         let isTextEmpty = text?.isEmpty ?? true
         
         if !isTextEmpty || isFirstResponder {
-            floatingLabel.snp.updateConstraints { make in
+            floatingLabel.ptLayout.updateConstraints { make in
                 make.top.equalToSuperview().inset(self.setTextAndPlaceHolderTop())
                 make.left.equalToSuperview().inset(self.leftSpace ?? 0)
             }
             floatingLabel.alpha = !isTextEmpty ? 1 : 0
         } else {
-            floatingLabel.snp.updateConstraints { make in
+            floatingLabel.ptLayout.updateConstraints { make in
                 make.top.equalToSuperview().inset((self.bounds.height - labelHeight) / 2)
                 make.left.equalToSuperview().inset(self.leftSpace ?? 0)
             }

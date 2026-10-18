@@ -9,6 +9,9 @@ import AVFoundation
 import ptools
 #endif
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 class ViewHierarchyElementThumbnailView: BaseView {
@@ -40,7 +43,7 @@ class ViewHierarchyElementThumbnailView: BaseView {
         }
     }
 
-    private var heightConstraint_inspector: Constraint?
+    private var heightConstraint_inspector: PTLayoutConstraint?
 
     // MARK: - Init
 
@@ -94,7 +97,7 @@ class ViewHierarchyElementThumbnailView: BaseView {
 
         contentView.addArrangedSubview(snapshotContainerView)
 
-        snapshotContainerView.snp.makeConstraints { make in
+        snapshotContainerView.ptLayout.makeConstraints { make in
             heightConstraint_inspector = make.height.equalTo(0).priority(999).constraint
         }
     }

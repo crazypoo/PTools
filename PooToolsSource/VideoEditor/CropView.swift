@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 // English: Import the umbrella Core target explicitly for standalone SwiftPM builds.
@@ -37,7 +40,7 @@ class CropView: UIView {
     private lazy var topLineView: UIView = {
         let view = UIView()
         self.addSubview(view)
-        view.snp.makeConstraints { make in
+        view.ptLayout.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview().offset(self.margin).priority(950)
             make.height.equalTo(self.lineSize).priority(950)
         }
@@ -47,7 +50,7 @@ class CropView: UIView {
     private lazy var leftLineView: UIView = {
         let view = UIView()
         self.addSubview(view)
-        view.snp.makeConstraints { make in
+        view.ptLayout.makeConstraints { make in
             make.leading.top.bottom.equalToSuperview().offset(self.margin).priority(950)
             make.width.equalTo(self.lineSize).priority(950)
         }
@@ -57,7 +60,7 @@ class CropView: UIView {
     private lazy var bottomLineView: UIView = {
         let view = UIView()
         self.addSubview(view)
-        view.snp.makeConstraints { make in
+        view.ptLayout.makeConstraints { make in
             make.leading.trailing.equalToSuperview().offset(self.margin).priority(950)
             make.bottom.equalToSuperview().offset(self.margin).priority(950)
             make.height.equalTo(self.lineSize).priority(950)
@@ -68,7 +71,7 @@ class CropView: UIView {
     private lazy var rightLineView: UIView = {
         let view = UIView()
         self.addSubview(view)
-        view.snp.makeConstraints { make in
+        view.ptLayout.makeConstraints { make in
             make.trailing.top.bottom.equalToSuperview().offset(self.margin).priority(950)
             make.width.equalTo(self.lineSize).priority(950)
         }
@@ -78,10 +81,10 @@ class CropView: UIView {
     private lazy var horizontalLeftLineView: UIView = {
         let view = UIView()
         self.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.leading.equalTo(self.horizontalLeftView.snp.trailing).priority(950)
-            make.bottom.equalTo(self.bottomLineView.snp.top).priority(950)
-            make.top.equalTo(self.topLineView.snp.bottom).priority(950)
+        view.ptLayout.makeConstraints { make in
+            make.leading.equalTo(self.horizontalLeftView.ptLayout.trailing).priority(950)
+            make.bottom.equalTo(self.bottomLineView.ptLayout.top).priority(950)
+            make.top.equalTo(self.topLineView.ptLayout.bottom).priority(950)
             make.width.equalTo(self.lineSize).priority(950)
         }
         return view
@@ -90,10 +93,10 @@ class CropView: UIView {
     private lazy var horizontalRightLineView: UIView = {
         let view = UIView()
         self.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.leading.equalTo(self.horizontalCenterView.snp.trailing).priority(950)
-            make.bottom.equalTo(self.bottomLineView.snp.top).priority(950)
-            make.top.equalTo(self.topLineView.snp.bottom).priority(950)
+        view.ptLayout.makeConstraints { make in
+            make.leading.equalTo(self.horizontalCenterView.ptLayout.trailing).priority(950)
+            make.bottom.equalTo(self.bottomLineView.ptLayout.top).priority(950)
+            make.top.equalTo(self.topLineView.ptLayout.bottom).priority(950)
             make.width.equalTo(self.lineSize).priority(950)
         }
         return view
@@ -102,10 +105,10 @@ class CropView: UIView {
     private lazy var verticalTopLineView: UIView = {
         let view = UIView()
         self.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.top.equalTo(self.verticalTopView.snp.bottom).priority(950)
-            make.leading.equalTo(self.leftLineView.snp.trailing).priority(950)
-            make.trailing.equalTo(self.rightLineView.snp.leading).priority(950)
+        view.ptLayout.makeConstraints { make in
+            make.top.equalTo(self.verticalTopView.ptLayout.bottom).priority(950)
+            make.leading.equalTo(self.leftLineView.ptLayout.trailing).priority(950)
+            make.trailing.equalTo(self.rightLineView.ptLayout.leading).priority(950)
             make.height.equalTo(self.lineSize).priority(950)
         }
         return view
@@ -114,10 +117,10 @@ class CropView: UIView {
     private lazy var verticalBottomLineView: UIView = {
         let view = UIView()
         self.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.top.equalTo(self.verticalCenterView.snp.bottom).priority(950)
-            make.leading.equalTo(self.leftLineView.snp.trailing).priority(950)
-            make.trailing.equalTo(self.rightLineView.snp.leading).priority(950)
+        view.ptLayout.makeConstraints { make in
+            make.top.equalTo(self.verticalCenterView.ptLayout.bottom).priority(950)
+            make.leading.equalTo(self.leftLineView.ptLayout.trailing).priority(950)
+            make.trailing.equalTo(self.rightLineView.ptLayout.leading).priority(950)
             make.height.equalTo(self.lineSize).priority(950)
         }
         return view
@@ -126,10 +129,10 @@ class CropView: UIView {
     private lazy var horizontalLeftView: UIView = {
         let view = UIView()
         self.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.leading.equalTo(self.leftLineView.snp.trailing).priority(950)
-            make.bottom.equalTo(self.bottomLineView.snp.top).priority(950)
-            make.top.equalTo(self.topLineView.snp.bottom).priority(950)
+        view.ptLayout.makeConstraints { make in
+            make.leading.equalTo(self.leftLineView.ptLayout.trailing).priority(950)
+            make.bottom.equalTo(self.bottomLineView.ptLayout.top).priority(950)
+            make.top.equalTo(self.topLineView.ptLayout.bottom).priority(950)
         }
         return view
     }()
@@ -137,11 +140,11 @@ class CropView: UIView {
     private lazy var horizontalCenterView: UIView = {
         let view = UIView()
         self.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.leading.equalTo(self.horizontalLeftLineView.snp.trailing).priority(950)
-            make.bottom.equalTo(self.bottomLineView.snp.top).priority(950)
-            make.top.equalTo(self.topLineView.snp.bottom).priority(950)
-            make.width.equalTo(self.horizontalLeftView.snp.width).priority(950)
+        view.ptLayout.makeConstraints { make in
+            make.leading.equalTo(self.horizontalLeftLineView.ptLayout.trailing).priority(950)
+            make.bottom.equalTo(self.bottomLineView.ptLayout.top).priority(950)
+            make.top.equalTo(self.topLineView.ptLayout.bottom).priority(950)
+            make.width.equalTo(self.horizontalLeftView.ptLayout.width).priority(950)
         }
         return view
     }()
@@ -149,12 +152,12 @@ class CropView: UIView {
     private lazy var horizontalRightView: UIView = {
         let view = UIView()
         self.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.leading.equalTo(self.horizontalRightLineView.snp.trailing).priority(950)
-            make.bottom.equalTo(self.bottomLineView.snp.top).priority(950)
-            make.top.equalTo(self.topLineView.snp.bottom).priority(950)
-            make.trailing.equalTo(self.rightLineView.snp.leading).priority(950)
-            make.width.equalTo(self.horizontalLeftView.snp.width).priority(950)
+        view.ptLayout.makeConstraints { make in
+            make.leading.equalTo(self.horizontalRightLineView.ptLayout.trailing).priority(950)
+            make.bottom.equalTo(self.bottomLineView.ptLayout.top).priority(950)
+            make.top.equalTo(self.topLineView.ptLayout.bottom).priority(950)
+            make.trailing.equalTo(self.rightLineView.ptLayout.leading).priority(950)
+            make.width.equalTo(self.horizontalLeftView.ptLayout.width).priority(950)
         }
         return view
     }()
@@ -162,10 +165,10 @@ class CropView: UIView {
     private lazy var verticalTopView: UIView = {
         let view = UIView()
         self.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.top.equalTo(self.topLineView.snp.bottom).priority(950)
-            make.leading.equalTo(self.leftLineView.snp.trailing).priority(950)
-            make.trailing.equalTo(self.rightLineView.snp.leading).priority(950)
+        view.ptLayout.makeConstraints { make in
+            make.top.equalTo(self.topLineView.ptLayout.bottom).priority(950)
+            make.leading.equalTo(self.leftLineView.ptLayout.trailing).priority(950)
+            make.trailing.equalTo(self.rightLineView.ptLayout.leading).priority(950)
         }
         return view
     }()
@@ -173,11 +176,11 @@ class CropView: UIView {
     private lazy var verticalCenterView: UIView = {
         let view = UIView()
         self.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.top.equalTo(self.verticalTopLineView.snp.bottom).priority(950)
-            make.leading.equalTo(self.leftLineView.snp.trailing).priority(950)
-            make.trailing.equalTo(self.rightLineView.snp.leading).priority(950)
-            make.height.equalTo(self.verticalTopView.snp.height).priority(950)
+        view.ptLayout.makeConstraints { make in
+            make.top.equalTo(self.verticalTopLineView.ptLayout.bottom).priority(950)
+            make.leading.equalTo(self.leftLineView.ptLayout.trailing).priority(950)
+            make.trailing.equalTo(self.rightLineView.ptLayout.leading).priority(950)
+            make.height.equalTo(self.verticalTopView.ptLayout.height).priority(950)
         }
         return view
     }()
@@ -185,12 +188,12 @@ class CropView: UIView {
     private lazy var verticalBottomView: UIView = {
         let view = UIView()
         self.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.top.equalTo(self.verticalBottomLineView.snp.bottom).priority(950)
-            make.leading.equalTo(self.leftLineView.snp.trailing).priority(950)
-            make.trailing.equalTo(self.rightLineView.snp.leading).priority(950)
-            make.height.equalTo(self.verticalTopView.snp.height).priority(950)
-            make.bottom.equalTo(self.bottomLineView.snp.top).priority(950)
+        view.ptLayout.makeConstraints { make in
+            make.top.equalTo(self.verticalBottomLineView.ptLayout.bottom).priority(950)
+            make.leading.equalTo(self.leftLineView.ptLayout.trailing).priority(950)
+            make.trailing.equalTo(self.rightLineView.ptLayout.leading).priority(950)
+            make.height.equalTo(self.verticalTopView.ptLayout.height).priority(950)
+            make.bottom.equalTo(self.bottomLineView.ptLayout.top).priority(950)
         }
         return view
     }()

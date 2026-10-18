@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 @MainActor
@@ -57,7 +60,7 @@ open class PTNavBar: PTNavigationBarContainer {
             case .auto:
                 if let view = titleView {
                     let targetWidth = max(view.intrinsicContentSize.width, view.bounds.width)
-                    view.snp.remakeConstraints { make in
+                    view.ptLayout.remakeConstraints { make in
                         make.centerX.centerY.equalToSuperview()
                         make.height.equalToSuperview()
                         make.width.equalTo(min(targetWidth, titleViewMAxWidth))
@@ -65,7 +68,7 @@ open class PTNavBar: PTNavigationBarContainer {
                 }
             case .fixed(let width):
                 if let view = titleView {
-                    view.snp.remakeConstraints { make in
+                    view.ptLayout.remakeConstraints { make in
                         make.center.equalToSuperview()
                         make.width.equalTo(min(width, titleViewMAxWidth))
                         make.height.equalToSuperview()
@@ -147,11 +150,11 @@ open class PTNavBar: PTNavigationBarContainer {
         updateContainerConstraints(leftContainer, isLeft: true)
         updateContainerConstraints(rightContainer, isLeft: false)
         
-        titleContainer.snp.remakeConstraints { make in
+        titleContainer.ptLayout.remakeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
-            make.left.greaterThanOrEqualTo(leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing)
-            make.right.lessThanOrEqualTo(rightContainer.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing)
+            make.left.greaterThanOrEqualTo(leftContainer.ptLayout.right).offset(PTAppBaseConfig.share.navContainerSpacing)
+            make.right.lessThanOrEqualTo(rightContainer.ptLayout.left).offset(-PTAppBaseConfig.share.navContainerSpacing)
             make.height.equalTo(34)
         }
     }
@@ -159,7 +162,7 @@ open class PTNavBar: PTNavigationBarContainer {
     // 🔥 核心逻辑 1：接管并重构父类 topBarContainer 的约束
     private func updateTopBarContainerConstraints() {
         // topBarContainer 是父类 PTNavigationBarContainer 里的属性
-        topBarContainer.snp.remakeConstraints { make in
+        topBarContainer.ptLayout.remakeConstraints { make in
             make.left.right.equalToSuperview()
             
             if isFakeNav {
@@ -188,7 +191,7 @@ open class PTNavBar: PTNavigationBarContainer {
         let leadingInset = layoutRect.minX + PTAppBaseConfig.share.defaultViewSpace
         let trailingInset = max(0, bounds.width - layoutRect.maxX) + PTAppBaseConfig.share.defaultViewSpace
         
-        container.snp.remakeConstraints { make in
+        container.ptLayout.remakeConstraints { make in
             if isLeft {
                 make.left.equalToSuperview().offset(leadingInset)
             } else {
@@ -238,7 +241,7 @@ open class PTNavBar: PTNavigationBarContainer {
     }
 
     private func applyTitleViewConstraints(_ view: UIView) {
-        view.snp.remakeConstraints { make in
+        view.ptLayout.remakeConstraints { make in
             switch titleViewMode {
             case .auto:
                 let targetWidth = max(view.intrinsicContentSize.width, view.bounds.width)
@@ -310,11 +313,11 @@ open class PTNavBar: PTNavigationBarContainer {
         guard lastWidthLayoutSignature != signature else { return }
         lastWidthLayoutSignature = signature
 
-        titleContainer.snp.remakeConstraints { make in
+        titleContainer.ptLayout.remakeConstraints { make in
             make.centerY.equalToSuperview()
             make.centerX.equalToSuperview().offset(visibleRect.midX - bounds.midX)
-            make.left.greaterThanOrEqualTo(leftContainer.snp.right).offset(navigationSpacing)
-            make.right.lessThanOrEqualTo(rightContainer.snp.left).offset(-navigationSpacing)
+            make.left.greaterThanOrEqualTo(leftContainer.ptLayout.right).offset(navigationSpacing)
+            make.right.lessThanOrEqualTo(rightContainer.ptLayout.left).offset(-navigationSpacing)
             // English: Give the title container an explicit width so Auto Layout cannot reuse an old ambiguous frame.
             // Español: Define un ancho explícito para que Auto Layout no reutilice un frame antiguo y ambiguo.
             // 中文：为标题容器设置明确宽度，避免 Auto Layout 复用旧的模糊 frame。

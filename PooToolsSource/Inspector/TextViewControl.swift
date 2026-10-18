@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -110,13 +113,13 @@ final class TextViewControl: BaseFormControl {
 
     private let aspectRatio: CGFloat = 3 / 5
 
-    private var textViewHeightConstraint: Constraint?
+    private var textViewHeightConstraint: PTLayoutConstraint?
 
     private var isScrollEnabled: Bool = false {
         didSet {
             if isScrollEnabled {
-                textView.snp.makeConstraints { make in
-                    textViewHeightConstraint = make.height.equalTo(textView.snp.width).multipliedBy(aspectRatio).constraint
+                textView.ptLayout.makeConstraints { make in
+                    textViewHeightConstraint = make.height.equalTo(textView.ptLayout.width).multipliedBy(aspectRatio).constraint
                 }
             }
             else {

@@ -5,6 +5,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -43,7 +46,7 @@ final class ColorPreviewControl: BaseFormControl {
     private lazy var colorDisplayControl = ColorDisplayControl().then {
         $0.color = selectedColor
 
-        $0.snp.makeConstraints { make in
+        $0.ptLayout.makeConstraints { make in
             make.height.equalTo(20)
             make.width.equalTo(40)
         }

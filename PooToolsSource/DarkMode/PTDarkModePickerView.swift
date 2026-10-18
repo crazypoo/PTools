@@ -6,6 +6,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 // MARK: - 暗黑模式时间的设置
@@ -164,16 +167,16 @@ class PTDarkModePickerView: UIView {
         addSubview(backdropView)
         addSubview(bgView)
 
-        backdropView.snp.makeConstraints { make in
+        backdropView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        bgView.snp.makeConstraints { make in
+        bgView.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(CGFloat.kPickerHeight + navBarHeight)
         }
 
         bgView.addSubviews([topToolBar, leftTimePickerView, rightTimePickerView, middeleLabel, topLineView])
-        topToolBar.snp.makeConstraints { make in
+        topToolBar.ptLayout.makeConstraints { make in
             make.left.right.top.equalToSuperview()
             make.height.equalTo(navBarHeight)
         }
@@ -181,27 +184,27 @@ class PTDarkModePickerView: UIView {
         topToolBar.setLeftButtons([cancelButton])
         topToolBar.setRightButtons([sureButton])
 
-        leftTimePickerView.snp.makeConstraints { make in
+        leftTimePickerView.ptLayout.makeConstraints { make in
             make.left.bottom.equalToSuperview()
-            make.right.equalTo(bgView.snp.centerX)
-            make.top.equalTo(topToolBar.snp.bottom)
+            make.right.equalTo(bgView.ptLayout.centerX)
+            make.top.equalTo(topToolBar.ptLayout.bottom)
         }
 
-        rightTimePickerView.snp.makeConstraints { make in
+        rightTimePickerView.ptLayout.makeConstraints { make in
             make.right.bottom.equalToSuperview()
-            make.left.equalTo(bgView.snp.centerX)
+            make.left.equalTo(bgView.ptLayout.centerX)
             make.top.equalTo(leftTimePickerView)
         }
 
-        middeleLabel.snp.makeConstraints { make in
+        middeleLabel.ptLayout.makeConstraints { make in
             make.size.equalTo(40)
             make.centerX.equalToSuperview()
             make.centerY.equalTo(leftTimePickerView)
         }
 
-        topLineView.snp.makeConstraints { make in
+        topLineView.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalTo(topToolBar.snp.bottom).offset((-lineViewHeight) / 2)
+            make.top.equalTo(topToolBar.ptLayout.bottom).offset((-lineViewHeight) / 2)
             make.height.equalTo(lineViewHeight)
         }
 

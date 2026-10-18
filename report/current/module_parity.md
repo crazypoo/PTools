@@ -3,19 +3,19 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/validate_module_parity.sh
-Source revision: a868c0a22374e9a4016e85a100ccc814895d9cc3
-Generated at: 2026-10-18T02:40:26Z
+Source revision: 80126150505961e259cce5e08ada67962265c063
+Generated at: 2026-10-18T05:02:35Z
 -->
 
 # SwiftPM / CocoaPods Module Parity
 
 - Status: `baseline`
-- Fingerprint: `536dfe06d4513880c1d0a6e2f35879c65060eeade2f5b68ff4221a91a4b8e144`
+- Fingerprint: `013163fa4a9e0cbc7c6a1b868d64bd5a988d47a108631e4d97ef988ff56ea8b6`
 - Matched modules: `123`
 - SwiftPM-only modules: `34`
 - CocoaPods-only modules: `36`
 - Source-directory drift: `3`
-- Dependency drift: `63`
+- Dependency drift: `82`
 - Swift setting / macro drift: `56`
 
 ## Classification
@@ -48,66 +48,85 @@ The baseline records existing differences as explicit review items. A later mani
 
 ### Dependencies
 
+- `Banner` / `internal_dependencies`: SPM=["Logging", "Overlay", "PToolsConstraintLayout", "PToolsCore", "Symbols"]; CocoaPods=["ConstraintLayout", "Logging", "Overlay", "PToolsCore", "Symbols"]
 - `Banner` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `BluetoothPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["Core"]
-- `CheckUpdate` / `internal_dependencies`: SPM=["Core", "Hud", "Loading", "NetWork"]; CocoaPods=["NetWork"]
+- `CheckUpdate` / `internal_dependencies`: SPM=["Core", "Hud", "Loading", "NetWork", "PToolsConstraintLayout"]; CocoaPods=["NetWork"]
 - `CheckUpdate` / `third_party_dependencies`: SPM=["Swift-JWT"]; CocoaPods=["SwiftJWT"]
 - `Configuration` / `internal_dependencies`: SPM=["Storage", "StorageCore"]; CocoaPods=["Storage"]
+- `ContentState` / `internal_dependencies`: SPM=["Accessibility", "Connectivity", "Core", "PToolsConstraintLayout", "Theme"]; CocoaPods=["Accessibility", "Connectivity", "Core", "Theme"]
 - `ContentState` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
-- `Core` / `internal_dependencies`: SPM=["Device", "Logging", "PToolsConstraintLayout", "PToolsCore", "PToolsDate", "PToolsFontCatalogCore", "PToolsPermissionCore", "PToolsUIFoundation", "Symbols"]; CocoaPods=["Date", "Device", "Logging", "PToolsCore", "PToolsUIFoundation", "Symbols"]
+- `Core` / `internal_dependencies`: SPM=["Device", "Logging", "PToolsConstraintLayout", "PToolsCore", "PToolsDate", "PToolsFontCatalogCore", "PToolsPermissionCore", "PToolsUIFoundation", "Symbols"]; CocoaPods=["ConstraintLayout", "Date", "Device", "Logging", "PToolsCore", "PToolsUIFoundation", "Symbols"]
 - `Core` / `third_party_dependencies`: SPM=["IQKeyboardManager", "Kingfisher", "SnapKit", "lottie-ios"]; CocoaPods=["IQKeyboardManagerSwift", "IQKeyboardToolbarManager", "Kingfisher", "SnapKit", "lottie-ios"]
+- `CustomerLabel` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout"]; CocoaPods=["Core"]
 - `CustomerLabel` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `CustomerNumberKeyboard` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
+- `DEBUG` / `internal_dependencies`: SPM=["BackgroundTasks", "Connectivity", "Core", "DeepLink", "NetWork", "Notifications", "Overlay", "PDF", "PToolsConstraintLayout", "RouteCore", "SearchBar", "Share", "Storage", "Symbols"]; CocoaPods=["BackgroundTasks", "Connectivity", "Core", "DeepLink", "NetWork", "Notifications", "Overlay", "PDF", "RouteCore", "SearchBar", "Share", "Storage", "Symbols"]
 - `DEBUG` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
+- `Documents` / `internal_dependencies`: SPM=["PDF", "PToolsConstraintLayout"]; CocoaPods=["PDF"]
 - `Documents` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
+- `Form` / `internal_dependencies`: SPM=["Accessibility", "CheckBox", "ContentState", "Core", "Input", "PToolsConstraintLayout", "PToolsCore", "Picker", "Slider", "Stepper", "Theme"]; CocoaPods=["Accessibility", "CheckBox", "ContentState", "Core", "Input", "PToolsCore", "Picker", "Slider", "Stepper", "Theme"]
 - `Form` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
+- `Guide` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout", "PageControl"]; CocoaPods=["Core", "PageControl"]
 - `Guide` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
+- `HandSign` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout"]; CocoaPods=["Core"]
 - `HandSign` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
-- `HarbethKit` / `internal_dependencies`: SPM=["CameraPermission", "Core", "Hud", "Loading", "MediaViewer", "Symbols"]; CocoaPods=["CameraPermission", "Core", "Symbols"]
+- `HarbethKit` / `internal_dependencies`: SPM=["CameraPermission", "Core", "Hud", "Loading", "MediaViewer", "PToolsConstraintLayout", "Symbols"]; CocoaPods=["CameraPermission", "Core", "Symbols"]
 - `HarbethKit` / `third_party_dependencies`: SPM=["Harbeth", "SnapKit"]; CocoaPods=["Harbeth"]
+- `HeartRate` / `internal_dependencies`: SPM=["CameraPermission", "Core", "PToolsConstraintLayout"]; CocoaPods=["CameraPermission", "Core"]
 - `HeartRate` / `third_party_dependencies`: SPM=["SnapKit", "lottie-ios"]; CocoaPods=["lottie-ios"]
+- `Hud` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout", "ProgressBar"]; CocoaPods=["Core", "ProgressBar"]
 - `Hud` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
-- `ImageEditor` / `internal_dependencies`: SPM=["Core", "HarbethKit", "MediaCore", "PToolsCore", "PhotoPicker", "Symbols"]; CocoaPods=["Core", "HarbethKit", "MediaCore", "PhotoPicker", "Symbols"]
+- `ImageEditor` / `internal_dependencies`: SPM=["Core", "HarbethKit", "MediaCore", "PToolsConstraintLayout", "PToolsCore", "PhotoPicker", "Symbols"]; CocoaPods=["Core", "HarbethKit", "MediaCore", "PhotoPicker", "Symbols"]
 - `ImageEditor` / `third_party_dependencies`: SPM=["Harbeth", "SnapKit"]; CocoaPods=[]
 - `ImagePicker` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
-- `Input` / `internal_dependencies`: SPM=["Core", "PToolsCore", "PToolsUIFoundation"]; CocoaPods=["Core", "PToolsUIFoundation"]
-- `Instructions` / `internal_dependencies`: SPM=["Overlay"]; CocoaPods=["Core", "Overlay"]
+- `Input` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout", "PToolsCore", "PToolsUIFoundation"]; CocoaPods=["Core", "PToolsUIFoundation"]
+- `Instructions` / `internal_dependencies`: SPM=["Overlay", "PToolsConstraintLayout"]; CocoaPods=["Core", "Overlay"]
 - `Instructions` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
+- `LaunchTimeProfiler` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout"]; CocoaPods=["Core"]
 - `LaunchTimeProfiler` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
+- `Loading` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout"]; CocoaPods=["Core"]
 - `Loading` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `Location` / `internal_dependencies`: SPM=["Core", "LocationPermission", "Storage", "StorageCore"]; CocoaPods=["Core", "LocationPermission", "Storage"]
-- `MediaViewer` / `internal_dependencies`: SPM=["Core", "LivePhoto", "MediaCore", "PToolsUIFoundation", "PageControl", "ProgressBar"]; CocoaPods=["Core", "LivePhoto", "MediaCore", "PageControl", "ProgressBar"]
+- `MediaViewer` / `internal_dependencies`: SPM=["Core", "LivePhoto", "MediaCore", "PToolsConstraintLayout", "PToolsUIFoundation", "PageControl", "ProgressBar"]; CocoaPods=["Core", "LivePhoto", "MediaCore", "PageControl", "ProgressBar"]
 - `MediaViewer` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `MeidaPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["MeidaPermission"]
-- `MessageKit` / `internal_dependencies`: SPM=["Core", "CustomerLabel", "NetWork", "ProgressBar", "Symbols"]; CocoaPods=["Core", "CustomerLabel", "Symbols"]
+- `MessageKit` / `internal_dependencies`: SPM=["Core", "CustomerLabel", "NetWork", "PToolsConstraintLayout", "ProgressBar", "Symbols"]; CocoaPods=["Core", "CustomerLabel", "Symbols"]
 - `MessageKit` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `Model` / `internal_dependencies`: SPM=["ModelCore", "PToolsModelMacroPlugin"]; CocoaPods=["ModelCore"]
 - `NetWork` / `internal_dependencies`: SPM=["Connectivity", "Core", "Loading", "ModelCore", "PToolsCore", "PToolsModelLegacyKakaJSON", "PToolsModelLegacySmartCodable", "PToolsNetworkModelCore"]; CocoaPods=["Connectivity", "Core", "Loading", "ModelCore", "ModelLegacyKakaJSON", "ModelLegacySmartCodable"]
+- `PDF` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout"]; CocoaPods=["Core"]
 - `PDF` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `PageControl` / `internal_dependencies`: SPM=["Core", "PToolsCore"]; CocoaPods=["Core"]
+- `PagingControl` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout"]; CocoaPods=["Core"]
 - `PagingControl` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
-- `PhotoPicker` / `internal_dependencies`: SPM=["CameraPermission", "Core", "ImagePicker", "Loading", "MediaCore", "PToolsUIFoundation", "Symbols"]; CocoaPods=["Core", "ImagePicker", "Loading", "MediaCore", "Symbols"]
+- `PhotoPicker` / `internal_dependencies`: SPM=["CameraPermission", "Core", "ImagePicker", "Loading", "MediaCore", "PToolsConstraintLayout", "PToolsUIFoundation", "Symbols"]; CocoaPods=["Core", "ImagePicker", "Loading", "MediaCore", "Symbols"]
 - `PhotoPicker` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
-- `Picker` / `internal_dependencies`: SPM=["Core", "PToolsCore"]; CocoaPods=["Core"]
+- `Picker` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout", "PToolsCore"]; CocoaPods=["Core"]
 - `Picker` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
+- `Ping` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout"]; CocoaPods=["Core"]
 - `Ping` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `Popover` / `internal_dependencies`: SPM=["Overlay", "PToolsCore", "Symbols"]; CocoaPods=["Overlay", "Symbols"]
+- `ProgressBar` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout"]; CocoaPods=["Core"]
 - `ProgressBar` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
-- `RateView` / `internal_dependencies`: SPM=["Core"]; CocoaPods=["PToolsUIFoundation"]
+- `RateView` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout"]; CocoaPods=["ConstraintLayout", "PToolsUIFoundation"]
 - `SVG` / `third_party_dependencies`: SPM=["Kingfisher", "PocketSVG"]; CocoaPods=["PocketSVG", "Protobuf", "SVGAPlayer"]
-- `ScanQRCode` / `internal_dependencies`: SPM=["CameraPermission", "Core", "ImagePicker", "PToolsCore", "PhotoPicker"]; CocoaPods=["CameraPermission", "Core", "PhotoPicker"]
+- `ScanQRCode` / `internal_dependencies`: SPM=["CameraPermission", "Core", "ImagePicker", "PToolsConstraintLayout", "PToolsCore", "PhotoPicker"]; CocoaPods=["CameraPermission", "Core", "PhotoPicker"]
 - `ScanQRCode` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
-- `ScrollBanner` / `internal_dependencies`: SPM=["Core", "PToolsUIFoundation", "PageControl"]; CocoaPods=["Core", "PageControl"]
+- `ScrollBanner` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout", "PToolsUIFoundation", "PageControl"]; CocoaPods=["Core", "PageControl"]
 - `ScrollBanner` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
+- `Search` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout", "PToolsUIFoundation", "SearchBar"]; CocoaPods=["Core", "PToolsUIFoundation", "SearchBar"]
 - `Search` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `Segmented` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
+- `Share` / `internal_dependencies`: SPM=["Core", "CustomerLabel", "PToolsConstraintLayout"]; CocoaPods=["Core", "CustomerLabel"]
 - `SiriPermission` / `internal_dependencies`: SPM=["PToolsPermissionCore"]; CocoaPods=["Core"]
-- `Slider` / `internal_dependencies`: SPM=[]; CocoaPods=["PToolsUIFoundation"]
+- `Slider` / `internal_dependencies`: SPM=["PToolsConstraintLayout"]; CocoaPods=["ConstraintLayout", "PToolsUIFoundation"]
+- `Stepper` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout"]; CocoaPods=["Core"]
 - `Stepper` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `TipsView` / `internal_dependencies`: SPM=["Core", "Overlay"]; CocoaPods=["Core"]
-- `VideoEditor` / `internal_dependencies`: SPM=["Core", "HarbethKit", "Loading", "MediaCore", "PToolsCore", "ProgressBar", "Symbols"]; CocoaPods=["Core", "HarbethKit", "Loading", "MediaCore", "ProgressBar", "Symbols"]
+- `VideoEditor` / `internal_dependencies`: SPM=["Core", "HarbethKit", "Loading", "MediaCore", "PToolsConstraintLayout", "PToolsCore", "ProgressBar", "Symbols"]; CocoaPods=["Core", "HarbethKit", "Loading", "MediaCore", "ProgressBar", "Symbols"]
 - `VideoEditor` / `third_party_dependencies`: SPM=["Harbeth", "SnapKit"]; CocoaPods=[]
-- `WhatsNewsKit` / `internal_dependencies`: SPM=["Core", "PToolsUIFoundation"]; CocoaPods=["Core"]
+- `WhatsNewsKit` / `internal_dependencies`: SPM=["Core", "PToolsConstraintLayout", "PToolsUIFoundation"]; CocoaPods=["Core"]
 - `WhatsNewsKit` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `WidgetCore` / `internal_dependencies`: SPM=["DeepLink", "RouteCore", "Storage", "StorageCore"]; CocoaPods=["DeepLink", "RouteCore", "Storage"]
 - `iOS17Tips` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]

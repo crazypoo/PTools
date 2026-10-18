@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -122,43 +125,43 @@ class PTMediaBrowserBottom: UIView {
         }
         addSubviews(subs)
         if viewConfig.pageControlShow {
-            pageControlView.snp.makeConstraints { make in
-                make.left.equalTo(self.safeAreaLayoutGuide.snp.left).offset(PTAppBaseConfig.share.defaultViewSpace)
-                make.right.equalTo(self.safeAreaLayoutGuide.snp.right).inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(PageControlBottomSpace)
+            pageControlView.ptLayout.makeConstraints { make in
+                make.left.equalTo(self.safeAreaLayoutGuide.ptLayout.left).offset(PTAppBaseConfig.share.defaultViewSpace)
+                make.right.equalTo(self.safeAreaLayoutGuide.ptLayout.right).inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.bottom.equalTo(self.safeAreaLayoutGuide.ptLayout.bottom).inset(PageControlBottomSpace)
                 make.height.equalTo(PageControlHeight)
             }
         }
         
-        moreActionButton.snp.makeConstraints { make in
+        moreActionButton.ptLayout.makeConstraints { make in
             make.width.height.equalTo(BottomMoreHeight)
-            make.right.equalTo(self.safeAreaLayoutGuide.snp.right).inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.right.equalTo(self.safeAreaLayoutGuide.ptLayout.right).inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(BottomTopSpacing)
         }
         switch viewConfig.actionType {
         case .Empty:
             moreActionButton.isHidden = true
-            titleLabel.snp.makeConstraints { make in
-                make.left.equalTo(self.safeAreaLayoutGuide.snp.left).offset(PTAppBaseConfig.share.defaultViewSpace)
-                make.right.equalTo(self.safeAreaLayoutGuide.snp.right).inset(PTAppBaseConfig.share.defaultViewSpace)
+            titleLabel.ptLayout.makeConstraints { make in
+                make.left.equalTo(self.safeAreaLayoutGuide.ptLayout.left).offset(PTAppBaseConfig.share.defaultViewSpace)
+                make.right.equalTo(self.safeAreaLayoutGuide.ptLayout.right).inset(PTAppBaseConfig.share.defaultViewSpace)
                 if self.viewConfig.pageControlShow{
-                    make.bottom.equalTo(self.pageControlView.snp.top).offset(-BottomItemSpacing)
+                    make.bottom.equalTo(self.pageControlView.ptLayout.top).offset(-BottomItemSpacing)
                 } else {
-                    make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
+                    make.bottom.equalTo(self.safeAreaLayoutGuide.ptLayout.bottom)
                 }
                 make.top.equalTo(self.moreActionButton)
             }
         default:
             moreActionButton.isHidden = false
-            titleLabel.snp.makeConstraints { make in
-                make.left.equalTo(self.safeAreaLayoutGuide.snp.left).offset(PTAppBaseConfig.share.defaultViewSpace)
+            titleLabel.ptLayout.makeConstraints { make in
+                make.left.equalTo(self.safeAreaLayoutGuide.ptLayout.left).offset(PTAppBaseConfig.share.defaultViewSpace)
                 if self.viewConfig.pageControlShow{
-                    make.bottom.equalTo(self.pageControlView.snp.top).offset(-BottomItemSpacing)
+                    make.bottom.equalTo(self.pageControlView.ptLayout.top).offset(-BottomItemSpacing)
                 } else {
-                    make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
+                    make.bottom.equalTo(self.safeAreaLayoutGuide.ptLayout.bottom)
                 }
                 make.top.equalTo(self.moreActionButton)
-                make.right.equalTo(self.moreActionButton.snp.left).offset(-ContentMoreSpacing)
+                make.right.equalTo(self.moreActionButton.ptLayout.left).offset(-ContentMoreSpacing)
             }
         }
     }
@@ -186,32 +189,32 @@ class PTMediaBrowserBottom: UIView {
         let leadingInset = visibleRect.minX + PTAppBaseConfig.share.defaultViewSpace
         let trailingInset = max(0, bounds.width - visibleRect.maxX) + PTAppBaseConfig.share.defaultViewSpace
         if viewConfig.pageControlShow {
-            pageControlView.snp.remakeConstraints { make in
+            pageControlView.ptLayout.remakeConstraints { make in
                 make.left.equalToSuperview().offset(leadingInset)
                 make.right.equalToSuperview().inset(trailingInset)
-                make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(PageControlBottomSpace)
+                make.bottom.equalTo(self.safeAreaLayoutGuide.ptLayout.bottom).inset(PageControlBottomSpace)
                 make.height.equalTo(PageControlHeight)
             }
         }
 
-        moreActionButton.snp.remakeConstraints { make in
+        moreActionButton.ptLayout.remakeConstraints { make in
             make.width.height.equalTo(BottomMoreHeight)
             make.right.equalToSuperview().inset(trailingInset)
             make.top.equalToSuperview().inset(BottomTopSpacing)
         }
 
-        titleLabel.snp.remakeConstraints { make in
+        titleLabel.ptLayout.remakeConstraints { make in
             make.left.equalToSuperview().offset(leadingInset)
             if viewConfig.pageControlShow {
-                make.bottom.equalTo(pageControlView.snp.top).offset(-BottomItemSpacing)
+                make.bottom.equalTo(pageControlView.ptLayout.top).offset(-BottomItemSpacing)
             } else {
-                make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom)
+                make.bottom.equalTo(self.safeAreaLayoutGuide.ptLayout.bottom)
             }
             make.top.equalTo(moreActionButton)
             if viewConfig.actionType == .Empty || moreActionButton.isHidden {
                 make.right.equalToSuperview().inset(trailingInset)
             } else {
-                make.right.equalTo(moreActionButton.snp.left).offset(-ContentMoreSpacing)
+                make.right.equalTo(moreActionButton.ptLayout.left).offset(-ContentMoreSpacing)
             }
         }
     }

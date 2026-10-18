@@ -1,0 +1,15 @@
+{
+  "version": "5.67.1",
+  "source_sha": "80126150505961e259cce5e08ada67962265c063",
+  "status": "blocked_external_host",
+  "reason": "No same-host Xcode benchmark run was available; no performance claim is made.",
+  "scenarios": [
+    "make",
+    "update",
+    "remake",
+    "cell reuse",
+    "SafeArea/Keyboard/Group",
+    "diagnostic failure"
+  ],
+  "raw_data": []
+}

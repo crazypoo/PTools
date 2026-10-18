@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
@@ -344,17 +347,17 @@ public class PTMediaBrowserController: PTBaseViewController {
         view.addSubviews([newCollectionView,navControl,bottomControl])
 
         // MARK: -  统一约束布局
-        newCollectionView.snp.makeConstraints { make in
+        newCollectionView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        navControl.snp.makeConstraints { make in
+        navControl.ptLayout.makeConstraints { make in
             make.left.right.top.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight_Total)
         }
         
         let pageControlHeight = viewConfig.pageControlShow ? (PageControlBottomSpace + PageControlHeight + BottomItemSpacing) : 0
-        bottomControl.snp.makeConstraints { make in
+        bottomControl.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(bottomSafeAreaInset + pageControlHeight + BottomTopSpacing + BottomMoreHeight)
         }
@@ -394,7 +397,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             // English: Keep normal paging behavior while allowing Duo media to fill the host bounds.
             // Español: Conserva el paginado normal y permite que el multimedia Duo llene los límites del host.
             // 中文：普通设备保持原分页行为，Duo 媒体允许铺满宿主边界。
-            newCollectionView.snp.remakeConstraints { make in
+            newCollectionView.ptLayout.remakeConstraints { make in
                 make.left.equalToSuperview().offset(visibleRect.minX)
                 make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
                 make.top.bottom.equalToSuperview()
@@ -414,7 +417,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         let currentHeight = bottomControl.frame.height
         let minimumHeight = safeBottom + pageControlHeight + BottomTopSpacing + BottomMoreHeight
         if currentHeight > 0, currentHeight < minimumHeight {
-            bottomControl.snp.updateConstraints { make in
+            bottomControl.ptLayout.updateConstraints { make in
                 make.height.equalTo(minimumHeight)
             }
         }
@@ -779,14 +782,14 @@ fileprivate extension PTMediaBrowserController {
             maskView.removeFromSuperview()
             self?.updateBottom(models: models)
         })
-        maskView.snp.makeConstraints { make in
+        maskView.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalTo(navControl.snp.bottom)
-            make.bottom.equalTo(bottomControl.snp.top)
+            make.top.equalTo(navControl.ptLayout.bottom)
+            make.bottom.equalTo(bottomControl.ptLayout.top)
         }
 
         let pageControlHeight = viewConfig.pageControlShow ? (PageControlBottomSpace + PageControlHeight + BottomItemSpacing) : 0
-        bottomControl.snp.updateConstraints { make in
+        bottomControl.ptLayout.updateConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(heightForString(models.imageInfo) + bottomSafeAreaInset + pageControlHeight + BottomTopSpacing)
         }
@@ -829,7 +832,7 @@ fileprivate extension PTMediaBrowserController {
             }
         }
         
-        bottomControl.snp.updateConstraints { make in
+        bottomControl.ptLayout.updateConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(bottomH)
         }

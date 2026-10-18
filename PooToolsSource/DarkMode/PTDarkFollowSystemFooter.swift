@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 
 class PTDarkFollowSystemFooter: PTBaseCollectionReusableView,@MainActor PTSupplementaryRegisterable {
@@ -32,7 +35,7 @@ class PTDarkFollowSystemFooter: PTBaseCollectionReusableView,@MainActor PTSupple
         super.init(frame: frame)
         
         addSubview(descLabel)
-        descLabel.snp.makeConstraints { make in
+        descLabel.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview().inset(10 + PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(10)
         }

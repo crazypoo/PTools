@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 import Photos
 #if canImport(PToolsUIFoundation)
@@ -130,12 +133,12 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         collectionView.contentCollectionView.contentInset.top = collectionInset_Top
         collectionView.contentCollectionView.contentInset.bottom = collectionInset_Bottom
         
-        collectionView.snp.makeConstraints { make in
+        collectionView.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
         }
 
-        fakeNav.snp.makeConstraints { make in
+        fakeNav.ptLayout.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight)
             make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
@@ -189,7 +192,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
             // English: Keep album rows inside the visible pane while the fake navigation bar remains full-height.
             // Español: Mantiene las filas de álbum dentro del panel visible mientras la barra falsa conserva toda la altura.
             // 中文：让相册列表行位于可视面板内，同时保留伪导航栏的完整高度背景。
-            collectionView.snp.remakeConstraints { make in
+            collectionView.ptLayout.remakeConstraints { make in
                 make.left.equalToSuperview().offset(visibleRect.minX)
                 make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
                 make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
@@ -198,7 +201,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
             // English: Give the fake navigation bar the same local pane as its title and back button.
             // Español: Da a la barra falsa el mismo panel local que usan su título y su botón de regreso.
             // 中文：让伪导航栏与标题和返回按钮使用同一个局部可视面板。
-            fakeNav.snp.remakeConstraints { make in
+            fakeNav.ptLayout.remakeConstraints { make in
                 make.left.equalToSuperview().offset(visibleRect.minX)
                 make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
                 make.height.equalTo(CGFloat.kNavBarHeight)

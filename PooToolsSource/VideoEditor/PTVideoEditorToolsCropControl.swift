@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -100,10 +103,10 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
         self.view.clipsToBounds = true
         self.view.backgroundColor = .black
         self.view.addSubview(self.cropView)
-        self.cropView.snp.makeConstraints { make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(10)
+        self.cropView.ptLayout.makeConstraints { make in
+            make.top.equalTo(self.view.safeAreaLayoutGuide.ptLayout.top).offset(10)
             make.left.right.equalToSuperview()
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).offset(-10)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.ptLayout.bottom).offset(-10)
         }
 
         Task { @MainActor in

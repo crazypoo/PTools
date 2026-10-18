@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
-  "generated_at": "2026-10-18T02:38:25Z",
+  "source_revision": "80126150505961e259cce5e08ada67962265c063",
+  "generated_at": "2026-10-18T05:01:48Z",
   "counts": {
     "main_queue_async": 26,
     "task_detached": 31,
@@ -43,7 +43,7 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Base/PTTabBarView.swift",
-      "line": 822,
+      "line": 825,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -241,13 +241,13 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 127,
+      "line": 130,
       "text": "DispatchQueue.main.async {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift",
-      "line": 254,
+      "line": 257,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -271,19 +271,19 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/HeartRate/PTHeartRateViewController.swift",
-      "line": 24,
+      "line": 27,
       "text": "private struct PTHeartRateSampleBufferBox: @unchecked Sendable {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "line": 306,
+      "line": 309,
       "text": "DispatchQueue.main.async { self.updateIndicators() }"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Hud/PTProgressHUD.swift",
-      "line": 488,
+      "line": 491,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in"
     },
     {
@@ -307,13 +307,13 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "line": 189,
+      "line": 192,
       "text": "DispatchQueue.main.async {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/Input/PTInputBoxView.swift",
-      "line": 220,
+      "line": 223,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: workItem)"
     },
     {
@@ -565,13 +565,13 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 982,
+      "line": 985,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 1070,
+      "line": 1073,
       "text": "DispatchQueue.main.async {"
     },
     {
@@ -619,7 +619,7 @@
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/VideoEditor/CropPickerView.swift",
-      "line": 574,
+      "line": 578,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {"
     },
     {
@@ -631,13 +631,13 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsTrimControl.swift",
-      "line": 16,
+      "line": 19,
       "text": "private struct PTSafeMediaBox<T>: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/VideoEditor/PTVideoEditorToolsViewController.swift",
-      "line": 1539,
+      "line": 1542,
       "text": "private struct PTC7SafeBox:@unchecked Sendable {"
     },
     {

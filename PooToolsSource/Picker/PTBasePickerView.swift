@@ -7,10 +7,12 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if canImport(PToolsCore)
 import PToolsCore
 #endif
-import SnapKit
 import Foundation
 #if SWIFT_PACKAGE
 import ptools
@@ -163,8 +165,8 @@ open class PTBasePickerView: UIView {
     private var presentationMode: PresentationMode = .embedded
     private var presentationGeneration = 0
     private var isUIConfigured = false
-    private var cancelWidthConstraint: Constraint?
-    private var confirmWidthConstraint: Constraint?
+    private var cancelWidthConstraint: PTLayoutConstraint?
+    private var confirmWidthConstraint: PTLayoutConstraint?
 
     /// EN: Shows the toolbar when the picker is embedded in another view.
     /// ES: Muestra la barra cuando el selector está incrustado en otra vista.
@@ -226,7 +228,7 @@ open class PTBasePickerView: UIView {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cancelAction))
         backgroundView.addGestureRecognizer(tapGesture)
         addSubviews([backgroundView, containerView])
-        backgroundView.snp.makeConstraints { make in
+        backgroundView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
 
@@ -236,13 +238,13 @@ open class PTBasePickerView: UIView {
         
         // 设置工具栏
         containerView.addSubviews([toolbarView, pickerContainer])
-        toolbarView.snp.makeConstraints { make in
+        toolbarView.ptLayout.makeConstraints { make in
             make.left.right.top.equalToSuperview()
             make.height.equalTo(0)
         }
 
-        pickerContainer.snp.makeConstraints { make in
-            make.top.equalTo(toolbarView.snp.bottom)
+        pickerContainer.ptLayout.makeConstraints { make in
+            make.top.equalTo(toolbarView.ptLayout.bottom)
             make.left.right.bottom.equalToSuperview()
         }
 
@@ -257,7 +259,7 @@ open class PTBasePickerView: UIView {
                                         blurStyle: .systemUltraThinMaterial,
                                         fallbackColor: pickerStyle.pickerBackgroundColor)
             pickerContainer.addSubview(pickerMaskGlassView)
-            pickerMaskGlassView.snp.makeConstraints { make in
+            pickerMaskGlassView.ptLayout.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
 
@@ -288,23 +290,23 @@ open class PTBasePickerView: UIView {
         PTUIAccessibility.applyDynamicType(to: titleLabel, font: pickerStyle.titleTextFont)
         titleLabel.titleLabel?.textAlignment = .center
         toolbarView.addSubviews([cancelButton, confirmButton, titleLabel])
-        cancelButton.snp.makeConstraints { make in
+        cancelButton.ptLayout.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             cancelWidthConstraint = make.width.equalTo(cancelW).constraint
             make.top.bottom.equalToSuperview().inset(self.pickerStyle.toolBarTopBottomSpacing)
         }
         
-        confirmButton.snp.makeConstraints { make in
+        confirmButton.ptLayout.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             confirmWidthConstraint = make.width.equalTo(confirmW).constraint
             make.top.bottom.equalToSuperview().inset(self.pickerStyle.toolBarTopBottomSpacing)
         }
         
-        titleLabel.snp.makeConstraints { make in
+        titleLabel.ptLayout.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.bottom.equalToSuperview().inset(self.pickerStyle.toolBarTopBottomSpacing)
-            make.leading.greaterThanOrEqualTo(cancelButton.snp.trailing).offset(8)
-            make.trailing.lessThanOrEqualTo(confirmButton.snp.leading).offset(-8)
+            make.leading.greaterThanOrEqualTo(cancelButton.ptLayout.trailing).offset(8)
+            make.trailing.lessThanOrEqualTo(confirmButton.ptLayout.leading).offset(-8)
         }
 
         isUIConfigured = true
@@ -390,7 +392,7 @@ open class PTBasePickerView: UIView {
         guard isUIConfigured else { return }
         let shouldShow = presentationMode != .embedded || showsToolbarWhenEmbedded
         toolbarView.isHidden = !shouldShow
-        toolbarView.snp.updateConstraints { make in
+        toolbarView.ptLayout.updateConstraints { make in
             make.height.equalTo(shouldShow ? toolbarHeight : 0)
         }
     }
@@ -402,11 +404,11 @@ open class PTBasePickerView: UIView {
 
         switch mode {
         case .embedded:
-            containerView.snp.remakeConstraints { make in
+            containerView.ptLayout.remakeConstraints { make in
                 make.edges.equalToSuperview()
             }
         case .presented, .dismissing:
-            containerView.snp.remakeConstraints { make in
+            containerView.ptLayout.remakeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.height.equalTo(containerHeight)
                 make.bottom.equalToSuperview().offset(mode == .dismissing ? containerHeight : 0)
@@ -477,7 +479,7 @@ open class PTBasePickerView: UIView {
         if superview == nil {
             hostView.addSubview(self)
         }
-        snp.remakeConstraints { make in
+        ptLayout.remakeConstraints { make in
             make.edges.equalToSuperview()
         }
 
@@ -493,13 +495,13 @@ open class PTBasePickerView: UIView {
         // EN: Start below the host before animating into place.
         // ES: Comienza debajo del anfitrión antes de animarse a su posición.
         // 中文：动画开始前先将容器放到宿主视图底部之外。
-        containerView.snp.updateConstraints { make in
+        containerView.ptLayout.updateConstraints { make in
             make.bottom.equalToSuperview().offset(containerHeight)
         }
         layoutIfNeeded()
         animate(animated, animations: {
             self.backgroundView.alpha = 1
-            self.containerView.snp.updateConstraints { make in
+            self.containerView.ptLayout.updateConstraints { make in
                 make.bottom.equalToSuperview().offset(0)
             }
         })
@@ -523,7 +525,7 @@ open class PTBasePickerView: UIView {
         backgroundView.isUserInteractionEnabled = false
         animate(animated, animations: {
             self.backgroundView.alpha = 0
-            self.containerView.snp.updateConstraints { make in
+            self.containerView.ptLayout.updateConstraints { make in
                 make.bottom.equalToSuperview().offset(self.containerHeight)
             }
         }) { [weak self] in
@@ -600,7 +602,7 @@ public class PTStringPickerView: PTBasePickerView, UIPickerViewDelegate, UIPicke
         pickerView.delegate = self
         pickerView.dataSource = self
         pickerContainer.addSubview(pickerView)
-        pickerView.snp.makeConstraints { make in
+        pickerView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -794,7 +796,7 @@ public class PTDatePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         pickerView.dataSource = self
         
         pickerContainer.addSubview(pickerView)
-        pickerView.snp.makeConstraints { make in
+        pickerView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -1264,7 +1266,7 @@ public class PTTreePickerView: PTBasePickerView, UIPickerViewDelegate, UIPickerV
         pickerView.dataSource = self
         
         pickerContainer.addSubview(pickerView)
-        pickerView.snp.makeConstraints { make in
+        pickerView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }

@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 import SnapKit
 #if POOTOOLS_PERMISSION_HEALTH
 import HealthKit
@@ -181,7 +184,7 @@ public class PTPermissionViewController: PTListViewController {
 
     public override func prepareListViewLayout(_ listView: PTCollectionView) {
         view.addSubview(closeButton)
-        closeButton.snp.makeConstraints { make in
+        closeButton.ptLayout.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.size.equalTo(PTAppBaseConfig.share.navBarButtonSize)
             make.top.equalToSuperview().inset(5)
@@ -189,9 +192,9 @@ public class PTPermissionViewController: PTListViewController {
     }
 
     public override func installListViewConstraints(_ listView: PTCollectionView) {
-        listView.snp.makeConstraints { make in
+        listView.ptLayout.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(closeButton.snp.bottom).offset(10)
+            make.top.equalTo(closeButton.ptLayout.bottom).offset(10)
         }
     }
     

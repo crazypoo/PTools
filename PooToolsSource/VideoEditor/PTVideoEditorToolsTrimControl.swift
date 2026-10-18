@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -42,7 +45,7 @@ class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
         super.viewDidLoad()
 
         view.addSubviews([trimmingControlView])
-        trimmingControlView.snp.makeConstraints { make in
+        trimmingControlView.ptLayout.makeConstraints { make in
             make.height.equalTo(60)
             make.left.right.equalToSuperview().inset(28)
             make.centerY.equalToSuperview()

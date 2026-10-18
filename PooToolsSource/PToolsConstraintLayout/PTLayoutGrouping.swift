@@ -73,11 +73,7 @@ public struct PTLayoutGroupNamespace {
         // English: All groups are validated before any group is activated, preventing partial commits.
         // Español: Todos los grupos se validan antes de activar uno, evitando commits parciales.
         // 中文：先完成全部约束组校验，再统一激活，避免部分提交。
-        for group in preparedGroups {
-            let result = group.activate()
-            guard result.isSuccess else { return result }
-        }
-        return .success(PTLayoutChanges(count: preparedGroups.reduce(0) { $0 + $1.constraints.count }))
+        return PTLayoutConstraintGroup.activateAtomically(preparedGroups)
     }
 
     @discardableResult
@@ -95,11 +91,7 @@ public struct PTLayoutGroupNamespace {
             if let issue = group.issue { return .failure(issue) }
             preparedGroups.append(group)
         }
-        for group in preparedGroups {
-            let result = group.activate()
-            guard result.isSuccess else { return result }
-        }
-        return .success(PTLayoutChanges(count: preparedGroups.reduce(0) { $0 + $1.constraints.count }))
+        return PTLayoutConstraintGroup.activateAtomically(preparedGroups)
     }
 
     private func commonSuperview() -> UIView? {

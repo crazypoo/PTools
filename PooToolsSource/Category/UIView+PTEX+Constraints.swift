@@ -11,7 +11,11 @@
 import UIKit
 import SnapKit
 
+// English: Keep this legacy UIKit compatibility surface on MainActor while preserving its public SnapKit signatures.
+// Español: Mantiene esta superficie legacy de UIKit en MainActor y conserva sus firmas públicas de SnapKit.
+// 中文：让这个 UIKit 兼容层运行在 MainActor，同时保留原有 SnapKit 公开签名。
 //MARK: 視頻剪輯
+@MainActor
 public extension UIView {
     var imageWithView: UIImage? {
         guard !bounds.isEmpty else { return nil }
@@ -50,6 +54,7 @@ public extension UIView {
         return nil
     }
 
+    @MainActor
     private enum PTConstraintAttribute {
         case leading
         case trailing
@@ -115,12 +120,12 @@ public extension UIView {
             let lhs = attribute.maker(from: make)
             if let second {
                 let rhs: ConstraintRelatableTarget = attribute.item(from: second)
-                pt_relation(lhs, rhs: rhs, relation: relatedBy)
+                _ = pt_relation(lhs, rhs: rhs, relation: relatedBy)
                     .multipliedBy(multiplier)
                     .offset(constant)
             } else {
                 let rhs: ConstraintRelatableTarget = constant
-                pt_relation(lhs, rhs: rhs, relation: relatedBy)
+                _ = pt_relation(lhs, rhs: rhs, relation: relatedBy)
             }
         }
 

@@ -7,6 +7,9 @@
 //
 
 import UIKit
+#if canImport(PToolsConstraintLayout)
+import PToolsConstraintLayout
+#endif
 #if canImport(PToolsUIFoundation)
 import PToolsUIFoundation
 #endif
@@ -98,7 +101,7 @@ public struct PTUnavailableManager { // 👈 弃用单例，改用 Struct 静态
             unavailableView = UIContentUnavailableView(configuration: emptyConfig)
             unavailableView.tag = emptyViewTag
             view.addSubview(unavailableView)
-            unavailableView.snp.makeConstraints { make in
+            unavailableView.ptLayout.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
         }
@@ -115,7 +118,7 @@ public struct PTUnavailableManager { // 👈 弃用单例，改用 Struct 静态
         unavailableLoadingView.tag = loadingViewTag
         
         view.addSubview(unavailableLoadingView)
-        unavailableLoadingView.snp.makeConstraints { make in
+        unavailableLoadingView.ptLayout.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -193,7 +196,7 @@ public struct PTUnavailableManager { // 👈 弃用单例，改用 Struct 静态
         guard let customerView = config.customerView else { return }
         customerView.tag = customerViewTag
         view.addSubview(customerView)
-        customerView.snp.makeConstraints { make in
+        customerView.ptLayout.makeConstraints { make in
             // 👈 移除了 make.size.equalTo(customerView.size)，因为如果外界没给 size 会引起约束冲突
             // 通常自定义 view 自身应该撑起内容，或者由外界限制
             make.centerX.equalToSuperview()

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
-  "generated_at": "2026-10-18T02:39:40Z",
+  "source_revision": "80126150505961e259cce5e08ada67962265c063",
+  "generated_at": "2026-10-18T05:03:03Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -54,55 +54,55 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseDecorationFunction.swift",
-      "line": 16,
+      "line": 19,
       "kind": "disk or custom cache",
       "text": "// English: Cache the shadow geometry to avoid rebuilding the path on every layout pass."
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 131,
+      "line": 134,
       "kind": "disk or custom cache",
       "text": "// English: Invalidate every geometry cache when a runtime layout contract changes."
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 785,
+      "line": 788,
       "kind": "disk or custom cache",
       "text": "if let cache = heightCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 786,
+      "line": 789,
       "kind": "disk or custom cache",
       "text": "return cache.doubleValue"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1435,
+      "line": 1438,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1436,
+      "line": 1439,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1546,
+      "line": 1549,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1547,
+      "line": 1550,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2273,
+      "line": 2276,
       "kind": "disk or custom cache",
       "text": "// English: Invalidate only the geometry cache for the requested rows."
     },
@@ -246,7 +246,7 @@
     },
     {
       "path": "PooToolsSource/Button/PTActionLayoutButton.swift",
-      "line": 103,
+      "line": 106,
       "kind": "disk or custom cache",
       "text": "// English: Cache the last layout size to avoid rebuilding identical constraints."
     },
@@ -348,79 +348,79 @@
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 194,
+      "line": 197,
       "kind": "NSCache",
       "text": "cache = NSCache()"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 350,
+      "line": 353,
       "kind": "disk or custom cache",
       "text": "/// Update cache for the current imageView."
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 358,
+      "line": 361,
       "kind": "disk or custom cache",
       "text": "cache?.removeAllObjects()"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 385,
+      "line": 388,
       "kind": "disk or custom cache",
       "text": "if haveCache, let image = cache?.object(forKey: displayOrderIndex as AnyObject) as? UIImage {"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 433,
+      "line": 436,
       "kind": "disk or custom cache",
       "text": "cache?.removeAllObjects()"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 465,
+      "line": 468,
       "kind": "NSCache",
       "text": "/// Prepare the cache by adding every images of the gif to an NSCache object."
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 467,
+      "line": 470,
       "kind": "disk or custom cache",
       "text": "guard let cache = self.cache else { return }"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 468,
+      "line": 471,
       "kind": "disk or custom cache",
       "text": "cache.removeAllObjects()"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 476,
+      "line": 479,
       "kind": "disk or custom cache",
       "text": "cache.setObject(UIImage(cgImage: cgImage), forKey: i as AnyObject)"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 492,
+      "line": 495,
       "kind": "disk or custom cache",
       "text": "static var cache: UInt8 = 0"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 578,
+      "line": 581,
       "kind": "NSCache",
       "text": "private var cache: NSCache<AnyObject, AnyObject>? {"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 579,
+      "line": 582,
       "kind": "NSCache",
       "text": "get { objc_getAssociatedObject(self, &AssociatedKeys.cache) as? NSCache }"
     },
     {
       "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
-      "line": 580,
+      "line": 583,
       "kind": "disk or custom cache",
       "text": "set { objc_setAssociatedObject(self, &AssociatedKeys.cache, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }"
     },
@@ -1008,19 +1008,19 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 669,
+      "line": 672,
       "kind": "disk or custom cache",
       "text": "PTAlertTipsViewController.tipsAlertShow(title: \"Error\",subtitle: \"Save to cache failed\", icon: .Error)"
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 707,
+      "line": 710,
       "kind": "disk or custom cache",
       "text": "// MARK: - Cache Helper"
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 721,
+      "line": 724,
       "kind": "disk or custom cache",
       "text": "PTNSLogConsole(\"Video cache export failed: \\(String(describing: error))\")"
     },
