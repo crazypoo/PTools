@@ -118,11 +118,9 @@ public final class PTAcknowledgementsViewController: PTSearchViewController<PTAc
     private var manifest: PTLicenseManifest?
     private var loadTask: Task<Void, Never>?
 
-    public init(
-        configuration: PTAcknowledgementsConfiguration = .init(),
-        dataSource: any PTAcknowledgementsDataSource = PTBundleAcknowledgementsDataSource(),
-        additionalEntries: [PTAcknowledgement] = []
-    ) {
+    public init(configuration: PTAcknowledgementsConfiguration = .init(),
+                dataSource: any PTAcknowledgementsDataSource = PTBundleAcknowledgementsDataSource(),
+                additionalEntries: [PTAcknowledgement] = []) {
         self.configuration = configuration
         self.dataSource = dataSource
         self.additionalEntries = additionalEntries

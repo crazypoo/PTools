@@ -356,10 +356,10 @@ final class PTDemoCoordinator {
             guard let manifest = PTDemoAcknowledgementsData.manifest else {
                 return PTFuncDetailViewController(descriptor: descriptor)
             }
-            return PTAcknowledgementsViewController(
+            let vc = PTAcknowledgementsViewController(
                 configuration: PTDemoAcknowledgementsData.configuration,
-                dataSource: PTInMemoryAcknowledgementsDataSource(manifest: manifest)
-            )
+                dataSource: PTInMemoryAcknowledgementsDataSource(manifest: manifest))
+            return vc
         case "security.acknowledgements-headless":
             return PTAcknowledgementsHeadlessDemoViewController()
         case "infrastructure.database":

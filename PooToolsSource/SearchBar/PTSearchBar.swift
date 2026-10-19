@@ -7,7 +7,6 @@
 //
 
 import UIKit
-
 #if SWIFT_PACKAGE
 import ptools
 #endif
@@ -31,7 +30,6 @@ public class PTSearchBarTextFieldClearButtonConfig: NSObject {
 
 @objcMembers
 public class PTSearchBar: UISearchBar {
-
     private var isRefreshingLocalizedPlaceholder = false
     private var usesDefaultLocalizedPlaceholder = true
     private var searchTask: Task<Void, Never>?
@@ -46,14 +44,16 @@ public class PTSearchBar: UISearchBar {
     // Español: Estos callbacks observan los eventos de edición de UIKit sin apropiarse del delegate del cliente.
     // 中文：这些回调只观察 UIKit 编辑事件，不接管调用方的 delegate。
     @nonobjc open var textChangeHandler: (@MainActor @Sendable (String) -> Void)?
-    @nonobjc open var returnHandler: (@MainActor @Sendable (String) -> Void)?
-    @nonobjc open var editingBeganHandler: (@MainActor @Sendable () -> Void)?
-    @nonobjc open var editingEndedHandler: (@MainActor @Sendable () -> Void)?
 
+    @nonobjc open var returnHandler: (@MainActor @Sendable (String) -> Void)?
+
+    @nonobjc open var editingBeganHandler: (@MainActor @Sendable () -> Void)?
+
+    @nonobjc open var editingEndedHandler: (@MainActor @Sendable () -> Void)?
     open var visualStyle: PTSearchVisualStyle = .automatic {
         didSet { updateVisualStyle() }
     }
-    
+
     // MARK: - 🎨 UI 属性配置
     open var searchPlaceholder: String = "PT Input text".localized() {
         didSet {
@@ -64,20 +64,19 @@ public class PTSearchBar: UISearchBar {
         }
     }
     open var searchPlaceholderFont: UIFont = .systemFont(ofSize: 16) { didSet { updateTextUI() } }
-    open var searchBarTextFieldBorderColor: UIColor = DynamicColor.randomColor { didSet { updateBorderUI() } }
+    open var searchBarTextFieldBorderColor: UIColor = .separator { didSet { updateBorderUI() } }
     open var cursorColor: UIColor = .lightGray { didSet { updateTextUI() } }
-    open var searchPlaceholderColor: UIColor = DynamicColor.randomColor { didSet { updateTextUI() } }
-    open var searchTextColor: UIColor = DynamicColor.randomColor { didSet { updateTextUI() } }
-    open var searchBarOutViewColor: UIColor = DynamicColor.randomColor { didSet { updateBackgroundUI() } }
+    open var searchPlaceholderColor: UIColor = .placeholderText { didSet { updateTextUI() } }
+    open var searchTextColor: UIColor = .label { didSet { updateTextUI() } }
+    open var searchBarOutViewColor: UIColor = .clear { didSet { updateBackgroundUI() } }
     open var searchBarTextFieldCornerRadius: CGFloat = 5 { didSet { updateBorderUI() } }
     open var searchBarTextFieldBorderWidth: CGFloat = 0.5 { didSet { updateBorderUI() } }
-    open var searchTextFieldBackgroundColor: UIColor = DynamicColor.randomColor { didSet { updateTextUI() } }
+    open var searchTextFieldBackgroundColor: UIColor = .secondarySystemBackground { didSet { updateTextUI() } }
 
     // English: Debounce text changes before starting an asynchronous search.
     // Español: Aplica debounce a los cambios de texto antes de iniciar una búsqueda asíncrona.
     // 中文：在启动异步搜索前对文本变化执行防抖。
     open var searchDebounceInterval: TimeInterval = 0.3
-
     // English: The handler is optional so existing delegate-based callers keep their behavior.
     // Español: El controlador es opcional para conservar el comportamiento de los clientes que usan delegate.
     // 中文：搜索处理器保持可选，兼容现有基于 delegate 的调用方。
@@ -96,40 +95,153 @@ public class PTSearchBar: UISearchBar {
     public private(set) var isSearching = false {
         didSet { updateLoadingAccessibility() }
     }
-    
     open var searchImageTopSpacing: CGFloat = 2
     open var searchBarImage: Any? {
         didSet { loadSearchImage() }
     }
-    
     open var clearConfig: PTSearchBarTextFieldClearButtonConfig? {
         didSet {
             loadClearImage()
             setupClearAction()
         }
     }
-    
+
     // MARK: - 🛠 内部属性：安全获取 TextField
     private var safeSearchTextField: UITextField? {
-        if #available(iOS 13.0, *) {
-            return self.searchTextField
-        } else {
-            return self.value(forKey: "searchField") as? UITextField
+        return self.searchTextField
+    }
+
+    // MARK: - Search Field Layout
+
+    /// 搜索框与外层 UISearchBar 的上下间距（例如外层 44pt / 上下 4pt -> 内层 36pt）。
+    /// The height is resolved from the *actual* laid-out bounds, not init(frame:).
+    open var searchFieldVerticalInset: CGFloat = 4 {
+        didSet {
+            guard oldValue != searchFieldVerticalInset else { return }
+            invalidateSearchFieldSizing()
         }
     }
+
+    /// 是否启用原生 UISearchBar 的高度适配。
+    /// 关闭后保持 UIKit 默认内部布局；不会再手动写 searchTextField.frame。
+    open var limitsSearchFieldHeight: Bool = true {
+        didSet {
+            guard oldValue != limitsSearchFieldHeight else { return }
+            invalidateSearchFieldSizing()
+        }
+    }
+
+    /// 若不为 nil，则优先使用明确的内部输入框高度；否则使用 bounds.height - 2 * inset。
+    /// Note: UISearchBar still owns its internal layout; UIKit may impose a platform minimum.
+    open var searchFieldHeight: CGFloat? {
+        didSet { invalidateSearchFieldSizing() }
+    }
+
+    // UIKit owns searchTextField's view hierarchy. Manipulating its frame during
+    // layoutSubviews is undone by a subsequent system layout pass (iOS 26 in particular).
+    // Ask UIKit for the desired height through its public background-image API,
+    // and use a non-required constraint only as a best-effort size preference.
+    private var searchFieldHeightConstraint: NSLayoutConstraint?
+    private var appliedSearchFieldHeight: CGFloat?
+    private var appliedSizingField: UISearchTextField?
+    #if DEBUG
+    private var lastReportedLayout: String?
+    #endif
+
+    private func invalidateSearchFieldSizing() {
+        appliedSearchFieldHeight = nil
+        setNeedsLayout()
+    }
+
+    private func updateSearchFieldLayout() {
+        guard bounds.height > 0 else { return }
+        let field = searchTextField
+
+        guard limitsSearchFieldHeight else {
+            // Do not reset UIKit appearance on *every* layout pass: that can
+            // repeatedly invalidate its own layout and cause a layout loop.
+            if searchFieldHeightConstraint != nil || appliedSizingField != nil {
+                searchFieldHeightConstraint?.isActive = false
+                searchFieldHeightConstraint = nil
+                appliedSizingField = nil
+                appliedSearchFieldHeight = nil
+                setSearchFieldBackgroundImage(nil, for: .normal)
+                clipsToBounds = false
+            }
+            return
+        }
+
+        let inset = max(0, searchFieldVerticalInset)
+        let maximumHeight = max(1, bounds.height)
+        let requested = searchFieldHeight ?? (bounds.height - inset * 2)
+        let target = min(max(1, requested), maximumHeight)
+        let roundedHeight = (target * UIScreen.main.scale).rounded() / UIScreen.main.scale
+
+        guard appliedSearchFieldHeight != roundedHeight || appliedSizingField !== field else {
+            return
+        }
+
+        // Give the search field a background asset of the requested intrinsic height.
+        // Transparent pixels allow searchTextField's normal backgroundColor / layer border.
+        let format = UIGraphicsImageRendererFormat()
+        format.opaque = false
+        format.scale = UIScreen.main.scale
+        let background = UIGraphicsImageRenderer(
+            size: CGSize(width: 2, height: roundedHeight),
+            format: format
+        ).image { _ in }
+        setSearchFieldBackgroundImage(background, for: .normal)
+
+        if appliedSizingField !== field {
+            searchFieldHeightConstraint?.isActive = false
+            let constraint = field.heightAnchor.constraint(equalToConstant: roundedHeight)
+            constraint.identifier = "PTSearchBar.preferredSearchFieldHeight"
+            // Don't use .required: UIKit's internal constraints can be required.
+            constraint.priority = UILayoutPriority(999)
+            constraint.isActive = true
+            searchFieldHeightConstraint = constraint
+            appliedSizingField = field
+        } else {
+            searchFieldHeightConstraint?.constant = roundedHeight
+        }
+        appliedSearchFieldHeight = roundedHeight
+        // The search-bar container must never draw beyond its explicitly assigned height.
+        clipsToBounds = true
+    }
+    
+    #if DEBUG
+    /// 供真机诊断：58.667 可能来自 UIKit 约束，也可能来自 field.transform。
+    /// Bounds / frame 的差异是区分两者的关键，避免错误地反复修改 frame。
+    private func reportUnexpectedSearchFieldHeightIfNeeded() {
+        guard limitsSearchFieldHeight, bounds.height > 0 else { return }
+        let field = searchTextField
+        let expected = appliedSearchFieldHeight ?? max(1, bounds.height - 2 * max(0, searchFieldVerticalInset))
+        guard abs(field.frame.height - expected) > 1 else {
+            lastReportedLayout = nil
+            return
+        }
+        let message = "[PTSearchBar] bar=\(bounds.height), fieldFrame=\(field.frame.height), fieldBounds=\(field.bounds.height), expected=\(expected), fieldTransform=\(field.transform)"
+        guard lastReportedLayout != message else { return }
+        lastReportedLayout = message
+        PTNSLogConsole(message)
+    }
+    #endif
 
     // MARK: - 🚀 生命周期
     public override init(frame: CGRect) {
         super.init(frame: frame)
+
         initialSetup()
     }
     
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
+
         initialSetup()
     }
     
     private func initialSetup() {
+
         // 初始化时统一刷新一次 UI
         updateTextUI()
         updateBackgroundUI()
@@ -139,25 +251,24 @@ public class PTSearchBar: UISearchBar {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        // layoutSubviews 中只做真正需要随 frame 变化而变化的操作
-        // 例如设置圆角等依赖 bounds 的操作
+
+        updateSearchFieldLayout()
         updateBorderUI()
         setupClearAction()
         installTextFieldTargetsIfNeeded()
         updateVisualStyleLayout()
     }
-    
+
     // MARK: - 🖌 私有更新方法
-    
+
     /// 更新文字、颜色等静态 UI（不需要放在 layoutSubviews 中重复执行）
     private func updateTextUI() {
         guard let searchTextField = safeSearchTextField else { return }
-        
+
         searchTextField.backgroundColor = searchTextFieldBackgroundColor
         searchTextField.tintColor = cursorColor
         searchTextField.textColor = searchTextColor
         searchTextField.font = searchPlaceholderFont
-        
         searchTextField.attributedPlaceholder = NSAttributedString(
             string: searchPlaceholder,
             attributes: [
@@ -166,7 +277,7 @@ public class PTSearchBar: UISearchBar {
             ]
         )
     }
-    
+
     /// 更新边框与圆角
     private func updateBorderUI() {
         guard let searchTextField = safeSearchTextField else { return }
@@ -176,7 +287,7 @@ public class PTSearchBar: UISearchBar {
             borderColor: searchBarTextFieldBorderColor
         )
     }
-    
+
     /// 更新背景颜色
     private func updateBackgroundUI() {
         backgroundImage = searchBarOutViewColor.createImageWithColor()
@@ -193,7 +304,6 @@ public class PTSearchBar: UISearchBar {
         case .custom, .classic, .glass:
             resolvedStyle = visualStyle
         }
-
         if resolvedStyle == .glass {
             if UIAccessibility.isReduceTransparencyEnabled {
                 visualBackgroundView?.isHidden = true
@@ -222,6 +332,7 @@ public class PTSearchBar: UISearchBar {
                 updateBackgroundUI()
             }
         }
+
         updateVisualStyleLayout()
     }
 
@@ -234,11 +345,13 @@ public class PTSearchBar: UISearchBar {
         }
         return UIBlurEffect(style: .systemMaterial)
     }
-
     private func updateVisualStyleLayout() {
         guard let visualBackgroundView else { return }
+
         visualBackgroundView.frame = bounds
+
         visualBackgroundView.layer.cornerRadius = searchBarTextFieldCornerRadius
+
         sendSubviewToBack(visualBackgroundView)
     }
 
@@ -253,12 +366,14 @@ public class PTSearchBar: UISearchBar {
         textField.addTarget(self, action: #selector(textFieldDidEndOnExit(_:)), for: .editingDidEndOnExit)
         didInstallTextFieldTargets = true
     }
-    
+
     // MARK: - 🖼 图片加载逻辑
-    
+
     /// 异步加载放大镜图标
     private func loadSearchImage() {
+
         searchImageTask?.cancel()
+
         searchImageTask = Task { @MainActor [weak self] in
             guard let self else { return }
             guard let clearImage = self.searchBarImage else { return }
@@ -269,34 +384,34 @@ public class PTSearchBar: UISearchBar {
             self.processAndSetImage(result: result, targetHeight: clearHeight, iconState: .search)
         }
     }
-    
+
     /// 异步加载清除按钮图标
     private func loadClearImage() {
+
         clearImageTask?.cancel()
         guard let config = clearConfig, let clearImage = config.clearImage else { return }
-        
         let clearTopSpace = min(max(config.clearTopSpace, 0), self.frame.height * 0.5)
         let clearHeight = max(self.frame.height - clearTopSpace * 2, 16)
-        
+
         clearImageTask = Task { @MainActor [weak self] in
             guard let self = self else { return }
             let result = await PTLoadImageFunction.loadImage(contentData: clearImage)
             guard !Task.isCancelled else { return }
+
             // 使用原生的 .clear 状态设置图片，无需手动干预控件大小，系统会自适应我们传入的图片尺寸
             self.processAndSetImage(result: result, targetHeight: clearHeight, iconState: .clear)
         }
     }
-    
+
     /// 通用图片处理与赋值方法
     private func processAndSetImage(result: PTLoadImageResult, targetHeight: CGFloat, iconState: UISearchBar.Icon) {
+
         // 假设 result 是你的图片加载结果模型 (根据你的代码推导)
         // 注意：如果你代码里的 result 类型有变，请调整此处的动态解析或强转
         let allImages = result.allImages
         let firstImage = result.firstImage
         let loadTime = result.loadTime
-        
         let targetSize = CGSize(width: targetHeight, height: targetHeight)
-        
         if let images = allImages, !images.isEmpty {
             if images.count > 1 {
                 let animatedImg = UIImage.animatedImage(with: images, duration: loadTime)?.transformImage(size: targetSize)
@@ -309,21 +424,23 @@ public class PTSearchBar: UISearchBar {
             }
         }
     }
-    
+
     // MARK: - 🎯 行为绑定
-    
+
     /// 绑定自定义的 Clear 按钮事件
     private func setupClearAction() {
+
         // English: The shared editing target already observes the native clear-button change event.
         // Español: El target de edición compartido ya observa el cambio emitido por el botón nativo de borrar.
         // 中文：统一的编辑 target 已经能够监听原生清除按钮发出的文本变化。
         guard let searchTextField = safeSearchTextField else { return }
+
         installTextFieldTargetsIfNeeded()
         if clearConfig == nil {
             previousSearchText = searchTextField.text ?? ""
         }
     }
-    
+
     @objc private func textFieldDidChange(_ textField: UITextField) {
         let text = textField.text ?? ""
         if text.isEmpty, !previousSearchText.isEmpty {
@@ -361,11 +478,11 @@ public class PTSearchBar: UISearchBar {
             textField.sendActions(for: .editingChanged)
         }
     }
-
+    
     public func focusSearchField() {
         safeSearchTextField?.becomeFirstResponder()
     }
-
+    
     public func resignSearchField() {
         safeSearchTextField?.resignFirstResponder()
     }
@@ -402,32 +519,35 @@ public class PTSearchBar: UISearchBar {
         }
         accessibilityLabel = searchPlaceholder
     }
-
+    
     private func scheduleSearch(for query: String) {
+
         searchGeneration &+= 1
         let generation = searchGeneration
+
         searchTask?.cancel()
+
         isSearching = false
-
         guard let handler = searchHandler, !query.isEmpty else { return }
-
         let delay = min(max(0, searchDebounceInterval), TimeInterval(UInt64.max) / 1_000_000_000)
+
         searchTask = Task { @MainActor [weak self] in
+
             do {
                 let nanoseconds = UInt64((delay * 1_000_000_000).rounded(.down))
                 try await Task.sleep(nanoseconds: nanoseconds)
             } catch {
                 return
             }
-
             guard let self, !Task.isCancelled, self.searchGeneration == generation else { return }
             self.isSearching = true
+
             await handler(query)
             guard !Task.isCancelled, self.searchGeneration == generation else { return }
             self.isSearching = false
         }
     }
-
+    
     private func updateLoadingAccessibility() {
         accessibilityValue = isSearching ? "Loading".localized() : nil
     }

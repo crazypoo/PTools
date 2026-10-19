@@ -73,7 +73,7 @@ private final class PTSearchDefaultCell: UICollectionViewCell {
 
 @MainActor
 open class PTSearchViewController<Item: Sendable>: PTListViewController {
-    public let searchConfiguration: PTSearchConfiguration
+    public var searchConfiguration: PTSearchConfiguration
     public private(set) lazy var searchBar: PTSearchBar = makeSearchBar()
     public var collectionView: PTCollectionView { listView }
 
@@ -179,7 +179,8 @@ open class PTSearchViewController<Item: Sendable>: PTListViewController {
         case .contentTop, .navigationBarExpanded:
             let safeArea = view.safeAreaLayoutGuide
             searchBar.snp.remakeConstraints { make in
-                make.leading.top.equalTo(safeArea)
+                make.top.equalTo(safeArea).offset(8)
+                make.leading.equalTo(safeArea)
                 make.height.equalTo(searchConfiguration.searchBarHeight)
             }
             listView.snp.remakeConstraints { make in

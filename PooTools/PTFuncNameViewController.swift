@@ -125,7 +125,7 @@ class PTFuncNameViewController: PTBaseViewController {
     }
 
     open override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
-        return .solid(.systemBackground)
+        return .solid(.clear)
     }
 
     var cacheSize = ""
