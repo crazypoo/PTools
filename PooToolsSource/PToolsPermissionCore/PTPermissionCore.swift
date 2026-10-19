@@ -7,10 +7,9 @@
 //  仅依赖 Foundation 的权限契约与只完成一次的请求桥接。
 //
 
-// English: CocoaPods aggregates the legacy PermissionCore and this opt-in contract in one target; the legacy target remains the compatibility implementation there.
-// Español: CocoaPods agrega PermissionCore heredado y este contrato opcional en un mismo target; allí se conserva la implementación de compatibilidad heredada.
-// 中文：CocoaPods 会将旧 PermissionCore 与这个可选契约聚合到同一个 target，因此聚合构建继续使用旧实现以避免重复符号。
-#if !POOTOOLS_COCOAPODS
+// English: Compile this Foundation-only contract once in SwiftPM or in the merged CocoaPods target.
+// Español: Compila este contrato basado solo en Foundation una vez en SwiftPM o en el target combinado de CocoaPods.
+// 中文：这份仅依赖 Foundation 的契约在 SwiftPM 或 CocoaPods 聚合 target 中只编译一份。
 import Foundation
 import os.lock
 
@@ -292,4 +291,3 @@ open class PTPermission: PTPermissionRequesting {
         openSettingPage()
     }
 }
-#endif

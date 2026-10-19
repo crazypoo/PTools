@@ -7,12 +7,16 @@
 //
 
 #if POOTOOLS_SPLIT_PERMISSION_CORE
+#if !POOTOOLS_EMBED_PERMISSION_CORE
 import PToolsPermissionCore
+#endif
 
-// English: Map the legacy umbrella name to the standalone permission contract in SwiftPM only.
-// Español: Mapea el nombre heredado del umbrella al contrato de permisos independiente solo en SwiftPM.
-// 中文：仅在 SwiftPM 中将旧 umbrella 类型名映射到独立权限契约。
+#if !POOTOOLS_EMBED_PERMISSION_CORE
+// English: Map the legacy umbrella name to the standalone permission contract when SwiftPM provides a separate module.
+// Español: Mapea el nombre heredado del umbrella al contrato independiente cuando SwiftPM proporciona un módulo separado.
+// 中文：当 SwiftPM 提供独立模块时，将旧 umbrella 类型名映射到独立权限契约。
 public typealias PTPermission = PToolsPermissionCore.PTPermission
+#endif
 
 @MainActor
 public extension PTPermission {

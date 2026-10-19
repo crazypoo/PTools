@@ -9,16 +9,16 @@
 import UIKit
 import os.lock
 
-#if POOTOOLS_SPLIT_PERMISSION_CORE
+#if POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE
 import PToolsPermissionCore
 // English: Reuse the permission-core callback type so SwiftPM and feature targets share one ABI-level contract.
 // Español: Reutiliza el tipo de callback del núcleo de permisos para que SwiftPM y los targets de funciones compartan un único contrato.
 // 中文：复用权限 Core 的回调类型，让 SwiftPM 与功能 target 共享同一套契约。
 public typealias PTActionTask = PToolsPermissionCore.PTActionTask
-#else
+#elseif !POOTOOLS_EMBED_PERMISSION_CORE
 // English: Keep the legacy callback type available to the CocoaPods/Xcode source set.
-// Español: Mantiene disponible el tipo de callback heredado para el conjunto de fuentes de CocoaPods/Xcode.
-// 中文：为 CocoaPods/Xcode 旧源码集合保留回调类型。
+// Español: Mantiene disponible el tipo de callback heredado para el conjunto de fuentes combinado.
+// 中文：为未启用独立权限 Core 的旧源码集合保留回调类型。
 public typealias PTActionTask = @Sendable () -> Void
 #endif
 public typealias PTActionAsyncTask = @Sendable () async -> Void

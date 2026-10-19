@@ -7,7 +7,7 @@
 //
 
 import AppTrackingTransparency
-#if POOTOOLS_SPLIT_PERMISSION_CORE
+#if POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE
 import PToolsPermissionCore
 #endif
 

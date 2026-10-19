@@ -68,6 +68,85 @@ bash Scripts/validate_concurrency_5_19.sh
 # Español: Mantén las líneas base de paridad SPM/CocoaPods y dirección de dependencias en la puerta de calidad.
 # 中文：将 SPM/CocoaPods 一致性和依赖方向基线纳入常规质量门禁。
 bash Scripts/validate_module_parity.sh --check
+
+# English: Validate the 5.67.x single-source-of-truth ledgers before any migration is trusted.
+# Español: Valida los registros de fuente única de 5.67.x antes de confiar en cualquier migración.
+# 中文：在信任任何 5.67.x 迁移之前，先验证单一实现来源台账。
+python3 - "$repo_root" <<'PY'
+import json
+import pathlib
+import sys
+
+# English: Keep this gate intentionally small; it validates decisions and evidence, not generated API completeness.
+# Español: Esta puerta es deliberadamente pequeña; valida decisiones y evidencia, no la integridad total de API generada.
+# 中文：这个门禁保持小而明确，只验证决策和证据，不伪装成完整 API 生成报告。
+root = pathlib.Path(sys.argv[1])
+architecture = root / "report" / "architecture"
+duplication_path = architecture / "FUNCTION_DUPLICATION_AUDIT.json"
+api_path = architecture / "API_COMPATIBILITY_BASELINE.json"
+matrix_path = architecture / "FUNCTION_OWNERSHIP_MATRIX.md"
+parity_path = architecture / "SPM_PODS_PARITY.md"
+required = (duplication_path, api_path, matrix_path, parity_path)
+missing = [str(path.relative_to(root)) for path in required if not path.is_file()]
+if missing:
+    raise SystemExit(f"FAIL: function deduplication ledgers are missing: {missing}")
+
+def load_json(path):
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise SystemExit(f"FAIL: invalid architecture ledger {path}: {error}") from error
+
+duplication = load_json(duplication_path)
+allowed_statuses = {"candidate", "confirmed", "designed", "migrated", "verified", "rejected", "blocked"}
+entries = duplication.get("entries")
+if duplication.get("sourceRevision") != "b5898d124c409bcf25ba824e40cdd616cf9284df":
+    raise SystemExit("FAIL: function duplication ledger source revision is not the 5.67.2 baseline")
+if duplication.get("version") != "5.67.2":
+    raise SystemExit("FAIL: function duplication ledger version is not 5.67.2")
+if not isinstance(entries, list) or not entries:
+    raise SystemExit("FAIL: function duplication ledger has no entries")
+feature_ids = []
+for entry in entries:
+    feature_id = entry.get("featureID")
+    feature_ids.append(feature_id)
+    for field in ("featureID", "capability", "primaryEntry", "evidence", "confirmedOwner", "decision", "status"):
+        if not isinstance(entry.get(field), str) or not entry[field].strip():
+            raise SystemExit(f"FAIL: duplication entry {feature_id!r} is missing {field}")
+    if entry["status"] not in allowed_statuses:
+        raise SystemExit(f"FAIL: duplication entry {feature_id!r} has invalid status {entry['status']!r}")
+    if not isinstance(entry.get("evidenceLines"), list) or not entry["evidenceLines"]:
+        raise SystemExit(f"FAIL: duplication entry {feature_id!r} has no evidence lines")
+    if entry["status"] == "verified" and not entry.get("testIDs"):
+        raise SystemExit(f"FAIL: verified duplication entry {feature_id!r} has no test IDs")
+    if entry["status"] == "rejected" and not entry.get("blockedReason"):
+        raise SystemExit(f"FAIL: rejected duplication entry {feature_id!r} has no decision reason")
+if len(feature_ids) != len(set(feature_ids)):
+    raise SystemExit("FAIL: function duplication ledger contains duplicate feature IDs")
+
+api = load_json(api_path)
+if api.get("sourceRevision") != duplication["sourceRevision"] or api.get("version") != duplication["version"]:
+    raise SystemExit("FAIL: API compatibility baseline does not match the duplication baseline")
+surfaces = api.get("surfaces")
+if not isinstance(surfaces, list) or not surfaces:
+    raise SystemExit("FAIL: API compatibility baseline has no surfaces")
+surface_ids = []
+for surface in surfaces:
+    surface_id = surface.get("surfaceID")
+    surface_ids.append(surface_id)
+    for field in ("surfaceID", "featureID", "ownerTarget", "primaryEntry", "compatibilityStatus"):
+        if not isinstance(surface.get(field), str) or not surface[field].strip():
+            raise SystemExit(f"FAIL: API surface {surface_id!r} is missing {field}")
+if len(surface_ids) != len(set(surface_ids)):
+    raise SystemExit("FAIL: API compatibility baseline contains duplicate surface IDs")
+
+for path in (matrix_path, parity_path):
+    content = path.read_text(encoding="utf-8")
+    if duplication["sourceRevision"] not in content:
+        raise SystemExit(f"FAIL: {path.relative_to(root)} does not declare the baseline source revision")
+
+print("PASS: 5.67.x function ownership and SPM/Pods parity ledgers")
+PY
 # English: Refresh the complete SwiftPM ownership, symbol, conditional, and resource reports.
 # Español: Actualiza los informes completos de propiedad, símbolos, condiciones y recursos de SwiftPM.
 # 中文：刷新完整的 SwiftPM 归属、符号、条件编译和资源报告。

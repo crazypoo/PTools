@@ -9,8 +9,6 @@
 
 import Foundation
 
-#if !POOTOOLS_COCOAPODS
-
 // English: Keep detailed states separate from the legacy four-value status so limited and provisional access is not lost.
 // Español: Mantén los estados detallados separados del estado heredado de cuatro valores para no perder el acceso limitado o provisional.
 // 中文：将详细状态与旧版四值状态分离，避免丢失受限、临时授权等信息。
@@ -58,4 +56,3 @@ public enum PTFaceIDPermissionState: String, CaseIterable, Equatable, Sendable {
     case unavailable
     case unknown
 }
-#endif
