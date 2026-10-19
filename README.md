@@ -11,9 +11,9 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.67.0`，真机/宿主回归与发布证据完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.67.1`，真机/宿主回归与发布证据完成前不创建正式 tag。
 
-`5.67.0` 新增独立 `PToolsConstraintLayout` 原生布局产品。它只依赖 UIKit/Foundation，提供结构化诊断、原子事务、更新/重建/移除、组约束、Safe Area、键盘和 RTL 支持；旧 `.snp` 入口保持兼容。接入与迁移请参阅 [PTLayout 5.67 兼容指南](docs/guides/PTLAYOUT_567_COMPATIBILITY.md) 和 [迁移清单](docs/guides/PTLAYOUT_MIGRATION_CHECKLIST.md)。
+`5.67.1` 修复独立 `PToolsConstraintLayout` 的自动布局掩码、最终常量、句柄归属、remake 事务、首次 update、Safe Area 和非法属性校验，并加入真实 iOS Simulator XCTest 门禁；旧 `.snp` 入口继续保持兼容，生产模块仍需按 opt-in 清单逐步迁移。接入与迁移请参阅 [PTLayout 5.67 兼容指南](docs/guides/PTLAYOUT_567_COMPATIBILITY.md) 和 [迁移清单](docs/guides/PTLAYOUT_MIGRATION_CHECKLIST.md)。
 
 `5.66.1` 修复 `PTSearchViewController` 清空输入框后列表被错误清空的问题；点击 clear button 会恢复调用方提供的完整未筛选数据，并保留搜索过程中的结果状态隔离。
 

@@ -1,0 +1,26 @@
+{
+  "version": "5.67.1",
+  "status": "partial",
+  "device": {
+    "name": "iPhone26",
+    "udid": "00008101-000A2DD22E40001E",
+    "os": "27.2"
+  },
+  "checks": {
+    "signed_debug_build": "passed",
+    "install": "passed",
+    "launch": "passed",
+    "relaunch": "passed",
+    "startup_console": "passed_no_crash",
+    "screenshot": "passed",
+    "pt_layout_demo_manual_flow": "not_run_device_ui_automation_unavailable"
+  },
+  "artifacts": {
+    "build": "xcodebuild PooTools.xcworkspace / PooTools-Example / Debug / iphoneos / iPhone26",
+    "screenshot": "/tmp/PTools_iphone26_after_validation.png"
+  },
+  "notes": [
+    "启动控制台出现现有 CoreText 字体提示和 NSMapGet(NULL) 诊断信息，未观察到崩溃或 PTLayout 错误。",
+    "真机 UI 点击自动化能力当前不可用，因此未宣称已完成 PTLayout 各 Demo 的逐项视觉回归。"
+  ]
+}

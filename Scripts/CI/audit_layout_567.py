@@ -69,7 +69,7 @@ def write_inventory(rows: list[dict[str, str]]) -> None:
     path = REPORT / "Full_Layout_Inventory.csv"
     fields = ["path", "line", "kind", "owner", "status", "reason", "snippet"]
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
     (REPORT / "PTLayout_full_migration.csv").write_text(path.read_text(encoding="utf-8"), encoding="utf-8")
@@ -130,13 +130,13 @@ def write_reports(rows: list[dict[str, str]], cases: list[dict[str, str]]) -> No
         "release_decision": "runtime_fixture_and_visual_validation_pending",
     }
     gate_document = (
-        "# PTLayout 5.67.0 release gate\n\n" +
+        f"# PTLayout {gate['version']} release gate\n\n" +
         "```json\n" + json.dumps(gate, indent=2, ensure_ascii=False) + "\n```\n\n" +
         "中文：静态审计不替代 Xcode Simulator、CocoaPods Consumer 和真机视觉验证。\n" +
         "Español: La auditoría estática no sustituye Xcode Simulator, CocoaPods Consumer ni la validación visual en dispositivo.\n"
     )
     (REPORT / "PTLayout_release_gate.md").write_text(gate_document, encoding="utf-8")
-    release_report = ROOT / "report" / "releases" / "5.67.0"
+    release_report = ROOT / "report" / "releases" / gate["version"]
     release_report.mkdir(parents=True, exist_ok=True)
     (release_report / "PTLayout_release_gate.md").write_text(gate_document, encoding="utf-8")
 

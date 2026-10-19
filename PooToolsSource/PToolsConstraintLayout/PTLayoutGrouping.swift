@@ -43,7 +43,7 @@ public struct PTLayoutGroupNamespace {
                                       line: line,
                                       reason: "批量布局的 View 没有共同父视图。",
                                       suggestion: "把所有 View 放入同一容器后再分布。")
-            PTLayoutDiagnostics.onFailure?(issue)
+            PTLayoutDiagnostics.report(issue, ownerView: views.first)
             return .failure(issue)
         }
 
@@ -73,11 +73,7 @@ public struct PTLayoutGroupNamespace {
         // English: All groups are validated before any group is activated, preventing partial commits.
         // Español: Todos los grupos se validan antes de activar uno, evitando commits parciales.
         // 中文：先完成全部约束组校验，再统一激活，避免部分提交。
-        for group in preparedGroups {
-            let result = group.activate()
-            guard result.isSuccess else { return result }
-        }
-        return .success(PTLayoutChanges(count: preparedGroups.reduce(0) { $0 + $1.constraints.count }))
+        return PTLayoutEngine.activateAtomically(preparedGroups)
     }
 
     @discardableResult
@@ -95,11 +91,7 @@ public struct PTLayoutGroupNamespace {
             if let issue = group.issue { return .failure(issue) }
             preparedGroups.append(group)
         }
-        for group in preparedGroups {
-            let result = group.activate()
-            guard result.isSuccess else { return result }
-        }
-        return .success(PTLayoutChanges(count: preparedGroups.reduce(0) { $0 + $1.constraints.count }))
+        return PTLayoutEngine.activateAtomically(preparedGroups)
     }
 
     private func commonSuperview() -> UIView? {
@@ -162,15 +154,23 @@ public extension Array where Element == UIView {
 @MainActor
 public enum PTLayoutAnimation {
     public static func perform(duration: TimeInterval,
+                               layoutContainer: UIView? = nil,
                                changes: @MainActor @escaping () -> PTLayoutResult,
                                completion: (@MainActor (Bool) -> Void)? = nil) {
         let resolvedDuration = UIAccessibility.isReduceMotionEnabled ? 0 : max(0, duration)
         var result: PTLayoutResult = .success(PTLayoutChanges(count: 0))
+        // English: Resolve the pre-animation layout in the caller-provided container.
+        // Español: Resuelve el layout previo en el contenedor proporcionado por el llamador.
+        // 中文：在调用方提供的容器中先完成动画前布局。
+        layoutContainer?.layoutIfNeeded()
         // English: Execute the transaction inside UIKit's animation block so constant updates animate.
         // Español: Ejecuta la transacción dentro del bloque de animación de UIKit para animar los cambios.
         // 中文：将事务放入 UIKit 动画闭包，确保常量更新真正产生动画。
         UIView.animate(withDuration: resolvedDuration,
-                       animations: { result = changes() },
+                       animations: {
+                           result = changes()
+                           layoutContainer?.layoutIfNeeded()
+                       },
                        completion: { finished in
                            completion?(finished && result.isSuccess)
                        })

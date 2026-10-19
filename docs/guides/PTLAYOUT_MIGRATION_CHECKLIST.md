@@ -1,4 +1,4 @@
-# PTLayout 5.67.0 migration checklist
+# PTLayout 5.67.1 migration checklist
 
 <!-- English: Migrate one ownership boundary at a time; do not mechanically replace every layout call. -->
 <!-- Español: Migra un límite de propiedad cada vez; no reemplaces todas las llamadas mecánicamente. -->
@@ -33,6 +33,8 @@
 - [ ] Foreign SnapKit/storyboard constraints are not removed by PTLayout.
 - [ ] New comments use English, Spanish, and Chinese.
 - [ ] Run the file's Swift parse/type-check and the iOS Simulator Debug/Release Xcode build.
+- [ ] Run the dedicated runtime XCTest and attach its `.xcresult`; a type-check or fixture count is not runtime parity.
+- [ ] Attach visual screenshots, unsatisfiable-constraint output, and the current simulator/OS/commit metadata.
 
 ## Explicit exemptions
 
@@ -55,3 +57,13 @@ bash Scripts/CI/validate_ptlayout_5_67_release.sh
 ```
 
 The static scripts do not replace Xcode Simulator, CocoaPods consumer, accessibility, visual, or physical-device validation.
+
+## 5.67.1 incident recovery rules
+
+- Keep existing `.snp` consumers unchanged unless the file is listed in the opt-in manifest and its runtime fixture passes.
+- `ptLayout.updateConstraints` follows SnapKit's first-update make behavior; `updateIfExists` remains strict.
+- A failed prepare/remake must leave the old view state and autoresizing-mask ownership unchanged.
+- Use [the opt-in migration manifest](PTLAYOUT_OPT_IN_MIGRATION_MANIFEST.md) as the source of truth for every future migration.
+
+中文：5.67.1 只修复 PTLayout 引擎与验证链路，不重新执行全仓替换。
+Español: 5.67.1 solo corrige el motor PTLayout y sus puertas de validación; no repite una sustitución global.

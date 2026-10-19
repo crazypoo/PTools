@@ -53,7 +53,7 @@ public enum PTLayoutProfiler {
                                 installedConstraintCount: installedConstraintCount)
     }
 
-    internal static func record(operation: PTLayoutOperation, count: Int) {
+    internal static func record(operation: PTLayoutOperation, count _: Int) {
         guard isEnabled else { return }
         switch operation {
         case .make:
@@ -65,6 +65,13 @@ public enum PTLayoutProfiler {
         case .prepare:
             prepareCount += 1
         }
+    }
+
+    // English: Count only constraints that reached native activation, not prepared or rejected drafts.
+    // Español: Cuenta solo las restricciones activadas de forma nativa, no los borradores preparados o rechazados.
+    // 中文：只统计真正完成原生激活的约束，不统计准备或失败的草稿。
+    internal static func recordInstalled(count: Int) {
+        guard isEnabled else { return }
         installedConstraintCount += max(0, count)
     }
 }

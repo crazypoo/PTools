@@ -1,14 +1,18 @@
-# PTLayout 5.67.0 release gate
+# PTLayout 5.67.1 release gate
 
 ```json
 {
-  "version": "5.67.0",
-  "generated_at": "2026-10-18T03:15:04.640094+00:00",
-  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
-  "inventory_rows": 1404,
+  "version": "5.67.1",
+  "generated_at": "2026-10-18T19:18:18.089060+00:00",
+  "source_revision": "7bab5e185402dbeba7a04e17641a3ee1ad078c70",
+  "inventory_rows": 1405,
   "failure_fixtures": 56,
-  "standalone_runtime": "requires an external iOS host and visual validation",
-  "release_decision": "runtime_fixture_and_visual_validation_pending"
+  "standalone_runtime": "xcodebuild iOS Simulator passed: F01-F56, 56/56",
+  "runtime_evidence": "report/layout/runtime_parity_5.67.1.json + report/layout/runtime_parity_5.67.1.csv; xcresult cleaned after validation",
+  "visual_regression": "not_run",
+  "consumer_validation": "blocked_missing_report_spm_onepass",
+  "iphone26_validation": "partial: report/layout/iphone26_validation_5.67.1.json; build/install/launch/relaunch/screenshot passed; PTLayout Demo flow pending",
+  "release_decision": "blocked_visual_consumer_device_validation"
 }
 ```
 

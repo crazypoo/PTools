@@ -67,6 +67,23 @@ public enum PTLayoutDiagnosticMode: String, Sendable {
     case production
 }
 
+// English: Make autoresizing-mask ownership explicit for every PTLayout activation.
+// Español: Hace explícita la propiedad de la máscara de autoresizing en cada activación de PTLayout.
+// 中文：明确每次 PTLayout 激活时 autoresizing mask 的布局所有权。
+@MainActor
+public enum PTLayoutAutoresizingMaskPolicy: Sendable {
+    case automaticForManagedViews
+    case preserve
+}
+
+// English: Keep the default SnapKit-compatible behavior while allowing controlled mixed-layout escape hatches.
+// Español: Mantiene el comportamiento compatible con SnapKit y permite excepciones controladas para layouts mixtos.
+// 中文：保持兼容 SnapKit 的默认行为，同时为混合布局提供受控例外。
+@MainActor
+public enum PTLayoutConfiguration {
+    public static var autoresizingMaskPolicy: PTLayoutAutoresizingMaskPolicy = .automaticForManagedViews
+}
+
 @MainActor
 public enum PTLayoutIssueCode: String, Sendable {
     case missingSuperview = "PTL001"
@@ -167,6 +184,8 @@ public enum PTLayoutDiagnostics {
     private static var latestIssues: [ObjectIdentifier: PTLayoutIssue] = [:]
     private static var repeatedIssues: [String: Int] = [:]
     private static var isReporting = false
+    private static let maximumLatestIssues = 512
+    private static let maximumRepeatedIssueKeys = 1024
 
     public static func latest(for view: UIView) -> PTLayoutIssue? {
         latestIssues[ObjectIdentifier(view)]
@@ -195,7 +214,17 @@ public enum PTLayoutDiagnostics {
                                     sourceType: issue.sourceType,
                                     occurrenceCount: count)
         if let ownerView {
+            if latestIssues[ObjectIdentifier(ownerView)] == nil,
+               latestIssues.count >= maximumLatestIssues,
+               let oldestOwner = latestIssues.keys.first {
+                latestIssues.removeValue(forKey: oldestOwner)
+            }
             latestIssues[ObjectIdentifier(ownerView)] = updated
+        }
+        if repeatedIssues.count > maximumRepeatedIssueKeys,
+           let oldestKey = repeatedIssues.keys.first,
+           oldestKey != key {
+            repeatedIssues.removeValue(forKey: oldestKey)
         }
 
         guard !isReporting else { return }
@@ -435,12 +464,21 @@ public extension PTLayoutAnchorGroup {
     @discardableResult
     func equalToSuperviewSafeArea() -> PTLayoutRelationMaker {
         guard let first else { return relation(.equal, target: .invalid("空锚点组")) }
+        guard let transaction else { return PTLayoutRelationMaker(transaction: nil, draftIDs: []) }
         let reference = first.reference
         let target = reference.view?.superview?.safeAreaLayoutGuide
             ?? reference.guide?.owningView?.safeAreaLayoutGuide
-        guard let target else { return relation(.equal, target: .superview) }
-        return relation(.equal, target: .anchor(PTLayoutAnchor(reference: PTLayoutReference(guide: target),
-                                                                attribute: first.attribute)))
+        guard let target else {
+            return relation(.equal, target: .invalid("无法解析起点对应的 Safe Area"))
+        }
+        let targetReference = PTLayoutReference(guide: target)
+        let ids = anchors.flatMap { anchor in
+            transaction.add(PTLayoutAnchorGroup([anchor], transaction: transaction),
+                            target: .anchor(PTLayoutAnchor(reference: targetReference,
+                                                           attribute: anchor.attribute)),
+                            relation: .equal).draftIDs
+        }
+        return PTLayoutRelationMaker(transaction: transaction, draftIDs: ids)
     }
 
     private func relation(_ relation: PTLayoutRelation,
@@ -542,22 +580,28 @@ public struct PTLayoutNamespace {
     public func updateConstraints(file: StaticString = #fileID,
                                   line: UInt = #line,
                                   _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult {
-        performUpdate(operation: .update, file: file, line: line, closure: closure)
+        performUpdate(operation: .update, allowsImplicitMake: true, file: file, line: line, closure: closure)
     }
 
     @discardableResult
     public func updateIfExists(file: StaticString = #fileID,
                                line: UInt = #line,
                                _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult {
-        updateConstraints(file: file, line: line, closure)
+        performUpdate(operation: .update, allowsImplicitMake: false, file: file, line: line, closure: closure)
     }
 
     @discardableResult
     public func upsertConstraints(file: StaticString = #fileID,
                                   line: UInt = #line,
                                   _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult {
-        let update = performUpdate(operation: .update, file: file, line: line, closure: closure)
+        let update = performUpdate(operation: .update, allowsImplicitMake: false, file: file, line: line, closure: closure)
         guard let issue = update.issue, issue.code == .updateNotFound else { return update }
+        guard let store = PTLayoutStoreRegistry.store(for: owner), store.allHandles().isEmpty else {
+            // English: Reject partial upserts instead of duplicating matched native constraints.
+            // Español: Rechaza upserts parciales para no duplicar restricciones nativas ya coincidentes.
+            // 中文：拒绝部分 upsert，避免重复创建已经匹配的原生约束。
+            return update
+        }
         return makeConstraints(file: file, line: line, closure)
     }
 
@@ -584,9 +628,19 @@ public struct PTLayoutNamespace {
                                           suggestion: "确认布局对象仍然存活。"))
         }
         let old = store.handles(for: owner)
-        let activated = prepared.group.activate()
-        guard activated.isSuccess else { return activated }
+        let oldConstraints = old.flatMap(\.nativeConstraints)
+        let oldActiveStates = oldConstraints.map(\.isActive)
         old.forEach { $0.deactivate() }
+        let activated = PTLayoutEngine.activateAtomically([prepared.group], registering: false)
+        guard activated.isSuccess else {
+            // English: Restore the old owner set when the replacement cannot be installed.
+            // Español: Restaura el conjunto anterior si el reemplazo no puede instalarse.
+            // 中文：新约束安装失败时恢复原有所有者约束。
+            for (constraint, wasActive) in zip(oldConstraints, oldActiveStates) where wasActive {
+                constraint.isActive = true
+            }
+            return activated
+        }
         old.forEach { store.remove($0) }
         store.register(prepared.group, named: group)
         return activated
@@ -626,6 +680,7 @@ public struct PTLayoutNamespace {
 
     @discardableResult
     private func performUpdate(operation: PTLayoutOperation,
+                               allowsImplicitMake: Bool,
                                file: StaticString,
                                line: UInt,
                                closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult {
@@ -633,7 +688,8 @@ public struct PTLayoutNamespace {
                                               operation: operation,
                                               groupID: nil,
                                               fileID: String(describing: file),
-                                              line: line)
+                                              line: line,
+                                              allowsImplicitMake: allowsImplicitMake)
         closure(PTLayoutMaker(transaction: transaction))
         return PTLayoutEngine.update(transaction)
     }
@@ -854,6 +910,7 @@ internal final class PTLayoutTransaction {
     let groupID: String?
     let fileID: String
     let line: UInt
+    let allowsImplicitMake: Bool
     var drafts: [PTLayoutDraft] = []
     private var handles: [PTLayoutConstraint] = []
 
@@ -861,12 +918,14 @@ internal final class PTLayoutTransaction {
          operation: PTLayoutOperation,
          groupID: String?,
          fileID: String,
-         line: UInt) {
+         line: UInt,
+         allowsImplicitMake: Bool = false) {
         self.owner = owner
         self.operation = operation
         self.groupID = groupID
         self.fileID = fileID
         self.line = line
+        self.allowsImplicitMake = allowsImplicitMake
     }
 
     func group(_ attributes: PTLayoutAttribute...) -> PTLayoutAnchorGroup {
@@ -1167,6 +1226,7 @@ internal enum PTLayoutEngine {
     }
 
     struct Resolved {
+        let draftID: Int
         let draft: PTLayoutDraft
         let first: PTLayoutReference
         let second: PTLayoutReference?
@@ -1199,65 +1259,95 @@ internal enum PTLayoutEngine {
             return Prepared(result: .failure(issue), group: group)
         }
 
+        let resolvedByID = Dictionary(uniqueKeysWithValues: resolved.map { ($0.draftID, $0) })
         let handles = transaction.allHandles()
-        var resultHandles = handles
-        if resultHandles.isEmpty {
-            resultHandles = resolved.map { resolvedConstraint in
-                let handle = PTLayoutConstraint(owner: transaction.owner,
-                                                draftIDs: [],
-                                                transaction: nil)
-                handle.attach(entries: [entry(from: resolvedConstraint, handle: handle)])
-                return handle
+        var resultHandles: [PTLayoutConstraint] = []
+        var claimedDraftIDs = Set<Int>()
+        for handle in handles {
+            let handleResolved = handle.draftIDs.compactMap { resolvedByID[$0] }
+            guard handleResolved.count == handle.draftIDs.count else {
+                let issue = PTLayoutIssue(code: .invalidConstraint,
+                                          owner: transaction.owner.displayName,
+                                          anchor: "handle",
+                                          fileID: transaction.fileID,
+                                          line: transaction.line,
+                                          reason: "布局句柄引用了不存在的 draft ID。",
+                                          suggestion: "不要跨事务复用 PTLayoutConstraint 句柄。")
+                PTLayoutDiagnostics.report(issue, ownerView: transaction.owner.owningView)
+                let group = PTLayoutConstraintGroup(constraints: [], issue: issue)
+                return Prepared(result: .failure(issue), group: group)
             }
-        } else {
-            var offset = 0
-            for handle in resultHandles {
-                let count = max(1, handle.drafts.count)
-                let entries = Array(resolved.dropFirst(offset).prefix(count)).map {
-                    entry(from: $0, handle: handle)
-                }
-                offset += count
-                handle.attach(entries: entries)
-            }
-            if offset < resolved.count {
-                let extra = resolved.dropFirst(offset).map {
-                    let handle = PTLayoutConstraint(owner: transaction.owner,
-                                                    draftIDs: [],
-                                                    transaction: nil)
-                    handle.attach(entries: [entry(from: $0, handle: handle)])
-                    return handle
-                }
-                resultHandles.append(contentsOf: extra)
-            }
+            handle.attach(entries: handleResolved.map { entry(from: $0, handle: handle) })
+            claimedDraftIDs.formUnion(handle.draftIDs)
+            resultHandles.append(handle)
+        }
+        for item in resolved where !claimedDraftIDs.contains(item.draftID) {
+            let handle = PTLayoutConstraint(owner: transaction.owner,
+                                            draftIDs: [item.draftID],
+                                            transaction: nil)
+            handle.attach(entries: [entry(from: item, handle: handle)])
+            resultHandles.append(handle)
         }
         let group = PTLayoutConstraintGroup(constraints: resultHandles)
         return Prepared(result: .success(PTLayoutChanges(count: resolved.count)), group: group)
     }
 
     static func activate(_ group: PTLayoutConstraintGroup) -> PTLayoutResult {
-        guard !group.constraints.isEmpty else { return .success(PTLayoutChanges(count: 0)) }
-        let allEntries = group.constraints.flatMap(\.entries)
+        activateAtomically([group])
+    }
+
+    // English: Validate all groups first, then install and register them as one transaction.
+    // Español: Valida todos los grupos primero y después los instala y registra como una sola transacción.
+    // 中文：先统一校验所有约束组，再作为一个事务安装和登记。
+    static func activateAtomically(_ groups: [PTLayoutConstraintGroup],
+                                   registering: Bool = true) -> PTLayoutResult {
+        if let issue = groups.compactMap(\.issue).first {
+            return .failure(issue)
+        }
+        let activeGroups = groups.filter { !$0.constraints.isEmpty }
+        guard !activeGroups.isEmpty else { return .success(PTLayoutChanges(count: 0)) }
+        let allEntries = activeGroups.flatMap(\.constraints).flatMap(\.entries)
+        guard let firstGroup = activeGroups.first,
+              let owner = firstGroup.constraints.first?.owner else {
+            return .success(PTLayoutChanges(count: 0))
+        }
         guard allEntries.allSatisfy({ entry in
             entry.first.object != nil && (entry.second == nil || entry.second?.object != nil) &&
                 hierarchyIsValid(first: entry.first, second: entry.second)
         }) else {
-            let owner = group.constraints.first?.owner
             let issue = PTLayoutIssue(code: .hierarchyChanged,
-                                      owner: owner?.displayName ?? "released-object",
+                                      owner: owner.displayName,
                                       anchor: "activate",
                                       reason: "prepare 之后视图层级发生变化，约束未激活。",
                                       suggestion: "重新调用 ptLayout.makeConstraints 或重新 prepare。")
-            PTLayoutDiagnostics.report(issue, ownerView: owner?.owningView)
+            PTLayoutDiagnostics.report(issue, ownerView: owner.owningView)
             return .failure(issue)
         }
-        NSLayoutConstraint.activate(allEntries.map(\.native))
-        // English: Register prepared groups only after atomic activation succeeds.
-        // Español: Registra los grupos preparados solo después de activar atómicamente con éxito.
-        // 中文：只有原子激活成功后才登记 prepare 产生的约束组。
-        if let owner = group.constraints.first?.owner {
-            PTLayoutStoreRegistry.store(for: owner)?.register(group, named: nil)
+        prepareManagedViews(allEntries)
+        let nativeConstraints = allEntries.map(\.native)
+        NSLayoutConstraint.activate(nativeConstraints)
+        guard nativeConstraints.allSatisfy(\.isActive) else {
+            NSLayoutConstraint.deactivate(nativeConstraints)
+            let issue = PTLayoutIssue(code: .invalidConstraint,
+                                      owner: owner.displayName,
+                                      anchor: "activate",
+                                      reason: "原生约束未完整安装。",
+                                      suggestion: "检查约束层级和布局所有权。")
+            PTLayoutDiagnostics.report(issue, ownerView: owner.owningView)
+            return .failure(issue)
         }
-        return .success(PTLayoutChanges(count: allEntries.count))
+        if registering {
+            // English: Register prepared groups only after atomic activation succeeds.
+            // Español: Registra los grupos preparados solo después de activar atómicamente con éxito.
+            // 中文：只有原子激活成功后才登记 prepare 产生的约束组。
+            for group in activeGroups {
+                if let groupOwner = group.constraints.first?.owner {
+                    PTLayoutStoreRegistry.store(for: groupOwner)?.register(group, named: nil)
+                }
+            }
+        }
+        PTLayoutProfiler.recordInstalled(count: nativeConstraints.count)
+        return .success(PTLayoutChanges(count: nativeConstraints.count))
     }
 
     static func activate(_ handle: PTLayoutConstraint) -> PTLayoutResult {
@@ -1291,6 +1381,22 @@ internal enum PTLayoutEngine {
             PTLayoutDiagnostics.report(issue, ownerView: transaction.owner.owningView)
             return .failure(issue)
         }
+        if store.allHandles().isEmpty {
+            guard transaction.allowsImplicitMake else {
+                let issue = PTLayoutIssue(code: .updateNotFound,
+                                          owner: transaction.owner.displayName,
+                                          anchor: "update",
+                                          fileID: transaction.fileID,
+                                          line: transaction.line,
+                                          reason: "没有可更新的 PTLayout 约束。",
+                                          suggestion: "先调用 makeConstraints，或使用 updateConstraints 的兼容首次创建语义。")
+                PTLayoutDiagnostics.report(issue, ownerView: transaction.owner.owningView)
+                return .failure(issue)
+            }
+            let prepared = prepare(transaction)
+            guard prepared.result.isSuccess else { return prepared.result }
+            return activate(prepared.group)
+        }
         let matches = findMatches(resolved, store: store)
         if let failure = matches.failure {
             PTLayoutDiagnostics.report(failure, ownerView: transaction.owner.owningView)
@@ -1310,17 +1416,18 @@ internal enum PTLayoutEngine {
             NSLayoutConstraint.activate(replacements)
             for (index, entry) in updates.enumerated() {
                 entry.native = replacements[index]
-                entry.constant = resolved[index].draft.constant
+                entry.constant = resolved[index].native.constant
                 entry.priority = resolved[index].draft.priority
             }
         } else {
             for (index, entry) in updates.enumerated() {
-                entry.native.constant = resolved[index].draft.constant
+                let canonicalConstant = resolved[index].native.constant
+                entry.native.constant = canonicalConstant
                 if entry.priority != resolved[index].draft.priority {
                     entry.native.priority = UILayoutPriority(rawValue: resolved[index].draft.priority)
                     entry.priority = resolved[index].draft.priority
                 }
-                entry.constant = resolved[index].draft.constant
+                entry.constant = canonicalConstant
             }
         }
         return .success(PTLayoutChanges(count: updates.count))
@@ -1415,8 +1522,8 @@ internal enum PTLayoutEngine {
                                 line: UInt,
                                 groupID: String?) -> [Resolved]? {
         var resolved: [Resolved] = []
-        for draft in drafts {
-            guard let firstObject = draft.first.reference.object else {
+        for (draftID, draft) in drafts.enumerated() {
+            guard draft.first.reference.object != nil else {
                 return fail(code: .hierarchyChanged,
                             draft: draft,
                             owner: owner,
@@ -1478,6 +1585,28 @@ internal enum PTLayoutEngine {
                             reason: "LayoutGuide 没有有效的 owningView。",
                             suggestion: "把 LayoutGuide 添加到有效容器后再激活。")
             }
+            guard draft.constant.isFinite, target.constant.isFinite else {
+                return fail(code: .invalidConstraint,
+                            draft: draft,
+                            owner: owner,
+                            fileID: fileID,
+                            line: line,
+                            groupID: groupID,
+                            reason: "约束常量必须是有限数值。",
+                            suggestion: "检查 offset、inset、尺寸和浮点计算结果。")
+            }
+            guard isValidAttributePair(first: draft.first.attribute,
+                                       second: target.secondAttribute,
+                                       hasSecond: target.reference != nil) else {
+                return fail(code: .invalidConstraint,
+                            draft: draft,
+                            owner: owner,
+                            fileID: fileID,
+                            line: line,
+                            groupID: groupID,
+                            reason: "约束两端的 NSLayoutConstraint 属性组合不兼容。",
+                            suggestion: "仅连接同轴位置、同维度尺寸或对应 baseline 属性。")
+            }
             guard draft.multiplier == 1 || (target.reference != nil && isSize(draft.first.attribute) && isSize(target.secondAttribute)) else {
                 return fail(code: .invalidMultiplier,
                             draft: draft,
@@ -1512,13 +1641,13 @@ internal enum PTLayoutEngine {
                                               second: target.reference?.identity,
                                               secondAttribute: target.secondAttribute,
                                               multiplier: draft.multiplier)
-            resolved.append(Resolved(draft: draft,
+            resolved.append(Resolved(draftID: draftID,
+                                     draft: draft,
                                      first: draft.first.reference,
                                      second: target.reference,
                                      secondAttribute: target.secondAttribute,
                                      native: native,
                                      signature: signature))
-            _ = firstObject
         }
         if hasDuplicateSignatures(resolved) {
             let draft = drafts[0]
@@ -1698,13 +1827,14 @@ internal enum PTLayoutEngine {
                                     store: PTLayoutConstraintStore) -> (entries: [PTLayoutEntry], failure: PTLayoutIssue?) {
         var result: [PTLayoutEntry] = []
         for item in resolved {
-            let candidates = store.allHandles().flatMap(\.entries).filter { $0.signature == item.signature }
+            let signatureCandidates = store.allHandles().flatMap(\.entries).filter { $0.signature == item.signature }
+            let candidates = signatureCandidates.filter { $0.identifier == item.draft.identifier }
             guard candidates.count == 1, let candidate = candidates.first else {
                 let code: PTLayoutIssueCode = candidates.isEmpty ? .updateNotFound : .ambiguousMatch
                 let issue = PTLayoutIssue(code: code,
                                           owner: item.first.displayName,
                                           anchor: item.draft.first.attribute.rawValue,
-                                          reason: candidates.isEmpty ? "没有找到相同签名的 PTLayout 约束。" : "找到多个相同签名的 PTLayout 约束。",
+                                          reason: candidates.isEmpty ? "没有找到相同签名和 identifier 的 PTLayout 约束。" : "找到多个相同签名和 identifier 的 PTLayout 约束。",
                                           suggestion: candidates.isEmpty ? "使用 remakeConstraints 或明确调用 upsertConstraints。" : "使用 identifier 或命名约束组消除歧义。")
                 return ([], issue)
             }
@@ -1714,9 +1844,56 @@ internal enum PTLayoutEngine {
     }
 
     private static func hasDuplicateSignatures(_ resolved: [Resolved]) -> Bool {
-        var seen = Set<PTLayoutSignature>()
-        for item in resolved where !seen.insert(item.signature).inserted { return true }
+        struct Key: Hashable {
+            let signature: PTLayoutSignature
+            let identifier: String?
+        }
+        var seen = Set<Key>()
+        for item in resolved where !seen.insert(Key(signature: item.signature,
+                                                    identifier: item.draft.identifier)).inserted { return true }
         return false
+    }
+
+    private static func isValidAttributePair(first: PTLayoutAttribute,
+                                             second: PTLayoutAttribute,
+                                             hasSecond: Bool) -> Bool {
+        guard hasSecond else { return isSize(first) }
+        if isSize(first) || isSize(second) {
+            return isSize(first) && isSize(second)
+        }
+        if isBaseline(first) || isBaseline(second) {
+            return isBaseline(first) && isBaseline(second)
+        }
+        return isHorizontal(first) && isHorizontal(second)
+            || isVertical(first) && isVertical(second)
+    }
+
+    private static func isHorizontal(_ attribute: PTLayoutAttribute) -> Bool {
+        switch attribute {
+        case .leading, .trailing, .left, .right, .centerX: return true
+        default: return false
+        }
+    }
+
+    private static func isVertical(_ attribute: PTLayoutAttribute) -> Bool {
+        switch attribute {
+        case .top, .bottom, .centerY: return true
+        default: return false
+        }
+    }
+
+    private static func isBaseline(_ attribute: PTLayoutAttribute) -> Bool {
+        attribute == .firstBaseline || attribute == .lastBaseline
+    }
+
+    private static func prepareManagedViews(_ entries: [PTLayoutEntry]) {
+        guard PTLayoutConfiguration.autoresizingMaskPolicy == .automaticForManagedViews else { return }
+        var seen = Set<ObjectIdentifier>()
+        for entry in entries {
+            guard let view = entry.first.view,
+                  seen.insert(ObjectIdentifier(view)).inserted else { continue }
+            view.translatesAutoresizingMaskIntoConstraints = false
+        }
     }
 
     private static func fail(code: PTLayoutIssueCode,

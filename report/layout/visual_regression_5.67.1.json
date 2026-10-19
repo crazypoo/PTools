@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "status": "not_run",
+  "reason": "Requires real iOS Simulator screenshot capture and geometry review.",
+  "screenshots": [],
+  "pages": [
+    "BaseNavigation",
+    "TabBar",
+    "CollectionAndCell",
+    "InputAndDynamicType",
+    "MediaPickerEditor",
+    "AlertSheetOverlay"
+  ]
+}
+

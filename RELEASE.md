@@ -1,5 +1,13 @@
 # PTools 发布清单
 
+## 5.67.1
+
+- [x] `VERSION`、podspec 版本来源、CHANGELOG、README 和 PTLayout 文档同步到 `5.67.1`。
+- [x] PTLayout P0 引擎修复、原子组激活、诊断缓存上限和真实安装计数已落地。
+- [x] F01-F56 均有 XCTest 方法和机器可读执行映射；静态 fixture 不再被视为运行时通过。
+- [x] Xcode iOS Simulator runtime XCTest 已通过：F01-F56 全部执行并通过；`.xcresult` 已在验证后清理，保留 JSON 和 CSV 摘要。
+- [ ] 视觉截图、SPM/CocoaPods consumer 和 `iphone26` 真机验证完成后，才允许创建 `5.67.1` tag。
+
 ## 5.67.0
 
 - [x] `VERSION`、`PooTools.podspec`、`CHANGELOG.md`、`README.md` 和 PTLayout 发布报告同步。

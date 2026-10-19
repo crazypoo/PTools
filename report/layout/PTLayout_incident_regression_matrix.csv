@@ -1,0 +1,9 @@
+fixture_id,area,required_evidence,status,rollback
+F01-F07,PTLayout P0 engine,PTLayoutRuntimeTests + xcresult,runtime_passed,keep .snp
+F08-F15,priority and ownership,PTLayoutRuntimeTests + xcresult,runtime_passed,keep .snp
+F16-F24,lifecycle and platform geometry,PTLayoutRuntimeTests + visual evidence,runtime_passed_visual_pending,keep .snp
+F25-F32,rotation and equation semantics,PTLayoutRuntimeTests + visual evidence,runtime_passed_visual_pending,keep .snp
+F33-F40,scene and diagnostics,PTLayoutRuntimeTests + console evidence,runtime_passed_console_pending,keep .snp
+F41-F48,first update and engine coexistence,PTLayoutRuntimeTests + xcresult,runtime_passed,keep .snp
+F49-F56,diagnostic and release boundaries,PTLayoutRuntimeTests + consumer evidence,runtime_passed_consumer_pending,keep .snp
+

@@ -120,6 +120,47 @@ final class PTLayoutLabViewController: PTBaseViewController {
                 make.width.equalTo(200)
             }
             return describe(result, expected: "不存在的签名不自动新增")
+        case "ui.layout.snapkit-compatibility":
+            let result = sampleView.ptLayout.updateConstraints { make in
+                make.leading.equalToSuperview().offset(16)
+                make.top.equalToSuperview().offset(12)
+                make.width.equalTo(180)
+                make.height.equalTo(96)
+            }
+            sampleView.superview?.layoutIfNeeded()
+            return describe(result, expected: "首次 update 按 SnapKit 语义创建")
+        case "ui.layout.safe-area-keyboard-rtl":
+            let result = sampleView.ptLayout.remakeConstraints { make in
+                make.edges.equalToSuperviewSafeArea().inset(UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12))
+            }
+            #if os(iOS) || os(tvOS) || os(visionOS)
+            if #available(iOS 15.0, tvOS 15.0, visionOS 1.0, *) {
+                PTLayoutKeyboardSupport.setFollowsUndockedKeyboard(true, on: view)
+            }
+            #endif
+            sampleView.superview?.layoutIfNeeded()
+            return describe(result, expected: "Safe Area 与键盘指南按容器逐边解析")
+        case "ui.layout.duo-adaptation":
+            let result = sampleView.ptLayout.remakeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(20)
+                make.top.equalToSuperviewSafeArea().offset(16)
+                make.height.equalTo(view.bounds.width > 700 ? 180 : 120)
+            }
+            view.layoutIfNeeded()
+            return describe(result, expected: "容器尺寸变化后重新计算 Duo 安全区布局")
+        case "ui.layout.lifecycle-reuse":
+            let first = sampleView.ptLayout.makeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(20)
+                make.height.equalTo(120)
+            }
+            let second = sampleView.ptLayout.remakeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(24)
+                make.height.equalTo(140)
+            }
+            let inspection = sampleView.ptLayout.inspect()
+            let firstStatus = first.isSuccess ? "成功" : "失败"
+            let secondStatus = second.isSuccess ? "成功" : "失败"
+            return "生命周期创建 (\(firstStatus))；复用重建 (\(secondStatus))；当前约束 (\(inspection.constraints.count)) 条。"
         case "ui.layout.profile-compare":
             PTLayoutProfiler.isEnabled = true
             PTLayoutProfiler.reset()
