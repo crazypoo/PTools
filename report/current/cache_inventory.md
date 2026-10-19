@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cache_inventory.rb
-Source revision: a868c0a22374e9a4016e85a100ccc814895d9cc3
-Generated at: 2026-10-18T02:39:40Z
+Source revision: 23f6f58d7b266175109501ec67df060cb2859650
+Generated at: 2026-10-19T07:31:21Z
 -->
 
 # PTools 当前缓存盘点
@@ -13,14 +13,14 @@ Generated at: 2026-10-18T02:39:40Z
 
 | 位置 | 类型 | 代码行 |
 | --- | --- | --- |
-| PooToolsSource/Base/PTAudioCache.swift:236 | disk or custom cache | // English: Derived durations use an explicit bounded cache policy. |
-| PooToolsSource/Base/PTAudioCache.swift:242 | NSCache | private let durationCache: NSCache<NSString, NSNumber> = { |
-| PooToolsSource/Base/PTAudioCache.swift:243 | NSCache | let cache = NSCache<NSString, NSNumber>() |
-| PooToolsSource/Base/PTAudioCache.swift:244 | disk or custom cache | cache.countLimit = 256 |
-| PooToolsSource/Base/PTAudioCache.swift:245 | disk or custom cache | cache.totalCostLimit = 256 * MemoryLayout<Float>.size |
-| PooToolsSource/Base/PTAudioCache.swift:246 | disk or custom cache | return cache |
-| PooToolsSource/Base/PTAudioCache.swift:260 | disk or custom cache | /// 获取音频时长（一定基于 cache 文件） |
-| PooToolsSource/Base/PTAudioCache.swift:300 | disk or custom cache | /// 创建播放用 PlayerItem（只用 cache 文件） |
+| PooToolsSource/Base/PTAudioCache.swift:141 | disk or custom cache | // English: Derived durations use an explicit bounded cache policy. |
+| PooToolsSource/Base/PTAudioCache.swift:147 | NSCache | private let durationCache: NSCache<NSString, NSNumber> = { |
+| PooToolsSource/Base/PTAudioCache.swift:148 | NSCache | let cache = NSCache<NSString, NSNumber>() |
+| PooToolsSource/Base/PTAudioCache.swift:149 | disk or custom cache | cache.countLimit = 256 |
+| PooToolsSource/Base/PTAudioCache.swift:150 | disk or custom cache | cache.totalCostLimit = 256 * MemoryLayout<Float>.size |
+| PooToolsSource/Base/PTAudioCache.swift:151 | disk or custom cache | return cache |
+| PooToolsSource/Base/PTAudioCache.swift:165 | disk or custom cache | /// 获取音频时长（一定基于 cache 文件） |
+| PooToolsSource/Base/PTAudioCache.swift:205 | disk or custom cache | /// 创建播放用 PlayerItem（只用 cache 文件） |
 | PooToolsSource/Base/PTBaseDecorationFunction.swift:16 | disk or custom cache | // English: Cache the shadow geometry to avoid rebuilding the path on every layout pass. |
 | PooToolsSource/Base/PTCollectionView.swift:131 | disk or custom cache | // English: Invalidate every geometry cache when a runtime layout contract changes. |
 | PooToolsSource/Base/PTCollectionView.swift:785 | disk or custom cache | if let cache = heightCache.get(forKey: key) { |
@@ -39,20 +39,19 @@ Generated at: 2026-10-18T02:39:40Z
 | PooToolsSource/Base/PTCollectionViewTypes.swift:30 | disk or custom cache | cache.removeObject(forKey: WrappedKey(key)) |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:34 | disk or custom cache | cache.removeAllObjects() |
 | PooToolsSource/Base/PTCollectionViewTypes.swift:382 | disk or custom cache | // English: Own list layout caches outside PTCollectionView so cache policy can evolve independently. |
-| PooToolsSource/Base/PTVideoCoverCache.swift:111 | disk or custom cache | // English: A shared actor prevents concurrent callers from writing the same video cache file. |
-| PooToolsSource/Base/PTVideoCoverCache.swift:177 | disk or custom cache | /// Video file cache manager. |
-| PooToolsSource/Base/PTVideoCoverCache.swift:260 | disk or custom cache | /// Video cover cache and thumbnail request coordinator. |
-| PooToolsSource/Base/PTVideoCoverCache.swift:362 | disk or custom cache | // English: Keep thumbnail limits aligned with the shared cache contract. |
-| PooToolsSource/Base/PTVideoCoverCache.swift:369 | NSCache | @MainActor private static let memoryCache: NSCache<NSString, UIImage> = { |
-| PooToolsSource/Base/PTVideoCoverCache.swift:370 | NSCache | let cache = NSCache<NSString, UIImage>() |
-| PooToolsSource/Base/PTVideoCoverCache.swift:371 | disk or custom cache | cache.countLimit = cachePolicy.countLimit |
-| PooToolsSource/Base/PTVideoCoverCache.swift:372 | disk or custom cache | cache.totalCostLimit = cachePolicy.costLimit |
-| PooToolsSource/Base/PTVideoCoverCache.swift:373 | disk or custom cache | return cache |
-| PooToolsSource/Base/PTVideoCoverCache.swift:482 | disk or custom cache | /// Preserves the URL-only key used by the video file cache. |
-| PooToolsSource/Base/PTVideoCoverCache.swift:491 | disk or custom cache | /// Writes a JPEG cache entry atomically on a utility task. |
-| PooToolsSource/Base/PTVideoCoverCache.swift:513 | disk or custom cache | // English: Encode generated thumbnails away from UI work before writing the disk cache. |
-| PooToolsSource/Base/PTVideoCoverCache.swift:528 | disk or custom cache | // Keep invalid dimensions out of integer conversion and make the cache key deterministic. |
-| PooToolsSource/Base/PTVideoCoverCache.swift:542 | disk or custom cache | // English: Version the key because this cache now stores pixel-bounded covers. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:154 | disk or custom cache | /// Video file cache manager. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:249 | disk or custom cache | /// Video cover cache and thumbnail request coordinator. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:351 | disk or custom cache | // English: Keep thumbnail limits aligned with the shared cache contract. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:358 | NSCache | @MainActor private static let memoryCache: NSCache<NSString, UIImage> = { |
+| PooToolsSource/Base/PTVideoCoverCache.swift:359 | NSCache | let cache = NSCache<NSString, UIImage>() |
+| PooToolsSource/Base/PTVideoCoverCache.swift:360 | disk or custom cache | cache.countLimit = cachePolicy.countLimit |
+| PooToolsSource/Base/PTVideoCoverCache.swift:361 | disk or custom cache | cache.totalCostLimit = cachePolicy.costLimit |
+| PooToolsSource/Base/PTVideoCoverCache.swift:362 | disk or custom cache | return cache |
+| PooToolsSource/Base/PTVideoCoverCache.swift:471 | disk or custom cache | /// Preserves the URL-only key used by the video file cache. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:480 | disk or custom cache | /// Writes a JPEG cache entry atomically on a utility task. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:502 | disk or custom cache | // English: Encode generated thumbnails away from UI work before writing the disk cache. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:517 | disk or custom cache | // Keep invalid dimensions out of integer conversion and make the cache key deterministic. |
+| PooToolsSource/Base/PTVideoCoverCache.swift:531 | disk or custom cache | // English: Version the key because this cache now stores pixel-bounded covers. |
 | PooToolsSource/Button/PTActionLayoutButton.swift:103 | disk or custom cache | // English: Cache the last layout size to avoid rebuilding identical constraints. |
 | PooToolsSource/C7Collector/C7Collector.swift:77 | disk or custom cache | // English: Harbeth owns the shared texture cache and supplies it at conversion time. |
 | PooToolsSource/Category/FileManager+PTEX.swift:24 | disk or custom cache | - 3.1、Library/Cache |
@@ -120,8 +119,8 @@ Generated at: 2026-10-18T02:39:40Z
 | PooToolsSource/NetWork/Network.swift:65 | disk or custom cache | case cache(String) |
 | PooToolsSource/NetWork/Network.swift:93 | disk or custom cache | case .cache(let message): return "PT Network cache failed: \(message)" |
 | PooToolsSource/NetWork/Network.swift:120 | disk or custom cache | case .cache: return 9999999912 |
-| PooToolsSource/NetWork/Network.swift:288 | URLCache | urlConfiguration.urlCache = URLCache(memoryCapacity: configurationSnapshot.memoryCapacity, |
-| PooToolsSource/NetWork/Network.swift:513 | disk or custom cache | throw PTNetworkError.cache("cacheOnly 没有可用缓存 / cacheOnly has no usable entry / cacheOnly no tiene una entrada utilizable") |
+| PooToolsSource/NetWork/Network.swift:283 | URLCache | urlConfiguration.urlCache = URLCache(memoryCapacity: configurationSnapshot.memoryCapacity, |
+| PooToolsSource/NetWork/Network.swift:508 | disk or custom cache | throw PTNetworkError.cache("cacheOnly 没有可用缓存 / cacheOnly has no usable entry / cacheOnly no tiene una entrada utilizable") |
 | PooToolsSource/NetWork/NetworkSupport.swift:1 | disk or custom cache | // English: Keep retry, cache, reachability, and upload support outside the Network facade. |
 | PooToolsSource/NetWork/NetworkSupport.swift:240 | disk or custom cache | // English: A cache entry carries validators and freshness without exposing URLSession objects. |
 | PooToolsSource/NetWork/NetworkSupport.swift:260 | NSCache | private let memoryCache = NSCache<NSString, NSData>() |

@@ -295,6 +295,7 @@ digraph PToolsSwiftPM {
   "PooToolsNetWork" -> "PToolsModelLegacyKakaJSON";
   "PooToolsNetWork" -> "PToolsModelLegacySmartCodable";
   "PooToolsNetWork" -> "PToolsNetworkModelCore";
+  "PooToolsNetWork" -> "PToolsTransferCore";
   "PooToolsNetWork" -> "PooToolsLoading";
   "PooToolsNetWork" -> "ptools";
   "PooToolsNetworkSpeedTest" -> "ptools";
@@ -373,5 +374,6 @@ digraph PToolsSwiftPM {
   "ptools" -> "PToolsLogging";
   "ptools" -> "PToolsPermissionCore";
   "ptools" -> "PToolsSymbols";
+  "ptools" -> "PToolsTransferCore";
   "ptools" -> "PToolsUIFoundation";
 }

@@ -127,6 +127,24 @@ final class PTApplicationInfrastructureTests: XCTestCase {
         XCTAssertEqual(snapshot.request.policy.maxConcurrent, 3)
     }
 
+    func testTransferDownloadConfigurationNormalizesTimeoutsAndPreservesRequestContract() {
+        let configuration = PTTransferDownloadConfiguration(requestTimeout: 30,
+                                                              resourceTimeout: 10)
+        let request = PTTransferRequest(
+            source: .download(URL(string: "https://example.invalid/file.bin")!),
+            destination: URL(fileURLWithPath: "/tmp/file.bin"),
+            headers: ["Authorization": "Bearer test"],
+            allowsResume: false,
+            downloadConfiguration: configuration
+        )
+
+        XCTAssertEqual(configuration.requestTimeout, 30)
+        XCTAssertEqual(configuration.resourceTimeout, 30)
+        XCTAssertEqual(request.headers["Authorization"], "Bearer test")
+        XCTAssertFalse(request.allowsResume)
+        XCTAssertEqual(request.downloadConfiguration, configuration)
+    }
+
     func testConfigurationTargetingUsesStableBucket() {
         let context = PTConfigurationContext(environment: .staging,
                                              appVersion: "5.62.0",

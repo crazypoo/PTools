@@ -48,7 +48,11 @@ final class PTTransferDownloadController: NSObject, URLSessionDownloadDelegate, 
                 return nextTask
             }
             guard case .download(let url) = request.source else { return nil }
-            let nextTask = session.downloadTask(with: URLRequest(url: url))
+            var urlRequest = URLRequest(url: url)
+            request.headers.forEach { key, value in
+                urlRequest.setValue(value, forHTTPHeaderField: key)
+            }
+            let nextTask = session.downloadTask(with: urlRequest)
             task = nextTask
             return nextTask
         }

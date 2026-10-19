@@ -830,10 +830,10 @@
   {
     "symbolName": "PTNSLogConsole",
     "referencePath": "PooToolsSource/Base/PTAudioCache.swift",
-    "line": 293,
+    "line": 198,
     "ownerTarget": "ptools",
     "requiredModule": "ptools",
-    "currentImports": "AVFoundation;Foundation;PToolsCore",
+    "currentImports": "AVFoundation;Foundation;PToolsCore;PToolsTransferCore",
     "ownerCandidates": "ptools"
   },
   {
@@ -3251,64 +3251,64 @@
   {
     "symbolName": "PTVideoCoverCache",
     "referencePath": "PooToolsSource/Base/PTVideoCoverCache.swift",
-    "line": 78,
+    "line": 81,
     "ownerTarget": "ptools",
     "requiredModule": "ptools",
-    "currentImports": "AVFoundation;CryptoKit;PToolsCore;UIKit",
+    "currentImports": "AVFoundation;CryptoKit;PToolsCore;PToolsTransferCore;UIKit",
     "ownerCandidates": "ptools"
   },
   {
     "symbolName": "PTVideoCoverCache",
     "referencePath": "PooToolsSource/Base/PTVideoCoverCache.swift",
-    "line": 378,
+    "line": 367,
     "ownerTarget": "ptools",
     "requiredModule": "ptools",
-    "currentImports": "AVFoundation;CryptoKit;PToolsCore;UIKit",
+    "currentImports": "AVFoundation;CryptoKit;PToolsCore;PToolsTransferCore;UIKit",
     "ownerCandidates": "ptools"
   },
   {
     "symbolName": "PTVideoCoverCache",
+    "referencePath": "PooToolsSource/Base/PTVideoCoverCache.swift",
+    "line": 368,
+    "ownerTarget": "ptools",
+    "requiredModule": "ptools",
+    "currentImports": "AVFoundation;CryptoKit;PToolsCore;PToolsTransferCore;UIKit",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTVideoCoverCache",
+    "referencePath": "PooToolsSource/Base/PTVideoCoverCache.swift",
+    "line": 369,
+    "ownerTarget": "ptools",
+    "requiredModule": "ptools",
+    "currentImports": "AVFoundation;CryptoKit;PToolsCore;PToolsTransferCore;UIKit",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTVideoThumbnailService",
     "referencePath": "PooToolsSource/Base/PTVideoCoverCache.swift",
     "line": 379,
     "ownerTarget": "ptools",
     "requiredModule": "ptools",
-    "currentImports": "AVFoundation;CryptoKit;PToolsCore;UIKit",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "PTVideoCoverCache",
-    "referencePath": "PooToolsSource/Base/PTVideoCoverCache.swift",
-    "line": 380,
-    "ownerTarget": "ptools",
-    "requiredModule": "ptools",
-    "currentImports": "AVFoundation;CryptoKit;PToolsCore;UIKit",
+    "currentImports": "AVFoundation;CryptoKit;PToolsCore;PToolsTransferCore;UIKit",
     "ownerCandidates": "ptools"
   },
   {
     "symbolName": "PTVideoThumbnailService",
     "referencePath": "PooToolsSource/Base/PTVideoCoverCache.swift",
-    "line": 390,
+    "line": 440,
     "ownerTarget": "ptools",
     "requiredModule": "ptools",
-    "currentImports": "AVFoundation;CryptoKit;PToolsCore;UIKit",
+    "currentImports": "AVFoundation;CryptoKit;PToolsCore;PToolsTransferCore;UIKit",
     "ownerCandidates": "ptools"
   },
   {
     "symbolName": "PTVideoThumbnailService",
     "referencePath": "PooToolsSource/Base/PTVideoCoverCache.swift",
-    "line": 451,
+    "line": 466,
     "ownerTarget": "ptools",
     "requiredModule": "ptools",
-    "currentImports": "AVFoundation;CryptoKit;PToolsCore;UIKit",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "PTVideoThumbnailService",
-    "referencePath": "PooToolsSource/Base/PTVideoCoverCache.swift",
-    "line": 477,
-    "ownerTarget": "ptools",
-    "requiredModule": "ptools",
-    "currentImports": "AVFoundation;CryptoKit;PToolsCore;UIKit",
+    "currentImports": "AVFoundation;CryptoKit;PToolsCore;PToolsTransferCore;UIKit",
     "ownerCandidates": "ptools"
   },
   {
@@ -13439,10 +13439,19 @@
   {
     "symbolName": "stringIsEmpty",
     "referencePath": "PooToolsSource/NetWork/Network+Download.swift",
-    "line": 179,
+    "line": 125,
     "ownerTarget": "PooToolsNetWork",
     "requiredModule": "ptools",
-    "currentImports": "Foundation;PToolsCore;UIKit;ptools",
+    "currentImports": "Foundation;PToolsCore;PToolsTransferCore;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "stringIsEmpty",
+    "referencePath": "PooToolsSource/NetWork/Network+Download.swift",
+    "line": 161,
+    "ownerTarget": "PooToolsNetWork",
+    "requiredModule": "ptools",
+    "currentImports": "Foundation;PToolsCore;PToolsTransferCore;UIKit;ptools",
     "ownerCandidates": "ptools"
   },
   {
@@ -13502,7 +13511,7 @@
   {
     "symbolName": "PTNSLogConsole",
     "referencePath": "PooToolsSource/NetWork/Network.swift",
-    "line": 344,
+    "line": 339,
     "ownerTarget": "PooToolsNetWork",
     "requiredModule": "ptools",
     "currentImports": "CoreTelephony;Network;PToolsCore;PToolsModelCore;PToolsModelLegacyKakaJSON;PToolsNetworkModelCore;Photos;PooToolsLoading;UIKit;ptools",
@@ -13511,7 +13520,7 @@
   {
     "symbolName": "PTNSLogConsole",
     "referencePath": "PooToolsSource/NetWork/Network.swift",
-    "line": 363,
+    "line": 358,
     "ownerTarget": "PooToolsNetWork",
     "requiredModule": "ptools",
     "currentImports": "CoreTelephony;Network;PToolsCore;PToolsModelCore;PToolsModelLegacyKakaJSON;PToolsNetworkModelCore;Photos;PooToolsLoading;UIKit;ptools",
@@ -13520,7 +13529,7 @@
   {
     "symbolName": "PTResponseMetadata",
     "referencePath": "PooToolsSource/NetWork/Network.swift",
-    "line": 520,
+    "line": 515,
     "ownerTarget": "PooToolsNetWork",
     "requiredModule": "PToolsCore",
     "currentImports": "CoreTelephony;Network;PToolsCore;PToolsModelCore;PToolsModelLegacyKakaJSON;PToolsNetworkModelCore;Photos;PooToolsLoading;UIKit;ptools",
@@ -13529,7 +13538,7 @@
   {
     "symbolName": "PTResponseMetadata",
     "referencePath": "PooToolsSource/NetWork/Network.swift",
-    "line": 598,
+    "line": 593,
     "ownerTarget": "PooToolsNetWork",
     "requiredModule": "PToolsCore",
     "currentImports": "CoreTelephony;Network;PToolsCore;PToolsModelCore;PToolsModelLegacyKakaJSON;PToolsNetworkModelCore;Photos;PooToolsLoading;UIKit;ptools",
@@ -13538,7 +13547,7 @@
   {
     "symbolName": "PTResponseMetadata",
     "referencePath": "PooToolsSource/NetWork/Network.swift",
-    "line": 611,
+    "line": 606,
     "ownerTarget": "PooToolsNetWork",
     "requiredModule": "PToolsCore",
     "currentImports": "CoreTelephony;Network;PToolsCore;PToolsModelCore;PToolsModelLegacyKakaJSON;PToolsNetworkModelCore;Photos;PooToolsLoading;UIKit;ptools",
@@ -14213,7 +14222,7 @@
   {
     "symbolName": "PTCollectionView",
     "referencePath": "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsSearchViewController.swift",
-    "line": 169,
+    "line": 167,
     "ownerTarget": "PToolsAcknowledgements",
     "requiredModule": "ptools",
     "currentImports": "PToolsAcknowledgementsCore;PooToolsSearch;SnapKit;UIKit;ptools",
@@ -14222,7 +14231,7 @@
   {
     "symbolName": "PTSection",
     "referencePath": "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsSearchViewController.swift",
-    "line": 206,
+    "line": 204,
     "ownerTarget": "PToolsAcknowledgements",
     "requiredModule": "ptools",
     "currentImports": "PToolsAcknowledgementsCore;PooToolsSearch;SnapKit;UIKit;ptools",
@@ -16787,7 +16796,7 @@
   {
     "symbolName": "PTOpenSystemConfig",
     "referencePath": "PooToolsSource/PermissionCore/PTPermission.swift",
-    "line": 115,
+    "line": 119,
     "ownerTarget": "ptools",
     "requiredModule": "ptools",
     "currentImports": "HealthKit;PToolsPermissionCore;UIKit;os",
@@ -16796,7 +16805,7 @@
   {
     "symbolName": "PTOpenSystemFunction",
     "referencePath": "PooToolsSource/PermissionCore/PTPermission.swift",
-    "line": 115,
+    "line": 119,
     "ownerTarget": "ptools",
     "requiredModule": "ptools",
     "currentImports": "HealthKit;PToolsPermissionCore;UIKit;os",
@@ -18767,15 +18776,6 @@
   {
     "symbolName": "PTRichText",
     "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 852,
-    "ownerTarget": "PooToolsSearch",
-    "requiredModule": "PToolsUIFoundation",
-    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
-    "ownerCandidates": "PToolsUIFoundation"
-  },
-  {
-    "symbolName": "PTRichText",
-    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
     "line": 853,
     "ownerTarget": "PooToolsSearch",
     "requiredModule": "PToolsUIFoundation",
@@ -18785,7 +18785,7 @@
   {
     "symbolName": "PTRichText",
     "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 862,
+    "line": 854,
     "ownerTarget": "PooToolsSearch",
     "requiredModule": "PToolsUIFoundation",
     "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
@@ -18801,18 +18801,18 @@
     "ownerCandidates": "PToolsUIFoundation"
   },
   {
-    "symbolName": "PTSection",
+    "symbolName": "PTRichText",
     "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 437,
+    "line": 864,
     "ownerTarget": "PooToolsSearch",
-    "requiredModule": "ptools",
+    "requiredModule": "PToolsUIFoundation",
     "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
-    "ownerCandidates": "ptools"
+    "ownerCandidates": "PToolsUIFoundation"
   },
   {
     "symbolName": "PTSection",
     "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 843,
+    "line": 438,
     "ownerTarget": "PooToolsSearch",
     "requiredModule": "ptools",
     "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
@@ -18820,87 +18820,6 @@
   },
   {
     "symbolName": "PTSection",
-    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 870,
-    "ownerTarget": "PooToolsSearch",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "PTUnavailableManager",
-    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 779,
-    "ownerTarget": "PooToolsSearch",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "PTUnavailableManager",
-    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 804,
-    "ownerTarget": "PooToolsSearch",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "PTUnavailableManager",
-    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 810,
-    "ownerTarget": "PooToolsSearch",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "PTUnavailableManager",
-    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 813,
-    "ownerTarget": "PooToolsSearch",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "PTUnavailableManager",
-    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 816,
-    "ownerTarget": "PooToolsSearch",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "PTUnavailableManager",
-    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 819,
-    "ownerTarget": "PooToolsSearch",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "PTUnavailableManager",
-    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 821,
-    "ownerTarget": "PooToolsSearch",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "PTUnavailableManager",
-    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 832,
-    "ownerTarget": "PooToolsSearch",
-    "requiredModule": "ptools",
-    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
-    "ownerCandidates": "ptools"
-  },
-  {
-    "symbolName": "PTUnavailableManager",
     "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
     "line": 844,
     "ownerTarget": "PooToolsSearch",
@@ -18909,9 +18828,9 @@
     "ownerCandidates": "ptools"
   },
   {
-    "symbolName": "PTUnavailableManager",
+    "symbolName": "PTSection",
     "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 855,
+    "line": 871,
     "ownerTarget": "PooToolsSearch",
     "requiredModule": "ptools",
     "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
@@ -18920,7 +18839,97 @@
   {
     "symbolName": "PTUnavailableManager",
     "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
-    "line": 865,
+    "line": 780,
+    "ownerTarget": "PooToolsSearch",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTUnavailableManager",
+    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
+    "line": 805,
+    "ownerTarget": "PooToolsSearch",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTUnavailableManager",
+    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
+    "line": 811,
+    "ownerTarget": "PooToolsSearch",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTUnavailableManager",
+    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
+    "line": 814,
+    "ownerTarget": "PooToolsSearch",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTUnavailableManager",
+    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
+    "line": 817,
+    "ownerTarget": "PooToolsSearch",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTUnavailableManager",
+    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
+    "line": 820,
+    "ownerTarget": "PooToolsSearch",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTUnavailableManager",
+    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
+    "line": 822,
+    "ownerTarget": "PooToolsSearch",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTUnavailableManager",
+    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
+    "line": 833,
+    "ownerTarget": "PooToolsSearch",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTUnavailableManager",
+    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
+    "line": 845,
+    "ownerTarget": "PooToolsSearch",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTUnavailableManager",
+    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
+    "line": 856,
+    "ownerTarget": "PooToolsSearch",
+    "requiredModule": "ptools",
+    "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTUnavailableManager",
+    "referencePath": "PooToolsSource/Search/PTSearchViewController.swift",
+    "line": 866,
     "ownerTarget": "PooToolsSearch",
     "requiredModule": "ptools",
     "currentImports": "PToolsUIFoundation;PooToolsSearchBar;SnapKit;UIKit;ptools",
@@ -18929,7 +18938,7 @@
   {
     "symbolName": "createImageWithColor",
     "referencePath": "PooToolsSource/SearchBar/PTSearchBar.swift",
-    "line": 182,
+    "line": 293,
     "ownerTarget": "PooToolsSearchBar",
     "requiredModule": "ptools",
     "currentImports": "UIKit;ptools",
@@ -18938,7 +18947,16 @@
   {
     "symbolName": "viewCorner",
     "referencePath": "PooToolsSource/SearchBar/PTSearchBar.swift",
-    "line": 173,
+    "line": 284,
+    "ownerTarget": "PooToolsSearchBar",
+    "requiredModule": "ptools",
+    "currentImports": "UIKit;ptools",
+    "ownerCandidates": "ptools"
+  },
+  {
+    "symbolName": "PTNSLogConsole",
+    "referencePath": "PooToolsSource/SearchBar/PTSearchBar.swift",
+    "line": 226,
     "ownerTarget": "PooToolsSearchBar",
     "requiredModule": "ptools",
     "currentImports": "UIKit;ptools",
@@ -18947,7 +18965,7 @@
   {
     "symbolName": "PTAppBaseConfig",
     "referencePath": "PooToolsSource/SearchBar/PTSearchBar.swift",
-    "line": 308,
+    "line": 423,
     "ownerTarget": "PooToolsSearchBar",
     "requiredModule": "ptools",
     "currentImports": "UIKit;ptools",

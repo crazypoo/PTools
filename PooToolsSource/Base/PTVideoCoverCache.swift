@@ -12,6 +12,9 @@ import CryptoKit
 #if canImport(PToolsCore)
 import PToolsCore
 #endif
+#if canImport(PToolsTransferCore)
+import PToolsTransferCore
+#endif
 
 // Serializes thumbnail file I/O so image decoding and disk access never block MainActor.
 // Serializa el acceso a los archivos para que la decodificación y el disco no bloqueen MainActor.
@@ -105,32 +108,6 @@ public final class PTVideoManager: Sendable {
                 videoReady?(frozenItemAfterCover)
             }
         }
-    }
-}
-
-// English: A shared actor prevents concurrent callers from writing the same video cache file.
-// Español: Un actor compartido evita que llamadas concurrentes escriban el mismo archivo de vídeo.
-// 中文：共享 Actor 防止并发调用同时写入同一个视频缓存文件。
-private actor PTVideoFileDownloadCoordinator {
-    static let shared = PTVideoFileDownloadCoordinator()
-    private var tasks: [URL: Task<URL, Error>] = [:]
-
-    func download(from url: URL,
-                  to destinationURL: URL,
-                  progress: FileDownloadProgress?) async throws -> URL {
-        if let task = tasks[destinationURL] {
-            return try await task.value
-        }
-
-        let task = Task.detached(priority: .utility) {
-            try await PTCoreFileDownloadService.download(from: url,
-                                                         to: destinationURL,
-                                                         progress: progress,
-                                                         allowsResume: true)
-        }
-        tasks[destinationURL] = task
-        defer { tasks[destinationURL] = nil }
-        return try await task.value
     }
 }
 
@@ -236,6 +213,17 @@ public final class PTVideoFileCache: Sendable {
     public func prepareVideo(url: URL,
                              progress: FileDownloadProgress? = nil,
                              completion: @escaping @MainActor @Sendable (URL?) -> Void) {
+        let progressHandler: PTTransferProgressHandler?
+        if let progress {
+            progressHandler = { snapshot in
+                await progress(snapshot.completed,
+                               snapshot.total ?? 0,
+                               snapshot.fraction)
+            }
+        } else {
+            progressHandler = nil
+        }
+
         Task { @MainActor in
             // 本地文件直接返回
             if let cached = cachedFileURL(for: url) {
@@ -245,9 +233,10 @@ public final class PTVideoFileCache: Sendable {
 
             let localURL = cacheURL(for: url)
             do {
-                _ = try await PTVideoFileDownloadCoordinator.shared.download(from: url,
+                _ = try await PTTransferFileDownloadService.shared.download(from: url,
                                                                               to: localURL,
-                                                                              progress: progress)
+                                                                              allowsResume: true,
+                                                                              progress: progressHandler)
                 await diskMaintenance.trimIfNeeded()
                 completion(localURL)
             } catch {

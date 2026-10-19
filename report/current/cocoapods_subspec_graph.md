@@ -3,14 +3,14 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: a868c0a22374e9a4016e85a100ccc814895d9cc3
-Generated at: 2026-10-18T02:40:25Z
+Source revision: 23f6f58d7b266175109501ec67df060cb2859650
+Generated at: 2026-10-19T07:40:29Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.67.0`
+- Podspec: `PooTools` `5.67.2`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
@@ -36,7 +36,7 @@ Generated at: 2026-10-18T02:40:25Z
 | `BilogyID` | `PooTools/BioID` | — | — | — | — |
 | `BioID` | `PooTools/Core`, `PooTools/FaceIDPermission`, `PooTools/KeyChain` | — | `BioID` | LocalAuthentication, Security | — |
 | `Bluetooth` | — | — | `PToolsBluetooth` | CoreBluetooth, Foundation | — |
-| `BluetoothPermission` | `PooTools/Core` | — | `BluetoothPermission` | — | — |
+| `BluetoothPermission` | `PooTools/PToolsPermissionCore` | — | `BluetoothPermission` | — | — |
 | `Calendar` | `PooTools/CalendarPermission`, `PooTools/Core`, `PooTools/RemindersPermission` | — | `Calendar` | EventKit | — |
 | `CalendarPermission` | `PooTools/PToolsPermissionCore` | — | `CalendarPermission` | — | — |
 | `CameraPermission` | `PooTools/PToolsPermissionCore` | — | `CameraPermission` | — | — |
@@ -52,7 +52,7 @@ Generated at: 2026-10-18T02:40:25Z
 | `Contact` | `PooTools/ContactsPermission`, `PooTools/Core` | — | `Contact` | — | — |
 | `ContactsPermission` | `PooTools/PToolsPermissionCore` | — | `ContactsPermission` | — | — |
 | `ContentState` | `PooTools/Accessibility`, `PooTools/Connectivity`, `PooTools/Core`, `PooTools/Theme` | — | `PToolsContentState` | Foundation, UIKit | — |
-| `Core` | `PooTools/Date`, `PooTools/Device`, `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsUIFoundation`, `PooTools/Symbols` | `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `Kingfisher`, `SnapKit`, `lottie-ios` | `ActionsheetAndAlert`, `Animation`, `AppDelegate`, `AppStore`, `ApplicationFunction`, `Badge`, `Base`, `BlackMagic`, `Blur`, `Button`, `Category`, `Colors`, `Core`, `DarkMode`, `FloatPanel`, `Font`, `Foundation`, `Language`, `Line`, `Log`, `PToolsFontCore`, `PermissionCore`, `PhotoLibraryPermission`, `Protocol`, `Rotation`, `SideMenuControl`, `StatusBar`, `Switch`, `iCloud` | AVFoundation, AVKit, AudioToolbox, CoreFoundation, CoreText, Foundation, Photos, UIKit | PooToolsResource |
+| `Core` | `PooTools/Date`, `PooTools/Device`, `PooTools/Logging`, `PooTools/PToolsCore`, `PooTools/PToolsPermissionCore`, `PooTools/PToolsUIFoundation`, `PooTools/Symbols`, `PooTools/TransferCore` | `IQKeyboardManagerSwift`, `IQKeyboardToolbarManager`, `Kingfisher`, `SnapKit`, `lottie-ios` | `ActionsheetAndAlert`, `Animation`, `AppDelegate`, `AppStore`, `ApplicationFunction`, `Badge`, `Base`, `BlackMagic`, `Blur`, `Button`, `Category`, `Colors`, `Core`, `DarkMode`, `FloatPanel`, `Font`, `Foundation`, `Language`, `Line`, `Log`, `PToolsFontCore`, `PToolsPermissionCore`, `PToolsTransferCore`, `PermissionCore`, `PhotoLibraryPermission`, `Protocol`, `Rotation`, `SideMenuControl`, `StatusBar`, `Switch`, `iCloud` | AVFoundation, AVKit, AudioToolbox, CoreFoundation, CoreText, Foundation, Photos, UIKit | PooToolsResource |
 | `Country` | `PooTools/Core` | — | `Country` | — | — |
 | `CustomerLabel` | `PooTools/Core` | — | `Label` | QuartzCore | — |
 | `CustomerNumberKeyboard` | `PooTools/Core` | — | `Keyboard` | — | — |
@@ -110,7 +110,7 @@ Generated at: 2026-10-18T02:40:25Z
 | `MotionPermission` | `PooTools/PToolsPermissionCore` | — | `MotionPermission` | — | — |
 | `NFCKit` | `PooTools/Core` | — | `NFC` | CoreNFC | — |
 | `NetWork` | `PooTools/Network` | — | — | — | — |
-| `Network` | `PooTools/Connectivity`, `PooTools/Core`, `PooTools/Loading`, `PooTools/ModelCore`, `PooTools/ModelLegacyKakaJSON`, `PooTools/ModelLegacySmartCodable` | `Alamofire` | `NetWork`, `NetWorkModelCore` | — | — |
+| `Network` | `PooTools/Connectivity`, `PooTools/Core`, `PooTools/Loading`, `PooTools/ModelCore`, `PooTools/ModelLegacyKakaJSON`, `PooTools/ModelLegacySmartCodable`, `PooTools/TransferCore` | `Alamofire` | `NetWork`, `NetWorkModelCore` | — | — |
 | `NetworkSpeedTest` | `PooTools/Core` | — | `NetworkSpeedTest` | — | — |
 | `NotificationBanner` | `PooTools/Banner` | — | — | — | — |
 | `NotificationPermission` | `PooTools/PToolsPermissionCore` | — | `NotificationPermission` | — | — |
@@ -152,7 +152,7 @@ Generated at: 2026-10-18T02:40:25Z
 | `Share` | `PooTools/Core`, `PooTools/CustomerLabel` | `SnapKit` | `Share` | — | — |
 | `Simulation` | `PooTools/Bluetooth`, `PooTools/Connectivity`, `PooTools/PToolsCore`, `PooTools/PToolsDevice`, `PooTools/SimulationCore` | — | `PToolsSimulation` | Foundation | — |
 | `SimulationCore` | — | — | `PToolsSimulationCore` | Foundation | — |
-| `SiriPermission` | `PooTools/Core` | — | `SiriPermission` | — | — |
+| `SiriPermission` | `PooTools/PToolsPermissionCore` | — | `SiriPermission` | — | — |
 | `Slider` | `PooTools/PToolsUIFoundation` | `SnapKit` | `Slider` | — | — |
 | `SmartScreenshot` | `PooTools/Core` | — | `ScreenShot` | — | — |
 | `SocketKit` | `PooTools/Core`, `PooTools/Logging`, `PooTools/Network` | — | `SocketKit` | — | — |

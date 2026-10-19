@@ -1451,15 +1451,6 @@
     },
     {
       "kind": "dependency",
-      "module": "BluetoothPermission",
-      "field": "internal_dependencies",
-      "reason": "SwiftPM uses PToolsPermissionCore; CocoaPods uses legacy Core.",
-      "owner": "permissions",
-      "expiration": "2026-12-31",
-      "classification": "INTENTIONAL"
-    },
-    {
-      "kind": "dependency",
       "module": "CheckUpdate",
       "field": "third_party_dependencies",
       "reason": "Equivalent dependency uses different SPM and CocoaPods names.",
@@ -1617,15 +1608,6 @@
       "field": "internal_dependencies",
       "reason": "SPM declares ImagePicker and PhotoPicker routes; CocoaPods uses its local graph.",
       "owner": "packaging",
-      "expiration": "2026-12-31",
-      "classification": "INTENTIONAL"
-    },
-    {
-      "kind": "dependency",
-      "module": "SiriPermission",
-      "field": "internal_dependencies",
-      "reason": "SwiftPM uses PToolsPermissionCore; CocoaPods keeps the legacy Core route for this permission alias.",
-      "owner": "permissions",
       "expiration": "2026-12-31",
       "classification": "INTENTIONAL"
     },

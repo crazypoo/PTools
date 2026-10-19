@@ -51,19 +51,23 @@ public actor PTTransferQueue: PTTransferService {
         publish(.stateChanged(request.id, .preparing))
         let task: Task<URL, Error>
         if case .download = request.source {
-            let storedResumeData = try? await resumeStore?.load(for: request.id)
-            let controller = PTTransferDownloadController(request: request,
-                                                           resumeData: storedResumeData ?? nil,
-                                                           session: Self.makeSession(for: request.executionMode,
-                                                                                     policy: request.policy)) { [weak self] written, completed, expected in
-                Task { await self?.updateProgress(id: request.id,
-                                                  written: written,
-                                                  completed: completed,
-                                                  expected: expected) }
+            if case .foreground = request.executionMode {
+                task = makeForegroundDownloadTask(for: request)
+            } else {
+                let storedResumeData = try? await resumeStore?.load(for: request.id)
+                let controller = PTTransferDownloadController(request: request,
+                                                               resumeData: storedResumeData ?? nil,
+                                                               session: Self.makeSession(for: request.executionMode,
+                                                                                         policy: request.policy)) { [weak self] written, completed, expected in
+                    Task { await self?.updateProgress(id: request.id,
+                                                      written: written,
+                                                      completed: completed,
+                                                      expected: expected) }
+                }
+                downloadControllers[request.id] = controller
+                controller.start()
+                task = Task(priority: request.priority.taskPriority) { try await controller.value() }
             }
-            downloadControllers[request.id] = controller
-            controller.start()
-            task = Task(priority: request.priority.taskPriority) { try await controller.value() }
         } else {
             task = Task(priority: request.priority.taskPriority) { [request] in try await Self.perform(request) }
         }
@@ -143,6 +147,8 @@ public actor PTTransferQueue: PTTransferService {
         if let controller = downloadControllers[id] {
             controller.resume()
             task = Task(priority: request.priority.taskPriority) { try await controller.value() }
+        } else if case .download = request.source, case .foreground = request.executionMode {
+            task = makeForegroundDownloadTask(for: request)
         } else {
             task = Task(priority: request.priority.taskPriority) { [request] in try await Self.perform(request) }
         }
@@ -171,7 +177,12 @@ public actor PTTransferQueue: PTTransferService {
         }
         states[id] = .retrying(attempt: 1)
         publish(.stateChanged(id, .retrying(attempt: 1)))
-        let task = Task(priority: request.priority.taskPriority) { [request] in try await Self.perform(request) }
+        let task: Task<URL, Error>
+        if case .download = request.source, case .foreground = request.executionMode {
+            task = makeForegroundDownloadTask(for: request)
+        } else {
+            task = Task(priority: request.priority.taskPriority) { [request] in try await Self.perform(request) }
+        }
         tasks[id] = task
         states[id] = .running
         publish(.stateChanged(id, .running))
@@ -215,6 +226,33 @@ public actor PTTransferQueue: PTTransferService {
         _ = written
     }
 
+    private func updateProgress(id: PTTransferID, snapshot: PTTransferProgress) {
+        progress[id] = snapshot
+        publish(.progress(id, snapshot))
+    }
+
+    private func makeForegroundDownloadTask(for request: PTTransferRequest) -> Task<URL, Error> {
+        let queue = self
+        return Task(priority: request.priority.taskPriority) {
+            guard case .download(let url) = request.source,
+                  let destination = request.destination else {
+                throw PTTransferError.invalidRequest
+            }
+            return try await PTTransferFileDownloadService.shared.download(
+                from: url,
+                to: destination,
+                headers: request.headers,
+                allowsResume: request.allowsResume,
+                retryPolicy: request.retryPolicy,
+                policy: request.policy,
+                configuration: request.downloadConfiguration,
+                progress: { snapshot in
+                    await queue.updateProgress(id: request.id, snapshot: snapshot)
+                }
+            )
+        }
+    }
+
     public func events() async -> AsyncStream<PTTransferEvent> {
         let id = UUID()
         return AsyncStream { continuation in
@@ -251,14 +289,16 @@ public actor PTTransferQueue: PTTransferService {
         let output: URL
         switch request.source {
         case .download(let url):
-            let (temporary, _) = try await session.download(from: url)
-            output = request.destination ?? temporary
-            if output != temporary {
-                let parent = output.deletingLastPathComponent()
-                try FileManager.default.createDirectory(at: parent, withIntermediateDirectories: true)
-                if FileManager.default.fileExists(atPath: output.path) { try FileManager.default.removeItem(at: output) }
-                try FileManager.default.moveItem(at: temporary, to: output)
-            }
+            guard let destination = request.destination else { throw PTTransferError.destinationUnavailable }
+            output = try await PTTransferFileDownloadService.shared.download(
+                from: url,
+                to: destination,
+                headers: request.headers,
+                allowsResume: request.allowsResume,
+                retryPolicy: request.retryPolicy,
+                policy: request.policy,
+                configuration: request.downloadConfiguration
+            )
         case .upload(let fileURL, let endpoint):
             var uploadRequest = URLRequest(url: endpoint)
             uploadRequest.httpMethod = "POST"

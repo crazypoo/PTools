@@ -546,6 +546,10 @@ Pod::Spec.new do |s|
     s.subspec "Core" do |subspec|
         subspec.dependency 'PooTools/PToolsCore'
         subspec.dependency 'PooTools/PToolsPermissionCore'
+        # English: Core media adapters use the shared Foundation-only transfer executor.
+        # Español: Los adaptadores multimedia de Core usan el ejecutor compartido basado solo en Foundation.
+        # 中文：Core 媒体适配器复用共享的 Foundation-only 传输执行器。
+        subspec.dependency 'PooTools/TransferCore'
         subspec.dependency 'PooTools/Device'
         subspec.dependency 'PooTools/Date'
         subspec.dependency 'PooTools/PToolsUIFoundation'
@@ -563,9 +567,9 @@ Pod::Spec.new do |s|
         # English: Embed the canonical contract once because CocoaPods subspecs share one aggregate target.
         # Español: Inserta el contrato canónico una sola vez porque los subspecs de CocoaPods comparten un target agregado.
         # 中文：由于 CocoaPods subspec 共用一个聚合 target，只嵌入一次规范契约源码。
-        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift,S}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/Protocol/*.{h,m,swift}','PooToolsSource/Animation/*.{h,m,swift}','PooToolsSource/PermissionCore/*.{h,m,swift}','PooToolsSource/PToolsPermissionCore/*.{h,m,swift}','PooToolsSource/PhotoLibraryPermission/*.{h,m,swift}','PooToolsSource/AppDelegate/*.{h,m,swift}','PooToolsSource/Foundation/*.{h,m,swift}','PooToolsSource/Language/*.{h,m,swift}','PooToolsSource/DarkMode/*.{h,m,swift}','PooToolsSource/Line/*.{h,m,swift}','PooToolsSource/Badge/*.{h,m,swift}','PooToolsSource/Rotation/*.{h,m,swift}','PooToolsSource/Switch/*.{h,m,swift}','PooToolsSource/Colors/*.{h,m,swift}','PooToolsSource/Font/**/*.{h,m,swift}','PooToolsSource/PToolsFontCore/**/*.swift','PooToolsSource/FloatPanel/*.{h,m,swift}','PooToolsSource/SideMenuControl/*.{h,m,swift}','PooToolsSource/iCloud/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift,S}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/Protocol/*.{h,m,swift}','PooToolsSource/Animation/*.{h,m,swift}','PooToolsSource/PermissionCore/*.{h,m,swift}','PooToolsSource/PToolsPermissionCore/*.{h,m,swift}','PooToolsSource/PToolsTransferCore/**/*.swift','PooToolsSource/PhotoLibraryPermission/*.{h,m,swift}','PooToolsSource/AppDelegate/*.{h,m,swift}','PooToolsSource/Foundation/*.{h,m,swift}','PooToolsSource/Language/*.{h,m,swift}','PooToolsSource/DarkMode/*.{h,m,swift}','PooToolsSource/Line/*.{h,m,swift}','PooToolsSource/Badge/*.{h,m,swift}','PooToolsSource/Rotation/*.{h,m,swift}','PooToolsSource/Switch/*.{h,m,swift}','PooToolsSource/Colors/*.{h,m,swift}','PooToolsSource/Font/**/*.{h,m,swift}','PooToolsSource/PToolsFontCore/**/*.swift','PooToolsSource/FloatPanel/*.{h,m,swift}','PooToolsSource/SideMenuControl/*.{h,m,swift}','PooToolsSource/iCloud/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COCOAPODS POOTOOLS_SPLIT_CORE POOTOOLS_SPLIT_UIFOUNDATION POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE"
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COCOAPODS POOTOOLS_SPLIT_CORE POOTOOLS_SPLIT_UIFOUNDATION POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_EMBED_TRANSFER_CORE"
         }
     end
 
@@ -590,6 +594,7 @@ Pod::Spec.new do |s|
 
     s.subspec 'Network' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/TransferCore'
         subspec.dependency 'PooTools/Connectivity'
         subspec.dependency 'PooTools/ModelCore'
         subspec.dependency 'PooTools/ModelLegacySmartCodable'

@@ -292,6 +292,7 @@
         "PooToolsSource/Rotation/PTRotationManager.swift",
         "PooToolsSource/Router/PTRouterLegacyCompatibility.swift",
         "PooToolsSource/Router/PTRouterManager.swift",
+        "PooToolsSource/SearchBar/PTSearchBar.swift",
         "PooToolsSource/SideMenuControl/PTSideMenuControl.swift",
         "PooToolsSource/SocketKit/PTWebSocketClient.swift",
         "PooToolsSource/StatusBar/StatusBarManager.swift",
@@ -308,7 +309,7 @@
         "PooToolsSource/iCloud/PTiCloudKeychainService.swift",
         "PooToolsSource/iOS17Tips/PTTip.swift"
       ],
-      "match_count": 118
+      "match_count": 119
     },
     {
       "capability": "routing",
@@ -836,7 +837,7 @@
     }
   ],
   "generator": "Scripts/report_semantic_capability_ownership.sh",
-  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
-  "generated_at": "2026-10-18T02:38:20Z",
-  "source_file_count": 1206
+  "source_revision": "23f6f58d7b266175109501ec67df060cb2859650",
+  "generated_at": "2026-10-19T07:31:13Z",
+  "source_file_count": 1207
 }

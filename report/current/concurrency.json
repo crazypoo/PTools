@@ -2,11 +2,11 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
-  "generated_at": "2026-10-18T02:38:25Z",
+  "source_revision": "23f6f58d7b266175109501ec67df060cb2859650",
+  "generated_at": "2026-10-19T07:31:19Z",
   "counts": {
     "main_queue_async": 26,
-    "task_detached": 31,
+    "task_detached": 30,
     "unchecked_sendable": 53
   },
   "locations": [
@@ -49,13 +49,7 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 125,
-      "text": "let task = Task.detached(priority: .utility) {"
-    },
-    {
-      "rule": "task_detached",
-      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 508,
+      "line": 497,
       "text": "await Task.detached(priority: .userInitiated) {"
     },
     {

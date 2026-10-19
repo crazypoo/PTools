@@ -9,8 +9,8 @@
 
 | Feature | Capability | Owner / 唯一实现候选 / Propietario | Primary entry | Legacy/adapters | Kind | Status | Decision / blocked reason |
 |---|---|---|---|---|---|---|---|
-| FD-01 | SnapKit helpers | PToolsUIFoundation | UIFoundation helper | Base/PTSnapKitEX | D1/D6 | confirmed | 先完成 SPM/Pods 符号基线，再收薄 Base |
-| FD-02 | Download/transfer | PToolsTransferCore + PToolsTransfer | transfer contract | Network, audio, video, Live Photo | D2 | confirmed | 当前能力不等价，先行为矩阵 |
+| FD-01 | SnapKit helpers | PToolsUIFoundation | UIFoundation helper | Base/PTSnapKitEX thin bridge | D1/D6 | migrated | SPM/Pods 编译已接通；符号/API 对比与布局时序回归仍待完成 |
+| FD-02 | Download/transfer | PToolsTransferCore + PToolsTransfer | PTTransferFileDownloadService foreground executor | Network, audio, video, PTTransferQueue background adapter, Live Photo | D2 | migrated | 前台文件下载、音频、视频和 TransferQueue foreground 已接通；后台 delegate 与 Live Photo 保持专用适配，行为矩阵和真实网络回归仍待完成 |
 | FD-03 | Segment | SegmentControl/PTSegmentedView | PTSegmentedView | PTSegmentView | D3 | confirmed | 先补齐旧属性和回调时序映射 |
 | FD-04 | Speech recognition | recognition session core | PTSpeechRecognitionSession (planned) | PTSpeech, OSSSpeech | D2 | confirmed | 录音/TTS 保留，需真机生命周期证据 |
 | FD-05 | Video export | shared lifecycle only | export lifecycle executor (planned) | PTVideoExportService, C7, Exporter | D2/D4 | confirmed | composition/filter/ReaderWriter 不合并 |

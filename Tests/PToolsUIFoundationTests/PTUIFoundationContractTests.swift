@@ -10,6 +10,25 @@ final class PTUIFoundationContractTests: XCTestCase {
         XCTAssertEqual(configuration.skeletonCornerRadius, 8)
     }
 
+    func testSnapKitConstraintGroupUsesTheSharedSuperview() {
+        let container = UIView(frame: .zero)
+        let views = [UIView(), UIView(), UIView()]
+        views.forEach(container.addSubview)
+
+        views.constraintGroup.distributeViewsAlong(axisType: .horizontal,
+                                                    fixedItemLength: 20,
+                                                    leadSpacing: 8,
+                                                    tailSpacing: 8,
+                                                    crossAxisAlignment: .center)
+
+        container.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
+        container.layoutIfNeeded()
+
+        XCTAssertEqual(views.first?.superview, container)
+        XCTAssertEqual(views.last?.superview, container)
+        XCTAssertEqual(views.first?.frame.width ?? 0, 20, accuracy: 0.001)
+    }
+
     func testSkeletonConfigurationAcceptsBoundedCustomValues() {
         let configuration = PTCollectionViewConfig()
         configuration.skeletonItemCount = 12

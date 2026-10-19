@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
-  "generated_at": "2026-10-18T02:39:39Z",
+  "source_revision": "23f6f58d7b266175109501ec67df060cb2859650",
+  "generated_at": "2026-10-19T07:31:18Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -306,7 +306,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "lines": 364,
+      "lines": 269,
       "classification": "ok"
     },
     {
@@ -561,7 +561,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "lines": 306,
+      "lines": 7,
       "classification": "ok"
     },
     {
@@ -611,7 +611,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "lines": 561,
+      "lines": 550,
       "classification": "ok"
     },
     {
@@ -4206,7 +4206,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network+Download.swift",
-      "lines": 249,
+      "lines": 353,
       "classification": "ok"
     },
     {
@@ -4231,7 +4231,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "lines": 689,
+      "lines": 684,
       "classification": "ok"
     },
     {
@@ -4371,7 +4371,7 @@
     },
     {
       "path": "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsSearchViewController.swift",
-      "lines": 278,
+      "lines": 276,
       "classification": "ok"
     },
     {
@@ -4476,7 +4476,7 @@
     },
     {
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "lines": 1821,
+      "lines": 1998,
       "classification": "architecture_exception"
     },
     {
@@ -4486,7 +4486,7 @@
     },
     {
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift",
-      "lines": 84,
+      "lines": 91,
       "classification": "ok"
     },
     {
@@ -4916,12 +4916,12 @@
     },
     {
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift",
-      "lines": 61,
+      "lines": 58,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "lines": 295,
+      "lines": 293,
       "classification": "ok"
     },
     {
@@ -5031,12 +5031,12 @@
     },
     {
       "path": "PooToolsSource/PToolsTransfer/PTTransfer.swift",
-      "lines": 366,
+      "lines": 406,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/PToolsTransfer/PTTransferDownloadController.swift",
-      "lines": 204,
+      "lines": 208,
       "classification": "ok"
     },
     {
@@ -5046,7 +5046,12 @@
     },
     {
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "lines": 220,
+      "lines": 243,
+      "classification": "ok"
+    },
+    {
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift",
+      "lines": 373,
       "classification": "ok"
     },
     {
@@ -5151,7 +5156,7 @@
     },
     {
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "lines": 431,
+      "lines": 435,
       "classification": "ok"
     },
     {
@@ -5571,12 +5576,12 @@
     },
     {
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "lines": 897,
+      "lines": 898,
       "classification": "ok"
     },
     {
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "lines": 434,
+      "lines": 554,
       "classification": "ok"
     },
     {

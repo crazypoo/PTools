@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons.rb",
-  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
-  "generated_at": "2026-10-18T02:38:26Z",
-  "shared_call_count": 1675,
+  "source_revision": "23f6f58d7b266175109501ec67df060cb2859650",
+  "generated_at": "2026-10-19T07:31:21Z",
+  "shared_call_count": 1679,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -52,7 +52,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 132,
+      "line": 26,
       "declaration": "public static let shared = PTAudioCacheFileManager()",
       "name": "shared",
       "category": "B",
@@ -61,7 +61,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 234,
+      "line": 139,
       "declaration": "public static let shared = PTAudioService()",
       "name": "shared",
       "category": "B",
@@ -88,7 +88,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 54,
+      "line": 57,
       "declaration": "public static let shared = PTVideoManager()",
       "name": "shared",
       "category": "B",
@@ -97,16 +97,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 115,
-      "declaration": "static let shared = PTVideoFileDownloadCoordinator()",
-      "name": "shared",
-      "category": "B",
-      "scope": "Thread-safe shared cache or resource",
-      "action": "保留共享入口，但必须有容量、过期和清理策略"
-    },
-    {
-      "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 182,
+      "line": 159,
       "declaration": "public static let shared = PTVideoFileCache()",
       "name": "shared",
       "category": "B",
@@ -954,6 +945,15 @@
       "path": "PooToolsSource/PToolsTheme/PTTheme.swift",
       "line": 283,
       "declaration": "public static let shared = PTThemeRegistry()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift",
+      "line": 30,
+      "declaration": "public static let shared = PTTransferFileDownloadService()",
       "name": "shared",
       "category": "C",
       "scope": "Shared mutable service",

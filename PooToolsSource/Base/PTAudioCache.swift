@@ -11,120 +11,14 @@ import AVFoundation
 #if canImport(PToolsCore)
 import PToolsCore
 #endif
+#if canImport(PToolsTransferCore)
+import PToolsTransferCore
+#endif
 
 // Progress callback shared by Core media caches.
 // Callback de progreso compartido por las cachés multimedia de Core.
 // Core 媒体缓存共用的进度回调类型。
 public typealias FileDownloadProgress = @MainActor @Sendable (Int64, Int64, Double) -> Void
-
-// Native file downloader shared by Core media caches.
-// Descargador nativo de archivos compartido por las cachés multimedia de Core.
-// Core 媒体缓存共用的原生文件下载器。
-enum PTCoreFileDownloadService {
-    static func download(from url: URL,
-                         to destinationURL: URL,
-                         progress: FileDownloadProgress?,
-                         allowsResume: Bool = false) async throws -> URL {
-        // English: Resume only uses a destination-scoped partial file and still commits atomically.
-        // Español: La reanudación usa un archivo parcial ligado al destino y conserva la sustitución atómica.
-        // 中文：断点续传只使用与目标绑定的分片文件，并继续采用原子替换。
-        let directoryURL = destinationURL.deletingLastPathComponent()
-        let temporaryURL: URL
-        if allowsResume {
-            temporaryURL = destinationURL.appendingPathExtension("part")
-        } else {
-            let temporaryName = ".\(destinationURL.lastPathComponent).\(UUID().uuidString).pt-download"
-            temporaryURL = directoryURL.appendingPathComponent(temporaryName, isDirectory: false)
-        }
-        try FileManager.default.createDirectory(at: directoryURL,
-                                                 withIntermediateDirectories: true)
-
-        var existingBytes: Int64 = 0
-        if allowsResume,
-           let attributes = try? FileManager.default.attributesOfItem(atPath: temporaryURL.path),
-           let size = attributes[.size] as? NSNumber {
-            existingBytes = max(0, size.int64Value)
-        } else if !FileManager.default.createFile(atPath: temporaryURL.path, contents: nil) {
-            throw CocoaError(.fileWriteUnknown)
-        }
-
-        defer {
-            if !allowsResume {
-                try? FileManager.default.removeItem(at: temporaryURL)
-            }
-        }
-
-        var request = URLRequest(url: url)
-        if existingBytes > 0 {
-            request.setValue("bytes=\(existingBytes)-", forHTTPHeaderField: "Range")
-        }
-        let (bytes, response) = try await URLSession.shared.bytes(for: request)
-        guard let httpResponse = response as? HTTPURLResponse,
-              (200..<300).contains(httpResponse.statusCode) else {
-            throw URLError(.badServerResponse)
-        }
-
-        let shouldAppend = allowsResume && existingBytes > 0 && httpResponse.statusCode == 206
-        if allowsResume && existingBytes > 0 && !shouldAppend {
-            existingBytes = 0
-            try? FileManager.default.removeItem(at: temporaryURL)
-            guard FileManager.default.createFile(atPath: temporaryURL.path, contents: nil) else {
-                throw CocoaError(.fileWriteUnknown)
-            }
-        }
-
-        let expectedBytes = response.expectedContentLength > 0 ? response.expectedContentLength : 0
-        let totalBytes = shouldAppend ? expectedBytes + existingBytes : expectedBytes
-        let fileHandle = try FileHandle(forWritingTo: temporaryURL)
-        var isClosed = false
-        defer {
-            if !isClosed {
-                try? fileHandle.close()
-            }
-        }
-
-        var buffer = Data()
-        buffer.reserveCapacity(64 * 1024)
-        var receivedBytes: Int64 = shouldAppend ? existingBytes : 0
-        if shouldAppend {
-            try fileHandle.seekToEnd()
-        } else {
-            try fileHandle.truncate(atOffset: 0)
-        }
-        var lastProgressTime = -Double.infinity
-
-        for try await byte in bytes {
-            try Task.checkCancellation()
-            buffer.append(byte)
-            if buffer.count >= 64 * 1024 {
-                try fileHandle.write(contentsOf: buffer)
-                receivedBytes += Int64(buffer.count)
-                buffer.removeAll(keepingCapacity: true)
-                let now = ProcessInfo.processInfo.systemUptime
-                if let progress, now - lastProgressTime >= 0.1 {
-                    let fraction = totalBytes > 0 ? Double(receivedBytes) / Double(totalBytes) : 0
-                    await progress(receivedBytes, totalBytes, fraction)
-                    lastProgressTime = now
-                }
-            }
-        }
-
-        if !buffer.isEmpty {
-            try fileHandle.write(contentsOf: buffer)
-            receivedBytes += Int64(buffer.count)
-        }
-        try fileHandle.close()
-        isClosed = true
-
-        guard receivedBytes > 0 else { throw URLError(.zeroByteResource) }
-        try? FileManager.default.removeItem(at: destinationURL)
-        try FileManager.default.moveItem(at: temporaryURL, to: destinationURL)
-        if let progress {
-            await progress(receivedBytes, totalBytes, 1)
-        }
-        return destinationURL
-    }
-}
 
 @MainActor
 public final class PTAudioCacheFileManager {
@@ -180,9 +74,20 @@ public final class PTAudioCacheFileManager {
 
         Task { @MainActor in
             do {
-                _ = try await PTCoreFileDownloadService.download(from: url,
-                                                                 to: localURL,
-                                                                 progress: progress)
+                let progressHandler: PTTransferProgressHandler?
+                if let progress {
+                    progressHandler = { snapshot in
+                        await progress(snapshot.completed,
+                                       snapshot.total ?? 0,
+                                       snapshot.fraction)
+                    }
+                } else {
+                    progressHandler = nil
+                }
+                _ = try await PTTransferFileDownloadService.shared.download(from: url,
+                                                                            to: localURL,
+                                                                            allowsResume: false,
+                                                                            progress: progressHandler)
 
                 guard PTAudioTranscoder.needTranscode(localURL) else {
                     self.trimCacheIfNeeded()

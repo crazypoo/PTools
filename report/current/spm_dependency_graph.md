@@ -3,8 +3,8 @@ AUTO-GENERATED FILE.
 DO NOT EDIT MANUALLY.
 
 Generator: Scripts/report_spm_dependency_graph.rb
-Source revision: a868c0a22374e9a4016e85a100ccc814895d9cc3
-Generated at: 2026-10-18T03:14:35Z
+Source revision: 23f6f58d7b266175109501ec67df060cb2859650
+Generated at: 2026-10-19T07:40:29Z
 -->
 
 # SwiftPM Dependency Graph
@@ -333,7 +333,7 @@ Generated at: 2026-10-18T03:14:35Z
 | `PooToolsMediaViewer` | `PooToolsSource/MediaViewer` | PToolsUIFoundation, PooToolsLivePhoto, PooToolsMediaCore, PooToolsPageControl, PooToolsProgressBar, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsMessageKit` | `PooToolsSource/MessageKit` | PToolsSymbols, PooToolsCustomerLabel, PooToolsNetWork, PooToolsProgressBar, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsMotion` | `PooToolsSource/Motion` | PTMotionPermission, ptools | — | 0 source entries / 0 resources |
-| `PooToolsNetWork` | `PooToolsSource/NetWork` | PToolsConnectivity, PToolsCore, PToolsModelCore, PToolsModelLegacyKakaJSON, PToolsModelLegacySmartCodable, PToolsNetworkModelCore, PooToolsLoading, ptools | Alamofire | 11 source entries / 0 resources |
+| `PooToolsNetWork` | `PooToolsSource/NetWork` | PToolsConnectivity, PToolsCore, PToolsModelCore, PToolsModelLegacyKakaJSON, PToolsModelLegacySmartCodable, PToolsNetworkModelCore, PToolsTransferCore, PooToolsLoading, ptools | Alamofire | 11 source entries / 0 resources |
 | `PooToolsNetworkSpeedTest` | `PooToolsSource/NetworkSpeedTest` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsOSSKitSpeech` | `PooToolsSource/OSSKit` | PTSpeechPermission, ptools | — | 0 source entries / 0 resources |
 | `PooToolsPDF` | `PooToolsSource/PDF` | ptools | SnapKit | 0 source entries / 0 resources |
@@ -369,7 +369,7 @@ Generated at: 2026-10-18T03:14:35Z
 | `PooToolsWebKit` | `PooToolsSource/WebKit` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsWhatsNewsKit` | `PooToolsSource/WhatsNewsKit` | PToolsUIFoundation, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsiOS17Tips` | `PooToolsSource/iOS17Tips` | ptools | SnapKit | 0 source entries / 0 resources |
-| `ptools` | `PooToolsSource` | PToolsConstraintLayout, PToolsCore, PToolsDate, PToolsDevice, PToolsFontCatalogCore, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsUIFoundation | IQKeyboardManagerSwift, Kingfisher, Lottie, SnapKit | 30 source entries / 1 resources |
+| `ptools` | `PooToolsSource` | PToolsConstraintLayout, PToolsCore, PToolsDate, PToolsDevice, PToolsFontCatalogCore, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsTransferCore, PToolsUIFoundation | IQKeyboardManagerSwift, Kingfisher, Lottie, SnapKit | 30 source entries / 1 resources |
 
 ## Notes
 

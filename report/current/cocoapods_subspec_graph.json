@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
-  "generated_at": "2026-10-18T02:40:25Z",
+  "source_revision": "23f6f58d7b266175109501ec67df060cb2859650",
+  "generated_at": "2026-10-19T07:40:29Z",
   "name": "PooTools",
-  "version": "5.67.0",
+  "version": "5.67.2",
   "platforms": {
     "ios": "17.0"
   },
@@ -355,7 +355,7 @@
       "name": "PooTools/BluetoothPermission",
       "short_name": "BluetoothPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsPermissionCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -368,7 +368,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_BLUETOOTH POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_BLUETOOTH POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -412,7 +412,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_CALENDAR POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_CALENDAR POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -432,7 +432,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_CAMERA POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_CAMERA POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -659,7 +659,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_CONTACTS POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_CONTACTS POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -694,8 +694,10 @@
         "PooTools/Device",
         "PooTools/Logging",
         "PooTools/PToolsCore",
+        "PooTools/PToolsPermissionCore",
         "PooTools/PToolsUIFoundation",
-        "PooTools/Symbols"
+        "PooTools/Symbols",
+        "PooTools/TransferCore"
       ],
       "third_party_dependencies": [
         "IQKeyboardManagerSwift",
@@ -726,6 +728,8 @@
         "PooToolsSource/Line/*.{h,m,swift}",
         "PooToolsSource/Log/*.{h,m,swift}",
         "PooToolsSource/PToolsFontCore/**/*.swift",
+        "PooToolsSource/PToolsPermissionCore/*.{h,m,swift}",
+        "PooToolsSource/PToolsTransferCore/**/*.swift",
         "PooToolsSource/PermissionCore/*.{h,m,swift}",
         "PooToolsSource/PhotoLibraryPermission/*.{h,m,swift}",
         "PooToolsSource/Protocol/*.{h,m,swift}",
@@ -757,6 +761,8 @@
         "Line",
         "Log",
         "PToolsFontCore",
+        "PToolsPermissionCore",
+        "PToolsTransferCore",
         "PermissionCore",
         "PhotoLibraryPermission",
         "Protocol",
@@ -785,7 +791,7 @@
         "UIKit"
       ],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS POOTOOLS_SPLIT_CORE POOTOOLS_SPLIT_UIFOUNDATION"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS POOTOOLS_SPLIT_CORE POOTOOLS_SPLIT_UIFOUNDATION POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_EMBED_TRANSFER_CORE"
       }
     },
     {
@@ -1090,7 +1096,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_FACEIDPERMISSION POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_FACEIDPERMISSION POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -1317,7 +1323,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_HEALTH POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_HEALTH POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -1704,7 +1710,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_LOCATION POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_LOCATION POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -1825,7 +1831,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_MEDIA POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_MEDIA POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -1907,7 +1913,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_MIC POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_MIC POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -2034,7 +2040,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_MOTION POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_MOTION POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -2082,7 +2088,8 @@
         "PooTools/Loading",
         "PooTools/ModelCore",
         "PooTools/ModelLegacyKakaJSON",
-        "PooTools/ModelLegacySmartCodable"
+        "PooTools/ModelLegacySmartCodable",
+        "PooTools/TransferCore"
       ],
       "third_party_dependencies": [
         "Alamofire"
@@ -2153,7 +2160,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_NOTIFICATION POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_NOTIFICATION POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -2361,7 +2368,9 @@
       "frameworks": [
         "Foundation"
       ],
-      "pod_target_xcconfig": {}
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS POOTOOLS_EMBED_PERMISSION_CORE"
+      }
     },
     {
       "name": "PooTools/PToolsPermissionUI",
@@ -2383,7 +2392,9 @@
         "Foundation",
         "UIKit"
       ],
-      "pod_target_xcconfig": {}
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS POOTOOLS_EMBED_PERMISSION_CORE"
+      }
     },
     {
       "name": "PooTools/PToolsUIFoundation",
@@ -2669,7 +2680,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_REMINDERS POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_REMINDERS POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -2953,7 +2964,7 @@
       "name": "PooTools/SiriPermission",
       "short_name": "SiriPermission",
       "local_dependencies": [
-        "PooTools/Core"
+        "PooTools/PToolsPermissionCore"
       ],
       "third_party_dependencies": [],
       "source_files": [
@@ -2966,7 +2977,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_SIRI POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_SIRI POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -3050,7 +3061,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_SPEECH POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_SPEECH POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -3362,7 +3373,7 @@
       "resources": [],
       "frameworks": [],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_TRACKING POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_TRACKING POOTOOLS_SPLIT_PERMISSION_CORE POOTOOLS_EMBED_PERMISSION_CORE POOTOOLS_COCOAPODS"
       }
     },
     {

@@ -51,7 +51,7 @@ public enum PTTransferPriority: Int, Sendable, Codable, Comparable {
     public static func < (lhs: Self, rhs: Self) -> Bool { lhs.rawValue < rhs.rawValue }
 }
 
-public struct PTTransferRetryPolicy: Sendable, Codable, Equatable {
+public struct PTTransferRetryPolicy: Sendable, Codable, Equatable, Hashable {
     public let maxAttempts: Int
     public let baseDelay: Duration
     public let maxDelay: Duration
@@ -64,7 +64,7 @@ public struct PTTransferRetryPolicy: Sendable, Codable, Equatable {
     }
 }
 
-public struct PTTransferPolicy: Sendable, Codable, Equatable {
+public struct PTTransferPolicy: Sendable, Codable, Equatable, Hashable {
     public let maxConcurrent: Int
     public let allowsCellular: Bool
     public let waitsForConnectivity: Bool
@@ -84,6 +84,20 @@ public struct PTTransferPolicy: Sendable, Codable, Equatable {
         self.allowsExpensiveNetwork = allowsExpensiveNetwork
         self.allowsConstrainedNetwork = allowsConstrainedNetwork
         self.pausesInLowPowerMode = pausesInLowPowerMode
+    }
+}
+
+// English: Keep URLSession timeout behavior as a value contract shared by Network and media caches.
+// Español: Mantiene el comportamiento de timeout de URLSession como un contrato de valor compartido por Network y las cachés multimedia.
+// 中文：将 URLSession 超时行为定义为 Network 与媒体缓存共用的值类型契约。
+public struct PTTransferDownloadConfiguration: Sendable, Codable, Equatable, Hashable {
+    public let requestTimeout: TimeInterval
+    public let resourceTimeout: TimeInterval
+
+    public init(requestTimeout: TimeInterval = 60,
+                resourceTimeout: TimeInterval = 3600) {
+        self.requestTimeout = max(0, requestTimeout)
+        self.resourceTimeout = max(self.requestTimeout, resourceTimeout)
     }
 }
 
@@ -126,6 +140,9 @@ public struct PTTransferRequest: Sendable, Equatable {
     public let priority: PTTransferPriority
     public let retryPolicy: PTTransferRetryPolicy
     public let policy: PTTransferPolicy
+    public let headers: [String: String]
+    public let allowsResume: Bool
+    public let downloadConfiguration: PTTransferDownloadConfiguration
 
     public init(id: PTTransferID = .init(),
                 source: PTTransferSource,
@@ -134,7 +151,10 @@ public struct PTTransferRequest: Sendable, Equatable {
                 executionMode: PTTransferExecutionMode = .foreground,
                 priority: PTTransferPriority = .normal,
                 retryPolicy: PTTransferRetryPolicy = .init(),
-                policy: PTTransferPolicy = .init()) {
+                policy: PTTransferPolicy = .init(),
+                headers: [String: String] = [:],
+                allowsResume: Bool = true,
+                downloadConfiguration: PTTransferDownloadConfiguration = .init()) {
         self.id = id
         self.source = source
         self.destination = destination
@@ -143,6 +163,9 @@ public struct PTTransferRequest: Sendable, Equatable {
         self.priority = priority
         self.retryPolicy = retryPolicy
         self.policy = policy
+        self.headers = headers
+        self.allowsResume = allowsResume
+        self.downloadConfiguration = downloadConfiguration
     }
 }
 

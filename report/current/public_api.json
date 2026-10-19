@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
-  "generated_at": "2026-10-18T02:38:25Z",
+  "source_revision": "23f6f58d7b266175109501ec67df060cb2859650",
+  "generated_at": "2026-10-19T07:31:20Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -4922,7 +4922,7 @@
     {
       "key": "PooToolsSource/Base/PTAudioCache.swift|public|typealias|public typealias FileDownloadProgress = @MainActor @Sendable (Int64, Int64, Double) -> Void",
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 18,
+      "line": 21,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias FileDownloadProgress = @MainActor @Sendable (Int64, Int64, Double) -> Void"
@@ -4930,7 +4930,7 @@
     {
       "key": "PooToolsSource/Base/PTAudioCache.swift|public|class|public final class PTAudioCacheFileManager",
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 130,
+      "line": 24,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTAudioCacheFileManager {"
@@ -4938,7 +4938,7 @@
     {
       "key": "PooToolsSource/Base/PTAudioCache.swift|public|func|public func cacheFileURL(for url: URL) -> URL",
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 152,
+      "line": 46,
       "access": "public",
       "kind": "func",
       "declaration": "public func cacheFileURL(for url: URL) -> URL {"
@@ -4946,7 +4946,7 @@
     {
       "key": "PooToolsSource/Base/PTAudioCache.swift|public|func|public func prepareLocalFile(for url: URL, progress: FileDownloadProgress? = nil, completion: @escaping @MainActor (URL?) -> Void)",
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 164,
+      "line": 58,
       "access": "public",
       "kind": "func",
       "declaration": "public func prepareLocalFile(for url: URL, progress: FileDownloadProgress? = nil, completion: @escaping @MainActor (URL?) -> Void) {"
@@ -4954,7 +4954,7 @@
     {
       "key": "PooToolsSource/Base/PTAudioCache.swift|public|class|public final class PTAudioService",
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 232,
+      "line": 137,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTAudioService {"
@@ -4962,7 +4962,7 @@
     {
       "key": "PooToolsSource/Base/PTAudioCache.swift|public|func|public func fetchDuration(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (Float, URL?) -> Void)",
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 261,
+      "line": 166,
       "access": "public",
       "kind": "func",
       "declaration": "public func fetchDuration(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (Float, URL?) -> Void) {"
@@ -4970,7 +4970,7 @@
     {
       "key": "PooToolsSource/Base/PTAudioCache.swift|public|func|public func playerItem(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (AVPlayerItem?) -> Void)",
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 301,
+      "line": 206,
       "access": "public",
       "kind": "func",
       "declaration": "public func playerItem(for url: URL,progress:FileDownloadProgress? = nil,completion: @escaping (AVPlayerItem?) -> Void) {"
@@ -4978,7 +4978,7 @@
     {
       "key": "PooToolsSource/Base/PTAudioCache.swift|public|enum|public enum PTAudioTranscoder",
       "path": "PooToolsSource/Base/PTAudioCache.swift",
-      "line": 312,
+      "line": 217,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTAudioTranscoder {"
@@ -10800,134 +10800,6 @@
       "declaration": "public var onCloseTapped: PTActionTask? // 🔹 你可以拦截返回逻辑"
     },
     {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|typealias|public typealias ConstraintView = UIView",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 15,
-      "access": "public",
-      "kind": "typealias",
-      "declaration": "public typealias ConstraintView = UIView"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|typealias|public typealias ConstraintEdgeInsets = UIEdgeInsets",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 16,
-      "access": "public",
-      "kind": "typealias",
-      "declaration": "public typealias ConstraintEdgeInsets = UIEdgeInsets"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|typealias|public typealias ConstraintView = NSView",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 19,
-      "access": "public",
-      "kind": "typealias",
-      "declaration": "public typealias ConstraintView = NSView"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|typealias|public typealias ConstraintEdgeInsets = NSEdgeInsets",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 20,
-      "access": "public",
-      "kind": "typealias",
-      "declaration": "public typealias ConstraintEdgeInsets = NSEdgeInsets"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|enum|public enum ConstraintAxis: Int",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 27,
-      "access": "public",
-      "kind": "enum",
-      "declaration": "public enum ConstraintAxis: Int {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|enum|public enum ConstraintCrossAxisAlignment",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 33,
-      "access": "public",
-      "kind": "enum",
-      "declaration": "public enum ConstraintCrossAxisAlignment {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|struct|public struct ConstraintGroup",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 42,
-      "access": "public",
-      "kind": "struct",
-      "declaration": "public struct ConstraintGroup {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|func|public func prepareConstraints(_ closure: (_ make: ConstraintMaker) -> Void) -> [Constraint]",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 51,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func prepareConstraints(_ closure: (_ make: ConstraintMaker) -> Void) -> [Constraint] {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|func|public func makeConstraints(_ closure: (_ make: ConstraintMaker) -> Void)",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 56,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func makeConstraints(_ closure: (_ make: ConstraintMaker) -> Void) {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|func|public func remakeConstraints(_ closure: (_ make: ConstraintMaker) -> Void)",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 60,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func remakeConstraints(_ closure: (_ make: ConstraintMaker) -> Void) {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|func|public func updateConstraints(_ closure: (_ make: ConstraintMaker) -> Void)",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 64,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func updateConstraints(_ closure: (_ make: ConstraintMaker) -> Void) {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|func|public func removeConstraints()",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 68,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func removeConstraints() {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|func|public func distributeViewsAlong(axisType: ConstraintAxis, fixedSpacing: CGFloat = 0, leadSpacing: CGFloat = 0, tailSpacing: CGFloat = 0, crossAxisAlignment: ConstraintCrossAxisAlignment = .fill)",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 80,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func distributeViewsAlong(axisType: ConstraintAxis, fixedSpacing: CGFloat = 0, leadSpacing: CGFloat = 0, tailSpacing: CGFloat = 0, crossAxisAlignment: ConstraintCrossAxisAlignment = .fill) {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|func|public func distributeViewsAlong(axisType: ConstraintAxis, fixedItemLength: CGFloat = 0, leadSpacing: CGFloat = 0, tailSpacing: CGFloat = 0, crossAxisAlignment: ConstraintCrossAxisAlignment = .fill)",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 120,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func distributeViewsAlong(axisType: ConstraintAxis, fixedItemLength: CGFloat = 0, leadSpacing: CGFloat = 0, tailSpacing: CGFloat = 0, crossAxisAlignment: ConstraintCrossAxisAlignment = .fill) {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|func|public func distributeSudokuViews(fixedItemWidth: CGFloat, fixedItemHeight: CGFloat, warpCount: Int, edgeInset: ConstraintEdgeInsets = .zero)",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 159,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func distributeSudokuViews(fixedItemWidth: CGFloat, fixedItemHeight: CGFloat, warpCount: Int, edgeInset: ConstraintEdgeInsets = .zero) {"
-    },
-    {
-      "key": "PooToolsSource/Base/PTSnapKitEX.swift|public|func|public func distributeSudokuViews(fixedLineSpacing: CGFloat, fixedInteritemSpacing: CGFloat, warpCount: Int, edgeInset: ConstraintEdgeInsets = .zero)",
-      "path": "PooToolsSource/Base/PTSnapKitEX.swift",
-      "line": 195,
-      "access": "public",
-      "kind": "func",
-      "declaration": "public func distributeSudokuViews(fixedLineSpacing: CGFloat, fixedInteritemSpacing: CGFloat, warpCount: Int, edgeInset: ConstraintEdgeInsets = .zero) {"
-    },
-    {
       "key": "PooToolsSource/Base/PTTabBarItemView.swift|public|class|public class func itemImageSize() -> CGFloat",
       "path": "PooToolsSource/Base/PTTabBarItemView.swift",
       "line": 32,
@@ -11402,7 +11274,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|struct|public struct PTVideoCacheItem",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 34,
+      "line": 37,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTVideoCacheItem {"
@@ -11410,7 +11282,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|let|public let originalURLString: String",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 36,
+      "line": 39,
       "access": "public",
       "kind": "let",
       "declaration": "public let originalURLString: String"
@@ -11418,7 +11290,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|var|public var coverImage: UIImage?",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 39,
+      "line": 42,
       "access": "public",
       "kind": "var",
       "declaration": "public var coverImage: UIImage?"
@@ -11426,7 +11298,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|var|public var localVideoURL: URL?",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 42,
+      "line": 45,
       "access": "public",
       "kind": "var",
       "declaration": "public var localVideoURL: URL?"
@@ -11434,7 +11306,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|var|public var isFullyCached: Bool",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 45,
+      "line": 48,
       "access": "public",
       "kind": "var",
       "declaration": "public var isFullyCached: Bool {"
@@ -11442,7 +11314,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|class|public final class PTVideoManager: Sendable",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 52,
+      "line": 55,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTVideoManager: Sendable {"
@@ -11450,7 +11322,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|func|@MainActor public func getVideoItem(for urlString: String, autoCacheVideo: Bool = false, progress: FileDownloadProgress? = nil, coverReady: @escaping @MainActor @Sendable (PTVideoCacheItem) -> Void, videoReady: (@MainActor @Sendable (PTVideoCacheItem) -> Void)? = nil)",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 68,
+      "line": 71,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func getVideoItem(for urlString: String, autoCacheVideo: Bool = false, progress: FileDownloadProgress? = nil, coverReady: @escaping @MainActor @Sendable (PTVideoCacheItem) -> Void, videoReady: (@MainActor @Sendable (PTVideoCacheItem) -> Void)? = nil) {"
@@ -11458,7 +11330,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|class|public final class PTVideoFileCache: Sendable",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 180,
+      "line": 157,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTVideoFileCache: Sendable {"
@@ -11466,7 +11338,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|func|public func cacheURL(for videoURL: URL) -> URL",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 208,
+      "line": 185,
       "access": "public",
       "kind": "func",
       "declaration": "public func cacheURL(for videoURL: URL) -> URL {"
@@ -11474,7 +11346,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|func|public func cachedFileURL(for url: URL) -> URL?",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 215,
+      "line": 192,
       "access": "public",
       "kind": "func",
       "declaration": "public func cachedFileURL(for url: URL) -> URL? {"
@@ -11482,7 +11354,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|func|public func prepareVideo(url: URL, progress: FileDownloadProgress? = nil, completion: @escaping @MainActor @Sendable (URL?) -> Void)",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 238,
+      "line": 215,
       "access": "public",
       "kind": "func",
       "declaration": "public func prepareVideo(url: URL, progress: FileDownloadProgress? = nil, completion: @escaping @MainActor @Sendable (URL?) -> Void) {"
@@ -11490,7 +11362,7 @@
     {
       "key": "PooToolsSource/Base/PTVideoCoverCache.swift|public|enum|public enum PTVideoCoverCache",
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 361,
+      "line": 350,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTVideoCoverCache {"
@@ -39200,57 +39072,49 @@
       "declaration": "public func sendAPDU(command: NFCISO7816APDU, onSuccess: @escaping (Data) -> Void, onError: @escaping (Error) -> Void) {"
     },
     {
-      "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|public func get(_ url: String) -> DownloadTask?",
+      "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil)",
       "path": "PooToolsSource/NetWork/Network+Download.swift",
-      "line": 52,
+      "line": 124,
       "access": "public",
       "kind": "func",
-      "declaration": "public func get(_ url: String) -> DownloadTask? { tasks[url] }"
+      "declaration": "public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil) {"
     },
     {
-      "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|@MainActor public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil)",
+      "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL",
       "path": "PooToolsSource/NetWork/Network+Download.swift",
-      "line": 178,
+      "line": 160,
       "access": "public",
       "kind": "func",
-      "declaration": "@MainActor public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil) {"
-    },
-    {
-      "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|@MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL",
-      "path": "PooToolsSource/NetWork/Network+Download.swift",
-      "line": 200,
-      "access": "public",
-      "kind": "func",
-      "declaration": "@MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL {"
+      "declaration": "public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL {"
     },
     {
       "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|public func suspend(fileUrl: String)",
       "path": "PooToolsSource/NetWork/Network+Download.swift",
-      "line": 227,
+      "line": 189,
       "access": "public",
       "kind": "func",
-      "declaration": "public func suspend(fileUrl: String) { Task { await store.get(fileUrl)?.suspend() } }"
+      "declaration": "public func suspend(fileUrl: String) {"
     },
     {
       "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|public func resume(fileUrl: String)",
       "path": "PooToolsSource/NetWork/Network+Download.swift",
-      "line": 228,
+      "line": 196,
       "access": "public",
       "kind": "func",
-      "declaration": "public func resume(fileUrl: String) { Task { await store.get(fileUrl)?.start(session: downloadSession) } }"
+      "declaration": "public func resume(fileUrl: String) {"
     },
     {
       "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|public func cancel(fileUrl: String)",
       "path": "PooToolsSource/NetWork/Network+Download.swift",
-      "line": 229,
+      "line": 203,
       "access": "public",
       "kind": "func",
-      "declaration": "public func cancel(fileUrl: String) { Task { if let task = await store.get(fileUrl) { await store.remove(fileUrl); await task.cancel() } } }"
+      "declaration": "public func cancel(fileUrl: String) {"
     },
     {
       "key": "PooToolsSource/NetWork/Network+Download.swift|public|func|public func downloadAsyncStream(fileUrl: String, saveFilePath: String) -> AsyncThrowingStream<(progress: Double, fileURL: URL?), Error>",
       "path": "PooToolsSource/NetWork/Network+Download.swift",
-      "line": 232,
+      "line": 211,
       "access": "public",
       "kind": "func",
       "declaration": "public func downloadAsyncStream(fileUrl: String, saveFilePath: String) -> AsyncThrowingStream<(progress: Double, fileURL: URL?), Error> {"
@@ -39330,7 +39194,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|init|public init(configuration: PTNetworkConfig = PTNetworkConfig(), plugins: [NetworkPlugin] = [PTNetworkCachePlugin()], protocolClasses: [AnyClass] = [], credentialProvider: (any PTCredentialProvider)? = nil, headerProvider: (any PTRequestHeaderProvider)? = nil, endpointResolver: (any PTEndpointResolver)? = nil, authRefreshProvider: (any PTNetworkAuthRefreshProvider)? = nil)",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 189,
+      "line": 187,
       "access": "public",
       "kind": "init",
       "declaration": "public init(configuration: PTNetworkConfig = PTNetworkConfig(), plugins: [NetworkPlugin] = [PTNetworkCachePlugin()], protocolClasses: [AnyClass] = [], credentialProvider: (any PTCredentialProvider)? = nil, headerProvider: (any PTRequestHeaderProvider)? = nil, endpointResolver: (any PTEndpointResolver)? = nil, authRefreshProvider: (any PTNetworkAuthRefreshProvider)? = nil) {"
@@ -39338,7 +39202,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var plugins: [NetworkPlugin]",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 200,
+      "line": 198,
       "access": "public",
       "kind": "var",
       "declaration": "public var plugins: [NetworkPlugin] {"
@@ -39346,7 +39210,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var pluginRegistry: PTNetworkPluginRegistry",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 212,
+      "line": 210,
       "access": "public",
       "kind": "var",
       "declaration": "public var pluginRegistry: PTNetworkPluginRegistry {"
@@ -39354,7 +39218,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|public func register(plugin: NetworkPlugin)",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 219,
+      "line": 217,
       "access": "public",
       "kind": "func",
       "declaration": "public func register(plugin: NetworkPlugin) {"
@@ -39362,7 +39226,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var config: PTNetworkConfig",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 253,
+      "line": 248,
       "access": "public",
       "kind": "var",
       "declaration": "public var config: PTNetworkConfig {"
@@ -39370,7 +39234,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var requestEnvironment: PTNetworkRequestEnvironment",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 269,
+      "line": 264,
       "access": "public",
       "kind": "var",
       "declaration": "public var requestEnvironment: PTNetworkRequestEnvironment {"
@@ -39378,7 +39242,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|public var hud:PTHudView?",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 307,
+      "line": 302,
       "access": "public",
       "kind": "var",
       "declaration": "public var hud:PTHudView?"
@@ -39386,7 +39250,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|var|@MainActor public var hudConfig : PTHudConfig",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 308,
+      "line": 303,
       "access": "public",
       "kind": "var",
       "declaration": "@MainActor public var hudConfig : PTHudConfig {"
@@ -39394,7 +39258,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|public func hudShow()",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 316,
+      "line": 311,
       "access": "public",
       "kind": "func",
       "declaration": "public func hudShow() {"
@@ -39402,7 +39266,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|func|@MainActor public func hudHide(completion:PTActionTask? = nil)",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 327,
+      "line": 322,
       "access": "public",
       "kind": "func",
       "declaration": "@MainActor public func hudHide(completion:PTActionTask? = nil) {"
@@ -39410,7 +39274,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|@MainActor public class func globalURL() async -> String",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 341,
+      "line": 336,
       "access": "public",
       "kind": "class",
       "declaration": "@MainActor public class func globalURL() async -> String {"
@@ -39418,7 +39282,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|@MainActor public class func socketGlobalURL() async -> String",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 360,
+      "line": 355,
       "access": "public",
       "kind": "class",
       "declaration": "@MainActor public class func socketGlobalURL() async -> String {"
@@ -39426,7 +39290,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|@MainActor public class func gobalUrl() async -> String",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 377,
+      "line": 372,
       "access": "public",
       "kind": "class",
       "declaration": "@MainActor public class func gobalUrl() async -> String {"
@@ -39434,7 +39298,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|@MainActor public class func socketGobalUrl() async -> String",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 382,
+      "line": 377,
       "access": "public",
       "kind": "class",
       "declaration": "@MainActor public class func socketGobalUrl() async -> String {"
@@ -39442,7 +39306,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|public class func requestIPInfoSnapshot(ipAddress: String,",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 405,
+      "line": 400,
       "access": "public",
       "kind": "class",
       "declaration": "public class func requestIPInfoSnapshot(ipAddress: String,"
@@ -39450,7 +39314,7 @@
     {
       "key": "PooToolsSource/NetWork/Network.swift|public|class|public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: (@Sendable () -> Void)? = nil)",
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 417,
+      "line": 412,
       "access": "public",
       "kind": "class",
       "declaration": "public class func cancelAllNetworkRequest(completingOnQueue queue: DispatchQueue = .main, completion: (@Sendable () -> Void)? = nil) {"
@@ -43144,12 +43008,12 @@
       "declaration": "public final class PTAcknowledgementsViewController: PTSearchViewController<PTAcknowledgement> {"
     },
     {
-      "key": "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsSearchViewController.swift|public|init|public init( configuration: PTAcknowledgementsConfiguration = .init(), dataSource: any PTAcknowledgementsDataSource = PTBundleAcknowledgementsDataSource(), additionalEntries: [PTAcknowledgement] = [] )",
+      "key": "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsSearchViewController.swift|public|init|public init(configuration: PTAcknowledgementsConfiguration = .init(), dataSource: any PTAcknowledgementsDataSource = PTBundleAcknowledgementsDataSource(), additionalEntries: [PTAcknowledgement] = [])",
       "path": "PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsSearchViewController.swift",
-      "line": 125,
+      "line": 123,
       "access": "public",
       "kind": "init",
-      "declaration": "public init( configuration: PTAcknowledgementsConfiguration = .init(), dataSource: any PTAcknowledgementsDataSource = PTBundleAcknowledgementsDataSource(), additionalEntries: [PTAcknowledgement] = [] ) {"
+      "declaration": "public init(configuration: PTAcknowledgementsConfiguration = .init(), dataSource: any PTAcknowledgementsDataSource = PTBundleAcknowledgementsDataSource(), additionalEntries: [PTAcknowledgement] = []) {"
     },
     {
       "key": "PooToolsSource/PToolsAcknowledgementsCore/PTAcknowledgement.swift|public|enum|public enum PTAcknowledgementSourceManager: String, Codable, CaseIterable, Hashable, Sendable",
@@ -48480,9 +48344,25 @@
       "declaration": "public enum PTLayoutDiagnosticMode: String, Sendable {"
     },
     {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|enum|public enum PTLayoutAutoresizingMaskPolicy: Sendable",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 74,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutAutoresizingMaskPolicy: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|enum|public enum PTLayoutConfiguration",
+      "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
+      "line": 83,
+      "access": "public",
+      "kind": "enum",
+      "declaration": "public enum PTLayoutConfiguration {"
+    },
+    {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|enum|public enum PTLayoutIssueCode: String, Sendable",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 71,
+      "line": 88,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTLayoutIssueCode: String, Sendable {"
@@ -48490,7 +48370,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutIssue: Error, Equatable, Sendable",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 84,
+      "line": 101,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTLayoutIssue: Error, Equatable, Sendable {"
@@ -48498,7 +48378,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let code: PTLayoutIssueCode",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 85,
+      "line": 102,
       "access": "public",
       "kind": "let",
       "declaration": "public let code: PTLayoutIssueCode"
@@ -48506,7 +48386,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let owner: String",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 86,
+      "line": 103,
       "access": "public",
       "kind": "let",
       "declaration": "public let owner: String"
@@ -48514,7 +48394,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let anchor: String",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 87,
+      "line": 104,
       "access": "public",
       "kind": "let",
       "declaration": "public let anchor: String"
@@ -48522,7 +48402,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let relatedTarget: String?",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 88,
+      "line": 105,
       "access": "public",
       "kind": "let",
       "declaration": "public let relatedTarget: String?"
@@ -48530,7 +48410,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let fileID: String",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 89,
+      "line": 106,
       "access": "public",
       "kind": "let",
       "declaration": "public let fileID: String"
@@ -48538,7 +48418,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let line: UInt",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 90,
+      "line": 107,
       "access": "public",
       "kind": "let",
       "declaration": "public let line: UInt"
@@ -48546,7 +48426,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let function: String",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 91,
+      "line": 108,
       "access": "public",
       "kind": "let",
       "declaration": "public let function: String"
@@ -48554,7 +48434,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let groupID: String?",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 92,
+      "line": 109,
       "access": "public",
       "kind": "let",
       "declaration": "public let groupID: String?"
@@ -48562,7 +48442,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let reason: String",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 93,
+      "line": 110,
       "access": "public",
       "kind": "let",
       "declaration": "public let reason: String"
@@ -48570,7 +48450,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let suggestion: String",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 94,
+      "line": 111,
       "access": "public",
       "kind": "let",
       "declaration": "public let suggestion: String"
@@ -48578,7 +48458,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let recovery: String",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 95,
+      "line": 112,
       "access": "public",
       "kind": "let",
       "declaration": "public let recovery: String"
@@ -48586,7 +48466,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let sourceType: String",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 96,
+      "line": 113,
       "access": "public",
       "kind": "let",
       "declaration": "public let sourceType: String"
@@ -48594,7 +48474,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let occurrenceCount: Int",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 97,
+      "line": 114,
       "access": "public",
       "kind": "let",
       "declaration": "public let occurrenceCount: Int"
@@ -48602,7 +48482,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|init|public init(code: PTLayoutIssueCode, owner: String, anchor: String, relatedTarget: String? = nil, fileID: String = #fileID, line: UInt = #line, function: String = #function, groupID: String? = nil, reason: String, suggestion: String, recovery: String = \"transaction skipped\", sourceType: String = \"PTLayout\", occurrenceCount: Int = 1)",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 111,
+      "line": 128,
       "access": "public",
       "kind": "init",
       "declaration": "public init(code: PTLayoutIssueCode, owner: String, anchor: String, relatedTarget: String? = nil, fileID: String = #fileID, line: UInt = #line, function: String = #function, groupID: String? = nil, reason: String, suggestion: String, recovery: String = \"transaction skipped\", sourceType: String = \"PTLayout\", occurrenceCount: Int = 1) {"
@@ -48610,7 +48490,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var message: String",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 127,
+      "line": 144,
       "access": "public",
       "kind": "var",
       "declaration": "public var message: String {"
@@ -48618,7 +48498,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutChanges: Sendable",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 133,
+      "line": 150,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTLayoutChanges: Sendable {"
@@ -48626,7 +48506,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let count: Int",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 134,
+      "line": 151,
       "access": "public",
       "kind": "let",
       "declaration": "public let count: Int"
@@ -48634,7 +48514,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|init|public init(count: Int)",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 136,
+      "line": 153,
       "access": "public",
       "kind": "init",
       "declaration": "public init(count: Int) {"
@@ -48642,7 +48522,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|enum|public enum PTLayoutResult",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 142,
+      "line": 159,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTLayoutResult {"
@@ -48650,7 +48530,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var isSuccess: Bool",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 146,
+      "line": 163,
       "access": "public",
       "kind": "var",
       "declaration": "public var isSuccess: Bool {"
@@ -48658,7 +48538,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var issue: PTLayoutIssue?",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 151,
+      "line": 168,
       "access": "public",
       "kind": "var",
       "declaration": "public var issue: PTLayoutIssue? {"
@@ -48666,7 +48546,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var changeCount: Int",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 156,
+      "line": 173,
       "access": "public",
       "kind": "var",
       "declaration": "public var changeCount: Int {"
@@ -48674,7 +48554,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|enum|public enum PTLayoutDiagnostics",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 163,
+      "line": 180,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTLayoutDiagnostics {"
@@ -48682,7 +48562,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutAnchor",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 248,
+      "line": 277,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTLayoutAnchor {"
@@ -48690,7 +48570,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let attribute: PTLayoutAttribute",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 250,
+      "line": 279,
       "access": "public",
       "kind": "let",
       "declaration": "public let attribute: PTLayoutAttribute"
@@ -48698,7 +48578,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 260,
+      "line": 289,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTLayoutAnchorGroup {"
@@ -48706,7 +48586,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var top: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 271,
+      "line": 300,
       "access": "public",
       "kind": "var",
       "declaration": "public var top: PTLayoutAnchorGroup { appending(.top) }"
@@ -48714,7 +48594,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var bottom: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 272,
+      "line": 301,
       "access": "public",
       "kind": "var",
       "declaration": "public var bottom: PTLayoutAnchorGroup { appending(.bottom) }"
@@ -48722,7 +48602,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var leading: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 273,
+      "line": 302,
       "access": "public",
       "kind": "var",
       "declaration": "public var leading: PTLayoutAnchorGroup { appending(.leading) }"
@@ -48730,7 +48610,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var trailing: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 274,
+      "line": 303,
       "access": "public",
       "kind": "var",
       "declaration": "public var trailing: PTLayoutAnchorGroup { appending(.trailing) }"
@@ -48738,7 +48618,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var left: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 275,
+      "line": 304,
       "access": "public",
       "kind": "var",
       "declaration": "public var left: PTLayoutAnchorGroup { appending(.left) }"
@@ -48746,7 +48626,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var right: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 276,
+      "line": 305,
       "access": "public",
       "kind": "var",
       "declaration": "public var right: PTLayoutAnchorGroup { appending(.right) }"
@@ -48754,7 +48634,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var centerX: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 277,
+      "line": 306,
       "access": "public",
       "kind": "var",
       "declaration": "public var centerX: PTLayoutAnchorGroup { appending(.centerX) }"
@@ -48762,7 +48642,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var centerY: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 278,
+      "line": 307,
       "access": "public",
       "kind": "var",
       "declaration": "public var centerY: PTLayoutAnchorGroup { appending(.centerY) }"
@@ -48770,7 +48650,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var width: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 279,
+      "line": 308,
       "access": "public",
       "kind": "var",
       "declaration": "public var width: PTLayoutAnchorGroup { appending(.width) }"
@@ -48778,7 +48658,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var height: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 280,
+      "line": 309,
       "access": "public",
       "kind": "var",
       "declaration": "public var height: PTLayoutAnchorGroup { appending(.height) }"
@@ -48786,7 +48666,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var firstBaseline: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 281,
+      "line": 310,
       "access": "public",
       "kind": "var",
       "declaration": "public var firstBaseline: PTLayoutAnchorGroup { appending(.firstBaseline) }"
@@ -48794,7 +48674,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var lastBaseline: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 282,
+      "line": 311,
       "access": "public",
       "kind": "var",
       "declaration": "public var lastBaseline: PTLayoutAnchorGroup { appending(.lastBaseline) }"
@@ -48802,7 +48682,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutNamespace",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 468,
+      "line": 506,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTLayoutNamespace {"
@@ -48810,7 +48690,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var top: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 479,
+      "line": 517,
       "access": "public",
       "kind": "var",
       "declaration": "public var top: PTLayoutAnchorGroup { group(.top) }"
@@ -48818,7 +48698,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var bottom: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 480,
+      "line": 518,
       "access": "public",
       "kind": "var",
       "declaration": "public var bottom: PTLayoutAnchorGroup { group(.bottom) }"
@@ -48826,7 +48706,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var leading: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 481,
+      "line": 519,
       "access": "public",
       "kind": "var",
       "declaration": "public var leading: PTLayoutAnchorGroup { group(.leading) }"
@@ -48834,7 +48714,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var trailing: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 482,
+      "line": 520,
       "access": "public",
       "kind": "var",
       "declaration": "public var trailing: PTLayoutAnchorGroup { group(.trailing) }"
@@ -48842,7 +48722,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var left: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 483,
+      "line": 521,
       "access": "public",
       "kind": "var",
       "declaration": "public var left: PTLayoutAnchorGroup { group(.left) }"
@@ -48850,7 +48730,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var right: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 484,
+      "line": 522,
       "access": "public",
       "kind": "var",
       "declaration": "public var right: PTLayoutAnchorGroup { group(.right) }"
@@ -48858,7 +48738,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var centerX: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 485,
+      "line": 523,
       "access": "public",
       "kind": "var",
       "declaration": "public var centerX: PTLayoutAnchorGroup { group(.centerX) }"
@@ -48866,7 +48746,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var centerY: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 486,
+      "line": 524,
       "access": "public",
       "kind": "var",
       "declaration": "public var centerY: PTLayoutAnchorGroup { group(.centerY) }"
@@ -48874,7 +48754,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var width: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 487,
+      "line": 525,
       "access": "public",
       "kind": "var",
       "declaration": "public var width: PTLayoutAnchorGroup { group(.width) }"
@@ -48882,7 +48762,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var height: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 488,
+      "line": 526,
       "access": "public",
       "kind": "var",
       "declaration": "public var height: PTLayoutAnchorGroup { group(.height) }"
@@ -48890,7 +48770,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var firstBaseline: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 489,
+      "line": 527,
       "access": "public",
       "kind": "var",
       "declaration": "public var firstBaseline: PTLayoutAnchorGroup { group(.firstBaseline) }"
@@ -48898,7 +48778,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var lastBaseline: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 490,
+      "line": 528,
       "access": "public",
       "kind": "var",
       "declaration": "public var lastBaseline: PTLayoutAnchorGroup { group(.lastBaseline) }"
@@ -48906,7 +48786,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var center: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 491,
+      "line": 529,
       "access": "public",
       "kind": "var",
       "declaration": "public var center: PTLayoutAnchorGroup { group(.centerX, .centerY) }"
@@ -48914,7 +48794,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var size: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 492,
+      "line": 530,
       "access": "public",
       "kind": "var",
       "declaration": "public var size: PTLayoutAnchorGroup { group(.width, .height) }"
@@ -48922,7 +48802,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var edges: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 493,
+      "line": 531,
       "access": "public",
       "kind": "var",
       "declaration": "public var edges: PTLayoutAnchorGroup { group(.top, .leading, .bottom, .trailing) }"
@@ -48930,7 +48810,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var horizontalEdges: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 494,
+      "line": 532,
       "access": "public",
       "kind": "var",
       "declaration": "public var horizontalEdges: PTLayoutAnchorGroup { group(.leading, .trailing) }"
@@ -48938,7 +48818,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var verticalEdges: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 495,
+      "line": 533,
       "access": "public",
       "kind": "var",
       "declaration": "public var verticalEdges: PTLayoutAnchorGroup { group(.top, .bottom) }"
@@ -48946,7 +48826,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func makeConstraints(group: String? = nil, active: Bool = true, file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 502,
+      "line": 540,
       "access": "public",
       "kind": "func",
       "declaration": "public func makeConstraints(group: String? = nil, active: Bool = true, file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult {"
@@ -48954,7 +48834,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func prepareConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutConstraintGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 527,
+      "line": 565,
       "access": "public",
       "kind": "func",
       "declaration": "public func prepareConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutConstraintGroup {"
@@ -48962,7 +48842,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func updateConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 544,
+      "line": 582,
       "access": "public",
       "kind": "func",
       "declaration": "public func updateConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult {"
@@ -48970,7 +48850,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func updateIfExists(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 551,
+      "line": 589,
       "access": "public",
       "kind": "func",
       "declaration": "public func updateIfExists(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult {"
@@ -48978,7 +48858,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func upsertConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 558,
+      "line": 596,
       "access": "public",
       "kind": "func",
       "declaration": "public func upsertConstraints(file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult {"
@@ -48986,7 +48866,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func remakeConstraints(group: String? = nil, file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 568,
+      "line": 612,
       "access": "public",
       "kind": "func",
       "declaration": "public func remakeConstraints(group: String? = nil, file: StaticString = #fileID, line: UInt = #line, _ closure: @MainActor (PTLayoutMaker) -> Void) -> PTLayoutResult {"
@@ -48994,7 +48874,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func removeConstraints()",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 595,
+      "line": 649,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeConstraints() {"
@@ -49002,7 +48882,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func activate(group: String, deactivating oldGroup: String? = nil) -> PTLayoutResult",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 604,
+      "line": 658,
       "access": "public",
       "kind": "func",
       "declaration": "public func activate(group: String, deactivating oldGroup: String? = nil) -> PTLayoutResult {"
@@ -49010,7 +48890,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func inspect() -> PTLayoutInspection",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 622,
+      "line": 676,
       "access": "public",
       "kind": "func",
       "declaration": "public func inspect() -> PTLayoutInspection {"
@@ -49018,7 +48898,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|class|public final class PTLayoutMaker",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 661,
+      "line": 717,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTLayoutMaker {"
@@ -49026,7 +48906,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var top: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 668,
+      "line": 724,
       "access": "public",
       "kind": "var",
       "declaration": "public var top: PTLayoutAnchorGroup { transaction.group(.top) }"
@@ -49034,7 +48914,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var bottom: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 669,
+      "line": 725,
       "access": "public",
       "kind": "var",
       "declaration": "public var bottom: PTLayoutAnchorGroup { transaction.group(.bottom) }"
@@ -49042,7 +48922,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var leading: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 670,
+      "line": 726,
       "access": "public",
       "kind": "var",
       "declaration": "public var leading: PTLayoutAnchorGroup { transaction.group(.leading) }"
@@ -49050,7 +48930,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var trailing: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 671,
+      "line": 727,
       "access": "public",
       "kind": "var",
       "declaration": "public var trailing: PTLayoutAnchorGroup { transaction.group(.trailing) }"
@@ -49058,7 +48938,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var left: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 672,
+      "line": 728,
       "access": "public",
       "kind": "var",
       "declaration": "public var left: PTLayoutAnchorGroup { transaction.group(.left) }"
@@ -49066,7 +48946,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var right: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 673,
+      "line": 729,
       "access": "public",
       "kind": "var",
       "declaration": "public var right: PTLayoutAnchorGroup { transaction.group(.right) }"
@@ -49074,7 +48954,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var centerX: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 674,
+      "line": 730,
       "access": "public",
       "kind": "var",
       "declaration": "public var centerX: PTLayoutAnchorGroup { transaction.group(.centerX) }"
@@ -49082,7 +48962,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var centerY: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 675,
+      "line": 731,
       "access": "public",
       "kind": "var",
       "declaration": "public var centerY: PTLayoutAnchorGroup { transaction.group(.centerY) }"
@@ -49090,7 +48970,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var width: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 676,
+      "line": 732,
       "access": "public",
       "kind": "var",
       "declaration": "public var width: PTLayoutAnchorGroup { transaction.group(.width) }"
@@ -49098,7 +48978,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var height: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 677,
+      "line": 733,
       "access": "public",
       "kind": "var",
       "declaration": "public var height: PTLayoutAnchorGroup { transaction.group(.height) }"
@@ -49106,7 +48986,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var firstBaseline: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 678,
+      "line": 734,
       "access": "public",
       "kind": "var",
       "declaration": "public var firstBaseline: PTLayoutAnchorGroup { transaction.group(.firstBaseline) }"
@@ -49114,7 +48994,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var lastBaseline: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 679,
+      "line": 735,
       "access": "public",
       "kind": "var",
       "declaration": "public var lastBaseline: PTLayoutAnchorGroup { transaction.group(.lastBaseline) }"
@@ -49122,7 +49002,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var center: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 680,
+      "line": 736,
       "access": "public",
       "kind": "var",
       "declaration": "public var center: PTLayoutAnchorGroup { transaction.group(.centerX, .centerY) }"
@@ -49130,7 +49010,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var size: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 681,
+      "line": 737,
       "access": "public",
       "kind": "var",
       "declaration": "public var size: PTLayoutAnchorGroup { transaction.group(.width, .height) }"
@@ -49138,7 +49018,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var edges: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 682,
+      "line": 738,
       "access": "public",
       "kind": "var",
       "declaration": "public var edges: PTLayoutAnchorGroup { transaction.group(.top, .leading, .bottom, .trailing) }"
@@ -49146,7 +49026,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var horizontalEdges: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 683,
+      "line": 739,
       "access": "public",
       "kind": "var",
       "declaration": "public var horizontalEdges: PTLayoutAnchorGroup { transaction.group(.leading, .trailing) }"
@@ -49154,7 +49034,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var verticalEdges: PTLayoutAnchorGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 684,
+      "line": 740,
       "access": "public",
       "kind": "var",
       "declaration": "public var verticalEdges: PTLayoutAnchorGroup { transaction.group(.top, .bottom) }"
@@ -49162,7 +49042,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func aspectRatio(_ ratio: CGFloat, priority: PTLayoutPriority = .required, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 690,
+      "line": 746,
       "access": "public",
       "kind": "func",
       "declaration": "public func aspectRatio(_ ratio: CGFloat, priority: PTLayoutPriority = .required, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint {"
@@ -49170,7 +49050,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func relativeWidth(to view: UIView, ratio: CGFloat, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 700,
+      "line": 756,
       "access": "public",
       "kind": "func",
       "declaration": "public func relativeWidth(to view: UIView, ratio: CGFloat, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint {"
@@ -49178,7 +49058,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func relativeHeight(to view: UIView, ratio: CGFloat, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 710,
+      "line": 766,
       "access": "public",
       "kind": "func",
       "declaration": "public func relativeHeight(to view: UIView, ratio: CGFloat, file: StaticString = #fileID, line: UInt = #line) -> PTLayoutConstraint {"
@@ -49186,7 +49066,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|class|public final class PTLayoutRelationMaker",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 718,
+      "line": 774,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTLayoutRelationMaker {"
@@ -49194,7 +49074,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func offset(_ value: CGFloat) -> Self",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 728,
+      "line": 784,
       "access": "public",
       "kind": "func",
       "declaration": "public func offset(_ value: CGFloat) -> Self {"
@@ -49202,7 +49082,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func inset(_ value: CGFloat) -> Self",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 737,
+      "line": 793,
       "access": "public",
       "kind": "func",
       "declaration": "public func inset(_ value: CGFloat) -> Self {"
@@ -49210,7 +49090,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func inset(_ value: UIEdgeInsets) -> Self",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 746,
+      "line": 802,
       "access": "public",
       "kind": "func",
       "declaration": "public func inset(_ value: UIEdgeInsets) -> Self {"
@@ -49218,7 +49098,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func directionalInset(_ value: NSDirectionalEdgeInsets) -> Self",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 755,
+      "line": 811,
       "access": "public",
       "kind": "func",
       "declaration": "public func directionalInset(_ value: NSDirectionalEdgeInsets) -> Self {"
@@ -49226,7 +49106,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func multipliedBy(_ value: CGFloat) -> Self",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 764,
+      "line": 820,
       "access": "public",
       "kind": "func",
       "declaration": "public func multipliedBy(_ value: CGFloat) -> Self {"
@@ -49234,7 +49114,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func dividedBy(_ value: CGFloat) -> Self",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 770,
+      "line": 826,
       "access": "public",
       "kind": "func",
       "declaration": "public func dividedBy(_ value: CGFloat) -> Self {"
@@ -49242,7 +49122,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func priority(_ value: PTLayoutPriority) -> Self",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 776,
+      "line": 832,
       "access": "public",
       "kind": "func",
       "declaration": "public func priority(_ value: PTLayoutPriority) -> Self {"
@@ -49250,7 +49130,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func priority(_ value: UILayoutPriority) -> Self",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 782,
+      "line": 838,
       "access": "public",
       "kind": "func",
       "declaration": "public func priority(_ value: UILayoutPriority) -> Self {"
@@ -49258,7 +49138,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func priority(_ value: Float) -> Self",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 788,
+      "line": 844,
       "access": "public",
       "kind": "func",
       "declaration": "public func priority(_ value: Float) -> Self {"
@@ -49266,7 +49146,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func labeled(_ value: String) -> Self",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 794,
+      "line": 850,
       "access": "public",
       "kind": "func",
       "declaration": "public func labeled(_ value: String) -> Self {"
@@ -49274,7 +49154,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func labeled(_ value: PTLayoutID) -> Self",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 800,
+      "line": 856,
       "access": "public",
       "kind": "func",
       "declaration": "public func labeled(_ value: PTLayoutID) -> Self {"
@@ -49282,7 +49162,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var constraint: PTLayoutConstraint",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 804,
+      "line": 860,
       "access": "public",
       "kind": "var",
       "declaration": "public var constraint: PTLayoutConstraint {"
@@ -49290,7 +49170,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|enum|public enum PTLayoutOperation",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 814,
+      "line": 870,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTLayoutOperation {"
@@ -49298,7 +49178,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|class|public final class PTLayoutConstraint",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 916,
+      "line": 975,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTLayoutConstraint {"
@@ -49306,7 +49186,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var isActive: Bool",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 933,
+      "line": 992,
       "access": "public",
       "kind": "var",
       "declaration": "public var isActive: Bool {"
@@ -49314,7 +49194,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var nativeConstraints: [NSLayoutConstraint]",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 937,
+      "line": 996,
       "access": "public",
       "kind": "var",
       "declaration": "public var nativeConstraints: [NSLayoutConstraint] {"
@@ -49322,7 +49202,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func activate() -> PTLayoutResult",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 941,
+      "line": 1000,
       "access": "public",
       "kind": "func",
       "declaration": "public func activate() -> PTLayoutResult {"
@@ -49330,7 +49210,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func deactivate()",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 945,
+      "line": 1004,
       "access": "public",
       "kind": "func",
       "declaration": "public func deactivate() {"
@@ -49338,7 +49218,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func update(offset: CGFloat) -> PTLayoutResult",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 951,
+      "line": 1010,
       "access": "public",
       "kind": "func",
       "declaration": "public func update(offset: CGFloat) -> PTLayoutResult {"
@@ -49346,7 +49226,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func update(inset: UIEdgeInsets) -> PTLayoutResult",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 956,
+      "line": 1015,
       "access": "public",
       "kind": "func",
       "declaration": "public func update(inset: UIEdgeInsets) -> PTLayoutResult {"
@@ -49354,7 +49234,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func update(priority: PTLayoutPriority) -> PTLayoutResult",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 961,
+      "line": 1020,
       "access": "public",
       "kind": "func",
       "declaration": "public func update(priority: PTLayoutPriority) -> PTLayoutResult {"
@@ -49362,7 +49242,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|class|public final class PTLayoutConstraintGroup",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 986,
+      "line": 1045,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTLayoutConstraintGroup {"
@@ -49370,7 +49250,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let constraints: [PTLayoutConstraint]",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 987,
+      "line": 1046,
       "access": "public",
       "kind": "let",
       "declaration": "public let constraints: [PTLayoutConstraint]"
@@ -49378,7 +49258,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func activate() -> PTLayoutResult",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 996,
+      "line": 1055,
       "access": "public",
       "kind": "func",
       "declaration": "public func activate() -> PTLayoutResult {"
@@ -49386,7 +49266,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func deactivate()",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1000,
+      "line": 1059,
       "access": "public",
       "kind": "func",
       "declaration": "public func deactivate() {"
@@ -49394,7 +49274,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|var|public var isActive: Bool",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1004,
+      "line": 1063,
       "access": "public",
       "kind": "var",
       "declaration": "public var isActive: Bool {"
@@ -49402,7 +49282,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutInspection",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1061,
+      "line": 1120,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTLayoutInspection {"
@@ -49410,7 +49290,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let owner: String",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1062,
+      "line": 1121,
       "access": "public",
       "kind": "let",
       "declaration": "public let owner: String"
@@ -49418,7 +49298,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let constraints: [PTLayoutInspectionConstraint]",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1063,
+      "line": 1122,
       "access": "public",
       "kind": "let",
       "declaration": "public let constraints: [PTLayoutInspectionConstraint]"
@@ -49426,7 +49306,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|init|public init(owner: String, constraints: [PTLayoutInspectionConstraint])",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1065,
+      "line": 1124,
       "access": "public",
       "kind": "init",
       "declaration": "public init(owner: String, constraints: [PTLayoutInspectionConstraint]) {"
@@ -49434,7 +49314,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|func|public func dumpConstraints() -> [[String: String]]",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1070,
+      "line": 1129,
       "access": "public",
       "kind": "func",
       "declaration": "public func dumpConstraints() -> [[String: String]] {"
@@ -49442,7 +49322,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|struct|public struct PTLayoutInspectionConstraint",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1086,
+      "line": 1145,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTLayoutInspectionConstraint {"
@@ -49450,7 +49330,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let identifier: String?",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1087,
+      "line": 1146,
       "access": "public",
       "kind": "let",
       "declaration": "public let identifier: String?"
@@ -49458,7 +49338,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let firstAttribute: PTLayoutAttribute",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1088,
+      "line": 1147,
       "access": "public",
       "kind": "let",
       "declaration": "public let firstAttribute: PTLayoutAttribute"
@@ -49466,7 +49346,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let secondAttribute: PTLayoutAttribute",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1089,
+      "line": 1148,
       "access": "public",
       "kind": "let",
       "declaration": "public let secondAttribute: PTLayoutAttribute"
@@ -49474,7 +49354,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let relation: PTLayoutRelation",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1090,
+      "line": 1149,
       "access": "public",
       "kind": "let",
       "declaration": "public let relation: PTLayoutRelation"
@@ -49482,7 +49362,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let constant: CGFloat",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1091,
+      "line": 1150,
       "access": "public",
       "kind": "let",
       "declaration": "public let constant: CGFloat"
@@ -49490,7 +49370,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let priority: Float",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1092,
+      "line": 1151,
       "access": "public",
       "kind": "let",
       "declaration": "public let priority: Float"
@@ -49498,7 +49378,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift|public|let|public let isActive: Bool",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift",
-      "line": 1093,
+      "line": 1152,
       "access": "public",
       "kind": "let",
       "declaration": "public let isActive: Bool"
@@ -49554,7 +49434,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift|public|func|public func equalSizes(file: StaticString = #fileID, line: UInt = #line) -> PTLayoutResult",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift",
-      "line": 85,
+      "line": 81,
       "access": "public",
       "kind": "func",
       "declaration": "public func equalSizes(file: StaticString = #fileID, line: UInt = #line) -> PTLayoutResult {"
@@ -49562,7 +49442,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift|public|enum|public enum PTLayoutAnimation",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift",
-      "line": 163,
+      "line": 155,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTLayoutAnimation {"
@@ -49634,7 +49514,7 @@
     {
       "key": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift|public|enum|public enum PTLayoutKeyboardSupport",
       "path": "PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift",
-      "line": 74,
+      "line": 81,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTLayoutKeyboardSupport {"
@@ -65042,7 +64922,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift|public|enum|public enum PTPermissionAuthorizationState: String, CaseIterable, Equatable, Sendable",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift",
-      "line": 17,
+      "line": 15,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTPermissionAuthorizationState: String, CaseIterable, Equatable, Sendable {"
@@ -65050,7 +64930,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift|public|var|public var isGranted: Bool",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift",
-      "line": 27,
+      "line": 25,
       "access": "public",
       "kind": "var",
       "declaration": "public var isGranted: Bool {"
@@ -65058,7 +64938,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift|public|enum|public enum PTBluetoothPermissionState: String, CaseIterable, Equatable, Sendable",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift",
-      "line": 40,
+      "line": 38,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTBluetoothPermissionState: String, CaseIterable, Equatable, Sendable {"
@@ -65066,7 +64946,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift|public|enum|public enum PTFaceIDPermissionState: String, CaseIterable, Equatable, Sendable",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift",
-      "line": 53,
+      "line": 51,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTFaceIDPermissionState: String, CaseIterable, Equatable, Sendable {"
@@ -65074,7 +64954,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|typealias|public typealias PTActionTask = @Sendable () -> Void",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 20,
+      "line": 19,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTActionTask = @Sendable () -> Void"
@@ -65082,7 +64962,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|enum|public enum PTPermissionStatus: Int, CustomStringConvertible, Equatable, Sendable",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 22,
+      "line": 21,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTPermissionStatus: Int, CustomStringConvertible, Equatable, Sendable {"
@@ -65090,7 +64970,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|var|public var description: String",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 28,
+      "line": 27,
       "access": "public",
       "kind": "var",
       "declaration": "public var description: String {"
@@ -65098,7 +64978,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|enum|public enum PTPermissionCalendarAccess: Sendable, Equatable",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 38,
+      "line": 37,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTPermissionCalendarAccess: Sendable, Equatable {"
@@ -65106,7 +64986,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|enum|public enum PTPermissionLocationAccess: Sendable, Equatable",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 43,
+      "line": 42,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTPermissionLocationAccess: Sendable, Equatable {"
@@ -65114,7 +64994,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|enum|public enum PTPermissionKind: Sendable, Equatable",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 48,
+      "line": 47,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTPermissionKind: Sendable, Equatable {"
@@ -65122,7 +65002,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|var|public var name: String",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 67,
+      "line": 66,
       "access": "public",
       "kind": "var",
       "declaration": "public var name: String {"
@@ -65130,7 +65010,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|enum|public enum PTPermissionError: Error, Equatable, Sendable, CustomStringConvertible",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 92,
+      "line": 91,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTPermissionError: Error, Equatable, Sendable, CustomStringConvertible {"
@@ -65138,7 +65018,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|var|public var description: String",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 98,
+      "line": 97,
       "access": "public",
       "kind": "var",
       "declaration": "public var description: String {"
@@ -65146,7 +65026,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|struct|public struct PTPermissionResult: Equatable, Sendable",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 108,
+      "line": 107,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTPermissionResult: Equatable, Sendable {"
@@ -65154,7 +65034,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|let|public let kind: PTPermissionKind",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 109,
+      "line": 108,
       "access": "public",
       "kind": "let",
       "declaration": "public let kind: PTPermissionKind"
@@ -65162,7 +65042,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|let|public let status: PTPermissionStatus",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 110,
+      "line": 109,
       "access": "public",
       "kind": "let",
       "declaration": "public let status: PTPermissionStatus"
@@ -65170,7 +65050,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|let|public let authorizationState: PTPermissionAuthorizationState",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 111,
+      "line": 110,
       "access": "public",
       "kind": "let",
       "declaration": "public let authorizationState: PTPermissionAuthorizationState"
@@ -65178,7 +65058,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|let|public let error: PTPermissionError?",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 112,
+      "line": 111,
       "access": "public",
       "kind": "let",
       "declaration": "public let error: PTPermissionError?"
@@ -65186,7 +65066,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|let|public let didRequest: Bool",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 113,
+      "line": 112,
       "access": "public",
       "kind": "let",
       "declaration": "public let didRequest: Bool"
@@ -65194,7 +65074,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|init|public init(kind: PTPermissionKind, status: PTPermissionStatus, authorizationState: PTPermissionAuthorizationState? = nil, error: PTPermissionError? = nil, didRequest: Bool = true)",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 119,
+      "line": 118,
       "access": "public",
       "kind": "init",
       "declaration": "public init(kind: PTPermissionKind, status: PTPermissionStatus, authorizationState: PTPermissionAuthorizationState? = nil, error: PTPermissionError? = nil, didRequest: Bool = true) {"
@@ -65202,7 +65082,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|protocol|public protocol PTPermissionRequesting: AnyObject",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 139,
+      "line": 138,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTPermissionRequesting: AnyObject {"
@@ -65210,7 +65090,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|enum|public enum PTPermissionSettings",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 152,
+      "line": 151,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTPermissionSettings {"
@@ -65218,7 +65098,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|enum|public enum PTPermissionSettingsRouter",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 160,
+      "line": 159,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTPermissionSettingsRouter {"
@@ -65226,7 +65106,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|class|open class PTPermission: PTPermissionRequesting",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 173,
+      "line": 172,
       "access": "open",
       "kind": "class",
       "declaration": "open class PTPermission: PTPermissionRequesting {"
@@ -65234,7 +65114,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|typealias|public typealias Status = PTPermissionStatus",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 174,
+      "line": 173,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias Status = PTPermissionStatus"
@@ -65242,7 +65122,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|typealias|public typealias Kind = PTPermissionKind",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 175,
+      "line": 174,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias Kind = PTPermissionKind"
@@ -65250,7 +65130,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|typealias|public typealias CalendarAccess = PTPermissionCalendarAccess",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 176,
+      "line": 175,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias CalendarAccess = PTPermissionCalendarAccess"
@@ -65258,7 +65138,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|typealias|public typealias LocationAccess = PTPermissionLocationAccess",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 177,
+      "line": 176,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias LocationAccess = PTPermissionLocationAccess"
@@ -65266,7 +65146,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var authorized: Bool",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 179,
+      "line": 178,
       "access": "open",
       "kind": "var",
       "declaration": "open var authorized: Bool { status == .authorized }"
@@ -65274,7 +65154,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var denied: Bool",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 180,
+      "line": 179,
       "access": "open",
       "kind": "var",
       "declaration": "open var denied: Bool { status == .denied }"
@@ -65282,7 +65162,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var notDetermined: Bool",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 181,
+      "line": 180,
       "access": "open",
       "kind": "var",
       "declaration": "open var notDetermined: Bool { status == .notDetermined }"
@@ -65290,7 +65170,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var debugName: String",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 182,
+      "line": 181,
       "access": "open",
       "kind": "var",
       "declaration": "open var debugName: String { kind.name }"
@@ -65298,7 +65178,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var authorizationState: PTPermissionAuthorizationState",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 187,
+      "line": 186,
       "access": "open",
       "kind": "var",
       "declaration": "open var authorizationState: PTPermissionAuthorizationState {"
@@ -65306,7 +65186,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var kind: Kind",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 196,
+      "line": 195,
       "access": "open",
       "kind": "var",
       "declaration": "open var kind: Kind { .custom(String(describing: type(of: self))) }"
@@ -65314,7 +65194,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var status: Status",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 197,
+      "line": 196,
       "access": "open",
       "kind": "var",
       "declaration": "open var status: Status { .notSupported }"
@@ -65322,7 +65202,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var settingsURL: URL?",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 198,
+      "line": 197,
       "access": "open",
       "kind": "var",
       "declaration": "open var settingsURL: URL? { PTPermissionSettings.applicationURL }"
@@ -65330,7 +65210,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|var|open var canBePresentWithCustomInterface: Bool",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 199,
+      "line": 198,
       "access": "open",
       "kind": "var",
       "declaration": "open var canBePresentWithCustomInterface: Bool { true }"
@@ -65338,7 +65218,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|init|public init()",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 208,
+      "line": 207,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -65346,7 +65226,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|func|open func request(completion: @escaping PTActionTask)",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 213,
+      "line": 212,
       "access": "open",
       "kind": "func",
       "declaration": "open func request(completion: @escaping PTActionTask) {"
@@ -65354,7 +65234,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|func|public func currentStatus() -> Status",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 217,
+      "line": 216,
       "access": "public",
       "kind": "func",
       "declaration": "public func currentStatus() -> Status { status }"
@@ -65362,7 +65242,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|func|public func requestStatus() async -> Status",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 241,
+      "line": 240,
       "access": "public",
       "kind": "func",
       "declaration": "public func requestStatus() async -> Status {"
@@ -65370,7 +65250,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|func|public func requestAuthorizationState() async -> PTPermissionAuthorizationState",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 270,
+      "line": 269,
       "access": "public",
       "kind": "func",
       "declaration": "public func requestAuthorizationState() async -> PTPermissionAuthorizationState {"
@@ -65378,7 +65258,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|public|func|public func request() async -> PTPermissionResult",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 276,
+      "line": 275,
       "access": "public",
       "kind": "func",
       "declaration": "public func request() async -> PTPermissionResult {"
@@ -65386,7 +65266,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|func|open func openSettingPage()",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 286,
+      "line": 285,
       "access": "open",
       "kind": "func",
       "declaration": "open func openSettingPage() {"
@@ -65394,7 +65274,7 @@
     {
       "key": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift|open|func|open func openSettings()",
       "path": "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift",
-      "line": 291,
+      "line": 290,
       "access": "open",
       "kind": "func",
       "declaration": "open func openSettings() {"
@@ -68986,7 +68866,7 @@
     {
       "key": "PooToolsSource/PToolsTransfer/PTTransfer.swift|public|func|public func wait(for id: PTTransferID) async throws -> URL",
       "path": "PooToolsSource/PToolsTransfer/PTTransfer.swift",
-      "line": 79,
+      "line": 83,
       "access": "public",
       "kind": "func",
       "declaration": "public func wait(for id: PTTransferID) async throws -> URL {"
@@ -68994,7 +68874,7 @@
     {
       "key": "PooToolsSource/PToolsTransfer/PTTransfer.swift|public|func|public func cancel(_ id: PTTransferID) async",
       "path": "PooToolsSource/PToolsTransfer/PTTransfer.swift",
-      "line": 113,
+      "line": 117,
       "access": "public",
       "kind": "func",
       "declaration": "public func cancel(_ id: PTTransferID) async {"
@@ -69002,7 +68882,7 @@
     {
       "key": "PooToolsSource/PToolsTransfer/PTTransfer.swift|public|func|public func pause(_ id: PTTransferID) async",
       "path": "PooToolsSource/PToolsTransfer/PTTransfer.swift",
-      "line": 121,
+      "line": 125,
       "access": "public",
       "kind": "func",
       "declaration": "public func pause(_ id: PTTransferID) async {"
@@ -69010,7 +68890,7 @@
     {
       "key": "PooToolsSource/PToolsTransfer/PTTransfer.swift|public|func|public func resume(_ id: PTTransferID) async throws",
       "path": "PooToolsSource/PToolsTransfer/PTTransfer.swift",
-      "line": 138,
+      "line": 142,
       "access": "public",
       "kind": "func",
       "declaration": "public func resume(_ id: PTTransferID) async throws {"
@@ -69018,7 +68898,7 @@
     {
       "key": "PooToolsSource/PToolsTransfer/PTTransfer.swift|public|func|public func pauseAll() async",
       "path": "PooToolsSource/PToolsTransfer/PTTransfer.swift",
-      "line": 154,
+      "line": 160,
       "access": "public",
       "kind": "func",
       "declaration": "public func pauseAll() async {"
@@ -69026,7 +68906,7 @@
     {
       "key": "PooToolsSource/PToolsTransfer/PTTransfer.swift|public|func|public func resumeAll() async",
       "path": "PooToolsSource/PToolsTransfer/PTTransfer.swift",
-      "line": 158,
+      "line": 164,
       "access": "public",
       "kind": "func",
       "declaration": "public func resumeAll() async {"
@@ -69034,7 +68914,7 @@
     {
       "key": "PooToolsSource/PToolsTransfer/PTTransfer.swift|public|func|public func cancelAll() async",
       "path": "PooToolsSource/PToolsTransfer/PTTransfer.swift",
-      "line": 164,
+      "line": 170,
       "access": "public",
       "kind": "func",
       "declaration": "public func cancelAll() async {"
@@ -69042,7 +68922,7 @@
     {
       "key": "PooToolsSource/PToolsTransfer/PTTransfer.swift|public|func|public func retry(_ id: PTTransferID) async throws",
       "path": "PooToolsSource/PToolsTransfer/PTTransfer.swift",
-      "line": 168,
+      "line": 174,
       "access": "public",
       "kind": "func",
       "declaration": "public func retry(_ id: PTTransferID) async throws {"
@@ -69050,7 +68930,7 @@
     {
       "key": "PooToolsSource/PToolsTransfer/PTTransfer.swift|public|func|public func state(for id: PTTransferID) -> PTTransferState?",
       "path": "PooToolsSource/PToolsTransfer/PTTransfer.swift",
-      "line": 180,
+      "line": 191,
       "access": "public",
       "kind": "func",
       "declaration": "public func state(for id: PTTransferID) -> PTTransferState? { states[id] }"
@@ -69058,7 +68938,7 @@
     {
       "key": "PooToolsSource/PToolsTransfer/PTTransfer.swift|public|func|public func snapshot(for id: PTTransferID) -> PTTransferSnapshot?",
       "path": "PooToolsSource/PToolsTransfer/PTTransfer.swift",
-      "line": 182,
+      "line": 193,
       "access": "public",
       "kind": "func",
       "declaration": "public func snapshot(for id: PTTransferID) -> PTTransferSnapshot? {"
@@ -69066,7 +68946,7 @@
     {
       "key": "PooToolsSource/PToolsTransfer/PTTransfer.swift|public|func|public func runtimeSnapshot(for id: PTTransferID) -> PTTransferRuntimeSnapshot?",
       "path": "PooToolsSource/PToolsTransfer/PTTransfer.swift",
-      "line": 189,
+      "line": 200,
       "access": "public",
       "kind": "func",
       "declaration": "public func runtimeSnapshot(for id: PTTransferID) -> PTTransferRuntimeSnapshot? {"
@@ -69074,7 +68954,7 @@
     {
       "key": "PooToolsSource/PToolsTransfer/PTTransfer.swift|public|func|public func events() async -> AsyncStream<PTTransferEvent>",
       "path": "PooToolsSource/PToolsTransfer/PTTransfer.swift",
-      "line": 218,
+      "line": 256,
       "access": "public",
       "kind": "func",
       "declaration": "public func events() async -> AsyncStream<PTTransferEvent> {"
@@ -69232,12 +69112,12 @@
       "declaration": "public enum PTTransferPriority: Int, Sendable, Codable, Comparable {"
     },
     {
-      "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|struct|public struct PTTransferRetryPolicy: Sendable, Codable, Equatable",
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|struct|public struct PTTransferRetryPolicy: Sendable, Codable, Equatable, Hashable",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
       "line": 54,
       "access": "public",
       "kind": "struct",
-      "declaration": "public struct PTTransferRetryPolicy: Sendable, Codable, Equatable {"
+      "declaration": "public struct PTTransferRetryPolicy: Sendable, Codable, Equatable, Hashable {"
     },
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let maxAttempts: Int",
@@ -69272,12 +69152,12 @@
       "declaration": "public init(maxAttempts: Int = 3, baseDelay: Duration = .milliseconds(250), maxDelay: Duration = .seconds(8)) {"
     },
     {
-      "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|struct|public struct PTTransferPolicy: Sendable, Codable, Equatable",
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|struct|public struct PTTransferPolicy: Sendable, Codable, Equatable, Hashable",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
       "line": 67,
       "access": "public",
       "kind": "struct",
-      "declaration": "public struct PTTransferPolicy: Sendable, Codable, Equatable {"
+      "declaration": "public struct PTTransferPolicy: Sendable, Codable, Equatable, Hashable {"
     },
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let maxConcurrent: Int",
@@ -69336,9 +69216,41 @@
       "declaration": "public init(maxConcurrent: Int = 3, allowsCellular: Bool = true, waitsForConnectivity: Bool = true, allowsExpensiveNetwork: Bool = true, allowsConstrainedNetwork: Bool = true, pausesInLowPowerMode: Bool = false) {"
     },
     {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|struct|public struct PTTransferDownloadConfiguration: Sendable, Codable, Equatable, Hashable",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
+      "line": 93,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTTransferDownloadConfiguration: Sendable, Codable, Equatable, Hashable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let requestTimeout: TimeInterval",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
+      "line": 94,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let requestTimeout: TimeInterval"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let resourceTimeout: TimeInterval",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
+      "line": 95,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let resourceTimeout: TimeInterval"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|init|public init(requestTimeout: TimeInterval = 60, resourceTimeout: TimeInterval = 3600)",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
+      "line": 98,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(requestTimeout: TimeInterval = 60, resourceTimeout: TimeInterval = 3600) {"
+    },
+    {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|enum|public enum PTTransferDestination: Sendable, Equatable, Codable",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 90,
+      "line": 104,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTransferDestination: Sendable, Equatable, Codable {"
@@ -69346,7 +69258,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|struct|public struct PTTransferMultipartPart: Sendable, Equatable",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 95,
+      "line": 109,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTransferMultipartPart: Sendable, Equatable {"
@@ -69354,7 +69266,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let name: String",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 96,
+      "line": 110,
       "access": "public",
       "kind": "let",
       "declaration": "public let name: String"
@@ -69362,7 +69274,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let filename: String?",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 97,
+      "line": 111,
       "access": "public",
       "kind": "let",
       "declaration": "public let filename: String?"
@@ -69370,7 +69282,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let contentType: String?",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 98,
+      "line": 112,
       "access": "public",
       "kind": "let",
       "declaration": "public let contentType: String?"
@@ -69378,7 +69290,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let data: Data",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 99,
+      "line": 113,
       "access": "public",
       "kind": "let",
       "declaration": "public let data: Data"
@@ -69386,7 +69298,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|init|public init(name: String, filename: String? = nil, contentType: String? = nil, data: Data)",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 100,
+      "line": 114,
       "access": "public",
       "kind": "init",
       "declaration": "public init(name: String, filename: String? = nil, contentType: String? = nil, data: Data) {"
@@ -69394,7 +69306,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|enum|public enum PTTransferExecutionMode: Sendable, Equatable, Codable",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 108,
+      "line": 122,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTransferExecutionMode: Sendable, Equatable, Codable {"
@@ -69402,7 +69314,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|enum|public enum PTTransferSource: Sendable, Equatable",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 113,
+      "line": 127,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTransferSource: Sendable, Equatable {"
@@ -69410,7 +69322,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|struct|public struct PTTransferRequest: Sendable, Equatable",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 120,
+      "line": 134,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTransferRequest: Sendable, Equatable {"
@@ -69418,7 +69330,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let id: PTTransferID",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 121,
+      "line": 135,
       "access": "public",
       "kind": "let",
       "declaration": "public let id: PTTransferID"
@@ -69426,7 +69338,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let source: PTTransferSource",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 122,
+      "line": 136,
       "access": "public",
       "kind": "let",
       "declaration": "public let source: PTTransferSource"
@@ -69434,7 +69346,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let destination: URL?",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 123,
+      "line": 137,
       "access": "public",
       "kind": "let",
       "declaration": "public let destination: URL?"
@@ -69442,7 +69354,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let checksum: String?",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 124,
+      "line": 138,
       "access": "public",
       "kind": "let",
       "declaration": "public let checksum: String?"
@@ -69450,7 +69362,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let executionMode: PTTransferExecutionMode",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 125,
+      "line": 139,
       "access": "public",
       "kind": "let",
       "declaration": "public let executionMode: PTTransferExecutionMode"
@@ -69458,7 +69370,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let priority: PTTransferPriority",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 126,
+      "line": 140,
       "access": "public",
       "kind": "let",
       "declaration": "public let priority: PTTransferPriority"
@@ -69466,7 +69378,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let retryPolicy: PTTransferRetryPolicy",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 127,
+      "line": 141,
       "access": "public",
       "kind": "let",
       "declaration": "public let retryPolicy: PTTransferRetryPolicy"
@@ -69474,23 +69386,47 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let policy: PTTransferPolicy",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 128,
+      "line": 142,
       "access": "public",
       "kind": "let",
       "declaration": "public let policy: PTTransferPolicy"
     },
     {
-      "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|init|public init(id: PTTransferID = .init(), source: PTTransferSource, destination: URL? = nil, checksum: String? = nil, executionMode: PTTransferExecutionMode = .foreground, priority: PTTransferPriority = .normal, retryPolicy: PTTransferRetryPolicy = .init(), policy: PTTransferPolicy = .init())",
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let headers: [String: String]",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 137,
+      "line": 143,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let headers: [String: String]"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let allowsResume: Bool",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
+      "line": 144,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let allowsResume: Bool"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let downloadConfiguration: PTTransferDownloadConfiguration",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
+      "line": 145,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let downloadConfiguration: PTTransferDownloadConfiguration"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|init|public init(id: PTTransferID = .init(), source: PTTransferSource, destination: URL? = nil, checksum: String? = nil, executionMode: PTTransferExecutionMode = .foreground, priority: PTTransferPriority = .normal, retryPolicy: PTTransferRetryPolicy = .init(), policy: PTTransferPolicy = .init(), headers: [String: String] = [:], allowsResume: Bool = true, downloadConfiguration: PTTransferDownloadConfiguration = .init())",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
+      "line": 157,
       "access": "public",
       "kind": "init",
-      "declaration": "public init(id: PTTransferID = .init(), source: PTTransferSource, destination: URL? = nil, checksum: String? = nil, executionMode: PTTransferExecutionMode = .foreground, priority: PTTransferPriority = .normal, retryPolicy: PTTransferRetryPolicy = .init(), policy: PTTransferPolicy = .init()) {"
+      "declaration": "public init(id: PTTransferID = .init(), source: PTTransferSource, destination: URL? = nil, checksum: String? = nil, executionMode: PTTransferExecutionMode = .foreground, priority: PTTransferPriority = .normal, retryPolicy: PTTransferRetryPolicy = .init(), policy: PTTransferPolicy = .init(), headers: [String: String] = [:], allowsResume: Bool = true, downloadConfiguration: PTTransferDownloadConfiguration = .init()) {"
     },
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|struct|public struct PTTransferSnapshot: Sendable, Equatable",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 149,
+      "line": 172,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTransferSnapshot: Sendable, Equatable {"
@@ -69498,7 +69434,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let request: PTTransferRequest",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 150,
+      "line": 173,
       "access": "public",
       "kind": "let",
       "declaration": "public let request: PTTransferRequest"
@@ -69506,7 +69442,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let state: PTTransferState",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 151,
+      "line": 174,
       "access": "public",
       "kind": "let",
       "declaration": "public let state: PTTransferState"
@@ -69514,7 +69450,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let progress: PTTransferProgress",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 152,
+      "line": 175,
       "access": "public",
       "kind": "let",
       "declaration": "public let progress: PTTransferProgress"
@@ -69522,7 +69458,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let updatedAt: Date",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 153,
+      "line": 176,
       "access": "public",
       "kind": "let",
       "declaration": "public let updatedAt: Date"
@@ -69530,7 +69466,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|init|public init(request: PTTransferRequest, state: PTTransferState, progress: PTTransferProgress = .init(completed: 0, fraction: 0), updatedAt: Date = .now)",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 157,
+      "line": 180,
       "access": "public",
       "kind": "init",
       "declaration": "public init(request: PTTransferRequest, state: PTTransferState, progress: PTTransferProgress = .init(completed: 0, fraction: 0), updatedAt: Date = .now) {"
@@ -69538,7 +69474,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|struct|public struct PTTransferRuntimeSnapshot: Sendable, Equatable",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 165,
+      "line": 188,
       "access": "public",
       "kind": "struct",
       "declaration": "public struct PTTransferRuntimeSnapshot: Sendable, Equatable {"
@@ -69546,7 +69482,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let id: PTTransferID",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 166,
+      "line": 189,
       "access": "public",
       "kind": "let",
       "declaration": "public let id: PTTransferID"
@@ -69554,7 +69490,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let state: PTTransferState",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 167,
+      "line": 190,
       "access": "public",
       "kind": "let",
       "declaration": "public let state: PTTransferState"
@@ -69562,7 +69498,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let progress: PTTransferProgress",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 168,
+      "line": 191,
       "access": "public",
       "kind": "let",
       "declaration": "public let progress: PTTransferProgress"
@@ -69570,7 +69506,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let retryCount: Int",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 169,
+      "line": 192,
       "access": "public",
       "kind": "let",
       "declaration": "public let retryCount: Int"
@@ -69578,7 +69514,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let canResume: Bool",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 170,
+      "line": 193,
       "access": "public",
       "kind": "let",
       "declaration": "public let canResume: Bool"
@@ -69586,7 +69522,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|let|public let updatedAt: Date",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 171,
+      "line": 194,
       "access": "public",
       "kind": "let",
       "declaration": "public let updatedAt: Date"
@@ -69594,7 +69530,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|init|public init(id: PTTransferID, state: PTTransferState, progress: PTTransferProgress, retryCount: Int = 0, canResume: Bool = false, updatedAt: Date = .now)",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 178,
+      "line": 201,
       "access": "public",
       "kind": "init",
       "declaration": "public init(id: PTTransferID, state: PTTransferState, progress: PTTransferProgress, retryCount: Int = 0, canResume: Bool = false, updatedAt: Date = .now) {"
@@ -69602,7 +69538,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|enum|public enum PTTransferEvent: Sendable, Equatable",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 188,
+      "line": 211,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTransferEvent: Sendable, Equatable {"
@@ -69610,7 +69546,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|enum|public enum PTTransferError: Error, Sendable, Equatable",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 193,
+      "line": 216,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTTransferError: Error, Sendable, Equatable {"
@@ -69618,7 +69554,7 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|protocol|public protocol PTTransferResumeStore: Sendable",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 205,
+      "line": 228,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTTransferResumeStore: Sendable {"
@@ -69626,10 +69562,90 @@
     {
       "key": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift|public|protocol|public protocol PTTransferService: Sendable",
       "path": "PooToolsSource/PToolsTransferCore/PTTransferCore.swift",
-      "line": 211,
+      "line": 234,
       "access": "public",
       "kind": "protocol",
       "declaration": "public protocol PTTransferService: Sendable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift|public|typealias|public typealias PTTransferProgressHandler = @Sendable (PTTransferProgress) async -> Void",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift",
+      "line": 10,
+      "access": "public",
+      "kind": "typealias",
+      "declaration": "public typealias PTTransferProgressHandler = @Sendable (PTTransferProgress) async -> Void"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift|public|struct|public struct PTTransferDownloadResult: Sendable, Equatable",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift",
+      "line": 12,
+      "access": "public",
+      "kind": "struct",
+      "declaration": "public struct PTTransferDownloadResult: Sendable, Equatable {"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift|public|let|public let fileURL: URL",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift",
+      "line": 13,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let fileURL: URL"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift|public|let|public let statusCode: Int?",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift",
+      "line": 14,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let statusCode: Int?"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift|public|let|public let headers: [String: String]",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift",
+      "line": 15,
+      "access": "public",
+      "kind": "let",
+      "declaration": "public let headers: [String: String]"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift|public|init|public init(fileURL: URL, statusCode: Int? = nil, headers: [String: String] = [:])",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift",
+      "line": 19,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init(fileURL: URL, statusCode: Int? = nil, headers: [String: String] = [:]) {"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift|public|actor|public actor PTTransferFileDownloadService",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift",
+      "line": 29,
+      "access": "public",
+      "kind": "actor",
+      "declaration": "public actor PTTransferFileDownloadService {"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift|public|init|public init()",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift",
+      "line": 53,
+      "access": "public",
+      "kind": "init",
+      "declaration": "public init() {}"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift|public|func|public func download(from sourceURL: URL, to destinationURL: URL, headers: [String: String] = [:], allowsResume: Bool = true, retryPolicy: PTTransferRetryPolicy = .init(), policy: PTTransferPolicy = .init(), configuration: PTTransferDownloadConfiguration = .init(), progress: PTTransferProgressHandler? = nil) async throws -> URL",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift",
+      "line": 62,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func download(from sourceURL: URL, to destinationURL: URL, headers: [String: String] = [:], allowsResume: Bool = true, retryPolicy: PTTransferRetryPolicy = .init(), policy: PTTransferPolicy = .init(), configuration: PTTransferDownloadConfiguration = .init(), progress: PTTransferProgressHandler? = nil) async throws -> URL {"
+    },
+    {
+      "key": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift|public|func|public func downloadResult(from sourceURL: URL, to destinationURL: URL, headers: [String: String] = [:], allowsResume: Bool = true, retryPolicy: PTTransferRetryPolicy = .init(), policy: PTTransferPolicy = .init(), configuration: PTTransferDownloadConfiguration = .init(), progress: PTTransferProgressHandler? = nil) async throws -> PTTransferDownloadResult",
+      "path": "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift",
+      "line": 80,
+      "access": "public",
+      "kind": "func",
+      "declaration": "public func downloadResult(from sourceURL: URL, to destinationURL: URL, headers: [String: String] = [:], allowsResume: Bool = true, retryPolicy: PTTransferRetryPolicy = .init(), policy: PTTransferPolicy = .init(), configuration: PTTransferDownloadConfiguration = .init(), progress: PTTransferProgressHandler? = nil) async throws -> PTTransferDownloadResult {"
     },
     {
       "key": "PooToolsSource/PToolsUIFoundation/PTRichText.swift|public|struct|public struct PTTextActionID: Hashable, Codable, Sendable",
@@ -72506,7 +72522,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|typealias|public typealias PTPermission = PToolsPermissionCore.PTPermission",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 15,
+      "line": 18,
       "access": "public",
       "kind": "typealias",
       "declaration": "public typealias PTPermission = PToolsPermissionCore.PTPermission"
@@ -72514,7 +72530,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|enum|public enum PTPermissionAuthorizationState: String, CaseIterable, Equatable, Sendable",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 33,
+      "line": 37,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTPermissionAuthorizationState: String, CaseIterable, Equatable, Sendable {"
@@ -72522,7 +72538,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|var|public var isGranted: Bool",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 43,
+      "line": 47,
       "access": "public",
       "kind": "var",
       "declaration": "public var isGranted: Bool {"
@@ -72530,7 +72546,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|enum|public enum PTBluetoothPermissionState: String, CaseIterable, Equatable, Sendable",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 53,
+      "line": 57,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTBluetoothPermissionState: String, CaseIterable, Equatable, Sendable {"
@@ -72538,7 +72554,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|enum|public enum PTFaceIDPermissionState: String, CaseIterable, Equatable, Sendable",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 63,
+      "line": 67,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTFaceIDPermissionState: String, CaseIterable, Equatable, Sendable {"
@@ -72546,7 +72562,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|class|open class PTPermission",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 73,
+      "line": 77,
       "access": "open",
       "kind": "class",
       "declaration": "open class PTPermission {"
@@ -72554,7 +72570,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var authorized: Bool",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 75,
+      "line": 79,
       "access": "open",
       "kind": "var",
       "declaration": "open var authorized: Bool {"
@@ -72562,7 +72578,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var denied: Bool",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 79,
+      "line": 83,
       "access": "open",
       "kind": "var",
       "declaration": "open var denied: Bool {"
@@ -72570,7 +72586,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var notDetermined: Bool",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 83,
+      "line": 87,
       "access": "open",
       "kind": "var",
       "declaration": "open var notDetermined: Bool {"
@@ -72578,7 +72594,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var authorizationState: PTPermissionAuthorizationState",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 90,
+      "line": 94,
       "access": "open",
       "kind": "var",
       "declaration": "open var authorizationState: PTPermissionAuthorizationState {"
@@ -72586,7 +72602,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var debugName: String",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 99,
+      "line": 103,
       "access": "open",
       "kind": "var",
       "declaration": "open var debugName: String {"
@@ -72594,7 +72610,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|@MainActor open var localisedName: String",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 103,
+      "line": 107,
       "access": "open",
       "kind": "var",
       "declaration": "@MainActor open var localisedName: String {"
@@ -72602,7 +72618,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|func|open func openSettingPage()",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 113,
+      "line": 117,
       "access": "open",
       "kind": "func",
       "declaration": "open func openSettingPage() {"
@@ -72610,7 +72626,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|func|open func openSettings()",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 123,
+      "line": 127,
       "access": "open",
       "kind": "func",
       "declaration": "open func openSettings() {"
@@ -72618,7 +72634,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|func|public func currentStatus() -> Status",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 130,
+      "line": 134,
       "access": "public",
       "kind": "func",
       "declaration": "public func currentStatus() -> Status {"
@@ -72626,7 +72642,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var kind: PTPermission.Kind",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 136,
+      "line": 140,
       "access": "open",
       "kind": "var",
       "declaration": "open var kind: PTPermission.Kind {"
@@ -72634,7 +72650,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var status: PTPermission.Status",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 140,
+      "line": 144,
       "access": "open",
       "kind": "var",
       "declaration": "open var status: PTPermission.Status {"
@@ -72642,7 +72658,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|func|open func request(completion: @escaping PTActionTask)",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 144,
+      "line": 148,
       "access": "open",
       "kind": "func",
       "declaration": "open func request(completion: @escaping PTActionTask) {"
@@ -72650,7 +72666,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|func|public func requestStatus() async -> Status",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 295,
+      "line": 299,
       "access": "public",
       "kind": "func",
       "declaration": "public func requestStatus() async -> Status {"
@@ -72658,7 +72674,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|func|public func request() async",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 319,
+      "line": 323,
       "access": "public",
       "kind": "func",
       "declaration": "public func request() async {"
@@ -72666,7 +72682,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|func|public func requestAuthorizationState() async -> PTPermissionAuthorizationState",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 326,
+      "line": 330,
       "access": "public",
       "kind": "func",
       "declaration": "public func requestAuthorizationState() async -> PTPermissionAuthorizationState {"
@@ -72674,7 +72690,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|open|var|open var canBePresentWithCustomInterface: Bool",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 331,
+      "line": 335,
       "access": "open",
       "kind": "var",
       "declaration": "open var canBePresentWithCustomInterface: Bool {"
@@ -72682,7 +72698,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|init|public init()",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 337,
+      "line": 341,
       "access": "public",
       "kind": "init",
       "declaration": "public init() {}"
@@ -72690,7 +72706,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|enum|@objc public enum Status: Int, CustomStringConvertible, Sendable",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 341,
+      "line": 345,
       "access": "public",
       "kind": "enum",
       "declaration": "@objc public enum Status: Int, CustomStringConvertible, Sendable {"
@@ -72698,7 +72714,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|var|public var description: String",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 348,
+      "line": 352,
       "access": "public",
       "kind": "var",
       "declaration": "public var description: String {"
@@ -72706,7 +72722,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|enum|public enum Kind: Sendable",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 358,
+      "line": 362,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum Kind: Sendable {"
@@ -72714,7 +72730,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|var|public var name: String",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 377,
+      "line": 381,
       "access": "public",
       "kind": "var",
       "declaration": "public var name: String {"
@@ -72722,7 +72738,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|enum|public enum CalendarAccess: Sendable",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 419,
+      "line": 423,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum CalendarAccess: Sendable {"
@@ -72730,7 +72746,7 @@
     {
       "key": "PooToolsSource/PermissionCore/PTPermission.swift|public|enum|public enum LocationAccess: Sendable",
       "path": "PooToolsSource/PermissionCore/PTPermission.swift",
-      "line": 425,
+      "line": 429,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum LocationAccess: Sendable {"
@@ -80704,12 +80720,12 @@
       "declaration": "open class PTSearchViewController<Item: Sendable>: PTListViewController {"
     },
     {
-      "key": "PooToolsSource/Search/PTSearchViewController.swift|public|let|public let searchConfiguration: PTSearchConfiguration",
+      "key": "PooToolsSource/Search/PTSearchViewController.swift|public|var|public var searchConfiguration: PTSearchConfiguration",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
       "line": 76,
       "access": "public",
-      "kind": "let",
-      "declaration": "public let searchConfiguration: PTSearchConfiguration"
+      "kind": "var",
+      "declaration": "public var searchConfiguration: PTSearchConfiguration"
     },
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|var|public var collectionView: PTCollectionView",
@@ -80770,7 +80786,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func setResultProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 242,
+      "line": 243,
       "access": "public",
       "kind": "func",
       "declaration": "public func setResultProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item {"
@@ -80778,7 +80794,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func setSuggestionProvider<Provider: PTSearchSuggestionProvider>(_ provider: Provider) where Provider.Suggestion == String",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 248,
+      "line": 249,
       "access": "public",
       "kind": "func",
       "declaration": "public func setSuggestionProvider<Provider: PTSearchSuggestionProvider>(_ provider: Provider) where Provider.Suggestion == String {"
@@ -80786,7 +80802,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func setLocalProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 254,
+      "line": 255,
       "access": "public",
       "kind": "func",
       "declaration": "public func setLocalProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item {"
@@ -80794,7 +80810,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func setRemoteProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 260,
+      "line": 261,
       "access": "public",
       "kind": "func",
       "declaration": "public func setRemoteProvider<Provider: PTSearchResultProvider>(_ provider: Provider) where Provider.Item == Item {"
@@ -80802,7 +80818,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func activateSearch()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 269,
+      "line": 270,
       "access": "public",
       "kind": "func",
       "declaration": "public func activateSearch() {"
@@ -80810,7 +80826,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func deactivateSearch()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 292,
+      "line": 293,
       "access": "public",
       "kind": "func",
       "declaration": "public func deactivateSearch() {"
@@ -80818,7 +80834,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func focusSearchBar()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 301,
+      "line": 302,
       "access": "public",
       "kind": "func",
       "declaration": "public func focusSearchBar() {"
@@ -80826,7 +80842,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func dismissSearchKeyboard()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 310,
+      "line": 311,
       "access": "public",
       "kind": "func",
       "declaration": "public func dismissSearchKeyboard() {"
@@ -80834,7 +80850,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func cancelSearch()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 314,
+      "line": 315,
       "access": "public",
       "kind": "func",
       "declaration": "public func cancelSearch() {"
@@ -80842,7 +80858,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func refreshSearch()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 332,
+      "line": 333,
       "access": "public",
       "kind": "func",
       "declaration": "public func refreshSearch() {"
@@ -80850,7 +80866,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func retryCurrentSearch()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 337,
+      "line": 338,
       "access": "public",
       "kind": "func",
       "declaration": "public func retryCurrentSearch() {"
@@ -80858,7 +80874,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func retryPagination()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 345,
+      "line": 346,
       "access": "public",
       "kind": "func",
       "declaration": "public func retryPagination() {"
@@ -80866,7 +80882,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func setResults(_ results: [Item], animated: Bool = true)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 352,
+      "line": 353,
       "access": "public",
       "kind": "func",
       "declaration": "public func setResults(_ results: [Item], animated: Bool = true) {"
@@ -80874,7 +80890,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func appendResults(_ results: [Item], animated: Bool = true)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 358,
+      "line": 359,
       "access": "public",
       "kind": "func",
       "declaration": "public func appendResults(_ results: [Item], animated: Bool = true) {"
@@ -80882,7 +80898,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func prependResults(_ results: [Item], animated: Bool = true)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 365,
+      "line": 366,
       "access": "public",
       "kind": "func",
       "declaration": "public func prependResults(_ results: [Item], animated: Bool = true) {"
@@ -80890,7 +80906,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func removeResult(at index: Int, animated: Bool = true)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 372,
+      "line": 373,
       "access": "public",
       "kind": "func",
       "declaration": "public func removeResult(at index: Int, animated: Bool = true) {"
@@ -80898,7 +80914,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func replaceResult(at index: Int, with item: Item, animated: Bool = true)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 381,
+      "line": 382,
       "access": "public",
       "kind": "func",
       "declaration": "public func replaceResult(at index: Int, with item: Item, animated: Bool = true) {"
@@ -80906,7 +80922,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func clearResults(animated: Bool = true)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 390,
+      "line": 391,
       "access": "public",
       "kind": "func",
       "declaration": "public func clearResults(animated: Bool = true) {"
@@ -80914,7 +80930,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func reloadResults()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 396,
+      "line": 397,
       "access": "public",
       "kind": "func",
       "declaration": "public func reloadResults() {"
@@ -80922,7 +80938,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func search(keyword: String) async throws -> [Item]",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 403,
+      "line": 404,
       "access": "open",
       "kind": "func",
       "declaration": "open func search(keyword: String) async throws -> [Item] {"
@@ -80930,7 +80946,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func localSearch(keyword: String) async throws -> [Item]",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 408,
+      "line": 409,
       "access": "open",
       "kind": "func",
       "declaration": "open func localSearch(keyword: String) async throws -> [Item] {"
@@ -80938,7 +80954,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func remoteSearch(keyword: String) async throws -> [Item]",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 413,
+      "line": 414,
       "access": "open",
       "kind": "func",
       "declaration": "open func remoteSearch(keyword: String) async throws -> [Item] {"
@@ -80946,7 +80962,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func merge(local: [Item], remote: [Item]) -> [Item]",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 420,
+      "line": 421,
       "access": "open",
       "kind": "func",
       "declaration": "open func merge(local: [Item], remote: [Item]) -> [Item] {"
@@ -80954,7 +80970,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func loadMore(keyword: String, page: Int) async throws -> [Item]",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 424,
+      "line": 425,
       "access": "open",
       "kind": "func",
       "declaration": "open func loadMore(keyword: String, page: Int) async throws -> [Item] {"
@@ -80962,7 +80978,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func makeResultSections(for items: [Item]) -> [PTSection]",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 428,
+      "line": 429,
       "access": "open",
       "kind": "func",
       "declaration": "open func makeResultSections(for items: [Item]) -> [PTSection] {"
@@ -80970,7 +80986,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func makeResultCell(collectionView: UICollectionView, item: Item, indexPath: IndexPath) -> UICollectionViewCell?",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 442,
+      "line": 443,
       "access": "open",
       "kind": "func",
       "declaration": "open func makeResultCell(collectionView: UICollectionView, item: Item, indexPath: IndexPath) -> UICollectionViewCell? {"
@@ -80978,7 +80994,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func configureResultCell(_ cell: UICollectionViewCell, item: Item, indexPath: IndexPath)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 448,
+      "line": 449,
       "access": "open",
       "kind": "func",
       "declaration": "open func configureResultCell(_ cell: UICollectionViewCell, item: Item, indexPath: IndexPath) {"
@@ -80986,7 +81002,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func itemForResult(at indexPath: IndexPath) -> Item?",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 452,
+      "line": 453,
       "access": "open",
       "kind": "func",
       "declaration": "open func itemForResult(at indexPath: IndexPath) -> Item? {"
@@ -80994,7 +81010,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func emptyConfiguration(for keyword: String) -> PTSearchEmptyConfiguration",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 456,
+      "line": 457,
       "access": "open",
       "kind": "func",
       "declaration": "open func emptyConfiguration(for keyword: String) -> PTSearchEmptyConfiguration {"
@@ -81002,7 +81018,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func errorConfiguration(for keyword: String, error: Error) -> PTSearchErrorConfiguration",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 460,
+      "line": 461,
       "access": "open",
       "kind": "func",
       "declaration": "open func errorConfiguration(for keyword: String, error: Error) -> PTSearchErrorConfiguration {"
@@ -81010,7 +81026,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchWillActivate()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 466,
+      "line": 467,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchWillActivate() {}"
@@ -81018,7 +81034,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchDidActivate()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 467,
+      "line": 468,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchDidActivate() {}"
@@ -81026,7 +81042,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchTextDidChange(_ keyword: String)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 468,
+      "line": 469,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchTextDidChange(_ keyword: String) {}"
@@ -81034,7 +81050,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchWillBegin(keyword: String)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 469,
+      "line": 470,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchWillBegin(keyword: String) {}"
@@ -81042,7 +81058,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchDidFinish(keyword: String, results: [Item])",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 470,
+      "line": 471,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchDidFinish(keyword: String, results: [Item]) {}"
@@ -81050,7 +81066,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchDidFail(keyword: String, error: Error)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 471,
+      "line": 472,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchDidFail(keyword: String, error: Error) {}"
@@ -81058,7 +81074,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchWillCancel()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 472,
+      "line": 473,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchWillCancel() {}"
@@ -81066,7 +81082,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchDidCancel()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 473,
+      "line": 474,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchDidCancel() {}"
@@ -81074,7 +81090,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchDidDeactivate()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 474,
+      "line": 475,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchDidDeactivate() {}"
@@ -81082,7 +81098,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchWillRefresh(keyword: String)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 475,
+      "line": 476,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchWillRefresh(keyword: String) {}"
@@ -81090,7 +81106,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func searchDidRefresh(keyword: String)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 476,
+      "line": 477,
       "access": "open",
       "kind": "func",
       "declaration": "open func searchDidRefresh(keyword: String) {}"
@@ -81098,7 +81114,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func didSelect(item: Item, at indexPath: IndexPath)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 477,
+      "line": 478,
       "access": "open",
       "kind": "func",
       "declaration": "open func didSelect(item: Item, at indexPath: IndexPath) {}"
@@ -81106,7 +81122,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func clearSearchHistory()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 479,
+      "line": 480,
       "access": "public",
       "kind": "func",
       "declaration": "public func clearSearchHistory() {"
@@ -81114,7 +81130,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|public|func|public func deleteSearchHistory(keyword: String)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 490,
+      "line": 491,
       "access": "public",
       "kind": "func",
       "declaration": "public func deleteSearchHistory(keyword: String) {"
@@ -81122,7 +81138,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func reloadLocalization()",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 501,
+      "line": 502,
       "access": "open",
       "kind": "func",
       "declaration": "open func reloadLocalization() {"
@@ -81130,7 +81146,7 @@
     {
       "key": "PooToolsSource/Search/PTSearchViewController.swift|open|func|open func installCustomSearchBar(_ searchBar: PTSearchBar)",
       "path": "PooToolsSource/Search/PTSearchViewController.swift",
-      "line": 514,
+      "line": 515,
       "access": "open",
       "kind": "func",
       "declaration": "open func installCustomSearchBar(_ searchBar: PTSearchBar) {}"
@@ -81138,7 +81154,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|enum|public enum PTSearchVisualStyle: Sendable, Equatable",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 18,
+      "line": 17,
       "access": "public",
       "kind": "enum",
       "declaration": "public enum PTSearchVisualStyle: Sendable, Equatable {"
@@ -81146,7 +81162,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|class|public class PTSearchBarTextFieldClearButtonConfig: NSObject",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 26,
+      "line": 25,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTSearchBarTextFieldClearButtonConfig: NSObject {"
@@ -81154,7 +81170,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|var|public var clearAction: PTActionTask?",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 27,
+      "line": 26,
       "access": "public",
       "kind": "var",
       "declaration": "public var clearAction: PTActionTask?"
@@ -81162,7 +81178,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|var|public var clearImage: Any?",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 28,
+      "line": 27,
       "access": "public",
       "kind": "var",
       "declaration": "public var clearImage: Any?"
@@ -81170,7 +81186,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|var|public var clearTopSpace: CGFloat = 2",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 29,
+      "line": 28,
       "access": "public",
       "kind": "var",
       "declaration": "public var clearTopSpace: CGFloat = 2"
@@ -81178,7 +81194,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|class|public class PTSearchBar: UISearchBar",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 33,
+      "line": 32,
       "access": "public",
       "kind": "class",
       "declaration": "public class PTSearchBar: UISearchBar {"
@@ -81186,7 +81202,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|@nonobjc open var textChangeHandler: (@MainActor @Sendable (String) -> Void)?",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 48,
+      "line": 46,
       "access": "open",
       "kind": "var",
       "declaration": "@nonobjc open var textChangeHandler: (@MainActor @Sendable (String) -> Void)?"
@@ -81194,7 +81210,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|@nonobjc open var returnHandler: (@MainActor @Sendable (String) -> Void)?",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 49,
+      "line": 48,
       "access": "open",
       "kind": "var",
       "declaration": "@nonobjc open var returnHandler: (@MainActor @Sendable (String) -> Void)?"
@@ -81210,7 +81226,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|@nonobjc open var editingEndedHandler: (@MainActor @Sendable () -> Void)?",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 51,
+      "line": 52,
       "access": "open",
       "kind": "var",
       "declaration": "@nonobjc open var editingEndedHandler: (@MainActor @Sendable () -> Void)?"
@@ -81240,12 +81256,12 @@
       "declaration": "open var searchPlaceholderFont: UIFont = .systemFont(ofSize: 16) { didSet { updateTextUI() } }"
     },
     {
-      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchBarTextFieldBorderColor: UIColor = DynamicColor.randomColor",
+      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchBarTextFieldBorderColor: UIColor = .separator",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
       "line": 67,
       "access": "open",
       "kind": "var",
-      "declaration": "open var searchBarTextFieldBorderColor: UIColor = DynamicColor.randomColor { didSet { updateBorderUI() } }"
+      "declaration": "open var searchBarTextFieldBorderColor: UIColor = .separator { didSet { updateBorderUI() } }"
     },
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var cursorColor: UIColor = .lightGray",
@@ -81256,28 +81272,28 @@
       "declaration": "open var cursorColor: UIColor = .lightGray { didSet { updateTextUI() } }"
     },
     {
-      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchPlaceholderColor: UIColor = DynamicColor.randomColor",
+      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchPlaceholderColor: UIColor = .placeholderText",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
       "line": 69,
       "access": "open",
       "kind": "var",
-      "declaration": "open var searchPlaceholderColor: UIColor = DynamicColor.randomColor { didSet { updateTextUI() } }"
+      "declaration": "open var searchPlaceholderColor: UIColor = .placeholderText { didSet { updateTextUI() } }"
     },
     {
-      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchTextColor: UIColor = DynamicColor.randomColor",
+      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchTextColor: UIColor = .label",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
       "line": 70,
       "access": "open",
       "kind": "var",
-      "declaration": "open var searchTextColor: UIColor = DynamicColor.randomColor { didSet { updateTextUI() } }"
+      "declaration": "open var searchTextColor: UIColor = .label { didSet { updateTextUI() } }"
     },
     {
-      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchBarOutViewColor: UIColor = DynamicColor.randomColor",
+      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchBarOutViewColor: UIColor = .clear",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
       "line": 71,
       "access": "open",
       "kind": "var",
-      "declaration": "open var searchBarOutViewColor: UIColor = DynamicColor.randomColor { didSet { updateBackgroundUI() } }"
+      "declaration": "open var searchBarOutViewColor: UIColor = .clear { didSet { updateBackgroundUI() } }"
     },
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchBarTextFieldCornerRadius: CGFloat = 5",
@@ -81296,12 +81312,12 @@
       "declaration": "open var searchBarTextFieldBorderWidth: CGFloat = 0.5 { didSet { updateBorderUI() } }"
     },
     {
-      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchTextFieldBackgroundColor: UIColor = DynamicColor.randomColor",
+      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchTextFieldBackgroundColor: UIColor = .secondarySystemBackground",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
       "line": 74,
       "access": "open",
       "kind": "var",
-      "declaration": "open var searchTextFieldBackgroundColor: UIColor = DynamicColor.randomColor { didSet { updateTextUI() } }"
+      "declaration": "open var searchTextFieldBackgroundColor: UIColor = .secondarySystemBackground { didSet { updateTextUI() } }"
     },
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchDebounceInterval: TimeInterval = 0.3",
@@ -81314,7 +81330,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|@nonobjc open var searchHandler: (@MainActor @Sendable (String) async -> Void)?",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 84,
+      "line": 83,
       "access": "open",
       "kind": "var",
       "declaration": "@nonobjc open var searchHandler: (@MainActor @Sendable (String) async -> Void)? {"
@@ -81322,7 +81338,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchImageTopSpacing: CGFloat = 2",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 100,
+      "line": 98,
       "access": "open",
       "kind": "var",
       "declaration": "open var searchImageTopSpacing: CGFloat = 2"
@@ -81330,7 +81346,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchBarImage: Any?",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 101,
+      "line": 99,
       "access": "open",
       "kind": "var",
       "declaration": "open var searchBarImage: Any? {"
@@ -81338,15 +81354,39 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var clearConfig: PTSearchBarTextFieldClearButtonConfig?",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 105,
+      "line": 102,
       "access": "open",
       "kind": "var",
       "declaration": "open var clearConfig: PTSearchBarTextFieldClearButtonConfig? {"
     },
     {
+      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchFieldVerticalInset: CGFloat = 4",
+      "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
+      "line": 118,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var searchFieldVerticalInset: CGFloat = 4 {"
+    },
+    {
+      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var limitsSearchFieldHeight: Bool = true",
+      "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
+      "line": 127,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var limitsSearchFieldHeight: Bool = true {"
+    },
+    {
+      "key": "PooToolsSource/SearchBar/PTSearchBar.swift|open|var|open var searchFieldHeight: CGFloat?",
+      "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
+      "line": 136,
+      "access": "open",
+      "kind": "var",
+      "declaration": "open var searchFieldHeight: CGFloat? {"
+    },
+    {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|func|public func setSearchText(_ text: String?, notify: Bool = true)",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 356,
+      "line": 473,
       "access": "public",
       "kind": "func",
       "declaration": "public func setSearchText(_ text: String?, notify: Bool = true) {"
@@ -81354,7 +81394,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|func|public func focusSearchField()",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 365,
+      "line": 482,
       "access": "public",
       "kind": "func",
       "declaration": "public func focusSearchField() {"
@@ -81362,7 +81402,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|func|public func resignSearchField()",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 369,
+      "line": 486,
       "access": "public",
       "kind": "func",
       "declaration": "public func resignSearchField() {"
@@ -81370,7 +81410,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|func|public func cancelSearch()",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 376,
+      "line": 493,
       "access": "public",
       "kind": "func",
       "declaration": "public func cancelSearch() {"
@@ -81378,7 +81418,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|func|public func clearSearch()",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 386,
+      "line": 503,
       "access": "public",
       "kind": "func",
       "declaration": "public func clearSearch() {"
@@ -81386,7 +81426,7 @@
     {
       "key": "PooToolsSource/SearchBar/PTSearchBar.swift|public|func|public func refreshLocalizedText()",
       "path": "PooToolsSource/SearchBar/PTSearchBar.swift",
-      "line": 395,
+      "line": 512,
       "access": "public",
       "kind": "func",
       "declaration": "public func refreshLocalizedText() {"

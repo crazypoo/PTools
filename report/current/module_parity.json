@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
-  "generated_at": "2026-10-18T01:57:29Z",
+  "source_revision": "23f6f58d7b266175109501ec67df060cb2859650",
+  "generated_at": "2026-10-19T07:28:37Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -453,6 +453,8 @@
         "Line",
         "Log",
         "PToolsFontCore",
+        "PToolsPermissionCore",
+        "PToolsTransferCore",
         "PermissionCore",
         "PhotoLibraryPermission",
         "Protocol",
@@ -489,16 +491,6 @@
         "SnapKit"
       ],
       "cocoapods": []
-    },
-    {
-      "module": "BluetoothPermission",
-      "field": "internal_dependencies",
-      "spm": [
-        "PToolsPermissionCore"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
     },
     {
       "module": "CheckUpdate",
@@ -553,6 +545,7 @@
         "PToolsDate",
         "PToolsFontCatalogCore",
         "PToolsPermissionCore",
+        "PToolsTransferCore",
         "PToolsUIFoundation",
         "Symbols"
       ],
@@ -561,8 +554,10 @@
         "Device",
         "Logging",
         "PToolsCore",
+        "PToolsPermissionCore",
         "PToolsUIFoundation",
-        "Symbols"
+        "Symbols",
+        "TransferCore"
       ]
     },
     {
@@ -867,7 +862,8 @@
         "PToolsCore",
         "PToolsModelLegacyKakaJSON",
         "PToolsModelLegacySmartCodable",
-        "PToolsNetworkModelCore"
+        "PToolsNetworkModelCore",
+        "PToolsTransferCore"
       ],
       "cocoapods": [
         "Connectivity",
@@ -875,7 +871,8 @@
         "Loading",
         "ModelCore",
         "ModelLegacyKakaJSON",
-        "ModelLegacySmartCodable"
+        "ModelLegacySmartCodable",
+        "TransferCore"
       ]
     },
     {
@@ -1064,16 +1061,6 @@
         "SnapKit"
       ],
       "cocoapods": []
-    },
-    {
-      "module": "SiriPermission",
-      "field": "internal_dependencies",
-      "spm": [
-        "PToolsPermissionCore"
-      ],
-      "cocoapods": [
-        "Core"
-      ]
     },
     {
       "module": "Slider",
@@ -1298,7 +1285,9 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_BLUETOOTH"
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_PERMISSION_BLUETOOTH",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
         ],
         "upcoming_features": []
       }
@@ -1316,7 +1305,9 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_CALENDAR"
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_PERMISSION_CALENDAR",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
         ],
         "upcoming_features": []
       }
@@ -1334,7 +1325,9 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_CAMERA"
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_PERMISSION_CAMERA",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
         ],
         "upcoming_features": []
       }
@@ -1384,7 +1377,9 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_CONTACTS"
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_PERMISSION_CONTACTS",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
         ],
         "upcoming_features": []
       }
@@ -1423,7 +1418,10 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_EMBED_TRANSFER_CORE",
           "POOTOOLS_SPLIT_CORE",
+          "POOTOOLS_SPLIT_PERMISSION_CORE",
           "POOTOOLS_SPLIT_UIFOUNDATION"
         ],
         "upcoming_features": []
@@ -1484,7 +1482,9 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_FACEIDPERMISSION"
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_PERMISSION_FACEIDPERMISSION",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
         ],
         "upcoming_features": []
       }
@@ -1557,7 +1557,9 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_HEALTH"
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_PERMISSION_HEALTH",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
         ],
         "upcoming_features": []
       }
@@ -1594,7 +1596,9 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_LOCATION"
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_PERMISSION_LOCATION",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
         ],
         "upcoming_features": []
       }
@@ -1656,7 +1660,9 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_MIC"
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_PERMISSION_MIC",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
         ],
         "upcoming_features": []
       }
@@ -1706,7 +1712,9 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_MOTION"
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_PERMISSION_MOTION",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
         ],
         "upcoming_features": []
       }
@@ -1724,7 +1732,9 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_NOTIFICATION"
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_PERMISSION_NOTIFICATION",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
         ],
         "upcoming_features": []
       }
@@ -1812,7 +1822,10 @@
         ]
       },
       "cocoapods": {
-        "defines": [],
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_EMBED_PERMISSION_CORE"
+        ],
         "upcoming_features": []
       }
     },
@@ -1825,7 +1838,10 @@
         ]
       },
       "cocoapods": {
-        "defines": [],
+        "defines": [
+          "POOTOOLS_COCOAPODS",
+          "POOTOOLS_EMBED_PERMISSION_CORE"
+        ],
         "upcoming_features": []
       }
     },
@@ -1874,7 +1890,9 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_REMINDERS"
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_PERMISSION_REMINDERS",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
         ],
         "upcoming_features": []
       }
@@ -1934,7 +1952,9 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_SIRI"
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_PERMISSION_SIRI",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
         ],
         "upcoming_features": []
       }
@@ -1952,7 +1972,9 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_SPEECH"
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_PERMISSION_SPEECH",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
         ],
         "upcoming_features": []
       }
@@ -2044,7 +2066,9 @@
       "cocoapods": {
         "defines": [
           "POOTOOLS_COCOAPODS",
-          "POOTOOLS_PERMISSION_TRACKING"
+          "POOTOOLS_EMBED_PERMISSION_CORE",
+          "POOTOOLS_PERMISSION_TRACKING",
+          "POOTOOLS_SPLIT_PERMISSION_CORE"
         ],
         "upcoming_features": []
       }
@@ -2067,5 +2091,5 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "536dfe06d4513880c1d0a6e2f35879c65060eeade2f5b68ff4221a91a4b8e144"
+  "fingerprint": "c44ed60fdd1939025f2715ef0fb87a044bcad9530be15f4a425e61eb65d32f68"
 }

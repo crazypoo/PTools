@@ -389,6 +389,18 @@
       "status": "not_run"
     },
     {
+      "product": "PToolsConstraintLayout",
+      "targets": [
+        "PToolsConstraintLayout"
+      ],
+      "modules": [
+        "PToolsConstraintLayout"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsConstraintLayout",
+      "status": "not_run"
+    },
+    {
       "product": "PToolsContentState",
       "targets": [
         "PToolsContentState"
@@ -975,6 +987,7 @@
         "PToolsModel",
         "PToolsModelUIKit",
         "PToolsModelCombine",
+        "PToolsConstraintLayout",
         "PToolsConnectivity",
         "PToolsStorageCore",
         "PToolsStorage",

@@ -2,248 +2,352 @@
 //  Network+Download.swift
 //  PooTools
 //
-// English: Keep download lifecycle code separate from request construction and response parsing.
-// Español: Mantiene el ciclo de vida de descargas separado de la construcción y el análisis de respuestas.
-// 中文：将下载生命周期代码从请求构造和响应解析中独立出来。
+// English: Keep the legacy download facade while routing file execution through the shared transfer core.
+// Español: Mantiene la fachada heredada de descargas y dirige la ejecución al núcleo de transferencias compartido.
+// 中文：保留旧下载门面，同时将文件执行统一到共享传输核心。
 //
 
-import UIKit
 import Foundation
+import UIKit
 #if SWIFT_PACKAGE
 import ptools
-#endif
-#if SWIFT_PACKAGE
 import PToolsCore
+import PToolsTransferCore
 #endif
 @preconcurrency import Alamofire
 
-extension Network {
-    // MARK: - ================= 8. 下载引擎与流式控制 =================
-    
-    // English: Build the download session once from the same initialization snapshot.
-    // Español: Construye una sola sesión de descarga usando la misma instantánea inicial.
-    // 中文：使用同一份初始化快照只创建一次下载 Session。
-    private static func makeDownloadSession(configuration configurationSnapshot: PTNetworkSessionConfiguration,
-                                            protocolClasses: [AnyClass]) -> Session {
-        let urlConfiguration = URLSessionConfiguration.default
-        urlConfiguration.timeoutIntervalForRequest = configurationSnapshot.downloadRequestTimeout
-        urlConfiguration.timeoutIntervalForResource = configurationSnapshot.resourceTimeout
-        urlConfiguration.httpMaximumConnectionsPerHost = 6
-        if !protocolClasses.isEmpty {
-            var protocols = urlConfiguration.protocolClasses ?? []
-            protocols.insert(contentsOf: protocolClasses, at: 0)
-            urlConfiguration.protocolClasses = protocols
-        }
-        return Session(configuration: urlConfiguration)
+private actor PTNetworkDownloadRegistry {
+    struct Plan: Sendable {
+        let sourceURL: URL
+        let destinationURL: URL
+        let headers: [String: String]
+        let allowsResume: Bool
+        let retryPolicy: PTTransferRetryPolicy
+        let policy: PTTransferPolicy
+        let configuration: PTTransferDownloadConfiguration
+        let progress: FileDownloadProgress?
+        let success: FileDownloadSuccess?
+        let fail: FileDownloadFail?
     }
 
-    private var downloadSession: Session {
-        downloadSessionLock.lock()
-        defer { downloadSessionLock.unlock() }
-        if let storedDownloadSession { return storedDownloadSession }
-        let newSession = Self.makeDownloadSession(configuration: sessionConfiguration,
-                                                  protocolClasses: protocolClasses)
-        storedDownloadSession = newSession
-        return newSession
+    private struct Entry {
+        let plan: Plan
+        var task: Task<Void, Never>?
+        var isSuspended: Bool
     }
-    
-    actor DownloadStore {
-        var tasks: [String: DownloadTask] = [:]
-        public func get(_ url: String) -> DownloadTask? { tasks[url] }
-        func set(_ url: String, task: DownloadTask) { tasks[url] = task }
-        func remove(_ url: String) { tasks[url] = nil }
+
+    private var entries: [UUID: Entry] = [:]
+    private var idsByURL: [String: Set<UUID>] = [:]
+
+    func insert(_ plan: Plan) -> UUID {
+        let id = UUID()
+        entries[id] = Entry(plan: plan, task: nil, isSuspended: false)
+        idsByURL[plan.sourceURL.absoluteString, default: []].insert(id)
+        return id
     }
-    
-    // 🌟 核心升级：直接声明为 actor，彻底告别 @unchecked 和 NSLock，编译器自动保证线程绝对安全！
-    final actor DownloadTask {
-        let url: String
-        let destination: @Sendable (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options)
-        let store: DownloadStore
-        var request: DownloadRequest?
-        var resumeData: Data?
-        
-        private var progressHandlers: [FileDownloadProgress] = []
-        private var successHandlers: [FileDownloadSuccess] = []
-        private var failHandlers: [FileDownloadFail] = []
-        private var lastProgressTime: CFTimeInterval = 0
-        private(set) var isDownloading: Bool = false
-        
-        init(url: String,
-             destination: @escaping @Sendable (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options),
-             store: DownloadStore) {
-            self.url = url
-            self.destination = destination
-            self.store = store
+
+    func attach(_ task: Task<Void, Never>, to id: UUID) {
+        guard var entry = entries[id] else {
+            task.cancel()
+            return
         }
-        
-        func appendHandlers(progress: FileDownloadProgress?, success: FileDownloadSuccess?, fail: FileDownloadFail?) {
-            if let p = progress { progressHandlers.append(p) }
-            if let s = success { successHandlers.append(s) }
-            if let f = fail { failHandlers.append(f) }
-        }
-        
-        private func clearHandlers() {
-            progressHandlers.removeAll()
-            successHandlers.removeAll()
-            failHandlers.removeAll()
-        }
-        
-        func start(session: Session) {
-            if isDownloading { return }
-            isDownloading = true
-            
-            if let data = resumeData { request = session.download(resumingWith: data, to: destination) }
-            else { request = session.download(url, to: destination) }
-            
-            // English: Capture Sendable progress values before entering the actor.
-            // Español: Captura valores de progreso Sendable antes de entrar en el actor.
-            // 中文：在进入 actor 前先捕获 Sendable 进度值。
-            request?.downloadProgress(queue: .global()) { [weak self] p in
-                guard let self = self else { return }
-                let snapshot = PTProgressSnapshot(completedUnitCount: p.completedUnitCount,
-                                                   totalUnitCount: p.totalUnitCount,
-                                                   fractionCompleted: p.fractionCompleted)
-                Task { await self.handleProgress(snapshot) }
-            }
-            
-            request?.response { [weak self] resp in
-                guard let self = self else { return }
-                Task { await self.handleResponse(resp) }
-            }
-        }
-        
-        // English: Process an immutable progress snapshot inside the actor.
-        // Español: Procesa una instantánea de progreso inmutable dentro del actor.
-        // 中文：在 actor 内处理不可变的进度快照。
-        private func handleProgress(_ snapshot: PTProgressSnapshot) {
-            let now = CACurrentMediaTime()
-            let isFinished = snapshot.totalUnitCount > 0
-                && snapshot.completedUnitCount >= snapshot.totalUnitCount
-            if now - lastProgressTime > 0.1 || isFinished {
-                lastProgressTime = now
-                let handlers = progressHandlers
-                // English: Rebuild only the legacy scalar callback values on MainActor.
-                // Español: Reconstruye solo los valores escalares del callback heredado en MainActor.
-                // 中文：只在 MainActor 上重建旧回调需要的标量值。
-                for cb in handlers {
-                    Task { @MainActor in
-                        cb(snapshot.completedUnitCount,
-                           snapshot.totalUnitCount,
-                           snapshot.fractionCompleted)
-                    }
-                }
-            }
-        }
-        
-        // 🌟 专门处理结束回调的内部方法，运行在 actor 隔离区内
-        private func handleResponse(_ resp: AFDownloadResponse<URL?>) async {
-            isDownloading = false
-            resumeData = nil
-            
-            let currentFails = failHandlers
-            let currentSuccesses = successHandlers
-            clearHandlers() // 清空回调防止内存泄漏
-            
-            if let error = resp.error {
-                if error.isExplicitlyCancelledError || (error.underlyingError as? URLError)?.code == .cancelled {
-                    resumeData = resp.resumeData
-                } else {
-                    await store.remove(self.url)
-                }
-                for cb in currentFails { Task { @MainActor in cb(error) } }
-            } else {
-                await store.remove(self.url)
-                for cb in currentSuccesses { Task { @MainActor in cb(resp) } }
-            }
-        }
-        
-        func suspend() {
-            isDownloading = false
-            request?.cancel { [weak self] data in
-                Task { await self?.saveResumeData(data) }
-            }
-        }
-        
-        private func saveResumeData(_ data: Data?) {
-            self.resumeData = data
-            self.request = nil
-        }
-        
-        func cancel() {
-            isDownloading = false
-            request?.cancel()
+        if entry.isSuspended {
+            task.cancel()
+        } else {
+            entry.task = task
+            entries[id] = entry
         }
     }
-    
-    @MainActor public func download(fileUrl: String, saveFilePath: String, queue: DispatchQueue? = .main, progress: FileDownloadProgress? = nil, success: FileDownloadSuccess? = nil, fail: FileDownloadFail? = nil) {
-        guard fileUrl.isURL(), !fileUrl.stringIsEmpty() else { fail?(AFError.invalidURL(url: "PT URL Error")); return }
-        let dest: @Sendable (URL, HTTPURLResponse) -> (URL, DownloadRequest.Options) = { _, _ in
-            return (URL(fileURLWithPath: saveFilePath), [.removePreviousFile, .createIntermediateDirectories])
+
+    func suspend(sourceURL: String) -> [Task<Void, Never>] {
+        let ids = idsByURL[sourceURL] ?? []
+        var tasks: [Task<Void, Never>] = []
+        for id in ids {
+            guard var entry = entries[id] else { continue }
+            entry.isSuspended = true
+            if let task = entry.task {
+                tasks.append(task)
+                entry.task = nil
+            }
+            entries[id] = entry
         }
-        
+        return tasks
+    }
+
+    func plansToResume(sourceURL: String) -> [Plan] {
+        let ids = idsByURL[sourceURL] ?? []
+        var plans: [Plan] = []
+        for id in ids {
+            guard let entry = entries[id], entry.isSuspended else { continue }
+            plans.append(entry.plan)
+            remove(id)
+        }
+        return plans
+    }
+
+    func tasksToCancel(sourceURL: String) -> [Task<Void, Never>] {
+        let ids = idsByURL[sourceURL] ?? []
+        var tasks: [Task<Void, Never>] = []
+        for id in ids {
+            if let task = entries[id]?.task { tasks.append(task) }
+            remove(id)
+        }
+        return tasks
+    }
+
+    func finished(_ id: UUID) -> Plan? {
+        guard let entry = entries[id], !entry.isSuspended else { return nil }
+        remove(id)
+        return entry.plan
+    }
+
+    private func remove(_ id: UUID) {
+        guard let entry = entries.removeValue(forKey: id) else { return }
+        let key = entry.plan.sourceURL.absoluteString
+        idsByURL[key]?.remove(id)
+        if idsByURL[key]?.isEmpty == true { idsByURL[key] = nil }
+    }
+}
+
+extension Network {
+    // English: One legacy callback call owns one transfer-core subscription, so cancelling one caller does not cancel its peers.
+    // Español: Cada llamada heredada posee una suscripción propia al núcleo; cancelar una no cancela a sus compañeras.
+    // 中文：每次旧回调调用都拥有独立的核心订阅，取消一个调用不会取消其他订阅者。
+    private static let downloadRegistry = PTNetworkDownloadRegistry()
+
+    @MainActor
+    public func download(fileUrl: String,
+                         saveFilePath: String,
+                         queue: DispatchQueue? = .main,
+                         progress: FileDownloadProgress? = nil,
+                         success: FileDownloadSuccess? = nil,
+                         fail: FileDownloadFail? = nil) {
+        guard fileUrl.isURL(), !fileUrl.stringIsEmpty(),
+              let sourceURL = URL(string: fileUrl) else {
+            fail?(AFError.invalidURL(url: "PT URL Error"))
+            return
+        }
+
+        let configuration = sessionConfiguration
+        let retryPolicy = PTRetryPolicy(maxAttempts: configuration.retryTimes,
+                                        baseDelay: configuration.retryDelay,
+                                        retryableStatusCodes: [408, 425, 429, 500, 502, 503, 504, configuration.retryAPIStatusCode])
+        let transferRetryPolicy = PTTransferRetryPolicy(maxAttempts: retryPolicy.maxAttempts,
+                                                        baseDelay: .milliseconds(Int(max(0, retryPolicy.baseDelay) * 1_000)),
+                                                        maxDelay: .milliseconds(Int(max(retryPolicy.baseDelay, retryPolicy.maxDelay) * 1_000)))
+        let transferPolicy = PTTransferPolicy(waitsForConnectivity: configuration.waitsForConnectivity)
+        let downloadConfiguration = PTTransferDownloadConfiguration(requestTimeout: configuration.downloadRequestTimeout,
+                                                                     resourceTimeout: configuration.resourceTimeout)
+        let destinationURL = URL(fileURLWithPath: saveFilePath)
+        let plan = PTNetworkDownloadRegistry.Plan(
+            sourceURL: sourceURL,
+            destinationURL: destinationURL,
+            headers: [:],
+            allowsResume: true,
+            retryPolicy: transferRetryPolicy,
+            policy: transferPolicy,
+            configuration: downloadConfiguration,
+            progress: Self.makeLegacyProgressCallback(progress, queue: queue),
+            success: Self.makeLegacySuccessCallback(success, queue: queue),
+            fail: Self.makeLegacyFailureCallback(fail, queue: queue)
+        )
+        Self.startDownload(plan)
+    }
+
+    @MainActor
+    public func download(fileUrl: String,
+                         saveFilePath: String,
+                         progress: FileDownloadProgress? = nil) async throws -> URL {
+        guard fileUrl.isURL(), !fileUrl.stringIsEmpty(),
+              let sourceURL = URL(string: fileUrl) else {
+            throw AFError.invalidURL(url: "PT URL Error")
+        }
+
+        let configuration = sessionConfiguration
+        let retryPolicy = PTRetryPolicy(maxAttempts: configuration.retryTimes,
+                                        baseDelay: configuration.retryDelay,
+                                        retryableStatusCodes: [408, 425, 429, 500, 502, 503, 504, configuration.retryAPIStatusCode])
+        let transferRetryPolicy = PTTransferRetryPolicy(maxAttempts: retryPolicy.maxAttempts,
+                                                        baseDelay: .milliseconds(Int(max(0, retryPolicy.baseDelay) * 1_000)),
+                                                        maxDelay: .milliseconds(Int(max(retryPolicy.baseDelay, retryPolicy.maxDelay) * 1_000)))
+        let transferPolicy = PTTransferPolicy(waitsForConnectivity: configuration.waitsForConnectivity)
+        let downloadConfiguration = PTTransferDownloadConfiguration(requestTimeout: configuration.downloadRequestTimeout,
+                                                                     resourceTimeout: configuration.resourceTimeout)
+        let progressHandler = Self.makeTransferProgressHandler(progress)
+        let resultURL = try await PTTransferFileDownloadService.shared.download(
+            from: sourceURL,
+            to: URL(fileURLWithPath: saveFilePath),
+            allowsResume: true,
+            retryPolicy: transferRetryPolicy,
+            policy: transferPolicy,
+            configuration: downloadConfiguration,
+            progress: progressHandler
+        )
+        return resultURL
+    }
+
+    public func suspend(fileUrl: String) {
         Task {
-            let task: DownloadTask
-            if let existing = await store.get(fileUrl) {
-                task = existing
-                await task.appendHandlers(progress: progress, success: success, fail: fail)
-            } else {
-                task = DownloadTask(url: fileUrl, destination: dest, store: store)
-                await task.appendHandlers(progress: progress, success: success, fail: fail)
-                await store.set(fileUrl, task: task)
-            }
-            
-            let isDownloading = await task.isDownloading
-            if !isDownloading { await task.start(session: downloadSession) }
+            let tasks = await Self.downloadRegistry.suspend(sourceURL: fileUrl)
+            tasks.forEach { $0.cancel() }
         }
     }
-    
-    @MainActor public func download(fileUrl: String, saveFilePath: String, progress: FileDownloadProgress? = nil) async throws -> URL {
-        let cancellationBridge = PTDownloadCancellationBridge()
-        // English: Keep cancellation outside the MainActor so the compiler and runtime use one clear boundary.
-        // Español: Mantiene la cancelación fuera de MainActor para que el compilador y el tiempo de ejecución usen un límite claro.
-        // 中文：让取消逻辑保持在 MainActor 之外，使编译器和运行时都只有一个清晰边界。
-        return try await withTaskCancellationHandler(operation: {
-            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<URL, Error>) in
-                cancellationBridge.install(resumeCancellation: {
-                    continuation.resume(throwing: CancellationError())
-                })
-                self.download(fileUrl: fileUrl, saveFilePath: saveFilePath, queue: nil, progress: progress, success: { response in
-                    guard cancellationBridge.finish() else { return }
-                    if let fileURL = response.fileURL { continuation.resume(returning: fileURL) }
-                    else { continuation.resume(throwing: PTNetworkError.downloadFail) }
-                }, fail: { error in
-                    guard cancellationBridge.finish() else { return }
-                    continuation.resume(throwing: error ?? PTNetworkError.downloadFail)
-                })
-                cancellationBridge.install(cancelUnderlying: { [weak self] in
-                    self?.cancel(fileUrl: fileUrl)
-                })
-            }
-        }, onCancel: {
-            cancellationBridge.cancel()
-        })
+
+    public func resume(fileUrl: String) {
+        Task {
+            let plans = await Self.downloadRegistry.plansToResume(sourceURL: fileUrl)
+            plans.forEach(Self.startDownload)
+        }
     }
-    
-    public func suspend(fileUrl: String) { Task { await store.get(fileUrl)?.suspend() } }
-    public func resume(fileUrl: String)  { Task { await store.get(fileUrl)?.start(session: downloadSession) } }
-    public func cancel(fileUrl: String)  { Task { if let task = await store.get(fileUrl) { await store.remove(fileUrl); await task.cancel() } } }
-    
-    /// 🌟 全新现代化的流式下载方法，支持在业务层循环获取进度
-    public func downloadAsyncStream(fileUrl: String, saveFilePath: String) -> AsyncThrowingStream<(progress: Double, fileURL: URL?), Error> {
+
+    public func cancel(fileUrl: String) {
+        Task {
+            let tasks = await Self.downloadRegistry.tasksToCancel(sourceURL: fileUrl)
+            tasks.forEach { $0.cancel() }
+        }
+    }
+
+    public func downloadAsyncStream(fileUrl: String,
+                                    saveFilePath: String) -> AsyncThrowingStream<(progress: Double, fileURL: URL?), Error> {
         AsyncThrowingStream { continuation in
-            Task { @MainActor in
-                self.download(fileUrl: fileUrl, saveFilePath: saveFilePath, queue: nil) { _, _, progress in
-                    continuation.yield((progress, nil))
-                } success: { response in
-                    if let fileURL = response.fileURL {
-                        continuation.yield((1.0, fileURL))
-                        continuation.finish()
-                    } else { continuation.finish(throwing: PTNetworkError.downloadFail) }
-                } fail: { error in continuation.finish(throwing: error ?? PTNetworkError.downloadFail) }
+            let task = Task { @MainActor in
+                do {
+                    let fileURL = try await self.download(fileUrl: fileUrl,
+                                                           saveFilePath: saveFilePath) { completed, total, fraction in
+                        continuation.yield((fraction, nil))
+                        _ = completed
+                        _ = total
+                    }
+                    continuation.yield((1, fileURL))
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
+                }
             }
-            continuation.onTermination = { @Sendable _ in
-                self.cancel(fileUrl: fileUrl)
+            continuation.onTermination = { @Sendable _ in task.cancel() }
+        }
+    }
+
+    private static func startDownload(_ plan: PTNetworkDownloadRegistry.Plan) {
+        Task {
+            let id = await downloadRegistry.insert(plan)
+            let task: Task<Void, Never> = Task {
+                await Self.performDownload(plan: plan, id: id)
+            }
+            await downloadRegistry.attach(task, to: id)
+        }
+    }
+
+    private static func performDownload(plan: PTNetworkDownloadRegistry.Plan,
+                                        id: UUID) async {
+        do {
+            let result = try await PTTransferFileDownloadService.shared.downloadResult(
+                from: plan.sourceURL,
+                to: plan.destinationURL,
+                headers: plan.headers,
+                allowsResume: plan.allowsResume,
+                retryPolicy: plan.retryPolicy,
+                policy: plan.policy,
+                configuration: plan.configuration,
+                progress: makeProgressHandler(plan.progress)
+            )
+            guard let finishedPlan = await downloadRegistry.finished(id) else { return }
+            let response = makeDownloadResponse(sourceURL: finishedPlan.sourceURL,
+                                                headers: finishedPlan.headers,
+                                                result: result)
+            await MainActor.run { finishedPlan.success?(response) }
+        } catch {
+            guard let finishedPlan = await downloadRegistry.finished(id) else { return }
+            let legacyError: Error = (error is CancellationError)
+                ? AFError.explicitlyCancelled
+                : (error as? AFError ?? AFError.sessionTaskFailed(error: error))
+            await MainActor.run { finishedPlan.fail?(legacyError) }
+        }
+    }
+
+    private static func makeProgressHandler(_ progress: FileDownloadProgress?) -> PTTransferProgressHandler? {
+        guard let progress else { return nil }
+        return { snapshot in
+            await MainActor.run {
+                progress(snapshot.completed, snapshot.total ?? 0, snapshot.fraction)
             }
         }
+    }
+
+    // English: Build legacy callbacks separately so Swift 6 can type-check each actor boundary independently.
+    // Español: Construye los callbacks heredados por separado para que Swift 6 compruebe cada límite de actor de forma independiente.
+    // 中文：将旧回调分开构造，让 Swift 6 能分别检查每个 actor 边界。
+    @MainActor
+    private static func makeLegacyProgressCallback(_ progress: FileDownloadProgress?,
+                                                   queue: DispatchQueue?) -> FileDownloadProgress? {
+        guard let progress else { return nil }
+        return { completed, total, fraction in
+            if let queue {
+                queue.async {
+                    Task { @MainActor in progress(completed, total, fraction) }
+                }
+            } else {
+                progress(completed, total, fraction)
+            }
+        }
+    }
+
+    @MainActor
+    private static func makeLegacySuccessCallback(_ success: FileDownloadSuccess?,
+                                                  queue: DispatchQueue?) -> FileDownloadSuccess? {
+        guard let success else { return nil }
+        return { response in
+            if let queue {
+                queue.async {
+                    Task { @MainActor in success(response) }
+                }
+            } else {
+                success(response)
+            }
+        }
+    }
+
+    @MainActor
+    private static func makeLegacyFailureCallback(_ fail: FileDownloadFail?,
+                                                  queue: DispatchQueue?) -> FileDownloadFail? {
+        guard let fail else { return nil }
+        return { error in
+            if let queue {
+                queue.async {
+                    Task { @MainActor in fail(error) }
+                }
+            } else {
+                fail(error)
+            }
+        }
+    }
+
+    private static func makeTransferProgressHandler(_ progress: FileDownloadProgress?) -> PTTransferProgressHandler? {
+        guard let progress else { return nil }
+        return { snapshot in
+            await MainActor.run {
+                progress(snapshot.completed, snapshot.total ?? 0, snapshot.fraction)
+            }
+        }
+    }
+
+    private static func makeDownloadResponse(sourceURL: URL,
+                                             headers: [String: String],
+                                             result: PTTransferDownloadResult) -> AFDownloadResponse<URL?> {
+        var request = URLRequest(url: sourceURL)
+        headers.forEach { request.setValue($1, forHTTPHeaderField: $0) }
+        let response = result.statusCode.flatMap {
+            HTTPURLResponse(url: sourceURL,
+                            statusCode: $0,
+                            httpVersion: "HTTP/1.1",
+                            headerFields: result.headers)
+        }
+        return AFDownloadResponse(request: request,
+                                  response: response,
+                                  fileURL: result.fileURL,
+                                  resumeData: nil,
+                                  metrics: nil,
+                                  serializationDuration: 0,
+                                  result: .success(result.fileURL))
     }
 }

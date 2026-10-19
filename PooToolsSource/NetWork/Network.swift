@@ -160,8 +160,6 @@ public final class Network: @unchecked Sendable {
     // 中文：为 Session 创建加锁，在保证无竞争的同时保留旧的懒加载配置行为。
     private let sessionLock = NSLock()
     private var storedSession: Session?
-    let downloadSessionLock = NSLock()
-    var storedDownloadSession: Session?
 
     // English: Freeze transport construction values while keeping request environment values dynamic.
     // Español: Congela los valores de construcción del transporte y mantiene dinámico el entorno de solicitudes.
@@ -222,9 +220,6 @@ public final class Network: @unchecked Sendable {
         }
     }
 
-    private var downloadQueue = DispatchQueue(label: "pt.downloader.queue")
-    let store = DownloadStore()
-    
     private let configLock = NSLock()
     private var _config = PTNetworkConfig()
     

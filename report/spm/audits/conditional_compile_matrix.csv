@@ -2,21 +2,21 @@ ownerTarget,path,line,directive,condition,activeBranch,review
 PTAcknowledgementsGenerator,Tools/PTAcknowledgementsGenerator/main.swift,8,if,canImport(Darwin),canImport(Darwin),review-platform-or-package-branch
 PTAcknowledgementsGenerator,Tools/PTAcknowledgementsGenerator/main.swift,10,else,,else of canImport(Darwin),structural
 PTAcknowledgementsGenerator,Tools/PTAcknowledgementsGenerator/main.swift,12,endif,,,structural
-PTBluetoothPermission,PooToolsSource/BluetoothPermission/PTPermissionBluetooth.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTBluetoothPermission,PooToolsSource/BluetoothPermission/PTPermissionBluetooth.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTBluetoothPermission,PooToolsSource/BluetoothPermission/PTPermissionBluetooth.swift,13,endif,,,structural
-PTBluetoothPermission,PooToolsSource/BluetoothPermission/PTPermissionBluetoothHandler.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTBluetoothPermission,PooToolsSource/BluetoothPermission/PTPermissionBluetoothHandler.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTBluetoothPermission,PooToolsSource/BluetoothPermission/PTPermissionBluetoothHandler.swift,13,endif,,,structural
-PTCalendarPermission,PooToolsSource/CalendarPermission/PTPermissionCalendar.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTCalendarPermission,PooToolsSource/CalendarPermission/PTPermissionCalendar.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTCalendarPermission,PooToolsSource/CalendarPermission/PTPermissionCalendar.swift,13,endif,,,structural
-PTCameraPermission,PooToolsSource/CameraPermission/PTPermissionCamera.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTCameraPermission,PooToolsSource/CameraPermission/PTPermissionCamera.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTCameraPermission,PooToolsSource/CameraPermission/PTPermissionCamera.swift,13,endif,,,structural
-PTContactsPermission,PooToolsSource/ContactsPermission/PTPermissionContacts.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTContactsPermission,PooToolsSource/ContactsPermission/PTPermissionContacts.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTContactsPermission,PooToolsSource/ContactsPermission/PTPermissionContacts.swift,13,endif,,,structural
-PTFaceIDPermission,PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTFaceIDPermission,PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTFaceIDPermission,PooToolsSource/FaceIDPermission/PTPermissionFaceID.swift,13,endif,,,structural
-PTHealthPermission,PooToolsSource/HealthPermission/PTPermissionHealth.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTHealthPermission,PooToolsSource/HealthPermission/PTPermissionHealth.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTHealthPermission,PooToolsSource/HealthPermission/PTPermissionHealth.swift,13,endif,,,structural
-PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocation.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocation.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocation.swift,13,endif,,,structural
 PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocation.swift,67,if,os(iOS),os(iOS),review-platform-or-package-branch
 PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocation.swift,69,endif,,,structural
@@ -37,9 +37,9 @@ PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocation.swif
 PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocation.swift,201,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
 PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocation.swift,203,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
 PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocation.swift,205,endif,,,structural
-PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocationAlwaysHandler.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocationAlwaysHandler.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocationAlwaysHandler.swift,13,endif,,,structural
-PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift,13,endif,,,structural
 PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift,22,if,!os(visionOS),!os(visionOS),review-platform-or-package-branch
 PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift,29,endif,,,structural
@@ -47,24 +47,24 @@ PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocationWhenI
 PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift,63,elseif,os(macOS),os(macOS),review-platform-or-package-branch
 PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift,65,else,,else of os(macOS),structural
 PTLocationPermission,PooToolsSource/LocationPermission/PTPermissionLocationWhenInUseHandler.swift,67,endif,,,structural
-PTMediaPermission,PooToolsSource/MeidaLibraryPermission/PTPermissionMedia.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTMediaPermission,PooToolsSource/MeidaLibraryPermission/PTPermissionMedia.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTMediaPermission,PooToolsSource/MeidaLibraryPermission/PTPermissionMedia.swift,13,endif,,,structural
-PTMicPermission,PooToolsSource/MicPermission/PTPermissionMic.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTMicPermission,PooToolsSource/MicPermission/PTPermissionMic.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTMicPermission,PooToolsSource/MicPermission/PTPermissionMic.swift,13,endif,,,structural
-PTMotionPermission,PooToolsSource/MotionPermission/PTPermissionMotion.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTMotionPermission,PooToolsSource/MotionPermission/PTPermissionMotion.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTMotionPermission,PooToolsSource/MotionPermission/PTPermissionMotion.swift,13,endif,,,structural
-PTNotificationPermission,PooToolsSource/NotificationPermission/PTPermissionNotification.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTNotificationPermission,PooToolsSource/NotificationPermission/PTPermissionNotification.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTNotificationPermission,PooToolsSource/NotificationPermission/PTPermissionNotification.swift,13,endif,,,structural
-PTRemindersPermission,PooToolsSource/RemindersPermission/PTPermissionReminders.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTRemindersPermission,PooToolsSource/RemindersPermission/PTPermissionReminders.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTRemindersPermission,PooToolsSource/RemindersPermission/PTPermissionReminders.swift,13,endif,,,structural
-PTSiriPermission,PooToolsSource/SiriPermission/PTPermissionSiri.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTSiriPermission,PooToolsSource/SiriPermission/PTPermissionSiri.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTSiriPermission,PooToolsSource/SiriPermission/PTPermissionSiri.swift,13,endif,,,structural
-PTSpeechPermission,PooToolsSource/SpeechPremission/PTPermissionSpeech.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTSpeechPermission,PooToolsSource/SpeechPremission/PTPermissionSpeech.swift,11,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTSpeechPermission,PooToolsSource/SpeechPremission/PTPermissionSpeech.swift,13,endif,,,structural
 PTSpeechPermission,PooToolsSource/SpeechPremission/PTPermissionSpeech.swift,40,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
 PTSpeechPermission,PooToolsSource/SpeechPremission/PTPermissionSpeech.swift,42,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
 PTSpeechPermission,PooToolsSource/SpeechPremission/PTPermissionSpeech.swift,46,endif,,,structural
-PTTrackingPermission,PooToolsSource/TrackingPermission/PTPermissionTracking.swift,10,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+PTTrackingPermission,PooToolsSource/TrackingPermission/PTPermissionTracking.swift,10,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 PTTrackingPermission,PooToolsSource/TrackingPermission/PTPermissionTracking.swift,12,endif,,,structural
 PToolsAccessibility,PooToolsSource/PToolsAccessibility/PTAccessibility.swift,7,if,canImport(UIKit),canImport(UIKit),review-platform-or-package-branch
 PToolsAccessibility,PooToolsSource/PToolsAccessibility/PTAccessibility.swift,9,endif,,,structural
@@ -99,7 +99,7 @@ PToolsAcknowledgements,PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsS
 PToolsAcknowledgements,PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsSearchViewController.swift,13,endif,,canImport(UIKit) && (canImport(PooToolsSearch) || POOTOOLS_SEARCH),structural
 PToolsAcknowledgements,PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsSearchViewController.swift,14,if,canImport(PooToolsSearch),canImport(UIKit) && (canImport(PooToolsSearch) || POOTOOLS_SEARCH) > canImport(PooToolsSearch),review-platform-or-package-branch
 PToolsAcknowledgements,PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsSearchViewController.swift,16,endif,,canImport(UIKit) && (canImport(PooToolsSearch) || POOTOOLS_SEARCH),structural
-PToolsAcknowledgements,PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsSearchViewController.swift,278,endif,,,structural
+PToolsAcknowledgements,PooToolsSource/PToolsAcknowledgements/PTAcknowledgementsSearchViewController.swift,276,endif,,,structural
 PToolsActivities,PooToolsSource/PToolsActivities/PTActivities.swift,7,if,canImport(ActivityKit) && os(iOS),canImport(ActivityKit) && os(iOS),review-platform-or-package-branch
 PToolsActivities,PooToolsSource/PToolsActivities/PTActivities.swift,12,endif,,,structural
 PToolsActivities,PooToolsSource/PToolsActivities/PTActivities.swift,83,if,canImport(ActivityKit) && os(iOS),canImport(ActivityKit) && os(iOS),review-platform-or-package-branch
@@ -206,11 +206,11 @@ PToolsConnectivity,PooToolsSource/PToolsConnectivity/PTConnectivity.swift,140,en
 PToolsConnectivity,PooToolsSource/PToolsConnectivity/PTConnectivity.swift,188,if,canImport(Network),canImport(Network),review-platform-or-package-branch
 PToolsConnectivity,PooToolsSource/PToolsConnectivity/PTConnectivity.swift,231,endif,,,structural
 PToolsConstraintLayout,PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift,5,if,canImport(UIKit),canImport(UIKit),review-platform-or-package-branch
-PToolsConstraintLayout,PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift,1821,endif,,,structural
+PToolsConstraintLayout,PooToolsSource/PToolsConstraintLayout/PTLayoutCore.swift,1998,endif,,,structural
 PToolsConstraintLayout,PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift,5,if,canImport(UIKit),canImport(UIKit),review-platform-or-package-branch
 PToolsConstraintLayout,PooToolsSource/PToolsConstraintLayout/PTLayoutGrouping.swift,180,endif,,,structural
 PToolsConstraintLayout,PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift,5,if,canImport(UIKit),canImport(UIKit),review-platform-or-package-branch
-PToolsConstraintLayout,PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift,84,endif,,,structural
+PToolsConstraintLayout,PooToolsSource/PToolsConstraintLayout/PTLayoutPerformance.swift,91,endif,,,structural
 PToolsContentState,PooToolsSource/PToolsContentState/PTBaseViewController+ContentState.swift,5,if,canImport(UIKit),canImport(UIKit),review-platform-or-package-branch
 PToolsContentState,PooToolsSource/PToolsContentState/PTBaseViewController+ContentState.swift,8,if,SWIFT_PACKAGE,canImport(UIKit) > SWIFT_PACKAGE,review-platform-or-package-branch
 PToolsContentState,PooToolsSource/PToolsContentState/PTBaseViewController+ContentState.swift,10,endif,,canImport(UIKit),structural
@@ -498,10 +498,6 @@ PToolsObservability,PooToolsSource/PToolsObservability/PTObservability.swift,13,
 PToolsObservability,PooToolsSource/PToolsObservability/PTObservability.swift,14,endif,,,structural
 PToolsObservability,PooToolsSource/PToolsObservability/PTObservability.swift,307,if,canImport(OSLog),canImport(OSLog),review-platform-or-package-branch
 PToolsObservability,PooToolsSource/PToolsObservability/PTObservability.swift,326,endif,,,structural
-PToolsPermissionCore,PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift,12,if,!POOTOOLS_COCOAPODS,!POOTOOLS_COCOAPODS,review-platform-or-package-branch
-PToolsPermissionCore,PooToolsSource/PToolsPermissionCore/PTPermissionAuthorizationState.swift,61,endif,,,structural
-PToolsPermissionCore,PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift,13,if,!POOTOOLS_COCOAPODS,!POOTOOLS_COCOAPODS,review-platform-or-package-branch
-PToolsPermissionCore,PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift,295,endif,,,structural
 PToolsPermissionUI,PooToolsSource/PToolsPermissionUI/PTPermissionUI.swift,11,if,canImport(PToolsPermissionCore),canImport(PToolsPermissionCore),review-platform-or-package-branch
 PToolsPermissionUI,PooToolsSource/PToolsPermissionUI/PTPermissionUI.swift,13,endif,,,structural
 PToolsPermissionUI,PooToolsSource/PToolsPermissionUI/PTPermissionUI.swift,41,if,canImport(UIKit),canImport(UIKit),review-platform-or-package-branch
@@ -531,12 +527,14 @@ PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransfer.swift,7,if,SWIFT_PACKAGE
 PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransfer.swift,9,endif,,,structural
 PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransfer.swift,15,if,os(iOS),os(iOS),review-platform-or-package-branch
 PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransfer.swift,22,endif,,,structural
-PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransfer.swift,303,if,os(iOS),os(iOS),review-platform-or-package-branch
-PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransfer.swift,314,endif,,,structural
+PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransfer.swift,343,if,os(iOS),os(iOS),review-platform-or-package-branch
+PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransfer.swift,354,endif,,,structural
 PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransferDownloadController.swift,6,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
 PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransferDownloadController.swift,8,endif,,,structural
 PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransferResumeStore.swift,6,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
 PToolsTransfer,PooToolsSource/PToolsTransfer/PTTransferResumeStore.swift,8,endif,,,structural
+PToolsTransferCore,PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift,6,if,canImport(FoundationNetworking),canImport(FoundationNetworking),review-platform-or-package-branch
+PToolsTransferCore,PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift,8,endif,,,structural
 PToolsUIFoundation,PooToolsSource/PToolsUIFoundation/PTRichTextLabelRendering.swift,60,if,DEBUG,DEBUG,review-platform-or-package-branch
 PToolsUIFoundation,PooToolsSource/PToolsUIFoundation/PTRichTextLabelRendering.swift,86,endif,,,structural
 PToolsUIFoundation,PooToolsSource/PToolsUIFoundation/PTRichTextLabelRendering.swift,113,if,DEBUG,DEBUG,review-platform-or-package-branch
@@ -1735,9 +1733,7 @@ PooToolsMessageKit,PooToolsSource/MessageKit/PTChatVoiceCell.swift,11,endif,,,st
 PooToolsMotion,PooToolsSource/Motion/PTMotion.swift,14,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
 PooToolsMotion,PooToolsSource/Motion/PTMotion.swift,16,endif,,,structural
 PooToolsNetWork,PooToolsSource/NetWork/Network+Download.swift,12,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
-PooToolsNetWork,PooToolsSource/NetWork/Network+Download.swift,14,endif,,,structural
-PooToolsNetWork,PooToolsSource/NetWork/Network+Download.swift,15,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
-PooToolsNetWork,PooToolsSource/NetWork/Network+Download.swift,17,endif,,,structural
+PooToolsNetWork,PooToolsSource/NetWork/Network+Download.swift,16,endif,,,structural
 PooToolsNetWork,PooToolsSource/NetWork/Network+LegacyCompatibility.swift,8,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
 PooToolsNetWork,PooToolsSource/NetWork/Network+LegacyCompatibility.swift,12,endif,,,structural
 PooToolsNetWork,PooToolsSource/NetWork/Network+Logging.swift,12,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
@@ -1762,9 +1758,9 @@ PooToolsNetWork,PooToolsSource/NetWork/Network.swift,26,if,SWIFT_PACKAGE,SWIFT_P
 PooToolsNetWork,PooToolsSource/NetWork/Network.swift,28,endif,,,structural
 PooToolsNetWork,PooToolsSource/NetWork/Network.swift,29,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
 PooToolsNetWork,PooToolsSource/NetWork/Network.swift,31,endif,,,structural
-PooToolsNetWork,PooToolsSource/NetWork/Network.swift,235,if,DEBUG,DEBUG,review-platform-or-package-branch
-PooToolsNetWork,PooToolsSource/NetWork/Network.swift,237,else,,else of DEBUG,structural
-PooToolsNetWork,PooToolsSource/NetWork/Network.swift,245,endif,,,structural
+PooToolsNetWork,PooToolsSource/NetWork/Network.swift,230,if,DEBUG,DEBUG,review-platform-or-package-branch
+PooToolsNetWork,PooToolsSource/NetWork/Network.swift,232,else,,else of DEBUG,structural
+PooToolsNetWork,PooToolsSource/NetWork/Network.swift,240,endif,,,structural
 PooToolsNetWork,PooToolsSource/NetWork/NetworkMetrics.swift,6,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
 PooToolsNetWork,PooToolsSource/NetWork/NetworkMetrics.swift,8,endif,,,structural
 PooToolsNetWork,PooToolsSource/NetWork/NetworkSupport.swift,6,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
@@ -1990,8 +1986,12 @@ PooToolsSearch,PooToolsSource/Search/PTSearchViewController.swift,14,if,canImpor
 PooToolsSearch,PooToolsSource/Search/PTSearchViewController.swift,16,endif,,,structural
 PooToolsSearch,PooToolsSource/Search/PTSearchViewController.swift,18,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
 PooToolsSearch,PooToolsSource/Search/PTSearchViewController.swift,21,endif,,,structural
-PooToolsSearchBar,PooToolsSource/SearchBar/PTSearchBar.swift,11,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
-PooToolsSearchBar,PooToolsSource/SearchBar/PTSearchBar.swift,13,endif,,,structural
+PooToolsSearchBar,PooToolsSource/SearchBar/PTSearchBar.swift,10,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
+PooToolsSearchBar,PooToolsSource/SearchBar/PTSearchBar.swift,12,endif,,,structural
+PooToolsSearchBar,PooToolsSource/SearchBar/PTSearchBar.swift,147,if,DEBUG,DEBUG,review-platform-or-package-branch
+PooToolsSearchBar,PooToolsSource/SearchBar/PTSearchBar.swift,149,endif,,,structural
+PooToolsSearchBar,PooToolsSource/SearchBar/PTSearchBar.swift,212,if,DEBUG,DEBUG,review-platform-or-package-branch
+PooToolsSearchBar,PooToolsSource/SearchBar/PTSearchBar.swift,228,endif,,,structural
 PooToolsSegmented,PooToolsSource/Segmented/PTSegmentView.swift,12,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
 PooToolsSegmented,PooToolsSource/Segmented/PTSegmentView.swift,14,endif,,,structural
 PooToolsShare,PooToolsSource/Share/PTActivityViewController.swift,10,if,SWIFT_PACKAGE,SWIFT_PACKAGE,review-platform-or-package-branch
@@ -2146,6 +2146,8 @@ ptools,PooToolsSource/Base/PTAppBaseConfig.swift,11,if,SWIFT_PACKAGE,SWIFT_PACKA
 ptools,PooToolsSource/Base/PTAppBaseConfig.swift,13,endif,,,structural
 ptools,PooToolsSource/Base/PTAudioCache.swift,11,if,canImport(PToolsCore),canImport(PToolsCore),review-platform-or-package-branch
 ptools,PooToolsSource/Base/PTAudioCache.swift,13,endif,,,structural
+ptools,PooToolsSource/Base/PTAudioCache.swift,14,if,canImport(PToolsTransferCore),canImport(PToolsTransferCore),review-platform-or-package-branch
+ptools,PooToolsSource/Base/PTAudioCache.swift,16,endif,,,structural
 ptools,PooToolsSource/Base/PTBaseNavControl.swift,10,if,canImport(PToolsCore),canImport(PToolsCore),review-platform-or-package-branch
 ptools,PooToolsSource/Base/PTBaseNavControl.swift,12,endif,,,structural
 ptools,PooToolsSource/Base/PTBaseTabBarViewController.swift,11,if,canImport(PToolsSymbols),canImport(PToolsSymbols),review-platform-or-package-branch
@@ -2190,11 +2192,8 @@ ptools,PooToolsSource/Base/PTHeaderAndFooter.swift,13,endif,,,structural
 ptools,PooToolsSource/Base/PTPlayerViewController.swift,138,if,POOTOOLS_VIDEOCACHE,POOTOOLS_VIDEOCACHE,review-platform-or-package-branch
 ptools,PooToolsSource/Base/PTPlayerViewController.swift,157,else,,else of POOTOOLS_VIDEOCACHE,structural
 ptools,PooToolsSource/Base/PTPlayerViewController.swift,159,endif,,,structural
-ptools,PooToolsSource/Base/PTSnapKitEX.swift,12,if,!POOTOOLS_SPLIT_UIFOUNDATION,!POOTOOLS_SPLIT_UIFOUNDATION,review-platform-or-package-branch
-ptools,PooToolsSource/Base/PTSnapKitEX.swift,13,if,os(iOS) || os(tvOS),!POOTOOLS_SPLIT_UIFOUNDATION > os(iOS) || os(tvOS),review-platform-or-package-branch
-ptools,PooToolsSource/Base/PTSnapKitEX.swift,17,else,,!POOTOOLS_SPLIT_UIFOUNDATION > else of os(iOS) || os(tvOS),structural
-ptools,PooToolsSource/Base/PTSnapKitEX.swift,24,endif,,!POOTOOLS_SPLIT_UIFOUNDATION,structural
-ptools,PooToolsSource/Base/PTSnapKitEX.swift,306,endif,,,structural
+ptools,PooToolsSource/Base/PTSnapKitEX.swift,5,if,!POOTOOLS_SPLIT_UIFOUNDATION && canImport(PToolsUIFoundation),!POOTOOLS_SPLIT_UIFOUNDATION && canImport(PToolsUIFoundation),review-platform-or-package-branch
+ptools,PooToolsSource/Base/PTSnapKitEX.swift,7,endif,,,structural
 ptools,PooToolsSource/Base/PTTabBarItemView.swift,13,if,canImport(PToolsCore),canImport(PToolsCore),review-platform-or-package-branch
 ptools,PooToolsSource/Base/PTTabBarItemView.swift,15,endif,,,structural
 ptools,PooToolsSource/Base/PTTabBarMediaContent.swift,13,if,canImport(PToolsCore),canImport(PToolsCore),review-platform-or-package-branch
@@ -2209,6 +2208,8 @@ ptools,PooToolsSource/Base/PTUnavailableFunction.swift,13,if,SWIFT_PACKAGE,SWIFT
 ptools,PooToolsSource/Base/PTUnavailableFunction.swift,15,endif,,,structural
 ptools,PooToolsSource/Base/PTVideoCoverCache.swift,12,if,canImport(PToolsCore),canImport(PToolsCore),review-platform-or-package-branch
 ptools,PooToolsSource/Base/PTVideoCoverCache.swift,14,endif,,,structural
+ptools,PooToolsSource/Base/PTVideoCoverCache.swift,15,if,canImport(PToolsTransferCore),canImport(PToolsTransferCore),review-platform-or-package-branch
+ptools,PooToolsSource/Base/PTVideoCoverCache.swift,17,endif,,,structural
 ptools,PooToolsSource/Button/PTActionLayoutButton.swift,10,if,canImport(PToolsUIFoundation),canImport(PToolsUIFoundation),review-platform-or-package-branch
 ptools,PooToolsSource/Button/PTActionLayoutButton.swift,12,endif,,,structural
 ptools,PooToolsSource/Button/PTLayoutButton.swift,10,if,canImport(PToolsUIFoundation),canImport(PToolsUIFoundation),review-platform-or-package-branch
@@ -2388,8 +2389,8 @@ ptools,PooToolsSource/Core/PTCacheStore.swift,6,if,canImport(PToolsCore),canImpo
 ptools,PooToolsSource/Core/PTCacheStore.swift,8,endif,,,structural
 ptools,PooToolsSource/Core/PTControlLoadingCoordinator.swift,7,if,canImport(UIKit),canImport(UIKit),review-platform-or-package-branch
 ptools,PooToolsSource/Core/PTControlLoadingCoordinator.swift,79,endif,,,structural
-ptools,PooToolsSource/Core/PTGCDManager.swift,12,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
-ptools,PooToolsSource/Core/PTGCDManager.swift,18,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/Core/PTGCDManager.swift,12,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
+ptools,PooToolsSource/Core/PTGCDManager.swift,18,elseif,!POOTOOLS_EMBED_PERMISSION_CORE,!POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 ptools,PooToolsSource/Core/PTGCDManager.swift,23,endif,,,structural
 ptools,PooToolsSource/Core/PTGifManager.swift,11,if,os(macOS),os(macOS),review-platform-or-package-branch
 ptools,PooToolsSource/Core/PTGifManager.swift,14,else,,else of os(macOS),structural
@@ -2506,64 +2507,68 @@ ptools,PooToolsSource/Log/PTNSLog.swift,258,if,canImport(PToolsLogging) || POOTO
 ptools,PooToolsSource/Log/PTNSLog.swift,260,else,,else of canImport(PToolsLogging) || POOTOOLS_LOGGING,structural
 ptools,PooToolsSource/Log/PTNSLog.swift,264,endif,,,structural
 ptools,PooToolsSource/PermissionCore/PTPermission.swift,9,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,23,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,26,if,POOTOOLS_PERMISSION_HEALTH,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_HEALTH,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,28,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,179,if,POOTOOLS_PERMISSION_TRACKING,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_TRACKING,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,181,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_TRACKING,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,183,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,185,if,POOTOOLS_PERMISSION_CAMERA,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_CAMERA,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,187,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_CAMERA,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,189,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,191,if,POOTOOLS_PERMISSION_PHOTO,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_PHOTO,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,193,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_PHOTO,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,195,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,197,if,POOTOOLS_PERMISSION_CALENDAR,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_CALENDAR,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,199,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_CALENDAR,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,201,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,203,if,POOTOOLS_PERMISSION_CALENDAR,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_CALENDAR,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,205,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_CALENDAR,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,207,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,209,if,POOTOOLS_PERMISSION_REMINDERS,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_REMINDERS,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,211,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_REMINDERS,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,213,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,215,if,POOTOOLS_PERMISSION_NOTIFICATION,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_NOTIFICATION,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,217,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_NOTIFICATION,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,219,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,221,if,POOTOOLS_PERMISSION_LOCATION,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_LOCATION,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,223,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_LOCATION,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,225,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,227,if,POOTOOLS_PERMISSION_LOCATION,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_LOCATION,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,229,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_LOCATION,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,231,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,233,if,POOTOOLS_PERMISSION_FACEIDPERMISSION,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_FACEIDPERMISSION,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,235,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_FACEIDPERMISSION,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,237,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,239,if,POOTOOLS_PERMISSION_SPEECH,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_SPEECH,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,241,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_SPEECH,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,243,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,245,if,POOTOOLS_PERMISSION_HEALTH,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_HEALTH,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,250,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_HEALTH,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,252,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,254,if,POOTOOLS_PERMISSION_MOTION,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_MOTION,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,256,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_MOTION,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,258,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,260,if,POOTOOLS_PERMISSION_CONTACTS,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_CONTACTS,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,262,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_CONTACTS,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,264,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,266,if,POOTOOLS_PERMISSION_MIC,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_MIC,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,268,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_MIC,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,270,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,272,if,POOTOOLS_PERMISSION_MEDIA,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_MEDIA,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,274,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_MEDIA,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,276,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,278,if,POOTOOLS_PERMISSION_BLUETOOTH,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_BLUETOOTH,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,280,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_BLUETOOTH,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,282,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,284,if,POOTOOLS_PERMISSION_SIRI,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_SIRI,review-platform-or-package-branch
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,286,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_SIRI,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,288,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
-ptools,PooToolsSource/PermissionCore/PTPermission.swift,431,endif,,,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,10,if,!POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE > !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,12,endif,,POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,14,if,!POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE > !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,19,endif,,POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,27,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,30,if,POOTOOLS_PERMISSION_HEALTH,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_HEALTH,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,32,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,183,if,POOTOOLS_PERMISSION_TRACKING,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_TRACKING,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,185,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_TRACKING,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,187,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,189,if,POOTOOLS_PERMISSION_CAMERA,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_CAMERA,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,191,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_CAMERA,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,193,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,195,if,POOTOOLS_PERMISSION_PHOTO,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_PHOTO,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,197,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_PHOTO,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,199,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,201,if,POOTOOLS_PERMISSION_CALENDAR,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_CALENDAR,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,203,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_CALENDAR,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,205,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,207,if,POOTOOLS_PERMISSION_CALENDAR,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_CALENDAR,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,209,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_CALENDAR,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,211,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,213,if,POOTOOLS_PERMISSION_REMINDERS,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_REMINDERS,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,215,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_REMINDERS,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,217,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,219,if,POOTOOLS_PERMISSION_NOTIFICATION,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_NOTIFICATION,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,221,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_NOTIFICATION,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,223,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,225,if,POOTOOLS_PERMISSION_LOCATION,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_LOCATION,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,227,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_LOCATION,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,229,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,231,if,POOTOOLS_PERMISSION_LOCATION,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_LOCATION,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,233,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_LOCATION,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,235,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,237,if,POOTOOLS_PERMISSION_FACEIDPERMISSION,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_FACEIDPERMISSION,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,239,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_FACEIDPERMISSION,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,241,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,243,if,POOTOOLS_PERMISSION_SPEECH,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_SPEECH,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,245,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_SPEECH,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,247,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,249,if,POOTOOLS_PERMISSION_HEALTH,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_HEALTH,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,254,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_HEALTH,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,256,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,258,if,POOTOOLS_PERMISSION_MOTION,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_MOTION,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,260,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_MOTION,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,262,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,264,if,POOTOOLS_PERMISSION_CONTACTS,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_CONTACTS,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,266,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_CONTACTS,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,268,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,270,if,POOTOOLS_PERMISSION_MIC,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_MIC,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,272,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_MIC,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,274,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,276,if,POOTOOLS_PERMISSION_MEDIA,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_MEDIA,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,278,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_MEDIA,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,280,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,282,if,POOTOOLS_PERMISSION_BLUETOOTH,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_BLUETOOTH,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,284,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_BLUETOOTH,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,286,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,288,if,POOTOOLS_PERMISSION_SIRI,else of POOTOOLS_SPLIT_PERMISSION_CORE > POOTOOLS_PERMISSION_SIRI,review-platform-or-package-branch
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,290,else,,else of POOTOOLS_SPLIT_PERMISSION_CORE > else of POOTOOLS_PERMISSION_SIRI,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,292,endif,,else of POOTOOLS_SPLIT_PERMISSION_CORE,structural
+ptools,PooToolsSource/PermissionCore/PTPermission.swift,435,endif,,,structural
 ptools,PooToolsSource/PermissionCore/PTPermissionCell.swift,11,if,canImport(PToolsUIFoundation),canImport(PToolsUIFoundation),review-platform-or-package-branch
 ptools,PooToolsSource/PermissionCore/PTPermissionCell.swift,13,endif,,,structural
 ptools,PooToolsSource/PermissionCore/PTPermissionCell.swift,15,if,POOTOOLS_PERMISSION_HEALTH,POOTOOLS_PERMISSION_HEALTH,review-platform-or-package-branch
@@ -2658,7 +2663,7 @@ ptools,PooToolsSource/PermissionCore/PTPermissionViewController.swift,398,if,POO
 ptools,PooToolsSource/PermissionCore/PTPermissionViewController.swift,404,endif,,,structural
 ptools,PooToolsSource/PermissionCore/PTPermissionViewController.swift,405,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
 ptools,PooToolsSource/PermissionCore/PTPermissionViewController.swift,408,endif,,,structural
-ptools,PooToolsSource/PhotoLibraryPermission/PTPermissionPhotoLibrary.swift,10,if,POOTOOLS_SPLIT_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE,review-platform-or-package-branch
+ptools,PooToolsSource/PhotoLibraryPermission/PTPermissionPhotoLibrary.swift,10,if,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,POOTOOLS_SPLIT_PERMISSION_CORE && !POOTOOLS_EMBED_PERMISSION_CORE,review-platform-or-package-branch
 ptools,PooToolsSource/PhotoLibraryPermission/PTPermissionPhotoLibrary.swift,12,endif,,,structural
 Package.swift,Package.swift,570,swift-setting-define,".define(""POOTOOLS_OVERLAY""),",manifest,compare-cocoapods-macro
 Package.swift,Package.swift,571,swift-setting-define,".define(""POOTOOLS_COCOAPODS""),",manifest,compare-cocoapods-macro
@@ -2668,96 +2673,96 @@ Package.swift,Package.swift,596,swift-setting-define,".define(""POOTOOLS_POPOVER
 Package.swift,Package.swift,597,swift-setting-define,".define(""POOTOOLS_COCOAPODS""),",manifest,compare-cocoapods-macro
 Package.swift,Package.swift,919,swift-setting-define,".define(""POOTOOLS_WEBKIT""),",manifest,compare-cocoapods-macro
 Package.swift,Package.swift,920,swift-setting-define,".define(""POOTOOLS_COCOAPODS""),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1000,swift-setting-define,".define(""POOTOOLS_COCOAPODS""),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1001,swift-setting-define,".define(""POOTOOLS_TABBAR""),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1002,swift-setting-define,".define(""POOTOOLS_PICKER""),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1003,swift-setting-define,".define(""POOTOOLS_APPZ""),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1004,swift-setting-define,".define(""POOTOOLS_LAUNCHTIMEPROFILER""),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1005,swift-setting-define,".define(""POOTOOLS_VIDEOCACHE""),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1006,swift-setting-define,".define(""POOTOOLS_SPLIT_CORE""),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1007,swift-setting-define,".define(""POOTOOLS_SPLIT_UIFOUNDATION""),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1008,swift-setting-define,".define(""POOTOOLS_SPLIT_PERMISSION_CORE""),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1016,swift-setting-define,".target(name: ""PooToolsCustomerLabel"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/Label"", swiftSettings: [.define(""POOTOOLS_CUSTOMERLABEL""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1017,swift-setting-define,".target(name: ""PooToolsProgressBar"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/ProgressBar"", swiftSettings: [.define(""POOTOOLS_PROGRESSBAR""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1018,swift-setting-define,".target(name: ""PooToolsPageControl"", dependencies: [""ptools"", ""PToolsCore""], path: ""PooToolsSource/PageControl"", swiftSettings: [.define(""POOTOOLS_PAGECONTROL""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1019,swift-setting-define,".target(name: ""PooToolsLoading"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/Loading"", swiftSettings: [.define(""POOTOOLS_LOADING""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1020,swift-setting-define,".target(name: ""PooToolsHud"", dependencies: [""ptools"", ""PooToolsProgressBar"", ""SnapKit""], path: ""PooToolsSource/Hud"", swiftSettings: [.define(""POOTOOLS_HUD""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1021,swift-setting-define,".target(name: ""PooToolsLivePhoto"", dependencies: [""ptools""], path: ""PooToolsSource/LivePhoto"", swiftSettings: [.define(""POOTOOLS_LIVEPHOTO""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1022,swift-setting-define,".target(name: ""PooToolsShare"", dependencies: [""ptools"", ""PooToolsCustomerLabel"", ""SnapKit""], path: ""PooToolsSource/Share"", swiftSettings: [.define(""POOTOOLS_SHARE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1023,swift-setting-define,".target(name: ""PooToolsPDF"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/PDF"", swiftSettings: [.define(""POOTOOLS_PDF""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1028,swift-setting-define,".target(name: ""PTCameraPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/CameraPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_CAMERA""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1029,swift-setting-define,".target(name: ""PTLocationPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/LocationPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_LOCATION""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1030,swift-setting-define,".target(name: ""PTCalendarPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/CalendarPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_CALENDAR""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1031,swift-setting-define,".target(name: ""PTMotionPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/MotionPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_MOTION""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1032,swift-setting-define,".target(name: ""PTTrackingPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/TrackingPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_TRACKING""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1033,swift-setting-define,".target(name: ""PTRemindersPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/RemindersPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_REMINDERS""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1034,swift-setting-define,".target(name: ""PTSpeechPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/SpeechPremission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_SPEECH""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1035,swift-setting-define,".target(name: ""PTHealthPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/HealthPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_HEALTH""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1036,swift-setting-define,".target(name: ""PTFaceIDPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/FaceIDPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_FACEIDPERMISSION""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1037,swift-setting-define,".target(name: ""PTContactsPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/ContactsPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_CONTACTS""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1038,swift-setting-define,".target(name: ""PTMicPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/MicPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_MIC""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1039,swift-setting-define,".target(name: ""PTMediaPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/MeidaLibraryPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_MEDIA""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1040,swift-setting-define,".target(name: ""PTBluetoothPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/BluetoothPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_BLUETOOTH""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1041,swift-setting-define,".target(name: ""PTSiriPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/SiriPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_SIRI""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1042,swift-setting-define,".target(name: ""PTNotificationPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/NotificationPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_NOTIFICATION""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1066,swift-setting-define,"swiftSettings: [.define(""POOTOOLS_NETWORK""), .define(""POOTOOLS_COCOAPODS"")]",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1068,swift-setting-define,".target(name: ""PooToolsDataEncrypt"", dependencies: [""ptools"", ""CryptoSwift""], path: ""PooToolsSource/AESAndDES"", swiftSettings: [.define(""POOTOOLS_DATAENCRYPT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1069,swift-setting-define,".target(name: ""PooToolsSecurity"", dependencies: [], path: ""PooToolsSource/Security"", swiftSettings: [.define(""POOTOOLS_SECURITY""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1070,swift-setting-define,".target(name: ""PooToolsSearchBar"", dependencies: [""ptools""], path: ""PooToolsSource/SearchBar"", swiftSettings: [.define(""POOTOOLS_SEARCHBAR""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1071,swift-setting-define,".target(name: ""PooToolsSearch"", dependencies: [""ptools"", ""PooToolsSearchBar"", ""PToolsUIFoundation"", ""SnapKit""], path: ""PooToolsSource/Search"", swiftSettings: [.define(""POOTOOLS_SEARCH""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1072,swift-setting-define,".target(name: ""PooToolsMediaViewer"", dependencies: [""ptools"", ""PToolsUIFoundation"", ""PooToolsMediaCore"", ""PooToolsProgressBar"", ""PooToolsPageControl"", ""PooToolsLivePhoto"", ""SnapKit""], path: ""PooToolsSource/MediaViewer"", swiftSettings: [.define(""POOTOOLS_MEDIAVIEWER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1077,swift-setting-define,".target(name: ""PooToolsImagePicker"", dependencies: [""ptools"", ""PTCameraPermission"", ""SnapKit""], path: ""PooToolsSource/ImagePicker"", swiftSettings: [.define(""POOTOOLS_IMAGEPICKER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1078,swift-setting-define,".target(name: ""PooToolsPhotoPicker"", dependencies: [""ptools"", ""PToolsSymbols"", ""PToolsUIFoundation"", ""PooToolsMediaCore"", ""PooToolsImagePicker"", ""PTCameraPermission"", ""PooToolsLoading"", ""SnapKit""], path: ""PooToolsSource"", sources: [""PhotoPicker""], swiftSettings: [.define(""POOTOOLS_PHOTOPICKER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1079,swift-setting-define,".target(name: ""PooToolsHarbethKit"", dependencies: [""ptools"", ""PToolsSymbols"", ""Harbeth"", ""PTCameraPermission"", ""PooToolsMediaViewer"", ""PooToolsHud"", ""PooToolsLoading"", ""SnapKit""], path: ""PooToolsSource/C7Collector"", sources: [""C7CameraConfig.swift"", ""C7Collector.swift"", ""C7CollectorCamera.swift"", ""C7CollectorVideo.swift"", ""PTC7VideoExportService.swift"", ""PTCameraAnimationUtils.swift"", ""PTCameraFilterConfig.swift"", ""PTFilterImageCell.swift"", ""PTHarBethFilter.swift"", ""PTTakePictureReviewer.swift""], swiftSettings: [.define(""POOTOOLS_HARBETHKIT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1083,swift-setting-define,".target(name: ""PooToolsFilterCamera"", dependencies: [""ptools"", ""PToolsSymbols"", ""PooToolsHarbethKit"", ""PooToolsMediaViewer"", ""PooToolsImageEditor"", ""PTCameraPermission"", ""SnapKit""], path: ""PooToolsSource"", sources: [""C7Collector/PTFilterCameraViewController.swift"", ""FilterCamera/PTFilterCameraCompatibility.swift""], swiftSettings: [.define(""POOTOOLS_FILTERCAMERA""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1084,swift-setting-define,".target(name: ""PooToolsImageEditor"", dependencies: [""ptools"", ""PToolsCore"", ""PToolsSymbols"", ""PooToolsMediaCore"", ""Harbeth"", ""PooToolsHarbethKit"", ""PooToolsPhotoPicker"", ""SnapKit""], path: ""PooToolsSource/ImageEditor"", swiftSettings: [.define(""POOTOOLS_IMAGEEDITOR""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1085,swift-setting-define,".target(name: ""PooToolsVideoEditor"", dependencies: [""ptools"", ""PToolsCore"", ""PToolsSymbols"", ""PooToolsMediaCore"", ""Harbeth"", ""PooToolsHarbethKit"", ""PooToolsProgressBar"", ""PooToolsLoading"", ""SnapKit""], path: ""PooToolsSource/VideoEditor"", swiftSettings: [.define(""POOTOOLS_VIDEOEDITOR""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1086,swift-setting-define,".target(name: ""PooToolsSVG"", dependencies: [""ptools"", ""Kingfisher"", ""PocketSVG""], path: ""PooToolsSource/KingfisherSVG"", swiftSettings: [.define(""POOTOOLS_SVG""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1087,swift-setting-define,".target(name: ""PooToolsCheckDirtyWord"", dependencies: [], path: ""PooToolsSource/CheckDirtyWord"", resources: [.process(""Resource"")], swiftSettings: [.define(""POOTOOLS_CHECKDIRTYWORD""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1092,swift-setting-define,".target(name: ""PooToolsStepper"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/Stepper"", swiftSettings: [.define(""POOTOOLS_STEPPER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1093,swift-setting-define,".target(name: ""PooToolsBankCard"", dependencies: [""ptools""], path: ""PooToolsSource/BankCard"", swiftSettings: [.define(""POOTOOLS_BANKCARD""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1094,swift-setting-define,".target(name: ""PooToolsBioID"", dependencies: [""ptools"", ""PTFaceIDPermission"", ""PooToolsKeyChain""], path: ""PooToolsSource/BioID"", swiftSettings: [.define(""POOTOOLS_BIOID""), .define(""POOTOOLS_BILOGYID""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1095,swift-setting-define,".target(name: ""PooToolsCalendar"", dependencies: [""ptools"", ""PTCalendarPermission"", ""PTRemindersPermission""], path: ""PooToolsSource/Calendar"", swiftSettings: [.define(""POOTOOLS_CALENDAR""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1096,swift-setting-define,".target(name: ""PooToolsTelephony"", dependencies: [""ptools""], path: ""PooToolsSource/CallMessageMail"", swiftSettings: [.define(""POOTOOLS_TELEPHONY""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1097,swift-setting-define,".target(name: ""PooToolsCheckBox"", dependencies: [], path: ""PooToolsSource/CheckBox"", swiftSettings: [.define(""POOTOOLS_CHECKBOX""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1098,swift-setting-define,".target(name: ""PooToolsCodeView"", dependencies: [""ptools""], path: ""PooToolsSource/CodeView"", swiftSettings: [.define(""POOTOOLS_CODEVIEW""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1099,swift-setting-define,".target(name: ""PooToolsCountry"", dependencies: [""ptools""], path: ""PooToolsSource/Country"", swiftSettings: [.define(""POOTOOLS_COUNTRY""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1100,swift-setting-define,".target(name: ""PooToolsGuide"", dependencies: [""ptools"", ""PooToolsPageControl"", ""SnapKit""], path: ""PooToolsSource/Guide"", swiftSettings: [.define(""POOTOOLS_GUIDE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1104,swift-setting-define,".target(name: ""PooToolsInstructions"", dependencies: [""PToolsOverlay"", ""SnapKit""], path: ""PooToolsSource/Instructions"", swiftSettings: [.define(""POOTOOLS_INSTRUCTIONS""), .define(""POOTOOLS_COCOAPODS""), .enableUpcomingFeature(""StrictConcurrency"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1105,swift-setting-define,".target(name: ""PooToolsInput"", dependencies: [""ptools"", ""PToolsCore"", ""PToolsUIFoundation"", ""PhoneNumberKit"", ""SnapKit""], path: ""PooToolsSource/Input"", swiftSettings: [.define(""POOTOOLS_INPUT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1106,swift-setting-define,".target(name: ""PooToolsKeyboard"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/Keyboard"", swiftSettings: [.define(""POOTOOLS_CUSTOMERNUMBERKEYWORD""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1107,swift-setting-define,".target(name: ""PooToolsKeyChain"", dependencies: [], path: ""PooToolsSource/KeyChain"", swiftSettings: [.define(""POOTOOLS_KEYCHAIN""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1108,swift-setting-define,".target(name: ""PooToolsMotion"", dependencies: [""ptools"", ""PTMotionPermission""], path: ""PooToolsSource/Motion"", swiftSettings: [.define(""POOTOOLS_MOTION""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1109,swift-setting-define,".target(name: ""PooToolsPhoneInfo"", dependencies: [], path: ""PooToolsSource/PhoneInfo"", swiftSettings: [.define(""POOTOOLS_PHONEINFO""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1110,swift-setting-define,".target(name: ""PooToolsRateView"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/RateView"", swiftSettings: [.define(""POOTOOLS_RATE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1111,swift-setting-define,".target(name: ""PooToolsScrollBanner"", dependencies: [""ptools"", ""PToolsUIFoundation"", ""PooToolsPageControl"", ""SnapKit""], path: ""PooToolsSource/ScrollBanner"", swiftSettings: [.define(""POOTOOLS_SCROLLBANNER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1112,swift-setting-define,".target(name: ""PooToolsSegmented"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/Segmented"", swiftSettings: [.define(""POOTOOLS_SEGMENT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1113,swift-setting-define,".target(name: ""PooToolsHandSign"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/SignView"", swiftSettings: [.define(""POOTOOLS_HANDSIGN""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1114,swift-setting-define,".target(name: ""PooToolsSlider"", dependencies: [""SnapKit""], path: ""PooToolsSource/Slider"", swiftSettings: [.define(""POOTOOLS_SLIDER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1115,swift-setting-define,".target(name: ""PooToolsCheckUpdate"", dependencies: [""ptools"", ""PooToolsNetWork"", ""PooToolsHud"", ""PooToolsLoading"", .product(name: ""SwiftJWT"", package: ""Swift-JWT"")], path: ""PooToolsSource/CheckUpdate"", swiftSettings: [.define(""POOTOOLS_CHECKUPDATE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1116,swift-setting-define,".target(name: ""PooToolsLayout"", dependencies: [""ptools"", ""CollectionViewPagingLayout""], path: ""PooToolsSource/Layout"", swiftSettings: [.define(""POOTOOLS_LAYOUT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1117,swift-setting-define,".target(name: ""PooToolsLocation"", dependencies: [""ptools"", ""PToolsStorage"", ""PToolsStorageCore"", ""PTLocationPermission""], path: ""PooToolsSource/Location"", swiftSettings: [.define(""POOTOOLS_LOCATION""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1118,swift-setting-define,".target(name: ""PooToolsSmartScreenshot"", dependencies: [""ptools""], path: ""PooToolsSource/ScreenShot"", swiftSettings: [.define(""POOTOOLS_SMARTSCREENSHOT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1122,swift-setting-define,".target(name: ""PooToolsPagingControl"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/SegmentControl"", swiftSettings: [.define(""POOTOOLS_PAGINGCONTROL""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1123,swift-setting-define,".target(name: ""PooToolsScanQRCode"", dependencies: [""ptools"", ""PToolsCore"", ""PooToolsImagePicker"", ""PooToolsPhotoPicker"", ""PTCameraPermission"", ""SnapKit""], path: ""PooToolsSource/QRCodeScan"", swiftSettings: [.define(""POOTOOLS_SCANQRCODE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1124,swift-setting-define,".target(name: ""PooToolsStepCount"", dependencies: [""ptools"", ""PTHealthPermission""], path: ""PooToolsSource/HealthKit"", swiftSettings: [.define(""POOTOOLS_STEPCOUNT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1125,swift-setting-define,".target(name: ""PooToolsContact"", dependencies: [""ptools"", ""PTContactsPermission""], path: ""PooToolsSource/Contact"", swiftSettings: [.define(""POOTOOLS_CONTACT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1126,swift-setting-define,".target(name: ""PooToolsVision"", dependencies: [""ptools""], path: ""PooToolsSource/Vision"", swiftSettings: [.define(""POOTOOLS_VISION""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1127,swift-setting-define,".target(name: ""PooToolsRouter"", dependencies: [""ptools"", ""PToolsRouteCore"", ""PToolsDeepLink""], path: ""PooToolsSource/Router"", swiftSettings: [.define(""POOTOOLS_ROUTER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1128,swift-setting-define,".target(name: ""PooToolsPing"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/Ping"", swiftSettings: [.define(""POOTOOLS_PING""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1129,swift-setting-define,".target(name: ""PooToolsSpeedPanel"", dependencies: [""ptools""], path: ""PooToolsSource/SpeedPanel"", swiftSettings: [.define(""POOTOOLS_SPEEDPANEL""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1130,swift-setting-define,".target(name: ""PooToolsNetworkSpeedTest"", dependencies: [""ptools""], path: ""PooToolsSource/NetworkSpeedTest"", swiftSettings: [.define(""POOTOOLS_NETWORKSPEEDTEST""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1131,swift-setting-define,".target(name: ""PooToolsOSSKitSpeech"", dependencies: [""ptools"", ""PTSpeechPermission""], path: ""PooToolsSource/OSSKit"", swiftSettings: [.define(""POOTOOLS_OSSKITSPEECH""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1132,swift-setting-define,".target(name: ""PooToolsiOS17Tips"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/iOS17Tips"", swiftSettings: [.define(""POOTOOLS_iOS17TIPS""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1133,swift-setting-define,".target(name: ""PooToolsWhatsNewsKit"", dependencies: [""ptools"", ""PToolsUIFoundation"", ""SnapKit""], path: ""PooToolsSource/WhatsNewsKit"", swiftSettings: [.define(""POOTOOLS_WHATSNEWSKIT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1134,swift-setting-define,".target(name: ""PooToolsHeartRate"", dependencies: [""ptools"", .product(name: ""Lottie"", package: ""lottie-ios""), ""PTCameraPermission"", ""SnapKit""], path: ""PooToolsSource/HeartRate"", swiftSettings: [.define(""POOTOOLS_HEARTRATE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1135,swift-setting-define,".target(name: ""PooToolsChinesePinyin"", dependencies: [""ptools""], path: ""PooToolsSource/Pinyin"", swiftSettings: [.define(""POOTOOLS_CHINESEPINYIN""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1136,swift-setting-define,".target(name: ""PooToolsCircle"", dependencies: [""ptools""], path: ""PooToolsSource/Circle"", swiftSettings: [.define(""POOTOOLS_CIRCLE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1137,swift-setting-define,".target(name: ""PooToolsMessageKit"", dependencies: [""ptools"", ""PToolsSymbols"", ""PooToolsCustomerLabel"", ""PooToolsProgressBar"", ""PooToolsNetWork"", ""SnapKit""], path: ""PooToolsSource/MessageKit"", swiftSettings: [.define(""POOTOOLS_MESSAGEKIT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1138,swift-setting-define,".target(name: ""PooToolsSocketKit"", dependencies: [""ptools"", ""PooToolsNetWork"", ""PToolsLogging""], path: ""PooToolsSource/SocketKit"", swiftSettings: [.define(""POOTOOLS_SOCKETKIT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1139,swift-setting-define,".target(name: ""PooToolsIAP"", dependencies: [""ptools""], path: ""PooToolsSource/IAP"", swiftSettings: [.define(""POOTOOLS_IAP""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1140,swift-setting-define,".target(name: ""PooToolsTipsView"", dependencies: [""ptools"", ""PToolsOverlay""], path: ""PooToolsSource/TipsView"", swiftSettings: [.define(""POOTOOLS_TIPSVIEW""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1141,swift-setting-define,".target(name: ""PooToolsPicker"", dependencies: [""ptools"", ""PToolsCore"", ""SnapKit""], path: ""PooToolsSource/Picker"", swiftSettings: [.define(""POOTOOLS_PICKER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1155,swift-setting-define,"swiftSettings: [.define(""POOTOOLS_DEBUG""), .define(""POOTOOLS_COCOAPODS"")]",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1161,swift-setting-define,"swiftSettings: [.define(""POOTOOLS_DEBUGTRACKINGEYES""), .define(""POOTOOLS_COCOAPODS"")]",manifest,compare-cocoapods-macro
-Package.swift,Package.swift,1167,swift-setting-define,"swiftSettings: [.define(""POOTOOLS_LAUNCHTIMEPROFILER""), .define(""POOTOOLS_COCOAPODS"")]",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1001,swift-setting-define,".define(""POOTOOLS_COCOAPODS""),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1002,swift-setting-define,".define(""POOTOOLS_TABBAR""),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1003,swift-setting-define,".define(""POOTOOLS_PICKER""),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1004,swift-setting-define,".define(""POOTOOLS_APPZ""),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1005,swift-setting-define,".define(""POOTOOLS_LAUNCHTIMEPROFILER""),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1006,swift-setting-define,".define(""POOTOOLS_VIDEOCACHE""),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1007,swift-setting-define,".define(""POOTOOLS_SPLIT_CORE""),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1008,swift-setting-define,".define(""POOTOOLS_SPLIT_UIFOUNDATION""),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1009,swift-setting-define,".define(""POOTOOLS_SPLIT_PERMISSION_CORE""),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1017,swift-setting-define,".target(name: ""PooToolsCustomerLabel"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/Label"", swiftSettings: [.define(""POOTOOLS_CUSTOMERLABEL""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1018,swift-setting-define,".target(name: ""PooToolsProgressBar"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/ProgressBar"", swiftSettings: [.define(""POOTOOLS_PROGRESSBAR""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1019,swift-setting-define,".target(name: ""PooToolsPageControl"", dependencies: [""ptools"", ""PToolsCore""], path: ""PooToolsSource/PageControl"", swiftSettings: [.define(""POOTOOLS_PAGECONTROL""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1020,swift-setting-define,".target(name: ""PooToolsLoading"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/Loading"", swiftSettings: [.define(""POOTOOLS_LOADING""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1021,swift-setting-define,".target(name: ""PooToolsHud"", dependencies: [""ptools"", ""PooToolsProgressBar"", ""SnapKit""], path: ""PooToolsSource/Hud"", swiftSettings: [.define(""POOTOOLS_HUD""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1022,swift-setting-define,".target(name: ""PooToolsLivePhoto"", dependencies: [""ptools""], path: ""PooToolsSource/LivePhoto"", swiftSettings: [.define(""POOTOOLS_LIVEPHOTO""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1023,swift-setting-define,".target(name: ""PooToolsShare"", dependencies: [""ptools"", ""PooToolsCustomerLabel"", ""SnapKit""], path: ""PooToolsSource/Share"", swiftSettings: [.define(""POOTOOLS_SHARE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1024,swift-setting-define,".target(name: ""PooToolsPDF"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/PDF"", swiftSettings: [.define(""POOTOOLS_PDF""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1029,swift-setting-define,".target(name: ""PTCameraPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/CameraPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_CAMERA""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1030,swift-setting-define,".target(name: ""PTLocationPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/LocationPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_LOCATION""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1031,swift-setting-define,".target(name: ""PTCalendarPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/CalendarPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_CALENDAR""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1032,swift-setting-define,".target(name: ""PTMotionPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/MotionPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_MOTION""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1033,swift-setting-define,".target(name: ""PTTrackingPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/TrackingPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_TRACKING""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1034,swift-setting-define,".target(name: ""PTRemindersPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/RemindersPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_REMINDERS""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1035,swift-setting-define,".target(name: ""PTSpeechPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/SpeechPremission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_SPEECH""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1036,swift-setting-define,".target(name: ""PTHealthPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/HealthPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_HEALTH""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1037,swift-setting-define,".target(name: ""PTFaceIDPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/FaceIDPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_FACEIDPERMISSION""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1038,swift-setting-define,".target(name: ""PTContactsPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/ContactsPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_CONTACTS""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1039,swift-setting-define,".target(name: ""PTMicPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/MicPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_MIC""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1040,swift-setting-define,".target(name: ""PTMediaPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/MeidaLibraryPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_MEDIA""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1041,swift-setting-define,".target(name: ""PTBluetoothPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/BluetoothPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_BLUETOOTH""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1042,swift-setting-define,".target(name: ""PTSiriPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/SiriPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_SIRI""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1043,swift-setting-define,".target(name: ""PTNotificationPermission"", dependencies: [""PToolsPermissionCore""], path: ""PooToolsSource/NotificationPermission"", swiftSettings: [.define(""POOTOOLS_PERMISSION_NOTIFICATION""), .define(""POOTOOLS_SPLIT_PERMISSION_CORE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1070,swift-setting-define,"swiftSettings: [.define(""POOTOOLS_NETWORK""), .define(""POOTOOLS_COCOAPODS"")]",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1072,swift-setting-define,".target(name: ""PooToolsDataEncrypt"", dependencies: [""ptools"", ""CryptoSwift""], path: ""PooToolsSource/AESAndDES"", swiftSettings: [.define(""POOTOOLS_DATAENCRYPT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1073,swift-setting-define,".target(name: ""PooToolsSecurity"", dependencies: [], path: ""PooToolsSource/Security"", swiftSettings: [.define(""POOTOOLS_SECURITY""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1074,swift-setting-define,".target(name: ""PooToolsSearchBar"", dependencies: [""ptools""], path: ""PooToolsSource/SearchBar"", swiftSettings: [.define(""POOTOOLS_SEARCHBAR""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1075,swift-setting-define,".target(name: ""PooToolsSearch"", dependencies: [""ptools"", ""PooToolsSearchBar"", ""PToolsUIFoundation"", ""SnapKit""], path: ""PooToolsSource/Search"", swiftSettings: [.define(""POOTOOLS_SEARCH""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1076,swift-setting-define,".target(name: ""PooToolsMediaViewer"", dependencies: [""ptools"", ""PToolsUIFoundation"", ""PooToolsMediaCore"", ""PooToolsProgressBar"", ""PooToolsPageControl"", ""PooToolsLivePhoto"", ""SnapKit""], path: ""PooToolsSource/MediaViewer"", swiftSettings: [.define(""POOTOOLS_MEDIAVIEWER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1081,swift-setting-define,".target(name: ""PooToolsImagePicker"", dependencies: [""ptools"", ""PTCameraPermission"", ""SnapKit""], path: ""PooToolsSource/ImagePicker"", swiftSettings: [.define(""POOTOOLS_IMAGEPICKER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1082,swift-setting-define,".target(name: ""PooToolsPhotoPicker"", dependencies: [""ptools"", ""PToolsSymbols"", ""PToolsUIFoundation"", ""PooToolsMediaCore"", ""PooToolsImagePicker"", ""PTCameraPermission"", ""PooToolsLoading"", ""SnapKit""], path: ""PooToolsSource"", sources: [""PhotoPicker""], swiftSettings: [.define(""POOTOOLS_PHOTOPICKER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1083,swift-setting-define,".target(name: ""PooToolsHarbethKit"", dependencies: [""ptools"", ""PToolsSymbols"", ""Harbeth"", ""PTCameraPermission"", ""PooToolsMediaViewer"", ""PooToolsHud"", ""PooToolsLoading"", ""SnapKit""], path: ""PooToolsSource/C7Collector"", sources: [""C7CameraConfig.swift"", ""C7Collector.swift"", ""C7CollectorCamera.swift"", ""C7CollectorVideo.swift"", ""PTC7VideoExportService.swift"", ""PTCameraAnimationUtils.swift"", ""PTCameraFilterConfig.swift"", ""PTFilterImageCell.swift"", ""PTHarBethFilter.swift"", ""PTTakePictureReviewer.swift""], swiftSettings: [.define(""POOTOOLS_HARBETHKIT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1087,swift-setting-define,".target(name: ""PooToolsFilterCamera"", dependencies: [""ptools"", ""PToolsSymbols"", ""PooToolsHarbethKit"", ""PooToolsMediaViewer"", ""PooToolsImageEditor"", ""PTCameraPermission"", ""SnapKit""], path: ""PooToolsSource"", sources: [""C7Collector/PTFilterCameraViewController.swift"", ""FilterCamera/PTFilterCameraCompatibility.swift""], swiftSettings: [.define(""POOTOOLS_FILTERCAMERA""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1088,swift-setting-define,".target(name: ""PooToolsImageEditor"", dependencies: [""ptools"", ""PToolsCore"", ""PToolsSymbols"", ""PooToolsMediaCore"", ""Harbeth"", ""PooToolsHarbethKit"", ""PooToolsPhotoPicker"", ""SnapKit""], path: ""PooToolsSource/ImageEditor"", swiftSettings: [.define(""POOTOOLS_IMAGEEDITOR""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1089,swift-setting-define,".target(name: ""PooToolsVideoEditor"", dependencies: [""ptools"", ""PToolsCore"", ""PToolsSymbols"", ""PooToolsMediaCore"", ""Harbeth"", ""PooToolsHarbethKit"", ""PooToolsProgressBar"", ""PooToolsLoading"", ""SnapKit""], path: ""PooToolsSource/VideoEditor"", swiftSettings: [.define(""POOTOOLS_VIDEOEDITOR""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1090,swift-setting-define,".target(name: ""PooToolsSVG"", dependencies: [""ptools"", ""Kingfisher"", ""PocketSVG""], path: ""PooToolsSource/KingfisherSVG"", swiftSettings: [.define(""POOTOOLS_SVG""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1091,swift-setting-define,".target(name: ""PooToolsCheckDirtyWord"", dependencies: [], path: ""PooToolsSource/CheckDirtyWord"", resources: [.process(""Resource"")], swiftSettings: [.define(""POOTOOLS_CHECKDIRTYWORD""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1096,swift-setting-define,".target(name: ""PooToolsStepper"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/Stepper"", swiftSettings: [.define(""POOTOOLS_STEPPER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1097,swift-setting-define,".target(name: ""PooToolsBankCard"", dependencies: [""ptools""], path: ""PooToolsSource/BankCard"", swiftSettings: [.define(""POOTOOLS_BANKCARD""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1098,swift-setting-define,".target(name: ""PooToolsBioID"", dependencies: [""ptools"", ""PTFaceIDPermission"", ""PooToolsKeyChain""], path: ""PooToolsSource/BioID"", swiftSettings: [.define(""POOTOOLS_BIOID""), .define(""POOTOOLS_BILOGYID""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1099,swift-setting-define,".target(name: ""PooToolsCalendar"", dependencies: [""ptools"", ""PTCalendarPermission"", ""PTRemindersPermission""], path: ""PooToolsSource/Calendar"", swiftSettings: [.define(""POOTOOLS_CALENDAR""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1100,swift-setting-define,".target(name: ""PooToolsTelephony"", dependencies: [""ptools""], path: ""PooToolsSource/CallMessageMail"", swiftSettings: [.define(""POOTOOLS_TELEPHONY""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1101,swift-setting-define,".target(name: ""PooToolsCheckBox"", dependencies: [], path: ""PooToolsSource/CheckBox"", swiftSettings: [.define(""POOTOOLS_CHECKBOX""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1102,swift-setting-define,".target(name: ""PooToolsCodeView"", dependencies: [""ptools""], path: ""PooToolsSource/CodeView"", swiftSettings: [.define(""POOTOOLS_CODEVIEW""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1103,swift-setting-define,".target(name: ""PooToolsCountry"", dependencies: [""ptools""], path: ""PooToolsSource/Country"", swiftSettings: [.define(""POOTOOLS_COUNTRY""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1104,swift-setting-define,".target(name: ""PooToolsGuide"", dependencies: [""ptools"", ""PooToolsPageControl"", ""SnapKit""], path: ""PooToolsSource/Guide"", swiftSettings: [.define(""POOTOOLS_GUIDE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1108,swift-setting-define,".target(name: ""PooToolsInstructions"", dependencies: [""PToolsOverlay"", ""SnapKit""], path: ""PooToolsSource/Instructions"", swiftSettings: [.define(""POOTOOLS_INSTRUCTIONS""), .define(""POOTOOLS_COCOAPODS""), .enableUpcomingFeature(""StrictConcurrency"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1109,swift-setting-define,".target(name: ""PooToolsInput"", dependencies: [""ptools"", ""PToolsCore"", ""PToolsUIFoundation"", ""PhoneNumberKit"", ""SnapKit""], path: ""PooToolsSource/Input"", swiftSettings: [.define(""POOTOOLS_INPUT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1110,swift-setting-define,".target(name: ""PooToolsKeyboard"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/Keyboard"", swiftSettings: [.define(""POOTOOLS_CUSTOMERNUMBERKEYWORD""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1111,swift-setting-define,".target(name: ""PooToolsKeyChain"", dependencies: [], path: ""PooToolsSource/KeyChain"", swiftSettings: [.define(""POOTOOLS_KEYCHAIN""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1112,swift-setting-define,".target(name: ""PooToolsMotion"", dependencies: [""ptools"", ""PTMotionPermission""], path: ""PooToolsSource/Motion"", swiftSettings: [.define(""POOTOOLS_MOTION""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1113,swift-setting-define,".target(name: ""PooToolsPhoneInfo"", dependencies: [], path: ""PooToolsSource/PhoneInfo"", swiftSettings: [.define(""POOTOOLS_PHONEINFO""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1114,swift-setting-define,".target(name: ""PooToolsRateView"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/RateView"", swiftSettings: [.define(""POOTOOLS_RATE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1115,swift-setting-define,".target(name: ""PooToolsScrollBanner"", dependencies: [""ptools"", ""PToolsUIFoundation"", ""PooToolsPageControl"", ""SnapKit""], path: ""PooToolsSource/ScrollBanner"", swiftSettings: [.define(""POOTOOLS_SCROLLBANNER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1116,swift-setting-define,".target(name: ""PooToolsSegmented"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/Segmented"", swiftSettings: [.define(""POOTOOLS_SEGMENT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1117,swift-setting-define,".target(name: ""PooToolsHandSign"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/SignView"", swiftSettings: [.define(""POOTOOLS_HANDSIGN""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1118,swift-setting-define,".target(name: ""PooToolsSlider"", dependencies: [""SnapKit""], path: ""PooToolsSource/Slider"", swiftSettings: [.define(""POOTOOLS_SLIDER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1119,swift-setting-define,".target(name: ""PooToolsCheckUpdate"", dependencies: [""ptools"", ""PooToolsNetWork"", ""PooToolsHud"", ""PooToolsLoading"", .product(name: ""SwiftJWT"", package: ""Swift-JWT"")], path: ""PooToolsSource/CheckUpdate"", swiftSettings: [.define(""POOTOOLS_CHECKUPDATE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1120,swift-setting-define,".target(name: ""PooToolsLayout"", dependencies: [""ptools"", ""CollectionViewPagingLayout""], path: ""PooToolsSource/Layout"", swiftSettings: [.define(""POOTOOLS_LAYOUT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1121,swift-setting-define,".target(name: ""PooToolsLocation"", dependencies: [""ptools"", ""PToolsStorage"", ""PToolsStorageCore"", ""PTLocationPermission""], path: ""PooToolsSource/Location"", swiftSettings: [.define(""POOTOOLS_LOCATION""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1122,swift-setting-define,".target(name: ""PooToolsSmartScreenshot"", dependencies: [""ptools""], path: ""PooToolsSource/ScreenShot"", swiftSettings: [.define(""POOTOOLS_SMARTSCREENSHOT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1126,swift-setting-define,".target(name: ""PooToolsPagingControl"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/SegmentControl"", swiftSettings: [.define(""POOTOOLS_PAGINGCONTROL""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1127,swift-setting-define,".target(name: ""PooToolsScanQRCode"", dependencies: [""ptools"", ""PToolsCore"", ""PooToolsImagePicker"", ""PooToolsPhotoPicker"", ""PTCameraPermission"", ""SnapKit""], path: ""PooToolsSource/QRCodeScan"", swiftSettings: [.define(""POOTOOLS_SCANQRCODE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1128,swift-setting-define,".target(name: ""PooToolsStepCount"", dependencies: [""ptools"", ""PTHealthPermission""], path: ""PooToolsSource/HealthKit"", swiftSettings: [.define(""POOTOOLS_STEPCOUNT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1129,swift-setting-define,".target(name: ""PooToolsContact"", dependencies: [""ptools"", ""PTContactsPermission""], path: ""PooToolsSource/Contact"", swiftSettings: [.define(""POOTOOLS_CONTACT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1130,swift-setting-define,".target(name: ""PooToolsVision"", dependencies: [""ptools""], path: ""PooToolsSource/Vision"", swiftSettings: [.define(""POOTOOLS_VISION""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1131,swift-setting-define,".target(name: ""PooToolsRouter"", dependencies: [""ptools"", ""PToolsRouteCore"", ""PToolsDeepLink""], path: ""PooToolsSource/Router"", swiftSettings: [.define(""POOTOOLS_ROUTER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1132,swift-setting-define,".target(name: ""PooToolsPing"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/Ping"", swiftSettings: [.define(""POOTOOLS_PING""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1133,swift-setting-define,".target(name: ""PooToolsSpeedPanel"", dependencies: [""ptools""], path: ""PooToolsSource/SpeedPanel"", swiftSettings: [.define(""POOTOOLS_SPEEDPANEL""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1134,swift-setting-define,".target(name: ""PooToolsNetworkSpeedTest"", dependencies: [""ptools""], path: ""PooToolsSource/NetworkSpeedTest"", swiftSettings: [.define(""POOTOOLS_NETWORKSPEEDTEST""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1135,swift-setting-define,".target(name: ""PooToolsOSSKitSpeech"", dependencies: [""ptools"", ""PTSpeechPermission""], path: ""PooToolsSource/OSSKit"", swiftSettings: [.define(""POOTOOLS_OSSKITSPEECH""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1136,swift-setting-define,".target(name: ""PooToolsiOS17Tips"", dependencies: [""ptools"", ""SnapKit""], path: ""PooToolsSource/iOS17Tips"", swiftSettings: [.define(""POOTOOLS_iOS17TIPS""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1137,swift-setting-define,".target(name: ""PooToolsWhatsNewsKit"", dependencies: [""ptools"", ""PToolsUIFoundation"", ""SnapKit""], path: ""PooToolsSource/WhatsNewsKit"", swiftSettings: [.define(""POOTOOLS_WHATSNEWSKIT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1138,swift-setting-define,".target(name: ""PooToolsHeartRate"", dependencies: [""ptools"", .product(name: ""Lottie"", package: ""lottie-ios""), ""PTCameraPermission"", ""SnapKit""], path: ""PooToolsSource/HeartRate"", swiftSettings: [.define(""POOTOOLS_HEARTRATE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1139,swift-setting-define,".target(name: ""PooToolsChinesePinyin"", dependencies: [""ptools""], path: ""PooToolsSource/Pinyin"", swiftSettings: [.define(""POOTOOLS_CHINESEPINYIN""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1140,swift-setting-define,".target(name: ""PooToolsCircle"", dependencies: [""ptools""], path: ""PooToolsSource/Circle"", swiftSettings: [.define(""POOTOOLS_CIRCLE""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1141,swift-setting-define,".target(name: ""PooToolsMessageKit"", dependencies: [""ptools"", ""PToolsSymbols"", ""PooToolsCustomerLabel"", ""PooToolsProgressBar"", ""PooToolsNetWork"", ""SnapKit""], path: ""PooToolsSource/MessageKit"", swiftSettings: [.define(""POOTOOLS_MESSAGEKIT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1142,swift-setting-define,".target(name: ""PooToolsSocketKit"", dependencies: [""ptools"", ""PooToolsNetWork"", ""PToolsLogging""], path: ""PooToolsSource/SocketKit"", swiftSettings: [.define(""POOTOOLS_SOCKETKIT""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1143,swift-setting-define,".target(name: ""PooToolsIAP"", dependencies: [""ptools""], path: ""PooToolsSource/IAP"", swiftSettings: [.define(""POOTOOLS_IAP""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1144,swift-setting-define,".target(name: ""PooToolsTipsView"", dependencies: [""ptools"", ""PToolsOverlay""], path: ""PooToolsSource/TipsView"", swiftSettings: [.define(""POOTOOLS_TIPSVIEW""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1145,swift-setting-define,".target(name: ""PooToolsPicker"", dependencies: [""ptools"", ""PToolsCore"", ""SnapKit""], path: ""PooToolsSource/Picker"", swiftSettings: [.define(""POOTOOLS_PICKER""), .define(""POOTOOLS_COCOAPODS"")]),",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1159,swift-setting-define,"swiftSettings: [.define(""POOTOOLS_DEBUG""), .define(""POOTOOLS_COCOAPODS"")]",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1165,swift-setting-define,"swiftSettings: [.define(""POOTOOLS_DEBUGTRACKINGEYES""), .define(""POOTOOLS_COCOAPODS"")]",manifest,compare-cocoapods-macro
+Package.swift,Package.swift,1171,swift-setting-define,"swiftSettings: [.define(""POOTOOLS_LAUNCHTIMEPROFILER""), .define(""POOTOOLS_COCOAPODS"")]",manifest,compare-cocoapods-macro

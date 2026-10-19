@@ -970,6 +970,7 @@ let package = Package(
             dependencies: [
                 "PToolsLogging",
                 "PToolsCore",
+                "PToolsTransferCore",
                 "PToolsConstraintLayout",
                 "PToolsDate",
                 "PToolsUIFoundation",
@@ -1055,7 +1056,10 @@ let package = Package(
         ),
         .target(
             name: "PooToolsNetWork",
-            dependencies: ["ptools", "PToolsCore", "PToolsModelCore", "PToolsModelLegacySmartCodable", "PToolsModelLegacyKakaJSON", "PToolsNetworkModelCore", "PToolsConnectivity", "PooToolsLoading", "Alamofire"],
+            // English: Reuse the Foundation-only file executor instead of keeping a second download engine in Network.
+            // Español: Reutiliza el ejecutor de archivos basado solo en Foundation en lugar de mantener otro motor en Network.
+            // 中文：复用仅依赖 Foundation 的文件执行器，避免 Network 再维护第二套下载引擎。
+            dependencies: ["ptools", "PToolsCore", "PToolsTransferCore", "PToolsModelCore", "PToolsModelLegacySmartCodable", "PToolsModelLegacyKakaJSON", "PToolsNetworkModelCore", "PToolsConnectivity", "PooToolsLoading", "Alamofire"],
             path: "PooToolsSource/NetWork",
             sources: [
                 "Network+Download.swift", "Network+LegacyCompatibility.swift", "Network+Logging.swift",

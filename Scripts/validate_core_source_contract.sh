@@ -120,10 +120,10 @@ end
 end
 
 expected_dirs = core_dirs.to_set
-# English: CocoaPods keeps the Foundation-only font metadata beside the monolithic Core sources so the 5.x pod can compile the split runtime files.
-# Español: CocoaPods conserva los metadatos de fuentes Foundation-only junto al Core monolítico para que el pod 5.x compile los archivos de runtime divididos.
-# 中文：CocoaPods 将 Foundation-only 字体元数据放在单体 Core 源码旁，以保证 5.x pod 能编译拆分后的运行时文件。
-pod_compatibility_split_dirs = Set.new(%w[PToolsFontCore])
+# English: CocoaPods keeps split Foundation-only contracts beside the monolithic Core sources so the 5.x pod can compile the shared runtime files.
+# Español: CocoaPods conserva los contratos Foundation-only divididos junto al Core monolítico para que el pod 5.x compile los archivos de runtime compartidos.
+# 中文：CocoaPods 将拆分后的 Foundation-only 契约放在单体 Core 源码旁，保证 5.x pod 能编译共享运行时文件。
+pod_compatibility_split_dirs = Set.new(%w[PToolsFontCore PToolsPermissionCore PToolsTransferCore])
 missing = (expected_dirs - pod_dirs).to_a.sort
 missing_compatibility = (pod_compatibility_split_dirs - pod_dirs).to_a.sort
 extra = ((pod_dirs - expected_dirs) - pod_compatibility_split_dirs).to_a.sort

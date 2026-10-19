@@ -3034,6 +3034,9 @@
     "PooToolsSource/PToolsTransferCore/PTTransferCore.swift": [
       "PToolsTransferCore"
     ],
+    "PooToolsSource/PToolsTransferCore/PTTransferFileDownloadService.swift": [
+      "PToolsTransferCore"
+    ],
     "PooToolsSource/PToolsUIFoundation/PTRichText.swift": [
       "PToolsUIFoundation"
     ],
@@ -3767,5 +3770,5 @@
       "PTAcknowledgementsGenerator"
     ]
   },
-  "source_count": 1255
+  "source_count": 1256
 }
