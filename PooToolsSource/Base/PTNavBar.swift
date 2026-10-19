@@ -51,31 +51,7 @@ open class PTNavBar: PTNavigationBarContainer {
     private var lastWidthLayoutSignature: WidthLayoutSignature?
     private var lastVisibleLayoutRect: CGRect = .null
     
-    fileprivate var titleViewMAxWidth: CGFloat = 0 {
-        didSet {
-            switch titleViewMode {
-            case .auto:
-                if let view = titleView {
-                    let targetWidth = max(view.intrinsicContentSize.width, view.bounds.width)
-                    view.snp.remakeConstraints { make in
-                        make.centerX.centerY.equalToSuperview()
-                        make.height.equalToSuperview()
-                        make.width.equalTo(min(targetWidth, titleViewMAxWidth))
-                    }
-                }
-            case .fixed(let width):
-                if let view = titleView {
-                    view.snp.remakeConstraints { make in
-                        make.center.equalToSuperview()
-                        make.width.equalTo(min(width, titleViewMAxWidth))
-                        make.height.equalToSuperview()
-                    }
-                }
-            default:
-                break
-            }
-        }
-    }
+    fileprivate var titleViewMAxWidth: CGFloat = 0
     
     public enum PTTitleViewMode: Sendable {
         case auto
@@ -85,32 +61,33 @@ open class PTNavBar: PTNavigationBarContainer {
 
     public var titleViewMode: PTTitleViewMode = .fill {
         didSet {
-            if let view = titleView { applyTitleViewConstraints(view) }
+            setNeedsLayout()
         }
     }
 
     public var titleView: UIView? {
         didSet {
-            oldValue?.removeFromSuperview()
-                        
-            guard let newView = titleView else {
-                // English: Hide the title container when no title view is installed.
-                // Español: Oculta el contenedor cuando no hay una vista de título instalada.
-                // 中文：没有标题视图时隐藏标题容器。
-                titleContainer.isHidden = true
+            if oldValue === titleView {
+                setNeedsLayout()
                 return
             }
-            
+
+            oldValue?.snp.removeConstraints()
+            oldValue?.removeFromSuperview()
+            guard let newView = titleView else {
+                clearTitleLayout()
+                return
+            }
+
+            newView.snp.removeConstraints()
+            newView.removeFromSuperview()
             // English: Keep the title container visible for the new title view.
             // Español: Mantiene visible el contenedor para la nueva vista de título.
             // 中文：为新的标题视图保持标题容器可见。
             titleContainer.isHidden = false
-
             titleContainer.addSubview(newView)
-            // English: Keep titleContainer constraints under calculateMaxWidth so the title stays centered in the full bar.
-            // Español: Mantiene las restricciones de titleContainer en calculateMaxWidth para centrar el título en toda la barra.
-            // 中文：将 titleContainer 的约束统一交给 calculateMaxWidth，保证标题相对整条导航栏居中。
-            applyTitleViewConstraints(newView)
+            titleContainer.isUserInteractionEnabled = true
+            setNeedsLayout()
         }
     }
     
@@ -148,11 +125,8 @@ open class PTNavBar: PTNavigationBarContainer {
         updateContainerConstraints(rightContainer, isLeft: false)
         
         titleContainer.snp.remakeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-            make.left.greaterThanOrEqualTo(leftContainer.snp.right).offset(PTAppBaseConfig.share.navContainerSpacing)
-            make.right.lessThanOrEqualTo(rightContainer.snp.left).offset(-PTAppBaseConfig.share.navContainerSpacing)
-            make.height.equalTo(34)
+            make.center.equalToSuperview()
+            make.width.height.equalTo(0)
         }
     }
     
@@ -237,25 +211,6 @@ open class PTNavBar: PTNavigationBarContainer {
         return visible.isEmpty ? bounds : visible
     }
 
-    private func applyTitleViewConstraints(_ view: UIView) {
-        view.snp.remakeConstraints { make in
-            switch titleViewMode {
-            case .auto:
-                let targetWidth = max(view.intrinsicContentSize.width, view.bounds.width)
-                let width = min(targetWidth, titleViewMAxWidth)
-                make.centerX.centerY.equalToSuperview()
-                make.height.equalToSuperview()
-                make.width.equalTo(width)
-            case .fixed(let width):
-                make.center.equalToSuperview()
-                make.width.equalTo(min(width, titleViewMAxWidth))
-                make.height.equalToSuperview()
-            case .fill:
-                make.edges.equalToSuperview()
-            }
-        }
-    }
-
     // MARK: - Public API
     
     public func setLeftButtons(_ buttons: [UIView]) {
@@ -293,38 +248,84 @@ open class PTNavBar: PTNavigationBarContainer {
         let leftWidthTotal: CGFloat = stackTotalWidth(leftContainer)
 
         let visibleRect = adaptiveVisibleRect()
-        let containerWidth = visibleRect.width > 0 ? visibleRect.width : bounds.width
         let navigationSpacing = PTAppBaseConfig.share.navContainerSpacing
         let defaultSpace = PTAppBaseConfig.share.defaultViewSpace
-        // English: Use the wider button group on both sides so a centered title never conflicts with an edge button.
-        // Español: Usa el grupo de botones más ancho en ambos lados para que el título centrado nunca choque con un botón.
-        // 中文：两侧都按较宽的按钮组计算，保证居中标题不会与边缘按钮产生约束冲突。
-        let widestButtonGroup = max(leftWidthTotal, rightWidthTotal)
-        let availableWidth = max(0, containerWidth - defaultSpace * 2 - navigationSpacing * 2 - widestButtonGroup * 2)
+        let containerWidth = visibleRect.width > 0 ? visibleRect.width : bounds.width
         let signature = WidthLayoutSignature(containerWidth: containerWidth,
                                               leftWidth: leftWidthTotal,
                                               rightWidth: rightWidthTotal,
                                               navigationSpacing: navigationSpacing,
                                               defaultSpace: defaultSpace,
                                               visibleRect: visibleRect)
-        guard lastWidthLayoutSignature != signature else { return }
-        lastWidthLayoutSignature = signature
-
-        titleContainer.snp.remakeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.centerX.equalToSuperview().offset(visibleRect.midX - bounds.midX)
-            make.left.greaterThanOrEqualTo(leftContainer.snp.right).offset(navigationSpacing)
-            make.right.lessThanOrEqualTo(rightContainer.snp.left).offset(-navigationSpacing)
-            // English: Give the title container an explicit width so Auto Layout cannot reuse an old ambiguous frame.
-            // Español: Define un ancho explícito para que Auto Layout no reutilice un frame antiguo y ambiguo.
-            // 中文：为标题容器设置明确宽度，避免 Auto Layout 复用旧的模糊 frame。
-            make.width.equalTo(availableWidth)
-            make.height.equalTo(34)
+        if lastWidthLayoutSignature != signature {
+            lastWidthLayoutSignature = signature
         }
 
-        let newWidth = availableWidth
-        if newWidth != titleViewMAxWidth {
-            titleViewMAxWidth = newWidth
+        guard let view = titleView else {
+            if titleLayoutSignature != nil || !titleContainer.isHidden {
+                clearTitleLayout()
+            }
+            return
+        }
+
+        let mode: PTNavigationTitleLayoutMode
+        let fixedWidth: CGFloat?
+        switch titleViewMode {
+        case .auto:
+            mode = .centerMeasured
+            fixedWidth = nil
+        case .fixed(let width):
+            mode = .centerFixed(width)
+            fixedWidth = width
+        case .fill:
+            mode = .fillAvailable
+            fixedWidth = nil
+        }
+
+        // English: Keep the fake-navigation content row stable while resolving dynamic title sizes.
+        // Español: Mantiene estable la fila de contenido de la barra falsa al medir títulos dinámicos.
+        // 中文：解析动态标题尺寸时，保持伪导航栏内容行高度稳定。
+        let contentRowHeight = min(34, max(0, visibleRect.height))
+        let layout = navigationTitleLayout(for: view,
+                                           mode: mode,
+                                           visibleRect: visibleRect,
+                                           availableHeight: contentRowHeight,
+                                           fixedWidth: fixedWidth)
+        titleViewMAxWidth = layout.result.titleFrame.width
+        titleLayoutMode = mode
+
+        let needsUpdate = titleLayoutSignature != layout.input || titleLayoutView !== view
+        titleLayoutView = view
+        guard needsUpdate else {
+            titleContainer.isHidden = !layout.result.shouldDisplay
+            return
+        }
+
+        titleLayoutSignature = layout.input
+        if !layout.result.shouldDisplay {
+            titleContainer.isHidden = true
+            titleContainer.isUserInteractionEnabled = false
+            titleContainer.snp.remakeConstraints { make in
+                make.center.equalToSuperview()
+                make.width.height.equalTo(0)
+            }
+            view.snp.remakeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            return
+        }
+
+        titleContainer.isHidden = false
+        titleContainer.isUserInteractionEnabled = true
+        let frame = layout.result.titleFrame
+        titleContainer.snp.remakeConstraints { make in
+            make.left.equalToSuperview().offset(frame.minX)
+            make.top.equalToSuperview().offset(frame.minY)
+            make.width.equalTo(frame.width)
+            make.height.equalTo(frame.height)
+        }
+        view.snp.remakeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
 }

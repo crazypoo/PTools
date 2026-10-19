@@ -1,8 +1,16 @@
 # PTools 路线图
 
-> 当前代码基线：`5.67.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.67.4`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.65.7`；`5.67.0` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.67.3`；`5.67.4` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.67.4 导航标题布局统一
+
+- ✅ 新增纯值 `PTNavigationTitleLayoutResolver` 与 `PTNavigationTitleSizeResolver`，统一标题区域和标题尺寸计算，处理非法尺寸、空间不足和安全降级。
+- ✅ 系统导航容器与 `PTNavBar` 共用同一套解析结果；按钮尺寸、标题模式、分屏可见区域和伪导航栏宿主高度变化都通过同一条状态更新路径刷新。
+- ✅ 保留现有公开方法签名、默认值、SnapKit `.snp` 入口、原生竖向导航栏和大标题转场行为，避免改变已有调用方的视觉契约。
+- ✅ 增加 NAV-TITLE-001 至 NAV-TITLE-014 几何/尺寸回归，并补充系统导航容器与独立导航栏的运行时回归覆盖。
+- ⬜ 仍需在真实宿主、iPhone Duo 和 watchOS/visionOS/macOS 对应可用边界完成设备/视觉验证；本轮未创建正式 Git tag。
 
 ## 5.67.0 PTLayout 3.0 原生约束布局
 

@@ -61,6 +61,15 @@ open class PTNavigationBarContainer: UIView {
     }()
     
     public let titleContainer = UIView()
+
+    // English: Cache only the value signature and weak view identity used by the title adapters.
+    // Español: Guarda solo la firma de valores y la identidad débil de la vista usada por los adaptadores.
+    // 中文：只缓存标题适配器使用的值签名和弱引用视图身份。
+    var titleLayoutSignature: PTNavigationTitleLayoutInput?
+    weak var titleLayoutView: UIView?
+    var titleLayoutMode: PTNavigationTitleLayoutMode?
+    var titleLayoutUpdateHandler: (() -> Void)?
+    private var isUpdatingTitleLayout = false
     
     let topBarContainer = UIView()   // ← 放 left/right/title
     let largeTitleContainer = UIView() // ← 单独一层
@@ -88,6 +97,11 @@ open class PTNavigationBarContainer: UIView {
                 make.top.equalToSuperview()
             }
             make.height.equalTo(CGFloat.kNavBarHeight)
+        }
+
+        titleContainer.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.height.equalTo(0)
         }
         
         largeTitleContainer.snp.makeConstraints { make in
@@ -157,10 +171,87 @@ open class PTNavigationBarContainer: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         updateBackgroundFrame()
+        requestTitleLayoutUpdate()
     }
 }
 
 extension PTNavigationBarContainer {
+    // English: Resolve the usable title region from the navigation host's local bounds and safe regions.
+    // Español: Resuelve la región utilizable del título desde los bounds y regiones seguras locales del host.
+    // 中文：根据导航宿主的局部 bounds 和安全区域解析标题可用范围。
+    func navigationTitleVisibleRect() -> CGRect {
+        guard !topBarContainer.bounds.isEmpty else { return .zero }
+        let context = PTAdaptiveBarLayoutContext.make(for: topBarContainer)
+        let region = PTAdaptiveVisibleRegionResolver.region(for: context)
+        let visible = region.visibleRect.intersection(topBarContainer.bounds)
+        return visible.isEmpty ? topBarContainer.bounds : visible
+    }
+
+    // English: Share one measurement input between the system-container and standalone-bar adapters.
+    // Español: Comparte una única entrada de medición entre el contenedor del sistema y la barra independiente.
+    // 中文：让系统容器和独立导航栏适配器共用同一套测量输入。
+    func navigationTitleLayout(for view: UIView,
+                               mode: PTNavigationTitleLayoutMode,
+                               visibleRect: CGRect,
+                               availableHeight: CGFloat? = nil,
+                               fixedWidth: CGFloat? = nil) -> (input: PTNavigationTitleLayoutInput,
+                                                               result: PTNavigationTitleLayoutResult) {
+        let height = availableHeight ?? visibleRect.height
+        let desiredSize = PTNavigationTitleSizeResolver.resolve(view: view,
+                                                                availableHeight: height,
+                                                                fixedWidth: fixedWidth)
+        let input = PTNavigationTitleLayoutResolver.makeInput(
+            visibleRect: visibleRect,
+            leftWidth: leftContainerWidth,
+            rightWidth: rightContainerWidth,
+            desiredTitleSize: desiredSize,
+            minimumEdgeInset: PTAppBaseConfig.share.defaultViewSpace,
+            itemSpacing: PTAppBaseConfig.share.navContainerSpacing,
+            mode: mode
+        )
+        return (input, PTNavigationTitleLayoutResolver.resolve(input))
+    }
+
+    // English: Re-enter an adapter only once per layout pass so geometry changes cannot create a layout loop.
+    // Español: Entra en el adaptador una sola vez por pasada para evitar bucles de layout por cambios geométricos.
+    // 中文：每次布局只进入一次适配器，避免几何变化造成布局循环。
+    private func requestTitleLayoutUpdate() {
+        guard !isUpdatingTitleLayout, titleLayoutUpdateHandler != nil else { return }
+        isUpdatingTitleLayout = true
+        titleLayoutUpdateHandler?()
+        isUpdatingTitleLayout = false
+    }
+
+    // English: Remove the title view and collapse its owner constraints when the renderer changes or title becomes nil.
+    // Español: Elimina el título y colapsa sus restricciones cuando cambia el renderer o el título pasa a nil.
+    // 中文：渲染器切换或标题为空时，移除标题并收拢其所属约束。
+    func clearTitleLayout(removeView: Bool = true) {
+        let hasTitleState = titleLayoutSignature != nil ||
+            titleLayoutView != nil ||
+            titleLayoutMode != nil ||
+            !titleContainer.isHidden ||
+            !titleContainer.subviews.isEmpty
+        guard hasTitleState else { return }
+        if removeView {
+            titleContainer.subviews.forEach {
+                // English: Remove adapter-owned constraints before changing the view hierarchy.
+                // Español: Elimina las restricciones del adaptador antes de cambiar la jerarquía de vistas.
+                // 中文：切换视图层级前，先移除适配器拥有的约束。
+                $0.snp.removeConstraints()
+                $0.removeFromSuperview()
+            }
+        }
+        titleLayoutSignature = nil
+        titleLayoutView = nil
+        titleLayoutMode = nil
+        titleContainer.isHidden = true
+        titleContainer.isUserInteractionEnabled = false
+        titleContainer.snp.remakeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.height.equalTo(0)
+        }
+    }
+
     // English: Snapshot custom item sizes before reparenting them into a navigation stack.
     // Español: Captura el tamaño de cada elemento antes de cambiarlo a la jerarquía de la barra.
     // 中文：在把自定义按钮重新加入导航栏层级前，先快照它们的尺寸。

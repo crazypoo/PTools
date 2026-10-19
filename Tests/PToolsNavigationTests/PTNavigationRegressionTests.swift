@@ -76,6 +76,51 @@ final class PTNavigationRegressionTests: XCTestCase {
         XCTAssertEqual(rightButton.bounds.size.height, 40, accuracy: 0.5)
     }
 
+    func testFakeNavigationBarTitleModesRemainWithinHost() {
+        let bar = PTNavBar(frame: CGRect(x: 0, y: 0, width: 320, height: 72))
+        bar.isFakeNav = true
+
+        let leftButton = UIView(frame: CGRect(x: 0, y: 0, width: 56, height: 44))
+        let rightButton = UIView(frame: CGRect(x: 0, y: 0, width: 56, height: 44))
+        let title = UILabel()
+        title.text = "Navigation title"
+
+        bar.setLeftButtons([leftButton])
+        bar.setRightButtons([rightButton])
+        bar.titleViewMode = .fill
+        bar.titleView = title
+        bar.layoutIfNeeded()
+
+        XCTAssertFalse(bar.titleContainer.isHidden)
+        XCTAssertGreaterThanOrEqual(bar.titleContainer.frame.minX, -0.5)
+        XCTAssertGreaterThanOrEqual(bar.titleContainer.frame.minY, -0.5)
+        XCTAssertLessThanOrEqual(bar.titleContainer.frame.maxX, bar.bounds.width + 0.5)
+        XCTAssertLessThanOrEqual(bar.titleContainer.frame.maxY, bar.bounds.height + 0.5)
+
+        bar.titleViewMode = .auto
+        bar.layoutIfNeeded()
+        XCTAssertFalse(bar.titleContainer.isHidden)
+
+        bar.titleViewMode = .fixed(120)
+        bar.layoutIfNeeded()
+        XCTAssertLessThanOrEqual(bar.titleContainer.frame.width, 120.5)
+    }
+
+    func testFakeNavigationBarTitleViewReuseKeepsOneSubview() {
+        let bar = PTNavBar(frame: CGRect(x: 0, y: 0, width: 320, height: 72))
+        bar.isFakeNav = true
+
+        let title = UILabel()
+        title.text = "Reusable title"
+        bar.titleView = title
+        bar.layoutIfNeeded()
+        bar.titleView = title
+        bar.layoutIfNeeded()
+
+        XCTAssertEqual(bar.titleContainer.subviews.count, 1)
+        XCTAssertTrue(title.superview === bar.titleContainer)
+    }
+
     func testHostDelegateCanRemainAttachedToNavigationController() {
         final class HostDelegate: NSObject, UINavigationControllerDelegate {}
 

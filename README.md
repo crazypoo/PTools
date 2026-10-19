@@ -11,7 +11,9 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.67.1`，真机/宿主回归与发布证据完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.67.4`，真机/宿主回归与发布证据完成前不创建正式 tag。
+
+`5.67.4` 统一了系统导航容器与 `PTNavBar` 的自定义标题布局：两者现在共享同一套可用区域、标题尺寸和安全降级解析逻辑，保留 `setCustomTitleView(_:fillSpace:)`、`.auto/.fixed/.fill` 和 SnapKit `.snp` 兼容入口。标题视图会在按钮、安全区、分屏和窗口尺寸变化后幂等刷新；迁移说明见 [导航标题布局指南](docs/guides/PTNAVIGATION_TITLE_LAYOUT_574.md)。
 
 `5.67.1` 修复独立 `PToolsConstraintLayout` 的自动布局掩码、最终常量、句柄归属、remake 事务、首次 update、Safe Area 和非法属性校验，并加入真实 iOS Simulator XCTest 门禁；旧 `.snp` 入口继续保持兼容，生产模块仍需按 opt-in 清单逐步迁移。接入与迁移请参阅 [PTLayout 5.67 兼容指南](docs/guides/PTLAYOUT_567_COMPATIBILITY.md) 和 [迁移清单](docs/guides/PTLAYOUT_MIGRATION_CHECKLIST.md)。
 

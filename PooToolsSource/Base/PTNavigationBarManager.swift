@@ -310,7 +310,10 @@ public final class PTNavigationBarManager:NSObject {
     
     public func installIfNeeded(in nav: UINavigationController) {
         if usesNativeVerticalBar(nav) {
-            setCustomContainer(containerMap.object(forKey: nav), visible: false)
+            if let container = containerMap.object(forKey: nav) {
+                container.clearTitleLayout()
+                setCustomContainer(container, visible: false)
+            }
             applyAdaptiveSystemPolicy(to: nav)
             return
         }
@@ -329,6 +332,14 @@ public final class PTNavigationBarManager:NSObject {
         
         container.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         container.bind(to: nav)
+
+        // English: Let the manager refresh title geometry after the host changes size.
+        // Español: Permite que el gestor actualice la geometría del título cuando cambia el tamaño del host.
+        // 中文：宿主尺寸变化后，由 Manager 负责重新计算标题几何。
+        container.titleLayoutUpdateHandler = { [weak self, weak nav, weak container] in
+            guard let self, let nav, let container else { return }
+            self.refreshTitleLayout(in: nav, container: container)
+        }
                 
         navBar.addSubview(container)
         navBar.sendSubviewToBack(container)
@@ -820,6 +831,10 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
     private func applyNativeItem(_ item: PTNavBarItem,
                                  in navigationController: UINavigationController,
                                  viewController: UIViewController) {
+        // English: Release the custom title owner before UIKit takes the same view for its native titleView.
+        // Español: Libera el propietario del título personalizado antes de que UIKit use la misma vista nativa.
+        // 中文：UIKit 接管原生 titleView 前，先释放自定义标题容器的布局所有权。
+        containerMap.object(forKey: navigationController)?.clearTitleLayout()
         let navigationItem = viewController.navigationItem
         let isPresentedRoot = navigationController.viewControllers.first === viewController &&
             (navigationController.presentingViewController != nil ||
@@ -1043,6 +1058,7 @@ extension PTNavigationBarManager {
             make.bottom.equalToSuperview()
             make.width.equalTo(containerWidth)
         }
+        refreshTitleLayout(in: nav, container: container)
     }
     
     public func setRightViews(_ views: [UIView], spacing: CGFloat = 8) {
@@ -1066,6 +1082,7 @@ extension PTNavigationBarManager {
             make.bottom.equalToSuperview()
             make.width.equalTo(containerWidth)
         }
+        refreshTitleLayout(in: nav, container: container)
     }
     
     public func setTitleView(_ view: UIView?, fillSpace: Bool = false) {
@@ -1075,50 +1092,92 @@ extension PTNavigationBarManager {
 
     private func setTitleView(_ view: UIView?, fillSpace: Bool, in nav: UINavigationController) {
         guard let container = containerMap.object(forKey: nav) else { return }
-        container.titleContainer.subviews.forEach { $0.removeFromSuperview() }
-        container.titleContainer.isHidden = true
-        guard let view else { return }
-        // 🛠️ 终极防遮挡核心 物理裁剪，不允许超长文字渲染到容器外部
+        guard let view else {
+            container.clearTitleLayout()
+            return
+        }
+
+        // English: Reuse the existing title view and let one resolver-owned path update its geometry.
+        // Español: Reutiliza la vista existente y deja que una única ruta propietaria del resolver actualice su geometría.
+        // 中文：复用现有标题视图，并由 Resolver 唯一负责的路径更新几何约束。
+        let existingView = container.titleContainer.subviews.first
+        if existingView !== view {
+            existingView?.snp.removeConstraints()
+            existingView?.removeFromSuperview()
+            view.snp.removeConstraints()
+            view.removeFromSuperview()
+            container.titleContainer.addSubview(view)
+        }
         container.titleContainer.clipsToBounds = true
+        container.titleContainer.isUserInteractionEnabled = true
         container.titleContainer.isHidden = false
-        container.titleContainer.addSubview(view)
 
-        // 🌟🌟🌟 核心逻辑：分别计算真实的左右物理边界 🌟🌟🌟
-        // 如果该边有按钮：边界 = 基础边距 + 按钮总宽度 + 标题间距
-        // 如果该边没按钮：边界 = 仅仅保留基础的安全边距（不浪费一丝多余空间）
-        let leftSpace = container.leftContainerWidth > 0
-            ? (PTAppBaseConfig.share.defaultViewSpace + container.leftContainerWidth + PTAppBaseConfig.share.navContainerSpacing)
-            : PTAppBaseConfig.share.defaultViewSpace
-        
-        let rightSpace = container.rightContainerWidth > 0
-            ? (PTAppBaseConfig.share.defaultViewSpace + container.rightContainerWidth + PTAppBaseConfig.share.navContainerSpacing)
-            : PTAppBaseConfig.share.defaultViewSpace
+        let mode: PTNavigationTitleLayoutMode = fillSpace ? .fillAvailable : .centerMeasured
+        container.titleLayoutMode = mode
+        applyTitleLayout(view: view, mode: mode, in: nav, container: container)
+    }
 
+    // English: Apply the shared title result and own all title-container constraints in this adapter.
+    // Español: Aplica el resultado compartido y posee todas las restricciones del contenedor en este adaptador.
+    // 中文：使用统一结果，并由当前适配器独占标题容器约束。
+    private func applyTitleLayout(view: UIView,
+                                  mode: PTNavigationTitleLayoutMode,
+                                  in navigationController: UINavigationController,
+                                  container: PTNavigationBarContainer) {
+        let visibleRect = container.navigationTitleVisibleRect()
+        let layout = container.navigationTitleLayout(for: view,
+                                                      mode: mode,
+                                                      visibleRect: visibleRect,
+                                                      availableHeight: visibleRect.height)
+        let needsUpdate = container.titleLayoutSignature != layout.input ||
+            container.titleLayoutView !== view
+        container.titleLayoutMode = mode
+        container.titleLayoutView = view
+
+        guard needsUpdate else {
+            container.titleContainer.isHidden = !layout.result.shouldDisplay
+            return
+        }
+
+        container.titleLayoutSignature = layout.input
+        if !layout.result.shouldDisplay {
+            container.titleContainer.isHidden = true
+            container.titleContainer.isUserInteractionEnabled = false
+            container.titleContainer.snp.remakeConstraints { make in
+                make.center.equalToSuperview()
+                make.width.height.equalTo(0)
+            }
+            view.snp.remakeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            return
+        }
+
+        container.titleContainer.isHidden = false
+        container.titleContainer.isUserInteractionEnabled = true
+        let frame = layout.result.titleFrame
         container.titleContainer.snp.remakeConstraints { make in
-            make.bottom.equalToSuperview()
-            // 注意：这里保留了你代码里的 self.navOffset()
-            make.top.equalToSuperview()
-            // ✅ 根据模式应用不同的约束策略
-            if fillSpace {
-                // 🔥 填满模式：直接等于左右物理边界，强制拉伸（非常适合搜索框等自定义 View）
-                make.left.equalToSuperview().offset(leftSpace)
-                make.right.equalToSuperview().offset(-rightSpace)
-            } else {
-                // 📝 文本居中模式：保持绝对居中，仅在超长时用 greaterThanOrEqualTo 限制（适合普通文字标题）
-                make.centerX.equalToSuperview().priority(900)
-                make.left.greaterThanOrEqualToSuperview().offset(leftSpace)
-                make.right.lessThanOrEqualToSuperview().offset(-rightSpace)
-            }
+            make.left.equalToSuperview().offset(frame.minX)
+            make.top.equalToSuperview().offset(frame.minY)
+            make.width.equalTo(frame.width)
+            make.height.equalTo(frame.height)
         }
-        
-        view.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            if self.titleLabel {
-                make.top.bottom.equalToSuperview()
-            } else {
-                make.height.equalTo(view.bounds.size.height)
-                make.centerY.equalToSuperview()
-            }
+        view.snp.remakeConstraints { make in
+            make.edges.equalToSuperview()
         }
+        _ = navigationController
+    }
+
+    // English: Recompute a title after button, safe-area, rotation, or split-pane geometry changes.
+    // Español: Recalcula el título después de cambios de botones, área segura, rotación o panel dividido.
+    // 中文：按钮、安全区、旋转或分屏几何变化后重新计算标题。
+    private func refreshTitleLayout(in navigationController: UINavigationController,
+                                    container: PTNavigationBarContainer) {
+        guard let view = container.titleLayoutView,
+              let mode = container.titleLayoutMode else { return }
+        applyTitleLayout(view: view,
+                         mode: mode,
+                         in: navigationController,
+                         container: container)
     }
 }
