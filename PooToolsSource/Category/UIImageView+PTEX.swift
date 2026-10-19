@@ -65,12 +65,16 @@ public extension UIImageView {
                    valueLabelColor: UIColor? = nil,
                    uniCount: Int? = nil,
                    emptyImage: UIImage? = nil,
+                   /// English: Optional decode size for image views whose own bounds are not ready yet.
+                   /// Español: Tamaño de decodificación opcional para vistas de imagen cuyos límites aún no están listos.
+                   /// 中文：当图片视图自身尺寸尚未完成布局时，用于图片解码的可选目标尺寸。
+                   targetSize: CGSize? = nil,
                    progressHandle: (@MainActor @Sendable (_ receivedSize: Int64, _ totalSize: Int64) -> Void)? = nil,
                    loadFinish: (@MainActor @Sendable (PTLoadImageResult) -> Void)? = nil) {
         // English: Reuse the current view bounds as a safe downsampling hint when layout is ready.
         // Español: Usa los límites actuales de la vista como sugerencia segura cuando el diseño está listo.
         // 中文：布局完成时使用当前视图尺寸作为安全的降采样提示。
-        let targetSize = bounds.size.width > 0 && bounds.size.height > 0 ? bounds.size : nil
+        let resolvedTargetSize = targetSize ?? (bounds.size.width > 0 && bounds.size.height > 0 ? bounds.size : nil)
         let configuration = PTImageLoadConfiguration(iCloudDocumentName: iCloudDocumentName,
                                                      radius: radius,
                                                      topLeft: topLeft,
@@ -86,7 +90,7 @@ public extension UIImageView {
                                                      valueLabelColor: valueLabelColor,
                                                      uniCount: uniCount,
                                                      emptyImage: emptyImage,
-                                                     targetSize: targetSize,
+                                                     targetSize: resolvedTargetSize,
                                                      displayScale: window?.screen.scale ?? UIScreen.main.scale)
         pt_loadCoreImage(
             contentData: contentData,

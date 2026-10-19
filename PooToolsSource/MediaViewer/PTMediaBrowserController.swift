@@ -53,6 +53,7 @@ public class PTMediaBrowserController: PTBaseViewController {
     fileprivate var firstLoad:Bool = false
     fileprivate var hideToolBar:Bool = false
     fileprivate var currentIndex:Int = 0
+    private var lastReportedPageIndex: Int?
     private var lastAdaptiveContentLayoutSignature: String?
 
     fileprivate var actionSheetTitle:[String] = []
@@ -108,9 +109,8 @@ public class PTMediaBrowserController: PTBaseViewController {
         view.pageTabCallback = { [weak self] index in
             guard let self = self else { return }
             // MARK: -  加入安全边界检查，防止越界崩溃
-            guard index < self.mediaData.count else { return }
-            let cellModel = self.mediaData[index]
-            self.updateBottom(models: cellModel)
+            guard self.mediaData.indices.contains(index) else { return }
+            self.commitCurrentPage(index: index, notify: true)
             self.newCollectionView.scrolToItem(indexPath: IndexPath(row: index, section: 0), position: .right)
         }
         return view
@@ -211,53 +211,45 @@ public class PTMediaBrowserController: PTBaseViewController {
         
         collectionView.collectionDidEndDisplay = { [weak self] collectionView, cell, sectionModel, indexPath in
             guard let self = self else { return }
-            if let currentIndex = self.settledPageIndex(in: collectionView) {
-                if let _ = sectionModel.rows?[currentIndex], let endCell = cell as? PTMediaBrowserCell {
-                    
-                    guard currentIndex < self.mediaData.count else { return }
-                    let cellModel = self.mediaData[currentIndex]
-                    switch endCell.currentCellType {
-                    case .GIF:
-                        endCell.imageView.stopAnimating()
-                    default: break
-                    }
-                    endCell.invalidateMediaResources()
-                    
-                    if self.viewConfig.pageControlShow {
-                        self.pageControlProgressSet(indexPath: IndexPath(item: currentIndex, section: 0))
-                    }
-                    self.currentIndex = currentIndex
-                    
-                    if !self.navControl.titleLabel.isHidden {
-                        self.navControl.titleLabel.text = "\(currentIndex + 1)/\(self.mediaData.count)"
-                    }
-                    self.updateBottom(models: cellModel)
-                }
+            guard indexPath.section == 0,
+                  indexPath.item < self.mediaData.count,
+                  let endCell = cell as? PTMediaBrowserCell else { return }
+
+            // English: Clean only the cell that actually left the viewport; never use the settled page to invalidate another cell.
+            // Español: Limpia solo la celda que realmente salió del viewport; nunca invalida otra celda usando la página estable.
+            // 中文：只清理真正离开可视区域的 Cell，不能用当前稳定页索引去失效另一张 Cell。
+            if endCell.currentCellType == .GIF {
+                endCell.imageView.stopAnimating()
             }
+            endCell.invalidateMediaResources()
         }
         
         collectionView.collectionWillDisplay = { [weak self] collectionView, cell, sectionModel, indexPath in
             guard let self = self else { return }
-            if self.viewConfig.pageControlShow {
-                self.pageControlProgressSet(indexPath: indexPath)
-            }
-            self.currentIndex = indexPath.row
+            guard indexPath.section == 0,
+                  indexPath.row < self.mediaData.count,
+                  let endCell = cell as? PTMediaBrowserCell else { return }
 
-            if let _ = sectionModel.rows?[indexPath.row], let endCell = cell as? PTMediaBrowserCell {
-                guard indexPath.row < self.mediaData.count else { return }
-                let cellModel = self.mediaData[indexPath.row]
+            // English: Display callbacks only control media playback; page state is committed after scrolling settles.
+            // Español: Los callbacks de visualización solo controlan la reproducción; el estado se confirma al terminar el desplazamiento.
+            // 中文：展示回调只负责媒体播放，页面状态统一在滚动结束后提交。
+            if let _ = sectionModel.rows?[indexPath.row] {
                 switch endCell.currentCellType {
                 case .GIF:
                     endCell.imageView.startAnimating()
                 default: break
                 }
-                if !self.navControl.titleLabel.isHidden {
-                    self.navControl.titleLabel.text = "\(indexPath.row + 1)/\(self.mediaData.count)"
-                }
-                self.updateBottom(models: cellModel)
-                
-                self.browserCurrentDataBlock?(indexPath.row)
             }
+        }
+
+        // English: Media pages use an orthogonal compositional section, so commit the index from its own page callback.
+        // Español: Las páginas multimedia usan una sección composicional ortogonal; confirma el índice desde su callback de página.
+        // 中文：媒体页面使用正交 Compositional Section，因此必须从正交分页回调提交索引。
+        collectionView.orthogonalPageDidChange = { [weak self] sectionIndex, pageIndex in
+            guard let self,
+                  sectionIndex == 0,
+                  self.mediaData.indices.contains(pageIndex) else { return }
+            self.commitCurrentPage(index: pageIndex, notify: true)
         }
         
         collectionView.collectionViewDidScroll = { [weak self] collectionViewScrol in
@@ -265,8 +257,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             let currentPageControlValue = self.getPageControlCurrentValue()
             guard currentPageControlValue < self.mediaData.count else { return }
             
-            if let currentIndex = self.settledPageIndex(in: collectionViewScrol),
-               let currentCell = collectionViewScrol.cellForItem(at: IndexPath(item: currentIndex, section: 0)) as? PTMediaBrowserCell {
+            if let currentCell = collectionViewScrol.cellForItem(at: IndexPath(item: self.currentIndex, section: 0)) as? PTMediaBrowserCell {
                 if abs(collectionViewScrol.contentOffset.y) > 0 {
                     currentCell.contentScrolView.isUserInteractionEnabled = false
                     currentCell.contentScrolView.isScrollEnabled = false
@@ -460,7 +451,8 @@ public class PTMediaBrowserController: PTBaseViewController {
             
             self.navControl.titleLabel.isHidden = false
             let initialIndex = min(self.defaultIndex, max(0, self.mediaData.count - 1))
-            self.navControl.titleLabel.text = "\(initialIndex + 1)/\(self.mediaData.count)"
+            self.lastReportedPageIndex = nil
+            self.commitCurrentPage(index: initialIndex, notify: true)
             
             self.newCollectionView.showCollectionDetail(collectionData: sections) { [weak self = self] collectionView in
                 guard let self = self else { return }
@@ -855,22 +847,23 @@ fileprivate extension PTMediaBrowserController {
         return labelW
     }
 
-    // English: Use the settled page nearest the viewport center instead of the first visible cell during paging.
-    // Español: Usa la página estable más cercana al centro del viewport en lugar de la primera celda visible.
-    // 中文：翻页过程中以最接近可视区域中心的页面作为当前页，避免双页残影误判。
-    private func settledPageIndex(in collectionView: UICollectionView) -> Int? {
-        let viewport = CGRect(origin: collectionView.contentOffset, size: collectionView.bounds.size)
-        let attributes = collectionView.collectionViewLayout.layoutAttributesForElements(in: viewport) ?? []
-        let center = CGPoint(x: viewport.midX, y: viewport.midY)
-        let cellIndexPath = attributes
-            .filter { $0.representedElementCategory == .cell }
-            .min { lhs, rhs in
-                let leftDistance = abs(lhs.center.x - center.x) + abs(lhs.center.y - center.y)
-                let rightDistance = abs(rhs.center.x - center.x) + abs(rhs.center.y - center.y)
-                return leftDistance < rightDistance
-            }?.indexPath
-        return cellIndexPath?.item ?? collectionView.indexPathsForVisibleItems
-            .min { abs($0.item - currentIndex) < abs($1.item - currentIndex) }?.item
+    // English: Commit title, page control, toolbar and consumer callbacks from one settled-page source.
+    // Español: Confirma el título, el control de páginas, la barra y los callbacks desde una única página estable.
+    // 中文：从唯一的稳定页来源统一更新标题、分页控件、工具栏和外部回调。
+    private func commitCurrentPage(index: Int, notify: Bool) {
+        guard mediaData.indices.contains(index) else { return }
+        currentIndex = index
+        if viewConfig.pageControlShow {
+            setPageControlValue(index)
+        }
+        if !navControl.titleLabel.isHidden {
+            navControl.titleLabel.text = "\(index + 1)/\(mediaData.count)"
+        }
+        updateBottom(models: mediaData[index])
+
+        guard notify, lastReportedPageIndex != index else { return }
+        lastReportedPageIndex = index
+        browserCurrentDataBlock?(index)
     }
 
     private var bottomSafeAreaInset: CGFloat {

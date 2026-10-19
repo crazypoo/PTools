@@ -24,6 +24,7 @@ class PTMediaBrowserNav: UIView {
     lazy var titleLabel:UILabel = {
         let view = UILabel()
         view.textAlignment = .center
+        view.bounds = .init(origin: .zero, size: .init(width: 100, height: PTAppBaseConfig.share.navBarButtonSize))
         return view
     }()
     
@@ -32,7 +33,7 @@ class PTMediaBrowserNav: UIView {
         view.isFakeNav = true
         view.setLeftButtons([closeButton])
         view.titleView = titleLabel
-        view.titleViewMode = .fill
+        view.titleViewMode = .auto
         return view
     }()
     

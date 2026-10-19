@@ -308,7 +308,17 @@ public class PTLoadImageFunction: NSObject {
         case let image as UIImage:
             source = .image(image)
         case let dataString as String:
-            source = .named(dataString)
+            let normalizedString = dataString.trimmingCharacters(in: .whitespacesAndNewlines)
+            if let url = URL(string: normalizedString),
+               let scheme = url.scheme,
+               !scheme.isEmpty {
+                // English: Route valid URL strings through the URL loader instead of treating them as image names.
+                // Español: Envía las cadenas URL válidas al cargador URL en lugar de tratarlas como nombres de imagen.
+                // 中文：将有效的 URL 字符串交给 URL 加载器，避免被误判为图片名称。
+                source = .url(url)
+            } else {
+                source = .named(dataString)
+            }
         case let data as Data:
             source = .data(data)
         case let asset as PHAsset:
@@ -342,7 +352,10 @@ public class PTLoadImageFunction: NSObject {
                                    displayScale: displayScale)
         }
 
-        if dataUrlString.isURL(), let url = URL(string: dataUrlString) {
+        let normalizedString = dataUrlString.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let url = URL(string: normalizedString),
+           let scheme = url.scheme,
+           !scheme.isEmpty {
             return await handleURL(url, iCloudDocumentName, progressHandle, targetSize, displayScale)
         }
 
@@ -488,7 +501,10 @@ public class PTLoadImageFunction: NSObject {
                                         _ targetSize: CGSize? = nil,
                                         _ displayScale: CGFloat = 1) async -> PTLoadImageResult {
 
-        guard let url = URL(string: dataUrlString), !url.absoluteString.isEmpty else {
+        let normalizedString = dataUrlString.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let url = URL(string: normalizedString),
+              let scheme = url.scheme,
+              !scheme.isEmpty else {
             return emptyResult()
         }
         return await handleURL(url, iCloudDocumentName, progressHandle, targetSize, displayScale)

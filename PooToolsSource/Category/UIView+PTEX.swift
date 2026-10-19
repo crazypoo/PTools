@@ -2075,9 +2075,15 @@ public extension UIView {
                 }
                 return
             }
-            if string.isURL(), let url = URL(string: string) {
+            let normalizedString = string.trimmingCharacters(in: .whitespacesAndNewlines)
+            if let url = URL(string: normalizedString),
+               let scheme = url.scheme,
+               !scheme.isEmpty {
+                // English: Keep string sources consistent with the typed URL pipeline.
+                // Español: Mantiene las fuentes String coherentes con el canal URL tipado.
+                // 中文：让 String 来源与类型化 URL 加载管线保持一致。
                 loadFromURL(url)
-            } else if let image = UIImage(named: string) ?? UIImage(systemName: string) {
+            } else if let image = UIImage(named: normalizedString) ?? UIImage(systemName: normalizedString) {
                 finish(PTLoadImageResult(allImages: [image], firstImage: image, loadTime: 0, imageType: .other))
             } else {
                 finish(PTLoadImageResult(allImages: nil, firstImage: nil, loadTime: 0, imageType: .unknown))

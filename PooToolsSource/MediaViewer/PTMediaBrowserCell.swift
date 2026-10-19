@@ -434,9 +434,9 @@ class PTMediaBrowserCell: PTBaseNormalCell {
 
             switch imageData {
             case let urlString as String:
-                self.loadDataUrl(loadUrl: urlString.urlToUnicodeURLString() ?? "",currentID: currentID)
+                self.loadDataUrl(loadUrl: urlString, currentID: currentID)
             case let url as URL:
-                self.loadDataUrl(loadUrl: url.absoluteString.urlToUnicodeURLString() ?? "",currentID: currentID)
+                self.loadDataUrl(loadUrl: url, currentID: currentID)
             case let avItem as AVPlayerItem:
                 self.videoOriginalItem = avItem
                 self.videoAVItem(avItem: avItem, currentID: currentID)
@@ -470,21 +470,57 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         }
     }
     
-    func loadDataUrl(loadUrl:String, currentID: UUID) {
-        if !loadUrl.isEmpty {
-            let mediaURL = URL(string: loadUrl) ?? URL(fileURLWithPath: loadUrl)
-            if mediaURL.pt_isVideoResource {
-                self.videoUrlLoad(url: loadUrl,currentID:currentID)
-            } else {
-                if !loadUrl.stringIsEmpty() {
-                    self.setImageTypeView(url:loadUrl, currentID: currentID)
-                } else {
-                    self.currentCellType = .None
-                    self.createReloadButton()
-                    self.adjustFrame()
-                    self.hideLoading()
-                }
+    // English: Preserve the original source and classify remote media with a valid URL before loading it.
+    // Español: Conserva la fuente original y clasifica los medios remotos con una URL válida antes de cargarlos.
+    // 中文：保留原始来源，并在加载前使用有效 URL 判断远程媒体类型。
+    func loadDataUrl(loadUrl: Any, currentID: UUID) {
+        let source: Any
+        let mediaURL: URL?
+
+        switch loadUrl {
+        case let url as URL:
+            source = url
+            mediaURL = url
+        case let value as String:
+            let normalizedValue = value.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !normalizedValue.isEmpty else {
+                source = value
+                mediaURL = nil
+                break
             }
+
+            if FileManager.default.fileExists(atPath: normalizedValue) {
+                source = value
+                mediaURL = URL(fileURLWithPath: normalizedValue)
+            } else if let url = URL(string: normalizedValue),
+                      let scheme = url.scheme,
+                      !scheme.isEmpty {
+                source = url
+                mediaURL = url
+            } else if let encoded = normalizedValue.urlToUnicodeURLString(),
+                      let url = URL(string: encoded),
+                      let scheme = url.scheme,
+                      !scheme.isEmpty {
+                source = url
+                mediaURL = url
+            } else {
+                source = value
+                mediaURL = nil
+            }
+        default:
+            source = loadUrl
+            mediaURL = nil
+        }
+
+        if let mediaURL, mediaURL.pt_isVideoResource {
+            self.videoUrlLoad(url: mediaURL.absoluteString, currentID: currentID)
+        } else if let string = source as? String, string.stringIsEmpty() {
+            self.currentCellType = .None
+            self.createReloadButton()
+            self.adjustFrame()
+            self.hideLoading()
+        } else if source is String || source is URL {
+            self.setImageTypeView(source: source, currentID: currentID)
         } else {
             self.currentCellType = .None
             self.createReloadButton()
@@ -544,15 +580,25 @@ class PTMediaBrowserCell: PTBaseNormalCell {
 
 //MARK: Image handling logic
 extension PTMediaBrowserCell {
-    func setImageTypeView(url:String, currentID: UUID) {
+    func setImageTypeView(source: Any, currentID: UUID) {
         clearContentView()
         playBtn.isHidden = true
         playBtn.isUserInteractionEnabled = false
-        baseLoadImageData(imageData: url, currentID: currentID)
+        baseLoadImageData(imageData: source, currentID: currentID)
     }
 
     private func baseLoadImageData(imageData:Any, currentID: UUID) {
-        imageView.loadImage(contentData: imageData, iCloudDocumentName: viewConfig.iCloudDocumentName, emptyImage: UIImage()) { receivedSize, totalSize in
+        let targetSize = [contentScrolView.bounds.size, contentView.bounds.size, bounds.size]
+            .first { $0.width > 0 && $0.height > 0 }
+            ?? UIScreen.main.bounds.size
+
+        // English: The image view has no intrinsic size before the first image arrives, so use the cell viewport for decoding.
+        // Español: La vista de imagen no tiene tamaño intrínseco antes de recibir la primera imagen; usa el viewport de la celda.
+        // 中文：图片到达前 UIImageView 没有固有尺寸，因此使用 Cell 可视区域作为解码尺寸。
+        imageView.loadImage(contentData: imageData,
+                            iCloudDocumentName: viewConfig.iCloudDocumentName,
+                            emptyImage: UIImage(),
+                            targetSize: targetSize) { receivedSize, totalSize in
             guard totalSize > 0 else { return }
             self.loading.progress = CGFloat(receivedSize) / CGFloat(totalSize)
         } loadFinish: { value in
