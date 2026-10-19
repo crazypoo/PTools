@@ -1,8 +1,15 @@
 # PTools 路线图
 
-> 当前代码基线：`5.67.4`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.68.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.67.3`；`5.67.4` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.67.3`；`5.68.0` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+
+## 5.68.0 PTCollectionView / PTBannerView 滚动统一
+
+- `PTBannerView` 的内部列表统一使用 `PTCollectionView`，保留可视区域分页、无限循环和稳定逻辑下标。
+- 自动轮播在拖动开始时暂停；拖动无减速结束或减速完成后才恢复，避免手指仍在操作时自动跳页。
+- Banner 内部滚动条默认隐藏，普通 `PTCollectionView` 仍可通过配置保留滚动条。
+- 迁移指南：[滚动样式](docs/guides/PTCOLLECTIONVIEW_SCROLL_STYLE_GUIDE.md) / [Banner 迁移](docs/guides/PTBANNER_PTCOLLECTIONVIEW_MIGRATION_GUIDE.md)。
 
 ## 5.67.4 导航标题布局统一
 

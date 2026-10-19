@@ -127,16 +127,18 @@ public class PTMediaBrowserController: PTBaseViewController {
         
         let collectionView = PTCollectionView(viewConfig: cConfig)
         
-        // MARK: -  所有闭包引入 [weak self]，防止严重的内存泄漏
-        collectionView.cellInCollection = { [weak self] collectionView, dataModel, indexPath in
-            guard let self = self else { return nil }
-            if let itemRow = dataModel.rows?[indexPath.row], let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTMediaBrowserCell {
-                
-                // MARK: -  防止滑动过快导致的数据越界
-                guard indexPath.row < self.mediaData.count else { return cell }
-                
-                let cellModel = self.mediaData[indexPath.row]
-                cell.dataModel = cellModel
+        // English: Bind the row supplied by the canonical provider instead of indexing the mutable media array.
+        // Español: Vincula la fila entregada por el proveedor canónico en lugar de indexar el array multimedia mutable.
+        // 中文：使用统一 Provider 提供的 Row 绑定数据，避免从可变媒体数组按 indexPath 取错资源。
+        collectionView.cellInCollectionV2 = { [weak self] collectionView, context in
+            guard let self,
+                  let cellModel = context.row.dataModel as? PTMediaBrowserModel,
+                  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: context.row.reuseID,
+                                                                  for: context.indexPath) as? PTMediaBrowserCell else {
+                return nil
+            }
+
+            cell.dataModel = cellModel
                 cell.viewerDismissBlock = { [weak self] in
                     Task { @MainActor in
                         self?.returnFrontVC {
@@ -191,29 +193,30 @@ public class PTMediaBrowserController: PTBaseViewController {
                         }
                     }
                 }
-                return cell
-            }
-            return nil
+            return cell
         }
         
         collectionView.customerLayout = { [weak collectionView] _, sectionModel in
             let effectiveSize = collectionView?.contentCollectionView.bounds.size ?? .zero
             let width = max(1, effectiveSize.width)
             let height = max(1, effectiveSize.height)
-            return UICollectionView.horizontalLayoutSystem(data: sectionModel.rows,
-                                                           itemOriginalX: 0,
-                                                           itemWidth: width,
-                                                           itemHeight: height,
-                                                           topContentSpace: 0,
-                                                           bottomContentSpace: 0,
-                                                           itemLeadingSpace: 0)
+            // English: Use one full-viewport item per orthogonal group so paging advances one media item.
+            // Español: Usa un elemento de viewport completo por grupo ortogonal para avanzar un medio por página.
+            // 中文：每个正交 Group 只放一个全屏媒体 Item，确保分页一次只切换一项媒体。
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                  heightDimension: .fractionalHeight(1))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(width),
+                                                   heightDimension: .absolute(height))
+            return NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                      subitems: [item])
         }
         
         collectionView.collectionDidEndDisplay = { [weak self] collectionView, cell, sectionModel, indexPath in
             guard let self = self else { return }
             guard indexPath.section == 0,
-                  indexPath.item < self.mediaData.count,
-                  let endCell = cell as? PTMediaBrowserCell else { return }
+                  let endCell = cell as? PTMediaBrowserCell,
+                  endCell.dataModel != nil else { return }
 
             // English: Clean only the cell that actually left the viewport; never use the settled page to invalidate another cell.
             // Español: Limpia solo la celda que realmente salió del viewport; nunca invalida otra celda usando la página estable.
@@ -227,18 +230,16 @@ public class PTMediaBrowserController: PTBaseViewController {
         collectionView.collectionWillDisplay = { [weak self] collectionView, cell, sectionModel, indexPath in
             guard let self = self else { return }
             guard indexPath.section == 0,
-                  indexPath.row < self.mediaData.count,
-                  let endCell = cell as? PTMediaBrowserCell else { return }
+                  let endCell = cell as? PTMediaBrowserCell,
+                  endCell.dataModel != nil else { return }
 
             // English: Display callbacks only control media playback; page state is committed after scrolling settles.
             // Español: Los callbacks de visualización solo controlan la reproducción; el estado se confirma al terminar el desplazamiento.
             // 中文：展示回调只负责媒体播放，页面状态统一在滚动结束后提交。
-            if let _ = sectionModel.rows?[indexPath.row] {
-                switch endCell.currentCellType {
-                case .GIF:
-                    endCell.imageView.startAnimating()
-                default: break
-                }
+            switch endCell.currentCellType {
+            case .GIF:
+                endCell.imageView.startAnimating()
+            default: break
             }
         }
 
@@ -248,8 +249,9 @@ public class PTMediaBrowserController: PTBaseViewController {
         collectionView.orthogonalPageDidChange = { [weak self] sectionIndex, pageIndex in
             guard let self,
                   sectionIndex == 0,
-                  self.mediaData.indices.contains(pageIndex) else { return }
-            self.commitCurrentPage(index: pageIndex, notify: true)
+                  !self.mediaData.isEmpty else { return }
+            let safeIndex = min(max(0, pageIndex), self.mediaData.count - 1)
+            self.commitCurrentPage(index: safeIndex, notify: true)
         }
         
         collectionView.collectionViewDidScroll = { [weak self] collectionViewScrol in

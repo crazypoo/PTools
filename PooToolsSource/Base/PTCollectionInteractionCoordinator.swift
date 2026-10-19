@@ -19,7 +19,20 @@ extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let itemSec = getSafeSectionModel(at: indexPath.section) else { return }
-        collectionDidSelect?(collectionView,itemSec,indexPath)
+        let logicalIndexPath = logicalIndexPath(for: indexPath)
+        // English: Keep the legacy callback's physical index during projection; the new callback carries the logical index.
+        // Español: Mantiene el índice físico en el callback heredado durante la proyección; el nuevo callback lleva el índice lógico.
+        // 中文：无限投影期间旧回调继续收到物理下标，新回调负责传递逻辑下标。
+        let legacyIndexPath = presentationAdapter.isActive ? indexPath : logicalIndexPath
+        collectionDidSelect?(collectionView,itemSec,legacyIndexPath)
+        if presentationAdapter.isActive,
+           let physicalID = diffableDataSource.itemIdentifier(for: indexPath),
+           let logicalIndex = presentationAdapter.logicalIndex(for: physicalID) {
+            onLogicalItemSelected?(PTCollectionLogicalSelectionContext(
+                rowID: presentationAdapter.logicalID(for: physicalID),
+                logicalIndexPath: IndexPath(item: logicalIndex, section: logicalIndexPath.section)
+            ))
+        }
     }
     
     public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -97,33 +110,94 @@ extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
         guard let cv = scrollView as? UICollectionView else { return }
         scrollObserverMultiplexer.notify(cv)
         throttleScrollUpdate()
+        updatePageGeometry(reason: .userScroll)
     }
     
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         guard let cv = scrollView as? UICollectionView else { return }
+        autoScrollCoordinator.setInteracting(true)
         collectionWillBeginDragging?(cv)
     }
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard let cv = scrollView as? UICollectionView else { return }
+        if !decelerate {
+            // English: Release the interaction gate before completion callbacks so an auto-scroll resume can start immediately.
+            // Español: Libera el bloqueo de interacción antes de los callbacks de finalización para que el auto-scroll pueda reanudarse de inmediato.
+            // 中文：无减速时先解除交互锁，再执行完成回调，确保自动轮播能够立即恢复。
+            autoScrollCoordinator.setInteracting(false)
+        }
         listControllerDidEndDragging?(cv, decelerate)
         collectionDidEndDragging?(cv,decelerate)
+        if !decelerate {
+            updatePageGeometry(reason: .userScroll)
+            if let context = currentPageContext { onPageScrollCompleted?(context) }
+        }
     }
     
     public func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         guard let cv = scrollView as? UICollectionView else { return }
+        if effectiveScrollStyle.isPaging || effectiveScrollStyle.isInfinite,
+           isItemSnap {
+            let proposedOffset = effectiveScrollStyle.isHorizontal
+                ? targetContentOffset.pointee.x + cv.adjustedContentInset.left
+                : targetContentOffset.pointee.y + cv.adjustedContentInset.top
+            if let nearest = nearestItemPage(for: proposedOffset),
+               let point = itemContentOffset(forPage: nearest.logicalPage) {
+                if effectiveScrollStyle.isHorizontal {
+                    targetContentOffset.pointee.x = point.x
+                } else {
+                    targetContentOffset.pointee.y = point.y
+                }
+            }
+        } else if effectiveScrollStyle.isPaging || effectiveScrollStyle.isInfinite,
+                  let extent = pageExtent,
+                  extent > 0 {
+            let current = currentPage
+            let velocityValue = effectiveScrollStyle.isHorizontal ? velocity.x : velocity.y
+            let proposedOffset = effectiveScrollStyle.isHorizontal
+                ? targetContentOffset.pointee.x + cv.adjustedContentInset.left
+                : targetContentOffset.pointee.y + cv.adjustedContentInset.top
+            var targetPage = Int(round(proposedOffset / extent))
+            if !viewConfig.scrollConfiguration.paging.allowsSkippingPages {
+                targetPage = current + (velocityValue > 0.1 ? 1 : velocityValue < -0.1 ? -1 : 0)
+            }
+            if effectiveScrollStyle.isInfinite {
+                targetPage = ((targetPage % max(totalPages, 1)) + max(totalPages, 1)) % max(totalPages, 1)
+            } else {
+                targetPage = max(0, min(targetPage, max(totalPages - 1, 0)))
+            }
+            if let physicalIndex = presentationAdapter.isActive
+                ? presentationAdapter.physicalIndex(for: targetPage)
+                : Optional(targetPage) {
+                let offset = CGFloat(physicalIndex) * extent
+                if effectiveScrollStyle.isHorizontal {
+                    targetContentOffset.pointee.x = offset - cv.adjustedContentInset.left
+                } else {
+                    targetContentOffset.pointee.y = offset - cv.adjustedContentInset.top
+                }
+            }
+        }
         collectionWillEndDraging?(cv,velocity,targetContentOffset)
     }
     
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         guard let cv = scrollView as? UICollectionView else { return }
+        // English: Keep auto-scroll paused until UIKit confirms deceleration has ended, then let completion callbacks resume it.
+        // Español: Mantiene el auto-scroll pausado hasta que UIKit confirme el fin de la desaceleración y después permite reanudarlo.
+        // 中文：只有 UIKit 确认减速结束后才解除自动轮播暂停，再执行完成回调恢复轮播。
+        autoScrollCoordinator.setInteracting(false)
         collectionDidEndDecelerating?(cv)
         hideIndicator()
+        updatePageGeometry(reason: .userScroll)
+        if let context = currentPageContext { onPageScrollCompleted?(context) }
     }
     
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         guard let cv = scrollView as? UICollectionView else { return }
         collectionDidEndScrollingAnimation?(cv)
+        updatePageGeometry(reason: .programmatic)
+        if let context = currentPageContext { onPageScrollCompleted?(context) }
     }
     
     public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
@@ -145,6 +219,19 @@ extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDe
         
         guard let rows = sectionModel.rows, indexPath.item < rows.count else { return [] }
         let rowModel = resolvedRow(rows[indexPath.item])
+        let context = PTCollectionCellContext(section: sectionModel,
+                                               row: rowModel,
+                                               indexPath: indexPath,
+                                               logicalIndexPath: logicalIndexPath(for: indexPath),
+                                               logicalRowID: PTRowIdentifier(rowModel.diffId),
+                                               isInfiniteProjection: presentationAdapter.isActive)
+        if let canBeginDrag, !canBeginDrag(context) { return [] }
+
+        dragCoordinator.begin(sourceRowIDs: [PTRowIdentifier(rowModel.diffId)],
+                              sourceIndexPaths: [indexPath],
+                              isLocalSession: true) { [weak self] phase, outcome, proposed, final in
+            self?.emitDragLifecycle(phase: phase, outcome: outcome, proposed: proposed, final: final)
+        }
         
         let itemProvider = NSItemProvider(object: rowModel.diffId as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
@@ -159,6 +246,11 @@ extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDe
             return UICollectionViewDropProposal(operation: .forbidden)
         }
         if collectionView.hasActiveDrag {
+            dragCoordinator.update(phase: .moved,
+                                   proposed: destinationIndexPath,
+                                   emit: { [weak self] phase, outcome, proposed, final in
+                self?.emitDragLifecycle(phase: phase, outcome: outcome, proposed: proposed, final: final)
+            })
             return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
         }
         return UICollectionViewDropProposal(operation: .forbidden)
@@ -173,6 +265,30 @@ extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDe
         let sourceRowID = (item.dragItem.localObject as? PTRows)?.diffId
             ?? diffableDataSource.itemIdentifier(for: sourceIndexPath)?.diffId
         guard let sourceRowID else { return }
+
+        if let sessionID = dragCoordinator.sessionID {
+            let context = PTCollectionDragContext(sessionID: sessionID,
+                                                  phase: .dropRequested,
+                                                  outcome: .pending,
+                                                  sourceRowIDs: dragCoordinator.sourceRowIDs,
+                                                  sourceLogicalIndexPaths: dragCoordinator.sourceIndexPaths.map(logicalIndexPath(for:)),
+                                                  proposedDestination: requestedDestinationIndexPath,
+                                                  finalDestination: nil,
+                                                  isLocalSession: dragCoordinator.isLocalSession)
+            if let canDropItem, !canDropItem(context) {
+                emitDragLifecycle(phase: .dropRejected,
+                                  outcome: .rejected,
+                                  proposed: requestedDestinationIndexPath,
+                                  final: nil)
+                dragCoordinator.end(phase: .ended,
+                                    outcome: .rejected,
+                                    proposed: requestedDestinationIndexPath,
+                                    emit: { [weak self] phase, outcome, proposed, final in
+                    self?.emitDragLifecycle(phase: phase, outcome: outcome, proposed: proposed, final: final)
+                })
+                return
+            }
+        }
 
         // English: Complete the drop interaction immediately; serialize only the model and snapshot mutation.
         // Español: Completa de inmediato la interacción de soltar; solo serializa la mutación del modelo y del snapshot.
@@ -277,9 +393,43 @@ extension PTCollectionView: UICollectionViewDragDelegate, UICollectionViewDropDe
             let finalIndexPath = IndexPath(item: insertionIndex, section: destinationSectionIndex)
             let animated = !self.viewConfig.refreshWithoutAnimation
             self.applySnapshot(snapshot, animatingDifferences: animated) { [weak self] in
+                if let self,
+                   let sessionID = self.dragCoordinator.sessionID {
+                    let commitContext = PTCollectionDragContext(
+                        sessionID: sessionID,
+                        phase: .dropCommitted,
+                        outcome: .committed,
+                        sourceRowIDs: self.dragCoordinator.sourceRowIDs,
+                        sourceLogicalIndexPaths: self.dragCoordinator.sourceIndexPaths.map(self.logicalIndexPath(for:)),
+                        proposedDestination: requestedDestinationIndexPath,
+                        finalDestination: finalIndexPath,
+                        isLocalSession: self.dragCoordinator.isLocalSession
+                    )
+                    self.onDragCommit?(commitContext)
+                }
                 self?.itemMoveTo?(collectionView, sourceIndexPath, finalIndexPath)
+                self?.emitDragLifecycle(phase: .dropCommitted,
+                                        outcome: .committed,
+                                        proposed: requestedDestinationIndexPath,
+                                        final: finalIndexPath)
+                self?.dragCoordinator.end(phase: .ended,
+                                          outcome: .committed,
+                                          proposed: requestedDestinationIndexPath,
+                                          final: finalIndexPath,
+                                          emit: { [weak self] phase, outcome, proposed, final in
+                    self?.emitDragLifecycle(phase: phase, outcome: outcome, proposed: proposed, final: final)
+                })
                 finish()
             }
         }
+    }
+
+    public func collectionView(_ collectionView: UICollectionView, dropSessionDidEnd session: UIDropSession) {
+        guard dragCoordinator.sessionID != nil else { return }
+        dragCoordinator.end(phase: .cancelled,
+                            outcome: .cancelled,
+                            emit: { [weak self] phase, outcome, proposed, final in
+            self?.emitDragLifecycle(phase: phase, outcome: outcome, proposed: proposed, final: final)
+        })
     }
 }

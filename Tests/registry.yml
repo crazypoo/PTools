@@ -107,6 +107,13 @@ targets:
     pr: true
     nightly: true
     release: true
+  - id: scroll-banner
+    target: PToolsScrollBannerTests
+    path: Tests/PToolsScrollBannerTests
+    type: [contract]
+    pr: true
+    nightly: true
+    release: true
   - id: socket-kit
     target: PToolsSocketKitTests
     path: Tests/PToolsSocketKitTests

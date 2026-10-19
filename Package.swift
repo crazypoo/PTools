@@ -1306,6 +1306,14 @@ let package = Package(
             dependencies: ["PooToolsBanner"],
             path: "Tests/PToolsBannerTests"
         ),
+        // English: Keep PTBannerView's PTCollectionView adapter and interaction contract covered by deterministic tests.
+        // Español: Mantiene cubiertos con pruebas deterministas el adaptador PTCollectionView y el contrato de interacción de PTBannerView.
+        // 中文：用确定性测试覆盖 PTBannerView 的 PTCollectionView 适配器和交互契约。
+        .testTarget(
+            name: "PToolsScrollBannerTests",
+            dependencies: ["PooToolsScrollBanner"],
+            path: "Tests/PToolsScrollBannerTests"
+        ),
         // English: Keep native WebSocket contract tests independent from live network services.
         // Español: Mantén las pruebas del contrato WebSocket nativo independientes de servicios de red reales.
         // 中文：原生 WebSocket 契约测试不依赖真实网络服务。

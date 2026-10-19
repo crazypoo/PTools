@@ -147,6 +147,17 @@ public class PTCollectionView: UIView {
     // Español: Mantiene los modelos mutables más recientes fuera de los identificadores Diffable heredados.
     // 中文：将最新可变模型保存在旧版 Diffable 标识之外。
     let modelStore = PTCollectionModelStore()
+    // English: The presentation adapter owns only physical Diffable identities; models stay logical in ModelStore.
+    // Español: El adaptador de presentación solo posee identidades físicas Diffable; los modelos siguen siendo lógicos.
+    // 中文：展示适配器只管理物理 Diffable 身份，模型始终保留在逻辑 ModelStore 中。
+    let presentationAdapter = PTCollectionPresentationAdapter()
+    let autoScrollCoordinator = PTCollectionAutoScrollCoordinator()
+    let dragCoordinator = PTCollectionDragCoordinator()
+    var requestedScrollConfiguration = PTCollectionScrollConfiguration()
+    @nonobjc public internal(set) var effectiveScrollStyle = PTCollectionScrollStyle.normal
+    @nonobjc public internal(set) var lastScrollError: PTCollectionScrollError?
+    @nonobjc public internal(set) var currentPageContext: PTCollectionPageContext?
+    var didSetInitialPage = false
     // English: Record whether content refresh reaches the Provider and Configure stages.
     // Español: Registra si el refresco de contenido alcanza las etapas Provider y Configure.
     // 中文：记录内容刷新是否真正进入 Provider 和 Configure 阶段。
@@ -182,16 +193,21 @@ public class PTCollectionView: UIView {
         view.dragDelegate = self
         view.dropDelegate = self
         view.contentOffSetZero = self.viewConfig.contentOffSetZero
-        switch self.viewConfig.viewType {
-        case .Normal,.Gird,.WaterFall,.Tag:
-            view.alwaysBounceHorizontal = false
-            view.alwaysBounceVertical = true
-        case .Custom:
-            view.alwaysBounceHorizontal = self.viewConfig.alwaysBounceHorizontal
-            view.alwaysBounceVertical = self.viewConfig.alwaysBounceVertical
-        case .HorizontalLayoutSystem,.Horizontal:
-            view.alwaysBounceHorizontal = true
-            view.alwaysBounceVertical = false
+        if self.viewConfig.scrollConfiguration.style != .normal {
+            view.alwaysBounceHorizontal = self.viewConfig.scrollConfiguration.style.isHorizontal
+            view.alwaysBounceVertical = !self.viewConfig.scrollConfiguration.style.isHorizontal
+        } else {
+            switch self.viewConfig.viewType {
+            case .Normal,.Gird,.WaterFall,.Tag:
+                view.alwaysBounceHorizontal = false
+                view.alwaysBounceVertical = true
+            case .Custom:
+                view.alwaysBounceHorizontal = self.viewConfig.alwaysBounceHorizontal
+                view.alwaysBounceVertical = self.viewConfig.alwaysBounceVertical
+            case .HorizontalLayoutSystem,.Horizontal:
+                view.alwaysBounceHorizontal = true
+                view.alwaysBounceVertical = false
+            }
         }
         view.showsVerticalScrollIndicator = self.viewConfig.showsVerticalScrollIndicator
         view.showsHorizontalScrollIndicator = self.viewConfig.showsHorizontalScrollIndicator
@@ -257,6 +273,23 @@ public class PTCollectionView: UIView {
     open var collectionDidEndScrollingAnimation: PTCollectionViewScrollHandler?
     open var collectionDidScrolltoTop: PTCollectionViewScrollHandler?
     open var collectionWillEndDraging: ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetContentOffset: UnsafeMutablePointer<CGPoint>) -> Void)?
+
+    // English: Typed page callbacks are Swift-only to preserve the Objective-C facade.
+    // Español: Los callbacks tipados de página son solo Swift para conservar la fachada Objective-C.
+    // 中文：类型化页面回调仅提供 Swift 入口，保证 Objective-C 门面兼容。
+    @nonobjc public var onPageChanged: (@MainActor (PTCollectionPageContext) -> Void)?
+    @nonobjc public var onPageScrollCompleted: (@MainActor (PTCollectionPageContext) -> Void)?
+    // English: Use this callback when callers need logical identity during infinite presentation.
+    // Español: Usa este callback cuando el consumidor necesite identidad lógica durante la presentación infinita.
+    // 中文：无限循环展示时，业务应使用这个回调获取稳定的逻辑身份。
+    @nonobjc public var onLogicalItemSelected: (@MainActor (PTCollectionLogicalSelectionContext) -> Void)?
+    @nonobjc public var onDragLifecycle: (@MainActor (PTCollectionDragContext) -> Void)?
+    @nonobjc public var canBeginDrag: (@MainActor (PTCollectionCellContext) -> Bool)?
+    @nonobjc public var canDropItem: (@MainActor (PTCollectionDragContext) -> Bool)?
+    @nonobjc public var onDragCommit: (@MainActor (PTCollectionDragContext) -> Void)?
+
+    @nonobjc public internal(set) var currentPage: Int = 0
+    @nonobjc public internal(set) var totalPages: Int = 0
 
     // English: Internal controller observers keep PTCollectionView's delegate ownership intact.
     // Español: Los observadores internos conservan la propiedad del delegate de PTCollectionView.
@@ -378,6 +411,8 @@ public class PTCollectionView: UIView {
         
         setupDiffableDataSource()
         setiOS17EmptyDataView()
+        requestedScrollConfiguration = viewConfig.scrollConfiguration
+        _ = applyScrollConfiguration(viewConfig.scrollConfiguration, rebuildLayout: false)
 
         skeletonOverlayView.isHidden = true
         addSubview(skeletonOverlayView)
@@ -393,6 +428,9 @@ public class PTCollectionView: UIView {
         super.didMoveToWindow()
         if window == nil {
             photoPrefetchCoordinator.removeAll()
+            autoScrollCoordinator.setVisible(false)
+        } else {
+            autoScrollCoordinator.setVisible(true)
         }
     }
     
@@ -433,6 +471,7 @@ public class PTCollectionView: UIView {
         }
         updateIndexPlacementIfNeeded()
         updateSkeletonLayout()
+        updatePageGeometry(reason: .geometryChanged)
     }
 
 
@@ -481,13 +520,20 @@ extension PTCollectionView {
     }
 
     func resolvedRow(_ identifier: PTRowIdentifier) -> PTRows {
-        modelStore.resolvedRow(identifier) ?? PTRows(diffId: identifier.rawValue)
+        let logicalIdentifier = presentationAdapter.logicalID(for: identifier)
+        return modelStore.resolvedRow(logicalIdentifier) ?? PTRows(diffId: logicalIdentifier.rawValue)
     }
 
     // English: Replace the compatibility store after a structural mutation.
     // Español: Reemplaza el almacén compatible después de una mutación estructural.
     // 中文：结构发生变化后同步兼容模型仓库。
     func synchronizeModelStore(with snapshot: PTCollectionIDSnapshot) {
+        guard !presentationAdapter.isActive else {
+            // English: Infinite physical IDs are a projection, never a logical model update.
+            // Español: Los IDs físicos infinitos son una proyección, nunca una actualización del modelo lógico.
+            // 中文：无限循环的物理 ID 只是投影，不能反向写入逻辑模型仓库。
+            return
+        }
         modelStore.synchronize(with: snapshot)
     }
 
@@ -500,15 +546,19 @@ extension PTCollectionView {
     func applySnapshot(_ snapshot: PTCollectionIDSnapshot,
                        animatingDifferences: Bool,
                        completion: (() -> Void)? = nil) {
+        let snapshotToApply = presentationAdapter.isActive
+            ? presentationSnapshotFromModelStore()
+            : snapshot
         snapshotApplyCount += 1
         diffableDataSource.apply(
-            snapshot,
+            snapshotToApply,
             animatingDifferences: animatingDifferences
         ) { [weak self] in
             self?.setiOS17EmptyDataView()
             if let self {
                 self.cellConfigurationDiagnostics.finish(operationID: self.updateCoordinator.activeOperationID,
                                                          kind: self.updateCoordinator.activeOperationKind ?? .structure)
+                self.applyInitialPageIfNeeded()
             }
             completion?()
         }
@@ -574,7 +624,12 @@ extension PTCollectionView {
 
             let section = resolvedSection(diffableDataSource.snapshot().sectionIdentifiers[indexPath.section])
             let row = resolvedRow(rowIdentifier)
-            let context = PTCollectionCellContext(section: section, row: row, indexPath: indexPath)
+            let context = PTCollectionCellContext(section: section,
+                                                   row: row,
+                                                   indexPath: indexPath,
+                                                   logicalIndexPath: logicalIndexPath(for: indexPath),
+                                                   logicalRowID: logicalRowIdentifier(for: rowIdentifier),
+                                                   isInfiniteProjection: presentationAdapter.isActive)
             cellConfigurationDiagnostics.fingerprint(operationID: updateCoordinator.activeOperationID,
                                                      row: row,
                                                      indexPath: indexPath,
@@ -851,8 +906,15 @@ extension PTCollectionView {
                 }
             }
 
+            snapshot = self.configurePresentation(for: collectionData)
+
             if !rowsToReconfigure.isEmpty {
-                snapshot.reconfigureItems(rowsToReconfigure)
+                let reconfigurableRows = rowsToReconfigure.filter { row in
+                    snapshot.itemIdentifiers.contains(PTRowIdentifier(row.diffId))
+                }
+                if !reconfigurableRows.isEmpty {
+                    snapshot.reconfigureItems(reconfigurableRows)
+                }
             }
 
             self.applySnapshot(snapshot,
@@ -877,6 +939,11 @@ extension PTCollectionView {
             self.waterfallCache.removeAll()
             self.fallbackLayouts.removeAll()
             self.modelStore.replace([])
+            self.presentationAdapter.reset()
+            self.effectiveScrollStyle = self.viewConfig.scrollConfiguration.style
+            self.totalPages = 0
+            self.currentPage = 0
+            self.didSetInitialPage = false
 
             var snapshot = PTCollectionIDSnapshot()
             snapshot.deleteAllItems()
@@ -1178,12 +1245,15 @@ extension PTCollectionView {
 //MARK: Layout
 extension PTCollectionView {
     func comboLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { [weak self] section, environment in
+        let layoutConfiguration = UICollectionViewCompositionalLayoutConfiguration()
+        let requestedStyle = viewConfig.scrollConfiguration.style
+        layoutConfiguration.scrollDirection = requestedStyle.isHorizontal ? .horizontal : .vertical
+        let layout = UICollectionViewCompositionalLayout(sectionProvider: { [weak self] section, environment in
             guard let self else {
                 return PTCollectionView.makeFallbackLayoutSection()
             }
             return self.generateSection(section: section, environment: environment)
-        }
+        }, configuration: layoutConfiguration)
         switch viewConfig.decorationItemsType {
         case .Custom:
             viewConfig.decorationModel?.forEach { value in
@@ -1201,6 +1271,29 @@ extension PTCollectionView {
     
     private func buildSection(sectionModel: PTSection,sectionIndex: NSInteger, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let screenWidth = environment.container.contentSize.width
+        let usesItemSnap = viewConfig.scrollConfiguration.paging.snapMode == .item
+            && !viewConfig.scrollConfiguration.style.isInfinite
+        if viewConfig.scrollConfiguration.style != .normal && !usesItemSnap {
+            let style = viewConfig.scrollConfiguration.style
+            let horizontal = style.isHorizontal
+            let pageWidth = max(1, environment.container.contentSize.width)
+            let pageHeight = max(1, environment.container.contentSize.height > 0
+                                 ? environment.container.contentSize.height
+                                 : viewConfig.itemHeight)
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                   heightDimension: horizontal ? .fractionalHeight(1) : .fractionalHeight(1))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            let groupSize = NSCollectionLayoutSize(widthDimension: horizontal ? .absolute(pageWidth) : .fractionalWidth(1),
+                                                   heightDimension: horizontal ? .fractionalHeight(1) : .absolute(pageHeight))
+            let group: NSCollectionLayoutGroup = horizontal
+                ? NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                : NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+            let pageSection = NSCollectionLayoutSection(group: group)
+            pageSection.interGroupSpacing = 0
+            pageSection.contentInsets = .zero
+            pageSection.orthogonalScrollingBehavior = .none
+            return pageSection
+        }
         let behavior = viewConfig.collectionViewBehavior
         let sectionLayout = sectionModel.layoutConfiguration
         let itemHeight = sectionLayout?.itemHeight.flatMap { value -> CGFloat? in
@@ -1405,14 +1498,22 @@ extension PTCollectionView {
         if behavior != .none {
             laySection.visibleItemsInvalidationHandler = { [weak self] visibleItems, offset, env in
                 guard let self = self else { return }
-                Task { @MainActor in
-                    self.orthogonalDidScroll?(sectionIndex, offset)
-                    let pageWidth = env.container.contentSize.width
-                    if pageWidth > 0 {
-                        let currentPage = Int(round(offset.x / pageWidth))
-                        self.orthogonalPageDidChange?(sectionIndex, currentPage)
-                    }
-                }
+                // English: Derive the page from the visible cell instead of the whole group width.
+                // Español: Calcula la página desde la celda visible y no desde el ancho del grupo completo.
+                // 中文：根据实际可见 Cell 计算页码，不能使用包含全部数据的 Group 宽度。
+                let viewportWidth = max(1, env.container.contentSize.width)
+                let viewportCenterX = offset.x + viewportWidth / 2
+                let pageIndex = visibleItems
+                    .filter { $0.representedElementCategory == .cell }
+                    .min { lhs, rhs in
+                        abs(lhs.frame.midX - viewportCenterX) < abs(rhs.frame.midX - viewportCenterX)
+                    }?.indexPath.item
+                let resolvedPageIndex = pageIndex ?? max(0, Int(round(offset.x / viewportWidth)))
+                // English: Deliver the settled page synchronously on UIKit's main-thread layout callback.
+                // Español: Entrega la página estable de forma síncrona dentro del callback de layout de UIKit en el hilo principal.
+                // 中文：在 UIKit 主线程布局回调中同步派发稳定页码，避免异步任务覆盖最新标题。
+                self.orthogonalDidScroll?(sectionIndex, offset)
+                self.orthogonalPageDidChange?(sectionIndex, resolvedPageIndex)
             }
         }
         return laySection

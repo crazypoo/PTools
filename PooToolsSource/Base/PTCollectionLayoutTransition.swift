@@ -273,16 +273,21 @@ extension PTCollectionView {
         view.dragInteractionEnabled = config.canMoveItem
         view.prefetchDataSource = config.viewForPhoto ? self : nil
 
-        switch config.viewType {
-        case .Normal, .Gird, .WaterFall, .Tag:
-            view.alwaysBounceHorizontal = false
-            view.alwaysBounceVertical = true
-        case .Custom:
-            view.alwaysBounceHorizontal = config.alwaysBounceHorizontal
-            view.alwaysBounceVertical = config.alwaysBounceVertical
-        case .Horizontal, .HorizontalLayoutSystem:
-            view.alwaysBounceHorizontal = true
-            view.alwaysBounceVertical = false
+        if config.scrollConfiguration.style != .normal {
+            view.alwaysBounceHorizontal = config.scrollConfiguration.style.isHorizontal
+            view.alwaysBounceVertical = !config.scrollConfiguration.style.isHorizontal
+        } else {
+            switch config.viewType {
+            case .Normal, .Gird, .WaterFall, .Tag:
+                view.alwaysBounceHorizontal = false
+                view.alwaysBounceVertical = true
+            case .Custom:
+                view.alwaysBounceHorizontal = config.alwaysBounceHorizontal
+                view.alwaysBounceVertical = config.alwaysBounceVertical
+            case .Horizontal, .HorizontalLayoutSystem:
+                view.alwaysBounceHorizontal = true
+                view.alwaysBounceVertical = false
+            }
         }
 
         if config.canMoveItem {
@@ -300,6 +305,7 @@ extension PTCollectionView {
                                              self?.footRefreshTask?()
                                          }
                                      })
+        _ = applyScrollConfiguration(config.scrollConfiguration, rebuildLayout: false)
         setIndexViews()
         if isSkeletonVisible { updateSkeletonLayout() }
     }
@@ -389,6 +395,7 @@ extension PTCollectionViewConfig {
         copy.skeletonItemCount = skeletonItemCount
         copy.skeletonCornerRadius = skeletonCornerRadius
         copy.skeletonConfiguration = skeletonConfiguration
+        copy.scrollConfiguration = scrollConfiguration
         return copy
     }
 }

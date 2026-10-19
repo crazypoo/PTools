@@ -34,6 +34,7 @@ extension PTCollectionView {
             guard let self, self.presentationCoordinator.isCurrent(token), self.presentationCoordinator.skeletonRequested else { return }
             self.skeletonIsPending = false
             self.isSkeletonVisible = true
+            self.autoScrollCoordinator.pause()
             self.collectionView.isSkeletonPresentationSuppressed = true
             PTUnavailableManager.hideUnavailableView(in: self)
             self.skeletonVisibleSince = ContinuousClock.now
@@ -153,6 +154,7 @@ extension PTCollectionView {
             // 中文：骨架完全隐藏后恢复调用方原先设置的 Collection alpha。
             self.collectionView.alpha = self.skeletonUnderlyingCollectionAlpha ?? 1
             self.skeletonUnderlyingCollectionAlpha = nil
+            self.autoScrollCoordinator.resume()
             self.reconcilePresentation()
         }
         if duration > 0, !UIAccessibility.isReduceMotionEnabled {

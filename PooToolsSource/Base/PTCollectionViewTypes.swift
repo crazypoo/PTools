@@ -123,11 +123,22 @@ public struct PTCollectionCellContext {
     public let section: PTSection
     public let row: PTRows
     public let indexPath: IndexPath
+    public let logicalIndexPath: IndexPath
+    public let logicalRowID: PTRowIdentifier
+    public let isInfiniteProjection: Bool
 
-    public init(section: PTSection, row: PTRows, indexPath: IndexPath) {
+    public init(section: PTSection,
+                row: PTRows,
+                indexPath: IndexPath,
+                logicalIndexPath: IndexPath? = nil,
+                logicalRowID: PTRowIdentifier? = nil,
+                isInfiniteProjection: Bool = false) {
         self.section = section
         self.row = row
         self.indexPath = indexPath
+        self.logicalIndexPath = logicalIndexPath ?? indexPath
+        self.logicalRowID = logicalRowID ?? PTRowIdentifier(row.diffId)
+        self.isInfiniteProjection = isInfiniteProjection
     }
 }
 
@@ -290,6 +301,19 @@ public class PTCollectionViewConfig: NSObject {
     // Español: Configuración de skeleton solo para Swift; las propiedades Objective-C heredadas siguen siendo el respaldo.
     // 中文：仅 Swift 使用的骨架配置；旧版 Objective-C 属性继续作为兼容回退。
     @nonobjc open var skeletonConfiguration: PTCollectionSkeletonConfiguration? = nil
+
+    // English: Swift-only scroll configuration keeps the legacy Objective-C configuration source-compatible.
+    // Español: La configuración de desplazamiento solo Swift mantiene compatible la configuración Objective-C heredada.
+    // 中文：滚动配置仅提供 Swift 入口，保证旧版 Objective-C 配置保持兼容。
+    @nonobjc open var scrollConfiguration: PTCollectionScrollConfiguration = .init()
+
+    // English: Convenience access for callers that only need the selected scroll style.
+    // Español: Acceso directo para consumidores que solo necesitan el estilo seleccionado.
+    // 中文：仅需要滚动样式的调用方可以直接使用此便捷属性。
+    @nonobjc open var scrollStyle: PTCollectionScrollStyle {
+        get { scrollConfiguration.style }
+        set { scrollConfiguration.style = newValue }
+    }
 }
 
 public class PTCollectionIndexViewConfiguration: NSObject {

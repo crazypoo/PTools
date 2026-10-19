@@ -15,6 +15,10 @@ import PToolsUIFoundation
 #endif
 
 public class PTBannerModel: NSObject {
+    /// English: Stable identity used by the PTCollectionView-backed banner projection.
+    /// Español: Identidad estable utilizada por la proyección del banner respaldada por PTCollectionView.
+    /// 中文：由 PTCollectionView 驱动的 Banner 投影使用的稳定身份。
+    public let identifier: String = UUID().uuidString
     open var media:Any?
     open var title:String = ""
     open var desc:String = ""

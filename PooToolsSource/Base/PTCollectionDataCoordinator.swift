@@ -122,9 +122,14 @@ extension PTCollectionView {
 
             let sectionModel = self.resolvedSection(snapshot.sectionIdentifiers[indexPath.section])
             let currentRowModel = self.resolvedRow(rowIdentifier)
+            let logicalIndexPath = self.logicalIndexPath(for: indexPath)
+            let logicalRowIdentifier = self.logicalRowIdentifier(for: rowIdentifier)
             let context = PTCollectionCellContext(section: sectionModel,
                                                    row: currentRowModel,
-                                                   indexPath: indexPath)
+                                                   indexPath: indexPath,
+                                                   logicalIndexPath: logicalIndexPath,
+                                                   logicalRowID: logicalRowIdentifier,
+                                                   isInfiniteProjection: self.presentationAdapter.isActive)
             self.cellConfigurationDiagnostics.provider(operationID: self.updateCoordinator.activeOperationID,
                                                        rowID: rowIdentifier,
                                                        indexPath: indexPath)

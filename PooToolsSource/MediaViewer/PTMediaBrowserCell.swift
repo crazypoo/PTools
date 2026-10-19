@@ -348,6 +348,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         loadTask = nil
         loadIdentifier = UUID()
         lastAdaptiveViewportSignature = nil
+        imageView.cancelImageLoad()
         imageView.kf.cancelDownloadTask()
         imageView.stopAnimating()
         livePhoto.stopPlayback()
