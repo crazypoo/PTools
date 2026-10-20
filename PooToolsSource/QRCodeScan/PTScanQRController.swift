@@ -408,8 +408,6 @@ public class PTScanQRController: PTBaseViewController {
                 })
             case .notSupported:
                 processResult(result: "",error: NSError(domain: "PT Setting camera no".localized(), code: 502))
-            default:
-                break
             }
         }
     }

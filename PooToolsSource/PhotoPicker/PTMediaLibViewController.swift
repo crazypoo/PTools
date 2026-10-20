@@ -888,7 +888,7 @@ public class PTMediaLibViewController: PTBaseViewController {
 
         fakeNav.snp.makeConstraints {
             $0.left.right.equalToSuperview()
-            $0.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+            $0.top.equalToSuperview().inset(CGFloat.statusBarHeight() - (self.sheetViewController?.options.pullBarHeight ?? 0) / 2)
             $0.height.equalTo(CGFloat.kNavBarHeight)
         }
 
@@ -916,7 +916,7 @@ public class PTMediaLibViewController: PTBaseViewController {
             fakeNav.snp.remakeConstraints { make in
                 make.left.equalToSuperview().offset(visibleRect.minX)
                 make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
-                make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() - (self.sheetViewController?.options.pullBarHeight ?? 0) / 2)
                 make.height.equalTo(CGFloat.kNavBarHeight)
             }
         }

@@ -480,10 +480,6 @@ class PTFuncNameViewController: PTBaseViewController {
         return true
     }
     
-//    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
-//        PTRotationManager.shared.orientationMask
-//    }
-    
     lazy var searchBar:PTSearchBar = {
         let searchBarConfig = PTSearchBarTextFieldClearButtonConfig()
         searchBarConfig.clearTopSpace = 2
