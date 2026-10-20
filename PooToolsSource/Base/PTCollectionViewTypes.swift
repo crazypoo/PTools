@@ -314,6 +314,11 @@ public class PTCollectionViewConfig: NSObject {
         get { scrollConfiguration.style }
         set { scrollConfiguration.style = newValue }
     }
+    
+    // 顶部玻璃，默认隐藏
+    open var topEdgeEffectIsHidden = true
+    // 底部玻璃，默认隐藏
+    open var bottomEdgeEffectIsHidden = true
 }
 
 public class PTCollectionIndexViewConfiguration: NSObject {

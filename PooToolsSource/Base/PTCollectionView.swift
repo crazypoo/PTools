@@ -192,6 +192,10 @@ public class PTCollectionView: UIView {
         view.dragInteractionEnabled = self.viewConfig.canMoveItem
         view.dragDelegate = self
         view.dropDelegate = self
+        if #available(iOS 26.0, *) {
+            view.topEdgeEffect.isHidden = self.viewConfig.topEdgeEffectIsHidden
+            view.bottomEdgeEffect.isHidden = self.viewConfig.bottomEdgeEffectIsHidden
+        }
         view.contentOffSetZero = self.viewConfig.contentOffSetZero
         if self.viewConfig.scrollConfiguration.style != .normal {
             view.alwaysBounceHorizontal = self.viewConfig.scrollConfiguration.style.isHorizontal
