@@ -557,6 +557,8 @@ public class PTActionLayoutButton: UIControl {
         switch layoutStyle {
         case .leftImageRightTitle,.leftTitleRightImage:
             total = self.getKitTitleSize(lineSpacing: lineSpacing,height: height,width: width).width + 5 + imageSize.width + midSpacing
+        case .title:
+            total = self.getKitTitleSize(lineSpacing: lineSpacing,height: height,width: width).width + 5
         default:
             total = self.getKitTitleSize(lineSpacing: lineSpacing,height: height,width: width).height + 5 + imageSize.height + midSpacing
         }
