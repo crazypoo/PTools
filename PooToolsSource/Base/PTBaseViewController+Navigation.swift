@@ -555,6 +555,24 @@ extension PTNavigationBarContainer {
 
         largeTitleContainer.backgroundColor = .clear
         largeTitleContainer.layer.contents = nil
+        
+        guard !PTNavigationGlassCompatibility.requiresWorkaround,
+              let nav = ownerNavigationController else {
+            return
+        }
+
+        appearance.backgroundColor = .clear
+        appearance.backgroundImage = nil
+
+        let bar = nav.navigationBar
+        bar.standardAppearance = appearance
+        bar.scrollEdgeAppearance = appearance
+        bar.compactAppearance = appearance
+        bar.compactScrollEdgeAppearance = appearance
+
+        bar.backgroundColor = .clear
+        bar.barTintColor = .clear
+        bar.isTranslucent = true
     }
 
     private func styleNeedsOpaqueFallback(_ style: PTNavigationBarStyle) -> Bool {

@@ -784,6 +784,23 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             return
         }
 
+        if PTNavigationGlassCompatibility.requiresWorkaround {
+            let navigationItem = viewController.navigationItem
+
+            navigationItem.hidesBackButton = true
+
+            // 仅清理已由 PTools 自定义视图接管的位置
+            if !item.leftView.isEmpty {
+                navigationItem.leftBarButtonItems = nil
+                navigationItem.leadingItemGroups = []
+            }
+
+            if !item.rightViews.isEmpty {
+                navigationItem.rightBarButtonItems = nil
+                navigationItem.trailingItemGroups = []
+            }
+        }
+        
         setLeftView(item.leftView, spacing: item.leftItemSpacing, in: navigationController)
         setRightViews(item.rightViews, spacing: item.rightItemSpacing, in: navigationController)
         if let findTitleView = item.titleView {
