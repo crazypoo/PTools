@@ -18,6 +18,25 @@ public enum PTScreenShotActionType {
     case Dark,Light,Auto
 }
 
+@MainActor
+enum PTNavigationGlassCompatibility {
+
+    static var requiresWorkaround: Bool {
+        let version = ProcessInfo.processInfo.operatingSystemVersion
+
+        switch version.majorVersion {
+        case 26:
+            return true
+
+        case 27:
+            return version.minorVersion == 0
+
+        default:
+            return false
+        }
+    }
+}
+
 // English: Give UIKit-native bar-button custom views a stable intrinsic size.
 // Español: Proporciona un tamaño intrínseco estable a las vistas personalizadas de los botones nativos de UIKit.
 // 中文：为 UIKit 原生导航按钮的自定义视图提供稳定的固有尺寸。
@@ -319,6 +338,10 @@ public final class PTNavigationBarManager:NSObject {
         }
         if let existingContainer = containerMap.object(forKey: nav) {
             setCustomContainer(existingContainer, visible: true)
+            
+            if PTNavigationGlassCompatibility.requiresWorkaround {
+                resetSystemNavBarAppearance(nav)
+            }
             return
         }
 
@@ -461,7 +484,6 @@ public final class PTNavigationBarManager:NSObject {
         guard let nav = currentNav,
               let container = containerMap.object(forKey: nav) else { return }
         container.setBackgroundAlpha(alpha)
-        resetSystemNavBarAppearance(nav)
     }
     
     public func bind(to nav: UINavigationController) {

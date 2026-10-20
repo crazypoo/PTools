@@ -467,9 +467,8 @@ extension PTNavigationBarContainer {
                        to: PTNavigationBarStyle,
                        progress: CGFloat) {
         let progress = min(max(progress, 0), 1)
-        let nav = ownerNavigationController
         let backgroundSize = backgroundRenderSize
-
+        
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
         appearance.backgroundEffect = nil   // ❗关键（去 blur）
@@ -556,29 +555,6 @@ extension PTNavigationBarContainer {
 
         largeTitleContainer.backgroundColor = .clear
         largeTitleContainer.layer.contents = nil
-
-        appearance.backgroundColor = .clear
-        appearance.backgroundImage = nil
-
-        guard let nav else { return }
-        
-        nav.navigationBar.compactScrollEdgeAppearance = appearance
-        nav.navigationBar.standardAppearance = appearance
-        nav.navigationBar.scrollEdgeAppearance = appearance
-        nav.navigationBar.compactAppearance = appearance
-        // English: Clear legacy UIKit colors as well as appearances so `.solid(.clear)` stays transparent.
-        // Español: Limpia también los colores UIKit heredados para que `.solid(.clear)` permanezca transparente.
-        // 中文：同时清理 UIKit 旧式颜色，确保 `.solid(.clear)` 始终保持透明。
-        nav.navigationBar.backgroundColor = .clear
-        nav.navigationBar.barTintColor = .clear
-        nav.navigationBar.isTranslucent = true
-        nav.navigationBar.subviews.forEach {
-            if NSStringFromClass(type(of: $0)).contains("UIBarBackground") {
-                $0.isHidden = true
-                $0.isUserInteractionEnabled = false
-                $0.alpha = 0
-            }
-        }
     }
 
     private func styleNeedsOpaqueFallback(_ style: PTNavigationBarStyle) -> Bool {
