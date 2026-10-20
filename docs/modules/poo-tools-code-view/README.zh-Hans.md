@@ -2,14 +2,14 @@
 module: "PooToolsCodeView"
 module_id: "poo-tools-code-view"
 language: "zh-Hans"
-status: "review"
+status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
 swiftpm_product: "PooToolsCodeView"
-cocoapods_subspec: "null"
-source: "manifest-only"
-category: "unclassified"
-last_reviewed: "2026-09-28"
+cocoapods_subspec: "CodeView"
+source: "PooToolsSource/CodeView"
+category: "ui-leaf"
+last_reviewed: "2026-10-20"
 canonical: false
 canonical_source: "README.en.md"
 product_version_source: "repository:VERSION"
@@ -20,14 +20,15 @@ document_schema_version: 1
 
 ## 1. 概览
 
-PooToolsCodeView 是 PTools 的 unclassified 模块。本指南由 canonical 模块 registry 生成，说明 iOS 17+ 与 Swift 6+ 下的稳定使用边界。
+PooToolsCodeView 是该稳定 PTools UI-leaf 模块面向 SwiftPM 的 product 名称。本指南由 canonical 模块 registry 生成，说明 iOS 17+ 与 Swift 6+ 下的稳定使用边界。
 
 ## 2. 要求
 
 - 平台：iOS 17.0+
 - Swift：6+
-- 分类：`unclassified`
-- 状态：`review`
+- 分类：`ui-leaf`
+- 状态：`stable`
+- 平台边界：该 UIKit 视图面向 iOS 提供；模块不暴露 watchOS 或 macOS UIKit target，也不声明 visionOS 支持。
 
 ## 3. 安装
 
@@ -40,7 +41,7 @@ import PooToolsCodeView
 CocoaPods：
 
 ```ruby
-# No standalone CocoaPods subspec is published for this product.
+pod 'PooTools/CodeView'
 ```
 
 ## 4. 导入
@@ -51,15 +52,23 @@ import PooToolsCodeView
 
 ## 5. 快速开始
 
-优先选择最小的 product 或 subspec。registry 中的名称是 `PooToolsCodeView`，不要猜测没有发布的 product 或依赖。
+SwiftPM 使用 `PooToolsCodeView`，CocoaPods 使用 `PooTools/CodeView`。模块支持本地生成、宿主提供文本和宿主提供图片三种显示来源。
 
 ## 6. 核心概念
 
-公开边界优先使用值类型。registry 记录的直接依赖：None declared by the registry.。
+模块只依赖 PTools Core 边界，不负责下载或解码远程媒体；网络工作由宿主完成，再把文本或图片交给控件显示。
 
 ## 7. 主要 API
 
-只使用源码中稳定的公开符号。完整符号数据属于自动生成的 API 报告，不在手写指南中重复维护。
+本地生成使用 `PTCodeView(numberOfCodes:numberOfLines:changeTimes:)`；`changeTimes` 是以秒为单位的自动刷新间隔，传入 `0` 可关闭自动刷新。外部文本使用 `setCode(_:)`，图片使用 `setCodeImage(_:)`，程序化刷新使用 `requestRefresh()`。外部刷新通过 `onRefreshRequested` 回调，本地刷新通过 `codeBlock` 回调。
+
+```swift
+let codeView = PTCodeView(numberOfCodes: 4, numberOfLines: 3, changeTimes: 0)
+codeView.setCode("SERVER-001")
+codeView.onRefreshRequested = { view, reason in
+    view.setCode("SERVER-002")
+}
+```
 
 ## 8. 常见场景
 
@@ -71,7 +80,7 @@ import PooToolsCodeView
 
 ## 10. Swift 并发
 
-UI 工作使用 `@MainActor`；共享值应遵守 `Sendable`；取消必须沿所属 `Task` 传播。
+UI 工作使用 `@MainActor`。`PTCodeRefreshReason` 遵守 `Sendable`，外部回调保持在控件所属 actor。控件离开 window 或应用进入后台时会取消自动刷新。
 
 ## 11. 生命周期
 
@@ -91,7 +100,7 @@ UI 工作使用 `@MainActor`；共享值应遵守 `Sendable`；取消必须沿�
 
 ## 15. 无障碍
 
-UI 集成必须保留 Dynamic Type、VoiceOver、Reduce Motion、Reduce Transparency 和 RTL 行为。
+控件提供名为“刷新验证码”的 VoiceOver 自定义操作，并让图片视图保持不可交互。验证码不适合播报时，宿主应提供合适的无障碍标签。
 
 ## 16. 性能
 

@@ -204,12 +204,75 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
                 }
             }
         case String.dymanicCode:
-            let codeView = PTCodeView(numberOfCodes: 4, numberOfLines: 3, changeTimes: 3)
-            view.addSubview(codeView)
-            codeView.snp.makeConstraints { make in
-                make.size.equalTo(150)
-                make.centerX.centerY.equalToSuperview()
+            let stackView = UIStackView()
+            stackView.axis = .vertical
+            stackView.spacing = 12
+            stackView.alignment = .fill
+            view.addSubview(stackView)
+            stackView.snp.makeConstraints { make in
+                make.edges.equalTo(view.safeAreaLayoutGuide).inset(20)
             }
+
+            let localCodeView = PTCodeView(numberOfCodes: 4, numberOfLines: 3, changeTimes: 3)
+            let externalCodeView = PTCodeView(numberOfCodes: 4, numberOfLines: 0, changeTimes: 0)
+            let imageCodeView = PTCodeView(numberOfCodes: 4, numberOfLines: 0, changeTimes: 0)
+            let input = UITextField()
+            let setTextButton = UIButton(type: .system)
+            let replaceImageButton = UIButton(type: .system)
+            let eventLabel = UILabel()
+            let localTitle = UILabel()
+            let externalTextTitle = UILabel()
+            let externalImageTitle = UILabel()
+
+            input.borderStyle = .roundedRect
+            input.placeholder = "输入外部验证码文本"
+            input.text = "SERVER-001"
+            setTextButton.setTitle("设置外部文本并刷新", for: .normal)
+            replaceImageButton.setTitle("替换外部图片", for: .normal)
+            localTitle.text = "本地生成（点击或定时刷新）"
+            externalTextTitle.text = "外部文本（由宿主回调后设置）"
+            externalImageTitle.text = "外部图片（由宿主回调后替换）"
+            eventLabel.numberOfLines = 0
+            eventLabel.textColor = .secondaryLabel
+
+            let fallbackImage = UIGraphicsImageRenderer(size: CGSize(width: 80, height: 80)).image { context in
+                UIColor.systemBlue.setFill()
+                context.fill(CGRect(x: 0, y: 0, width: 80, height: 80))
+            }
+            let demoImage = UIImage(named: "DemoImage") ?? fallbackImage
+            imageCodeView.setCodeImage(demoImage)
+
+            localCodeView.codeBlock = { [weak eventLabel] _, code in
+                eventLabel?.text = "本地生成：\(code)"
+            }
+            externalCodeView.onRefreshRequested = { [weak externalCodeView, weak eventLabel] _, reason in
+                eventLabel?.text = "外部文本刷新：\(reason)"
+                externalCodeView?.setCode("SERVER-REFRESHED")
+            }
+            imageCodeView.onRefreshRequested = { [weak imageCodeView, weak eventLabel] _, reason in
+                eventLabel?.text = "外部图片刷新：\(reason)"
+                imageCodeView?.setCodeImage(demoImage)
+            }
+            setTextButton.addAction(UIAction { [weak externalCodeView, weak input, weak eventLabel] _ in
+                externalCodeView?.setCode(input?.text ?? "")
+                eventLabel?.text = "已设置外部文本"
+            }, for: .touchUpInside)
+            replaceImageButton.addAction(UIAction { [weak imageCodeView, weak eventLabel] _ in
+                let image = UIImage(systemName: "photo.fill") ?? demoImage
+                imageCodeView?.setCodeImage(image)
+                eventLabel?.text = "已替换外部图片"
+            }, for: .touchUpInside)
+
+            [
+                localTitle, localCodeView,
+                externalTextTitle, externalCodeView,
+                input, setTextButton,
+                externalImageTitle, imageCodeView,
+                replaceImageButton, eventLabel
+            ].forEach { stackView.addArrangedSubview($0) }
+            localCodeView.snp.makeConstraints { make in make.height.equalTo(70) }
+            externalCodeView.snp.makeConstraints { make in make.height.equalTo(70) }
+            imageCodeView.snp.makeConstraints { make in make.height.equalTo(90) }
         case String.slider:
             let slider = PTSlider(showTitle: true, showRawValue: false)
             view.addSubview(slider)

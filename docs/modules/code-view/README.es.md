@@ -2,14 +2,14 @@
 module: "CodeView"
 module_id: "code-view"
 language: "es"
-status: "compatibility"
+status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
-swiftpm_product: "null"
+swiftpm_product: "PooToolsCodeView"
 cocoapods_subspec: "CodeView"
-source: "manifest-only"
-category: "compatibility"
-last_reviewed: "2026-09-28"
+source: "PooToolsSource/CodeView"
+category: "ui-leaf"
+last_reviewed: "2026-10-20"
 canonical: false
 canonical_source: "README.en.md"
 product_version_source: "repository:VERSION"
@@ -20,21 +20,22 @@ document_schema_version: 1
 
 ## 1. Descripción
 
-CodeView es un módulo PTools de categoría compatibility. Esta guía se genera desde el registro canónico y describe el límite compatible en iOS 17+ y Swift 6+.
+CodeView es un módulo PTools estable de interfaz. Esta guía se genera desde el registro canónico y describe el límite compatible en iOS 17+ y Swift 6+.
 
 ## 2. Requisitos
 
 - Plataforma: iOS 17.0+
 - Swift: 6+
-- Categoría: `compatibility`
-- Estado: `compatibility`
+- Categoría: `ui-leaf`
+- Estado: `stable`
+- Límite de plataforma: esta vista UIKit se ofrece para iOS; el módulo no expone un target UIKit para watchOS o macOS y no declara compatibilidad con visionOS.
 
 ## 3. Instalación
 
 Swift Package Manager:
 
 ```swift
-// This entry is CocoaPods-only; import the module exposed by the selected subspec.
+import PooToolsCodeView
 ```
 
 CocoaPods:
@@ -46,20 +47,28 @@ pod 'PooTools/CodeView'
 ## 4. Importación
 
 ```swift
-// This entry is CocoaPods-only; import the module exposed by the selected subspec.
+import PooToolsCodeView
 ```
 
 ## 5. Inicio rápido
 
-Usa el producto o subspec mínimo publicado. El nombre del registro es `CodeView`; no inventes productos ni dependencias no publicadas.
+Usa `PooToolsCodeView` con SwiftPM o `PooTools/CodeView` con CocoaPods. El módulo admite generación local, texto externo e imagen externa suministrados por el host.
 
 ## 6. Conceptos principales
 
-La frontera pública prioriza tipos de valor. Dependencias directas registradas: None declared by the registry..
+El módulo solo depende de la frontera Core de PTools. No descarga ni decodifica medios remotos; el host realiza el trabajo de red y entrega el texto o la imagen.
 
 ## 7. API principales
 
-Usa solo símbolos públicos estables. La referencia completa pertenece a los informes de API generados.
+Usa `PTCodeView(numberOfCodes:numberOfLines:changeTimes:)` para generar localmente; `changeTimes` es el intervalo automático en segundos y `0` lo desactiva. Usa `setCode(_:)` para texto externo, `setCodeImage(_:)` para una imagen y `requestRefresh()` para actualizar de forma programática. Las actualizaciones externas llegan por `onRefreshRequested`; las locales por `codeBlock`.
+
+```swift
+let codeView = PTCodeView(numberOfCodes: 4, numberOfLines: 3, changeTimes: 0)
+codeView.setCode("SERVER-001")
+codeView.onRefreshRequested = { view, reason in
+    view.setCode("SERVER-002")
+}
+```
 
 ## 8. Casos de uso
 
@@ -71,7 +80,7 @@ Inyecta un proveedor o una política solo si la API pública lo expone. No acced
 
 ## 10. Concurrencia Swift
 
-El trabajo de UI usa `@MainActor`; los valores compartidos deben ser `Sendable`; la cancelación debe propagarse por el `Task` propietario.
+El trabajo de UI usa `@MainActor`. `PTCodeRefreshReason` es `Sendable` y los callbacks externos permanecen en el actor de la vista. La actualización automática se cancela al salir de la ventana o al entrar en background.
 
 ## 11. Ciclo de vida
 
@@ -91,7 +100,7 @@ El comportamiento de hardware, notificaciones, background, audio, cámara o exte
 
 ## 15. Accesibilidad
 
-Las integraciones UI deben conservar Dynamic Type, VoiceOver, Reduce Motion, Reduce Transparency y RTL.
+La vista expone una acción de VoiceOver llamada “刷新验证码” y mantiene la imagen sin interacción. Si el código no debe anunciarse, el host debe proporcionar una etiqueta accesible adecuada.
 
 ## 16. Rendimiento
 

@@ -200,14 +200,15 @@
 -
   id: "code-view"
   name: "CodeView"
-  swiftpm_product: ""
+  swiftpm_product: "PooToolsCodeView"
   cocoapods_subspec: "CodeView"
-  source: ""
-  category: "compatibility"
-  status: "compatibility"
+  source: "PooToolsSource/CodeView"
+  category: "ui-leaf"
+  status: "stable"
   minimum_ios: "17.0"
   swift: "6+"
-  dependencies: []
+  dependencies:
+    - "Core"
   owner: "PTools maintainers"
   docs: true
   canonical_slug: "code-view"
@@ -1271,13 +1272,14 @@
   id: "poo-tools-code-view"
   name: "PooToolsCodeView"
   swiftpm_product: "PooToolsCodeView"
-  cocoapods_subspec: ""
-  source: ""
-  category: "unclassified"
-  status: "review"
+  cocoapods_subspec: "CodeView"
+  source: "PooToolsSource/CodeView"
+  category: "ui-leaf"
+  status: "stable"
   minimum_ios: "17.0"
   swift: "6+"
-  dependencies: []
+  dependencies:
+    - "Core"
   owner: "PTools maintainers"
   docs: true
   canonical_slug: "poo-tools-code-view"

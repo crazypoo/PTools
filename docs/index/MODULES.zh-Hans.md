@@ -24,7 +24,7 @@ generated: true
 | [CheckUpdate](../modules/check-update/README.zh-Hans.md) | `—` | `CheckUpdate` |
 | [ChinesePinyin](../modules/chinese-pinyin/README.zh-Hans.md) | `—` | `ChinesePinyin` |
 | [Circle](../modules/circle/README.zh-Hans.md) | `—` | `Circle` |
-| [CodeView](../modules/code-view/README.zh-Hans.md) | `—` | `CodeView` |
+| [CodeView](../modules/code-view/README.zh-Hans.md) | `PooToolsCodeView` | `CodeView` |
 | [Connectivity](../modules/connectivity/README.zh-Hans.md) | `—` | `Connectivity` |
 | [Contact](../modules/contact/README.zh-Hans.md) | `—` | `Contact` |
 | [ContactsPermission](../modules/contacts-permission/README.zh-Hans.md) | `—` | `ContactsPermission` |
@@ -95,7 +95,7 @@ generated: true
 | [PooToolsCheckUpdate](../modules/poo-tools-check-update/README.zh-Hans.md) | `PooToolsCheckUpdate` | `—` |
 | [PooToolsChinesePinyin](../modules/poo-tools-chinese-pinyin/README.zh-Hans.md) | `PooToolsChinesePinyin` | `—` |
 | [PooToolsCircle](../modules/poo-tools-circle/README.zh-Hans.md) | `PooToolsCircle` | `—` |
-| [PooToolsCodeView](../modules/poo-tools-code-view/README.zh-Hans.md) | `PooToolsCodeView` | `—` |
+| [PooToolsCodeView](../modules/poo-tools-code-view/README.zh-Hans.md) | `PooToolsCodeView` | `CodeView` |
 | [PooToolsContact](../modules/poo-tools-contact/README.zh-Hans.md) | `PooToolsContact` | `—` |
 | [PooToolsCountry](../modules/poo-tools-country/README.zh-Hans.md) | `PooToolsCountry` | `—` |
 | [PooToolsCustomerLabel](../modules/poo-tools-customer-label/README.zh-Hans.md) | `PooToolsCustomerLabel` | `—` |

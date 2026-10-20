@@ -24,7 +24,7 @@ Cada producto SwiftPM y subspec de CocoaPods registrado tiene una guía triling�
 | [CheckUpdate](../modules/check-update/README.es.md) | `—` | `CheckUpdate` |
 | [ChinesePinyin](../modules/chinese-pinyin/README.es.md) | `—` | `ChinesePinyin` |
 | [Circle](../modules/circle/README.es.md) | `—` | `Circle` |
-| [CodeView](../modules/code-view/README.es.md) | `—` | `CodeView` |
+| [CodeView](../modules/code-view/README.es.md) | `PooToolsCodeView` | `CodeView` |
 | [Connectivity](../modules/connectivity/README.es.md) | `—` | `Connectivity` |
 | [Contact](../modules/contact/README.es.md) | `—` | `Contact` |
 | [ContactsPermission](../modules/contacts-permission/README.es.md) | `—` | `ContactsPermission` |
@@ -95,7 +95,7 @@ Cada producto SwiftPM y subspec de CocoaPods registrado tiene una guía triling�
 | [PooToolsCheckUpdate](../modules/poo-tools-check-update/README.es.md) | `PooToolsCheckUpdate` | `—` |
 | [PooToolsChinesePinyin](../modules/poo-tools-chinese-pinyin/README.es.md) | `PooToolsChinesePinyin` | `—` |
 | [PooToolsCircle](../modules/poo-tools-circle/README.es.md) | `PooToolsCircle` | `—` |
-| [PooToolsCodeView](../modules/poo-tools-code-view/README.es.md) | `PooToolsCodeView` | `—` |
+| [PooToolsCodeView](../modules/poo-tools-code-view/README.es.md) | `PooToolsCodeView` | `CodeView` |
 | [PooToolsContact](../modules/poo-tools-contact/README.es.md) | `PooToolsContact` | `—` |
 | [PooToolsCountry](../modules/poo-tools-country/README.es.md) | `PooToolsCountry` | `—` |
 | [PooToolsCustomerLabel](../modules/poo-tools-customer-label/README.es.md) | `PooToolsCustomerLabel` | `—` |

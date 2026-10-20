@@ -138,6 +138,20 @@
       "category": "ui-leaf"
     },
     {
+      "name": "CodeView",
+      "module_id": "poo-tools-code-view",
+      "canonical_slug": "poo-tools-code-view",
+      "aliases": [],
+      "spm_product": "PooToolsCodeView",
+      "spm_target": "PooToolsCodeView",
+      "pod_subspec": "CodeView",
+      "source_path": "PooToolsSource/CodeView",
+      "dependencies": ["Core"],
+      "compile_flags": ["POOTOOLS_CODEVIEW", "StrictConcurrency"],
+      "resources": [],
+      "category": "ui-leaf"
+    },
+    {
       "name": "Symbols",
       "spm_product": "PToolsSymbols",
       "spm_target": "PToolsSymbols",

@@ -1396,6 +1396,17 @@ let package = Package(
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]
+        ),
+        // English: Keep CodeView refresh, image replacement, accessibility, and lifecycle checks in an iOS-only target.
+        // Español: Mantiene las comprobaciones de actualización, imagen, accesibilidad y ciclo de vida de CodeView en un objetivo exclusivo de iOS.
+        // 中文：将 CodeView 的刷新、图片替换、无障碍和生命周期检查放入仅面向 iOS 的测试 target。
+        .testTarget(
+            name: "PToolsCodeViewTests",
+            dependencies: ["PooToolsCodeView"],
+            path: "Tests/PToolsCodeViewTests",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
         )
     ],
     swiftLanguageModes: [.v6]

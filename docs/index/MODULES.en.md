@@ -24,7 +24,7 @@ Every listed SwiftPM product and CocoaPods subspec has a generated tri-lingual u
 | [CheckUpdate](../modules/check-update/README.en.md) | `—` | `CheckUpdate` |
 | [ChinesePinyin](../modules/chinese-pinyin/README.en.md) | `—` | `ChinesePinyin` |
 | [Circle](../modules/circle/README.en.md) | `—` | `Circle` |
-| [CodeView](../modules/code-view/README.en.md) | `—` | `CodeView` |
+| [CodeView](../modules/code-view/README.en.md) | `PooToolsCodeView` | `CodeView` |
 | [Connectivity](../modules/connectivity/README.en.md) | `—` | `Connectivity` |
 | [Contact](../modules/contact/README.en.md) | `—` | `Contact` |
 | [ContactsPermission](../modules/contacts-permission/README.en.md) | `—` | `ContactsPermission` |
@@ -95,7 +95,7 @@ Every listed SwiftPM product and CocoaPods subspec has a generated tri-lingual u
 | [PooToolsCheckUpdate](../modules/poo-tools-check-update/README.en.md) | `PooToolsCheckUpdate` | `—` |
 | [PooToolsChinesePinyin](../modules/poo-tools-chinese-pinyin/README.en.md) | `PooToolsChinesePinyin` | `—` |
 | [PooToolsCircle](../modules/poo-tools-circle/README.en.md) | `PooToolsCircle` | `—` |
-| [PooToolsCodeView](../modules/poo-tools-code-view/README.en.md) | `PooToolsCodeView` | `—` |
+| [PooToolsCodeView](../modules/poo-tools-code-view/README.en.md) | `PooToolsCodeView` | `CodeView` |
 | [PooToolsContact](../modules/poo-tools-contact/README.en.md) | `PooToolsContact` | `—` |
 | [PooToolsCountry](../modules/poo-tools-country/README.en.md) | `PooToolsCountry` | `—` |
 | [PooToolsCustomerLabel](../modules/poo-tools-customer-label/README.en.md) | `PooToolsCustomerLabel` | `—` |

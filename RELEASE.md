@@ -3,6 +3,8 @@
 ## 5.68.0
 
 - [x] `VERSION`、`PooTools.podspec` 的 canonical version source、CHANGELOG、README 和迁移指南同步到 `5.68.0`。
+- [x] `PTCodeView` 外部文本/图片刷新、生命周期、无障碍和空尺寸绘制安全边界已实现，并登记 SwiftPM `PooToolsCodeView` 与 CocoaPods `CodeView` 的一致映射。
+- [x] CodeView 独立 iOS 测试 target、三语模块文档和 Example 外部内容演示已补齐。
 - [x] `PTBannerView` 已统一使用 `PTCollectionView` 的 viewport 分页、无限循环、拖动生命周期和自动轮播协调器；Banner 内部滚动条默认隐藏。
 - [x] Debug / Release arm64 iOS Simulator Xcode 完整构建通过；构建使用 `/tmp` DerivedData，未在仓库留下 `xcresult`。
 - [x] `git diff --check` 和 SwiftPM manifest 检查通过。

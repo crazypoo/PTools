@@ -15,6 +15,8 @@ PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码�
 
 `5.68.0` 将 `PTBannerView` 的滚动实现统一到 `PTCollectionView`：保留 viewport 分页和无限循环，自动轮播在用户拖动及减速期间暂停、滚动完成后恢复，并默认隐藏 Banner 内部滚动条。迁移与配置示例见 [PTCollectionView 滚动样式指南](docs/guides/PTCOLLECTIONVIEW_SCROLL_STYLE_GUIDE.md) 和 [PTBannerView 迁移指南](docs/guides/PTBANNER_PTCOLLECTIONVIEW_MIGRATION_GUIDE.md)。
 
+`PTCodeView` 同时支持本地生成和宿主提供的文本/图片验证码：使用 `setCode(_:)`、`setCodeImage(_:)` 和 `onRefreshRequested` 接入外部数据，不在控件内部联网；SwiftPM 使用 `PooToolsCodeView`，CocoaPods 使用 `PooTools/CodeView`。
+
 `5.67.4` 统一了系统导航容器与 `PTNavBar` 的自定义标题布局：两者现在共享同一套可用区域、标题尺寸和安全降级解析逻辑，保留 `setCustomTitleView(_:fillSpace:)`、`.auto/.fixed/.fill` 和 SnapKit `.snp` 兼容入口。标题视图会在按钮、安全区、分屏和窗口尺寸变化后幂等刷新；迁移说明见 [导航标题布局指南](docs/guides/PTNAVIGATION_TITLE_LAYOUT_574.md)。
 
 `5.67.1` 修复独立 `PToolsConstraintLayout` 的自动布局掩码、最终常量、句柄归属、remake 事务、首次 update、Safe Area 和非法属性校验，并加入真实 iOS Simulator XCTest 门禁；旧 `.snp` 入口继续保持兼容，生产模块仍需按 opt-in 清单逐步迁移。接入与迁移请参阅 [PTLayout 5.67 兼容指南](docs/guides/PTLAYOUT_567_COMPATIBILITY.md) 和 [迁移清单](docs/guides/PTLAYOUT_MIGRATION_CHECKLIST.md)。
