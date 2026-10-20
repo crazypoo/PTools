@@ -882,7 +882,7 @@ public class PTMediaLibViewController: PTBaseViewController {
 
         mediaListView.snp.makeConstraints {
             $0.left.right.equalToSuperview()
-            $0.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+            $0.top.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
 

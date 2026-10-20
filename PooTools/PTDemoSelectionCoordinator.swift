@@ -127,11 +127,11 @@ enum PTDemoSelectionCoordinator {
                             } completion: { avAsset in
                                 if let getAv = avAsset {
                                     Task { @MainActor in
-                                        let controller = PTVideoEditorToolsViewController(asset: resultFirst.asset,avAsset: getAv.asset)
-                                        controller.videoEditorShow(vc: controller)
-                                        controller.onEditCompleteHandler = { url in
+                                        let editor = PTVideoEditorToolsViewController(asset: resultFirst.asset, avAsset: getAv.asset)
+                                        editor.onEditCompleteHandler = { url in
                                             PTAlertTipsViewController.tipsAlertShow(title:"我好了\(url)",icon: .Done)
                                         }
+                                        editor.videoEditorShow(vc: controller)
                                     }
                                 } else {
                                     Task { @MainActor in
