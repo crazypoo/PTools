@@ -40,6 +40,15 @@ public class PTMediaLibListModel: NSObject {
     }
     
     public var models: [PTMediaModel] = []
+
+    // English: Expose a monotonic content revision so the picker can reject identical album snapshots.
+    // Español: Expone una revisión monótona para que el selector rechace instantáneas de álbum idénticas.
+    // 中文：提供单调递增的内容版本，Picker 可以直接跳过完全相同的相册快照。
+    public private(set) var contentRevision: UInt64 = 0
+
+    private var resultSignature: String
+    private var modeledResultSignature: String?
+    private var modelsSignature = ""
     
     // 暂未用到
     private var selectedModels: [PTMediaModel] = []
@@ -59,22 +68,88 @@ public class PTMediaLibListModel: NSObject {
         self.option = option
         self.isCameraRoll = isCameraRoll
         self.selectionOptions = selectionOptions ?? .current()
+        self.resultSignature = Self.signature(for: result)
+        self.modeledResultSignature = nil
     }
-    
-    @MainActor
+
+    // English: Preserve the public void API and keep the change result internal to the repository.
+    // Español: Conserva la API pública sin retorno y mantiene el resultado de cambio dentro del repositorio.
+    // 中文：保留公开的无返回值 API，只在 Repository 内部使用变化结果。
     public func refetchPhotos() {
+        _ = refetchPhotosIfChanged()
+    }
+
+    // English: Reuse unchanged model objects and report whether the modeled snapshot changed.
+    // Español: Reutiliza modelos sin cambios e informa si cambió la instantánea modelada.
+    // 中文：复用未变化的模型，并返回当前模型快照是否发生变化。
+    @MainActor
+    @discardableResult
+    func refetchPhotosIfChanged() -> Bool {
+        let started = CFAbsoluteTimeGetCurrent()
+        guard modeledResultSignature != resultSignature else {
+            PTMediaPickerTrace.event("modeling", details: "changed=false,reason=version,count=\(models.count)")
+            return false
+        }
+        let existingModels = Dictionary(uniqueKeysWithValues: models.map { ($0.ident, $0) })
         let models = PTMediaLibManager.fetchPhoto(
             in: result,
             ascending: selectionOptions.sortAscending,
-            selectionOptions: selectionOptions
+            selectionOptions: selectionOptions,
+            reusing: existingModels
         )
-        self.models.removeAll()
-        self.models.append(contentsOf: models)
+        let nextSignature = Self.signature(for: models.map(\.sourceRevisionKey))
+        guard nextSignature != modelsSignature else {
+            PTMediaPickerTrace.event("modeling", details: "changed=false,count=\(models.count),durationMs=\(Int((CFAbsoluteTimeGetCurrent() - started) * 1000))")
+            return false
+        }
+        self.models = models
+        modelsSignature = nextSignature
+        modeledResultSignature = resultSignature
+        contentRevision &+= 1
+        PTMediaPickerTrace.event("modeling", details: "changed=true,count=\(models.count),reused=\(existingModels.count),durationMs=\(Int((CFAbsoluteTimeGetCurrent() - started) * 1000))")
+        return true
     }
-    
+
+    // English: Return whether the public PhotoKit result actually changed before publishing a refresh.
+    // Español: Devuelve si el resultado público de PhotoKit cambió antes de publicar una actualización.
+    // 中文：先判断公开 PhotoKit 结果是否真的变化，再发布刷新。
     @MainActor
-    func refreshResult() {
-        result = PHAsset.fetchAssets(in: collection, options: option)
+    @discardableResult
+    func refreshResult() -> Bool {
+        let nextResult = PHAsset.fetchAssets(in: collection, options: option)
+        let nextSignature = Self.signature(for: nextResult)
+        guard nextSignature != resultSignature else { return false }
+        result = nextResult
+        resultSignature = nextSignature
+        return true
+    }
+
+    private static func signature(for result: PHFetchResult<PHAsset>) -> String {
+        var values: [String] = []
+        values.reserveCapacity(result.count)
+        for index in 0..<result.count {
+            // English: Include only cell-relevant metadata so changed assets rebuild without recreating unchanged models.
+            // Español: Incluye solo metadata relevante para la celda para reconstruir únicamente los recursos modificados.
+            // 中文：只纳入与 Cell 相关的元数据，让变化的资源更新而不重建未变化模型。
+            values.append(PTMediaModel.sourceRevisionKey(for: result.object(at: index)))
+        }
+        return signature(for: values)
+    }
+
+    private static func signature(for values: [String]) -> String {
+        // English: FNV-1a keeps the snapshot marker compact without storing every identifier twice.
+        // Español: FNV-1a mantiene compacto el marcador sin almacenar dos veces cada identificador.
+        // 中文：使用 FNV-1a 保存紧凑快照标记，避免重复保存全部资源标识。
+        var hash: UInt64 = 14_695_981_039_346_656_037
+        for value in values {
+            for byte in value.utf8 {
+                hash ^= UInt64(byte)
+                hash &*= 1_099_511_628_211
+            }
+            hash ^= 0
+            hash &*= 1_099_511_628_211
+        }
+        return "\(values.count):\(hash)"
     }
 }
 
@@ -93,6 +168,26 @@ public final class PTMediaModel: NSObject {
     public let ident: String
     
     public let asset: PHAsset
+
+    // English: This stable key changes when PhotoKit metadata relevant to the cell changes.
+    // Español: Esta clave estable cambia cuando cambia metadata relevante de PhotoKit para la celda.
+    // 中文：这个稳定键会在影响 Cell 的 PhotoKit 元数据变化时改变。
+    var sourceRevisionKey: String {
+        Self.sourceRevisionKey(for: asset)
+    }
+
+    static func sourceRevisionKey(for asset: PHAsset) -> String {
+        let modification = asset.modificationDate?.timeIntervalSince1970.bitPattern ?? 0
+        return [
+            asset.localIdentifier,
+            String(asset.mediaType.rawValue),
+            String(asset.mediaSubtypes.rawValue),
+            String(asset.pixelWidth),
+            String(asset.pixelHeight),
+            String(asset.duration.bitPattern),
+            String(modification)
+        ].joined(separator: "|")
+    }
 
     public var type: PTMediaModel.MediaType = .unknown
     

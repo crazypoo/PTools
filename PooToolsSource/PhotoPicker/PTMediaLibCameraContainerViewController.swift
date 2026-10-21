@@ -111,8 +111,17 @@ extension PTMediaLibCameraContainerViewController: UIImagePickerControllerDelega
             case .image(let image):
                 saveMediaToAlbum(image: image, videoUrl: nil)
             case .video(let url):
-                let copiedURL = try PTMediaTemporaryFile.copyVideoToTemporaryURL(url)
-                saveMediaToAlbum(image: nil, videoUrl: copiedURL, ownedTemporaryURL: copiedURL)
+                Task { @MainActor [weak self] in
+                    do {
+                        let copiedURL = try await PTMediaTemporaryFile.copyVideoToTemporaryURLAsync(url)
+                        guard let self, !self.didDeliverAsset else { return }
+                        self.saveMediaToAlbum(image: nil, videoUrl: copiedURL, ownedTemporaryURL: copiedURL)
+                    } catch let error as PTSystemMediaPickerError {
+                        self?.handleCameraFailure(error)
+                    } catch {
+                        self?.handleCameraFailure(.temporaryFileCopyFailed(String(describing: error)))
+                    }
+                }
             }
         } catch let error as PTSystemMediaPickerError {
             handleCameraFailure(error)

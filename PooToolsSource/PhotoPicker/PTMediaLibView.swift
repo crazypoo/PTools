@@ -23,6 +23,22 @@ import PooToolsImagePicker
 import PTCameraPermission
 #endif
 
+// English: Keep the legacy collection completion on MainActor without capturing UIKit in a nonisolated callback.
+// Español: Mantiene la finalización heredada de la colección en MainActor sin capturar UIKit en un callback no aislado.
+// 中文：让旧版列表完成回调保持在 MainActor，避免在非隔离回调中捕获 UIKit。
+@MainActor
+private final class PTMediaCollectionFinishBox {
+    private let callback: PTCollectionCallback?
+
+    init(_ callback: PTCollectionCallback?) {
+        self.callback = callback
+    }
+
+    func call(with collectionView: UICollectionView) {
+        callback?(collectionView)
+    }
+}
+
 @MainActor
 public class PTMediaLibView: UIView {
     
@@ -55,11 +71,22 @@ public class PTMediaLibView: UIView {
     var currentAlbum: PTMediaLibListModel? {
         didSet {
             pickerSessionAlbumDidChange(currentAlbum)
-            guard currentAlbum != nil else { return }
-            updateTitle?()
-            collectionView.clearAllData { [weak self] _ in
-                self?.loadMedia()
+            guard let album = currentAlbum else {
+                PTMediaPickerTrace.event("album", details: "kind=clear")
+                renderedRows = []
+                renderedAlbumIdentity = nil
+                renderedAlbumRevision = 0
+                collectionView.clearAllData()
+                return
             }
+            updateTitle?()
+            let albumIdentity = album.collection.localIdentifier
+            guard renderedAlbumIdentity != albumIdentity || renderedAlbumRevision != album.contentRevision else {
+                PTMediaPickerTrace.event("album", details: "kind=unchanged")
+                return
+            }
+            PTMediaPickerTrace.event("album", details: "kind=render,revision=\(album.contentRevision)")
+            loadMedia()
         }
     }
 
@@ -87,6 +114,11 @@ public class PTMediaLibView: UIView {
     private var lastGridWidth: CGFloat = 0
     private var lastAdaptiveLayoutSignature: String?
     private var pendingDownloadCancellations: [String: PTMediaRequestCancellation] = [:]
+    private var renderedRows: [PTRows] = []
+    private var renderedAlbumIdentity: String?
+    private var renderedAlbumRevision: UInt64 = 0
+    private var pendingSavedAssets: [String: PHAsset] = [:]
+    private var pendingReplacementAssets: [String: (asset: PHAsset, originalIdentifier: String)] = [:]
 
     // English: Restrict camera media kinds to the picker policy before presenting the camera.
     // Español: Limita los tipos de medios de la cámara a la política del selector antes de mostrar la cámara.
@@ -139,9 +171,7 @@ public class PTMediaLibView: UIView {
             self?.updateTitleCounter()
         }
         self.albumRepository.onCameraRollChange = { [weak self] album in
-            guard let self, self.currentAlbum?.isCameraRoll != false else { return }
-            self.currentAlbum = album
-            (self.parentViewController as? PTMediaLibViewController)?.setPickerAlbum(album)
+            self?.applyRepositoryAlbum(album)
         }
         setupUI()
         self.currentAlbum = currentModels
@@ -211,29 +241,134 @@ public class PTMediaLibView: UIView {
 // MARK: - Media Loading & Data Management
 extension PTMediaLibView {
     func loadMedia(addImage: Bool = false, loadFinish: PTCollectionCallback? = nil) {
-        Task { @MainActor [weak self] in
-            guard let self = self, let album = self.currentAlbum else { return }
-            
-            if !addImage {
-                self.totalModels = album.models
-            }
-            
-            // English: Derive Diffable identity from the asset, never from a new random UUID per reload.
-            // Español: Deriva la identidad Diffable del recurso, nunca de un UUID nuevo en cada recarga.
-            // 中文：Diffable 身份必须来自资源标识，不能在每次刷新时重新生成随机 UUID。
-            var rows = self.totalModels.map {
-                PTRows(ID: PTMediaLibCell.ID,
-                       diffId: "asset:\($0.ident)",
-                       dataModel: $0)
-            }
-            
-            if self.showCameraCell {
-                let insertIndex = self.activeSelectionOptions.cameraCellAtTop ? 0 : rows.count
-                rows.insert(PTRows(ID: PTCameraCell.ID, diffId: "camera"), at: insertIndex)
-            }
-            
-            self.collectionView.showCollectionDetail(collectionData: [PTSection(rows: rows)], finishTask: loadFinish)
+        guard let album = currentAlbum else { return }
+        if !addImage { totalModels = album.models }
+
+        // English: Keep stable row identities and choose a local update whenever the delta is small.
+        // Español: Conserva identidades estables y usa una actualización local cuando el delta es pequeño.
+        // 中文：保持稳定行身份，变更规模较小时只执行局部更新。
+        var rows = totalModels.map {
+            PTRows(ID: PTMediaLibCell.ID,
+                   diffId: "asset:\($0.ident)",
+                   dataModel: $0)
         }
+        if showCameraCell {
+            let insertIndex = activeSelectionOptions.cameraCellAtTop ? 0 : rows.count
+            rows.insert(PTRows(ID: PTCameraCell.ID, diffId: "camera"), at: insertIndex)
+        }
+        applyMediaRows(rows, album: album, finish: loadFinish)
+    }
+
+    private func applyMediaRows(_ rows: [PTRows],
+                                album: PTMediaLibListModel,
+                                finish: PTCollectionCallback?) {
+        let oldRows = renderedRows
+        let oldIDs = oldRows.map(\.diffId)
+        let newIDs = rows.map(\.diffId)
+        let albumIdentity = album.collection.localIdentifier
+        let sameAlbum = renderedAlbumIdentity == albumIdentity
+
+        renderedAlbumIdentity = albumIdentity
+        renderedAlbumRevision = album.contentRevision
+        renderedRows = rows
+
+        let finishBox = PTMediaCollectionFinishBox(finish)
+        let complete: PTActionTask = { [weak self, finishBox] in
+            PTMainActorBridge.perform { [weak self, finishBox] in
+                guard let self else { return }
+                finishBox.call(with: self.collectionView.contentCollectionView)
+            }
+        }
+
+        if sameAlbum, oldIDs == newIDs {
+            let changedRows = rows.enumerated().compactMap { index, row -> PTRows? in
+                guard index < oldRows.count else { return row }
+                guard mediaRowRevision(oldRows[index]) != mediaRowRevision(row) else { return nil }
+                return row
+            }
+            if !changedRows.isEmpty {
+                PTMediaPickerTrace.event("rows", details: "kind=content,count=\(changedRows.count)")
+                collectionView.updateRows(changedRows, reload: true, completion: complete)
+            } else {
+                finishBox.call(with: collectionView.contentCollectionView)
+            }
+            return
+        }
+
+        if sameAlbum,
+           newIDs.count == oldIDs.count + 1,
+           isSubsequence(oldIDs, of: newIDs) {
+            let insertedIndex = newIDs.firstIndex { !oldIDs.contains($0) } ?? newIDs.count - 1
+            PTMediaPickerTrace.event("rows", details: "kind=insert,index=\(insertedIndex)")
+            collectionView.insertRows([rows[insertedIndex]],
+                                      at: IndexPath(item: insertedIndex, section: 0),
+                                      completion: complete)
+            return
+        }
+
+        if sameAlbum,
+           oldIDs.count == newIDs.count + 1,
+           isSubsequence(newIDs, of: oldIDs) {
+            let removedIndex = oldIDs.firstIndex { !newIDs.contains($0) } ?? oldIDs.count - 1
+            PTMediaPickerTrace.event("rows", details: "kind=delete,index=\(removedIndex)")
+            collectionView.deleteRows([oldRows[removedIndex]], from: 0, completion: complete)
+            return
+        }
+
+        PTMediaPickerTrace.event("rows", details: "kind=replace,count=\(rows.count)")
+        collectionView.showCollectionDetail(collectionData: [PTSection(rows: rows)], finishTask: finish)
+    }
+
+    private func mediaRowRevision(_ row: PTRows) -> String {
+        if let model = row.dataModel as? PTMediaModel {
+            return model.sourceRevisionKey
+        }
+        return "\(row.ID)|\(row.diffHash)"
+    }
+
+    private func isSubsequence(_ smaller: [String], of larger: [String]) -> Bool {
+        var index = 0
+        for value in larger where index < smaller.count {
+            if value == smaller[index] { index += 1 }
+        }
+        return index == smaller.count
+    }
+
+    private func applyRepositoryAlbum(_ album: PTMediaLibListModel) {
+        guard currentAlbum?.isCameraRoll != false else { return }
+        currentAlbum = album
+        currentVc?.setPickerAlbum(album)
+        consumePendingAssets(in: album)
+    }
+
+    private func consumePendingAssets(in album: PTMediaLibListModel) {
+        for (identifier, asset) in Array(pendingSavedAssets) {
+            guard let model = album.models.first(where: { $0.ident == identifier }) else { continue }
+            guard canAddModel(model,
+                              currentSelectCount: selectionStore.reservedCount,
+                              sender: currentVc,
+                              showAlert: false,
+                              selectionOptions: activeSelectionOptions,
+                              selectionStore: selectionStore) else {
+                pendingSavedAssets.removeValue(forKey: identifier)
+                continue
+            }
+            selectionStore.completeSelection(for: model)
+            PTMediaLibConfig.share.didSelectAsset?(asset)
+            pendingSavedAssets.removeValue(forKey: identifier)
+        }
+
+        for (identifier, pending) in Array(pendingReplacementAssets) {
+            guard let model = album.models.first(where: { $0.ident == identifier }) else { continue }
+            if let original = selectedModel.first(where: { $0.ident == pending.originalIdentifier }) {
+                selectionStore.replaceSelection(original, with: model)
+            } else {
+                selectionStore.completeSelection(for: model)
+            }
+            PTMediaLibConfig.share.didSelectAsset?(pending.asset)
+            pendingReplacementAssets.removeValue(forKey: identifier)
+        }
+        refreshCellIndex()
     }
     
     private func updateTitleCounter() {
@@ -330,6 +465,7 @@ extension PTMediaLibView {
         Task { @MainActor [weak self] in
             guard let self = self else { return }
             let visibleIndexPaths = self.collectionView.contentCollectionView.indexPathsForVisibleItems
+            let selectedIndexMap = self.selectionStore.selectedIndexMap()
             
             for indexPath in visibleIndexPaths {
                 guard let cell = self.collectionView.contentCollectionView.cellForItem(at: indexPath) as? PTMediaLibCell else { continue }
@@ -340,7 +476,7 @@ extension PTMediaLibView {
                 guard dataIndex >= 0, dataIndex < self.totalModels.count else { continue }
                 
                 let m = self.totalModels[dataIndex]
-                let selectedIdx = self.selectedModel.firstIndex(where: { $0 == m })
+                let selectedIdx = selectedIndexMap[m.ident]
                 
                 self.setCellIndex(cell, index: (selectedIdx ?? -1) + 1)
                 self.setCellMaskView(cell, isSelected: selectedIdx != nil, model: m)
@@ -455,29 +591,9 @@ extension PTMediaLibView {
         // English: Refetch PhotoKit first, then render one authoritative snapshot instead of guessing an insert index.
         // Español: Vuelve a consultar PhotoKit primero y renderiza una instantánea única en lugar de adivinar un índice.
         // 中文：先重新获取 PhotoKit 结果，再渲染唯一快照，不再猜测插入下标。
-        currentAlbum?.refreshResult()
-        currentAlbum?.refetchPhotos()
-
-        let newModel = currentAlbum?.models.first(where: { $0.ident == asset.localIdentifier })
-            ?? PTMediaModel(asset: asset)
-        if let album = currentAlbum {
-            selectionStore.replaceModels(album.models)
-        } else {
-            let insertIndex = activeSelectionOptions.sortAscending ? totalModels.count : 0
-            selectionStore.insertModel(newModel, at: insertIndex)
-        }
-
-        if canAddModel(newModel,
-                       currentSelectCount: selectionStore.reservedCount,
-                       sender: currentVc,
-                       showAlert: false,
-                       selectionOptions: activeSelectionOptions,
-                       selectionStore: selectionStore) {
-            selectionStore.completeSelection(for: newModel)
-            PTMediaLibConfig.share.didSelectAsset?(asset)
-        }
-
-        loadMedia(addImage: false)
+        pendingSavedAssets[asset.localIdentifier] = asset
+        PTMediaPickerTrace.event("captureSaved", details: "assetIDPresent=true")
+        albumRepository.requestRefresh(reason: .captureSaved)
     }
 }
 
@@ -569,6 +685,7 @@ extension PTMediaLibView {
                               cell: PTMediaLibCell,
                               isSelected: (@MainActor @Sendable (Bool) -> Void)? = nil) {
         let config = PTMediaLibConfig.share
+        PTMediaPickerTrace.event("selectionOnly", details: "assetIDPresent=true,selected=\(cellModel.isSelected)")
         
         // --- 情况 A: 准备选中该资源 ---
         if !cellModel.isSelected {
@@ -620,9 +737,6 @@ extension PTMediaLibView {
 
                     cell.selectButton.isSelected = true
                     cell.layer.removeAllAnimations()
-                    // 选中后获取高清图（预览用）
-                    cell.fetchBigImage()
-                    
                     // 5. 触发配置回调与全局索引刷新
                     config.didSelectAsset?(cellModel.asset)
                     self.refreshCellIndex()
@@ -703,12 +817,7 @@ extension PTMediaLibView {
                 // 检测到普通截屏，执行静默刷新
                 // 这里的 loadMedia 不需要传回调，直接刷新 UI 即可
                 PTGCDManager.shared.runOnMain {
-                    // English: Requery PhotoKit before rendering so a new screenshot is not hidden by a stale model list.
-                    // Español: Vuelve a consultar PhotoKit antes de renderizar para no ocultar una captura nueva.
-                    // 中文：刷新 UI 前重新查询 PhotoKit，避免新截图被旧模型列表遮蔽。
-                    self.currentAlbum?.refreshResult()
-                    self.currentAlbum?.refetchPhotos()
-                    self.loadMedia(addImage: false)
+                    self.albumRepository.requestRefresh(reason: .screenshot)
                 }
             case .Video:
                 // 如果是录屏事件，通常不需要刷新媒体库
@@ -759,34 +868,9 @@ extension PTMediaLibView {
     
     /// 使用新产生的 Asset 替换/更新已选中的模型
     private func updateSelectedModelWithNewAsset(_ asset: PHAsset, replacing originalAsset: PHAsset) {
-        Task { @MainActor [weak self] in
-            guard let self = self else { return }
-
-            // English: Refresh PhotoKit before replacing the selected identity, then keep the old selection index.
-            // Español: Actualiza PhotoKit antes de sustituir la identidad seleccionada y conserva su índice.
-            // 中文：替换选中资源前先刷新 PhotoKit，并保留原有选中下标。
-            self.currentAlbum?.refreshResult()
-            self.currentAlbum?.refetchPhotos()
-            let newModel = self.currentAlbum?.models.first(where: { $0.ident == asset.localIdentifier })
-                ?? PTMediaModel(asset: asset)
-            if let album = self.currentAlbum,
-               !album.models.contains(where: { $0.ident == newModel.ident }) {
-                let index = self.activeSelectionOptions.sortAscending ? album.models.count : 0
-                album.models.insert(newModel, at: index)
-            }
-            self.selectionStore.insertModel(newModel, at: self.activeSelectionOptions.sortAscending ? self.totalModels.count : 0)
-            if let originalModel = self.selectedModel.first(where: { $0.asset.localIdentifier == originalAsset.localIdentifier }) {
-                self.selectionStore.replaceSelection(originalModel, with: newModel)
-            } else {
-                self.selectionStore.completeSelection(for: newModel)
-            }
-            PTMediaLibConfig.share.didSelectAsset?(asset)
-
-            // English: Render the refreshed album snapshot instead of appending a second guessed row.
-            // Español: Renderiza la instantánea actualizada del álbum en lugar de añadir otra fila estimada.
-            // 中文：重新渲染刷新后的相册快照，不再手动猜位置追加重复行。
-            self.loadMedia(addImage: false)
-        }
+        pendingReplacementAssets[asset.localIdentifier] = (asset, originalAsset.localIdentifier)
+        PTMediaPickerTrace.event("editSaved", details: "assetIDPresent=true")
+        albumRepository.requestRefresh(reason: .editSaved)
     }
 }
 

@@ -9,6 +9,27 @@
 @preconcurrency import Photos
 import UIKit
 import os.lock
+import ImageIO
+import UniformTypeIdentifiers
+
+// English: Preserve the captured UIImage orientation when ImageIO writes the detached image data.
+// Español: Conserva la orientación capturada de UIImage cuando ImageIO escribe los datos separados.
+// 中文：使用 ImageIO 写入后台图片数据时保留 UIImage 捕获时的方向。
+private extension UIImage.Orientation {
+    var ptImageIOOrientation: CGImagePropertyOrientation {
+        switch self {
+        case .up: return .up
+        case .down: return .down
+        case .left: return .left
+        case .right: return .right
+        case .upMirrored: return .upMirrored
+        case .downMirrored: return .downMirrored
+        case .leftMirrored: return .leftMirrored
+        case .rightMirrored: return .rightMirrored
+        @unknown default: return .up
+        }
+    }
+}
 
 public enum PTMediaSaveError: Error, LocalizedError, Sendable {
     case invalidInput
@@ -54,12 +75,45 @@ public enum PTMediaSaveService {
             return
         }
 
-        guard let changeRequest = prepareChangeRequest(image: image, videoURL: videoURL) else {
-            completion(.failure(image != nil ? .imageEncodingFailed : .saveFailed("视频资源不可用")))
+        if let image {
+            // English: Snapshot immutable image metadata before moving only the encoder off MainActor.
+            // Español: Captura metadata inmutable antes de mover solo el codificador fuera de MainActor.
+            // 中文：先在 MainActor 快照不可变图片元数据，只把编码工作移出 MainActor。
+            Task { @MainActor in
+                guard let data = await encodeImageData(image) else {
+                    completion(.failure(.imageEncodingFailed))
+                    return
+                }
+                requestAuthorizationAndSave(changeRequest: .image(data), completion: completion)
+            }
             return
         }
 
-        requestAuthorizationAndSave(changeRequest: changeRequest, completion: completion)
+        guard let videoURL, FileManager.default.fileExists(atPath: videoURL.path) else {
+            completion(.failure(.saveFailed("视频资源不可用")))
+            return
+        }
+        requestAuthorizationAndSave(changeRequest: .video(videoURL), completion: completion)
+    }
+
+    // English: Encode a captured CGImage away from MainActor; UIImage itself never crosses the boundary.
+    // Español: Codifica el CGImage capturado fuera de MainActor; UIImage nunca cruza el límite.
+    // 中文：在 MainActor 之外编码已捕获的 CGImage，UIImage 本身不跨并发边界。
+    public static func encodeImageData(_ image: UIImage) async -> Data? {
+        guard let cgImage = image.cgImage else { return nil }
+        let hasAlpha: Bool
+        switch cgImage.alphaInfo {
+        case .first, .last, .premultipliedFirst, .premultipliedLast:
+            hasAlpha = true
+        default:
+            hasAlpha = false
+        }
+        let input = PTImageEncodingInput(cgImage: PTSystemCGImageBox(cgImage),
+                                         orientation: image.imageOrientation.ptImageIOOrientation,
+                                         hasAlpha: hasAlpha)
+        return await Task.detached(priority: .userInitiated) {
+            encode(input)
+        }.value
     }
 
     // Ask for permission before starting the Photos transaction, and finish on MainActor exactly once.
@@ -174,15 +228,30 @@ public enum PTMediaSaveService {
         }
     }
 
-    private static func prepareChangeRequest(image: UIImage?, videoURL: URL?) -> ChangeRequest? {
-        if let image {
-            let data = image.pt.hasAlphaChannel()
-                ? image.pngData()
-                : image.jpegData(compressionQuality: 1)
-            guard let data else { return nil }
-            return .image(data)
+    private struct PTSystemCGImageBox: @unchecked Sendable {
+        // English: CGImage is an immutable Core Graphics snapshot and is only read by ImageIO below.
+        // Español: CGImage es una instantánea inmutable de Core Graphics y ImageIO solo la lee abajo.
+        // 中文：CGImage 是不可变的 Core Graphics 快照，下面只由 ImageIO 读取。
+        let value: CGImage
+
+        init(_ value: CGImage) {
+            self.value = value
         }
-        guard let videoURL, FileManager.default.fileExists(atPath: videoURL.path) else { return nil }
-        return .video(videoURL)
+    }
+
+    private struct PTImageEncodingInput: Sendable {
+        let cgImage: PTSystemCGImageBox
+        let orientation: CGImagePropertyOrientation
+        let hasAlpha: Bool
+    }
+
+    private nonisolated static func encode(_ input: PTImageEncodingInput) -> Data? {
+        let data = NSMutableData()
+        let type: CFString = input.hasAlpha ? UTType.png.identifier as CFString : UTType.jpeg.identifier as CFString
+        guard let destination = CGImageDestinationCreateWithData(data, type, 1, nil) else { return nil }
+        let properties: [CFString: Any] = [kCGImagePropertyOrientation: input.orientation.rawValue]
+        CGImageDestinationAddImage(destination, input.cgImage.value, properties as CFDictionary)
+        guard CGImageDestinationFinalize(destination) else { return nil }
+        return data.copy() as? Data
     }
 }

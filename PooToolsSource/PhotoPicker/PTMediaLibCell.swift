@@ -29,6 +29,7 @@ class PTMediaLibCell: PTBaseNormalCell {
     // PHImageManager 的请求不是结构化 Task，由协调器统一保存并取消。
     private let requestCoordinator = PTMediaRequestCoordinator()
     private var imageIdentifier: String = ""
+    private var lastSmallRequestSize: CGSize = .zero
 
     // English: Keep the selection callback on MainActor so the cell never sends UIKit state through a detached closure.
     // Español: Mantén el callback de selección en MainActor para no enviar el estado UIKit mediante un cierre separado.
@@ -70,6 +71,7 @@ class PTMediaLibCell: PTBaseNormalCell {
         cancelImageRequests()
         
         imageIdentifier = ""
+        lastSmallRequestSize = .zero
         imageView.image = nil
         imageView.alpha = 1
         videoTimeLabel.text = ""
@@ -89,10 +91,10 @@ class PTMediaLibCell: PTBaseNormalCell {
         let options = self.selectionOptions ?? .current()
         imageIdentifier = cellModel.ident
         
-        // 1. 处理选中状态的大图预加载/缓存逻辑
-        if cellModel.isSelected {
-            fetchBigImage()
-        } else {
+        // English: Selection only updates the overlay; original data is requested by an explicit submission path.
+        // Español: La selección solo actualiza la máscara; los datos originales se solicitan en la ruta explícita de envío.
+        // 中文：选中状态只更新遮罩；原图请求由提交流程按需发起，避免 Cell 重复下载。
+        if !cellModel.isSelected {
             cancelFetchBigImage()
         }
         
@@ -147,27 +149,27 @@ class PTMediaLibCell: PTBaseNormalCell {
 
     // MARK: - 异步加载逻辑
     private func fetchSmallImage() {
-        let generation = requestCoordinator.begin("small")
-        
         guard let cellModel else { return }
+        guard bounds.width > 1, bounds.height > 1 else {
+            imageView.image = PTAppBaseConfig.share.defaultEmptyImage
+            return
+        }
         let asset = cellModel.asset
         let ident = cellModel.ident
         // English: Resolve scale from the cell's scene; use one only before the cell is attached to a window.
         // Español: Resuelve la escala desde la escena de la celda; usa uno solo antes de adjuntarla a una ventana.
         // 中文：优先从 Cell 所属场景读取比例，尚未挂载到 Window 时才使用 1。
         let scale = window?.screen.scale ?? PTSceneContext.activeWindow()?.screen.scale ?? 1
-        let targetWidth = max(1, bounds.width) * scale
         guard cellModel.whRatio.isFinite, cellModel.whRatio > 0 else {
             imageView.image = PTAppBaseConfig.share.defaultEmptyImage
             return
         }
-        
-        let size: CGSize
-        if cellModel.whRatio > 1 {
-            size = CGSize(width: targetWidth * cellModel.whRatio, height: targetWidth)
-        } else {
-            size = CGSize(width: targetWidth, height: targetWidth / cellModel.whRatio)
-        }
+        let size = cellModel.previewSize(in: bounds, scale: scale)
+        guard size.width > 1, size.height > 1 else { return }
+        if requestCoordinator.isActive("small"), lastSmallRequestSize == size { return }
+        lastSmallRequestSize = size
+        let generation = requestCoordinator.begin("small")
+        PTMediaPickerTrace.event("cellRequest", details: "kind=thumbnail,assetIDPresent=true,width=\(Int(size.width)),height=\(Int(size.height))")
 
         let requestID = PTMediaLibManager.requestImage(for: asset,
                                                        targetSize: size,
@@ -183,11 +185,19 @@ class PTMediaLibCell: PTBaseNormalCell {
         requestCoordinator.store(requestID, for: "small", generation: generation)
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if cellModel != nil {
+            fetchSmallImage()
+        }
+    }
+
     func fetchBigImage() {
         guard let cellModel else { return }
         let asset = cellModel.asset
         let ident = cellModel.ident
         let generation = requestCoordinator.begin("big")
+        PTMediaPickerTrace.event("cellRequest", details: "kind=original,assetIDPresent=true")
         
         let requestID = PTMediaLibManager.requestImageData(for: asset, progress: { [weak self = self] progress, _, _, _ in
             Task { @MainActor in
@@ -215,6 +225,7 @@ class PTMediaLibCell: PTBaseNormalCell {
     }
 
     private func cancelImageRequests() {
+        PTMediaPickerTrace.event("cellRequest", details: "kind=cancel,assetIDPresent=\(!imageIdentifier.isEmpty)")
         requestCoordinator.cancelAll()
     }
     
@@ -278,7 +289,7 @@ class PTMediaLibCell: PTBaseNormalCell {
             guard let self = self, self.enableSelect else { return }
             self.selectedBlock? { isSelected in
                 sender.isSelected = isSelected
-                if isSelected { self.fetchBigImage() } else { self.cancelFetchBigImage() }
+                if !isSelected { self.cancelFetchBigImage() }
             }
         }
         view.cornerRadius = 12.5

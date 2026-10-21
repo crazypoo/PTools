@@ -156,9 +156,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         guard let selectedAlbum else {
             return
         }
-        if selectedAlbum.models.isEmpty {
-            selectedAlbum.refetchPhotos()
-        }
+        _ = albumRepository.prepare(selectedAlbum)
         
         UIScreen.pt.detectScreenShot { type in
             switch type {

@@ -45,6 +45,13 @@ final class PTMediaRequestCoordinator {
         states[key]?.generation == generation
     }
 
+    // English: Avoid restarting an identical request during repeated layout passes.
+    // Español: Evita reiniciar una solicitud idéntica durante varios pases de layout.
+    // 中文：避免在多次布局过程中重复启动相同请求。
+    func isActive(_ key: String) -> Bool {
+        states[key] != nil
+    }
+
     func cancel(_ key: String) {
         guard let state = states.removeValue(forKey: key),
               state.requestID != PHInvalidImageRequestID else { return }

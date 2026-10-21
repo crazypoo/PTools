@@ -184,6 +184,17 @@
       "removeIn": null
     },
     {
+      "path": "PooToolsSource/Core/PTMediaSaveService.swift",
+      "symbol": "PTSystemCGImageBox",
+      "category": "SYSTEM_WRAPPER",
+      "systemType": "CoreGraphics CGImage",
+      "reason": "Audited compatibility boundary for an immutable CGImage snapshot used by detached ImageIO encoding.",
+      "protection": "The wrapper contains only the captured immutable CGImage; the detached encoder performs read-only ImageIO access and no mutable UI state crosses the boundary.",
+      "owner": "Core",
+      "replacementPlan": "Replace the wrapper with a native Sendable Core Graphics image snapshot when the minimum SDK provides one.",
+      "removeIn": null
+    },
+    {
       "path": "PooToolsSource/DebugCrash/PTCrashHandler.swift",
       "symbol": "PTSafeExceptionBox",
       "category": "SYSTEM_WRAPPER",

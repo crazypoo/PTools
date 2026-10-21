@@ -21,6 +21,10 @@ PooToolsSource/NFC/PTNFCToolKit.swift
 PooToolsSource/NetWork/Network.swift
 PooToolsSource/NetWork/Network+LegacyCompatibility.swift
 PooToolsSource/NetWork/NetworkSupport.swift
+# Core Graphics system wrapper only: the captured CGImage is immutable and read-only during ImageIO encoding.
+# Solo para el wrapper del sistema Core Graphics: el CGImage capturado es inmutable y se lee únicamente al codificar con ImageIO.
+# 仅用于 Core Graphics 系统包装器：捕获的 CGImage 不可变，仅在 ImageIO 编码期间读取。
+PooToolsSource/Core/PTMediaSaveService.swift
 PooToolsSource/PhotoPicker/PTMediaLibManager.swift
 # SQLite C handle only: PTDatabase owns the serialized access and never exposes the pointer as a value.
 # Solo para el handle C de SQLite: PTDatabase posee el acceso serializado y nunca expone el puntero como valor.

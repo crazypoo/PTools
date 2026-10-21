@@ -141,6 +141,13 @@ final class PTMediaSelectionStore {
     var reservedCount: Int { selectedModels.count + pendingIdentifiers.count }
 
     func replaceModels(_ models: [PTMediaModel]) {
+        let unchanged = self.models.count == models.count && zip(self.models, models).allSatisfy {
+            $0.ident == $1.ident && $0.sourceRevisionKey == $1.sourceRevisionKey
+        }
+        guard !unchanged else {
+            synchronizeModelFlags()
+            return
+        }
         self.models = models
         // English: Keep selections from another album; the displayed album is only a projection of the picker state.
         // Español: Conserva las selecciones de otro álbum; el álbum visible solo proyecta el estado del selector.
@@ -287,6 +294,10 @@ final class PTMediaSelectionStore {
 
     func selectionIndex(of model: PTMediaModel) -> Int? {
         selectedModels.firstIndex { $0.ident == model.ident }
+    }
+
+    func selectedIndexMap() -> [String: Int] {
+        Dictionary(uniqueKeysWithValues: selectedModels.enumerated().map { ($0.element.ident, $0.offset) })
     }
 
     func reset() {

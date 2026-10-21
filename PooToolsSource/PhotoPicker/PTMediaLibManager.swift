@@ -601,6 +601,19 @@ public class PTMediaLibManager: NSObject {
                                  ascending: Bool,
                                  selectionOptions: PTMediaLibSelectionOptions,
                                  limitCount: Int = .max) -> [PTMediaModel] {
+        fetchPhoto(in: result,
+                   ascending: ascending,
+                   selectionOptions: selectionOptions,
+                   limitCount: limitCount,
+                   reusing: [:])
+    }
+
+    @MainActor
+    class func fetchPhoto(in result: PHFetchResult<PHAsset>,
+                          ascending: Bool,
+                          selectionOptions: PTMediaLibSelectionOptions,
+                          limitCount: Int = .max,
+                          reusing existingModels: [String: PTMediaModel]) -> [PTMediaModel] {
         guard limitCount > 0 else { return [] }
 
         var models: [PTMediaModel] = []
@@ -608,7 +621,13 @@ public class PTMediaLibManager: NSObject {
 
         result.enumerateObjects(options: option) { asset, _, stop in
             autoreleasepool {
-                let model = PTMediaModel(asset: asset)
+                let model: PTMediaModel
+                if let existing = existingModels[asset.localIdentifier],
+                   existing.sourceRevisionKey == PTMediaModel.sourceRevisionKey(for: asset) {
+                    model = existing
+                } else {
+                    model = PTMediaModel(asset: asset)
+                }
                 guard canDisplay(model, with: selectionOptions) else { return }
                 models.append(model)
                 if models.count >= limitCount {
@@ -776,12 +795,11 @@ public class PTMediaLibManager: NSObject {
     }
 
     public class func fetchAssetSize(for asset: PHAsset) -> PTMediaLibConfig.KBUnit? {
-        guard let resource = PHAssetResource.assetResources(for: asset).first,
-              let size = resource.value(forKey: "fileSize") as? CGFloat else {
-            return nil
-        }
-        
-        return size / 1024
+        // English: PhotoKit has no supported synchronous public file-size API; unknown size must defer validation.
+        // Español: PhotoKit no ofrece una API pública síncrona de tamaño; el tamaño desconocido debe posponer la validación.
+        // 中文：PhotoKit 没有受支持的同步公开文件大小 API；未知大小必须延后校验。
+        _ = asset
+        return nil
     }
     
     public class func fetchAVAsset(forVideo asset: PHAsset, completion: @escaping @MainActor @Sendable (AVAsset?, [AnyHashable: Any]?) -> Void) -> PHImageRequestID {

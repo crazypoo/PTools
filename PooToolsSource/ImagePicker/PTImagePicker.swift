@@ -279,23 +279,30 @@ private final class PTSystemMediaPickerCoordinator: NSObject, PHPickerViewContro
 
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        do {
-            switch try PTCameraCapturePayload.parse(info) {
-            case .image(let image):
-                guard let data = image.pngData() ?? image.jpegData(compressionQuality: 1) else {
-                    finish(.failure(.loadFailed("相机图片编码失败")))
-                    return
-                }
-                finish(.success(.image(data: data, assetIdentifier: nil)))
+        guard let payload = try? PTCameraCapturePayload.parse(info) else {
+            finish(.failure(.unsupportedResult))
+            return
+        }
 
-            case .video(let url):
-                let copiedURL = try PTMediaTemporaryFile.copyVideoToTemporaryURL(url)
-                finish(.success(.video(fileURL: copiedURL, assetIdentifier: nil)))
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                switch payload {
+                case .image(let image):
+                    guard let data = await PTMediaSaveService.encodeImageData(image) else {
+                        self.finish(.failure(.loadFailed("相机图片编码失败")))
+                        return
+                    }
+                    self.finish(.success(.image(data: data, assetIdentifier: nil)))
+                case .video(let url):
+                    let copiedURL = try await PTMediaTemporaryFile.copyVideoToTemporaryURLAsync(url)
+                    self.finish(.success(.video(fileURL: copiedURL, assetIdentifier: nil)))
+                }
+            } catch let error as PTSystemMediaPickerError {
+                self.finish(.failure(error))
+            } catch {
+                self.finish(.failure(.loadFailed(String(describing: error))))
             }
-        } catch let error as PTSystemMediaPickerError {
-            finish(.failure(error))
-        } catch {
-            finish(.failure(.loadFailed(String(describing: error))))
         }
     }
 
@@ -400,19 +407,14 @@ private final class PTSystemMediaPickerCoordinator: NSObject, PHPickerViewContro
                 return
             }
 
-            do {
-                let copiedURL = try PTMediaTemporaryFile.copyVideoToTemporaryURL(url)
-                PTMainActorBridge.perform {
+            Task { @MainActor in
+                do {
+                    let copiedURL = try await PTMediaTemporaryFile.copyVideoToTemporaryURLAsync(url)
                     deliver(.success(.video(fileURL: copiedURL, assetIdentifier: assetIdentifier)))
-                }
-            } catch let error as PTSystemMediaPickerError {
-                PTMainActorBridge.perform {
+                } catch let error as PTSystemMediaPickerError {
                     deliver(.failure(error))
-                }
-            } catch {
-                let message = String(describing: error)
-                PTMainActorBridge.perform {
-                    deliver(.failure(.temporaryFileCopyFailed(message)))
+                } catch {
+                    deliver(.failure(.temporaryFileCopyFailed(String(describing: error))))
                 }
             }
         }
@@ -485,6 +487,15 @@ public enum PTMediaTemporaryFile {
         } catch {
             throw PTSystemMediaPickerError.temporaryFileCopyFailed(String(describing: error))
         }
+    }
+
+    // English: File I/O runs off MainActor while the source URL remains provider-owned only for the call.
+    // Español: La E/S de archivos se ejecuta fuera de MainActor y la URL sigue siendo propiedad del proveedor solo durante la llamada.
+    // 中文：文件 I/O 在 MainActor 之外执行，源 URL 仅在调用期间由 provider 持有。
+    public static func copyVideoToTemporaryURLAsync(_ sourceURL: URL) async throws -> URL {
+        try await Task.detached(priority: .userInitiated) {
+            try copyVideoToTemporaryURL(sourceURL)
+        }.value
     }
 }
 

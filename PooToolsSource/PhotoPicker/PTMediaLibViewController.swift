@@ -280,9 +280,7 @@ public class PTMediaLibViewController: PTBaseViewController {
             vc.selectedModelHandler = { [weak self] model in
                 guard let self else { return }
 
-                if model.models.isEmpty {
-                    model.refetchPhotos()
-                }
+                _ = self.pickerSession?.albumRepository.prepare(model)
 
                 self.mediaListView.currentAlbum = model
                 self.scheduleTitleUpdate() // 🌟 优化：复用 scheduleTitleUpdate 进行安全更新
@@ -399,19 +397,7 @@ public class PTMediaLibViewController: PTBaseViewController {
             guard let self else { return }
 
             self.currentAlbum = model
-
-            let setup = {
-                self.mediaListView.currentAlbum = model
-            }
-
-            if model.models.isEmpty {
-                DispatchQueue.main.async {
-                    model.refetchPhotos()
-                    setup()
-                }
-            } else {
-                setup()
-            }
+            self.mediaListView.currentAlbum = model
             self.pickerSession?.markReady()
         }
     }
@@ -617,32 +603,30 @@ extension PTSheetContentViewController: UIImagePickerControllerDelegate {
         // English: Parse metadata before dismissal so the callback does not read a mutable picker state.
         // Español: Analiza los metadatos antes del cierre para que el callback no lea un estado mutable del picker.
         // 中文：在关闭前解析 metadata，避免回调读取已经变化的 picker 状态。
-        let payload: PTCameraCapturePayload? = {
-            guard let parsed = try? PTCameraCapturePayload.parse(info) else { return nil }
-            switch parsed {
-            case .image:
-                return parsed
-            case .video(let url):
-                guard let copiedURL = try? PTMediaTemporaryFile.copyVideoToTemporaryURL(url) else {
-                    return nil
-                }
-                return .video(copiedURL)
-            }
-        }()
-        
-        picker.dismiss(animated: true) {
-            guard let mediaLib = currentVC as? PTMediaLibViewController else { return }
-            guard let payload else {
-                PTAlertTipsViewController.tipsAlertShow(title: "Error",
-                                                        subtitle: "视频临时文件不可用",
-                                                        icon: .Error)
-                return
-            }
+        guard let payload = try? PTCameraCapturePayload.parse(info),
+              let mediaLib = currentVC as? PTMediaLibViewController else { return }
+
+        Task { @MainActor in
             switch payload {
             case .image(let image):
-                mediaLib.mediaListView.saveMediaToAlbum(image: image, videoUrl: nil)
+                picker.dismiss(animated: true) {
+                    mediaLib.mediaListView.saveMediaToAlbum(image: image, videoUrl: nil)
+                }
             case .video(let url):
-                mediaLib.mediaListView.saveMediaToAlbum(image: nil, videoUrl: url, ownedTemporaryURL: url)
+                do {
+                    let copiedURL = try await PTMediaTemporaryFile.copyVideoToTemporaryURLAsync(url)
+                    picker.dismiss(animated: true) {
+                        mediaLib.mediaListView.saveMediaToAlbum(image: nil,
+                                                               videoUrl: copiedURL,
+                                                               ownedTemporaryURL: copiedURL)
+                    }
+                } catch {
+                    picker.dismiss(animated: true) {
+                        PTAlertTipsViewController.tipsAlertShow(title: "Error",
+                                                                subtitle: "视频临时文件不可用",
+                                                                icon: .Error)
+                    }
+                }
             }
         }
     }

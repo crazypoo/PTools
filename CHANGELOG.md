@@ -16,6 +16,10 @@
 - 修复相机拍摄完成后的空结果强制解包、PhotoKit 后台观察者 Actor 边界、相机保存/关闭/回调竞态，以及视频 provider 临时 URL 未被框架持有的问题；保存成功、失败、取消和迟到回调均只结束一次。
 - 修复 PhotoPicker Cell 编辑按钮重复绑定、复用状态残留和旧请求串图风险；保留 `PTMediaLibManager`、`PTMediaLibConfig`、`PTMediaModel`、`PTResultModel` 以及旧回调 API 兼容入口。
 - 相册列表也通过实例级 Repository 获取和刷新；新增图片族、Live Photo、GIF 过滤、提交终态和取消终态回归测试。`PooToolsPhotoPicker` 仍是 UIKit/PhotoKit 的 iOS/iPadOS 能力，watchOS、visionOS、macOS 继续由宿主平台边界管理。
+- 完成 5.69.0 增补审计：PhotoKit 变更、截图、前台恢复、拍摄保存和编辑替换统一通过 Repository 防抖刷新；相同相册版本不再清空网格，单行插入/删除/内容变更优先使用 `PTCollectionView` 局部更新。
+- PhotoPicker 复用未变化的 `PTMediaModel`，Cell 按实际布局尺寸请求缩略图并取消复用旧请求；普通选中不再自动请求原图，原图只在明确的预览/提交路径按需加载。
+- 拍照图片编码和录像临时文件复制移出 UIKit 关键路径，保留 JPEG/PNG 透明度与方向处理、视频临时文件所有权和取消失败清理；新增 `OSLog` 阶段追踪，日志不包含媒体内容或文件名。
+- 本轮完成源码解析及 PooTools CocoaPods 工作区 Debug/Release 构建门禁；真机连续拍摄、Hangs/Time Profiler、Instruments 和 10,000 资源量级仍需宿主使用真实设备验收，不能以模拟器构建替代性能结论。
 
 ## 5.68.0 — 2026-10-19
 
