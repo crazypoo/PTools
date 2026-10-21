@@ -1,8 +1,8 @@
 # PTools 路线图
 
-> 当前代码基线：`5.68.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
+> 当前代码基线：`5.69.0`（来自 `VERSION`，由 `PooTools.podspec` 读取）
 >
-> 当前最新正式 Git tag：`5.67.3`；`5.68.0` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
+> 当前最新正式 Git tag：`5.67.3`；`5.69.0` 为当前开发基线，真机/宿主回归与发布证据完成前尚未创建正式 tag。
 
 ## 5.68.0 PTCollectionView / PTBannerView 滚动统一
 

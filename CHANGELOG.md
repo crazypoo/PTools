@@ -7,6 +7,15 @@
 - PTLayout 5.67.1 专项记录：已撤销的全仓 SnapKit → PTLayout 迁移不重新执行；本轮只修复引擎语义、增加运行时 XCTest 和严格门禁，生产模块继续保留 `.snp` 兼容路径。
 - 后续变更记录继续写入新的正式版本章节。
 
+## 5.69.0 — 2026-10-21
+
+- 重构 PhotoPicker 的职责边界：`PTMediaLibView`、实例级 `PTMediaPickerSession`、唯一选择状态 `PTMediaSelectionStore`、PhotoKit 相册仓库和提交协调器分别负责展示、状态、相册变更与媒体提交。
+- 统一图片/视频选择规则，补齐图片与视频双向混选校验、异步下载期间的 pending 预留、重复点击幂等和编辑后资产替换的选中顺序保持。
+- 用结构化并发替代旧的 `PTFetchImageOperation` 提交链路，真正取消 PhotoKit 请求，限制并发数量，并保证提交结果按原选中顺序、完成回调只触发一次。
+- 修复 PhotoKit 观察者生命周期、截图刷新、相册切换保留选择和相机新资源刷新；移除固定延迟插入逻辑，临时视频文件改用 UUID 缓存路径并在完成或失败后回收。
+- 修复 PhotoPicker Cell 编辑按钮重复绑定、复用状态残留和旧请求串图风险；保留 `PTMediaLibManager`、`PTMediaLibConfig`、`PTMediaModel`、`PTResultModel` 以及旧回调 API 兼容入口。
+- 新增 PhotoPicker 选择策略回归测试和 5.69.0 迁移指南；明确 `PooToolsPhotoPicker` 仍是 UIKit/PhotoKit 的 iOS/iPadOS 能力，watchOS、visionOS、macOS 继续由宿主平台边界管理。
+
 ## 5.68.0 — 2026-10-19
 
 - 重构 `PTCodeView` 的显示源与刷新边界：保留本地生成兼容入口，新增外部文本、外部图片、程序化刷新和宿主刷新回调；外部 setter 不再误触发刷新。

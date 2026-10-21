@@ -872,7 +872,6 @@
 | `PTPermissionViewController.swift` | `PooToolsSource/PermissionCore/PTPermissionViewController.swift` | yes | yes | no | Library | remove_from_example_target |
 | `PTPhoneNetWorkInfo.swift` | `PooToolsSource/PhoneInfo/PTPhoneNetWorkInfo.swift` | yes | yes | yes | Library | remove_from_example_target |
 | `PTPermissionPhotoLibrary.swift` | `PooToolsSource/PhotoLibraryPermission/PTPermissionPhotoLibrary.swift` | yes | yes | no | Library | remove_from_example_target |
-| `PTFetchImageOperation.swift` | `PooToolsSource/PhotoPicker/PTFetchImageOperation.swift` | yes | yes | no | Library | remove_from_example_target |
 | `PTMediaLibAlbumListViewController.swift` | `PooToolsSource/PhotoPicker/PTMediaLibAlbumListViewController.swift` | yes | yes | no | Library | remove_from_example_target |
 | `PTMediaLibCameraContainerViewController.swift` | `PooToolsSource/PhotoPicker/PTMediaLibCameraContainerViewController.swift` | yes | yes | no | Library | remove_from_example_target |
 | `PTMediaLibCell.swift` | `PooToolsSource/PhotoPicker/PTMediaLibCell.swift` | yes | yes | no | Library | remove_from_example_target |

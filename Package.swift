@@ -1283,6 +1283,14 @@ let package = Package(
             dependencies: ["ptools"],
             path: "Tests/PToolsMediaTests"
         ),
+        // English: Keep PhotoPicker selection-policy tests next to the iOS PhotoKit target.
+        // Español: Mantiene las pruebas de la política de selección junto al target iOS de PhotoKit.
+        // 中文：将 PhotoPicker 选择策略测试放在 iOS PhotoKit target 旁，避免把 UIKit 依赖带入 Core 测试。
+        .testTarget(
+            name: "PToolsPhotoPickerTests",
+            dependencies: ["PooToolsPhotoPicker"],
+            path: "Tests/PToolsPhotoPickerTests"
+        ),
         .testTarget(
             name: "PToolsPermissionTests",
             dependencies: ["ptools"],

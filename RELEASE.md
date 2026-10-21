@@ -1,5 +1,14 @@
 # PTools 发布清单
 
+## 5.69.0
+
+- [x] `VERSION`、`PooTools.podspec` 的 canonical version source、CHANGELOG、README、ROADMAP 和 Podfile.lock 同步到 `5.69.0`。
+- [x] PhotoPicker 拆分为页面协调、实例 Session、唯一选择 Store、Selection Policy、PhotoKit Album Repository、提交协调器和纯 UI View/Cell 边界。
+- [x] 图片/视频混选、pending 选择、取消、编辑替换、相册变化、截图刷新和临时视频回收路径已完成代码级收敛。
+- [x] 删除旧 `PTFetchImageOperation`，保留 `PTMediaRequestCoordinator`、`PTMediaSaveUI` 和公开 Manager/API 兼容入口。
+- [x] SwiftPM manifest、`git diff --check`、PooTools-Example iOS Simulator Debug / Release 构建和 PhotoPicker 选择策略静态测试准备完成。
+- [ ] CocoaPods 独立 consumer、PhotoKit 真机/宿主回归、视觉回归和性能对照仍需完成后才创建正式 `5.69.0` tag。
+
 ## 5.68.0
 
 - [x] `VERSION`、`PooTools.podspec` 的 canonical version source、CHANGELOG、README 和迁移指南同步到 `5.68.0`。

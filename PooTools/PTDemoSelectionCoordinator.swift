@@ -98,16 +98,24 @@ enum PTDemoSelectionCoordinator {
                 }
             } else if descriptor.id.rawValue == "media.video-editor" {
                 PTGCDManager.shared.runOnMain {
-                    let pickerConfig = PTMediaLibConfig.share
-                    pickerConfig.allowSelectImage = false
-                    pickerConfig.allowSelectVideo = true
-                    pickerConfig.allowSelectGif = false
-                    pickerConfig.allowEditVideo = false
-                    pickerConfig.maxSelectCount = 1
-                    pickerConfig.maxVideoSelectCount = 1
-                    pickerConfig.useCustomCamera = false
+                    // English: Use an instance snapshot so this demo cannot leak picker settings to another screen.
+                    // Español: Usa una instantánea por instancia para que este demo no contamine otra pantalla.
+                    // 中文：使用实例快照，避免这个 Demo 把选择器配置泄漏到其他页面。
+                    let selectionOptions = PTMediaLibSelectionOptions(
+                        allowSelectImage: false,
+                        allowSelectVideo: true,
+                        allowSelectGif: false,
+                        maxSelectCount: 1,
+                        allowEditImage: false,
+                        allowMixSelect: false,
+                        allowTakePhotoInLibrary: false,
+                        cameraOptions: PTMediaLibCameraOptions(allowTakePhoto: false, allowRecordVideo: false),
+                        maxVideoSelectCount: 1,
+                        allowEditVideo: false
+                    )
                     
                     let vc = PTMediaLibViewController()
+                    vc.selectionOptions = selectionOptions
                     vc.mediaLibShow()
                     vc.selectedHudStatusBlock = { result in
                         Task { @MainActor in
@@ -437,16 +445,24 @@ enum PTDemoSelectionCoordinator {
                 }
             } else if descriptor.id.rawValue == "media.photo-picker" {
                 PTGCDManager.shared.runOnMain {
-                    PTMediaLibConfig.share.allowEditImage = true
-                    PTMediaLibConfig.share.maxSelectCount = 9
-                    PTMediaLibConfig.share.allowSelectImage = true
-                    PTMediaLibConfig.share.allowSelectVideo = true
-                    PTMediaLibConfig.share.allowMixSelect = true
-                    PTMediaLibConfig.share.maxVideoSelectCount = 1
-                    PTMediaLibConfig.share.allowEditVideo = true
-                    PTMediaLibConfig.share.useCustomCamera = true
+                    // English: Configure the picker per instance while keeping the singleton for legacy consumers.
+                    // Español: Configura el selector por instancia y conserva el singleton para consumidores heredados.
+                    // 中文：按实例配置选择器，同时保留单例以兼容旧调用方。
+                    let selectionOptions = PTMediaLibSelectionOptions(
+                        allowSelectImage: true,
+                        allowSelectVideo: true,
+                        allowSelectGif: true,
+                        maxSelectCount: 9,
+                        allowEditImage: true,
+                        allowMixSelect: true,
+                        allowTakePhotoInLibrary: true,
+                        cameraOptions: PTMediaLibCameraOptions(),
+                        maxVideoSelectCount: 1,
+                        allowEditVideo: true
+                    )
 
                     let vc = PTMediaLibViewController()
+                    vc.selectionOptions = selectionOptions
                     vc.mediaLibShow()
                     vc.selectImageBlock = { result,isOriginal in
                         if result.count > 0 {

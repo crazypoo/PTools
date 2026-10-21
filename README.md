@@ -11,7 +11,9 @@ PooTools 是面向 iOS 应用的 UIKit、Foundation、媒体、网络、权限�
 基础边界，其他功能按需安装。
 
 PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码基线为 iOS 17+ / Swift 6+，版本事实
-以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.68.0`，真机/宿主回归与发布证据完成前不创建正式 tag。
+以 `VERSION`、`PooTools.podspec` 和正式 Git tag 为准；当前开发基线为 `5.69.0`，真机/宿主回归与发布证据完成前不创建正式 tag。
+
+`5.69.0` 重构了 PhotoPicker 的内部职责：页面协调由 `PTMediaLibViewController` 负责，实例配置和生命周期由 `PTMediaPickerSession` 负责，选择状态由 `PTMediaSelectionStore` 统一维护，相册变更由 PhotoKit 仓库处理，提交由可取消的 `PTMediaSubmissionCoordinator` 处理。旧的 `PTMediaLibConfig.share`、`PTMediaLibManager`、`PTMediaModel`、`PTResultModel` 和历史回调继续可用，迁移建议见 [PhotoPicker 5.69.0 迁移指南](docs/guides/PTPHOTOPICKER_569_MIGRATION_GUIDE.md)。
 
 `5.68.0` 将 `PTBannerView` 的滚动实现统一到 `PTCollectionView`：保留 viewport 分页和无限循环，自动轮播在用户拖动及减速期间暂停、滚动完成后恢复，并默认隐藏 Banner 内部滚动条。迁移与配置示例见 [PTCollectionView 滚动样式指南](docs/guides/PTCOLLECTIONVIEW_SCROLL_STYLE_GUIDE.md) 和 [PTBannerView 迁移指南](docs/guides/PTBANNER_PTCOLLECTIONVIEW_MIGRATION_GUIDE.md)。
 

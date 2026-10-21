@@ -895,7 +895,6 @@
 		55BCB9642B1731C20016A4C2 /* PTPaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPaths.swift; sourceTree = "<group>"; };
 		55BCB9682B1732020016A4C2 /* PTAdjustSliderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTAdjustSliderView.swift; sourceTree = "<group>"; };
 		55BCB9692B1732030016A4C2 /* PTMediaLibCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMediaLibCell.swift; sourceTree = "<group>"; };
-		55BCB96C2B1732030016A4C2 /* PTFetchImageOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTFetchImageOperation.swift; sourceTree = "<group>"; };
 		55BCB96D2B1732030016A4C2 /* PTMediaLibListModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMediaLibListModel.swift; sourceTree = "<group>"; };
 		55BCB96E2B1732030016A4C2 /* PTMediaLibConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMediaLibConfig.swift; sourceTree = "<group>"; };
 		55BCB9722B1732030016A4C2 /* PTMediaLibManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMediaLibManager.swift; sourceTree = "<group>"; };
@@ -1848,7 +1847,6 @@
 			children = (
 				B51700000000000000000001 /* PTMediaRequestCoordinator.swift */,
 				B51700000000000000000002 /* PTMediaSaveUI.swift */,
-				55BCB96C2B1732030016A4C2 /* PTFetchImageOperation.swift */,
 				55BCB97F2B1733620016A4C2 /* PTMediaLibAlbumListViewController.swift */,
 				55BCB9692B1732030016A4C2 /* PTMediaLibCell.swift */,
 				55BCB96E2B1732030016A4C2 /* PTMediaLibConfig.swift */,

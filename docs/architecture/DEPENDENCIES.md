@@ -46,6 +46,13 @@
 ImagePicker 与 PhotoPicker 有意共存：前者负责单媒体系统选择和相机，后者负责多选、编辑、原图、
 Live Photo、自定义 Cell 和 iCloud 进度。不要因都能选择图片就合并成一条不清晰的依赖。
 
+5.69.0 起 PhotoPicker 内部按 `PTMediaPickerSession`、`PTMediaSelectionStore`、
+`PTMediaAlbumRepository` 和 `PTMediaSubmissionCoordinator` 分工；`PTMediaLibViewController`
+仍是公开协调入口，`PTMediaLibManager` 仍是兼容门面。PhotoPicker 继续依赖现有 Core 的
+`PTMediaRequestCoordinator`、`PTMediaSaveService`、`PTMediaCache` 和 `PTImageDownsampler`，不反向依赖
+ImageEditor。该模块使用 UIKit/PhotoKit，当前支持边界为 iOS/iPadOS；watchOS、visionOS、macOS
+只保留 Core/值类型层评估，不宣称可直接运行 PhotoPicker UI。
+
 5.15.0 的媒体缓存和解码由 Core 提供：`PTImageDownsampler` 负责 ImageIO 目标像素解码，
 `PTMediaCache` 负责 Memory/Disk 变体键和容量维护，`PTVideoThumbnailService` 负责视频帧生成。
 Feature 模块只能使用这些入口，不应重新创建 `CGImageSource`、视频封面磁盘目录或重复的缓存键。

@@ -39,6 +39,11 @@ class PTMediaLibCell: PTBaseNormalCell {
     // Español: El presentador proporciona una política de selección congelada para que la celda no lea límites globales mutables.
     // 中文：由展示控制器提供冻结的选择策略，Cell 不再读取可变的全局限制。
     var selectionOptions: PTMediaLibSelectionOptions?
+
+    // English: Bind the edit action once; cell configuration only replaces this closure.
+    // Español: Vincula la acción de edición una sola vez; la configuración solo reemplaza este cierre.
+    // 中文：编辑按钮只绑定一次，Cell 配置阶段只替换闭包。
+    var editAction: ((UIButton) -> Void)?
     
     var cellSelectedIndex = 0 {
         didSet {
@@ -68,7 +73,15 @@ class PTMediaLibCell: PTBaseNormalCell {
         imageView.image = nil
         imageView.alpha = 1
         videoTimeLabel.text = ""
+        videoTimeLabel.isHidden = true
         mediaTypeImageView.image = nil
+        selectButton.isSelected = false
+        selectButton.normalTitle = ""
+        coverView.isHidden = true
+        editButton.isHidden = true
+        editButton.clearProgressLayer()
+        editAction = nil
+        layer.borderWidth = 0
     }
 
     private func updateCellContent() {
@@ -249,6 +262,9 @@ class PTMediaLibCell: PTBaseNormalCell {
         let view = UIButton(type: .custom)
         view.setImage(PTMediaLibUIConfig.share.cellEditImage, for: .normal)
         view.isHidden = true
+        view.addActionHandlers { [weak self] sender in
+            self?.editAction?(sender)
+        }
         return view
     }()
 

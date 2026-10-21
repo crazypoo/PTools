@@ -132,13 +132,13 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         
         collectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+            make.top.equalToSuperview()
         }
 
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight)
-            make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() - (self.sheetViewController?.options.pullBarHeight ?? 0) / 2)
         }
         
         fakeNavSet()
@@ -202,7 +202,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
                 make.left.equalToSuperview().offset(visibleRect.minX)
                 make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
                 make.height.equalTo(CGFloat.kNavBarHeight)
-                make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() - (self.sheetViewController?.options.pullBarHeight ?? 0) / 2)
             }
         }
         let topInset = max(0, fakeNav.frame.maxY)

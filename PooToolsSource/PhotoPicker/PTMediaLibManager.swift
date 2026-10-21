@@ -200,82 +200,116 @@ func canAddModel(_ model: PTMediaModel,
                  selectionOptions: PTMediaLibSelectionOptions? = nil) -> Bool {
     let options = selectionOptions ?? .current()
 
-    guard PTMediaLibConfig.share.canSelectAsset?(model.asset) ?? true else {
-        return false
+    guard PTMediaLibConfig.share.canSelectAsset?(model.asset) ?? true else { return false }
+    let context = ptMediaSelectionContext(for: model,
+                                           store: PTMediaSelectionStoreSnapshot(count: currentSelectCount),
+                                           options: options)
+    guard let violation = PTMediaSelectionPolicy.violation(for: context) else { return true }
+    guard showAlert else { return false }
+
+    let ui = PTMediaLibUIConfig.share
+    switch violation {
+    case .maximumSelectionReached:
+        PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle,
+                                                subtitle: String(format: ui.mediaCoutError, "\(options.maxSelectCount)"),
+                                                icon: .Error)
+    case .videoDurationTooLong:
+        PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle,
+                                                subtitle: String(format: ui.videoTimeMoreError, "\(options.maxSelectVideoDuration)"),
+                                                icon: .Error)
+    case .videoDurationTooShort:
+        PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle,
+                                                subtitle: String(format: ui.videoTimeLessError, "\(options.minSelectVideoDuration)"),
+                                                icon: .Error)
+    case .videoSizeTooLarge:
+        let value = Int(round(options.maxSelectVideoDataSize / 1024))
+        PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle,
+                                                subtitle: String(format: ui.videoSizeMoreError, "\(value)"),
+                                                icon: .Error)
+    case .videoSizeTooSmall:
+        let value = Int(round(options.minSelectVideoDataSize / 1024))
+        PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle,
+                                                subtitle: String(format: ui.videoSizeLessError, "\(value)"),
+                                                icon: .Error)
+    case .mixedMediaNotAllowed, .assetNotAllowed, .mediaTypeNotAllowed, .imageFilterNotAllowed:
+        break
+    }
+    return false
+}
+
+// English: Adapt the legacy count-only validator without creating a second mutable selection owner.
+// Español: Adapta el validador heredado basado solo en cantidad sin crear otro propietario mutable.
+// 中文：兼容旧版仅传数量的校验入口，不再创建第二个可变选择持有者。
+@MainActor
+private func ptMediaSelectionContext(for model: PTMediaModel,
+                                     store: PTMediaSelectionStoreSnapshot,
+                                     options: PTMediaLibSelectionOptions) -> PTMediaSelectionContext {
+    PTMediaSelectionContext(selectedCount: store.count,
+                            selectedTypes: [],
+                            candidateType: model.type,
+                            candidateDuration: model.second,
+                            candidateDataSize: model.type == .video ? model.dataSize : nil,
+                            options: options)
+}
+
+private struct PTMediaSelectionStoreSnapshot {
+    let count: Int
+}
+
+@MainActor
+func downloadAssetIfNeeded(alertTitle: String? = nil,
+                           subTitle: String? = nil,
+                           model: PTMediaModel,
+                           sender: UIViewController?,
+                           selectionOptions: PTMediaLibSelectionOptions? = nil,
+                           completion: @escaping @MainActor @Sendable (Bool) -> Void) {
+    let title = alertTitle ?? PTMediaLibUIConfig.share.alertTitle
+    let timeoutMessage = subTitle ?? PTMediaLibUIConfig.share.downloadTimeOutError
+    let options = selectionOptions ?? .current()
+
+    guard model.type == .video,
+          model.asset.pt.isInCloud,
+          options.downloadVideoBeforeSelecting else {
+        completion(true)
+        return
     }
 
-    switch model.type {
-    case .video:
-        guard options.allowSelectVideo else { return false }
-    case .image, .gif, .livePhoto:
-        guard options.allowSelectImage else { return false }
-        switch options.imageFilter {
-        case .all:
-            break
-        case .livePhotoOnly:
-            guard model.type == .livePhoto else { return false }
-        case .regularImageOnly:
-            guard model.type == .image || model.type == .gif else { return false }
-        }
-    case .unknown:
-        return false
+    // English: Finish the cloud request exactly once across success, error, timeout, and cancellation.
+    // Español: Finaliza la solicitud en la nube exactamente una vez ante éxito, error, timeout o cancelación.
+    // 中文：无论成功、失败、超时还是取消，云端请求都只结束一次。
+    @MainActor final class State {
+        var requestID = PHInvalidImageRequestID
+        var timeoutTask: Task<Void, Never>?
+        var didFinish = false
     }
 
-    let maximumSelectionCount = options.maxSelectCount
-        
-    if currentSelectCount >= maximumSelectionCount {
-        if showAlert {
-            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.mediaCoutError, "\(maximumSelectionCount)"), icon: .Error)
+    let state = State()
+    let finish: @MainActor @Sendable (Bool) -> Void = { success in
+        guard !state.didFinish else { return }
+        state.didFinish = true
+        state.timeoutTask?.cancel()
+        if !success, state.requestID != PHInvalidImageRequestID {
+            PHImageManager.default().cancelImageRequest(state.requestID)
+            PTAlertTipsViewController.tipsAlertShow(title: title, subtitle: timeoutMessage, icon: .Error)
         }
-        return false
+        completion(success)
     }
-    
-    if currentSelectCount > 0,
-       !options.allowMixSelect,
-       model.type == .video {
-        return false
+
+    let nanoseconds = UInt64(max(0.1, options.iCloudRequestTimeout) * 1_000_000_000)
+    state.timeoutTask = Task { @MainActor in
+        try? await Task.sleep(nanoseconds: nanoseconds)
+        guard !Task.isCancelled else { return }
+        finish(false)
     }
-    
-    guard model.type == .video else {
-        return true
+
+    state.requestID = PTMediaLibManager.requestVideo(for: model.asset) { result in
+        guard !result.isDegraded else { return }
+        finish(result.error == nil && !result.isCancelled)
     }
-    
-    if options.maxSelectVideoDuration > 0, model.second > options.maxSelectVideoDuration {
-        if showAlert {
-            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.videoTimeMoreError, "\(options.maxSelectVideoDuration)"), icon: .Error)
-        }
-        return false
+
+    if state.requestID == PHInvalidImageRequestID {
+        finish(false)
     }
-    
-    if model.second < options.minSelectVideoDuration {
-        if showAlert {
-            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.videoTimeLessError, "\(options.minSelectVideoDuration)"), icon: .Error)
-        }
-        return false
-    }
-    
-    guard options.minSelectVideoDataSize > 0 || options.maxSelectVideoDataSize != .greatestFiniteMagnitude,
-          let size = model.dataSize else {
-        return true
-    }
-    
-    if size > options.maxSelectVideoDataSize {
-        if showAlert {
-            let value = Int(round(options.maxSelectVideoDataSize / 1024))
-            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.videoSizeMoreError, "\(String(value))"), icon: .Error)
-        }
-        return false
-    }
-    
-    if size < options.minSelectVideoDataSize {
-        if showAlert {
-            let value = Int(round(options.minSelectVideoDataSize / 1024))
-            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: String(format: PTMediaLibUIConfig.share.videoSizeLessError, "\(String(value))"), icon: .Error)
-        }
-        return false
-    }
-    
-    return true
 }
 
 @MainActor
@@ -285,52 +319,13 @@ func downloadAssetIfNeed(alertTitle: String? = nil,
                          sender: UIViewController?,
                          selectionOptions: PTMediaLibSelectionOptions? = nil,
                          completion: @escaping PTActionTask) {
-    
-    let alertTitle_new = alertTitle ?? PTMediaLibUIConfig.share.alertTitle
-    let subTitle_new = subTitle ?? PTMediaLibUIConfig.share.downloadTimeOutError
-
-    let options = selectionOptions ?? .current()
-    guard model.type == .video,
-          model.asset.pt.isInCloud,
-          options.downloadVideoBeforeSelecting else {
-        completion()
-        return
+    downloadAssetIfNeeded(alertTitle: alertTitle,
+                          subTitle: subTitle,
+                          model: model,
+                          sender: sender,
+                          selectionOptions: selectionOptions) { success in
+        if success { completion() }
     }
-    
-    // 💡 Swift 6 优化：将其声明为绑定在 MainActor 的 final class
-    // 因为受主线程保护，Swift 6 会自动赋予它隐式的 @Sendable 能力，再也不会报错了
-    @MainActor final class RequestContainer {
-        var id: PHImageRequestID?
-    }
-    let container = RequestContainer()
-    
-    // 💡 Swift 6 优化：废弃 Timer，使用现代的 Task 机制处理超时
-    let timeoutTask = Task { @MainActor in
-        // English: Use the immutable picker snapshot so PhotoKit does not depend on the HTTP Network module.
-        // Español: Usa la instantánea inmutable del selector para que PhotoKit no dependa del módulo HTTP Network.
-        // 中文：使用不可变的选择器快照，让 PhotoKit 不再依赖 HTTP Network 模块。
-        let nanoseconds = UInt64(options.iCloudRequestTimeout * 1_000_000_000)
-        try? await Task.sleep(nanoseconds: nanoseconds)
-        
-        // 醒来后检查任务是否已经被取消，如果取消了说明网络请求已经成功，直接退出
-        guard !Task.isCancelled else { return }
-        
-        // 执行超时逻辑
-        PTAlertTipsViewController.tipsAlertShow(title: alertTitle_new,subtitle: subTitle_new, icon: .Error)
-
-        if let requestAssetID = container.id {
-            PHImageManager.default().cancelImageRequest(requestAssetID)
-        }
-    }
-    
-    // 给容器内的属性赋值
-    container.id = PTMediaLibManager.requestVideo(for: model.asset, completion: { result in
-        // 网络请求一回来，马上取消超时任务
-        timeoutTask.cancel()
-        if !result.isDegraded, result.error == nil {
-            completion()
-        }
-    })
 }
 
 public class PTMediaLibManager: NSObject {

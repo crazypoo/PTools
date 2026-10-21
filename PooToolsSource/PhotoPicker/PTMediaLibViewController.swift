@@ -23,723 +23,17 @@ import PooToolsImagePicker
 import PTCameraPermission
 #endif
 
-public class PTMediaLibView: UIView {
-    
-    // MARK: - Properties
-    public var updateTitle: PTActionTask?
-    var selectedModelDidUpdate: PTActionTask?
-    var selectedCount: ((Int) -> Void)?
-    
-    // English: Keep the controller reference weak and avoid force-unwrapping during cell reuse.
-    // Español: Mantiene débil la referencia al controlador y evita desempaquetados forzados durante la reutilización.
-    // 中文：控制器引用使用弱引用，避免 Cell 复用期间发生循环引用和强制解包崩溃。
-    fileprivate weak var currentVc: PTMediaLibViewController?
-    
-    fileprivate var totalModels: [PTMediaModel] = []
-    fileprivate var selectedModel: [PTMediaModel] = [] {
-        didSet {
-            selectedModelDidUpdate?()
-            updateTitleCounter()
-        }
-    }
-
-    var currentAlbum: PTMediaLibListModel? {
-        didSet {
-            guard currentAlbum != nil else { return }
-            updateTitle?()
-            collectionView.clearAllData { [weak self] _ in
-                self?.loadMedia()
-            }
-        }
-    }
-    
-    private var showCameraCell: Bool {
-        let options = effectiveCameraOptions
-        return activeSelectionOptions.allowTakePhotoInLibrary
-            && (options.allowTakePhoto || options.allowRecordVideo)
-            && (currentAlbum?.isCameraRoll ?? false)
-    }
-
-    // English: Keep the first load independent from the controller back-reference setup order.
-    // Español: Mantiene la primera carga independiente del orden de configuración de la referencia al controlador.
-    // 中文：让首次加载不受控制器反向引用设置顺序影响。
-    private let selectionOptionsSnapshot: PTMediaLibSelectionOptions
-
-    private var activeSelectionOptions: PTMediaLibSelectionOptions {
-        currentVc?.effectiveSelectionOptions ?? selectionOptionsSnapshot
-    }
-
-    private var lastGridWidth: CGFloat = 0
-    private var lastAdaptiveLayoutSignature: String?
-
-    // English: Restrict camera media kinds to the picker policy before presenting the camera.
-    // Español: Limita los tipos de medios de la cámara a la política del selector antes de mostrar la cámara.
-    // 中文：展示相机前，先用当前选择器策略限制可拍摄的媒体类型。
-    private var effectiveCameraOptions: PTMediaLibCameraOptions {
-        var options = activeSelectionOptions.cameraOptions
-        options.allowTakePhoto = options.allowTakePhoto && activeSelectionOptions.allowSelectImage
-        options.allowRecordVideo = options.allowRecordVideo && activeSelectionOptions.allowSelectVideo
-        return options
-    }
-
-    // MARK: - UI Components
-    lazy var collectionView: PTCollectionView = {
-        let configs = PTCollectionViewConfig()
-        configs.viewType = .Gird
-        configs.itemOriginalX = 1
-        configs.cellLeadingSpace = 1
-        configs.cellTrailingSpace = 1
-        configs.rowCount = 3
-        configs.itemHeight = 1
-
-        let view = PTCollectionView(viewConfig: configs)
-        view.registerClassCells(classs: [
-            PTMediaLibCell.ID: PTMediaLibCell.self,
-            PTCameraCell.ID: PTCameraCell.self
-        ])
-        
-        view.cellInCollection = { [weak self] collection, sectionModel, indexPath in
-            self?.configureCell(collection: collection, sectionModel: sectionModel, indexPath: indexPath)
-        }
-        
-        view.collectionDidSelect = { [weak self] collection, sectionModel, indexPath in
-            self?.handleSelection(collection: collection, sectionModel: sectionModel, indexPath: indexPath)
-        }
-        
-        return view
-    }()
-
-    // MARK: - Init
-    init(currentModels: PTMediaLibListModel?, selectionOptions: PTMediaLibSelectionOptions? = nil) {
-        self.selectionOptionsSnapshot = selectionOptions ?? currentModels?.selectionOptions ?? .current()
-        super.init(frame: .zero)
-        setupUI()
-        self.currentAlbum = currentModels
-        markSelected(source: &totalModels, selected: &selectedModel)
-        setupScreenshotObserver()
-    }
-    
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-    
-    private func setupUI() {
-        addSubview(collectionView)
-        collectionView.snp.makeConstraints { $0.edges.equalToSuperview() }
-    }
-
-    override public func layoutSubviews() {
-        super.layoutSubviews()
-        let region = PTAdaptiveVisibleRegionResolver.region(for: self)
-        let horizontalVisibleRect = CGRect(x: region.visibleRect.minX,
-                                            y: bounds.minY,
-                                            width: region.visibleRect.width,
-                                            height: bounds.height).intersection(bounds)
-        let visibleRect = horizontalVisibleRect.isEmpty ? bounds : horizontalVisibleRect
-        let layoutSignature = "\(region.signature)|\(visibleRect.integral)"
-        if layoutSignature != lastAdaptiveLayoutSignature {
-            lastAdaptiveLayoutSignature = layoutSignature
-            // English: Keep the photo grid inside the local visible pane while retaining the full-height sheet background.
-            // Español: Mantiene la cuadrícula dentro del panel visible local y conserva el fondo de altura completa.
-            // 中文：让照片网格保持在当前可视面板内，同时保留全高度的 Sheet 背景。
-            collectionView.snp.remakeConstraints { make in
-                make.left.equalToSuperview().offset(visibleRect.minX)
-                make.right.equalToSuperview().inset(max(0, bounds.width - visibleRect.maxX))
-                make.top.bottom.equalToSuperview()
-            }
-        }
-        let width = collectionView.contentCollectionView.bounds.width
-        guard width > 0, abs(width - lastGridWidth) > 0.5 else { return }
-        lastGridWidth = width
-        guard let config = collectionView.viewConfig else { return }
-        let itemWidth = max(1, (width - CGFloat(config.rowCount - 1) * config.cellLeadingSpace) / CGFloat(max(1, config.rowCount)))
-        guard abs(config.itemHeight - itemWidth) > 0.5 else { return }
-        config.itemHeight = itemWidth
-        collectionView.invalidateRuntimeLayout()
-    }
-}
-
-// MARK: - Media Loading & Data Management
-extension PTMediaLibView {
-    func loadMedia(addImage: Bool = false, loadFinish: PTCollectionCallback? = nil) {
-        Task { @MainActor [weak self] in
-            guard let self = self, let album = self.currentAlbum else { return }
-            
-            if !addImage {
-                self.totalModels = album.models
-            }
-            
-            var rows = self.totalModels.map { PTRows(ID: PTMediaLibCell.ID, dataModel: $0) }
-            
-            if self.showCameraCell {
-                let insertIndex = self.activeSelectionOptions.cameraCellAtTop ? 0 : rows.count
-                rows.insert(PTRows(ID: PTCameraCell.ID), at: insertIndex)
-            }
-            
-            self.collectionView.showCollectionDetail(collectionData: [PTSection(rows: rows)], finishTask: loadFinish)
-        }
-    }
-    
-    private func updateTitleCounter() {
-        Task { @MainActor [weak self] in
-            guard let self = self else { return }
-            self.selectedCount?(self.selectedModel.count)
-        }
-    }
-}
-
-// MARK: - Cell Configuration Logic
-private extension PTMediaLibView {
-    func configureCell(collection: UICollectionView, sectionModel: PTSection, indexPath: IndexPath) -> UICollectionViewCell? {
-        guard let itemRow = sectionModel.rows?[indexPath.row] else { return nil }
-        
-        let baseCell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath)
-        
-        if let cell = baseCell as? PTMediaLibCell, let cellModel = itemRow.dataModel as? PTMediaModel {
-            cell.selectionOptions = activeSelectionOptions
-
-            // 配置选择回调
-            cell.selectedBlock = { [weak self] isSelected in
-                self?.cellSelectedFunction(cellModel: cellModel, cell: cell, isSelected: isSelected)
-            }
-            
-            // 配置编辑按钮
-            cell.editButton.addActionHandlers { [weak self] sender in
-                self?.handleEditAction(for: cellModel, sender: sender)
-            }
-            
-            // 更新选中状态 UI
-            updateCellSelectionUI(cell, with: cellModel)
-            cell.cellModel = cellModel
-            return cell
-        }
-        
-        return baseCell
-    }
-    
-    func updateCellSelectionUI(_ cell: PTMediaLibCell, with model: PTMediaModel) {
-        if let index = selectedModel.firstIndex(where: { $0 == model }) {
-            setCellIndex(cell, index: index + 1)
-            model.isSelected = true
-        } else {
-            model.isSelected = false
-            cell.selectButton.normalTitle = ""
-        }
-        setCellMaskView(cell, isSelected: model.isSelected, model: model)
-    }
-}
-
-// MARK: - Action Handling
-private extension PTMediaLibView {
-    func handleSelection(collection: UICollectionView, sectionModel: PTSection, indexPath: IndexPath) {
-        guard let itemRow = sectionModel.rows?[indexPath.row] else { return }
-        
-        switch itemRow.ID {
-        case PTCameraCell.ID:
-            openCamera()
-        case PTMediaLibCell.ID:
-            if let cellModel = itemRow.dataModel as? PTMediaModel,
-               let cell = collectionView.contentCollectionView.cellForItem(at: indexPath) as? PTMediaLibCell {
-                Task { @MainActor in
-                    self.cellSelectedFunction(cellModel: cellModel, cell: cell)
-                }
-            }
-        default: break
-        }
-    }
-    
-    func handleEditAction(for model: PTMediaModel, sender: UIButton) {
-        #if POOTOOLS_VIDEOEDITOR
-        if model.type == .video {
-            handleVideoEdit(model: model, sender: sender)
-            return
-        }
-        #endif
-        
-        #if POOTOOLS_IMAGEEDITOR
-        if model.type == .image {
-            handleImageEdit(model: model)
-        }
-        #endif
-    }
-}
-
-// MARK: - Helper Methods (UI Update)
-extension PTMediaLibView {
-    private func refreshCellIndex() {
-        Task { @MainActor [weak self] in
-            guard let self = self else { return }
-            let visibleIndexPaths = self.collectionView.contentCollectionView.indexPathsForVisibleItems
-            
-            for indexPath in visibleIndexPaths {
-                guard let cell = self.collectionView.contentCollectionView.cellForItem(at: indexPath) as? PTMediaLibCell else { continue }
-                
-                let indexOffset = self.showCameraCell ? (self.activeSelectionOptions.cameraCellAtTop ? 1 : 0) : 0
-                let dataIndex = indexPath.row - indexOffset
-                
-                guard dataIndex >= 0, dataIndex < self.totalModels.count else { continue }
-                
-                let m = self.totalModels[dataIndex]
-                let selectedIdx = self.selectedModel.firstIndex(where: { $0 == m })
-                
-                self.setCellIndex(cell, index: (selectedIdx ?? -1) + 1)
-                self.setCellMaskView(cell, isSelected: selectedIdx != nil, model: m)
-            }
-            self.updateTitleCounter()
-        }
-    }
-
-    private func setCellIndex(_ cell: PTMediaLibCell?, index: Int) {
-        cell?.cellSelectedIndex = index
-    }
-
-    private func setCellMaskView(_ cell: PTMediaLibCell, isSelected: Bool, model: PTMediaModel) {
-        let config = PTMediaLibConfig.share
-        let uiConfig = PTMediaLibUIConfig.share
-        
-        cell.coverView.isHidden = true
-        cell.enableSelect = true
-        cell.layer.borderWidth = 0
-
-        if isSelected {
-            cell.coverView.backgroundColor = .DevMaskColor
-            cell.coverView.isHidden = false
-            cell.layer.borderColor = uiConfig.selectedBorderColor.cgColor
-            cell.layer.borderWidth = 4
-            
-            // 根据宏定义控制编辑按钮显隐
-            #if POOTOOLS_IMAGEEDITOR
-            if model.type == .image { cell.editButton.isHidden = !activeSelectionOptions.allowEditImage }
-            #endif
-#if POOTOOLS_VIDEOEDITOR
-            if model.type == .video { cell.editButton.isHidden = !activeSelectionOptions.allowEditVideo }
-#endif
-        } else {
-            cell.editButton.isHidden = true
-            handleInvalidMask(cell, model: model, config: config, uiConfig: uiConfig)
-        }
-    }
-    
-    private func handleInvalidMask(_ cell: PTMediaLibCell, model: PTMediaModel, config: PTMediaLibConfig, uiConfig: PTMediaLibUIConfig) {
-        let selCount = selectedModel.count
-        if selCount >= activeSelectionOptions.maxSelectCount {
-            cell.coverView.backgroundColor = .DevMaskColor
-            cell.coverView.isHidden = !uiConfig.showInvalidMask
-            cell.enableSelect = false
-        } else if !activeSelectionOptions.allowMixSelect && selCount > 0 {
-            let hasVideo = selectedModel.contains { $0.type == .video }
-            let isTypeMismatch = hasVideo ? (model.type != .video) : (model.type == .video)
-            if isTypeMismatch {
-                cell.coverView.backgroundColor = .DevMaskColor
-                cell.coverView.isHidden = !uiConfig.showInvalidMask
-                cell.enableSelect = false
-            }
-        }
-    }
-}
-
-// MARK: - Camera & Saving Logic
-extension PTMediaLibView {
-    
-    // English: Request permission once, then present the embedded camera with a typed result path.
-    // Español: Solicita el permiso una vez y presenta la cámara integrada con un resultado tipado.
-    // 中文：只请求一次权限，再通过类型化结果路径展示嵌入式相机。
-    /// 调用系统相机
-    func openCamera() {
-        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: PTMediaLibUIConfig.share.cameraError, icon: .Error)
-            return
-        }
-
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            guard await PTSystemMediaPicker.requestCameraAccess() else {
-                PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,
-                                                        subtitle: PTMediaLibUIConfig.share.takePhotoError,
-                                                        icon: .Error)
-                return
-            }
-
-            let picker = PTMediaLibCameraContainerViewController()
-            picker.cameraOptions = self.effectiveCameraOptions
-            picker.handleNewAssetCallback = { [weak self] asset in
-                self?.handleNewAsset(asset)
-            }
-            // 弹出相机界面
-            UIViewController.currentPresentToSheet(vc: picker, sizes: [.fullscreen], dismissPanGes: false)
-        }
-    }
-
-    /// 统一保存逻辑
-    @MainActor
-    fileprivate func saveMediaToAlbum(image: UIImage?, videoUrl: URL?) {
-        PTMediaSaveUI.save(image: image, videoURL: videoUrl) { [weak self] asset in
-            self?.handleNewAsset(asset)
-        }
-    }
-
-    /// 处理新生成的资源并插入到当前列表
-    private func handleNewAsset(_ asset: PHAsset) {
-        let newModel = PTMediaModel(asset: asset)
-        newModel.isSelected = true
-        
-        currentAlbum?.refreshResult()
-        
-        // 根据排序规则插入数据
-        if activeSelectionOptions.sortAscending {
-            totalModels.append(newModel)
-        } else {
-            totalModels.insert(newModel, at: 0)
-        }
-        
-        // 尝试自动选中
-        if canAddModel(newModel,
-                       currentSelectCount: selectedModel.count,
-                       sender: PTUtils.getCurrentVC(),
-                       showAlert: false,
-                       selectionOptions: activeSelectionOptions) {
-            selectedModel.append(newModel)
-            PTMediaLibConfig.share.didSelectAsset?(asset)
-        }
-
-        let insertRow = PTRows(ID: PTMediaLibCell.ID, dataModel: newModel)
-        
-        // 延迟刷新 UI 确保相册数据库已同步
-        PTGCDManager.shared.delayOnMain(time: 0.55) {
-            let totalCount = self.totalModels.count
-            var insertIndex = 0
-            if self.showCameraCell {
-                insertIndex = self.activeSelectionOptions.cameraCellAtTop ? 1 : (totalCount - 1)
-            } else {
-                insertIndex = self.activeSelectionOptions.cameraCellAtTop ? 0 : totalCount
-            }
-            self.collectionView.insertRows([insertRow], at: IndexPath(row: insertIndex, section: 0), completion: nil)
-        }
-    }
-}
-
-// MARK: - Editor Integration
-extension PTMediaLibView {
-    
-    #if POOTOOLS_IMAGEEDITOR
-    func handleImageEdit(model: PTMediaModel) {
-        let container = collectionView.contentCollectionView
-        let targetSize = model.previewSize(in: container.bounds,
-                                           scale: container.window?.screen.scale ?? container.traitCollection.displayScale)
-        PTMediaLibManager.requestImage(for: model.asset, targetSize: targetSize) { [weak self] result in
-            PTGCDManager.shared.runOnMain { [weak self] in
-                guard !result.isDegraded, let image = result.image else { return }
-                
-                let vc = PTEditImageViewController(readyEditImage: image)
-                vc.editFinishBlock = { [weak self] editedImage, editModel in
-                    self?.updateSelectedModelAfterEdit(original: model, newImage: editedImage, newEditModel: editModel)
-                }
-                
-                let nav = PTBaseNavControl(rootViewController: vc)
-                UIViewController.currentPresentToSheet(vc: nav, sizes: [.fullscreen], dismissPanGes: false)
-            }
-        }
-    }
-    #endif
-    
-    #if POOTOOLS_VIDEOEDITOR
-    func handleVideoEdit(model: PTMediaModel, sender: UIButton) {
-        // 如果正在导出，则取消
-        if model.asset.exportSession?.status == .exporting {
-            model.asset.calcelExport()
-            sender.clearProgressLayer()
-            return
-        }
-
-        model.asset.convertPHAssetToAVAsset(progress: { progress in
-            PTGCDManager.shared.runOnMain {
-                sender.layerProgress(value: CGFloat(progress),
-                                   borderWidth: PTMediaLibConfig.share.videoDownloadBorderWidth,
-                                   borderColor: PTMediaLibUIConfig.share.themeColor)
-            }
-        }, completion: { [weak self] avAsset in
-            PTGCDManager.shared.runOnMain { [weak self] in
-                guard let avAsset = avAsset else {
-                    PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Video error", icon: .Error)
-                    return
-                }
-                
-                self?.presentVideoEditor(asset: model.asset, avAsset: avAsset.asset)
-            }
-        })
-    }
-    
-    private func presentVideoEditor(asset: PHAsset, avAsset: AVAsset) {
-        let vc = PTVideoEditorToolsViewController(asset: asset, avAsset: avAsset)
-        vc.onlyOutput = true
-        vc.onEditCompleteHandler = { [weak self] url in
-            self?.saveEditedVideoToAlbum(url: url)
-        }
-        let nav = PTBaseNavControl(rootViewController: vc)
-        UIViewController.currentPresentToSheet(vc: nav, sizes: [.fullscreen])
-    }
-    #endif
-
-    /// 编辑完成后同步更新数据源
-    private func updateSelectedModelAfterEdit(original: PTMediaModel, newImage: UIImage, newEditModel: Any?) {
-        if let index = selectedModel.firstIndex(where: { $0 == original }) {
-            let model = selectedModel[index]
-            model.editImage = newImage
-            // 假设编辑后自动选中
-            model.isSelected = true
-            selectedModel[index] = model
-            PTMediaLibConfig.share.didSelectAsset?(model.asset)
-            refreshCellIndex()
-        }
-    }
-}
-
-// MARK: - Photo Library Observer
-extension PTMediaLibView: @MainActor PHPhotoLibraryChangeObserver {
-    public func photoLibraryDidChange(_ changeInstance: PHChange) {
-        // 注销观察者防止重复触发
-        PHPhotoLibrary.shared().unregisterChangeObserver(self)
-        
-        Task { @MainActor [weak self] in
-            guard let self = self else { return }
-            // 重新获取最新的相机胶卷
-            let options = self.activeSelectionOptions
-            PTMediaLibManager.getCameraRollAlbum(options: options) { [weak self] newAlbum in
-                guard let self = self else { return }
-                self.currentAlbum = newAlbum
-                
-                // 如果是 PTMediaLibViewController 的子视图，同步更新父级数据
-                if let vc = self.parentViewController as? PTMediaLibViewController {
-                    vc.currentAlbum = newAlbum
-                }
-                
-                // 自动滚动到底部（如果需要）
-                if !options.cameraCellAtTop {
-                    PTGCDManager.shared.delayOnMain(time: 0.1) {
-                        self.collectionView.contentCollectionView.scrollToBottom(animated: true)
-                    }
-                }
-            }
-        }
-    }
-}
-
-// MARK: - Cell Selection Logic
-extension PTMediaLibView {
-    
-    /// 处理 Cell 的点击选择逻辑
-    /// - Parameters:
-    ///   - cellModel: 当前点击的数据模型
-    ///   - cell: 当前点击的 UI 单元格
-    ///   - isSelected: 选择状态回调（通常用于同步按钮内部状态）
-    func cellSelectedFunction(cellModel: PTMediaModel,
-                              cell: PTMediaLibCell,
-                              isSelected: (@MainActor @Sendable (Bool) -> Void)? = nil) {
-        let config = PTMediaLibConfig.share
-        
-        // --- 情况 A: 准备选中该资源 ---
-        if !cellModel.isSelected {
-            // 1. 检查限制：是否达到最大选择数？是否允许混选？
-            let currentCount = self.selectedModel.count
-            guard canAddModel(cellModel,
-                              currentSelectCount: currentCount,
-                              sender: PTUtils.getCurrentVC(),
-                              selectionOptions: activeSelectionOptions) else {
-                // 如果不满足条件（如已达上限），重置 Cell 状态并返回
-                Task { @MainActor in
-                    cell.editButton.isHidden = true
-                    self.selectedModel.removeAll(where: { $0 == cellModel })
-                    self.cellStatusReset(cellModel: cellModel, cell: cell, isSelected: isSelected)
-                }
-                return
-            }
-            
-            // 2. 资源下载检查：如果是 iCloud 资源，需要先下载
-            downloadAssetIfNeed(model: cellModel,
-                                sender: PTUtils.getCurrentVC(),
-                                selectionOptions: activeSelectionOptions) { [weak self] in
-                // 4. 更新 UI 表现
-                Task { @MainActor [weak self] in
-                    guard let self = self else { return }
-                    cellModel.isSelected = true
-                    self.selectedModel.append(cellModel)
-                    isSelected?(true)
-
-                    cell.selectButton.isSelected = true
-                    cell.layer.removeAllAnimations()
-                    // 选中后获取高清图（预览用）
-                    cell.fetchBigImage()
-                    
-                    // 5. 触发配置回调与全局索引刷新
-                    config.didSelectAsset?(cellModel.asset)
-                    self.refreshCellIndex()
-                }
-            }
-        }
-        // --- 情况 B: 取消选中该资源 ---
-        else {
-            cellStatusReset(cellModel: cellModel, cell: cell, isSelected: isSelected)
-        }
-    }
-    
-    /// 重置 Cell 状态（取消选中）
-    func cellStatusReset(cellModel: PTMediaModel,
-                         cell: PTMediaLibCell,
-                         isSelected: (@MainActor @Sendable (Bool) -> Void)? = nil) {
-        let config = PTMediaLibConfig.share
-        
-        // 1. 如果该资源正在执行导出操作（如视频），立即取消
-        if cellModel.asset.exportSession?.status == .exporting {
-            cellModel.asset.calcelExport()
-            cell.editButton.clearProgressLayer()
-        }
-        
-        // 2. 更新数据模型：从已选列表中移除
-        cellModel.isSelected = false
-        self.selectedModel.removeAll(where: { $0 == cellModel })
-        isSelected?(false)
-        
-        // 3. UI 线程更新
-        Task { @MainActor [weak self] in
-            guard let self = self else { return }
-            
-            cell.selectButton.isSelected = false
-            cell.layer.removeAllAnimations()
-            // 取消获取大图的任务，节省内存
-            cell.cancelFetchBigImage()
-            
-            // 4. 触发回调与刷新
-            config.didDeselectAsset?(cellModel.asset)
-            self.refreshCellIndex()
-        }
-    }
-}
-
-// MARK: - Authority Check
-extension PTMediaLibView {
-    // English: Keep the legacy query as a compatibility wrapper around the shared permission source.
-    // Español: Mantén esta consulta heredada como un adaptador de compatibilidad sobre la fuente común de permisos.
-    // 中文：保留这个旧查询作为公共权限来源的兼容包装器。
-    /// 检查并返回当前相机的访问权限状态
-    /// - Returns: true 表示有权限或尚未请求，false 表示明确被拒绝
-    public static func hasCameraAuthority() -> Bool {
-        switch PTPermission.camera.status {
-        case .authorized, .notDetermined:
-            return true
-        case .denied, .notSupported:
-            return false
-        }
-    }
-}
-
-// MARK: - Screenshot Observer
-extension PTMediaLibView {
-    /// 设置截屏监听器
-    /// 当检测到用户截屏后，自动刷新媒体列表以显示最新的图片
-    func setupScreenshotObserver() {
-        // 使用弱引用防止闭包捕获导致的循环引用
-        UIScreen.pt.detectScreenShot { [weak self] type in
-            guard let self = self else { return }
-            
-            switch type {
-            case .Normal:
-                // 检测到普通截屏，执行静默刷新
-                // 这里的 loadMedia 不需要传回调，直接刷新 UI 即可
-                PTGCDManager.shared.runOnMain {
-                    self.loadMedia(addImage: false)
-                }
-            case .Video:
-                // 如果是录屏事件，通常不需要刷新媒体库
-                break
-            }
-        }
-    }
-}
-
-// MARK: - Video Edit Saving
-extension PTMediaLibView {
-    
-    /// 将编辑后的视频保存到相册并更新选中状态
-    /// - Parameter url: 编辑工具输出的临时视频 URL
-    func saveEditedVideoToAlbum(url: URL) {
-        // 1. 构造播放条目（如果后续需要保存到缓存）
-        let playerItem = AVPlayerItem(url: url)
-        
-        // 2. 先保存到本地缓存（可选，根据你的 PTMediaLibView.outputURL 逻辑）
-        self.saveVideoToCache(playerItem: playerItem) { [weak self] fileURL, finish in
-            guard let self = self, finish, let finalURL = fileURL else {
-                PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to cache failed", icon: .Error)
-                return
-            }
-            
-            // 3. 将缓存文件写入系统相册
-            Task { @MainActor in
-                PTMediaSaveService.save(videoURL: finalURL) { result in
-                    switch result {
-                    case .success(let asset):
-                        self.updateSelectedModelWithNewAsset(asset)
-                    case .failure:
-                        PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to album failed", icon: .Error)
-                    }
-                }
-            }
-        }
-    }
-    
-    /// 使用新产生的 Asset 替换/更新已选中的模型
-    private func updateSelectedModelWithNewAsset(_ asset: PHAsset) {
-        Task { @MainActor [weak self] in
-            guard let self = self else { return }
-            
-            // 创建新模型
-            let newModel = PTMediaModel(asset: asset)
-            newModel.isSelected = true
-            
-            // 这里有一个逻辑细节：通常编辑后的视频会作为“最新选中的”或者“替换当前的”
-            // 如果你的逻辑是替换当前正在编辑的那个，可以根据 ident 寻找并替换
-            // 这里演示通用的处理方式：通知配置项并刷新界面
-            PTMediaLibConfig.share.didSelectAsset?(asset)
-            
-            // 刷新列表，让新保存的视频出现在相册视图中
-            self.loadMedia(addImage: true)
-        }
-    }
-}
-
-// MARK: - Cache Helper
-extension PTMediaLibView {
-    
-    /// 将视频条目导出并保存到沙盒缓存目录
-    func saveVideoToCache(fileURL: URL = PTMediaLibView.outputURL(),
-                          playerItem: AVPlayerItem,
-                          result: ((_ fileURL: URL?, _ finish: Bool) -> Void)? = nil) {
-        
-        // 调用扩展方法进行导出
-        AVAssetExportSession.pt.saveVideoToCache(fileURL: fileURL, playerItem: playerItem) { status, exportSession, url, error in
-            if status == .completed {
-                result?(url, true)
-            } else {
-                // 如果失败，打印日志或处理错误
-                PTNSLogConsole("Video cache export failed: \(String(describing: error))")
-                result?(nil, false)
-            }
-        }
-    }
-    
-    /// 生成唯一的输出路径
-    fileprivate static func outputURL() -> URL {
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
-            ?? FileManager.default.temporaryDirectory
-        // 使用时间戳防止文件名冲突
-        let fileName = "\(Int(Date().timeIntervalSince1970)).mp4"
-        return documentsDirectory.appendingPathComponent(fileName)
-    }
-}
-
 public class PTMediaLibViewController: PTBaseViewController {
 
     // MARK: - Callbacks
     public var selectedHudStatusBlock: PTBoolTask?
     public var selectImageBlock: (([PTResultModel], Bool) -> Void)?
     public var selectImageRequestErrorBlock: (([PHAsset], [Int]) -> Void)?
+
+    // English: Optional typed completion is emitted from the same terminal event as legacy callbacks.
+    // Español: La finalización tipada opcional nace del mismo evento terminal que los callbacks heredados.
+    // 中文：可选的类型化完成回调与旧回调共享同一个终态事件，避免重复消费结果。
+    public var onFinish: ((PTMediaPickerOutcome) -> Void)?
 
     // English: Optional instance configuration used instead of changing PTMediaLibConfig.share.
     // Español: Configuración opcional por instancia que evita cambiar PTMediaLibConfig.share.
@@ -750,23 +44,29 @@ public class PTMediaLibViewController: PTBaseViewController {
     // English: Use a frozen snapshot for the lifetime of this picker.
     // Español: Usa una instantánea congelada durante toda la vida de este selector.
     // 中文：在当前选择器整个生命周期内使用冻结后的配置快照。
-    fileprivate var effectiveSelectionOptions: PTMediaLibSelectionOptions {
+    var effectiveSelectionOptions: PTMediaLibSelectionOptions {
         resolvedSelectionOptions ?? selectionOptions ?? .current()
     }
 
     // MARK: - Data
-    var currentAlbum: PTMediaLibListModel?// 🌟 优化：将隐式解包(!)改为可选值(?)，防止生命周期异步加载时意外崩溃
-    var totalModels: [PTMediaModel] = []
-    var selectedModel: [PTMediaModel] = []
+    var currentAlbum: PTMediaLibListModel? {
+        get { pickerSession?.currentAlbum }
+        set { pickerSession?.setCurrentAlbum(newValue) }
+    }
+    private lazy var selectionStore = PTMediaSelectionStore()
+    private var pickerSession: PTMediaPickerSession?
 
-    // 🌟 1. 但仅仅是为了利用它完美的“并发数限制(maxConcurrentOperationCount = 3)”功能
-    private lazy var fetchImageQueue: OperationQueue = {
-        let queue = OperationQueue()
-        queue.name = "com.pt.media.fetch"
-        queue.maxConcurrentOperationCount = 3
-        queue.qualityOfService = .userInitiated
-        return queue
-    }()
+    // English: Keep legacy controller reads as projections of the shared store.
+    // Español: Mantiene las lecturas heredadas del controlador como proyecciones del store compartido.
+    // 中文：旧版 Controller 读取统一改为共享 Store 的只读投影。
+    var totalModels: [PTMediaModel] { selectionStore.models }
+    var selectedModel: [PTMediaModel] { selectionStore.selectedModels }
+
+    // English: Keep submission cancellation outside the view and reuse one request bridge.
+    // Español: Mantiene la cancelación de envíos fuera de la vista y reutiliza un único puente de solicitudes.
+    // 中文：将提交取消逻辑移出 View，并复用统一请求桥接器。
+    private lazy var submissionCoordinator = PTMediaSubmissionCoordinator()
+    private var submissionTask: Task<Void, Never>?
 
     private var isSelectOriginal = false
     fileprivate var selectedMediaCount: Int = 0
@@ -815,7 +115,9 @@ public class PTMediaLibViewController: PTBaseViewController {
 
     fileprivate lazy var mediaListView: PTMediaLibView = {
         let view = PTMediaLibView(currentModels: self.currentAlbum,
-                                  selectionOptions: self.effectiveSelectionOptions)
+                                  selectionOptions: self.effectiveSelectionOptions,
+                                  selectionStore: self.selectionStore,
+                                  albumRepository: self.pickerSession?.albumRepository)
         view.currentVc = self
 
         view.selectedCount = { [weak self] count in
@@ -831,9 +133,7 @@ public class PTMediaLibViewController: PTBaseViewController {
 
         view.selectedModelDidUpdate = { [weak self] in
             Task { @MainActor [weak self] in
-                guard let self else { return }
-                self.selectedModel = self.mediaListView.selectedModel
-                self.totalModels = self.mediaListView.totalModels
+                self?.scheduleTitleUpdate()
             }
         }
 
@@ -841,11 +141,19 @@ public class PTMediaLibViewController: PTBaseViewController {
     }()
 
     // MARK: - Lifecycle
-    deinit {}
+    deinit {
+        submissionTask?.cancel()
+    }
+
+    func setPickerAlbum(_ album: PTMediaLibListModel?) {
+        pickerSession?.setCurrentAlbum(album)
+    }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
         resolvedSelectionOptions = selectionOptions ?? .current()
+        pickerSession = PTMediaPickerSession(options: effectiveSelectionOptions,
+                                             selectionStore: selectionStore)
         setupUI()
         checkPermissionAndLoad()
     }
@@ -865,6 +173,12 @@ public class PTMediaLibViewController: PTBaseViewController {
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         changeStatusBar(type: .Auto)
+        if isBeingDismissed || navigationController?.isBeingDismissed == true {
+            submissionTask?.cancel()
+            submissionTask = nil
+            submissionCoordinator.cancelAll()
+            pickerSession?.markCancelled()
+        }
     }
 
     // MARK: - UI
@@ -930,8 +244,16 @@ public class PTMediaLibViewController: PTBaseViewController {
 
     // MARK: - Album
 
+    // English: PhotoKit's limited access is usable for browsing and must not be treated as denial.
+    // Español: El acceso limitado de PhotoKit permite explorar y no debe tratarse como denegación.
+    // 中文：PhotoKit 的 limited 权限可以浏览相册，不能当作拒绝处理。
+    private func hasPhotoLibraryAccess() -> Bool {
+        let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        return status == .authorized || status == .limited
+    }
+
     private func handleAlbumClick() {
-        guard PTPermission.photoLibrary.status == .authorized else { return }
+        guard hasPhotoLibraryAccess() else { return }
 
         let pushAlbum: (PTMediaLibListModel) -> Void = { [weak self] album in
             guard let self else { return }
@@ -960,8 +282,7 @@ public class PTMediaLibViewController: PTBaseViewController {
         if let current = mediaListView.currentAlbum {
             pushAlbum(current)
         } else {
-            let options = effectiveSelectionOptions
-            PTMediaLibManager.getCameraRollAlbum(options: options) { model in
+            pickerSession?.albumRepository.cameraRoll { model in
                 pushAlbum(model)
             }
         }
@@ -1037,13 +358,13 @@ public class PTMediaLibViewController: PTBaseViewController {
     // MARK: - Load
 
     private func checkPermissionAndLoad() {
-        switch PTPermission.photoLibrary.status {
-        case .authorized:
+        switch PHPhotoLibrary.authorizationStatus(for: .readWrite) {
+        case .authorized, .limited:
             loadImageData()
         case .notDetermined:
             PTPermission.photoLibrary.request { [weak self] in
                 PTGCDManager.shared.runOnMain {
-                    if PTPermission.photoLibrary.status == .authorized {
+                    if self?.hasPhotoLibraryAccess() == true {
                         Task { @MainActor in
                             self?.loadImageData()
                         }
@@ -1056,8 +377,9 @@ public class PTMediaLibViewController: PTBaseViewController {
     }
 
     func loadImageData() {
-        let options = effectiveSelectionOptions
-        PTMediaLibManager.getCameraRollAlbum(options: options) { [weak self] model in
+        pickerSession?.beginLoading()
+        guard let repository = pickerSession?.albumRepository else { return }
+        repository.cameraRoll { [weak self] model in
             guard let self else { return }
 
             self.currentAlbum = model
@@ -1074,6 +396,7 @@ public class PTMediaLibViewController: PTBaseViewController {
             } else {
                 setup()
             }
+            self.pickerSession?.markReady()
         }
     }
     
@@ -1090,57 +413,49 @@ public class PTMediaLibViewController: PTBaseViewController {
 }
 
 extension PTMediaLibViewController {
-        
-    // 🌟 2. 桥接方法：把基于回调的 Operation 变成可以直接 await 的 Swift 6 方法
+
+    // English: Build the result model only after the submission coordinator returns a terminal value.
+    // Español: Construye el modelo de resultado solo después de que el coordinador devuelva un valor terminal.
+    // 中文：仅在提交协调器返回终态结果后构造结果模型。
     private func fetchMediaResultAsync(model: PTMediaModel, index: Int, isOriginal: Bool) async -> (result: PTResultModel?, errorAsset: PHAsset?, index: Int) {
         let selectionOptions = effectiveSelectionOptions
-        return await withCheckedContinuation { continuation in
-            let previewContainer = mediaListView.collectionView.contentCollectionView
-            let operation = PTFetchImageOperation(model: model,
-                                                  isOriginal: isOriginal,
-                                                  selectionOptions: selectionOptions,
-                                                  previewBounds: previewContainer.bounds,
-                                                  previewScale: previewContainer.window?.screen.scale ?? previewContainer.traitCollection.displayScale) { image, asset in
-                Task { @MainActor in
-                    if let image = image {
-                        let isEdited = model.editImage != nil && !selectionOptions.saveNewImageAfterEdit
-                        
-    #if POOTOOLS_IMAGEEDITOR
-                        let resultModel = PTResultModel(
-                            asset: asset ?? model.asset,
-                            image: image,
-                            isEdited: isEdited,
-                            editModel: isEdited ? model.editImageModel : nil,
-                            avEditorOutputItem: model.avEditorOutputItem,
-                            index: index
-                        )
-    #else
-                        let resultModel = PTResultModel(
-                            asset: asset ?? model.asset,
-                            image: image,
-                            isEdited: isEdited,
-                            avEditorOutputItem: model.avEditorOutputItem,
-                            index: index
-                        )
-    #endif
-                        continuation.resume(returning: (resultModel, nil, index))
-                    } else {
-                        continuation.resume(returning: (nil, asset ?? model.asset, index))
-                    }
-                }
-            }
-            
-            // 放到 Queue 里去执行，这能保证 Operation 按照原有的设计正常运作！
-            self.fetchImageQueue.addOperation(operation)
+        let previewContainer = mediaListView.collectionView.contentCollectionView
+        let (image, asset) = await submissionCoordinator.fetch(
+            model: model,
+            isOriginal: isOriginal,
+            selectionOptions: selectionOptions,
+            previewBounds: previewContainer.bounds,
+            previewScale: previewContainer.window?.screen.scale ?? previewContainer.traitCollection.displayScale
+        )
+
+        guard let image else {
+            return (nil, asset ?? model.asset, index)
         }
+
+        let isEdited = model.editImage != nil && !selectionOptions.saveNewImageAfterEdit
+    #if POOTOOLS_IMAGEEDITOR
+        let resultModel = PTResultModel(
+            asset: asset ?? model.asset,
+            image: image,
+            isEdited: isEdited,
+            editModel: isEdited ? model.editImageModel : nil,
+            avEditorOutputItem: model.avEditorOutputItem,
+            index: index
+        )
+    #else
+        let resultModel = PTResultModel(
+            asset: asset ?? model.asset,
+            image: image,
+            isEdited: isEdited,
+            avEditorOutputItem: model.avEditorOutputItem,
+            index: index
+        )
+    #endif
+        return (resultModel, nil, index)
     }
     
     // 🌟 3. 重构提交流程
     public func requestSelectPhoto(viewController: UIViewController? = nil) {
-        
-        // 🔥 核心修复：直接实时获取！不再依赖闭包更新，绝对不会出现丢失选中的情况！
-        self.selectedModel = self.mediaListView.selectedModel
-        self.totalModels = self.mediaListView.totalModels
         
         // 1. 空数据拦截
         guard !self.selectedModel.isEmpty else {
@@ -1149,6 +464,7 @@ extension PTMediaLibViewController {
             
             viewController?.dismiss(animated: true) { [weak self] in
                 self?.selectImageBlock?([], emptyOriginal)
+                self?.onFinish?(PTMediaPickerOutcome(items: [], isOriginal: emptyOriginal))
                 if let pVC = presentingVC {
                     PTNavigationBarManager.shared.restoreIfNeeded(for: pVC)
                 }
@@ -1176,25 +492,25 @@ extension PTMediaLibViewController {
         }
         
         let isOriginal = options.allowSelectOriginal ? isSelectOriginal : options.alwaysRequestOriginal
+        guard pickerSession?.beginSubmitting() ?? true else { return }
         selectedHudStatusBlock?(true)
         
-        // 🌟 4. 极简版 TaskGroup
-        // 因为 fetchImageQueue 已经帮我们做了 `maxConcurrent = 3` 的限制，
-        // 所以在这里我们可以直接把所有任务扔进 TaskGroup，代码变得异常简洁且安全！
-        Task {
+        // English: The task group is bounded by the submission coordinator's request lifecycle.
+        // Español: El grupo de tareas queda limitado por el ciclo de vida del coordinador de envíos.
+        // 中文：任务组由提交协调器的请求生命周期负责取消和收口。
+        submissionTask = Task { @MainActor [weak self] in
+            guard let self else { return }
             var sucModels: [PTResultModel] = []
             var errAssets: [PHAsset] = []
             var errIndices: [Int] = []
             
             await withTaskGroup(of: (PTResultModel?, PHAsset?, Int).self) { group in
-                // 直接全部添加进去，底层的 OperationQueue 会自动排队处理（一次跑3个）
                 for (i, m) in selectedModel.enumerated() {
                     group.addTask {
                         await self.fetchMediaResultAsync(model: m, index: i, isOriginal: isOriginal)
                     }
                 }
                 
-                // 收集结果
                 for await (result, errorAsset, index) in group {
                     if let r = result {
                         sucModels.append(r)
@@ -1204,11 +520,15 @@ extension PTMediaLibViewController {
                     }
                 }
             }
+
+            guard !Task.isCancelled, self.pickerSession?.state != .cancelled else { return }
+
+            let sortedErrors = zip(errAssets, errIndices).sorted { $0.1 < $1.1 }
+            errAssets = sortedErrors.map(\.0)
+            errIndices = sortedErrors.map(\.1)
             
-            // 恢复图片原始的点击顺序
             sucModels.sort { $0.index < $1.index }
-            
-            // 🌟 5. 回到主线程处理回调
+
             self.handleFetchCompletion(
                 viewController: viewController,
                 sucModels: sucModels,
@@ -1216,6 +536,7 @@ extension PTMediaLibViewController {
                 errIndices: errIndices,
                 isOriginal: isOriginal
             )
+            self.submissionTask = nil
         }
     }
     
@@ -1232,9 +553,14 @@ extension PTMediaLibViewController {
             if !errAssets.isEmpty {
                 self?.selectImageRequestErrorBlock?(errAssets, errIndices)
             }
-            // 清理数据
-            self?.selectedModel.removeAll()
-            self?.totalModels.removeAll()
+            self?.onFinish?(PTMediaPickerOutcome(items: sucModels,
+                                                 isOriginal: isOriginal,
+                                                 failedAssetIndices: errIndices))
+            // English: Reset the single store after the compatibility callbacks finish.
+            // Español: Restablece el store único después de completar los callbacks compatibles.
+            // 中文：兼容回调结束后再重置唯一 Store。
+            self?.selectionStore.reset()
+            self?.pickerSession?.markCompleted()
         }
 
         guard let vc = viewController,

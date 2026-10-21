@@ -238,7 +238,7 @@ public extension PTMediaModel {
 }
 
 public extension PTMediaModel {
-    enum MediaType: Int {
+    enum MediaType: Int, Sendable {
         case unknown = 0
         case image
         case gif
@@ -287,6 +287,24 @@ public class PTResultModel: NSObject {
         super.init()
     }
 #endif
+}
+
+// English: The typed completion value keeps success ordering and failed indices together.
+// Español: El resultado tipado conserva juntos el orden exitoso y los índices fallidos.
+// 中文：类型化完成结果同时保留成功顺序和失败下标，避免两个回调数组失配。
+@MainActor
+public struct PTMediaPickerOutcome {
+    public let items: [PTResultModel]
+    public let isOriginal: Bool
+    public let failedAssetIndices: [Int]
+
+    public init(items: [PTResultModel],
+                isOriginal: Bool,
+                failedAssetIndices: [Int] = []) {
+        self.items = items
+        self.isOriginal = isOriginal
+        self.failedAssetIndices = failedAssetIndices
+    }
 }
 
 extension PTResultModel {
