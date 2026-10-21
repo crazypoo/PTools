@@ -19,6 +19,10 @@
 - 完成 5.69.0 增补审计：PhotoKit 变更、截图、前台恢复、拍摄保存和编辑替换统一通过 Repository 防抖刷新；相同相册版本不再清空网格，单行插入/删除/内容变更优先使用 `PTCollectionView` 局部更新。
 - PhotoPicker 复用未变化的 `PTMediaModel`，Cell 按实际布局尺寸请求缩略图并取消复用旧请求；普通选中不再自动请求原图，原图只在明确的预览/提交路径按需加载。
 - 拍照图片编码和录像临时文件复制移出 UIKit 关键路径，保留 JPEG/PNG 透明度与方向处理、视频临时文件所有权和取消失败清理；新增 `OSLog` 阶段追踪，日志不包含媒体内容或文件名。
+- 首次打开相册改为首批有界建模并按批次渐进追加；Session generation 会取消过期批次，关闭或切换相册后不再回写旧页面。
+- PhotoKit 刷新先比较首尾边界；同边界的可疑变更才执行一次完整快照 fallback，确认无变化时不重建模型、不提交 Grid；模型指纹已检查的结果会正确更新已建模标记。
+- 多资源新增、删除和重排通过 `PTCollectionView.replaceRows` 保持 Section 身份与滚动锚点；视频限制使用公开可取消的 `PHAssetResourceManager` 异步统计，未知大小不会直接放行。
+- `UIImage(ciImage:)` 保存增加 Core Image 物化 fallback；异步视频复制在失败、取消和 provider 副本失效时清理框架自有半成品，绝不删除 provider 源文件。
 - 本轮完成源码解析及 PooTools CocoaPods 工作区 Debug/Release 构建门禁；真机连续拍摄、Hangs/Time Profiler、Instruments 和 10,000 资源量级仍需宿主使用真实设备验收，不能以模拟器构建替代性能结论。
 
 ## 5.68.0 — 2026-10-19

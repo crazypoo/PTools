@@ -100,7 +100,19 @@ public enum PTMediaSaveService {
     // Español: Codifica el CGImage capturado fuera de MainActor; UIImage nunca cruza el límite.
     // 中文：在 MainActor 之外编码已捕获的 CGImage，UIImage 本身不跨并发边界。
     public static func encodeImageData(_ image: UIImage) async -> Data? {
-        guard let cgImage = image.cgImage else { return nil }
+        // English: Materialize CIImage-backed UIImage values before detaching ImageIO work.
+        // Español: Materializa las UIImage respaldadas por CIImage antes de separar el trabajo de ImageIO.
+        // 中文：在移出 ImageIO 编码前，将仅由 CIImage 支持的 UIImage 物化为 CGImage。
+        let cgImage: CGImage?
+        if let directImage = image.cgImage {
+            cgImage = directImage
+        } else if let ciImage = image.ciImage {
+            let context = CIContext(options: nil)
+            cgImage = context.createCGImage(ciImage, from: ciImage.extent)
+        } else {
+            cgImage = nil
+        }
+        guard let cgImage else { return nil }
         let hasAlpha: Bool
         switch cgImage.alphaInfo {
         case .first, .last, .premultipliedFirst, .premultipliedLast:

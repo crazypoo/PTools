@@ -959,6 +959,64 @@ extension PTCollectionView {
         }
     }
 
+    // English: Replace one section's rows while preserving the section identity and its surrounding collection state.
+    // Español: Sustituye las filas de una sección conservando su identidad y el estado del resto de la colección.
+    // 中文：替换单个 Section 的 Row，同时保留 Section 身份和其他列表状态。
+    public func replaceRows(in section: Int,
+                            with rows: [PTRows],
+                            animated: Bool = true,
+                            completion: PTActionTask? = nil) {
+        updateCoordinator.enqueue(name: "replaceRows", kind: .structure, sections: [section]) { [weak self] finish in
+            guard let self else {
+                completion?()
+                finish()
+                return
+            }
+            var snapshot = self.diffableDataSource.snapshot()
+            guard section >= 0, section < snapshot.sectionIdentifiers.count else {
+                completion?()
+                finish()
+                return
+            }
+
+            let sectionIdentifier = snapshot.sectionIdentifiers[section]
+            let oldIdentifiers = snapshot.itemIdentifiers(inSection: sectionIdentifier)
+            let newIDs = rows.map(\.diffId)
+            let oldIDSet = Set(oldIdentifiers.map(\.diffId))
+            let otherIDSet = Set(snapshot.itemIdentifiers.map(\.diffId)).subtracting(oldIDSet)
+            guard Set(newIDs).count == newIDs.count,
+                  newIDs.allSatisfy({ !$0.isEmpty && !otherIDSet.contains($0) }) else {
+                self.reportUpdateError(.duplicateRowIdentifier("replaceRows"))
+                completion?()
+                finish()
+                return
+            }
+
+            let sectionModel = self.resolvedSection(sectionIdentifier)
+            sectionModel.rows = rows
+            sectionModel.layoutVersion += 1
+            self.layoutCache.removeAll()
+            self.heightCache.removeAll()
+            if self.viewConfig.viewType == .WaterFall, self.waterFallLayout != nil {
+                self.clearWaterfallCache(section: section)
+            }
+
+            if !oldIdentifiers.isEmpty {
+                snapshot.deleteItems(oldIdentifiers)
+            }
+            if !rows.isEmpty {
+                snapshot.appendItems(rows, toSection: sectionIdentifier)
+            }
+            self.modelStore.update(section: sectionModel)
+            self.synchronizeModelStore(with: snapshot)
+            self.applySnapshot(snapshot,
+                               animatingDifferences: animated && self.structureAnimationEnabled) {
+                completion?()
+                finish()
+            }
+        }
+    }
+
     /// 在指定的 IndexPath 插入新行
     /// - Parameters:
     ///   - rows: 需要插入的新数据数组

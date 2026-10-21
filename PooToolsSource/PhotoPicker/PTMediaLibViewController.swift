@@ -72,6 +72,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     private var isSelectOriginal = false
     fileprivate var selectedMediaCount: Int = 0
     private var lastAdaptiveNavigationLayoutSignature: String?
+    private let pickerTraceID = PTMediaPickerTrace.makeTraceID()
 
     // MARK: - UI
     private lazy var fakeNav: PTNavBar = {
@@ -154,9 +155,12 @@ public class PTMediaLibViewController: PTBaseViewController {
         super.viewDidLoad()
         resolvedSelectionOptions = selectionOptions ?? .current()
         pickerSession = PTMediaPickerSession(options: effectiveSelectionOptions,
-                                             selectionStore: selectionStore)
+                                             selectionStore: selectionStore,
+                                             traceID: pickerTraceID)
+        let interval = PTMediaPickerTrace.begin("viewDidLoad", traceID: pickerTraceID)
         setupUI()
         checkPermissionAndLoad()
+        PTMediaPickerTrace.end("viewDidLoad", traceID: pickerTraceID, signpostID: interval)
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -180,6 +184,7 @@ public class PTMediaLibViewController: PTBaseViewController {
             submissionTask = nil
             submissionCoordinator.cancelAll()
             mediaListView.cancelPendingDownloads()
+            pickerSession?.albumRepository.cancelPendingLoads()
             pickerSession?.markCancelled()
         }
     }
@@ -193,6 +198,7 @@ public class PTMediaLibViewController: PTBaseViewController {
         submissionTask = nil
         submissionCoordinator.cancelAll()
         mediaListView.cancelPendingDownloads()
+        pickerSession?.albumRepository.cancelPendingLoads()
         pickerSession?.markCancelled()
         returnFrontVC()
     }
@@ -393,8 +399,11 @@ public class PTMediaLibViewController: PTBaseViewController {
     func loadImageData() {
         pickerSession?.beginLoading()
         guard let repository = pickerSession?.albumRepository else { return }
+        let interval = PTMediaPickerTrace.begin("cameraRoll", traceID: pickerTraceID)
         repository.cameraRoll { [weak self] model in
             guard let self else { return }
+
+            PTMediaPickerTrace.end("cameraRoll", traceID: self.pickerTraceID, signpostID: interval, details: "count=\(model.count)")
 
             self.currentAlbum = model
             self.mediaListView.currentAlbum = model

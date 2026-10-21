@@ -23,14 +23,17 @@ final class PTMediaPickerSession {
     let options: PTMediaLibSelectionOptions
     let selectionStore: PTMediaSelectionStore
     let albumRepository: PTMediaAlbumRepository
+    let traceID: String
     private(set) var currentAlbum: PTMediaLibListModel?
     private(set) var state: State = .idle
 
     init(options: PTMediaLibSelectionOptions,
-         selectionStore: PTMediaSelectionStore = PTMediaSelectionStore()) {
+         selectionStore: PTMediaSelectionStore = PTMediaSelectionStore(),
+         traceID: String? = nil) {
         self.options = options
         self.selectionStore = selectionStore
-        self.albumRepository = PTMediaAlbumRepository(options: options)
+        self.traceID = traceID ?? PTMediaPickerTrace.makeTraceID()
+        self.albumRepository = PTMediaAlbumRepository(options: options, traceID: self.traceID)
     }
 
     func beginLoading() {

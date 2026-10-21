@@ -49,6 +49,16 @@ public class PTMediaLibListModel: NSObject {
     private var resultSignature: String
     private var modeledResultSignature: String?
     private var modelsSignature = ""
+    private var nextResultOffset = 0
+    private var resultChangeGeneration: UInt64 = 0
+
+    // English: Keep initial PhotoKit work bounded so the first screen does not build every row synchronously.
+    // Español: Mantiene acotado el trabajo inicial de PhotoKit para no construir todas las filas de forma síncrona.
+    // 中文：限制首次 PhotoKit 工作量，避免同步构建全部 Row 阻塞首屏。
+    private let initialBatchSize = 96
+    private let subsequentBatchSize = 160
+
+    var isFullyModeled: Bool { nextResultOffset >= result.count }
     
     // 暂未用到
     private var selectedModels: [PTMediaModel] = []
@@ -68,8 +78,9 @@ public class PTMediaLibListModel: NSObject {
         self.option = option
         self.isCameraRoll = isCameraRoll
         self.selectionOptions = selectionOptions ?? .current()
-        self.resultSignature = Self.signature(for: result)
+        self.resultSignature = Self.boundarySignature(for: result)
         self.modeledResultSignature = nil
+        self.nextResultOffset = 0
     }
 
     // English: Preserve the public void API and keep the change result internal to the repository.
@@ -86,7 +97,7 @@ public class PTMediaLibListModel: NSObject {
     @discardableResult
     func refetchPhotosIfChanged() -> Bool {
         let started = CFAbsoluteTimeGetCurrent()
-        guard modeledResultSignature != resultSignature else {
+        guard !isFullyModeled || modeledResultSignature != resultSignature else {
             PTMediaPickerTrace.event("modeling", details: "changed=false,reason=version,count=\(models.count)")
             return false
         }
@@ -99,12 +110,15 @@ public class PTMediaLibListModel: NSObject {
         )
         let nextSignature = Self.signature(for: models.map(\.sourceRevisionKey))
         guard nextSignature != modelsSignature else {
+            modeledResultSignature = resultSignature
+            nextResultOffset = result.count
             PTMediaPickerTrace.event("modeling", details: "changed=false,count=\(models.count),durationMs=\(Int((CFAbsoluteTimeGetCurrent() - started) * 1000))")
             return false
         }
         self.models = models
         modelsSignature = nextSignature
         modeledResultSignature = resultSignature
+        nextResultOffset = result.count
         contentRevision &+= 1
         PTMediaPickerTrace.event("modeling", details: "changed=true,count=\(models.count),reused=\(existingModels.count),durationMs=\(Int((CFAbsoluteTimeGetCurrent() - started) * 1000))")
         return true
@@ -115,12 +129,72 @@ public class PTMediaLibListModel: NSObject {
     // 中文：先判断公开 PhotoKit 结果是否真的变化，再发布刷新。
     @MainActor
     @discardableResult
-    func refreshResult() -> Bool {
+    func refreshResult(knownChanged: Bool = false) -> Bool {
         let nextResult = PHAsset.fetchAssets(in: collection, options: option)
-        let nextSignature = Self.signature(for: nextResult)
-        guard nextSignature != resultSignature else { return false }
+        let nextSignature = Self.boundarySignature(for: nextResult)
+        let previousBoundary = Self.boundarySignature(for: result)
+        guard knownChanged || nextSignature != previousBoundary else { return false }
+        if knownChanged, nextSignature == previousBoundary {
+            // English: A middle-asset change keeps both boundaries stable, so pay the full-scan cost only for this ambiguous notification.
+            // Español: Un cambio en un recurso intermedio mantiene estables ambos límites; el escaneo completo solo se paga en esta notificación ambigua.
+            // 中文：中间资源变化会保持首尾不变，因此仅在这类不明确通知中执行一次完整扫描。
+            let previousSignature = Self.signature(for: result)
+            let currentSignature = Self.signature(for: nextResult)
+            guard previousSignature != currentSignature else {
+                PTMediaPickerTrace.event("refresh", details: "changed=false,reason=photoKitSameSnapshot,count=\(nextResult.count)")
+                return false
+            }
+        }
         result = nextResult
-        resultSignature = nextSignature
+        if knownChanged {
+            resultChangeGeneration &+= 1
+            resultSignature = "\(nextSignature)|change:\(resultChangeGeneration)"
+        } else {
+            resultSignature = nextSignature
+        }
+        nextResultOffset = 0
+        modeledResultSignature = nil
+        return true
+    }
+
+    // English: Model only the first visible-sized slice and let the repository append later slices.
+    // Español: Modela solo el primer lote del tamaño visible y deja que el repositorio añada los siguientes.
+    // 中文：先构建接近首屏可见范围的批次，再由 Repository 追加后续批次。
+    @discardableResult
+    func loadInitialBatch() -> Bool {
+        models.removeAll(keepingCapacity: true)
+        modelsSignature = ""
+        modeledResultSignature = nil
+        nextResultOffset = 0
+        return loadNextBatch(batchSize: initialBatchSize)
+    }
+
+    // English: Append one bounded PhotoKit batch without rescanning already modeled assets.
+    // Español: Añade un lote acotado de PhotoKit sin volver a escanear recursos ya modelados.
+    // 中文：追加一个有界 PhotoKit 批次，不重新扫描已经建模的资源。
+    @discardableResult
+    func loadNextBatch(batchSize: Int? = nil) -> Bool {
+        guard !isFullyModeled else { return false }
+        let started = CFAbsoluteTimeGetCurrent()
+        let batch = PTMediaLibManager.fetchPhotoBatch(
+            in: result,
+            startResultOffset: nextResultOffset,
+            ascending: selectionOptions.sortAscending,
+            selectionOptions: selectionOptions,
+            limitCount: batchSize ?? subsequentBatchSize
+        )
+        nextResultOffset = batch.nextResultOffset
+        guard !batch.models.isEmpty else {
+            if isFullyModeled { modeledResultSignature = resultSignature }
+            return false
+        }
+        models.append(contentsOf: batch.models)
+        contentRevision &+= 1
+        PTMediaPickerTrace.event("modelingBatch", details: "added=\(batch.models.count),total=\(models.count),complete=\(isFullyModeled),durationMs=\(Int((CFAbsoluteTimeGetCurrent() - started) * 1000))")
+        if isFullyModeled {
+            modelsSignature = Self.signature(for: models.map(\.sourceRevisionKey))
+            modeledResultSignature = resultSignature
+        }
         return true
     }
 
@@ -134,6 +208,15 @@ public class PTMediaLibListModel: NSObject {
             values.append(PTMediaModel.sourceRevisionKey(for: result.object(at: index)))
         }
         return signature(for: values)
+    }
+
+    private static func boundarySignature(for result: PHFetchResult<PHAsset>) -> String {
+        guard result.count > 0 else { return "0" }
+        let first = PTMediaModel.sourceRevisionKey(for: result.object(at: 0))
+        let last = result.count == 1
+            ? first
+            : PTMediaModel.sourceRevisionKey(for: result.object(at: result.count - 1))
+        return signature(for: [first, last, String(result.count)])
     }
 
     private static func signature(for values: [String]) -> String {
@@ -206,6 +289,13 @@ public final class PTMediaModel: NSObject {
         pri_dataSize = size
         
         return size
+    }
+
+    // English: Cache the result of the asynchronous public PhotoKit size request for final selection validation.
+    // Español: Guarda el resultado de la solicitud asíncrona pública de tamaño de PhotoKit para validar la selección final.
+    // 中文：缓存公开 PhotoKit 异步大小请求结果，用于最终选择校验。
+    func setDataSize(_ size: PTMediaLibConfig.KBUnit?) {
+        pri_dataSize = size
     }
     
     public var avEditorOutputItem:AVPlayerItem?

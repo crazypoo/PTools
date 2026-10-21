@@ -9,6 +9,7 @@
 import Foundation
 import Photos
 import UIKit
+import os.lock
 
 #if SWIFT_PACKAGE
 import ptools
@@ -192,6 +193,15 @@ func markSelected(source: inout [PTMediaModel], selected: inout [PTMediaModel]) 
     }
 }
 
+// English: Keep one bounded PhotoKit batch result for the progressive album loader.
+// Español: Mantiene un único resultado de lote acotado de PhotoKit para la carga progresiva del álbum.
+// 中文：为渐进式相册加载统一保存一个有界 PhotoKit 批次结果。
+@MainActor
+struct PTMediaPhotoBatch {
+    let models: [PTMediaModel]
+    let nextResultOffset: Int
+}
+
 @MainActor
 func canAddModel(_ model: PTMediaModel,
                  currentSelectCount: Int,
@@ -257,6 +267,15 @@ private func ptMediaSelectionContext(for model: PTMediaModel,
 
 private struct PTMediaSelectionStoreSnapshot {
     let count: Int
+}
+
+// English: Keep the resource request ID and terminal flag on MainActor while byte counting stays lock protected.
+// Español: Mantiene el ID de solicitud y el estado terminal en MainActor mientras el conteo de bytes usa un lock.
+// 中文：请求 ID 和终态标记由 MainActor 持有，字节统计只通过锁保护。
+@MainActor
+final class PTMediaResourceSizeState {
+    var requestID: PHAssetResourceDataRequestID = 0
+    var didFinish = false
 }
 
 // English: Owns one cancellable PhotoKit download without exposing request internals to the view.
@@ -595,6 +614,43 @@ public class PTMediaLibManager: NSObject {
         }
     }
 
+    // English: Read only the requested result window so large libraries do not block the first presentation.
+    // Español: Lee solo la ventana solicitada del resultado para que las bibliotecas grandes no bloqueen la primera presentación.
+    // 中文：只读取请求范围内的结果窗口，避免大图库阻塞首次展示。
+    @MainActor
+    class func fetchPhotoBatch(in result: PHFetchResult<PHAsset>,
+                               startResultOffset: Int,
+                               ascending: Bool,
+                               selectionOptions: PTMediaLibSelectionOptions,
+                               limitCount: Int,
+                               reusing existingModels: [String: PTMediaModel] = [:]) -> PTMediaPhotoBatch {
+        guard limitCount > 0, startResultOffset < result.count else {
+            return PTMediaPhotoBatch(models: [], nextResultOffset: result.count)
+        }
+
+        var models: [PTMediaModel] = []
+        models.reserveCapacity(limitCount)
+        var offset = max(0, startResultOffset)
+        while offset < result.count, models.count < limitCount {
+            let index = ascending ? offset : result.count - offset - 1
+            let asset = result.object(at: index)
+            offset += 1
+            autoreleasepool {
+                let model: PTMediaModel
+                if let existing = existingModels[asset.localIdentifier],
+                   existing.sourceRevisionKey == PTMediaModel.sourceRevisionKey(for: asset) {
+                    model = existing
+                } else {
+                    model = PTMediaModel(asset: asset)
+                }
+                if canDisplay(model, with: selectionOptions) {
+                    models.append(model)
+                }
+            }
+        }
+        return PTMediaPhotoBatch(models: models, nextResultOffset: offset)
+    }
+
     /// Fetch photos from result.
     @MainActor
     public class func fetchPhoto(in result: PHFetchResult<PHAsset>,
@@ -800,6 +856,65 @@ public class PTMediaLibManager: NSObject {
         // 中文：PhotoKit 没有受支持的同步公开文件大小 API；未知大小必须延后校验。
         _ = asset
         return nil
+    }
+
+    // English: Count bytes through the public, cancellable PhotoKit resource API; private file-size KVC is intentionally avoided.
+    // Español: Cuenta bytes mediante la API pública y cancelable de recursos PhotoKit; se evita deliberadamente KVC privado.
+    // 中文：通过公开且可取消的 PhotoKit 资源 API 统计字节数，明确不再使用私有 fileSize KVC。
+    @discardableResult
+    @MainActor
+    class func requestAssetSize(for asset: PHAsset,
+                                completion: @escaping @MainActor @Sendable (PTMediaLibConfig.KBUnit?) -> Void) -> PTMediaRequestCancellation? {
+        guard let resource = PHAssetResource.assetResources(for: asset).first(where: { resource in
+            switch resource.type {
+            case .video, .fullSizeVideo, .pairedVideo:
+                return asset.mediaType == .video
+            default:
+                return false
+            }
+        }) else {
+            completion(nil)
+            return nil
+        }
+
+        let bytes = OSAllocatedUnfairLock<Int64>(initialState: 0)
+        let state = PTMediaResourceSizeState()
+        let cancellation = PTMediaRequestCancellation()
+        let finish: @MainActor @Sendable (PTMediaLibConfig.KBUnit?) -> Void = { value in
+            guard !state.didFinish else { return }
+            state.didFinish = true
+            completion(value)
+        }
+        cancellation.setCancelAction {
+            if state.requestID != PHInvalidImageRequestID {
+                PHAssetResourceManager.default().cancelDataRequest(state.requestID)
+            }
+            finish(nil)
+        }
+
+        let options = PHAssetResourceRequestOptions()
+        options.isNetworkAccessAllowed = true
+        state.requestID = PHAssetResourceManager.default().requestData(
+            for: resource,
+            options: options,
+            dataReceivedHandler: { data in
+                bytes.withLock { $0 += Int64(data.count) }
+            },
+            completionHandler: { error in
+                let total = bytes.withLock { $0 }
+                PTMainActorBridge.perform {
+                    guard error == nil, total > 0 else {
+                        finish(nil)
+                        return
+                    }
+                    finish(PTMediaLibConfig.KBUnit(total) / 1024)
+                }
+            }
+        )
+        if cancellation.isCancelled {
+            PHAssetResourceManager.default().cancelDataRequest(state.requestID)
+        }
+        return cancellation
     }
     
     public class func fetchAVAsset(forVideo asset: PHAsset, completion: @escaping @MainActor @Sendable (AVAsset?, [AnyHashable: Any]?) -> Void) -> PHImageRequestID {

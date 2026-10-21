@@ -266,16 +266,20 @@ extension PTMediaLibView {
         let oldIDs = oldRows.map(\.diffId)
         let newIDs = rows.map(\.diffId)
         let albumIdentity = album.collection.localIdentifier
+        let albumRevision = album.contentRevision
         let sameAlbum = renderedAlbumIdentity == albumIdentity
-
-        renderedAlbumIdentity = albumIdentity
-        renderedAlbumRevision = album.contentRevision
-        renderedRows = rows
+        let anchor = sameAlbum ? captureScrollAnchor(in: oldRows) : nil
 
         let finishBox = PTMediaCollectionFinishBox(finish)
-        let complete: PTActionTask = { [weak self, finishBox] in
+        let complete: PTActionTask = { [weak self, finishBox, anchor, rows, albumIdentity, albumRevision] in
             PTMainActorBridge.perform { [weak self, finishBox] in
                 guard let self else { return }
+                self.renderedAlbumIdentity = albumIdentity
+                self.renderedAlbumRevision = albumRevision
+                self.renderedRows = rows
+                if let anchor {
+                    self.restoreScrollAnchor(anchor, in: rows)
+                }
                 finishBox.call(with: self.collectionView.contentCollectionView)
             }
         }
@@ -290,6 +294,9 @@ extension PTMediaLibView {
                 PTMediaPickerTrace.event("rows", details: "kind=content,count=\(changedRows.count)")
                 collectionView.updateRows(changedRows, reload: true, completion: complete)
             } else {
+                renderedAlbumIdentity = albumIdentity
+                renderedAlbumRevision = albumRevision
+                renderedRows = rows
                 finishBox.call(with: collectionView.contentCollectionView)
             }
             return
@@ -315,8 +322,17 @@ extension PTMediaLibView {
             return
         }
 
-        PTMediaPickerTrace.event("rows", details: "kind=replace,count=\(rows.count)")
-        collectionView.showCollectionDetail(collectionData: [PTSection(rows: rows)], finishTask: finish)
+        if sameAlbum {
+            PTMediaPickerTrace.event("rows", details: "kind=batchReplace,count=\(rows.count)")
+            collectionView.replaceRows(in: 0,
+                                       with: rows,
+                                       animated: true,
+                                       completion: complete)
+        } else {
+            PTMediaPickerTrace.event("rows", details: "kind=replace,count=\(rows.count)")
+            collectionView.showCollectionDetail(collectionData: [PTSection(rows: rows)],
+                                                finishTask: { _ in complete() })
+        }
     }
 
     private func mediaRowRevision(_ row: PTRows) -> String {
@@ -332,6 +348,48 @@ extension PTMediaLibView {
             if value == smaller[index] { index += 1 }
         }
         return index == smaller.count
+    }
+
+    private struct PTMediaScrollAnchor {
+        let rowID: String
+        let offset: CGFloat
+    }
+
+    // English: Capture one visible asset so multi-row PhotoKit updates do not move the user's browsing position.
+    // Español: Captura un recurso visible para que las actualizaciones de varias filas no muevan la posición del usuario.
+    // 中文：记录一个可见媒体，避免多 Row PhotoKit 更新改变用户当前浏览位置。
+    private func captureScrollAnchor(in rows: [PTRows]) -> PTMediaScrollAnchor? {
+        let collection = collectionView.contentCollectionView
+        let visible = collection.indexPathsForVisibleItems.sorted {
+            if $0.section != $1.section { return $0.section < $1.section }
+            return $0.item < $1.item
+        }
+        guard let indexPath = visible.first,
+              indexPath.section == 0,
+              rows.indices.contains(indexPath.item),
+              let attributes = collection.layoutAttributesForItem(at: indexPath) else {
+            return nil
+        }
+        return PTMediaScrollAnchor(rowID: rows[indexPath.item].diffId,
+                                   offset: attributes.frame.minY - collection.contentOffset.y)
+    }
+
+    // English: Restore the captured anchor after the serialized Diffable transaction completes.
+    // Español: Restaura el ancla capturada cuando termina la transacción Diffable serializada.
+    // 中文：在串行 Diffable 事务完成后恢复之前记录的滚动锚点。
+    private func restoreScrollAnchor(_ anchor: PTMediaScrollAnchor,
+                                     in rows: [PTRows]) {
+        guard let item = rows.firstIndex(where: { $0.diffId == anchor.rowID }) else { return }
+        let collection = collectionView.contentCollectionView
+        collection.layoutIfNeeded()
+        let indexPath = IndexPath(item: item, section: 0)
+        guard let attributes = collection.layoutAttributesForItem(at: indexPath) else { return }
+        let targetOffset = attributes.frame.minY - anchor.offset
+        let minOffset = -collection.adjustedContentInset.top
+        let maxOffset = max(minOffset,
+                            collection.contentSize.height - collection.bounds.height + collection.adjustedContentInset.bottom)
+        let y = min(max(targetOffset, minOffset), maxOffset)
+        collection.setContentOffset(CGPoint(x: collection.contentOffset.x, y: y), animated: false)
     }
 
     private func applyRepositoryAlbum(_ album: PTMediaLibListModel) {
@@ -706,49 +764,101 @@ extension PTMediaLibView {
             }
 
             guard let reservation = selectionStore.reserveSelection(for: cellModel) else { return }
-            
-            // 2. 资源下载检查：如果是 iCloud 资源，需要先下载
-            let download = downloadAssetIfNeededCancellable(model: cellModel,
-                                                             sender: currentVc,
-                                                             selectionOptions: activeSelectionOptions) { [weak self] success in
-                self?.pendingDownloadCancellations.removeValue(forKey: cellModel.ident)
-                // 4. 更新 UI 表现
-                Task { @MainActor [weak self] in
-                    guard let self = self else { return }
-                    guard self.selectionStore.isReservationActive(reservation) else { return }
-                    guard success else {
-                        self.selectionStore.cancelSelection(for: cellModel, reservation: reservation)
-                        isSelected?(false)
-                        self.refreshCellIndex()
-                        return
-                    }
-                    let finalContext = ptMediaSelectionContext(for: cellModel,
-                                                               store: self.selectionStore,
-                                                               options: self.activeSelectionOptions)
-                    guard PTMediaSelectionPolicy.violation(for: finalContext) == nil else {
-                        self.selectionStore.cancelSelection(for: cellModel, reservation: reservation)
-                        isSelected?(false)
-                        self.refreshCellIndex()
-                        return
-                    }
-                    cellModel.isSelected = true
-                    guard self.selectionStore.completeSelection(for: cellModel, reservation: reservation) else { return }
-                    isSelected?(true)
 
-                    cell.selectButton.isSelected = true
-                    cell.layer.removeAllAnimations()
-                    // 5. 触发配置回调与全局索引刷新
-                    config.didSelectAsset?(cellModel.asset)
-                    self.refreshCellIndex()
-                }
+            let continueSelection: @MainActor @Sendable () -> Void = { [weak self, weak cell] in
+                guard let self, let cell else { return }
+                self.startDownloadSelection(for: cellModel,
+                                            cell: cell,
+                                            reservation: reservation,
+                                            isSelected: isSelected,
+                                            config: config)
             }
-            if let download {
-                pendingDownloadCancellations[cellModel.ident] = download
+
+            let options = activeSelectionOptions
+            let hasVideoSizeConstraint = cellModel.type == .video &&
+                (options.minSelectVideoDataSize > 0 ||
+                 options.maxSelectVideoDataSize != .greatestFiniteMagnitude)
+            if hasVideoSizeConstraint, cellModel.dataSize == nil {
+                // English: Unknown video size cannot pass a configured limit; validate it before any final selection callback.
+                // Español: Un tamaño de vídeo desconocido no puede superar un límite configurado; se valida antes del callback final.
+                // 中文：配置了体积限制时，未知视频大小不能直接通过，必须在最终选择回调前校验。
+                let sizeRequest = PTMediaLibManager.requestAssetSize(for: cellModel.asset) { [weak self] size in
+                    guard let self else { return }
+                    self.pendingDownloadCancellations.removeValue(forKey: cellModel.ident)
+                    guard self.selectionStore.isReservationActive(reservation) else { return }
+                    guard let size else {
+                        self.selectionStore.cancelSelection(for: cellModel, reservation: reservation)
+                        isSelected?(false)
+                        self.refreshCellIndex()
+                        return
+                    }
+                    cellModel.setDataSize(size)
+                    guard canAddModel(cellModel,
+                                      currentSelectCount: self.selectionStore.reservedCount,
+                                      sender: self.currentVc,
+                                      selectionOptions: options,
+                                      selectionStore: self.selectionStore) else {
+                        self.selectionStore.cancelSelection(for: cellModel, reservation: reservation)
+                        isSelected?(false)
+                        self.refreshCellIndex()
+                        return
+                    }
+                    continueSelection()
+                }
+                if let sizeRequest {
+                    pendingDownloadCancellations[cellModel.ident] = sizeRequest
+                }
+            } else {
+                continueSelection()
             }
         }
         // --- 情况 B: 取消选中该资源 ---
         else {
             cellStatusReset(cellModel: cellModel, cell: cell, isSelected: isSelected)
+        }
+    }
+
+    // English: Keep cloud download and final selection completion in one path after optional size validation.
+    // Español: Mantiene la descarga en la nube y la finalización de selección en una sola ruta tras validar el tamaño.
+    // 中文：可选体积校验完成后，云端下载和最终选中回调统一走同一条路径。
+    private func startDownloadSelection(for cellModel: PTMediaModel,
+                                        cell: PTMediaLibCell,
+                                        reservation: PTMediaSelectionReservation,
+                                        isSelected: (@MainActor @Sendable (Bool) -> Void)?,
+                                        config: PTMediaLibConfig) {
+        let download = downloadAssetIfNeededCancellable(model: cellModel,
+                                                         sender: currentVc,
+                                                         selectionOptions: activeSelectionOptions) { [weak self] success in
+            self?.pendingDownloadCancellations.removeValue(forKey: cellModel.ident)
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                guard self.selectionStore.isReservationActive(reservation) else { return }
+                guard success else {
+                    self.selectionStore.cancelSelection(for: cellModel, reservation: reservation)
+                    isSelected?(false)
+                    self.refreshCellIndex()
+                    return
+                }
+                let finalContext = ptMediaSelectionContext(for: cellModel,
+                                                           store: self.selectionStore,
+                                                           options: self.activeSelectionOptions)
+                guard PTMediaSelectionPolicy.violation(for: finalContext) == nil else {
+                    self.selectionStore.cancelSelection(for: cellModel, reservation: reservation)
+                    isSelected?(false)
+                    self.refreshCellIndex()
+                    return
+                }
+                cellModel.isSelected = true
+                guard self.selectionStore.completeSelection(for: cellModel, reservation: reservation) else { return }
+                isSelected?(true)
+                cell.selectButton.isSelected = true
+                cell.layer.removeAllAnimations()
+                config.didSelectAsset?(cellModel.asset)
+                self.refreshCellIndex()
+            }
+        }
+        if let download {
+            pendingDownloadCancellations[cellModel.ident] = download
         }
     }
     

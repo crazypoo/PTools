@@ -485,6 +485,10 @@ public enum PTMediaTemporaryFile {
             try FileManager.default.copyItem(at: sourceURL, to: destinationURL)
             return destinationURL
         } catch {
+            // English: Remove a partial owned copy but never touch the provider-owned source URL.
+            // Español: Elimina una copia propia incompleta sin tocar nunca la URL propiedad del proveedor.
+            // 中文：清理可能残留的自有半成品副本，但绝不删除 provider 持有的源 URL。
+            try? FileManager.default.removeItem(at: destinationURL)
             throw PTSystemMediaPickerError.temporaryFileCopyFailed(String(describing: error))
         }
     }
@@ -493,9 +497,17 @@ public enum PTMediaTemporaryFile {
     // Español: La E/S de archivos se ejecuta fuera de MainActor y la URL sigue siendo propiedad del proveedor solo durante la llamada.
     // 中文：文件 I/O 在 MainActor 之外执行，源 URL 仅在调用期间由 provider 持有。
     public static func copyVideoToTemporaryURLAsync(_ sourceURL: URL) async throws -> URL {
-        try await Task.detached(priority: .userInitiated) {
+        let copiedURL = try await Task.detached(priority: .userInitiated) {
             try copyVideoToTemporaryURL(sourceURL)
         }.value
+        // English: Cancellation cannot interrupt FileManager.copyItem, so remove the completed owned copy before returning.
+        // Español: La cancelación no interrumpe FileManager.copyItem; elimina la copia propia terminada antes de devolverla.
+        // 中文：取消无法中断 FileManager.copyItem，因此返回前清理已完成但不再需要的自有副本。
+        guard !Task.isCancelled else {
+            try? FileManager.default.removeItem(at: copiedURL)
+            throw CancellationError()
+        }
+        return copiedURL
     }
 }
 

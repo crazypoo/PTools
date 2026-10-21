@@ -7,6 +7,10 @@
 - [x] 图片/视频混选、pending 选择、取消、编辑替换、相册变化、截图刷新和临时视频回收路径已完成代码级收敛。
 - [x] 删除旧 `PTFetchImageOperation`，保留 `PTMediaRequestCoordinator`、`PTMediaSaveUI` 和公开 Manager/API 兼容入口。
 - [x] SwiftPM manifest、`git diff --check`、PooTools-Example iOS Simulator Debug / Release 构建和 PhotoPicker 选择策略静态测试准备完成。
+- [x] N00 首屏阶段补齐统一 `PTMediaPickerTrace` signpost；不记录媒体内容、字节或用户文件名。
+- [x] N01 首屏采用有界批次并渐进建模；退出、切换相册和刷新使用 generation 取消过期任务。
+- [x] N02 刷新先走边界快照，同边界的 PhotoKit 通知仅在必要时进入一次完整 fallback；无变化不重建、不提交 Grid。
+- [x] N03/N04/N05 补齐多行 Row 替换与滚动锚点、公开异步视频大小校验、CIImage 保存 fallback 和临时副本失败/取消清理。
 - [ ] CocoaPods 独立 consumer、PhotoKit 真机/宿主回归、视觉回归和性能对照仍需完成后才创建正式 `5.69.0` tag。
 
 ## 5.68.0

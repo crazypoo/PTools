@@ -145,7 +145,6 @@ final class PTMediaSelectionStore {
             $0.ident == $1.ident && $0.sourceRevisionKey == $1.sourceRevisionKey
         }
         guard !unchanged else {
-            synchronizeModelFlags()
             return
         }
         self.models = models
