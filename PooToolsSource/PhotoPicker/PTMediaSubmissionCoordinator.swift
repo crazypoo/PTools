@@ -15,6 +15,57 @@ import ptools
 import PooToolsImagePicker
 #endif
 
+// English: A continuation-backed gate waits without polling while keeping the PhotoKit request limit.
+// Español: Una compuerta basada en continuaciones espera sin sondeo y conserva el límite de PhotoKit.
+// 中文：使用 continuation 等待，不轮询，同时保留 PhotoKit 请求数量上限。
+@MainActor
+private final class PTMediaSubmissionSlotGate {
+    private let limit: Int
+    private var activeCount = 0
+    private var waiters: [UUID: CheckedContinuation<Bool, Never>] = [:]
+
+    init(limit: Int) {
+        self.limit = max(1, limit)
+    }
+
+    func acquire() async -> Bool {
+        guard !Task.isCancelled else { return false }
+        if activeCount < limit {
+            activeCount += 1
+            return true
+        }
+
+        let token = UUID()
+        return await withTaskCancellationHandler(operation: {
+            await withCheckedContinuation { (continuation: CheckedContinuation<Bool, Never>) in
+                guard !Task.isCancelled else {
+                    continuation.resume(returning: false)
+                    return
+                }
+                waiters[token] = continuation
+            }
+        }, onCancel: { [weak self] in
+            PTMainActorBridge.perform { [weak self] in
+                self?.cancel(token: token)
+            }
+        })
+    }
+
+    func release() {
+        guard let token = waiters.keys.first,
+              let continuation = waiters.removeValue(forKey: token) else {
+            activeCount = max(0, activeCount - 1)
+            return
+        }
+        continuation.resume(returning: true)
+    }
+
+    func cancel(token: UUID) {
+        guard let continuation = waiters.removeValue(forKey: token) else { return }
+        continuation.resume(returning: false)
+    }
+}
+
 @MainActor
 final class PTMediaSubmissionCoordinator {
     private final class RequestState {
@@ -25,23 +76,17 @@ final class PTMediaSubmissionCoordinator {
     }
 
     private var requests: [String: RequestState] = [:]
-    private var activeRequestCount = 0
+    private let slotGate = PTMediaSubmissionSlotGate(limit: 3)
 
     // English: Keep at most three PhotoKit submission requests active to bound memory and iCloud pressure.
     // Español: Mantiene como máximo tres solicitudes activas para limitar memoria y presión de iCloud.
     // 中文：最多同时处理三个 PhotoKit 提交请求，限制内存和 iCloud 压力。
     private func acquireRequestSlot() async -> Bool {
-        while activeRequestCount >= 3 {
-            guard !Task.isCancelled else { return false }
-            try? await Task.sleep(nanoseconds: 10_000_000)
-        }
-        guard !Task.isCancelled else { return false }
-        activeRequestCount += 1
-        return true
+        await slotGate.acquire()
     }
 
     private func releaseRequestSlot() {
-        activeRequestCount = max(0, activeRequestCount - 1)
+        slotGate.release()
     }
 
     // English: Submit one asset through a single exactly-once continuation.

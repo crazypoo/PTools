@@ -289,7 +289,7 @@ private final class PTSystemMediaPickerCoordinator: NSObject, PHPickerViewContro
                 finish(.success(.image(data: data, assetIdentifier: nil)))
 
             case .video(let url):
-                let copiedURL = try ptCopyVideoToTemporaryURL(url)
+                let copiedURL = try PTMediaTemporaryFile.copyVideoToTemporaryURL(url)
                 finish(.success(.video(fileURL: copiedURL, assetIdentifier: nil)))
             }
         } catch let error as PTSystemMediaPickerError {
@@ -401,7 +401,7 @@ private final class PTSystemMediaPickerCoordinator: NSObject, PHPickerViewContro
             }
 
             do {
-                let copiedURL = try ptCopyVideoToTemporaryURL(url)
+                let copiedURL = try PTMediaTemporaryFile.copyVideoToTemporaryURL(url)
                 PTMainActorBridge.perform {
                     deliver(.success(.video(fileURL: copiedURL, assetIdentifier: assetIdentifier)))
                 }
@@ -469,17 +469,22 @@ private enum PTSystemMediaPickerAssociation {
 // English: Copy provider-owned video files before the provider callback returns.
 // Español: Copia los vídeos propiedad del proveedor antes de que termine su callback.
 // 中文：在 provider 回调结束前复制视频文件，避免继续使用失效的临时 URL。
-private func ptCopyVideoToTemporaryURL(_ sourceURL: URL) throws -> URL {
-    let fileExtension = UTType(filenameExtension: sourceURL.pathExtension)?.preferredFilenameExtension ?? "mov"
-    let destinationURL = FileManager.default.temporaryDirectory
-        .appendingPathComponent("PToolsImagePicker-\(UUID().uuidString)")
-        .appendingPathExtension(fileExtension)
+// English: Own provider video files until PhotoKit finishes reading them.
+// Español: Mantén la propiedad de los vídeos del proveedor hasta que PhotoKit termine de leerlos.
+// 中文：在 PhotoKit 完成读取前，由框架持有 provider 返回的视频文件。
+public enum PTMediaTemporaryFile {
+    public static func copyVideoToTemporaryURL(_ sourceURL: URL) throws -> URL {
+        let fileExtension = UTType(filenameExtension: sourceURL.pathExtension)?.preferredFilenameExtension ?? "mov"
+        let destinationURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("PToolsImagePicker-\(UUID().uuidString)")
+            .appendingPathExtension(fileExtension)
 
-    do {
-        try FileManager.default.copyItem(at: sourceURL, to: destinationURL)
-        return destinationURL
-    } catch {
-        throw PTSystemMediaPickerError.temporaryFileCopyFailed(String(describing: error))
+        do {
+            try FileManager.default.copyItem(at: sourceURL, to: destinationURL)
+            return destinationURL
+        } catch {
+            throw PTSystemMediaPickerError.temporaryFileCopyFailed(String(describing: error))
+        }
     }
 }
 

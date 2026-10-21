@@ -197,13 +197,16 @@ func canAddModel(_ model: PTMediaModel,
                  currentSelectCount: Int,
                  sender: UIViewController?,
                  showAlert: Bool = true,
-                 selectionOptions: PTMediaLibSelectionOptions? = nil) -> Bool {
+                 selectionOptions: PTMediaLibSelectionOptions? = nil,
+                 selectionStore: PTMediaSelectionStore? = nil) -> Bool {
     let options = selectionOptions ?? .current()
 
     guard PTMediaLibConfig.share.canSelectAsset?(model.asset) ?? true else { return false }
-    let context = ptMediaSelectionContext(for: model,
-                                           store: PTMediaSelectionStoreSnapshot(count: currentSelectCount),
-                                           options: options)
+    let context = selectionStore.map {
+        ptMediaSelectionContext(for: model, store: $0, options: options)
+    } ?? ptMediaSelectionContext(for: model,
+                                 store: PTMediaSelectionStoreSnapshot(count: currentSelectCount),
+                                 options: options)
     guard let violation = PTMediaSelectionPolicy.violation(for: context) else { return true }
     guard showAlert else { return false }
 
@@ -245,7 +248,7 @@ private func ptMediaSelectionContext(for model: PTMediaModel,
                                      store: PTMediaSelectionStoreSnapshot,
                                      options: PTMediaLibSelectionOptions) -> PTMediaSelectionContext {
     PTMediaSelectionContext(selectedCount: store.count,
-                            selectedTypes: [],
+                            selectedFamilies: [],
                             candidateType: model.type,
                             candidateDuration: model.second,
                             candidateDataSize: model.type == .video ? model.dataSize : nil,
@@ -256,6 +259,31 @@ private struct PTMediaSelectionStoreSnapshot {
     let count: Int
 }
 
+// English: Owns one cancellable PhotoKit download without exposing request internals to the view.
+// Español: Posee una descarga cancelable de PhotoKit sin exponer detalles de la solicitud a la vista.
+// 中文：封装一次可取消的 PhotoKit 下载，不把请求内部细节暴露给界面。
+@MainActor
+final class PTMediaRequestCancellation {
+    private var cancelAction: (@MainActor @Sendable () -> Void)?
+    private(set) var isCancelled = false
+
+    func setCancelAction(_ action: @escaping @MainActor @Sendable () -> Void) {
+        guard !isCancelled else {
+            action()
+            return
+        }
+        cancelAction = action
+    }
+
+    func cancel() {
+        guard !isCancelled else { return }
+        isCancelled = true
+        let action = cancelAction
+        cancelAction = nil
+        action?()
+    }
+}
+
 @MainActor
 func downloadAssetIfNeeded(alertTitle: String? = nil,
                            subTitle: String? = nil,
@@ -263,6 +291,22 @@ func downloadAssetIfNeeded(alertTitle: String? = nil,
                            sender: UIViewController?,
                            selectionOptions: PTMediaLibSelectionOptions? = nil,
                            completion: @escaping @MainActor @Sendable (Bool) -> Void) {
+    _ = downloadAssetIfNeededCancellable(alertTitle: alertTitle,
+                                          subTitle: subTitle,
+                                          model: model,
+                                          sender: sender,
+                                          selectionOptions: selectionOptions,
+                                          completion: completion)
+}
+
+@discardableResult
+@MainActor
+func downloadAssetIfNeededCancellable(alertTitle: String? = nil,
+                                      subTitle: String? = nil,
+                                      model: PTMediaModel,
+                                      sender: UIViewController?,
+                                      selectionOptions: PTMediaLibSelectionOptions? = nil,
+                                      completion: @escaping @MainActor @Sendable (Bool) -> Void) -> PTMediaRequestCancellation? {
     let title = alertTitle ?? PTMediaLibUIConfig.share.alertTitle
     let timeoutMessage = subTitle ?? PTMediaLibUIConfig.share.downloadTimeOutError
     let options = selectionOptions ?? .current()
@@ -271,7 +315,7 @@ func downloadAssetIfNeeded(alertTitle: String? = nil,
           model.asset.pt.isInCloud,
           options.downloadVideoBeforeSelecting else {
         completion(true)
-        return
+        return nil
     }
 
     // English: Finish the cloud request exactly once across success, error, timeout, and cancellation.
@@ -284,32 +328,51 @@ func downloadAssetIfNeeded(alertTitle: String? = nil,
     }
 
     let state = State()
-    let finish: @MainActor @Sendable (Bool) -> Void = { success in
+    let cancellation = PTMediaRequestCancellation()
+    let finish: @MainActor @Sendable (Bool, Bool) -> Void = { success, showsAlert in
         guard !state.didFinish else { return }
         state.didFinish = true
         state.timeoutTask?.cancel()
         if !success, state.requestID != PHInvalidImageRequestID {
             PHImageManager.default().cancelImageRequest(state.requestID)
-            PTAlertTipsViewController.tipsAlertShow(title: title, subtitle: timeoutMessage, icon: .Error)
+            if showsAlert {
+                PTAlertTipsViewController.tipsAlertShow(title: title, subtitle: timeoutMessage, icon: .Error)
+            }
         }
         completion(success)
     }
+    cancellation.setCancelAction {
+        finish(false, false)
+    }
+
+    guard !cancellation.isCancelled else { return cancellation }
 
     let nanoseconds = UInt64(max(0.1, options.iCloudRequestTimeout) * 1_000_000_000)
     state.timeoutTask = Task { @MainActor in
         try? await Task.sleep(nanoseconds: nanoseconds)
         guard !Task.isCancelled else { return }
-        finish(false)
+        finish(false, true)
     }
 
     state.requestID = PTMediaLibManager.requestVideo(for: model.asset) { result in
         guard !result.isDegraded else { return }
-        finish(result.error == nil && !result.isCancelled)
+        finish(result.error == nil && !result.isCancelled, true)
+    }
+
+    // English: A cancellation can race with PhotoKit assigning its request ID; cancel the ID immediately when that happens.
+    // Español: La cancelación puede competir con la asignación del ID de PhotoKit; cancela el ID en cuanto exista.
+    // 中文：取消可能与 PhotoKit 分配请求 ID 同时发生；一旦拿到 ID 就立即取消。
+    if cancellation.isCancelled || state.didFinish {
+        if state.requestID != PHInvalidImageRequestID {
+            PHImageManager.default().cancelImageRequest(state.requestID)
+        }
+        return cancellation
     }
 
     if state.requestID == PHInvalidImageRequestID {
-        finish(false)
+        finish(false, true)
     }
+    return cancellation
 }
 
 @MainActor

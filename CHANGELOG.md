@@ -13,8 +13,9 @@
 - 统一图片/视频选择规则，补齐图片与视频双向混选校验、异步下载期间的 pending 预留、重复点击幂等和编辑后资产替换的选中顺序保持。
 - 用结构化并发替代旧的 `PTFetchImageOperation` 提交链路，真正取消 PhotoKit 请求，限制并发数量，并保证提交结果按原选中顺序、完成回调只触发一次。
 - 修复 PhotoKit 观察者生命周期、截图刷新、相册切换保留选择和相机新资源刷新；移除固定延迟插入逻辑，临时视频文件改用 UUID 缓存路径并在完成或失败后回收。
+- 修复相机拍摄完成后的空结果强制解包、PhotoKit 后台观察者 Actor 边界、相机保存/关闭/回调竞态，以及视频 provider 临时 URL 未被框架持有的问题；保存成功、失败、取消和迟到回调均只结束一次。
 - 修复 PhotoPicker Cell 编辑按钮重复绑定、复用状态残留和旧请求串图风险；保留 `PTMediaLibManager`、`PTMediaLibConfig`、`PTMediaModel`、`PTResultModel` 以及旧回调 API 兼容入口。
-- 新增 PhotoPicker 选择策略回归测试和 5.69.0 迁移指南；明确 `PooToolsPhotoPicker` 仍是 UIKit/PhotoKit 的 iOS/iPadOS 能力，watchOS、visionOS、macOS 继续由宿主平台边界管理。
+- 相册列表也通过实例级 Repository 获取和刷新；新增图片族、Live Photo、GIF 过滤、提交终态和取消终态回归测试。`PooToolsPhotoPicker` 仍是 UIKit/PhotoKit 的 iOS/iPadOS 能力，watchOS、visionOS、macOS 继续由宿主平台边界管理。
 
 ## 5.68.0 — 2026-10-19
 

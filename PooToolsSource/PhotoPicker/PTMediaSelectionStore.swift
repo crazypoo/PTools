@@ -9,12 +9,39 @@
 
 import Foundation
 
+// English: Images, GIFs, and Live Photos share one selection family; videos remain a separate family.
+// Español: Las imágenes, GIF y Live Photos comparten una familia; los vídeos permanecen separados.
+// 中文：普通图片、GIF 和 Live Photo 属于同一选择族；视频保持独立选择族。
+enum PTMediaSelectionFamily: Sendable, Hashable {
+    case image
+    case video
+
+    init?(mediaType: PTMediaModel.MediaType) {
+        switch mediaType {
+        case .image, .gif, .livePhoto:
+            self = .image
+        case .video:
+            self = .video
+        case .unknown:
+            return nil
+        }
+    }
+}
+
+// English: A reservation identifies one asynchronous selection attempt and rejects late callbacks.
+// Español: La reserva identifica un intento asíncrono y rechaza callbacks tardíos.
+// 中文：预约令牌标识一次异步选择尝试，用于拒绝取消后的迟到回调。
+struct PTMediaSelectionReservation: Sendable, Equatable {
+    let identifier: String
+    let generation: UInt64
+}
+
 // English: The value context keeps selection validation independent from UIKit and PhotoKit objects.
 // Español: El contexto de valor mantiene la validación independiente de objetos UIKit y PhotoKit.
 // 中文：值类型上下文让选择校验不依赖 UIKit 和 PhotoKit 对象。
 struct PTMediaSelectionContext: Sendable {
     let selectedCount: Int
-    let selectedTypes: Set<PTMediaModel.MediaType>
+    let selectedFamilies: Set<PTMediaSelectionFamily>
     let candidateType: PTMediaModel.MediaType
     let candidateDuration: Int
     let candidateDataSize: CGFloat?
@@ -50,7 +77,7 @@ enum PTMediaSelectionPolicy {
                 break
             case .livePhotoOnly where context.candidateType != .livePhoto:
                 return .imageFilterNotAllowed
-            case .regularImageOnly where context.candidateType != .image && context.candidateType != .gif:
+            case .regularImageOnly where context.candidateType != .image:
                 return .imageFilterNotAllowed
             default:
                 break
@@ -67,8 +94,8 @@ enum PTMediaSelectionPolicy {
         }
 
         if !options.allowMixSelect,
-           !context.selectedTypes.isEmpty,
-           context.selectedTypes.contains(where: { $0 != context.candidateType }) {
+           let candidateFamily = PTMediaSelectionFamily(mediaType: context.candidateType),
+           context.selectedFamilies.contains(where: { $0 != candidateFamily }) {
             return .mixedMediaNotAllowed
         }
 
@@ -98,6 +125,8 @@ final class PTMediaSelectionStore {
     private(set) var selectedModels: [PTMediaModel] = []
     private(set) var pendingIdentifiers: Set<String> = []
     private(set) var pendingModels: [String: PTMediaModel] = [:]
+    private var reservations: [String: PTMediaSelectionReservation] = [:]
+    private var generations: [String: UInt64] = [:]
 
     // English: UI observes one change stream instead of mirroring selected arrays in two owners.
     // Español: La UI observa un único flujo de cambios en lugar de duplicar arrays seleccionados.
@@ -135,23 +164,39 @@ final class PTMediaSelectionStore {
         var seen = Set<String>()
         selectedModels = models.filter { seen.insert($0.ident).inserted }
         pendingIdentifiers.subtract(selectedModels.map(\.ident))
-        selectedModels.forEach { pendingModels.removeValue(forKey: $0.ident) }
+        selectedModels.forEach {
+            pendingModels.removeValue(forKey: $0.ident)
+            reservations.removeValue(forKey: $0.ident)
+        }
         synchronizeModelFlags()
         notifyChange()
     }
 
     func beginSelection(for model: PTMediaModel) -> Bool {
+        reserveSelection(for: model) != nil
+    }
+
+    func reserveSelection(for model: PTMediaModel) -> PTMediaSelectionReservation? {
         guard !selectedModels.contains(where: { $0.ident == model.ident }),
               !pendingIdentifiers.contains(model.ident) else {
-            return false
+            return nil
         }
+
+        let generation = (generations[model.ident] ?? 0) &+ 1
+        let reservation = PTMediaSelectionReservation(identifier: model.ident, generation: generation)
+        generations[model.ident] = generation
+        reservations[model.ident] = reservation
         pendingIdentifiers.insert(model.ident)
         pendingModels[model.ident] = model
         notifyChange()
-        return true
+        return reservation
     }
 
     func completeSelection(for model: PTMediaModel) {
+        if let reservation = reservations[model.ident] {
+            _ = completeSelection(for: model, reservation: reservation)
+            return
+        }
         pendingIdentifiers.remove(model.ident)
         pendingModels.removeValue(forKey: model.ident)
         guard !selectedModels.contains(where: { $0.ident == model.ident }) else {
@@ -162,6 +207,24 @@ final class PTMediaSelectionStore {
         model.isSelected = true
         selectedModels.append(model)
         notifyChange()
+    }
+
+    @discardableResult
+    func completeSelection(for model: PTMediaModel,
+                           reservation: PTMediaSelectionReservation) -> Bool {
+        guard reservations[model.ident] == reservation else { return false }
+        reservations.removeValue(forKey: model.ident)
+        pendingIdentifiers.remove(model.ident)
+        pendingModels.removeValue(forKey: model.ident)
+        guard !selectedModels.contains(where: { $0.ident == model.ident }) else {
+            model.isSelected = true
+            notifyChange()
+            return true
+        }
+        model.isSelected = true
+        selectedModels.append(model)
+        notifyChange()
+        return true
     }
 
     // English: Replace an edited asset without changing the user's selection order.
@@ -178,17 +241,39 @@ final class PTMediaSelectionStore {
         selectedModels[index] = replacement
         pendingIdentifiers.remove(replacement.ident)
         pendingModels.removeValue(forKey: replacement.ident)
+        reservations.removeValue(forKey: replacement.ident)
         notifyChange()
     }
 
     func cancelSelection(for model: PTMediaModel) {
+        if let reservation = reservations[model.ident] {
+            _ = cancelSelection(for: model, reservation: reservation)
+            return
+        }
         pendingIdentifiers.remove(model.ident)
         pendingModels.removeValue(forKey: model.ident)
         model.isSelected = selectedModels.contains(where: { $0.ident == model.ident })
         notifyChange()
     }
 
+    @discardableResult
+    func cancelSelection(for model: PTMediaModel,
+                         reservation: PTMediaSelectionReservation) -> Bool {
+        guard reservations[model.ident] == reservation else { return false }
+        reservations.removeValue(forKey: model.ident)
+        pendingIdentifiers.remove(model.ident)
+        pendingModels.removeValue(forKey: model.ident)
+        model.isSelected = selectedModels.contains(where: { $0.ident == model.ident })
+        notifyChange()
+        return true
+    }
+
+    func isReservationActive(_ reservation: PTMediaSelectionReservation) -> Bool {
+        reservations[reservation.identifier] == reservation
+    }
+
     func removeSelection(for model: PTMediaModel) {
+        reservations.removeValue(forKey: model.ident)
         pendingIdentifiers.remove(model.ident)
         pendingModels.removeValue(forKey: model.ident)
         selectedModels.removeAll { $0.ident == model.ident }
@@ -205,6 +290,7 @@ final class PTMediaSelectionStore {
     }
 
     func reset() {
+        reservations.removeAll(keepingCapacity: true)
         pendingIdentifiers.removeAll(keepingCapacity: true)
         pendingModels.removeAll(keepingCapacity: true)
         selectedModels.removeAll(keepingCapacity: true)
@@ -216,7 +302,11 @@ final class PTMediaSelectionStore {
     // Español: Incluye medios pendientes en la comprobación de tipos para que los toques rápidos no eviten la política de mezcla.
     // 中文：类型校验包含待处理资源，避免快速点击绕过混选规则。
     func containsPendingTypeDifferent(from type: PTMediaModel.MediaType) -> Bool {
-        pendingModels.values.contains { $0.type != type }
+        guard let family = PTMediaSelectionFamily(mediaType: type) else { return true }
+        return pendingModels.values.contains {
+            guard let pendingFamily = PTMediaSelectionFamily(mediaType: $0.type) else { return true }
+            return pendingFamily != family
+        }
     }
 
     private func synchronizeModelFlags() {
@@ -234,7 +324,9 @@ func ptMediaSelectionContext(for model: PTMediaModel,
                              store: PTMediaSelectionStore,
                              options: PTMediaLibSelectionOptions) -> PTMediaSelectionContext {
     PTMediaSelectionContext(selectedCount: store.reservedCount - (store.pendingIdentifiers.contains(model.ident) ? 1 : 0),
-                            selectedTypes: Set(store.selectedModels.map(\.type) + store.pendingModels.values.map(\.type)),
+                            selectedFamilies: Set((store.selectedModels + Array(store.pendingModels.values)).compactMap {
+                                PTMediaSelectionFamily(mediaType: $0.type)
+                            }),
                             candidateType: model.type,
                             candidateDuration: model.second,
                             candidateDataSize: model.type == .video ? model.dataSize : nil,

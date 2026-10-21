@@ -2,11 +2,16 @@ import XCTest
 @testable import PooToolsPhotoPicker
 
 @MainActor
+private final class PTMediaCancellationCounter {
+    var value = 0
+}
+
+@MainActor
 final class PTMediaSelectionPolicyTests: XCTestCase {
     func testImageThenVideoIsRejectedWhenMixingIsDisabled() {
         let options = PTMediaLibSelectionOptions(allowMixSelect: false)
         let context = PTMediaSelectionContext(selectedCount: 1,
-                                               selectedTypes: [.image],
+                                               selectedFamilies: [.image],
                                                candidateType: .video,
                                                candidateDuration: 1,
                                                candidateDataSize: nil,
@@ -18,7 +23,7 @@ final class PTMediaSelectionPolicyTests: XCTestCase {
     func testVideoThenImageIsRejectedWhenMixingIsDisabled() {
         let options = PTMediaLibSelectionOptions(allowMixSelect: false)
         let context = PTMediaSelectionContext(selectedCount: 1,
-                                               selectedTypes: [.video],
+                                               selectedFamilies: [.video],
                                                candidateType: .image,
                                                candidateDuration: 0,
                                                candidateDataSize: nil,
@@ -30,7 +35,7 @@ final class PTMediaSelectionPolicyTests: XCTestCase {
     func testReservedSelectionCountsAgainstMaximum() {
         let options = PTMediaLibSelectionOptions(maxSelectCount: 1)
         let context = PTMediaSelectionContext(selectedCount: 1,
-                                               selectedTypes: [.image],
+                                               selectedFamilies: [.image],
                                                candidateType: .image,
                                                candidateDuration: 0,
                                                candidateDataSize: nil,
@@ -43,13 +48,13 @@ final class PTMediaSelectionPolicyTests: XCTestCase {
         let options = PTMediaLibSelectionOptions(minSelectVideoDuration: 2,
                                                   maxSelectVideoDuration: 5)
         let tooShort = PTMediaSelectionContext(selectedCount: 0,
-                                                selectedTypes: [],
+                                                selectedFamilies: [],
                                                 candidateType: .video,
                                                 candidateDuration: 1,
                                                 candidateDataSize: nil,
                                                 options: options)
         let tooLong = PTMediaSelectionContext(selectedCount: 0,
-                                               selectedTypes: [],
+                                               selectedFamilies: [],
                                                candidateType: .video,
                                                candidateDuration: 6,
                                                candidateDataSize: nil,
@@ -62,13 +67,50 @@ final class PTMediaSelectionPolicyTests: XCTestCase {
     func testGifCanBeDisabledWithoutDisablingRegularImages() {
         let options = PTMediaLibSelectionOptions(allowSelectGif: false)
         let context = PTMediaSelectionContext(selectedCount: 0,
-                                               selectedTypes: [],
+                                               selectedFamilies: [],
                                                candidateType: .gif,
                                                candidateDuration: 0,
                                                candidateDataSize: nil,
                                                options: options)
 
         XCTAssertEqual(PTMediaSelectionPolicy.violation(for: context), .mediaTypeNotAllowed)
+    }
+
+    func testImageFamilyAllowsGifWhenGifIsEnabled() {
+        let options = PTMediaLibSelectionOptions(allowMixSelect: false,
+                                                 allowSelectGif: true)
+        let context = PTMediaSelectionContext(selectedCount: 1,
+                                               selectedFamilies: [.image],
+                                               candidateType: .gif,
+                                               candidateDuration: 0,
+                                               candidateDataSize: nil,
+                                               options: options)
+
+        XCTAssertNil(PTMediaSelectionPolicy.violation(for: context))
+    }
+
+    func testImageFamilyAllowsLivePhotoWhenMixingIsDisabled() {
+        let options = PTMediaLibSelectionOptions(allowMixSelect: false)
+        let context = PTMediaSelectionContext(selectedCount: 1,
+                                               selectedFamilies: [.image],
+                                               candidateType: .livePhoto,
+                                               candidateDuration: 0,
+                                               candidateDataSize: nil,
+                                               options: options)
+
+        XCTAssertNil(PTMediaSelectionPolicy.violation(for: context))
+    }
+
+    func testRegularImageFilterRejectsGif() {
+        let options = PTMediaLibSelectionOptions(imageFilter: .regularImageOnly)
+        let context = PTMediaSelectionContext(selectedCount: 0,
+                                               selectedFamilies: [],
+                                               candidateType: .gif,
+                                               candidateDuration: 0,
+                                               candidateDataSize: nil,
+                                               options: options)
+
+        XCTAssertEqual(PTMediaSelectionPolicy.violation(for: context), .imageFilterNotAllowed)
     }
 
     func testPickerSessionLifecycleDoesNotNeedPhotoKitState() {
@@ -83,5 +125,37 @@ final class PTMediaSelectionPolicyTests: XCTestCase {
         XCTAssertFalse(session.beginSubmitting())
         session.markCompleted()
         XCTAssertEqual(session.state, .completed)
+        XCTAssertFalse(session.beginSubmitting())
+    }
+
+    func testPickerSessionCancellationIsTerminal() {
+        let session = PTMediaPickerSession(options: .singleImage)
+        session.beginLoading()
+        session.markReady()
+        session.markCancelled()
+
+        XCTAssertEqual(session.state, .cancelled)
+        XCTAssertFalse(session.beginSubmitting())
+        session.markCompleted()
+        XCTAssertEqual(session.state, .cancelled)
+    }
+
+    func testMediaRequestCancellationIsIdempotentAndHandlesLateRegistration() {
+        let cancellation = PTMediaRequestCancellation()
+        let counter = PTMediaCancellationCounter()
+
+        cancellation.setCancelAction {
+            counter.value += 1
+        }
+        cancellation.cancel()
+        cancellation.cancel()
+
+        XCTAssertTrue(cancellation.isCancelled)
+        XCTAssertEqual(counter.value, 1)
+
+        cancellation.setCancelAction {
+            counter.value += 1
+        }
+        XCTAssertEqual(counter.value, 2)
     }
 }

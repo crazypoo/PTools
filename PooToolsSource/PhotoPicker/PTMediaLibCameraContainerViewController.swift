@@ -35,6 +35,8 @@ public class PTMediaLibCameraContainerViewController: PTBaseViewController {
     // Español: Serializa la finalización de captura para que guardar, cancelar y fallar no terminen dos veces.
     // 中文：串行化拍摄完成流程，避免保存、取消和失败路径重复结束。
     private var isFinishingCapture = false
+    private var didDeliverAsset = false
+    private var didReportFailure = false
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,6 +87,9 @@ public class PTMediaLibCameraContainerViewController: PTBaseViewController {
     }
 
     private func handleCameraFailure(_ error: PTSystemMediaPickerError) {
+        guard !didReportFailure else { return }
+        didReportFailure = true
+        isFinishingCapture = true
         // English: Report a typed failure before dismissing the embedded camera.
         // Español: Informa del fallo tipado antes de cerrar la cámara integrada.
         // 中文：关闭嵌入式相机前先回传类型化错误。
@@ -106,13 +111,12 @@ extension PTMediaLibCameraContainerViewController: UIImagePickerControllerDelega
             case .image(let image):
                 saveMediaToAlbum(image: image, videoUrl: nil)
             case .video(let url):
-                saveMediaToAlbum(image: nil, videoUrl: url)
+                let copiedURL = try PTMediaTemporaryFile.copyVideoToTemporaryURL(url)
+                saveMediaToAlbum(image: nil, videoUrl: copiedURL, ownedTemporaryURL: copiedURL)
             }
         } catch let error as PTSystemMediaPickerError {
-            isFinishingCapture = false
             handleCameraFailure(error)
         } catch {
-            isFinishingCapture = false
             handleCameraFailure(.loadFailed(String(describing: error)))
         }
     }
@@ -122,17 +126,37 @@ extension PTMediaLibCameraContainerViewController: UIImagePickerControllerDelega
     // 中文：图片和视频都走统一保存服务，失败时恢复拍摄状态。
     /// 统一保存逻辑
     @MainActor
-    fileprivate func saveMediaToAlbum(image: UIImage?, videoUrl: URL?) {
+    fileprivate func saveMediaToAlbum(image: UIImage?,
+                                      videoUrl: URL?,
+                                      ownedTemporaryURL: URL? = nil) {
         PTMediaSaveUI.save(image: image,
                            videoURL: videoUrl,
                            onSuccess: { [weak self] asset in
                                guard let self else { return }
-                               self.handleNewAsset(asset)
-                               self.dismiss(animated: true)
+                               self.removeTemporaryFile(ownedTemporaryURL)
+                               let deliver = {
+                                   guard !self.didDeliverAsset else { return }
+                                   self.didDeliverAsset = true
+                                   self.handleNewAsset(asset)
+                               }
+                               if self.presentingViewController != nil {
+                                   self.dismiss(animated: true, completion: deliver)
+                               } else {
+                                   deliver()
+                               }
                            },
                            onFailure: { [weak self] _ in
+                               self?.removeTemporaryFile(ownedTemporaryURL)
                                self?.isFinishingCapture = false
                            })
+    }
+
+    // English: Remove only the temporary copy owned by this capture flow.
+    // Español: Elimina únicamente la copia temporal propiedad de este flujo de captura.
+    // 中文：只清理当前拍摄流程自己持有的临时副本。
+    private func removeTemporaryFile(_ url: URL?) {
+        guard let url else { return }
+        try? FileManager.default.removeItem(at: url)
     }
 
     /// 处理新生成的资源并插入到当前列表

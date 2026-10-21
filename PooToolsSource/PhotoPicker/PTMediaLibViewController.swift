@@ -67,6 +67,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     // 中文：将提交取消逻辑移出 View，并复用统一请求桥接器。
     private lazy var submissionCoordinator = PTMediaSubmissionCoordinator()
     private var submissionTask: Task<Void, Never>?
+    private var isFinishingSubmission = false
 
     private var isSelectOriginal = false
     fileprivate var selectedMediaCount: Int = 0
@@ -84,7 +85,7 @@ public class PTMediaLibViewController: PTBaseViewController {
         let view = PTBaseButton(type: .custom)
         view.setImage(PTMediaLibUIConfig.share.backImage, for: .normal)
         view.addActionHandlers { [weak self] _ in
-            self?.returnFrontVC()
+            self?.cancelPickerAndDismiss()
         }
         view.bounds = CGRectMake(0, 0, PTAppBaseConfig.share.navBarButtonSize, PTAppBaseConfig.share.navBarButtonSize)
         return view
@@ -174,11 +175,26 @@ public class PTMediaLibViewController: PTBaseViewController {
         super.viewWillDisappear(animated)
         changeStatusBar(type: .Auto)
         if isBeingDismissed || navigationController?.isBeingDismissed == true {
+            guard !isFinishingSubmission else { return }
             submissionTask?.cancel()
             submissionTask = nil
             submissionCoordinator.cancelAll()
+            mediaListView.cancelPendingDownloads()
             pickerSession?.markCancelled()
         }
+    }
+
+    // English: User dismissal cancels in-flight PhotoKit work; only a completed submission may bypass cancellation.
+    // Español: El cierre iniciado por el usuario cancela PhotoKit; solo un envío terminado puede omitir la cancelación.
+    // 中文：用户主动关闭时取消 PhotoKit 任务；只有已完成的提交流程可以跳过取消。
+    private func cancelPickerAndDismiss() {
+        isFinishingSubmission = false
+        submissionTask?.cancel()
+        submissionTask = nil
+        submissionCoordinator.cancelAll()
+        mediaListView.cancelPendingDownloads()
+        pickerSession?.markCancelled()
+        returnFrontVC()
     }
 
     // MARK: - UI
@@ -417,8 +433,10 @@ extension PTMediaLibViewController {
     // English: Build the result model only after the submission coordinator returns a terminal value.
     // Español: Construye el modelo de resultado solo después de que el coordinador devuelva un valor terminal.
     // 中文：仅在提交协调器返回终态结果后构造结果模型。
-    private func fetchMediaResultAsync(model: PTMediaModel, index: Int, isOriginal: Bool) async -> (result: PTResultModel?, errorAsset: PHAsset?, index: Int) {
-        let selectionOptions = effectiveSelectionOptions
+    private func fetchMediaResultAsync(model: PTMediaModel,
+                                       index: Int,
+                                       isOriginal: Bool,
+                                       selectionOptions: PTMediaLibSelectionOptions) async -> (result: PTResultModel?, errorAsset: PHAsset?, index: Int) {
         let previewContainer = mediaListView.collectionView.contentCollectionView
         let (image, asset) = await submissionCoordinator.fetch(
             model: model,
@@ -456,18 +474,25 @@ extension PTMediaLibViewController {
     
     // 🌟 3. 重构提交流程
     public func requestSelectPhoto(viewController: UIViewController? = nil) {
+        guard !isFinishingSubmission else { return }
         
         // 1. 空数据拦截
         guard !self.selectedModel.isEmpty else {
             let emptyOriginal = isSelectOriginal
             let presentingVC = viewController?.presentingViewController
-            
-            viewController?.dismiss(animated: true) { [weak self] in
+            pickerSession?.markCompleted()
+            isFinishingSubmission = true
+            let finish = { [weak self] in
                 self?.selectImageBlock?([], emptyOriginal)
                 self?.onFinish?(PTMediaPickerOutcome(items: [], isOriginal: emptyOriginal))
                 if let pVC = presentingVC {
                     PTNavigationBarManager.shared.restoreIfNeeded(for: pVC)
                 }
+            }
+            if let viewController {
+                viewController.dismiss(animated: true, completion: finish)
+            } else {
+                finish()
             }
             return
         }
@@ -493,6 +518,8 @@ extension PTMediaLibViewController {
         
         let isOriginal = options.allowSelectOriginal ? isSelectOriginal : options.alwaysRequestOriginal
         guard pickerSession?.beginSubmitting() ?? true else { return }
+        let frozenModels = selectedModel
+        let frozenOptions = options
         selectedHudStatusBlock?(true)
         
         // English: The task group is bounded by the submission coordinator's request lifecycle.
@@ -505,9 +532,12 @@ extension PTMediaLibViewController {
             var errIndices: [Int] = []
             
             await withTaskGroup(of: (PTResultModel?, PHAsset?, Int).self) { group in
-                for (i, m) in selectedModel.enumerated() {
+                for (i, m) in frozenModels.enumerated() {
                     group.addTask {
-                        await self.fetchMediaResultAsync(model: m, index: i, isOriginal: isOriginal)
+                        await self.fetchMediaResultAsync(model: m,
+                                                         index: i,
+                                                         isOriginal: isOriginal,
+                                                         selectionOptions: frozenOptions)
                     }
                 }
                 
@@ -569,7 +599,7 @@ extension PTMediaLibViewController {
             return
         }
 
-        // 🌟 优化：这里捕获 presentingVC 的逻辑非常棒，它是安全的
+        isFinishingSubmission = true
         vc.dismiss(animated: true) {
             PTNavigationBarManager.shared.restoreIfNeeded(for: presentingVC)
             call()
@@ -587,16 +617,32 @@ extension PTSheetContentViewController: UIImagePickerControllerDelegate {
         // English: Parse metadata before dismissal so the callback does not read a mutable picker state.
         // Español: Analiza los metadatos antes del cierre para que el callback no lea un estado mutable del picker.
         // 中文：在关闭前解析 metadata，避免回调读取已经变化的 picker 状态。
-        let payload = try? PTCameraCapturePayload.parse(info)
+        let payload: PTCameraCapturePayload? = {
+            guard let parsed = try? PTCameraCapturePayload.parse(info) else { return nil }
+            switch parsed {
+            case .image:
+                return parsed
+            case .video(let url):
+                guard let copiedURL = try? PTMediaTemporaryFile.copyVideoToTemporaryURL(url) else {
+                    return nil
+                }
+                return .video(copiedURL)
+            }
+        }()
         
         picker.dismiss(animated: true) {
-            guard let mediaLib = currentVC as? PTMediaLibViewController,
-                  let payload else { return }
+            guard let mediaLib = currentVC as? PTMediaLibViewController else { return }
+            guard let payload else {
+                PTAlertTipsViewController.tipsAlertShow(title: "Error",
+                                                        subtitle: "视频临时文件不可用",
+                                                        icon: .Error)
+                return
+            }
             switch payload {
             case .image(let image):
                 mediaLib.mediaListView.saveMediaToAlbum(image: image, videoUrl: nil)
             case .video(let url):
-                mediaLib.mediaListView.saveMediaToAlbum(image: nil, videoUrl: url)
+                mediaLib.mediaListView.saveMediaToAlbum(image: nil, videoUrl: url, ownedTemporaryURL: url)
             }
         }
     }

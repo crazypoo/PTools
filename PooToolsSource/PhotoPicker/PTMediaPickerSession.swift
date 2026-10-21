@@ -33,17 +33,32 @@ final class PTMediaPickerSession {
         self.albumRepository = PTMediaAlbumRepository(options: options)
     }
 
-    func beginLoading() { state = .loading }
+    func beginLoading() {
+        guard state == .idle else { return }
+        state = .loading
+    }
     func setCurrentAlbum(_ album: PTMediaLibListModel?) {
         currentAlbum = album
         albumRepository.setCurrentAlbum(album)
     }
-    func markReady() { state = .ready }
+    func markReady() {
+        guard state == .loading else { return }
+        state = .ready
+    }
+
     func beginSubmitting() -> Bool {
-        guard state != .submitting else { return false }
+        guard state == .ready else { return false }
         state = .submitting
         return true
     }
-    func markCompleted() { state = .completed }
-    func markCancelled() { state = .cancelled }
+
+    func markCompleted() {
+        guard state == .ready || state == .submitting else { return }
+        state = .completed
+    }
+
+    func markCancelled() {
+        guard state != .completed else { return }
+        state = .cancelled
+    }
 }

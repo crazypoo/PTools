@@ -22,6 +22,7 @@ import PooToolsImagePicker
 import PTCameraPermission
 #endif
 
+@MainActor
 class PTMediaLibAlbumListViewController: PTBaseViewController {
 
     var albumList = [PTMediaLibListModel]()
@@ -29,6 +30,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
 
     var selectedModelHandler:((PTMediaLibListModel) -> Void)?
     private var lastAdaptiveLayoutSignature: String?
+    private let albumRepository: PTMediaAlbumRepository
     
     private lazy var dismissButton:PTBaseButton = {
         let view = PTBaseButton(type: .custom)
@@ -64,20 +66,20 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         config.contentBottomSpace = max(0, view.safeAreaInsets.bottom)
 
         let view = PTCollectionView(viewConfig: config)
-        view.cellInCollection = { collection,sectionModel,indexPath in
+        view.cellInCollection = { [weak self] collection,sectionModel,indexPath in
             if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTMediaLibListModel,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTMediaLibAlbumCell {
                 cell.albumModel = cellModel
-                cell.selectedButton.isSelected = (cellModel.title == self.selectedAlbum?.title)
+                cell.selectedButton.isSelected = (cellModel.collection.localIdentifier == self?.selectedAlbum?.collection.localIdentifier)
                 return cell
             }
             return nil
         }
-        view.collectionDidSelect = { collection,sectionModel,indexPath in
+        view.collectionDidSelect = { [weak self] collection,sectionModel,indexPath in
             if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTMediaLibListModel {
-                if self.selectedModelHandler != nil {
-                    self.navigationController?.popViewController(animated: true)
+                if self?.selectedModelHandler != nil {
+                    self?.navigationController?.popViewController(animated: true)
                 }
-                self.selectedModelHandler?(cellModel)
+                self?.selectedModelHandler?(cellModel)
             }
         }
         return view
@@ -106,6 +108,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
 
     init(albumList: PTMediaLibListModel) {
         selectedAlbum = albumList
+        albumRepository = PTMediaAlbumRepository(options: albumList.selectionOptions)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -117,6 +120,12 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = true
         changeStatusBar(type: .Dark)
+        albumRepository.startObserving()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        albumRepository.stopObserving()
     }
 
     override func viewDidLoad() {
@@ -163,6 +172,9 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         }
         
         loadAlbumList()
+        albumRepository.onAlbumsChange = { [weak self] models in
+            self?.applyAlbumList(models)
+        }
     }
     
     func fakeNavSet() {
@@ -221,18 +233,21 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     }
     
     func loadAlbumList() {
-        let options = selectedAlbum?.selectionOptions ?? .current()
-        PTMediaLibManager.getPhotoAlbumList(options: options) { models in
-            self.albumList.removeAll()
-            self.albumList.append(contentsOf: models)
-            
-            let rows = models.map {
-                let row = PTRows(dataModel: $0)
-                row.cellClass = PTMediaLibAlbumCell.self
-                return row
-            }
-            let section = PTSection(rows:rows)
-            self.collectionView.showCollectionDetail(collectionData: [section])
+        albumRepository.albums { [weak self] models in
+            self?.applyAlbumList(models)
         }
+    }
+
+    // English: Render the latest repository snapshot without letting an older fetch overwrite it.
+    // Español: Renderiza la instantánea más reciente del repositorio sin permitir que una consulta antigua la sobrescriba.
+    // 中文：只渲染 Repository 的最新快照，避免旧查询覆盖新相册列表。
+    private func applyAlbumList(_ models: [PTMediaLibListModel]) {
+        albumList = models
+        let rows = models.map {
+            let row = PTRows(dataModel: $0)
+            row.cellClass = PTMediaLibAlbumCell.self
+            return row
+        }
+        collectionView.showCollectionDetail(collectionData: [PTSection(rows: rows)])
     }
 }

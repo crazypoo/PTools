@@ -559,7 +559,13 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
                         
                         let visionVersion:Int = VNRecognizeTextRequestRevision3
                         
-                        vision.findText(withImage: result.first!.image,revision: visionVersion) { resultText, textObservations in
+                        guard let firstResult = result.first else {
+                            UIViewController.drop(title: "没有可识别的图片")
+                            return
+                        }
+                        let image = firstResult.image
+
+                        vision.findText(withImage: image, revision: visionVersion) { resultText, textObservations in
                             Task { @MainActor in
                                 UIViewController.drop(title: resultText)
                             }
@@ -1374,7 +1380,8 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
         vc.selectImageBlock = { result, isOriginal in
             if result.count > 0 {
                 PTNSLogConsole("选择了视频\(result)")
-                mediaSelectedCallback(result.first!)
+                guard let firstResult = result.first else { return }
+                mediaSelectedCallback(firstResult)
             } else {
                 Task { @MainActor in
                     PTAlertTipsViewController.tipsAlertShow(title:"沒有選擇媒体",icon: .Error)

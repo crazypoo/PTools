@@ -86,6 +86,7 @@ public class PTMediaLibView: UIView {
 
     private var lastGridWidth: CGFloat = 0
     private var lastAdaptiveLayoutSignature: String?
+    private var pendingDownloadCancellations: [String: PTMediaRequestCancellation] = [:]
 
     // English: Restrict camera media kinds to the picker policy before presenting the camera.
     // Español: Limita los tipos de medios de la cámara a la política del selector antes de mostrar la cámara.
@@ -191,10 +192,19 @@ public class PTMediaLibView: UIView {
     override public func didMoveToWindow() {
         super.didMoveToWindow()
         if window == nil {
+            cancelPendingDownloads()
             albumRepository.stopObserving()
         } else {
             albumRepository.startObserving()
         }
+    }
+
+    // English: Cancel iCloud selection work before the picker is dismissed.
+    // Español: Cancela el trabajo de selección de iCloud antes de cerrar el selector.
+    // 中文：关闭 Picker 前取消所有 iCloud 选择任务。
+    func cancelPendingDownloads() {
+        pendingDownloadCancellations.values.forEach { $0.cancel() }
+        pendingDownloadCancellations.removeAll(keepingCapacity: true)
     }
 }
 
@@ -208,11 +218,18 @@ extension PTMediaLibView {
                 self.totalModels = album.models
             }
             
-            var rows = self.totalModels.map { PTRows(ID: PTMediaLibCell.ID, dataModel: $0) }
+            // English: Derive Diffable identity from the asset, never from a new random UUID per reload.
+            // Español: Deriva la identidad Diffable del recurso, nunca de un UUID nuevo en cada recarga.
+            // 中文：Diffable 身份必须来自资源标识，不能在每次刷新时重新生成随机 UUID。
+            var rows = self.totalModels.map {
+                PTRows(ID: PTMediaLibCell.ID,
+                       diffId: "asset:\($0.ident)",
+                       dataModel: $0)
+            }
             
             if self.showCameraCell {
                 let insertIndex = self.activeSelectionOptions.cameraCellAtTop ? 0 : rows.count
-                rows.insert(PTRows(ID: PTCameraCell.ID), at: insertIndex)
+                rows.insert(PTRows(ID: PTCameraCell.ID, diffId: "camera"), at: insertIndex)
             }
             
             self.collectionView.showCollectionDetail(collectionData: [PTSection(rows: rows)], finishTask: loadFinish)
@@ -415,10 +432,22 @@ extension PTMediaLibView {
 
     /// 统一保存逻辑
     @MainActor
-    func saveMediaToAlbum(image: UIImage?, videoUrl: URL?) {
-        PTMediaSaveUI.save(image: image, videoURL: videoUrl) { [weak self] asset in
-            self?.handleNewAsset(asset)
-        }
+    func saveMediaToAlbum(image: UIImage?,
+                          videoUrl: URL?,
+                          ownedTemporaryURL: URL? = nil) {
+        PTMediaSaveUI.save(image: image,
+                           videoURL: videoUrl,
+                           onSuccess: { [weak self] asset in
+                               if let ownedTemporaryURL {
+                                   try? FileManager.default.removeItem(at: ownedTemporaryURL)
+                               }
+                               self?.handleNewAsset(asset)
+                           },
+                           onFailure: { _ in
+                               if let ownedTemporaryURL {
+                                   try? FileManager.default.removeItem(at: ownedTemporaryURL)
+                               }
+                           })
     }
 
     /// 处理新生成的资源并插入到当前列表
@@ -442,7 +471,8 @@ extension PTMediaLibView {
                        currentSelectCount: selectionStore.reservedCount,
                        sender: currentVc,
                        showAlert: false,
-                       selectionOptions: activeSelectionOptions) {
+                       selectionOptions: activeSelectionOptions,
+                       selectionStore: selectionStore) {
             selectionStore.completeSelection(for: newModel)
             PTMediaLibConfig.share.didSelectAsset?(asset)
         }
@@ -547,7 +577,8 @@ extension PTMediaLibView {
             guard canAddModel(cellModel,
                               currentSelectCount: currentCount,
                               sender: currentVc,
-                              selectionOptions: activeSelectionOptions) else {
+                              selectionOptions: activeSelectionOptions,
+                              selectionStore: selectionStore) else {
                 // 如果不满足条件（如已达上限），重置 Cell 状态并返回
                 Task { @MainActor in
                     cell.editButton.isHidden = true
@@ -557,27 +588,19 @@ extension PTMediaLibView {
                 return
             }
 
-            // English: Reject image/video mixing in both directions before reserving an async request.
-            // Español: Rechaza la mezcla de imagen/vídeo en ambas direcciones antes de reservar una solicitud asíncrona.
-            // 中文：在预留异步请求前，双向拒绝图片和视频混选。
-            if !activeSelectionOptions.allowMixSelect,
-               (selectionStore.selectedModels.contains(where: { $0.type != cellModel.type })
-                || selectionStore.containsPendingTypeDifferent(from: cellModel.type)) {
-                cellStatusReset(cellModel: cellModel, cell: cell, isSelected: isSelected)
-                return
-            }
-
-            guard selectionStore.beginSelection(for: cellModel) else { return }
+            guard let reservation = selectionStore.reserveSelection(for: cellModel) else { return }
             
             // 2. 资源下载检查：如果是 iCloud 资源，需要先下载
-            downloadAssetIfNeeded(model: cellModel,
-                                  sender: currentVc,
-                                  selectionOptions: activeSelectionOptions) { [weak self] success in
+            let download = downloadAssetIfNeededCancellable(model: cellModel,
+                                                             sender: currentVc,
+                                                             selectionOptions: activeSelectionOptions) { [weak self] success in
+                self?.pendingDownloadCancellations.removeValue(forKey: cellModel.ident)
                 // 4. 更新 UI 表现
                 Task { @MainActor [weak self] in
                     guard let self = self else { return }
+                    guard self.selectionStore.isReservationActive(reservation) else { return }
                     guard success else {
-                        self.selectionStore.cancelSelection(for: cellModel)
+                        self.selectionStore.cancelSelection(for: cellModel, reservation: reservation)
                         isSelected?(false)
                         self.refreshCellIndex()
                         return
@@ -586,13 +609,13 @@ extension PTMediaLibView {
                                                                store: self.selectionStore,
                                                                options: self.activeSelectionOptions)
                     guard PTMediaSelectionPolicy.violation(for: finalContext) == nil else {
-                        self.selectionStore.cancelSelection(for: cellModel)
+                        self.selectionStore.cancelSelection(for: cellModel, reservation: reservation)
                         isSelected?(false)
                         self.refreshCellIndex()
                         return
                     }
                     cellModel.isSelected = true
-                    self.selectionStore.completeSelection(for: cellModel)
+                    guard self.selectionStore.completeSelection(for: cellModel, reservation: reservation) else { return }
                     isSelected?(true)
 
                     cell.selectButton.isSelected = true
@@ -604,6 +627,9 @@ extension PTMediaLibView {
                     config.didSelectAsset?(cellModel.asset)
                     self.refreshCellIndex()
                 }
+            }
+            if let download {
+                pendingDownloadCancellations[cellModel.ident] = download
             }
         }
         // --- 情况 B: 取消选中该资源 ---
@@ -624,6 +650,8 @@ extension PTMediaLibView {
             cell.editButton.clearProgressLayer()
         }
         
+        pendingDownloadCancellations.removeValue(forKey: cellModel.ident)?.cancel()
+
         // 2. 更新数据模型：从已选列表中移除
         self.selectionStore.removeSelection(for: cellModel)
         isSelected?(false)
@@ -696,12 +724,17 @@ extension PTMediaLibView {
     /// 将编辑后的视频保存到相册并更新选中状态
     /// - Parameter url: 编辑工具输出的临时视频 URL
     func saveEditedVideoToAlbum(url: URL, replacing originalAsset: PHAsset) {
+        // Keep the exported file owned by this flow until PhotoKit finishes reading it.
+        // Mantener el archivo exportado bajo el control de este flujo hasta que PhotoKit termine de leerlo.
+        // 在 PhotoKit 完成读取前，由当前流程持有导出文件，避免临时 URL 提前失效。
+        let temporaryURL = PTMediaLibView.outputURL()
         // 1. 构造播放条目（如果后续需要保存到缓存）
         let playerItem = AVPlayerItem(url: url)
         
         // 2. 先保存到本地缓存（可选，根据你的 PTMediaLibView.outputURL 逻辑）
-        self.saveVideoToCache(playerItem: playerItem) { [weak self] fileURL, finish in
+        self.saveVideoToCache(fileURL: temporaryURL, playerItem: playerItem) { [weak self] fileURL, finish in
             guard let self = self, finish, let finalURL = fileURL else {
+                try? FileManager.default.removeItem(at: temporaryURL)
                 PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to cache failed", icon: .Error)
                 return
             }
