@@ -18,6 +18,37 @@
 
 相册模型会按资源标识和 PhotoKit 元数据复用未变化的 `PTMediaModel`。Cell 会等待实际布局尺寸稳定后请求缩略图，复用时取消旧请求；单纯选中图片不会自动下载原图。拍照图片编码和录像临时文件复制在保留公开 API 的前提下移出 UI 关键路径。
 
+### P01–P06 增补：拍照刷新、Grid 状态和实例级反馈
+
+本轮继续复用 `PTMediaAlbumRepository`、`PTMediaSelectionStore` 和 `PTCollectionView`，没有新增第二套 PhotoKit 快照或 Diffable DataSource：
+
+- PhotoKit 事务只为新增或元数据变化的资源创建新的 `PTMediaModel`，未变化资源按 `localIdentifier` 复用；Row 的真实提交状态与最新期望状态分开记录。
+- 网格结构提交完成前不会把排队数据当作已显示数据；无变化提交、迟到 completion、相册切换和窗口关闭都会进入有限终态。
+- Cell 复用时先展示占位图，PhotoKit 返回 nil、错误或取消时保留已有成功图片；请求诊断只记录状态、尺寸、请求号和耗时，不记录媒体内容或原始资产标识。
+- 拍照后的新资源以 `assetID + capture token` 等待真实进入当前相册；等待有界，超时会清理，不会凭空插入不存在的 IndexPath。
+
+需要自定义反馈时，在每个 Picker 实例上设置 `onFeedback`，不要修改全局单例：
+
+```swift
+let picker = PTMediaLibViewController()
+picker.selectionOptions = .multipleImage
+picker.onFeedback = { feedback in
+    switch feedback.kind {
+    case .saveStarted:
+        hostHUD.start(identifier: feedback.operationID)
+    case .saveSucceeded, .saveFailed, .saveCancelled:
+        hostHUD.finish(identifier: feedback.operationID)
+    default:
+        hostToast.show(feedback.message)
+    }
+}
+picker.mediaLibShow()
+```
+
+`onFeedback == nil` 时继续使用原有 `PTAlertTipsViewController.tipsAlertShow`；配置非空后，受控的内部提示只发送 `PTMediaPickerFeedback`，由宿主自行决定显示、记录或忽略。系统的相机/照片权限对话框不被拦截。保存事件使用同一个 `operationID`，终态只发送一次。PhotoPicker Demo 现在提供 Default Tips 与 Custom Feedback 两个入口，可直接对照验证。
+
+`PTMediaLibView` 内部已使用 `cellInCollectionV2` 和 `configureCell`，外部不需要创建第二个数据源，也不需要直接操作内部 Cell。旧的公开选择、保存和回调入口仍保留。
+
 ### 选择状态与拍照刷新一致性
 
 选择状态的唯一来源是当前 Picker 实例的 `PTMediaSelectionStore`。Cell 只使用资源 `localIdentifier` 投影按钮选中状态、选择序号、遮罩、边框和编辑入口；未选资源不显示 `0`。Cell 复用、相册切换、缩略图完成回调和拍照自动选中都必须重新按资源 ID 投影，不能用旧 `IndexPath` 或 `PTMediaModel.isSelected` 作为判断来源。

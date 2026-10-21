@@ -85,6 +85,10 @@ private final class PTMediaAlbumChangeObserver: NSObject, PHPhotoLibraryChangeOb
     }
 
     func photoLibraryDidChange(_ changeInstance: PHChange) {
+        // English: Record only that PhotoKit delivered a change signal; never retain or log the non-Sendable change object.
+        // Español: Registra solo que PhotoKit entregó una señal de cambio; nunca conserva ni registra el objeto no Sendable.
+        // 中文：只记录 PhotoKit 收到变化信号，不保存或记录不可 Sendable 的变化对象。
+        PTMediaPickerTrace.event("photoKitNotificationReceived", details: "changePresent=true")
         PTMainActorBridge.perform { [onChange] in
             onChange()
         }
@@ -245,16 +249,9 @@ final class PTMediaAlbumRepository: NSObject {
             let transaction = album.refreshResultTransaction(knownChanged: knownChange,
                                                              generation: refreshGeneration)
             if let transaction {
-                // English: Existing rows are rebuilt atomically; only an empty album uses the bounded initial batch.
-                // Español: Las filas existentes se reconstruyen atómicamente; solo un álbum vacío usa el lote inicial acotado.
-                // 中文：已有 Row 通过原子方式重建，只有空相册才使用有界首批加载。
-                if album.models.isEmpty {
-                    _ = album.loadInitialBatch()
-                } else {
-                    _ = album.refetchPhotosIfChanged()
-                }
+                let projection = album.applyChangeTransaction(transaction)
                 didChange = true
-                trace("photoKitDelta", details: "old=\(transaction.oldCount),new=\(transaction.newCount),inserted=\(transaction.insertedIDs.count),removed=\(transaction.removedIDs.count),moved=\(transaction.movedIDs.count),changed=\(transaction.changedIDs.count),generation=\(transaction.generation)")
+                trace("photoKitDelta", details: "old=\(transaction.oldCount),new=\(transaction.newCount),inserted=\(transaction.insertedIDs.count),removed=\(transaction.removedIDs.count),moved=\(transaction.movedIDs.count),changed=\(transaction.changedIDs.count),reused=\(projection?.reusedCount ?? 0),created=\(projection?.createdCount ?? 0),generation=\(transaction.generation)")
                 onCameraRollChange?(album)
                 cameraRollGeneration &+= 1
                 if !album.isFullyModeled {

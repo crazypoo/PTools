@@ -208,7 +208,8 @@ func canAddModel(_ model: PTMediaModel,
                  sender: UIViewController?,
                  showAlert: Bool = true,
                  selectionOptions: PTMediaLibSelectionOptions? = nil,
-                 selectionStore: PTMediaSelectionStore? = nil) -> Bool {
+                 selectionStore: PTMediaSelectionStore? = nil,
+                 feedbackHandler: PTMediaPickerFeedbackHandler? = nil) -> Bool {
     let options = selectionOptions ?? .current()
 
     guard PTMediaLibConfig.share.canSelectAsset?(model.asset) ?? true else { return false }
@@ -223,27 +224,47 @@ func canAddModel(_ model: PTMediaModel,
     let ui = PTMediaLibUIConfig.share
     switch violation {
     case .maximumSelectionReached:
-        PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle,
-                                                subtitle: String(format: ui.mediaCoutError, "\(options.maxSelectCount)"),
-                                                icon: .Error)
+        let message = String(format: ui.mediaCoutError, "\(options.maxSelectCount)")
+        PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .selectionLimitReached,
+                                                                title: ui.alertTitle,
+                                                                message: message),
+                                          handler: feedbackHandler) {
+            PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle, subtitle: message, icon: .Error)
+        }
     case .videoDurationTooLong:
-        PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle,
-                                                subtitle: String(format: ui.videoTimeMoreError, "\(options.maxSelectVideoDuration)"),
-                                                icon: .Error)
+        let message = String(format: ui.videoTimeMoreError, "\(options.maxSelectVideoDuration)")
+        PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .videoDurationInvalid,
+                                                                title: ui.alertTitle,
+                                                                message: message),
+                                          handler: feedbackHandler) {
+            PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle, subtitle: message, icon: .Error)
+        }
     case .videoDurationTooShort:
-        PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle,
-                                                subtitle: String(format: ui.videoTimeLessError, "\(options.minSelectVideoDuration)"),
-                                                icon: .Error)
+        let message = String(format: ui.videoTimeLessError, "\(options.minSelectVideoDuration)")
+        PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .videoDurationInvalid,
+                                                                title: ui.alertTitle,
+                                                                message: message),
+                                          handler: feedbackHandler) {
+            PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle, subtitle: message, icon: .Error)
+        }
     case .videoSizeTooLarge:
         let value = Int(round(options.maxSelectVideoDataSize / 1024))
-        PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle,
-                                                subtitle: String(format: ui.videoSizeMoreError, "\(value)"),
-                                                icon: .Error)
+        let message = String(format: ui.videoSizeMoreError, "\(value)")
+        PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .videoSizeInvalid,
+                                                                title: ui.alertTitle,
+                                                                message: message),
+                                          handler: feedbackHandler) {
+            PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle, subtitle: message, icon: .Error)
+        }
     case .videoSizeTooSmall:
         let value = Int(round(options.minSelectVideoDataSize / 1024))
-        PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle,
-                                                subtitle: String(format: ui.videoSizeLessError, "\(value)"),
-                                                icon: .Error)
+        let message = String(format: ui.videoSizeLessError, "\(value)")
+        PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .videoSizeInvalid,
+                                                                title: ui.alertTitle,
+                                                                message: message),
+                                          handler: feedbackHandler) {
+            PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle, subtitle: message, icon: .Error)
+        }
     case .mixedMediaNotAllowed, .assetNotAllowed, .mediaTypeNotAllowed, .imageFilterNotAllowed:
         break
     }
@@ -309,12 +330,14 @@ func downloadAssetIfNeeded(alertTitle: String? = nil,
                            model: PTMediaModel,
                            sender: UIViewController?,
                            selectionOptions: PTMediaLibSelectionOptions? = nil,
+                           feedbackHandler: PTMediaPickerFeedbackHandler? = nil,
                            completion: @escaping @MainActor @Sendable (Bool) -> Void) {
     _ = downloadAssetIfNeededCancellable(alertTitle: alertTitle,
                                           subTitle: subTitle,
                                           model: model,
                                           sender: sender,
                                           selectionOptions: selectionOptions,
+                                          feedbackHandler: feedbackHandler,
                                           completion: completion)
 }
 
@@ -325,6 +348,7 @@ func downloadAssetIfNeededCancellable(alertTitle: String? = nil,
                                       model: PTMediaModel,
                                       sender: UIViewController?,
                                       selectionOptions: PTMediaLibSelectionOptions? = nil,
+                                      feedbackHandler: PTMediaPickerFeedbackHandler? = nil,
                                       completion: @escaping @MainActor @Sendable (Bool) -> Void) -> PTMediaRequestCancellation? {
     let title = alertTitle ?? PTMediaLibUIConfig.share.alertTitle
     let timeoutMessage = subTitle ?? PTMediaLibUIConfig.share.downloadTimeOutError
@@ -355,7 +379,12 @@ func downloadAssetIfNeededCancellable(alertTitle: String? = nil,
         if !success, state.requestID != PHInvalidImageRequestID {
             PHImageManager.default().cancelImageRequest(state.requestID)
             if showsAlert {
-                PTAlertTipsViewController.tipsAlertShow(title: title, subtitle: timeoutMessage, icon: .Error)
+                PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .iCloudRequestTimedOut,
+                                                                        title: title,
+                                                                        message: timeoutMessage),
+                                                  handler: feedbackHandler) {
+                    PTAlertTipsViewController.tipsAlertShow(title: title, subtitle: timeoutMessage, icon: .Error)
+                }
             }
         }
         completion(success)
@@ -595,7 +624,7 @@ public class PTMediaLibManager: NSObject {
     // Español: Mantiene el filtro del modelo sincronizado con el predicado de PhotoKit para recargas y adaptadores.
     // 中文：让模型过滤规则与 PhotoKit 谓词保持一致，覆盖重新获取和兼容入口。
     @MainActor
-    private class func canDisplay(_ model: PTMediaModel, with selectionOptions: PTMediaLibSelectionOptions) -> Bool {
+    class func canDisplay(_ model: PTMediaModel, with selectionOptions: PTMediaLibSelectionOptions) -> Bool {
         switch model.type {
         case .video:
             return selectionOptions.allowSelectVideo

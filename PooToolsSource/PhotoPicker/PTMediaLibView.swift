@@ -29,14 +29,46 @@ import PTCameraPermission
 @MainActor
 private final class PTMediaCollectionFinishBox {
     private let callback: PTCollectionCallback?
+    private var didCall = false
 
     init(_ callback: PTCollectionCallback?) {
         self.callback = callback
     }
 
     func call(with collectionView: UICollectionView) {
+        guard !didCall else { return }
+        didCall = true
         callback?(collectionView)
     }
+}
+
+@MainActor
+private final class PTMediaRowsRequest {
+    var rows: [PTRows]
+    var albumIdentity: String
+    var albumRevision: UInt64
+    var transactionID: String
+    var anchor: PTMediaScrollAnchor?
+    var finishBoxes: [PTMediaCollectionFinishBox]
+
+    init(rows: [PTRows],
+         albumIdentity: String,
+         albumRevision: UInt64,
+         transactionID: String,
+         anchor: PTMediaScrollAnchor?,
+         finishBox: PTMediaCollectionFinishBox) {
+        self.rows = rows
+        self.albumIdentity = albumIdentity
+        self.albumRevision = albumRevision
+        self.transactionID = transactionID
+        self.anchor = anchor
+        self.finishBoxes = [finishBox]
+    }
+}
+
+private struct PTMediaScrollAnchor {
+    let rowID: String
+    let offset: CGFloat
 }
 
 @MainActor
@@ -78,6 +110,16 @@ public class PTMediaLibView: UIView {
                 renderedAlbumIdentity = nil
                 renderedAlbumRevision = 0
                 mediaRowsGeneration &+= 1
+                pendingMediaRowsRequest?.finishBoxes.forEach { $0.call(with: collectionView.contentCollectionView) }
+                activeMediaRowsRequest?.finishBoxes.forEach { $0.call(with: collectionView.contentCollectionView) }
+                pendingMediaRowsRequest = nil
+                activeMediaRowsRequest = nil
+                mediaRowsApplyInFlight = false
+                mediaGridCommitState.reset()
+                cancelPendingCaptureTasks()
+                pendingSavedAssets.removeAll(keepingCapacity: true)
+                pendingCaptureStartedAt.removeAll(keepingCapacity: true)
+                pendingCaptureModelVisibleAt.removeAll(keepingCapacity: true)
                 collectionView.clearAllData()
                 return
             }
@@ -121,7 +163,15 @@ public class PTMediaLibView: UIView {
     private var renderedAlbumIdentity: String?
     private var renderedAlbumRevision: UInt64 = 0
     private var mediaRowsGeneration: UInt64 = 0
+    private var mediaGridCommitState = PTMediaGridCommitState()
+    private var pendingMediaRowsRequest: PTMediaRowsRequest?
+    private var activeMediaRowsRequest: PTMediaRowsRequest?
+    private var mediaRowsApplyInFlight = false
     private var pendingSavedAssets: [String: PHAsset] = [:]
+    private var pendingCaptureTokens: [String: UUID] = [:]
+    private var pendingCaptureTasks: [String: Task<Void, Never>] = [:]
+    private var pendingCaptureStartedAt: [String: CFAbsoluteTime] = [:]
+    private var pendingCaptureModelVisibleAt: [String: CFAbsoluteTime] = [:]
     private var completedCaptureAssetIDs: Set<String> = []
     private var pendingReplacementAssets: [String: (asset: PHAsset, originalIdentifier: String)] = [:]
 
@@ -151,8 +201,11 @@ public class PTMediaLibView: UIView {
             PTCameraCell.ID: PTCameraCell.self
         ])
         
-        view.cellInCollection = { [weak self] collection, sectionModel, indexPath in
-            self?.configureCell(collection: collection, sectionModel: sectionModel, indexPath: indexPath)
+        view.cellInCollectionV2 = { collection, context in
+            collection.dequeueReusableCell(withReuseIdentifier: context.row.reuseID, for: context.indexPath)
+        }
+        view.configureCell = { [weak self] collection, cell, context in
+            self?.configureCell(collection: collection, cell: cell, context: context)
         }
         
         view.collectionDidSelect = { [weak self] collection, sectionModel, indexPath in
@@ -229,6 +282,7 @@ public class PTMediaLibView: UIView {
         super.didMoveToWindow()
         if window == nil {
             cancelPendingDownloads()
+            cancelPendingCaptureTasks()
             pendingSavedAssets.removeAll(keepingCapacity: true)
             pendingReplacementAssets.removeAll(keepingCapacity: true)
             albumRepository.stopObserving()
@@ -243,6 +297,17 @@ public class PTMediaLibView: UIView {
     func cancelPendingDownloads() {
         pendingDownloadCancellations.values.forEach { $0.cancel() }
         pendingDownloadCancellations.removeAll(keepingCapacity: true)
+    }
+
+    // English: End pending captures when the picker leaves the window; no capture may wait forever.
+    // Español: Termina las capturas pendientes cuando el selector sale de la ventana; ninguna captura espera para siempre.
+    // 中文：Picker 离开 Window 时终止待处理拍摄，避免资源永久挂起。
+    private func cancelPendingCaptureTasks() {
+        pendingCaptureTasks.values.forEach { $0.cancel() }
+        pendingCaptureTasks.removeAll(keepingCapacity: true)
+        pendingCaptureTokens.removeAll(keepingCapacity: true)
+        pendingCaptureStartedAt.removeAll(keepingCapacity: true)
+        pendingCaptureModelVisibleAt.removeAll(keepingCapacity: true)
     }
 }
 
@@ -270,63 +335,88 @@ extension PTMediaLibView {
     private func applyMediaRows(_ rows: [PTRows],
                                 album: PTMediaLibListModel,
                                 finish: PTCollectionCallback?) {
-        let oldRows = scheduledRows ?? renderedRows
-        let oldIDs = oldRows.map(\.diffId)
-        let newIDs = rows.map(\.diffId)
         let albumIdentity = album.collection.localIdentifier
         let albumRevision = album.contentRevision
-        let sameAlbum = renderedAlbumIdentity == albumIdentity ||
-            (renderedAlbumIdentity == nil && scheduledRows != nil && currentAlbum?.collection.localIdentifier == albumIdentity)
-        let anchor = sameAlbum ? captureScrollAnchor(in: oldRows) : nil
-        mediaRowsGeneration &+= 1
-        let applyGeneration = mediaRowsGeneration
         let transactionID = UUID().uuidString
-        scheduledRows = rows
-        PTMediaPickerTrace.event("collectionApplyEnqueued", details: "transaction=\(transactionID),revision=\(albumRevision),rows=\(rows.count),selected=\(selectionStore.selectedCount)")
-
         let finishBox = PTMediaCollectionFinishBox(finish)
-        let complete: PTActionTask = { [weak self, finishBox, anchor, rows, albumIdentity, albumRevision, applyGeneration, transactionID] in
-            PTMainActorBridge.perform { [weak self, finishBox] in
-                guard let self else { return }
-                guard self.mediaRowsGeneration == applyGeneration,
-                      self.currentAlbum?.collection.localIdentifier == albumIdentity,
-                      self.currentAlbum?.contentRevision == albumRevision else {
-                    PTMediaPickerTrace.event("collectionApplyDropped", details: "transaction=\(transactionID),reason=stale")
-                    return
-                }
-                self.renderedAlbumIdentity = albumIdentity
-                self.renderedAlbumRevision = albumRevision
-                self.renderedRows = rows
-                self.scheduledRows = nil
-                if let anchor {
-                    self.restoreScrollAnchor(anchor, in: rows)
-                }
-                PTMediaPickerTrace.event("collectionApplyCommitted", details: "transaction=\(transactionID),revision=\(albumRevision),rows=\(rows.count)")
-                finishBox.call(with: self.collectionView.contentCollectionView)
-            }
+        let anchor = renderedAlbumIdentity == albumIdentity ? captureScrollAnchor(in: renderedRows) : nil
+        let request = PTMediaRowsRequest(rows: rows,
+                                         albumIdentity: albumIdentity,
+                                         albumRevision: albumRevision,
+                                         transactionID: transactionID,
+                                         anchor: anchor,
+                                         finishBox: finishBox)
+        if let pending = pendingMediaRowsRequest {
+            pending.rows = rows
+            pending.albumIdentity = albumIdentity
+            pending.albumRevision = albumRevision
+            pending.transactionID = transactionID
+            pending.anchor = anchor
+            pending.finishBoxes.append(finishBox)
+        } else {
+            pendingMediaRowsRequest = request
         }
+        scheduledRows = rows
+        mediaGridCommitState.enqueue(rowIDs: rows.map(\.diffId))
+        PTMediaPickerTrace.event("collectionApplyEnqueued", details: "transaction=\(transactionID),revision=\(albumRevision),rows=\(rows.count),selected=\(selectionStore.selectedCount)")
+        drainMediaRowsIfNeeded()
+    }
+
+    private func drainMediaRowsIfNeeded() {
+        guard !mediaRowsApplyInFlight, let request = pendingMediaRowsRequest else { return }
+        pendingMediaRowsRequest = nil
+        let oldRows = renderedRows
+        let oldIDs = mediaGridCommitState.committedRowIDs
+        let newIDs = request.rows.map(\.diffId)
+        let sameAlbum = renderedAlbumIdentity == request.albumIdentity
+        mediaRowsGeneration &+= 1
+        let generation = mediaRowsGeneration
+        activeMediaRowsRequest = request
+        PTMediaPickerTrace.event("collectionApplyStarted", details: "transaction=\(request.transactionID),rows=\(newIDs.count),sameAlbum=\(sameAlbum)")
 
         if sameAlbum, oldIDs == newIDs {
-            let changedRows = rows.enumerated().compactMap { index, row -> PTRows? in
+            let changedRows = request.rows.enumerated().compactMap { index, row -> PTRows? in
                 guard index < oldRows.count else { return row }
                 guard mediaRowRevision(oldRows[index]) != mediaRowRevision(row) else { return nil }
                 return row
             }
-            if !changedRows.isEmpty {
-                PTMediaPickerTrace.event("rows", details: "kind=content,count=\(changedRows.count)")
-                collectionView.updateRows(changedRows, reload: true, completion: complete)
-            } else {
-                renderedAlbumIdentity = albumIdentity
-                renderedAlbumRevision = albumRevision
-                renderedRows = rows
-                finishBox.call(with: collectionView.contentCollectionView)
+            if changedRows.isEmpty {
+                PTMediaPickerTrace.event("gridNoopSkippedOrDeferred", details: "transaction=\(request.transactionID),hasInFlightStructure=false")
+                _ = mediaGridCommitState.commit(transactionID: request.transactionID, rowIDs: newIDs)
+                commitMediaRows(request, generation: generation)
+                return
             }
+            guard mediaGridCommitState.begin(transactionID: request.transactionID) else {
+                PTMediaPickerTrace.event("gridNoopSkippedOrDeferred", details: "transaction=\(request.transactionID),hasInFlightStructure=true")
+                pendingMediaRowsRequest = request
+                activeMediaRowsRequest = nil
+                return
+            }
+            mediaRowsApplyInFlight = true
+            applyContentRows(changedRows, request: request, generation: generation)
             return
+        }
+
+        guard mediaGridCommitState.begin(transactionID: request.transactionID) else {
+            PTMediaPickerTrace.event("gridNoopSkippedOrDeferred", details: "transaction=\(request.transactionID),hasInFlightStructure=true")
+            pendingMediaRowsRequest = request
+            activeMediaRowsRequest = nil
+            return
+        }
+        mediaRowsApplyInFlight = true
+        let transactionID = request.transactionID
+        let complete: PTActionTask = { [weak self] in
+            PTMainActorBridge.perform { [weak self] in
+                guard let self,
+                      let activeRequest = self.activeMediaRowsRequest,
+                      activeRequest.transactionID == transactionID else { return }
+                self.finishMediaRows(activeRequest, generation: generation)
+            }
         }
 
         if sameAlbum,
            let insertedRange = appendRange(oldIDs: oldIDs, newIDs: newIDs) {
-            let insertedRows = Array(rows[insertedRange])
+            let insertedRows = Array(request.rows[insertedRange])
             PTMediaPickerTrace.event("rows", details: "kind=append,count=\(insertedRows.count),index=\(insertedRange.lowerBound)")
             collectionView.insertRows(insertedRows,
                                        at: IndexPath(item: insertedRange.lowerBound, section: 0),
@@ -344,16 +434,74 @@ extension PTMediaLibView {
         }
 
         if sameAlbum {
-            PTMediaPickerTrace.event("rows", details: "kind=batchReplace,count=\(rows.count)")
+            PTMediaPickerTrace.event("rows", details: "kind=batchReplace,count=\(request.rows.count)")
             collectionView.replaceRows(in: 0,
-                                       with: rows,
+                                       with: request.rows,
                                        animated: true,
                                        completion: complete)
         } else {
-            PTMediaPickerTrace.event("rows", details: "kind=replace,count=\(rows.count)")
-            collectionView.showCollectionDetail(collectionData: [PTSection(rows: rows)],
-                                                finishTask: { _ in complete() })
+            PTMediaPickerTrace.event("rows", details: "kind=replace,count=\(request.rows.count)")
+            collectionView.showCollectionDetail(collectionData: [PTSection(rows: request.rows)],
+                                                 finishTask: { _ in complete() })
         }
+    }
+
+    private func applyContentRows(_ rows: [PTRows],
+                                  request: PTMediaRowsRequest,
+                                  generation: UInt64) {
+        PTMediaPickerTrace.event("rows", details: "kind=content,count=\(rows.count)")
+        let transactionID = request.transactionID
+        collectionView.updateRows(rows, reload: true) { [weak self] in
+            PTMainActorBridge.perform { [weak self] in
+                guard let self,
+                      let activeRequest = self.activeMediaRowsRequest,
+                      activeRequest.transactionID == transactionID else { return }
+                self.finishMediaRows(activeRequest, generation: generation)
+            }
+        }
+    }
+
+    private func commitMediaRows(_ request: PTMediaRowsRequest, generation: UInt64) {
+        renderedAlbumIdentity = request.albumIdentity
+        renderedAlbumRevision = request.albumRevision
+        renderedRows = request.rows
+        scheduledRows = pendingMediaRowsRequest?.rows
+        if let anchor = request.anchor {
+            restoreScrollAnchor(anchor, in: request.rows)
+        }
+        mediaRowsApplyInFlight = false
+        activeMediaRowsRequest = nil
+        let committedRowIDs = Set(request.rows.map(\.diffId))
+        let visibleCaptureIDs = pendingCaptureStartedAt.keys.filter { committedRowIDs.contains("asset:\($0)") }
+        for identifier in visibleCaptureIDs {
+            guard let startedAt = pendingCaptureStartedAt[identifier] else { continue }
+            let modelVisibleAt = pendingCaptureModelVisibleAt[identifier] ?? startedAt
+            PTMediaPickerTrace.event("newCaptureVisible", details: "captureIDPresent=true,modelVisibleMs=\(Int((modelVisibleAt - startedAt) * 1000)),gridVisibleMs=\(Int((CFAbsoluteTimeGetCurrent() - startedAt) * 1000)),thumbnailVisibleMs=unknown")
+            pendingCaptureStartedAt.removeValue(forKey: identifier)
+            pendingCaptureModelVisibleAt.removeValue(forKey: identifier)
+        }
+        PTMediaPickerTrace.event("collectionApplyCommitted", details: "transaction=\(request.transactionID),revision=\(request.albumRevision),rows=\(request.rows.count),generation=\(generation)")
+        request.finishBoxes.forEach { $0.call(with: collectionView.contentCollectionView) }
+        drainMediaRowsIfNeeded()
+    }
+
+    private func finishMediaRows(_ request: PTMediaRowsRequest, generation: UInt64) {
+        let isCurrent = mediaRowsGeneration == generation &&
+            currentAlbum?.collection.localIdentifier == request.albumIdentity &&
+            currentAlbum?.contentRevision == request.albumRevision
+        guard isCurrent else {
+            mediaGridCommitState.supersede(transactionID: request.transactionID)
+            mediaRowsApplyInFlight = false
+            activeMediaRowsRequest = nil
+            scheduledRows = pendingMediaRowsRequest?.rows
+            PTMediaPickerTrace.event("collectionApplySuperseded", details: "transaction=\(request.transactionID),reason=stale")
+            request.finishBoxes.forEach { $0.call(with: collectionView.contentCollectionView) }
+            drainMediaRowsIfNeeded()
+            return
+        }
+        _ = mediaGridCommitState.commit(transactionID: request.transactionID,
+                                        rowIDs: request.rows.map(\.diffId))
+        commitMediaRows(request, generation: generation)
     }
 
     private func mediaRowRevision(_ row: PTRows) -> String {
@@ -386,11 +534,6 @@ extension PTMediaLibView {
             return nil
         }
         return oldMediaCount..<newMediaCount
-    }
-
-    private struct PTMediaScrollAnchor {
-        let rowID: String
-        let offset: CGFloat
     }
 
     // English: Capture one visible asset so multi-row PhotoKit updates do not move the user's browsing position.
@@ -444,9 +587,14 @@ extension PTMediaLibView {
             guard selectionStore.selectedIndexMap()[identifier] == nil,
                   !selectionStore.pendingIdentifiers.contains(identifier) else {
                 pendingSavedAssets.removeValue(forKey: identifier)
+                pendingCaptureTasks.removeValue(forKey: identifier)?.cancel()
+                pendingCaptureTokens.removeValue(forKey: identifier)
+                pendingCaptureStartedAt.removeValue(forKey: identifier)
+                pendingCaptureModelVisibleAt.removeValue(forKey: identifier)
                 completedCaptureAssetIDs.insert(identifier)
                 continue
             }
+            pendingCaptureModelVisibleAt[identifier] = CFAbsoluteTimeGetCurrent()
             guard canAddModel(model,
                               currentSelectCount: selectionStore.reservedCount,
                               sender: currentVc,
@@ -454,6 +602,10 @@ extension PTMediaLibView {
                               selectionOptions: activeSelectionOptions,
                               selectionStore: selectionStore) else {
                 pendingSavedAssets.removeValue(forKey: identifier)
+                pendingCaptureTasks.removeValue(forKey: identifier)?.cancel()
+                pendingCaptureTokens.removeValue(forKey: identifier)
+                pendingCaptureStartedAt.removeValue(forKey: identifier)
+                pendingCaptureModelVisibleAt.removeValue(forKey: identifier)
                 completedCaptureAssetIDs.insert(identifier)
                 PTMediaPickerTrace.event("captureAutoRejected", details: "assetIDPresent=true,reason=selectionPolicy")
                 continue
@@ -463,6 +615,8 @@ extension PTMediaLibView {
                 PTMediaPickerTrace.event("captureAutoSelected", details: "assetIDPresent=true,selectedCount=\(selectionStore.selectedCount)")
             }
             pendingSavedAssets.removeValue(forKey: identifier)
+            pendingCaptureTasks.removeValue(forKey: identifier)?.cancel()
+            pendingCaptureTokens.removeValue(forKey: identifier)
             completedCaptureAssetIDs.insert(identifier)
         }
 
@@ -489,12 +643,11 @@ extension PTMediaLibView {
 
 // MARK: - Cell Configuration Logic
 private extension PTMediaLibView {
-    func configureCell(collection: UICollectionView, sectionModel: PTSection, indexPath: IndexPath) -> UICollectionViewCell? {
-        guard let itemRow = sectionModel.rows?[indexPath.row] else { return nil }
-        
-        let baseCell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath)
-        
-        if let cell = baseCell as? PTMediaLibCell, let cellModel = itemRow.dataModel as? PTMediaModel {
+    func configureCell(collection: UICollectionView,
+                       cell: UICollectionViewCell,
+                       context: PTCollectionCellContext) {
+        let itemRow = context.row
+        if let cell = cell as? PTMediaLibCell, let cellModel = itemRow.dataModel as? PTMediaModel {
             cell.selectionOptions = activeSelectionOptions
 
             // English: Configure selection without adding another target during reuse.
@@ -513,10 +666,7 @@ private extension PTMediaLibView {
             
             cell.cellModel = cellModel
             updateCellSelectionUI(cell, with: cellModel)
-            return cell
         }
-        
-        return baseCell
     }
     
     func updateCellSelectionUI(_ cell: PTMediaLibCell, with model: PTMediaModel) {
@@ -618,21 +768,34 @@ extension PTMediaLibView {
     /// 调用系统相机
     func openCamera() {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,subtitle: PTMediaLibUIConfig.share.cameraError, icon: .Error)
+            let ui = PTMediaLibUIConfig.share
+            PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .cameraUnavailable,
+                                                                    title: ui.alertTitle,
+                                                                    message: ui.cameraError),
+                                              handler: currentVc?.onFeedback) {
+                PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle, subtitle: ui.cameraError, icon: .Error)
+            }
             return
         }
 
         Task { @MainActor [weak self] in
             guard let self else { return }
             guard await PTSystemMediaPicker.requestCameraAccess() else {
-                PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,
-                                                        subtitle: PTMediaLibUIConfig.share.takePhotoError,
-                                                        icon: .Error)
+                let ui = PTMediaLibUIConfig.share
+                PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .cameraPermissionDenied,
+                                                                        title: ui.alertTitle,
+                                                                        message: ui.takePhotoError),
+                                                  handler: self.currentVc?.onFeedback) {
+                    PTAlertTipsViewController.tipsAlertShow(title: ui.alertTitle,
+                                                            subtitle: ui.takePhotoError,
+                                                            icon: .Error)
+                }
                 return
             }
 
             let picker = PTMediaLibCameraContainerViewController()
             picker.cameraOptions = self.effectiveCameraOptions
+            picker.feedbackHandler = self.currentVc?.onFeedback
             picker.handleNewAssetCallback = { [weak self] asset in
                 self?.handleNewAsset(asset)
             }
@@ -646,8 +809,12 @@ extension PTMediaLibView {
     func saveMediaToAlbum(image: UIImage?,
                           videoUrl: URL?,
                           ownedTemporaryURL: URL? = nil) {
-        PTMediaSaveUI.save(image: image,
+        // English: Keep the cancellation handle alive only when the caller needs to cancel this save.
+        // Español: Conserva el identificador de cancelación solo cuando el llamador necesite cancelar este guardado.
+        // 中文：仅在调用方需要取消保存时保留取消句柄。
+        _ = PTMediaSaveUI.save(image: image,
                            videoURL: videoUrl,
+                           feedbackHandler: currentVc?.onFeedback,
                            onSuccess: { [weak self] asset in
                                if let ownedTemporaryURL {
                                    try? FileManager.default.removeItem(at: ownedTemporaryURL)
@@ -672,8 +839,50 @@ extension PTMediaLibView {
               selectionStore.selectedIndexMap()[identifier] == nil,
               pendingSavedAssets[identifier] == nil else { return }
         pendingSavedAssets[identifier] = asset
+        let captureID = UUID()
+        pendingCaptureTokens[identifier] = captureID
+        pendingCaptureStartedAt[identifier] = CFAbsoluteTimeGetCurrent()
+        pendingCaptureModelVisibleAt.removeValue(forKey: identifier)
         PTMediaPickerTrace.event("captureSaved", details: "assetIDPresent=true")
         albumRepository.requestRefresh(reason: .captureSaved)
+        schedulePendingCapture(identifier: identifier, captureID: captureID)
+    }
+
+    // English: Retry visibility for a bounded period and emit one terminal feedback event on timeout.
+    // Español: Reintenta la visibilidad durante un periodo acotado y emite un único feedback terminal al vencer.
+    // 中文：在有限时间内重试资源可见性，超时只发送一次终态反馈。
+    private func schedulePendingCapture(identifier: String, captureID: UUID) {
+        pendingCaptureTasks[identifier]?.cancel()
+        pendingCaptureTasks[identifier] = Task { @MainActor [weak self] in
+            for _ in 0..<20 {
+                guard let self,
+                      !Task.isCancelled,
+                      self.pendingCaptureTokens[identifier] == captureID else { return }
+                if let album = self.currentAlbum {
+                    self.consumePendingAssets(in: album)
+                    if self.pendingSavedAssets[identifier] == nil { return }
+                }
+                do {
+                    try await Task.sleep(nanoseconds: 250_000_000)
+                } catch {
+                    return
+                }
+                self.albumRepository.requestRefresh(reason: .captureSaved)
+            }
+            guard let self,
+                  self.pendingCaptureTokens[identifier] == captureID,
+                  self.pendingSavedAssets.removeValue(forKey: identifier) != nil else { return }
+            self.pendingCaptureTokens.removeValue(forKey: identifier)
+            self.pendingCaptureTasks.removeValue(forKey: identifier)
+            self.pendingCaptureStartedAt.removeValue(forKey: identifier)
+            self.pendingCaptureModelVisibleAt.removeValue(forKey: identifier)
+            self.completedCaptureAssetIDs.insert(identifier)
+            let feedback = PTMediaPickerFeedback(kind: .captureVisibilityTimedOut,
+                                                  title: PTMediaLibUIConfig.share.alertTitle,
+                                                  message: "媒体同步超时")
+            PTMediaPickerFeedbackRouter.route(feedback, handler: self.currentVc?.onFeedback)
+            PTMediaPickerTrace.event("captureVisibilityTimedOut", details: "captureIDPresent=true")
+        }
     }
 }
 
@@ -719,7 +928,12 @@ extension PTMediaLibView {
         }, completion: { [weak self] avAsset in
             PTGCDManager.shared.runOnMain { [weak self] in
                 guard let avAsset = avAsset else {
-                    PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Video error", icon: .Error)
+                    PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .editFailed,
+                                                                            title: "Error",
+                                                                            message: "Video error"),
+                                                      handler: self?.currentVc?.onFeedback) {
+                        PTAlertTipsViewController.tipsAlertShow(title: "Error", subtitle: "Video error", icon: .Error)
+                    }
                     return
                 }
                 
@@ -779,7 +993,8 @@ extension PTMediaLibView {
                               currentSelectCount: currentCount,
                               sender: currentVc,
                               selectionOptions: activeSelectionOptions,
-                              selectionStore: selectionStore) else {
+                              selectionStore: selectionStore,
+                              feedbackHandler: currentVc?.onFeedback) else {
                 // 如果不满足条件（如已达上限），重置 Cell 状态并返回
                 Task { @MainActor in
                     cell.editButton.isHidden = true
@@ -825,7 +1040,8 @@ extension PTMediaLibView {
                                       currentSelectCount: self.selectionStore.reservedCount,
                                       sender: self.currentVc,
                                       selectionOptions: options,
-                                      selectionStore: self.selectionStore) else {
+                                      selectionStore: self.selectionStore,
+                                      feedbackHandler: self.currentVc?.onFeedback) else {
                         self.selectionStore.cancelSelection(for: cellModel, reservation: reservation)
                         isSelected?(false)
                         self.refreshCellIndex()
@@ -856,7 +1072,8 @@ extension PTMediaLibView {
                                         config: PTMediaLibConfig) {
         let download = downloadAssetIfNeededCancellable(model: cellModel,
                                                          sender: currentVc,
-                                                         selectionOptions: activeSelectionOptions) { [weak self] success in
+                                                         selectionOptions: activeSelectionOptions,
+                                                         feedbackHandler: currentVc?.onFeedback) { [weak self] success in
             self?.pendingDownloadCancellations.removeValue(forKey: cellModel.ident)
             Task { @MainActor [weak self] in
                 guard let self else { return }
@@ -972,6 +1189,12 @@ extension PTMediaLibView {
         // Keep the exported file owned by this flow until PhotoKit finishes reading it.
         // Mantener el archivo exportado bajo el control de este flujo hasta que PhotoKit termine de leerlo.
         // 在 PhotoKit 完成读取前，由当前流程持有导出文件，避免临时 URL 提前失效。
+        let operation = PTMediaPickerFeedbackOperation()
+        PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .saveStarted,
+                                                                title: "",
+                                                                message: "",
+                                                                operationID: operation.id),
+                                          handler: currentVc?.onFeedback)
         let temporaryURL = PTMediaLibView.outputURL()
         // 1. 构造播放条目（如果后续需要保存到缓存）
         let playerItem = AVPlayerItem(url: url)
@@ -980,7 +1203,14 @@ extension PTMediaLibView {
         self.saveVideoToCache(fileURL: temporaryURL, playerItem: playerItem) { [weak self] fileURL, finish in
             guard let self = self, finish, let finalURL = fileURL else {
                 try? FileManager.default.removeItem(at: temporaryURL)
-                PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to cache failed", icon: .Error)
+                guard operation.canEmitTerminal() else { return }
+                PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .saveFailed,
+                                                                        title: "Error",
+                                                                        message: "Save to cache failed",
+                                                                        operationID: operation.id),
+                                                  handler: self?.currentVc?.onFeedback) {
+                    PTAlertTipsViewController.tipsAlertShow(title: "Error", subtitle: "Save to cache failed", icon: .Error)
+                }
                 return
             }
             
@@ -993,9 +1223,22 @@ extension PTMediaLibView {
                     try? FileManager.default.removeItem(at: finalURL)
                     switch result {
                     case .success(let asset):
+                        guard operation.canEmitTerminal() else { return }
+                        PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .saveSucceeded,
+                                                                                title: "",
+                                                                                message: "",
+                                                                                operationID: operation.id),
+                                                          handler: self.currentVc?.onFeedback)
                         self.updateSelectedModelWithNewAsset(asset, replacing: originalAsset)
                     case .failure:
-                        PTAlertTipsViewController.tipsAlertShow(title: "Error",subtitle: "Save to album failed", icon: .Error)
+                        guard operation.canEmitTerminal() else { return }
+                        PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .saveFailed,
+                                                                                title: "Error",
+                                                                                message: "Save to album failed",
+                                                                                operationID: operation.id),
+                                                          handler: self.currentVc?.onFeedback) {
+                            PTAlertTipsViewController.tipsAlertShow(title: "Error", subtitle: "Save to album failed", icon: .Error)
+                        }
                     }
                 }
             }

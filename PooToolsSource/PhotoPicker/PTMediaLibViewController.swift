@@ -29,6 +29,7 @@ public class PTMediaLibViewController: PTBaseViewController {
     public var selectedHudStatusBlock: PTBoolTask?
     public var selectImageBlock: (([PTResultModel], Bool) -> Void)?
     public var selectImageRequestErrorBlock: (([PHAsset], [Int]) -> Void)?
+    public var onFeedback: PTMediaPickerFeedbackHandler?
 
     // English: Optional typed completion is emitted from the same terminal event as legacy callbacks.
     // Español: La finalización tipada opcional nace del mismo evento terminal que los callbacks heredados.
@@ -501,12 +502,24 @@ extension PTMediaLibViewController {
             let maxVideoCount = options.maxVideoSelectCount > 0 ? options.maxVideoSelectCount : options.maxSelectCount
             
             if videoCount > maxVideoCount {
-                PTAlertTipsViewController.tipsAlertShow(title: uiConfig.alertTitle,subtitle: String(format: uiConfig.mediaCountMax, "\(maxVideoCount)"), icon: .Error)
+                let message = String(format: uiConfig.mediaCountMax, "\(maxVideoCount)")
+                PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .submissionRejected,
+                                                                        title: uiConfig.alertTitle,
+                                                                        message: message),
+                                                  handler: onFeedback) {
+                    PTAlertTipsViewController.tipsAlertShow(title: uiConfig.alertTitle, subtitle: message, icon: .Error)
+                }
                 return
             }
             
             if videoCount < options.minVideoSelectCount {
-                PTAlertTipsViewController.tipsAlertShow(title: uiConfig.alertTitle,subtitle: String(format: uiConfig.mediaCountMin, "\(options.minVideoSelectCount)"), icon: .Error)
+                let message = String(format: uiConfig.mediaCountMin, "\(options.minVideoSelectCount)")
+                PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .submissionRejected,
+                                                                        title: uiConfig.alertTitle,
+                                                                        message: message),
+                                                  handler: onFeedback) {
+                    PTAlertTipsViewController.tipsAlertShow(title: uiConfig.alertTitle, subtitle: message, icon: .Error)
+                }
                 return
             }
         }
@@ -631,9 +644,14 @@ extension PTSheetContentViewController: UIImagePickerControllerDelegate {
                     }
                 } catch {
                     picker.dismiss(animated: true) {
-                        PTAlertTipsViewController.tipsAlertShow(title: "Error",
-                                                                subtitle: "视频临时文件不可用",
-                                                                icon: .Error)
+                        PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: .submissionRejected,
+                                                                                title: "Error",
+                                                                                message: "视频临时文件不可用"),
+                                                          handler: mediaLib.onFeedback) {
+                            PTAlertTipsViewController.tipsAlertShow(title: "Error",
+                                                                    subtitle: "视频临时文件不可用",
+                                                                    icon: .Error)
+                        }
                     }
                 }
             }

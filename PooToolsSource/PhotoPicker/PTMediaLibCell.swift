@@ -30,6 +30,7 @@ class PTMediaLibCell: PTBaseNormalCell {
     private let requestCoordinator = PTMediaRequestCoordinator()
     private var imageIdentifier: String = ""
     private var lastSmallRequestSize: CGSize = .zero
+    private var smallRequestStartedAt: CFAbsoluteTime?
 
     // English: Keep the selection callback on MainActor so the cell never sends UIKit state through a detached closure.
     // Español: Mantén el callback de selección en MainActor para no enviar el estado UIKit mediante un cierre separado.
@@ -79,6 +80,7 @@ class PTMediaLibCell: PTBaseNormalCell {
         imageIdentifier = ""
         representedAssetID = nil
         lastSmallRequestSize = .zero
+        smallRequestStartedAt = nil
         imageView.image = nil
         imageView.alpha = 1
         videoTimeLabel.text = ""
@@ -101,8 +103,16 @@ class PTMediaLibCell: PTBaseNormalCell {
     private func updateCellContent() {
         guard let cellModel else { return }
         let options = self.selectionOptions ?? .current()
+        let identityChanged = imageIdentifier != cellModel.ident
         imageIdentifier = cellModel.ident
         representedAssetID = cellModel.ident
+        if identityChanged {
+            // English: A reused cell must show a placeholder until the new asset resolves.
+            // Español: Una celda reutilizada debe mostrar un marcador hasta resolver el nuevo recurso.
+            // 中文：复用 Cell 后，必须先展示占位图，直到新资源加载完成。
+            imageView.image = PTAppBaseConfig.share.defaultEmptyImage
+            lastSmallRequestSize = .zero
+        }
         
         // English: Selection only updates the overlay; original data is requested by an explicit submission path.
         // Español: La selección solo actualiza la máscara; los datos originales se solicitan en la ruta explícita de envío.
@@ -205,10 +215,13 @@ class PTMediaLibCell: PTBaseNormalCell {
         }
         let size = cellModel.previewSize(in: bounds, scale: scale)
         guard size.width > 1, size.height > 1 else { return }
+        if imageView.image == nil {
+            imageView.image = PTAppBaseConfig.share.defaultEmptyImage
+        }
         if requestCoordinator.isActive("small"), lastSmallRequestSize == size { return }
         lastSmallRequestSize = size
         let generation = requestCoordinator.begin("small")
-        PTMediaPickerTrace.event("cellRequest", details: "kind=thumbnail,assetIDPresent=true,width=\(Int(size.width)),height=\(Int(size.height))")
+        smallRequestStartedAt = CFAbsoluteTimeGetCurrent()
 
         let requestID = PTMediaLibManager.requestImage(for: asset,
                                                        targetSize: size,
@@ -217,10 +230,20 @@ class PTMediaLibCell: PTBaseNormalCell {
                                                        deliveryMode: .opportunistic) { [weak self = self] result in
             guard let self = self,
                   self.imageIdentifier == ident,
-                  self.requestCoordinator.isCurrent("small", generation: generation),
-                  !result.isCancelled else { return }
-            self.imageView.image = result.image
+                  self.requestCoordinator.isCurrent("small", generation: generation) else { return }
+            let durationMs = Int((CFAbsoluteTimeGetCurrent() - (self.smallRequestStartedAt ?? CFAbsoluteTimeGetCurrent())) * 1000)
+            if result.isCancelled {
+                PTMediaPickerTrace.event("thumbnailResolved", details: "assetIDPresent=true,status=cancelled,durationMs=\(durationMs)")
+                return
+            }
+            guard let image = result.image else {
+                PTMediaPickerTrace.event("thumbnailResolved", details: "assetIDPresent=true,status=failed,degraded=\(result.isDegraded),nilImage=true,errorPresent=\(result.error != nil),durationMs=\(durationMs)")
+                return
+            }
+            self.imageView.image = image
+            PTMediaPickerTrace.event("thumbnailResolved", details: "assetIDPresent=true,status=\(result.isDegraded ? "degraded" : "final"),nilImage=false,errorPresent=\(result.error != nil),durationMs=\(durationMs)")
         }
+        PTMediaPickerTrace.event("thumbnailRequested", details: "assetIDPresent=true,width=\(Int(size.width)),height=\(Int(size.height)),requestID=\(requestID)")
         requestCoordinator.store(requestID, for: "small", generation: generation)
     }
 

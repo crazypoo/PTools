@@ -30,6 +30,7 @@ public class PTMediaLibCameraContainerViewController: PTBaseViewController {
     public var cameraOptions: PTMediaLibCameraOptions?
     public var handleNewAssetCallback:((_ asset: PHAsset) -> Void)?
     public var handleCameraFailureCallback: (@MainActor @Sendable (PTSystemMediaPickerError) -> Void)?
+    public var feedbackHandler: PTMediaPickerFeedbackHandler?
 
     // English: Serialize capture completion so save, cancel, and failure cannot finish twice.
     // Español: Serializa la finalización de captura para que guardar, cancelar y fallar no terminen dos veces.
@@ -37,6 +38,7 @@ public class PTMediaLibCameraContainerViewController: PTBaseViewController {
     private var isFinishingCapture = false
     private var didDeliverAsset = false
     private var didReportFailure = false
+    private var saveCancellation: PTMediaSaveCancellation?
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,6 +92,20 @@ public class PTMediaLibCameraContainerViewController: PTBaseViewController {
         guard !didReportFailure else { return }
         didReportFailure = true
         isFinishingCapture = true
+        let feedbackKind: PTMediaPickerFeedbackKind
+        if case .permissionDenied = error {
+            feedbackKind = .cameraPermissionDenied
+        } else {
+            feedbackKind = .cameraUnavailable
+        }
+        PTMediaPickerFeedbackRouter.route(PTMediaPickerFeedback(kind: feedbackKind,
+                                                                title: PTMediaLibUIConfig.share.alertTitle,
+                                                                message: error.localizedDescription),
+                                          handler: feedbackHandler) {
+            PTAlertTipsViewController.tipsAlertShow(title: PTMediaLibUIConfig.share.alertTitle,
+                                                    subtitle: error.localizedDescription,
+                                                    icon: .Error)
+        }
         // English: Report a typed failure before dismissing the embedded camera.
         // Español: Informa del fallo tipado antes de cerrar la cámara integrada.
         // 中文：关闭嵌入式相机前先回传类型化错误。
@@ -138,26 +154,29 @@ extension PTMediaLibCameraContainerViewController: UIImagePickerControllerDelega
     fileprivate func saveMediaToAlbum(image: UIImage?,
                                       videoUrl: URL?,
                                       ownedTemporaryURL: URL? = nil) {
-        PTMediaSaveUI.save(image: image,
-                           videoURL: videoUrl,
-                           onSuccess: { [weak self] asset in
-                               guard let self else { return }
-                               self.removeTemporaryFile(ownedTemporaryURL)
-                               let deliver = {
-                                   guard !self.didDeliverAsset else { return }
-                                   self.didDeliverAsset = true
-                                   self.handleNewAsset(asset)
-                               }
-                               if self.presentingViewController != nil {
-                                   self.dismiss(animated: true, completion: deliver)
-                               } else {
-                                   deliver()
-                               }
-                           },
-                           onFailure: { [weak self] _ in
-                               self?.removeTemporaryFile(ownedTemporaryURL)
-                               self?.isFinishingCapture = false
-                           })
+        saveCancellation = PTMediaSaveUI.save(image: image,
+                                              videoURL: videoUrl,
+                                              feedbackHandler: feedbackHandler,
+                                              onSuccess: { [weak self] asset in
+                                                  guard let self else { return }
+                                                  self.saveCancellation = nil
+                                                  self.removeTemporaryFile(ownedTemporaryURL)
+                                                  let deliver = {
+                                                      guard !self.didDeliverAsset else { return }
+                                                      self.didDeliverAsset = true
+                                                      self.handleNewAsset(asset)
+                                                  }
+                                                  if self.presentingViewController != nil {
+                                                      self.dismiss(animated: true, completion: deliver)
+                                                  } else {
+                                                      deliver()
+                                                  }
+                                              },
+                                              onFailure: { [weak self] _ in
+                                                  self?.saveCancellation = nil
+                                                  self?.removeTemporaryFile(ownedTemporaryURL)
+                                                  self?.isFinishingCapture = false
+                                              })
     }
 
     // English: Remove only the temporary copy owned by this capture flow.
@@ -177,8 +196,11 @@ extension PTMediaLibCameraContainerViewController: UIImagePickerControllerDelega
         // English: Cancellation is terminal for this presentation and must not trigger a save.
         // Español: La cancelación termina esta presentación y no debe iniciar un guardado.
         // 中文：取消是本次展示的终态，不能再触发保存。
-        guard !isFinishingCapture else { return }
+        guard !didDeliverAsset,
+              !isFinishingCapture || saveCancellation != nil else { return }
         isFinishingCapture = true
+        saveCancellation?.cancel()
+        saveCancellation = nil
         dismiss(animated: true)
     }
 }

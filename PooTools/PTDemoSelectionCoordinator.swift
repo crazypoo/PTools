@@ -445,32 +445,7 @@ enum PTDemoSelectionCoordinator {
                 }
             } else if descriptor.id.rawValue == "media.photo-picker" {
                 PTGCDManager.shared.runOnMain {
-                    // English: Configure the picker per instance while keeping the singleton for legacy consumers.
-                    // Español: Configura el selector por instancia y conserva el singleton para consumidores heredados.
-                    // 中文：按实例配置选择器，同时保留单例以兼容旧调用方。
-                    let selectionOptions = PTMediaLibSelectionOptions(
-                        allowSelectImage: true,
-                        allowSelectVideo: true,
-                        allowSelectGif: true,
-                        maxSelectCount: 9,
-                        allowEditImage: true,
-                        allowMixSelect: true,
-                        allowTakePhotoInLibrary: true,
-                        cameraOptions: PTMediaLibCameraOptions(),
-                        maxVideoSelectCount: 1,
-                        allowEditVideo: true
-                    )
-
-                    let vc = PTMediaLibViewController()
-                    vc.selectionOptions = selectionOptions
-                    vc.mediaLibShow()
-                    vc.selectImageBlock = { result,isOriginal in
-                        if result.count > 0 {
-                            PTNSLogConsole("\(result)")
-                        } else {
-                            PTAlertTipsViewController.tipsAlertShow(title:"失败",subtitle: "",icon: .Error)
-                        }
-                    }
+                    presentPhotoPickerFeedbackSelector(from: controller)
                 }
             } else {
                 let sizes: [PTSheetSize] = [
@@ -479,10 +454,66 @@ enum PTDemoSelectionCoordinator {
                 PTDemoCoordinator.shared.present(descriptor, from: controller, sizes: sizes)
             }
         }
-
-
     }
 
+    // English: Keep both feedback modes in the Demo so instance-scoped routing can be verified without changing global picker configuration.
+    // Español: Mantiene los dos modos de feedback en el Demo para verificar el enrutamiento por instancia sin cambiar la configuración global.
+    // 中文：在 Demo 中保留两种反馈模式，用于验证实例级路由，同时不修改全局选择器配置。
+    private static func presentPhotoPickerFeedbackSelector(from controller: PTFuncNameViewController) {
+        let alert = UIAlertController(title: "PhotoPicker Feedback",
+                                      message: "选择默认提示或宿主自定义反馈 / Elige los avisos predeterminados o feedback del host",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Default Tips", style: .default) { _ in
+            openPhotoPicker(from: controller, usesCustomFeedback: false)
+        })
+        alert.addAction(UIAlertAction(title: "Custom Feedback", style: .default) { _ in
+            openPhotoPicker(from: controller, usesCustomFeedback: true)
+        })
+        alert.addAction(UIAlertAction(title: "取消", style: .cancel))
+        controller.present(alert, animated: true)
+    }
+
+    // English: Build the picker with an immutable per-instance selection snapshot and an optional host feedback sink.
+    // Español: Construye el selector con una instantánea inmutable por instancia y un sink opcional del host.
+    // 中文：使用不可变的实例级选择配置，并按需注入宿主反馈处理器创建 Picker。
+    private static func openPhotoPicker(from controller: PTFuncNameViewController,
+                                        usesCustomFeedback: Bool) {
+        let selectionOptions = PTMediaLibSelectionOptions(
+            allowSelectImage: true,
+            allowSelectVideo: true,
+            allowSelectGif: true,
+            maxSelectCount: 9,
+            allowEditImage: true,
+            allowMixSelect: true,
+            allowTakePhotoInLibrary: true,
+            cameraOptions: PTMediaLibCameraOptions(),
+            maxVideoSelectCount: 1,
+            allowEditVideo: true
+        )
+
+        let picker = PTMediaLibViewController()
+        picker.selectionOptions = selectionOptions
+        if usesCustomFeedback {
+            picker.onFeedback = { feedback in
+                PTNSLogConsole("PhotoPicker feedback: \(feedback.kind.rawValue) - \(feedback.message)")
+                guard feedback.kind != .saveStarted,
+                      feedback.kind != .saveSucceeded,
+                      feedback.kind != .saveCancelled,
+                      !feedback.message.isEmpty else { return }
+                PTAlertTipsViewController.tipsAlertShow(title: feedback.title.isEmpty ? "PhotoPicker" : feedback.title,
+                                                        subtitle: feedback.message,
+                                                        icon: .Error)
+            }
+        }
+        picker.selectImageBlock = { result, _ in
+            if result.isEmpty {
+                PTAlertTipsViewController.tipsAlertShow(title: "失败", subtitle: "", icon: .Error)
+            } else {
+                PTNSLogConsole("PhotoPicker selected count: \(result.count)")
+            }
+        }
+        picker.mediaLibShow()
+    }
     // English: Demonstrate the complete customer-alert capsule matrix without changing legacy alert entry points.
     // Español: Demuestra la matriz completa de cápsulas sin cambiar las entradas heredadas de las alertas.
     // 中文：展示完整的 Alert 胶囊按钮场景，同时不改变旧 Alert 入口。

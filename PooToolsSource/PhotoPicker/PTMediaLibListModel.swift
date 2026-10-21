@@ -28,6 +28,15 @@ struct PTMediaAlbumChangeTransaction: Sendable {
     let removedIDs: [String]
     let changedIDs: [String]
     let movedIDs: [String]
+    let orderedIDs: [String]
+    let oldModeledResultOffset: Int
+    let oldWasFullyModeled: Bool
+}
+
+struct PTMediaModelProjectionMetrics: Sendable, Equatable {
+    let reusedCount: Int
+    let createdCount: Int
+    let removedCount: Int
 }
 
 @MainActor
@@ -156,6 +165,7 @@ public class PTMediaLibListModel: NSObject {
     @discardableResult
     func refreshResultTransaction(knownChanged: Bool = false,
                                   generation: UInt64) -> PTMediaAlbumChangeTransaction? {
+        let started = CFAbsoluteTimeGetCurrent()
         let nextResult = PHAsset.fetchAssets(in: collection, options: option)
         let nextSignature = Self.boundarySignature(for: nextResult)
         let previousBoundary = Self.boundarySignature(for: result)
@@ -173,6 +183,8 @@ public class PTMediaLibListModel: NSObject {
         }
 
         let oldRevision = contentRevision
+        let oldModeledResultOffset = nextResultOffset
+        let oldWasFullyModeled = isFullyModeled
         let oldIDs = Self.assetIdentifiers(for: result)
         let newIDs = Self.assetIdentifiers(for: nextResult)
         let oldIDSet = Set(oldIDs)
@@ -216,9 +228,84 @@ public class PTMediaLibListModel: NSObject {
                 guard let oldValue = oldRevisionMap[$0], let newValue = newRevisionMap[$0] else { return false }
                 return oldValue != newValue
             },
-            movedIDs: Array(Set(movedIDs))
+            movedIDs: Array(Set(movedIDs)),
+            orderedIDs: selectionOptions.sortAscending ? newIDs : Array(newIDs.reversed()),
+            oldModeledResultOffset: oldModeledResultOffset,
+            oldWasFullyModeled: oldWasFullyModeled
         )
+        PTMediaPickerTrace.event("deltaPrepared", details: "albumIDPresent=true,oldCount=\(transaction.oldCount),newCount=\(transaction.newCount),inserted=\(transaction.insertedIDs.count),removed=\(transaction.removedIDs.count),moved=\(transaction.movedIDs.count),changed=\(transaction.changedIDs.count),mainThreadMs=\(Int((CFAbsoluteTimeGetCurrent() - started) * 1000))")
         return transaction
+    }
+
+    // English: Project only the visible PhotoKit window and recreate models for changed IDs.
+    // Español: Proyecta solo la ventana visible de PhotoKit y recrea modelos para los IDs modificados.
+    // 中文：只投影当前可见的 PhotoKit 窗口，仅为变化的 ID 重建模型。
+    @discardableResult
+    func applyChangeTransaction(_ transaction: PTMediaAlbumChangeTransaction) -> PTMediaModelProjectionMetrics? {
+        guard transaction.albumIdentifier == collection.localIdentifier else { return nil }
+        let started = CFAbsoluteTimeGetCurrent()
+        let previousByID = Dictionary(uniqueKeysWithValues: models.map { ($0.ident, $0) })
+        let affectedIDs = Set(transaction.insertedIDs).union(transaction.changedIDs)
+        let modeledRawCount: Int
+        if transaction.oldWasFullyModeled {
+            modeledRawCount = result.count
+        } else {
+            modeledRawCount = min(result.count,
+                                  max(initialBatchSize,
+                                      transaction.oldModeledResultOffset,
+                                      models.count + transaction.insertedIDs.count))
+        }
+        let projectedIDs = Array(transaction.orderedIDs.prefix(modeledRawCount))
+        let projectedIDSet = Set(projectedIDs)
+        let assetsToCreate = affectedIDs.intersection(projectedIDSet)
+        var assetsByID: [String: PHAsset] = [:]
+        assetsByID.reserveCapacity(assetsToCreate.count)
+        if !assetsToCreate.isEmpty {
+            // English: Resolve only affected assets instead of walking the entire fetch result again.
+            // Español: Resuelve solo los recursos afectados en lugar de recorrer de nuevo todo el resultado.
+            // 中文：只解析受影响的资源，避免再次遍历整个 FetchResult。
+            let affectedAssets = PHAsset.fetchAssets(withLocalIdentifiers: Array(assetsToCreate), options: nil)
+            for index in 0..<affectedAssets.count {
+                let asset = affectedAssets.object(at: index)
+                assetsByID[asset.localIdentifier] = asset
+            }
+        }
+
+        var nextModels: [PTMediaModel] = []
+        nextModels.reserveCapacity(projectedIDs.count)
+        var reusedCount = 0
+        var createdCount = 0
+        for identifier in projectedIDs {
+            let model: PTMediaModel
+            if !affectedIDs.contains(identifier), let existing = previousByID[identifier] {
+                model = existing
+                reusedCount += 1
+            } else if let asset = assetsByID[identifier] {
+                model = PTMediaModel(asset: asset)
+                createdCount += 1
+            } else {
+                continue
+            }
+            guard PTMediaLibManager.canDisplay(model, with: selectionOptions) else { continue }
+            nextModels.append(model)
+        }
+
+        let previousIDs = Set(models.map(\.ident))
+        let nextIDs = Set(nextModels.map(\.ident))
+        let removedCount = previousIDs.subtracting(nextIDs).count
+        let nextSignature = Self.signature(for: nextModels.map(\.sourceRevisionKey))
+        let changed = nextSignature != modelsSignature || nextIDs != previousIDs
+        models = nextModels
+        modelsSignature = nextSignature
+        nextResultOffset = modeledRawCount
+        modeledResultSignature = transaction.oldWasFullyModeled ? resultSignature : nil
+        if changed {
+            contentRevision &+= 1
+        }
+        PTMediaPickerTrace.event("modelProjectionPrepared", details: "reused=\(reusedCount),created=\(createdCount),removed=\(removedCount),modeled=\(nextModels.count),durationMs=\(Int((CFAbsoluteTimeGetCurrent() - started) * 1000))")
+        return PTMediaModelProjectionMetrics(reusedCount: reusedCount,
+                                             createdCount: createdCount,
+                                             removedCount: removedCount)
     }
 
     private static func assetIdentifiers(for result: PHFetchResult<PHAsset>) -> [String] {

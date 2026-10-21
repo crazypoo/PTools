@@ -25,6 +25,11 @@
 - 多资源新增、删除和重排通过 `PTCollectionView.replaceRows` 保持 Section 身份与滚动锚点；视频限制使用公开可取消的 `PHAssetResourceManager` 异步统计，未知大小不会直接放行。
 - `UIImage(ciImage:)` 保存增加 Core Image 物化 fallback；异步视频复制在失败、取消和 provider 副本失效时清理框架自有半成品，绝不删除 provider 源文件。
 - 本轮完成源码解析及 PooTools CocoaPods 工作区 Debug/Release 构建门禁；真机连续拍摄、Hangs/Time Profiler、Instruments 和 10,000 资源量级仍需宿主使用真实设备验收，不能以模拟器构建替代性能结论。
+- 完成本轮 P01–P04：PhotoKit 变化事务按资源 ID 复用模型，只为新增/变化资源创建模型；拍照后的 Grid 使用已提交 Row 状态驱动局部提交，并对无变化、排队、过期和完成回调做确定性收敛。
+- 缩略图请求现在等待有效 Cell 尺寸、复用时先恢复占位图，nil/错误/取消回调不会清空已成功图片；新增 `thumbnailRequested`、`thumbnailResolved`、`newCaptureVisible` 等安全诊断事件。
+- 完成 P05 实例级 `onFeedback`：未配置时继续使用原有提示，配置后仅发送类型化事件；保存开始、成功、失败、取消均带同一 `operationID`，不同 Picker 实例互不影响。
+- 完成 P06：`PTMediaLibView` 使用 `cellInCollectionV2` 与 `configureCell` 单一配置路径，不再同时维护旧 Cell provider；保留 `PTCollectionView` 结构/内容更新 API 作为局部更新和安全回退。
+- 新增 P01–P06 回归测试、PhotoPicker Demo 的 Default Tips / Custom Feedback 入口和 5.69.0 迁移说明；PhotoKit 真机、10,000 资源量级、Instruments 与独立消费者仍按发布清单单独验收。
 
 ## 5.68.0 — 2026-10-19
 
