@@ -36,6 +36,24 @@ struct PTMediaSelectionReservation: Sendable, Equatable {
     let generation: UInt64
 }
 
+// English: Keep the visible-cell selection projection as a value so its order and empty state are testable.
+// Español: Mantiene la proyección de selección de la celda como un valor para probar el orden y el estado vacío.
+// 中文：将 Cell 的选择投影定义为值类型，便于验证顺序和未选状态。
+struct PTMediaSelectionProjection: Sendable, Equatable {
+    let isSelected: Bool
+    let order: Int?
+
+    init(identifier: String, selectedIndexMap: [String: Int]) {
+        guard let index = selectedIndexMap[identifier] else {
+            isSelected = false
+            order = nil
+            return
+        }
+        isSelected = true
+        order = index + 1
+    }
+}
+
 // English: The value context keeps selection validation independent from UIKit and PhotoKit objects.
 // Español: El contexto de valor mantiene la validación independiente de objetos UIKit y PhotoKit.
 // 中文：值类型上下文让选择校验不依赖 UIKit 和 PhotoKit 对象。
@@ -127,6 +145,13 @@ final class PTMediaSelectionStore {
     private(set) var pendingModels: [String: PTMediaModel] = [:]
     private var reservations: [String: PTMediaSelectionReservation] = [:]
     private var generations: [String: UInt64] = [:]
+    private var selectedIndexMapCache: [String: Int] = [:]
+    private var selectedIndexMapCacheRevision: UInt64 = .max
+
+    // English: The revision lets visible cells reuse one selection projection per MainActor transaction.
+    // Español: La revisión permite que las celdas visibles reutilicen una proyección por transacción de MainActor.
+    // 中文：版本号让可见 Cell 在同一个 MainActor 事务内复用一次选择投影。
+    private(set) var revision: UInt64 = 0
 
     // English: UI observes one change stream instead of mirroring selected arrays in two owners.
     // Español: La UI observa un único flujo de cambios en lugar de duplicar arrays seleccionados.
@@ -198,21 +223,22 @@ final class PTMediaSelectionStore {
         return reservation
     }
 
-    func completeSelection(for model: PTMediaModel) {
+    @discardableResult
+    func completeSelection(for model: PTMediaModel) -> Bool {
         if let reservation = reservations[model.ident] {
-            _ = completeSelection(for: model, reservation: reservation)
-            return
+            return completeSelection(for: model, reservation: reservation)
         }
         pendingIdentifiers.remove(model.ident)
         pendingModels.removeValue(forKey: model.ident)
         guard !selectedModels.contains(where: { $0.ident == model.ident }) else {
             model.isSelected = true
             notifyChange()
-            return
+            return false
         }
         model.isSelected = true
         selectedModels.append(model)
         notifyChange()
+        return true
     }
 
     @discardableResult
@@ -225,7 +251,7 @@ final class PTMediaSelectionStore {
         guard !selectedModels.contains(where: { $0.ident == model.ident }) else {
             model.isSelected = true
             notifyChange()
-            return true
+            return false
         }
         model.isSelected = true
         selectedModels.append(model)
@@ -296,7 +322,17 @@ final class PTMediaSelectionStore {
     }
 
     func selectedIndexMap() -> [String: Int] {
-        Dictionary(uniqueKeysWithValues: selectedModels.enumerated().map { ($0.element.ident, $0.offset) })
+        guard selectedIndexMapCacheRevision != revision else {
+            return selectedIndexMapCache
+        }
+        let map = Dictionary(uniqueKeysWithValues: selectedModels.enumerated().map { ($0.element.ident, $0.offset) })
+        selectedIndexMapCache = map
+        selectedIndexMapCacheRevision = revision
+        return map
+    }
+
+    func selectionProjection(for identifier: String) -> PTMediaSelectionProjection {
+        PTMediaSelectionProjection(identifier: identifier, selectedIndexMap: selectedIndexMap())
     }
 
     func reset() {
@@ -325,6 +361,8 @@ final class PTMediaSelectionStore {
     }
 
     private func notifyChange() {
+        revision &+= 1
+        selectedIndexMapCacheRevision = .max
         onChange?()
     }
 }

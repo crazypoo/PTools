@@ -74,8 +74,10 @@ public class PTMediaLibView: UIView {
             guard let album = currentAlbum else {
                 PTMediaPickerTrace.event("album", details: "kind=clear")
                 renderedRows = []
+                scheduledRows = nil
                 renderedAlbumIdentity = nil
                 renderedAlbumRevision = 0
+                mediaRowsGeneration &+= 1
                 collectionView.clearAllData()
                 return
             }
@@ -115,9 +117,12 @@ public class PTMediaLibView: UIView {
     private var lastAdaptiveLayoutSignature: String?
     private var pendingDownloadCancellations: [String: PTMediaRequestCancellation] = [:]
     private var renderedRows: [PTRows] = []
+    private var scheduledRows: [PTRows]?
     private var renderedAlbumIdentity: String?
     private var renderedAlbumRevision: UInt64 = 0
+    private var mediaRowsGeneration: UInt64 = 0
     private var pendingSavedAssets: [String: PHAsset] = [:]
+    private var completedCaptureAssetIDs: Set<String> = []
     private var pendingReplacementAssets: [String: (asset: PHAsset, originalIdentifier: String)] = [:]
 
     // English: Restrict camera media kinds to the picker policy before presenting the camera.
@@ -168,6 +173,7 @@ public class PTMediaLibView: UIView {
         super.init(frame: .zero)
         self.selectionStore.onChange = { [weak self] in
             self?.selectedModelDidUpdate?()
+            self?.refreshCellIndex()
             self?.updateTitleCounter()
         }
         self.albumRepository.onCameraRollChange = { [weak self] album in
@@ -223,6 +229,8 @@ public class PTMediaLibView: UIView {
         super.didMoveToWindow()
         if window == nil {
             cancelPendingDownloads()
+            pendingSavedAssets.removeAll(keepingCapacity: true)
+            pendingReplacementAssets.removeAll(keepingCapacity: true)
             albumRepository.stopObserving()
         } else {
             albumRepository.startObserving()
@@ -262,24 +270,38 @@ extension PTMediaLibView {
     private func applyMediaRows(_ rows: [PTRows],
                                 album: PTMediaLibListModel,
                                 finish: PTCollectionCallback?) {
-        let oldRows = renderedRows
+        let oldRows = scheduledRows ?? renderedRows
         let oldIDs = oldRows.map(\.diffId)
         let newIDs = rows.map(\.diffId)
         let albumIdentity = album.collection.localIdentifier
         let albumRevision = album.contentRevision
-        let sameAlbum = renderedAlbumIdentity == albumIdentity
+        let sameAlbum = renderedAlbumIdentity == albumIdentity ||
+            (renderedAlbumIdentity == nil && scheduledRows != nil && currentAlbum?.collection.localIdentifier == albumIdentity)
         let anchor = sameAlbum ? captureScrollAnchor(in: oldRows) : nil
+        mediaRowsGeneration &+= 1
+        let applyGeneration = mediaRowsGeneration
+        let transactionID = UUID().uuidString
+        scheduledRows = rows
+        PTMediaPickerTrace.event("collectionApplyEnqueued", details: "transaction=\(transactionID),revision=\(albumRevision),rows=\(rows.count),selected=\(selectionStore.selectedCount)")
 
         let finishBox = PTMediaCollectionFinishBox(finish)
-        let complete: PTActionTask = { [weak self, finishBox, anchor, rows, albumIdentity, albumRevision] in
+        let complete: PTActionTask = { [weak self, finishBox, anchor, rows, albumIdentity, albumRevision, applyGeneration, transactionID] in
             PTMainActorBridge.perform { [weak self, finishBox] in
                 guard let self else { return }
+                guard self.mediaRowsGeneration == applyGeneration,
+                      self.currentAlbum?.collection.localIdentifier == albumIdentity,
+                      self.currentAlbum?.contentRevision == albumRevision else {
+                    PTMediaPickerTrace.event("collectionApplyDropped", details: "transaction=\(transactionID),reason=stale")
+                    return
+                }
                 self.renderedAlbumIdentity = albumIdentity
                 self.renderedAlbumRevision = albumRevision
                 self.renderedRows = rows
+                self.scheduledRows = nil
                 if let anchor {
                     self.restoreScrollAnchor(anchor, in: rows)
                 }
+                PTMediaPickerTrace.event("collectionApplyCommitted", details: "transaction=\(transactionID),revision=\(albumRevision),rows=\(rows.count)")
                 finishBox.call(with: self.collectionView.contentCollectionView)
             }
         }
@@ -303,13 +325,12 @@ extension PTMediaLibView {
         }
 
         if sameAlbum,
-           newIDs.count == oldIDs.count + 1,
-           isSubsequence(oldIDs, of: newIDs) {
-            let insertedIndex = newIDs.firstIndex { !oldIDs.contains($0) } ?? newIDs.count - 1
-            PTMediaPickerTrace.event("rows", details: "kind=insert,index=\(insertedIndex)")
-            collectionView.insertRows([rows[insertedIndex]],
-                                      at: IndexPath(item: insertedIndex, section: 0),
-                                      completion: complete)
+           let insertedRange = appendRange(oldIDs: oldIDs, newIDs: newIDs) {
+            let insertedRows = Array(rows[insertedRange])
+            PTMediaPickerTrace.event("rows", details: "kind=append,count=\(insertedRows.count),index=\(insertedRange.lowerBound)")
+            collectionView.insertRows(insertedRows,
+                                       at: IndexPath(item: insertedRange.lowerBound, section: 0),
+                                       completion: complete)
             return
         }
 
@@ -350,6 +371,23 @@ extension PTMediaLibView {
         return index == smaller.count
     }
 
+    // English: Return only the new media range while keeping a camera row at either edge stable.
+    // Español: Devuelve solo el rango multimedia nuevo y mantiene estable la fila de cámara en cualquier extremo.
+    // 中文：仅返回新增媒体范围，同时保持首尾两种相机 Cell 位置稳定。
+    private func appendRange(oldIDs: [String], newIDs: [String]) -> Range<Int>? {
+        guard newIDs.count > oldIDs.count else { return nil }
+        let cameraID = "camera"
+        let oldHasTrailingCamera = oldIDs.last == cameraID && newIDs.last == cameraID
+        let oldMediaCount = oldHasTrailingCamera ? oldIDs.count - 1 : oldIDs.count
+        let newMediaCount = oldHasTrailingCamera ? newIDs.count - 1 : newIDs.count
+        guard newMediaCount > oldMediaCount,
+              oldMediaCount >= 0,
+              Array(oldIDs.prefix(oldMediaCount)) == Array(newIDs.prefix(oldMediaCount)) else {
+            return nil
+        }
+        return oldMediaCount..<newMediaCount
+    }
+
     private struct PTMediaScrollAnchor {
         let rowID: String
         let offset: CGFloat
@@ -360,18 +398,19 @@ extension PTMediaLibView {
     // 中文：记录一个可见媒体，避免多 Row PhotoKit 更新改变用户当前浏览位置。
     private func captureScrollAnchor(in rows: [PTRows]) -> PTMediaScrollAnchor? {
         let collection = collectionView.contentCollectionView
-        let visible = collection.indexPathsForVisibleItems.sorted {
-            if $0.section != $1.section { return $0.section < $1.section }
-            return $0.item < $1.item
+        let candidates = collection.indexPathsForVisibleItems.compactMap { indexPath -> (PTRows, UICollectionViewLayoutAttributes)? in
+            guard indexPath.section == 0,
+                  let cell = collection.cellForItem(at: indexPath) as? PTMediaLibCell,
+                  let assetID = cell.representedAssetID,
+                  let row = rows.first(where: { $0.diffId == "asset:\(assetID)" }),
+                  let attributes = collection.layoutAttributesForItem(at: indexPath) else {
+                return nil
+            }
+            return (row, attributes)
         }
-        guard let indexPath = visible.first,
-              indexPath.section == 0,
-              rows.indices.contains(indexPath.item),
-              let attributes = collection.layoutAttributesForItem(at: indexPath) else {
-            return nil
-        }
-        return PTMediaScrollAnchor(rowID: rows[indexPath.item].diffId,
-                                   offset: attributes.frame.minY - collection.contentOffset.y)
+        guard let candidate = candidates.min(by: { $0.1.frame.minY < $1.1.frame.minY }) else { return nil }
+        return PTMediaScrollAnchor(rowID: candidate.0.diffId,
+                                   offset: candidate.1.frame.minY - collection.contentOffset.y)
     }
 
     // English: Restore the captured anchor after the serialized Diffable transaction completes.
@@ -402,6 +441,12 @@ extension PTMediaLibView {
     private func consumePendingAssets(in album: PTMediaLibListModel) {
         for (identifier, asset) in Array(pendingSavedAssets) {
             guard let model = album.models.first(where: { $0.ident == identifier }) else { continue }
+            guard selectionStore.selectedIndexMap()[identifier] == nil,
+                  !selectionStore.pendingIdentifiers.contains(identifier) else {
+                pendingSavedAssets.removeValue(forKey: identifier)
+                completedCaptureAssetIDs.insert(identifier)
+                continue
+            }
             guard canAddModel(model,
                               currentSelectCount: selectionStore.reservedCount,
                               sender: currentVc,
@@ -409,11 +454,16 @@ extension PTMediaLibView {
                               selectionOptions: activeSelectionOptions,
                               selectionStore: selectionStore) else {
                 pendingSavedAssets.removeValue(forKey: identifier)
+                completedCaptureAssetIDs.insert(identifier)
+                PTMediaPickerTrace.event("captureAutoRejected", details: "assetIDPresent=true,reason=selectionPolicy")
                 continue
             }
-            selectionStore.completeSelection(for: model)
-            PTMediaLibConfig.share.didSelectAsset?(asset)
+            if selectionStore.completeSelection(for: model) {
+                PTMediaLibConfig.share.didSelectAsset?(asset)
+                PTMediaPickerTrace.event("captureAutoSelected", details: "assetIDPresent=true,selectedCount=\(selectionStore.selectedCount)")
+            }
             pendingSavedAssets.removeValue(forKey: identifier)
+            completedCaptureAssetIDs.insert(identifier)
         }
 
         for (identifier, pending) in Array(pendingReplacementAssets) {
@@ -461,9 +511,8 @@ private extension PTMediaLibView {
                 self?.handleEditAction(for: cellModel, sender: sender)
             }
             
-            // 更新选中状态 UI
-            updateCellSelectionUI(cell, with: cellModel)
             cell.cellModel = cellModel
+            updateCellSelectionUI(cell, with: cellModel)
             return cell
         }
         
@@ -471,14 +520,8 @@ private extension PTMediaLibView {
     }
     
     func updateCellSelectionUI(_ cell: PTMediaLibCell, with model: PTMediaModel) {
-        if let index = selectedModel.firstIndex(where: { $0 == model }) {
-            setCellIndex(cell, index: index + 1)
-            model.isSelected = true
-        } else {
-            model.isSelected = false
-            cell.selectButton.normalTitle = ""
-        }
-        setCellMaskView(cell, isSelected: model.isSelected, model: model)
+        let projection = selectionStore.selectionProjection(for: model.ident)
+        renderSelectionState(cell, model: model, selectedOrder: projection.order)
     }
 }
 
@@ -492,7 +535,8 @@ private extension PTMediaLibView {
             openCamera()
         case PTMediaLibCell.ID:
             if let cellModel = itemRow.dataModel as? PTMediaModel,
-               let cell = collectionView.contentCollectionView.cellForItem(at: indexPath) as? PTMediaLibCell {
+               let cell = collectionView.contentCollectionView.cellForItem(at: indexPath) as? PTMediaLibCell,
+               cell.representedAssetID == cellModel.ident {
                 Task { @MainActor in
                     self.cellSelectedFunction(cellModel: cellModel, cell: cell)
                 }
@@ -520,75 +564,48 @@ private extension PTMediaLibView {
 // MARK: - Helper Methods (UI Update)
 extension PTMediaLibView {
     private func refreshCellIndex() {
-        Task { @MainActor [weak self] in
-            guard let self = self else { return }
-            let visibleIndexPaths = self.collectionView.contentCollectionView.indexPathsForVisibleItems
-            let selectedIndexMap = self.selectionStore.selectedIndexMap()
-            
-            for indexPath in visibleIndexPaths {
-                guard let cell = self.collectionView.contentCollectionView.cellForItem(at: indexPath) as? PTMediaLibCell else { continue }
-                
-                let indexOffset = self.showCameraCell ? (self.activeSelectionOptions.cameraCellAtTop ? 1 : 0) : 0
-                let dataIndex = indexPath.row - indexOffset
-                
-                guard dataIndex >= 0, dataIndex < self.totalModels.count else { continue }
-                
-                let m = self.totalModels[dataIndex]
-                let selectedIdx = selectedIndexMap[m.ident]
-                
-                self.setCellIndex(cell, index: (selectedIdx ?? -1) + 1)
-                self.setCellMaskView(cell, isSelected: selectedIdx != nil, model: m)
-            }
-            self.updateTitleCounter()
+        let visibleIndexPaths = collectionView.contentCollectionView.indexPathsForVisibleItems
+
+        for indexPath in visibleIndexPaths {
+            guard let cell = collectionView.contentCollectionView.cellForItem(at: indexPath) as? PTMediaLibCell,
+                  let assetID = cell.representedAssetID,
+                  let model = cell.cellModel,
+                  model.ident == assetID else { continue }
+            let projection = selectionStore.selectionProjection(for: assetID)
+            renderSelectionState(cell, model: model, selectedOrder: projection.order)
         }
     }
 
-    private func setCellIndex(_ cell: PTMediaLibCell?, index: Int) {
-        cell?.cellSelectedIndex = index
-    }
-
-    private func setCellMaskView(_ cell: PTMediaLibCell, isSelected: Bool, model: PTMediaModel) {
-        let config = PTMediaLibConfig.share
+    private func renderSelectionState(_ cell: PTMediaLibCell,
+                                      model: PTMediaModel,
+                                      selectedOrder: Int?) {
         let uiConfig = PTMediaLibUIConfig.share
-        
-        cell.coverView.isHidden = true
-        cell.enableSelect = true
-        cell.layer.borderWidth = 0
-
-        if isSelected {
-            cell.coverView.backgroundColor = .DevMaskColor
-            cell.coverView.isHidden = false
-            cell.layer.borderColor = uiConfig.selectedBorderColor.cgColor
-            cell.layer.borderWidth = 4
-            
-            // 根据宏定义控制编辑按钮显隐
-            #if POOTOOLS_IMAGEEDITOR
-            if model.type == .image { cell.editButton.isHidden = !activeSelectionOptions.allowEditImage }
-            #endif
-#if POOTOOLS_VIDEOEDITOR
-            if model.type == .video { cell.editButton.isHidden = !activeSelectionOptions.allowEditVideo }
-#endif
-        } else {
-            cell.editButton.isHidden = true
-            handleInvalidMask(cell, model: model, config: config, uiConfig: uiConfig)
-        }
+        let isSelected = selectedOrder != nil
+        model.isSelected = isSelected
+        let canSelect = isSelected || canSelectUnselectedModel(model)
+        var canEdit = false
+        #if POOTOOLS_IMAGEEDITOR
+        if isSelected, model.type == .image { canEdit = activeSelectionOptions.allowEditImage }
+        #endif
+        #if POOTOOLS_VIDEOEDITOR
+        if isSelected, model.type == .video { canEdit = activeSelectionOptions.allowEditVideo }
+        #endif
+        cell.applySelectionPresentation(isSelected: isSelected,
+                                        order: selectedOrder,
+                                        canSelect: canSelect,
+                                        canEdit: canEdit,
+                                        showInvalidMask: !isSelected && !canSelect && uiConfig.showInvalidMask,
+                                        borderColor: uiConfig.selectedBorderColor)
     }
-    
-    private func handleInvalidMask(_ cell: PTMediaLibCell, model: PTMediaModel, config: PTMediaLibConfig, uiConfig: PTMediaLibUIConfig) {
-        let selCount = selectionStore.reservedCount
-        if selCount >= activeSelectionOptions.maxSelectCount {
-            cell.coverView.backgroundColor = .DevMaskColor
-            cell.coverView.isHidden = !uiConfig.showInvalidMask
-            cell.enableSelect = false
-        } else if !activeSelectionOptions.allowMixSelect && selCount > 0 {
-            let hasVideo = (selectedModel + Array(selectionStore.pendingModels.values)).contains { $0.type == .video }
-            let isTypeMismatch = hasVideo ? (model.type != .video) : (model.type == .video)
-            if isTypeMismatch {
-                cell.coverView.backgroundColor = .DevMaskColor
-                cell.coverView.isHidden = !uiConfig.showInvalidMask
-                cell.enableSelect = false
-            }
+
+    private func canSelectUnselectedModel(_ model: PTMediaModel) -> Bool {
+        let options = activeSelectionOptions
+        guard selectionStore.reservedCount < options.maxSelectCount else { return false }
+        guard !options.allowMixSelect, selectionStore.reservedCount > 0 else {
+            return true
         }
+        let selectedHasVideo = (selectedModel + Array(selectionStore.pendingModels.values)).contains { $0.type == .video }
+        return selectedHasVideo == (model.type == .video)
     }
 }
 
@@ -649,7 +666,12 @@ extension PTMediaLibView {
         // English: Refetch PhotoKit first, then render one authoritative snapshot instead of guessing an insert index.
         // Español: Vuelve a consultar PhotoKit primero y renderiza una instantánea única en lugar de adivinar un índice.
         // 中文：先重新获取 PhotoKit 结果，再渲染唯一快照，不再猜测插入下标。
-        pendingSavedAssets[asset.localIdentifier] = asset
+        let identifier = asset.localIdentifier
+        guard !identifier.isEmpty,
+              !completedCaptureAssetIDs.contains(identifier),
+              selectionStore.selectedIndexMap()[identifier] == nil,
+              pendingSavedAssets[identifier] == nil else { return }
+        pendingSavedAssets[identifier] = asset
         PTMediaPickerTrace.event("captureSaved", details: "assetIDPresent=true")
         albumRepository.requestRefresh(reason: .captureSaved)
     }
@@ -743,10 +765,14 @@ extension PTMediaLibView {
                               cell: PTMediaLibCell,
                               isSelected: (@MainActor @Sendable (Bool) -> Void)? = nil) {
         let config = PTMediaLibConfig.share
-        PTMediaPickerTrace.event("selectionOnly", details: "assetIDPresent=true,selected=\(cellModel.isSelected)")
+        guard cell.representedAssetID == cellModel.ident,
+              cell.cellModel?.ident == cellModel.ident else { return }
+        let isCurrentlySelected = selectionStore.isSelected(cellModel)
+        guard !selectionStore.pendingIdentifiers.contains(cellModel.ident) else { return }
+        PTMediaPickerTrace.event("selectionOnly", details: "assetIDPresent=true,selected=\(isCurrentlySelected)")
         
         // --- 情况 A: 准备选中该资源 ---
-        if !cellModel.isSelected {
+        if !isCurrentlySelected {
             // 1. 检查限制：是否达到最大选择数？是否允许混选？
             let currentCount = selectionStore.reservedCount
             guard canAddModel(cellModel,
@@ -766,7 +792,9 @@ extension PTMediaLibView {
             guard let reservation = selectionStore.reserveSelection(for: cellModel) else { return }
 
             let continueSelection: @MainActor @Sendable () -> Void = { [weak self, weak cell] in
-                guard let self, let cell else { return }
+                guard let self, let cell,
+                      cell.representedAssetID == cellModel.ident,
+                      cell.cellModel?.ident == cellModel.ident else { return }
                 self.startDownloadSelection(for: cellModel,
                                             cell: cell,
                                             reservation: reservation,
@@ -851,7 +879,6 @@ extension PTMediaLibView {
                 cellModel.isSelected = true
                 guard self.selectionStore.completeSelection(for: cellModel, reservation: reservation) else { return }
                 isSelected?(true)
-                cell.selectButton.isSelected = true
                 cell.layer.removeAllAnimations()
                 config.didSelectAsset?(cellModel.asset)
                 self.refreshCellIndex()
@@ -884,7 +911,6 @@ extension PTMediaLibView {
         Task { @MainActor [weak self] in
             guard let self = self else { return }
             
-            cell.selectButton.isSelected = false
             cell.layer.removeAllAnimations()
             // 取消获取大图的任务，节省内存
             cell.cancelFetchBigImage()
@@ -978,7 +1004,11 @@ extension PTMediaLibView {
     
     /// 使用新产生的 Asset 替换/更新已选中的模型
     private func updateSelectedModelWithNewAsset(_ asset: PHAsset, replacing originalAsset: PHAsset) {
-        pendingReplacementAssets[asset.localIdentifier] = (asset, originalAsset.localIdentifier)
+        let identifier = asset.localIdentifier
+        guard !identifier.isEmpty,
+              selectionStore.selectedIndexMap()[identifier] == nil,
+              pendingReplacementAssets[identifier] == nil else { return }
+        pendingReplacementAssets[identifier] = (asset, originalAsset.localIdentifier)
         PTMediaPickerTrace.event("editSaved", details: "assetIDPresent=true")
         albumRepository.requestRefresh(reason: .editSaved)
     }

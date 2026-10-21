@@ -21,6 +21,7 @@
 - 拍照图片编码和录像临时文件复制移出 UIKit 关键路径，保留 JPEG/PNG 透明度与方向处理、视频临时文件所有权和取消失败清理；新增 `OSLog` 阶段追踪，日志不包含媒体内容或文件名。
 - 首次打开相册改为首批有界建模并按批次渐进追加；Session generation 会取消过期批次，关闭或切换相册后不再回写旧页面。
 - PhotoKit 刷新先比较首尾边界；同边界的可疑变更才执行一次完整快照 fallback，确认无变化时不重建模型、不提交 Grid；模型指纹已检查的结果会正确更新已建模标记。
+- 完成最新审计 H01-H04：选择 Store 通过资源 ID 向 Cell 做单向原子投影，未选项不再显示 `0`；相册刷新保留已展示的完整模型并生成带 generation 的变更事务；Snapshot/Cell 提交会丢弃过期回调；拍照自动选中按资源 ID 与 reservation exactly-once 收敛。新增选择投影回归测试。
 - 多资源新增、删除和重排通过 `PTCollectionView.replaceRows` 保持 Section 身份与滚动锚点；视频限制使用公开可取消的 `PHAssetResourceManager` 异步统计，未知大小不会直接放行。
 - `UIImage(ciImage:)` 保存增加 Core Image 物化 fallback；异步视频复制在失败、取消和 provider 副本失效时清理框架自有半成品，绝不删除 provider 源文件。
 - 本轮完成源码解析及 PooTools CocoaPods 工作区 Debug/Release 构建门禁；真机连续拍摄、Hangs/Time Profiler、Instruments 和 10,000 资源量级仍需宿主使用真实设备验收，不能以模拟器构建替代性能结论。

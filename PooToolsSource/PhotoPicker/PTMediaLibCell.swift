@@ -45,11 +45,17 @@ class PTMediaLibCell: PTBaseNormalCell {
     // Español: Vincula la acción de edición una sola vez; la configuración solo reemplaza este cierre.
     // 中文：编辑按钮只绑定一次，Cell 配置阶段只替换闭包。
     var editAction: ((UIButton) -> Void)?
+
+    // English: Keep the asset identity visible to the owner so reused cells never apply a stale selection state.
+    // Español: Mantiene visible la identidad del recurso para que las celdas reutilizadas no apliquen un estado obsoleto.
+    // 中文：让拥有者可以读取资源身份，避免复用 Cell 应用过期的选择状态。
+    private(set) var representedAssetID: String?
     
     var cellSelectedIndex = 0 {
         didSet {
-            selectButton.normalTitle = "\(cellSelectedIndex)"
-            selectButton.selectedTitle = "\(cellSelectedIndex)"
+            let title = cellSelectedIndex > 0 ? "\(cellSelectedIndex)" : ""
+            selectButton.normalTitle = title
+            selectButton.selectedTitle = title
         }
     }
     
@@ -71,6 +77,7 @@ class PTMediaLibCell: PTBaseNormalCell {
         cancelImageRequests()
         
         imageIdentifier = ""
+        representedAssetID = nil
         lastSmallRequestSize = .zero
         imageView.image = nil
         imageView.alpha = 1
@@ -78,11 +85,16 @@ class PTMediaLibCell: PTBaseNormalCell {
         videoTimeLabel.isHidden = true
         mediaTypeImageView.image = nil
         selectButton.isSelected = false
-        selectButton.normalTitle = ""
+        cellSelectedIndex = 0
+        selectButton.isUserInteractionEnabled = false
         coverView.isHidden = true
         editButton.isHidden = true
         editButton.clearProgressLayer()
         editAction = nil
+        selectedBlock = nil
+        selectionOptions = nil
+        cellModel = nil
+        enableSelect = true
         layer.borderWidth = 0
     }
 
@@ -90,6 +102,7 @@ class PTMediaLibCell: PTBaseNormalCell {
         guard let cellModel else { return }
         let options = self.selectionOptions ?? .current()
         imageIdentifier = cellModel.ident
+        representedAssetID = cellModel.ident
         
         // English: Selection only updates the overlay; original data is requested by an explicit submission path.
         // Español: La selección solo actualiza la máscara; los datos originales se solicitan en la ruta explícita de envío.
@@ -111,10 +124,36 @@ class PTMediaLibCell: PTBaseNormalCell {
         
         selectButton.isHidden = !canShowBtn
         selectButton.isUserInteractionEnabled = canShowBtn
-        selectButton.isSelected = cellModel.isSelected
         
         // 4. 媒体类型 UI 适配
         configureMediaType()
+    }
+
+    // English: Render every selection-dependent property from one immutable projection.
+    // Español: Renderiza todas las propiedades dependientes de la selección desde una sola proyección inmutable.
+    // 中文：所有依赖选择状态的属性都由同一个不可变投影一次性渲染。
+    func applySelectionPresentation(isSelected: Bool,
+                                    order: Int?,
+                                    canSelect: Bool,
+                                    canEdit: Bool,
+                                    showInvalidMask: Bool,
+                                    borderColor: UIColor) {
+        let canInteract = isSelected || canSelect
+        selectButton.isSelected = isSelected
+        selectButton.isUserInteractionEnabled = canInteract
+        cellSelectedIndex = order ?? 0
+        enableSelect = canInteract
+        editButton.isHidden = !canEdit
+        layer.borderColor = borderColor.cgColor
+        layer.borderWidth = isSelected ? 4 : 0
+
+        if isSelected {
+            coverView.backgroundColor = .DevMaskColor
+            coverView.isHidden = false
+        } else {
+            coverView.backgroundColor = .DevMaskColor
+            coverView.isHidden = !showInvalidMask
+        }
     }
     
     private func configureMediaType() {
@@ -288,7 +327,6 @@ class PTMediaLibCell: PTBaseNormalCell {
         view.addActionHandlers { [weak self] sender in
             guard let self = self, self.enableSelect else { return }
             self.selectedBlock? { isSelected in
-                sender.isSelected = isSelected
                 if !isSelected { self.cancelFetchBigImage() }
             }
         }

@@ -145,7 +145,9 @@ final class PTMediaAlbumRepository: NSObject {
         let generation = cameraRollGeneration
         progressiveTask?.cancel()
         observedAlbum = album
-        let didChange = album.loadInitialBatch()
+        let didChange = album.models.isEmpty
+            ? album.loadInitialBatch()
+            : album.refetchPhotosIfChanged()
         startProgressiveLoading(album, generation: generation)
         return didChange
     }
@@ -240,13 +242,24 @@ final class PTMediaAlbumRepository: NSObject {
                 $0 == PTMediaAlbumRefreshReason.screenshot.rawValue ||
                 $0 == PTMediaAlbumRefreshReason.editSaved.rawValue
             }
-            let resultChanged = album.refreshResult(knownChanged: knownChange)
-            let modelsChanged = resultChanged && album.loadInitialBatch()
-            didChange = resultChanged || modelsChanged
-            if didChange {
+            let transaction = album.refreshResultTransaction(knownChanged: knownChange,
+                                                             generation: refreshGeneration)
+            if let transaction {
+                // English: Existing rows are rebuilt atomically; only an empty album uses the bounded initial batch.
+                // Español: Las filas existentes se reconstruyen atómicamente; solo un álbum vacío usa el lote inicial acotado.
+                // 中文：已有 Row 通过原子方式重建，只有空相册才使用有界首批加载。
+                if album.models.isEmpty {
+                    _ = album.loadInitialBatch()
+                } else {
+                    _ = album.refetchPhotosIfChanged()
+                }
+                didChange = true
+                trace("photoKitDelta", details: "old=\(transaction.oldCount),new=\(transaction.newCount),inserted=\(transaction.insertedIDs.count),removed=\(transaction.removedIDs.count),moved=\(transaction.movedIDs.count),changed=\(transaction.changedIDs.count),generation=\(transaction.generation)")
                 onCameraRollChange?(album)
                 cameraRollGeneration &+= 1
-                startProgressiveLoading(album, generation: cameraRollGeneration)
+                if !album.isFullyModeled {
+                    startProgressiveLoading(album, generation: cameraRollGeneration)
+                }
             }
         } else {
             cameraRoll { [weak self] album in

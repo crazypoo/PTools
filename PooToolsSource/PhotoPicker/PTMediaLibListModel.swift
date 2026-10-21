@@ -14,6 +14,22 @@ import ptools
 import PooToolsImagePicker
 #endif
 
+// English: Keep one PhotoKit change fact on MainActor before any UI snapshot is published.
+// Español: Mantiene un único hecho de cambio de PhotoKit en MainActor antes de publicar un snapshot de UI.
+// 中文：在发布 UI 快照前，先在 MainActor 保存一份唯一的 PhotoKit 变化事实。
+struct PTMediaAlbumChangeTransaction: Sendable {
+    let albumIdentifier: String
+    let generation: UInt64
+    let oldRevision: UInt64
+    let newRevision: UInt64
+    let oldCount: Int
+    let newCount: Int
+    let insertedIDs: [String]
+    let removedIDs: [String]
+    let changedIDs: [String]
+    let movedIDs: [String]
+}
+
 @MainActor
 public class PTMediaLibListModel: NSObject {
     public let title: String
@@ -130,10 +146,20 @@ public class PTMediaLibListModel: NSObject {
     @MainActor
     @discardableResult
     func refreshResult(knownChanged: Bool = false) -> Bool {
+        refreshResultTransaction(knownChanged: knownChanged, generation: resultChangeGeneration &+ 1) != nil
+    }
+
+    // English: Refetch PhotoKit once and return an immutable delta without exposing PHChange to async work.
+    // Español: Vuelve a consultar PhotoKit una vez y devuelve un delta inmutable sin exponer PHChange a trabajo asíncrono.
+    // 中文：只重新读取一次 PhotoKit，并返回不可变变化结果，不把 PHChange 传入异步任务。
+    @MainActor
+    @discardableResult
+    func refreshResultTransaction(knownChanged: Bool = false,
+                                  generation: UInt64) -> PTMediaAlbumChangeTransaction? {
         let nextResult = PHAsset.fetchAssets(in: collection, options: option)
         let nextSignature = Self.boundarySignature(for: nextResult)
         let previousBoundary = Self.boundarySignature(for: result)
-        guard knownChanged || nextSignature != previousBoundary else { return false }
+        guard knownChanged || nextSignature != previousBoundary else { return nil }
         if knownChanged, nextSignature == previousBoundary {
             // English: A middle-asset change keeps both boundaries stable, so pay the full-scan cost only for this ambiguous notification.
             // Español: Un cambio en un recurso intermedio mantiene estables ambos límites; el escaneo completo solo se paga en esta notificación ambigua.
@@ -142,9 +168,24 @@ public class PTMediaLibListModel: NSObject {
             let currentSignature = Self.signature(for: nextResult)
             guard previousSignature != currentSignature else {
                 PTMediaPickerTrace.event("refresh", details: "changed=false,reason=photoKitSameSnapshot,count=\(nextResult.count)")
-                return false
+                return nil
             }
         }
+
+        let oldRevision = contentRevision
+        let oldIDs = Self.assetIdentifiers(for: result)
+        let newIDs = Self.assetIdentifiers(for: nextResult)
+        let oldIDSet = Set(oldIDs)
+        let newIDSet = Set(newIDs)
+        let oldRevisionMap = Dictionary(uniqueKeysWithValues: (0..<result.count).map {
+            let asset = result.object(at: $0)
+            return (asset.localIdentifier, PTMediaModel.sourceRevisionKey(for: asset))
+        })
+        let newRevisionMap = Dictionary(uniqueKeysWithValues: (0..<nextResult.count).map {
+            let asset = nextResult.object(at: $0)
+            return (asset.localIdentifier, PTMediaModel.sourceRevisionKey(for: asset))
+        })
+
         result = nextResult
         if knownChanged {
             resultChangeGeneration &+= 1
@@ -154,7 +195,34 @@ public class PTMediaLibListModel: NSObject {
         }
         nextResultOffset = 0
         modeledResultSignature = nil
-        return true
+
+        let oldIndexMap = Dictionary(uniqueKeysWithValues: oldIDs.enumerated().map { ($0.element, $0.offset) })
+        var movedIDs: [String] = []
+        movedIDs.reserveCapacity(newIDs.count)
+        for (index, identifier) in newIDs.enumerated() {
+            guard let oldIndex = oldIndexMap[identifier], oldIndex != index else { continue }
+            movedIDs.append(identifier)
+        }
+        let transaction = PTMediaAlbumChangeTransaction(
+            albumIdentifier: collection.localIdentifier,
+            generation: generation,
+            oldRevision: oldRevision,
+            newRevision: oldRevision &+ 1,
+            oldCount: oldIDs.count,
+            newCount: newIDs.count,
+            insertedIDs: newIDs.filter { !oldIDSet.contains($0) },
+            removedIDs: oldIDs.filter { !newIDSet.contains($0) },
+            changedIDs: newIDs.filter {
+                guard let oldValue = oldRevisionMap[$0], let newValue = newRevisionMap[$0] else { return false }
+                return oldValue != newValue
+            },
+            movedIDs: Array(Set(movedIDs))
+        )
+        return transaction
+    }
+
+    private static func assetIdentifiers(for result: PHFetchResult<PHAsset>) -> [String] {
+        (0..<result.count).map { result.object(at: $0).localIdentifier }
     }
 
     // English: Model only the first visible-sized slice and let the repository append later slices.
