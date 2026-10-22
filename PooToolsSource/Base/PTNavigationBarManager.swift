@@ -749,6 +749,82 @@ public final class PTNavigationBarManager:NSObject {
         }
         return max(0, frame.maxY)
     }
+    
+    
+    // MARK: - Navigation Controller Resolution
+    /// 从指定 UIWindow 查找当前可见的导航控制器。
+    /// 优先解析实际的 ViewController 层级，
+    /// 避免 Scene 导航栈尚未完成登记时直接失败。
+    func navigationControllerForTotalHeight(in window: UIWindow) -> UINavigationController? {
+
+        // 1. 优先解析实际可见的控制器层级
+        if let nav = Self.visibleNavigationController(
+            from: window.rootViewController
+        ), nav.viewIfLoaded?.window === window {
+            return nav
+        }
+
+        // 2. 兼容 PTNavigationBarManager 已登记的 Scene
+        if let scene = window.windowScene,
+           let nav = currentNavigationController(in: scene),
+           nav.viewIfLoaded?.window === window {
+            return nav
+        }
+
+        return nil
+    }
+
+    /// 查找当前可见 UINavigationController
+    private static func visibleNavigationController(from root: UIViewController?) -> UINavigationController? {
+
+        var current = root
+        var visited = Set<ObjectIdentifier>()
+
+        while let controller = current {
+
+            guard visited.insert(
+                ObjectIdentifier(controller)
+            ).inserted else {
+                return nil
+            }
+
+            // 优先处理模态展示
+            if let presented = controller.presentedViewController,
+               !presented.isBeingDismissed {
+                current = presented
+                continue
+            }
+
+            // UITabBarController
+            if let tab = controller as? UITabBarController {
+                current = tab.selectedViewController
+                continue
+            }
+
+            // UISplitViewController
+            if let split = controller as? UISplitViewController {
+                current = split.viewControllers.last
+                continue
+            }
+
+            // UINavigationController
+            if let nav = controller as? UINavigationController {
+
+                // 导航页面内部可能继续 present
+                if let presented = nav.visibleViewController?.presentedViewController, !presented.isBeingDismissed {
+                    current = presented
+                    continue
+                }
+
+                return nav
+            }
+
+            return controller.navigationController
+        }
+
+        return nil
+    }
+
 }
 
 extension PTNavigationBarManager {

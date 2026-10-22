@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 
 extension CGFloat: PTProtocolCompatible {}
 //MARK: 溫度單位
@@ -50,56 +51,117 @@ public extension CGFloat {
     //MARK: Picker height
     static let kPickerHeight: CGFloat = 216
     
+    
+    // MARK: - Status Bar Resolution
+    /// 验证 UIKit 返回的高度是否有效
+    @MainActor
+    private static func ptValidHeight(_ value: CGFloat?) -> CGFloat? {
+
+        guard let value, value.isFinite, value > 0 else {
+            return nil
+        }
+
+        return value
+    }
+
+    /// 优先从当前 UIWindow / UIWindowScene 获取状态栏高度
+    @MainActor
+    private static func ptResolvedStatusBarHeight(in window: UIWindow?) -> CGFloat? {
+
+        // 1. 当前 Window 所属 Scene
+        if let height = ptValidHeight(window?.windowScene?.statusBarManager?.statusBarFrame.height) {
+            return height
+        }
+
+        // 2. 当前 Window 安全区域
+        if let height = ptValidHeight(window?.safeAreaInsets.top) {
+            return height
+        }
+
+        // 3. 如果只有一个前台 Scene，尝试直接读取
+        // 不在多个 Scene 中随意猜测
+        let scenes = PTSceneContext.connectedWindowScenes().filter {
+                $0.activationState == .foregroundActive ||
+                $0.activationState == .foregroundInactive
+            }
+
+        guard scenes.count == 1, let scene = scenes.first else {
+            return nil
+        }
+
+        return ptValidHeight(
+            scene.statusBarManager?.statusBarFrame.height
+        )
+    }
+
     //MARK: 獲取StatusBar的高度
     ///獲取StatusBar的高度
     /// - Returns: CGFloat
     @MainActor static func statusBarHeight() -> CGFloat {
-        let statusBarFrame = AppWindows?.windowScene?.statusBarManager?.statusBarFrame
-        return statusBarFrame?.height ?? (deviceInfo.isFaceIDCapable ? 44 : 20)
+        if let height = ptResolvedStatusBarHeight(in: PTSceneContext.activeWindow()) {
+            return height
+        }
+
+        // 最终兼容估算值，不代表设备真实状态栏高度
+        return deviceInfo.isFaceIDCapable ? 44 : 20
+
     }
     
-    // English: Preserve the old call site while preferring the active scene's measured navigation-bar bottom.
-    // Español: Conserva el antiguo punto de llamada y prioriza el borde inferior medido de la barra en la escena activa.
-    // 中文：保留旧调用方式，同时优先使用活动场景中实测的导航栏底部位置。
-    //MARK: 獲取導航欄總高度
-    ///獲取導航欄總高度
-    @MainActor static var kNavBarHeight_Total: CGFloat {
 
+    // MARK: - Navigation Bar Total Height
+
+    /// 获取导航栏总高度。
+    ///
+    /// 优先返回 UIWindow 坐标系中的真实导航栏底部。
+    /// 尚未完成布局时返回兼容估算值。
+    ///
+    /// 注意：
+    /// 这是兼容 API，不应作为不可更新的初始化布局常量。
+    @MainActor
+    static var kNavBarHeight_Total: CGFloat {
+
+        let manager = PTNavigationBarManager.shared
         let window = PTSceneContext.activeWindow()
 
-        let sceneStatusHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height
+        // 第一阶段：读取当前实际状态栏高度
+        let statusHeight = ptResolvedStatusBarHeight(in: window) ?? statusBarHeight()
 
-        let statusHeight: CGFloat
+        // 第二阶段：尝试获取当前真实导航栏
+        if let window {
+            let nav = manager.navigationControllerForTotalHeight(in: window)
+            if let nav {
+                // iPhone Duo 等系统垂直导航栏模式
+                // 不应将侧边栏底部作为顶部偏移
+                if manager.isSystemVerticalBarOwned(by: nav) {
+                    return Swift.max(0, window.safeAreaInsets.top)
+                }
 
-        if let sceneStatusHeight,
-           sceneStatusHeight > 0,
-           sceneStatusHeight.isFinite {
-            statusHeight = sceneStatusHeight
-        } else if let safeTop = window?.safeAreaInsets.top,
-                  safeTop > 0 {
-            statusHeight = safeTop
-        } else {
-            statusHeight = CGFloat.statusBarHeight()
+                // 导航栏隐藏时只保留状态栏区域
+                if nav.isNavigationBarHidden || nav.navigationBar.isHidden {
+                    return Swift.max(0, statusHeight)
+                }
+
+                // 优先返回真实导航栏底部
+                if let geometry = manager.navigationGeometry(
+                    in: nav
+                ) {
+                    return geometry.navigationBottomInWindow
+                }
+
+                // 第三阶段：
+                // 有当前导航栈，但导航栏暂时无法完成真实测量
+                // 使用状态栏高度 + 当前导航栏已有 bounds 高度估算
+                if nav.viewIfLoaded?.window === window,
+                   let barHeight = ptValidHeight(nav.navigationBar.bounds.height) {
+                    return statusHeight + barHeight
+                }
+            }
         }
 
-        // 先尝试当前真实导航栏
-        if let window,
-           let scene = window.windowScene,
-           let nav = PTNavigationBarManager.shared
-                .currentNavigationController(in: scene),
-           nav.viewIfLoaded?.window === window,
-           let geometry = PTNavigationBarManager.shared
-                .navigationGeometry(in: nav) {
+        // 第四阶段：兼容历史估算
+        let legacyHeight = ptValidHeight(CGFloat.kNavBarHeight) ?? 44
 
-            return geometry.navigationBottomInWindow
-        }
-
-        // 仅用于旧接口兼容，不代表真实布局
-        let legacyHeight = CGFloat.kNavBarHeight
-
-        let estimatedHeight: CGFloat = legacyHeight.isFinite && legacyHeight > 0 ? legacyHeight : 44
-
-        return statusHeight + estimatedHeight
+        return statusHeight + legacyHeight
     }
 
     //MARK: Tabbar安全高度
