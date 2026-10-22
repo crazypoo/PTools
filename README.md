@@ -15,6 +15,8 @@ PTools 支持中文、粤语、英文和西班牙语资源。当前开发代码�
 
 `5.69.0` 重构了 PhotoPicker 的内部职责：页面协调由 `PTMediaLibViewController` 负责，实例配置和生命周期由 `PTMediaPickerSession` 负责，选择状态由 `PTMediaSelectionStore` 统一维护，相册变更由 PhotoKit 仓库处理，提交由可取消的 `PTMediaSubmissionCoordinator` 处理。旧的 `PTMediaLibConfig.share`、`PTMediaLibManager`、`PTMediaModel`、`PTResultModel` 和历史回调继续可用，迁移建议见 [PhotoPicker 5.69.0 迁移指南](docs/guides/PTPHOTOPICKER_569_MIGRATION_GUIDE.md)。
 
+`5.69.0` 同时修复 `PTNavigationBarManager` 在真实 `UINavigationBar` 中的内容行对齐：左侧按钮、标题和右侧按钮共享宿主局部几何，保留旧导航高度 API 的兼容语义。需要实时内容行高度时使用 `currentNavigationContentHeight(in:)`，需要页面顶到实时导航栏下方时使用 `currentNavigationTopInset(in:navigationController:)`，详情见 [导航栏内容行对齐指南](docs/guides/PTNAVIGATION_BAR_MANAGER_ALIGNMENT_569.md)。
+
 `5.68.0` 将 `PTBannerView` 的滚动实现统一到 `PTCollectionView`：保留 viewport 分页和无限循环，自动轮播在用户拖动及减速期间暂停、滚动完成后恢复，并默认隐藏 Banner 内部滚动条。迁移与配置示例见 [PTCollectionView 滚动样式指南](docs/guides/PTCOLLECTIONVIEW_SCROLL_STYLE_GUIDE.md) 和 [PTBannerView 迁移指南](docs/guides/PTBANNER_PTCOLLECTIONVIEW_MIGRATION_GUIDE.md)。
 
 `PTCodeView` 同时支持本地生成和宿主提供的文本/图片验证码：使用 `setCode(_:)`、`setCodeImage(_:)` 和 `onRefreshRequested` 接入外部数据，不在控件内部联网；SwiftPM 使用 `PooToolsCodeView`，CocoaPods 使用 `PooTools/CodeView`。

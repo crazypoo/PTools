@@ -39,6 +39,9 @@ public extension CGFloat {
         return width
     }
 
+    // English: Legacy estimate kept for source compatibility; live navigation bars must be measured from their host.
+    // Español: Estimación heredada conservada por compatibilidad; las barras reales deben medirse desde su host.
+    // 中文：保留旧估算值以兼容现有代码；实时导航栏必须从所属宿主测量。
     //MARK: 獲取導航欄Bar高度
     ///獲取導航欄Bar高度
     @MainActor static let kNavBarHeight: CGFloat = UINavigationController().navigationBar.frame.height
@@ -55,9 +58,32 @@ public extension CGFloat {
         return statusBarFrame?.height ?? (deviceInfo.isFaceIDCapable ? 44 : 20)
     }
     
+    // English: Preserve the old call site while preferring the active scene's measured navigation-bar bottom.
+    // Español: Conserva el antiguo punto de llamada y prioriza el borde inferior medido de la barra en la escena activa.
+    // 中文：保留旧调用方式，同时优先使用活动场景中实测的导航栏底部位置。
     //MARK: 獲取導航欄總高度
     ///獲取導航欄總高度
-    @MainActor static let kNavBarHeight_Total: CGFloat = CGFloat.kNavBarHeight + CGFloat.statusBarHeight()
+    @MainActor static var kNavBarHeight_Total: CGFloat {
+        let legacyValue = CGFloat.kNavBarHeight + CGFloat.statusBarHeight()
+        guard let window = PTSceneContext.activeWindow(),
+              let scene = window.windowScene,
+              let navigationController = PTNavigationBarManager.shared.currentNavigationController(in: scene),
+              navigationController.navigationBar.window === window else {
+            return legacyValue
+        }
+
+        navigationController.navigationBar.layoutIfNeeded()
+        let liveValue = PTNavigationBarManager.shared.currentNavigationTopInset(
+            in: window,
+            navigationController: navigationController
+        )
+        guard liveValue.isFinite,
+              liveValue > 0,
+              liveValue <= window.bounds.height else {
+            return legacyValue
+        }
+        return liveValue
+    }
 
     //MARK: Tabbar安全高度
     ///Tabbar安全高度

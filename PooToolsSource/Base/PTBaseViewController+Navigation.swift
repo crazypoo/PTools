@@ -38,6 +38,12 @@ open class PTNavigationBarContainer: UIView {
     private var largeTitleBackgroundHeight: CGFloat = 0
     private var renderedProgress: CGFloat = 1
 
+    // English: Store the last host-local row so repeated layout passes remain idempotent.
+    // Español: Guarda la última fila local del host para que las pasadas repetidas sean idempotentes.
+    // 中文：保存最近一次宿主局部内容行，让重复布局保持幂等。
+    private(set) var lastAppliedContentRect: CGRect = .null
+    private(set) var lastContentRowInput: PTNavigationContentRowInput?
+
     let backgroundView = UIView()
     let contentView = UIView()
         
@@ -90,13 +96,11 @@ open class PTNavigationBarContainer: UIView {
         largeTitleContainer.backgroundColor = .clear
         topBarContainer.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            if let findCurrent = PTUtils.getCurrentVC(), let sheet = findCurrent.sheetViewController {
-                let offset = sheet.options.useFullScreenMode ? 0 : sheet.options.pullBarHeight
-                make.top.equalToSuperview().offset(-offset)
-            } else {
-                make.top.equalToSuperview()
-            }
-            make.height.equalTo(CGFloat.kNavBarHeight)
+            // English: Use only a temporary non-negative seed until the real host row is measured.
+            // Español: Usa solo una semilla temporal no negativa hasta medir la fila real del host.
+            // 中文：在获取宿主真实内容行前，仅使用非负的临时种子高度。
+            make.top.equalToSuperview()
+            make.height.equalTo(max(0, frame.height))
         }
 
         titleContainer.snp.makeConstraints { make in
@@ -143,6 +147,20 @@ open class PTNavigationBarContainer: UIView {
         setNeedsLayout()
     }
 
+    // English: Expose only the measured large-title height needed by the host-row adapter.
+    // Español: Expone solo la altura medida del título grande que necesita el adaptador de la fila.
+    // 中文：只提供宿主内容行适配器需要的大标题实测高度。
+    var largeTitleContentHeightForLayout: CGFloat {
+        max(largeTitleBackgroundHeight, largeTitleContainer.bounds.height)
+    }
+
+    // English: Treat a visible positive large-title area as expanded; a collapsed title uses the compact row.
+    // Español: Considera expandido un título visible con altura positiva; el título colapsado usa la fila compacta.
+    // 中文：大标题可见且高度大于零时视为展开，否则使用紧凑内容行。
+    var isLargeTitleExpandedForLayout: Bool {
+        !largeTitleContainer.isHidden && largeTitleContentHeightForLayout > 0.5
+    }
+
     // English: Expose only local host geometry to PTNavBar; never infer layout from a global status-bar constant.
     // Español: Expone solo la geometría local al PTNavBar; nunca infiere el layout desde una constante global.
     // 中文：只向 PTNavBar 提供当前宿主几何，不再使用全局状态栏常量推算布局。
@@ -176,15 +194,96 @@ open class PTNavigationBarContainer: UIView {
 }
 
 extension PTNavigationBarContainer {
+    // English: Keep the overlay and its frame-based backing views aligned with the UIKit host bounds.
+    // Español: Mantiene el overlay y sus vistas de respaldo basadas en frame alineados con el host de UIKit.
+    // 中文：让覆盖层及其基于 frame 的背景视图与 UIKit 宿主 bounds 保持一致。
+    @discardableResult
+    func syncHostBounds(_ hostBounds: CGRect) -> Bool {
+        guard hostBounds.width >= 0,
+              hostBounds.height >= 0,
+              hostBounds.width.isFinite,
+              hostBounds.height.isFinite else { return false }
+        let changed = frame != hostBounds
+        if changed {
+            frame = hostBounds
+        }
+        let localBounds = bounds
+        if contentView.frame != localBounds {
+            contentView.frame = localBounds
+        }
+        if backgroundView.frame != localBounds {
+            backgroundView.frame = localBounds
+        }
+        return changed
+    }
+
+    // English: Apply the measured host-local row only when its geometry or input signature changes.
+    // Español: Aplica la fila local medida solo cuando cambia su geometría o su firma de entrada.
+    // 中文：仅当内容行几何或输入签名变化时，才更新宿主局部内容行约束。
+    @discardableResult
+    func applyNavigationContentRow(_ rect: CGRect,
+                                   input: PTNavigationContentRowInput? = nil) -> Bool {
+        let hostBounds = contentView.bounds
+        let clippedRect = rect.intersection(hostBounds)
+        guard !clippedRect.isNull,
+              !clippedRect.isEmpty,
+              clippedRect.origin.x.isFinite,
+              clippedRect.origin.y.isFinite,
+              clippedRect.width.isFinite,
+              clippedRect.height.isFinite else {
+            return false
+        }
+
+        let geometryChanged = lastAppliedContentRect != clippedRect
+        let signatureChanged = lastContentRowInput != input
+        guard geometryChanged || signatureChanged else { return false }
+
+        lastAppliedContentRect = clippedRect
+        lastContentRowInput = input
+
+        if geometryChanged {
+            topBarContainer.snp.remakeConstraints { make in
+                make.left.equalToSuperview().offset(clippedRect.minX)
+                make.top.equalToSuperview().offset(clippedRect.minY)
+                make.width.equalTo(clippedRect.width)
+                make.height.equalTo(clippedRect.height)
+            }
+            setNeedsLayout()
+        }
+        return true
+    }
+
     // English: Resolve the usable title region from the navigation host's local bounds and safe regions.
     // Español: Resuelve la región utilizable del título desde los bounds y regiones seguras locales del host.
     // 中文：根据导航宿主的局部 bounds 和安全区域解析标题可用范围。
     func navigationTitleVisibleRect() -> CGRect {
         guard !topBarContainer.bounds.isEmpty else { return .zero }
+        let rowBounds = topBarContainer.bounds
         let context = PTAdaptiveBarLayoutContext.make(for: topBarContainer)
-        let region = PTAdaptiveVisibleRegionResolver.region(for: context)
-        let visible = region.visibleRect.intersection(topBarContainer.bounds)
-        return visible.isEmpty ? topBarContainer.bounds : visible
+
+        // English: Consume only horizontal safe-area data; the row already owns its vertical geometry.
+        // Español: Consume solo el área segura horizontal; la fila ya posee su geometría vertical.
+        // 中文：只消费水平方向安全区，垂直几何已经由内容行统一管理。
+        let horizontalContext = PTAdaptiveBarLayoutContext(
+            bounds: rowBounds,
+            safeAreaInsets: UIEdgeInsets(top: 0,
+                                         left: max(0, context.safeAreaInsets.left),
+                                         bottom: 0,
+                                         right: max(0, context.safeAreaInsets.right)),
+            verticalBarEdge: context.verticalBarEdge,
+            reservedRegions: context.reservedRegions.filter { $0.frame.height > $0.frame.width },
+            layoutDirection: context.layoutDirection,
+            isHorizontalRegular: context.isHorizontalRegular,
+            isVerticalRegular: context.isVerticalRegular
+        )
+        let region = PTAdaptiveVisibleRegionResolver.region(for: horizontalContext)
+        var visible = region.visibleRect.intersection(rowBounds)
+        if visible.isEmpty {
+            visible = rowBounds
+        }
+        visible.origin.y = rowBounds.minY
+        visible.size.height = rowBounds.height
+        return visible
     }
 
     // English: Share one measurement input between the system-container and standalone-bar adapters.

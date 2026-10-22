@@ -9,6 +9,11 @@
 
 ## 5.69.0 — 2026-10-21
 
+- 修复 `PTNavigationBarManager` 将自定义导航容器嵌入真实 `UINavigationBar` 时的垂直对齐问题：新增 host-local 内容行解析器，让左侧按钮、标题和右侧按钮共享同一条几何真值；不再依赖全局 `kNavBarHeight` 或 `PTUtils.getCurrentVC()` 推断 Sheet 偏移。
+- 内容行刷新接入导航栏安装、样式、Push/Pop、Large Title 和 `PTBaseNavControl` 布局生命周期；按几何签名幂等更新，保持背景层的状态栏延伸与内容行布局分离，避免重复约束和布局反馈循环。
+- 保留 `currentNavBarHeight()`、`kNavBarHeight` 和 `kNavBarHeight_Total` 的兼容调用方式；`kNavBarHeight_Total` 会优先读取活动场景的实时导航栏底部并在无法解析时回退旧公式，另新增 `currentNavigationContentHeight(in:)` 获取已绑定导航栈的实时内容行高度；新增 DEBUG 环境变量 `PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1` 用于现场 frame/midY 诊断。
+- 新增 `currentNavigationTopInset(in:navigationController:)`，按目标 View 和当前导航栈实时换算导航栏底部；避免新系统页面继续使用 `kNavBarHeight_Total` 的全局估算值造成二次偏移。
+- 新增导航内容行纯值解析和运行时回归覆盖；UIKit 导航栏能力继续限定在 iOS/iPadOS，CoreGraphics 解析器保持可移植边界。详见 [导航栏内容行对齐指南](docs/guides/PTNAVIGATION_BAR_MANAGER_ALIGNMENT_569.md)。
 - 重构 PhotoPicker 的职责边界：`PTMediaLibView`、实例级 `PTMediaPickerSession`、唯一选择状态 `PTMediaSelectionStore`、PhotoKit 相册仓库和提交协调器分别负责展示、状态、相册变更与媒体提交。
 - 统一图片/视频选择规则，补齐图片与视频双向混选校验、异步下载期间的 pending 预留、重复点击幂等和编辑后资产替换的选中顺序保持。
 - 用结构化并发替代旧的 `PTFetchImageOperation` 提交链路，真正取消 PhotoKit 请求，限制并发数量，并保证提交结果按原选中顺序、完成回调只触发一次。

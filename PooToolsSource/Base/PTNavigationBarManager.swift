@@ -326,6 +326,123 @@ public final class PTNavigationBarManager:NSObject {
         container?.isHidden = !visible
         container?.isUserInteractionEnabled = visible
     }
+
+    // English: Resolve the real UINavigationBar row in local coordinates before updating any child constraints.
+    // Español: Resuelve la fila real de UINavigationBar en coordenadas locales antes de actualizar restricciones hijas.
+    // 中文：先在 UINavigationBar 局部坐标中解析真实内容行，再更新子视图约束。
+    private func refreshNavigationContentRow(in nav: UINavigationController,
+                                             container: PTNavigationBarContainer) {
+        let navBar = nav.navigationBar
+        let hostFrame = navBar.bounds
+        let hostBounds = CGRect(origin: .zero, size: hostFrame.size)
+        guard hostBounds.width > 0,
+              hostBounds.height > 0,
+              hostBounds.width.isFinite,
+              hostBounds.height.isFinite else {
+            navBar.setNeedsLayout()
+            return
+        }
+        container.syncHostBounds(hostFrame)
+
+        let safeInsets = UIEdgeInsets(top: max(0, navBar.safeAreaInsets.top),
+                                      left: max(0, navBar.safeAreaInsets.left),
+                                      bottom: max(0, navBar.safeAreaInsets.bottom),
+                                      right: max(0, navBar.safeAreaInsets.right))
+        let hostSafeRect = hostBounds.inset(by: safeInsets)
+        let isLargeTitleExpanded = container.isLargeTitleExpandedForLayout
+        let compactRowHeight = isLargeTitleExpanded
+            ? compactNavigationRowHeight(in: navBar, container: container)
+            : nil
+        let input = PTNavigationContentRowInput(
+            hostBounds: hostBounds,
+            hostSafeRect: hostSafeRect,
+            systemContentRect: isLargeTitleExpanded ? nil : hostSafeRect,
+            isLargeTitleExpanded: isLargeTitleExpanded,
+            compactRowHeight: compactRowHeight
+        )
+        guard let result = PTNavigationContentRowResolver.resolve(input) else {
+            // English: Do not cache a zero frame while UIKit is between layout states.
+            // Español: No guarda un frame cero mientras UIKit está entre estados de layout.
+            // 中文：UIKit 尚未完成布局时不缓存零尺寸内容行。
+            navBar.setNeedsLayout()
+            return
+        }
+
+        if container.applyNavigationContentRow(result.contentRect, input: input) {
+            refreshTitleLayout(in: nav, container: container)
+        }
+#if DEBUG
+        dumpNavigationVerticalGeometryIfEnabled(nav: nav, container: container)
+#endif
+    }
+
+#if DEBUG
+    // English: Keep vertical geometry logging opt-in so normal debug builds have no extra output.
+    // Español: Mantiene el registro geométrico optativo para no añadir salida en las compilaciones debug normales.
+    // 中文：垂直几何日志默认关闭，避免普通 Debug 构建产生额外输出。
+    private func dumpNavigationVerticalGeometryIfEnabled(nav: UINavigationController,
+                                                         container: PTNavigationBarContainer) {
+        guard ProcessInfo.processInfo.environment["PTOOLS_NAVIGATION_GEOMETRY_DEBUG"] == "1",
+              let window = nav.viewIfLoaded?.window else { return }
+
+        func rect(_ view: UIView) -> CGRect {
+            view.convert(view.bounds, to: window)
+        }
+
+        let barRect = rect(nav.navigationBar)
+        let hostRect = rect(container)
+        let rowRect = rect(container.topBarContainer)
+        let leftRect = rect(container.leftContainer)
+        let rightRect = rect(container.rightContainer)
+        let titleRect = rect(container.titleContainer)
+        PTNSLogConsole("""
+        [PTNavY]
+        bar=\(barRect) / safe=\(nav.navigationBar.safeAreaInsets)
+        host=\(hostRect) / safe=\(container.safeAreaInsets)
+        row=\(rowRect) / safe=\(container.topBarContainer.safeAreaInsets)
+        left.midY=\(leftRect.midY)
+        right.midY=\(rightRect.midY)
+        title.midY=\(titleRect.midY)
+        navSafe=\(nav.view.safeAreaInsets)
+        """)
+    }
+#endif
+
+    // English: Use the previous measured row first, then infer a compact row from the host and large-title area.
+    // Español: Usa primero la fila medida anterior y luego infiere la fila compacta desde el host y el título grande.
+    // 中文：优先复用上一次实测内容行，再根据宿主和大标题区域推导紧凑行。
+    private func compactNavigationRowHeight(in navBar: UINavigationBar,
+                                             container: PTNavigationBarContainer) -> CGFloat? {
+        let hostHeight = navBar.bounds.height
+        let previousHeight = container.lastAppliedContentRect.height
+        if previousHeight.isFinite,
+           previousHeight > 0,
+           previousHeight < hostHeight - 0.5 {
+            return previousHeight
+        }
+
+        let largeTitleHeight = max(container.largeTitleContentHeightForLayout,
+                                   container.largeTitleHeight)
+        let inferredHeight = hostHeight - largeTitleHeight
+        if inferredHeight > 0, inferredHeight < hostHeight {
+            return inferredHeight
+        }
+
+        // English: This is only a first-pass compatibility seed; the next host layout replaces it.
+        // Español: Esta es solo una semilla de compatibilidad inicial; el siguiente layout del host la reemplaza.
+        // 中文：这只是首次布局的兼容种子，下一次宿主布局会用实测值替换。
+        let seed = min(hostHeight, CGFloat.kNavBarHeight)
+        return seed > 0 ? seed : nil
+    }
+
+    // English: Refresh geometry without reinstalling the per-navigation-controller container.
+    // Español: Actualiza la geometría sin reinstalar el contenedor propio del controlador de navegación.
+    // 中文：只刷新几何，不重新安装每个导航控制器独立拥有的容器。
+    func refreshGeometry(in nav: UINavigationController) {
+        guard !usesNativeVerticalBar(nav),
+              let container = containerMap.object(forKey: nav) else { return }
+        refreshNavigationContentRow(in: nav, container: container)
+    }
     
     public func installIfNeeded(in nav: UINavigationController) {
         if usesNativeVerticalBar(nav) {
@@ -342,6 +459,7 @@ public final class PTNavigationBarManager:NSObject {
             if PTNavigationGlassCompatibility.requiresWorkaround {
                 resetSystemNavBarAppearance(nav)
             }
+            refreshNavigationContentRow(in: nav, container: existingContainer)
             return
         }
 
@@ -367,6 +485,7 @@ public final class PTNavigationBarManager:NSObject {
         navBar.addSubview(container)
         navBar.sendSubviewToBack(container)
         containerMap.setObject(container, forKey: nav)
+        refreshNavigationContentRow(in: nav, container: container)
     }
     
     public func apply(style: PTNavigationBarStyle, in nav: UINavigationController) {
@@ -379,6 +498,9 @@ public final class PTNavigationBarManager:NSObject {
         }
         let container = containerMap.object(forKey: nav)
         container?.apply(style: style)
+        if let container {
+            refreshNavigationContentRow(in: nav, container: container)
+        }
         
         resetSystemNavBarAppearance(nav)
     }
@@ -565,6 +687,38 @@ extension PTNavigationBarManager {
         
         return status + navBar + currentNavLargeTitleBarHeight()
     }
+
+    // English: Expose the measured custom content-row height without changing the legacy total-height API.
+    // Español: Expone la altura medida de la fila personalizada sin cambiar la API heredada de altura total.
+    // 中文：提供实测自定义内容行高度，同时不改变旧的总高度 API 语义。
+    public func currentNavigationContentHeight(in navigationController: UINavigationController? = nil) -> CGFloat {
+        let nav = navigationController ?? currentNav
+        guard let nav,
+              let container = containerMap.object(forKey: nav) else { return 0 }
+        refreshNavigationContentRow(in: nav, container: container)
+        nav.navigationBar.layoutIfNeeded()
+        container.layoutIfNeeded()
+        return container.topBarContainer.bounds.height
+    }
+
+    // English: Convert the live navigation-bar bottom into a target view's coordinates instead of using a global estimate.
+    // Español: Convierte el borde inferior real de la barra al sistema de coordenadas de la vista destino, sin usar una estimación global.
+    // 中文：将实时导航栏底部转换到目标 View 坐标系，避免使用全局估算值。
+    public func currentNavigationTopInset(in view: UIView,
+                                          navigationController: UINavigationController? = nil) -> CGFloat {
+        let fallback = max(0, view.safeAreaInsets.top)
+        guard let nav = navigationController ?? currentNav,
+              let targetWindow = view.window,
+              nav.viewIfLoaded?.window === targetWindow else {
+            return fallback
+        }
+
+        let navigationBar = nav.navigationBar
+        guard !navigationBar.bounds.isEmpty else { return fallback }
+        let barRect = navigationBar.convert(navigationBar.bounds, to: view)
+        guard barRect.maxY.isFinite, barRect.maxY >= 0 else { return fallback }
+        return barRect.maxY
+    }
 }
 
 extension PTNavigationBarManager: UINavigationControllerDelegate {
@@ -578,6 +732,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         
         installIfNeeded(in: navigationController)
         rememberNavigationController(navigationController)
+        refreshGeometry(in: navigationController)
 
         let toStyle: PTNavigationBarStyle
         if let configurable = viewController as? PTNavigationConfigurable {
@@ -744,6 +899,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         rememberCurrent(navigationController, viewController: viewController)
         let item = itemCache.object(forKey: viewController) ?? PTNavBarItem()
         apply(item: item, in: navigationController, viewController: viewController)
+        refreshGeometry(in: navigationController)
         StatusBarManager.shared.update(with: style)
         viewController.setNeedsStatusBarAppearanceUpdate()
         navigationController.setNeedsStatusBarAppearanceUpdate()

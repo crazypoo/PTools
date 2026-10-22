@@ -843,24 +843,41 @@ class PTFuncNameViewController: PTBaseViewController {
                                            classicBottomInset: CGFloat) {
         guard isViewLoaded else { return }
         let usesSystemAdaptiveBars = usesSystemAdaptiveBarsForCatalog
-        guard catalogUsesSystemAdaptiveBars != usesSystemAdaptiveBars else { return }
-        catalogUsesSystemAdaptiveBars = usesSystemAdaptiveBars
-
         let scrollView = collectionView.contentCollectionView
         if usesSystemAdaptiveBars {
+            // English: Re-apply only when the mode or the current automatic values changed.
+            // Español: Reaplica solo cuando cambia el modo o los valores automáticos actuales.
+            // 中文：仅在模式或当前自动 inset 发生变化时重新应用。
+            let needsUpdate = catalogUsesSystemAdaptiveBars != true
+                || scrollView.contentInset != .zero
+                || scrollView.verticalScrollIndicatorInsets != .zero
+            guard needsUpdate else { return }
+
+            catalogUsesSystemAdaptiveBars = true
             scrollView.contentInsetAdjustmentBehavior = .automatic
             scrollView.contentInset = .zero
             scrollView.verticalScrollIndicatorInsets = .zero
         } else {
+            // English: The live navigation-bar bottom can change after the first layout pass, so compare the actual insets instead of only the mode.
+            // Español: El borde inferior vivo de la barra puede cambiar después del primer layout; compara los insets reales y no solo el modo.
+            // 中文：实时导航栏底部可能在首次布局后变化，因此比较实际 inset，而不是只比较模式。
+            let contentInset = UIEdgeInsets(top: classicTopInset,
+                                             left: 0,
+                                             bottom: classicBottomInset,
+                                             right: 0)
+            let indicatorInsets = UIEdgeInsets(top: 0,
+                                               left: 0,
+                                               bottom: classicBottomInset,
+                                               right: 0)
+            let needsUpdate = catalogUsesSystemAdaptiveBars != false
+                || scrollView.contentInset != contentInset
+                || scrollView.verticalScrollIndicatorInsets != indicatorInsets
+            guard needsUpdate else { return }
+
+            catalogUsesSystemAdaptiveBars = false
             scrollView.contentInsetAdjustmentBehavior = .never
-            scrollView.contentInset = UIEdgeInsets(top: classicTopInset,
-                                                    left: 0,
-                                                    bottom: classicBottomInset,
-                                                    right: 0)
-            scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0,
-                                                                     left: 0,
-                                                                     bottom: classicBottomInset,
-                                                                     right: 0)
+            scrollView.contentInset = contentInset
+            scrollView.verticalScrollIndicatorInsets = indicatorInsets
         }
     }
     

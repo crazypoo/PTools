@@ -99,6 +99,14 @@ open class PTBaseNavControl: UINavigationController {
         PTAdaptiveSystemBarBridge.apply(policy: adaptiveBarPresentationPolicy, to: self)
     }
 
+    // English: Let the manager refresh measured navigation geometry after UIKit lays out the bar.
+    // Español: Permite que el gestor actualice la geometría medida después del layout de UIKit.
+    // 中文：UIKit 完成导航栏布局后，由 Manager 刷新实测几何。
+    open override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        PTNavigationBarManager.shared.refreshGeometry(in: self)
+    }
+
     open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) { }
     
     open override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
