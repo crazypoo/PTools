@@ -707,17 +707,25 @@ extension PTNavigationBarManager {
     public func currentNavigationTopInset(in view: UIView,
                                           navigationController: UINavigationController? = nil) -> CGFloat {
         let fallback = max(0, view.safeAreaInsets.top)
+
         guard let nav = navigationController ?? currentNav,
-              let targetWindow = view.window,
-              nav.viewIfLoaded?.window === targetWindow else {
+              let targetWindow = (view as? UIWindow) ?? view.window,
+              nav.viewIfLoaded?.window === targetWindow,
+              !nav.isNavigationBarHidden else {
             return fallback
         }
 
-        let navigationBar = nav.navigationBar
-        guard !navigationBar.bounds.isEmpty else { return fallback }
-        let barRect = navigationBar.convert(navigationBar.bounds, to: view)
-        guard barRect.maxY.isFinite, barRect.maxY >= 0 else { return fallback }
-        return barRect.maxY
+        let bar = nav.navigationBar
+        guard bar.window === targetWindow,
+              !bar.isHidden,
+              !bar.bounds.isEmpty else {
+            return fallback
+        }
+        let rect = bar.convert(bar.bounds, to: view)
+        guard rect.maxY.isFinite else {
+            return fallback
+        }
+        return max(0, rect.maxY)
     }
 }
 

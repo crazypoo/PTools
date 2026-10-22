@@ -64,25 +64,40 @@ public extension CGFloat {
     //MARK: 獲取導航欄總高度
     ///獲取導航欄總高度
     @MainActor static var kNavBarHeight_Total: CGFloat {
-        let legacyValue = CGFloat.kNavBarHeight + CGFloat.statusBarHeight()
-        guard let window = PTSceneContext.activeWindow(),
+        let window = PTSceneContext.activeWindow()
+
+        let statusHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? CGFloat.statusBarHeight()
+
+        // 标准导航栏的兼容回退值
+        let fallback = statusHeight + 44
+
+        guard let window,
               let scene = window.windowScene,
-              let navigationController = PTNavigationBarManager.shared.currentNavigationController(in: scene),
-              navigationController.navigationBar.window === window else {
-            return legacyValue
+              let nav = PTNavigationBarManager.shared
+                .currentNavigationController(in: scene),
+              nav.viewIfLoaded?.window === window,
+              !nav.isNavigationBarHidden else {
+            return fallback
         }
 
-        navigationController.navigationBar.layoutIfNeeded()
-        let liveValue = PTNavigationBarManager.shared.currentNavigationTopInset(
-            in: window,
-            navigationController: navigationController
-        )
-        guard liveValue.isFinite,
-              liveValue > 0,
-              liveValue <= window.bounds.height else {
-            return legacyValue
+        let bar = nav.navigationBar
+
+        guard bar.window === window,
+              !bar.isHidden,
+              bar.bounds.width > 0,
+              bar.bounds.height > 0 else {
+            return fallback
         }
-        return liveValue
+
+        let bottom = bar.convert(bar.bounds, to: window).maxY
+
+        guard bottom.isFinite,
+              bottom > statusHeight,
+              bottom <= window.bounds.height else {
+            return fallback
+        }
+
+        return bottom
     }
 
     //MARK: Tabbar安全高度
