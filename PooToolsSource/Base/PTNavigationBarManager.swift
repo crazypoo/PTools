@@ -18,6 +18,30 @@ public enum PTScreenShotActionType {
     case Dark,Light,Auto
 }
 
+public struct PTNavigationBarGeometry {
+
+    /// 当前 Scene 的状态栏高度
+    public let statusBarHeight: CGFloat
+
+    /// 导航栏在 UIWindow 坐标系中的 CGRect
+    public let navigationBarFrameInWindow: CGRect
+
+    /// 导航栏本身高度
+    public var navigationBarHeight: CGFloat {
+        navigationBarFrameInWindow.height
+    }
+
+    /// 导航栏在 UIWindow 中的顶部位置
+    public var navigationBarTopInWindow: CGFloat {
+        navigationBarFrameInWindow.minY
+    }
+
+    /// 导航栏在 UIWindow 中的底部位置
+    public var navigationBottomInWindow: CGFloat {
+        navigationBarFrameInWindow.maxY
+    }
+}
+
 @MainActor
 enum PTNavigationGlassCompatibility {
 
@@ -663,6 +687,68 @@ public final class PTNavigationBarManager:NSObject {
             apply(item: item)
         }
     }
+    
+    /// 获取真实导航栏几何。
+    /// - Returns: 未关联窗口、导航栏隐藏或无法有效测量时返回 nil。
+    public func navigationGeometry(in navigationController: UINavigationController) -> PTNavigationBarGeometry? {
+
+        guard navigationController.isViewLoaded,
+              let window = navigationController.view.window,
+              let scene = window.windowScene,
+              !navigationController.isNavigationBarHidden,
+              !usesNativeVerticalBar(navigationController) else {
+            return nil
+        }
+
+        let bar = navigationController.navigationBar
+
+        guard bar.window === window,
+              !bar.isHidden,
+              !bar.bounds.isEmpty else {
+            return nil
+        }
+
+        let frame = bar.convert(bar.bounds,to: window)
+
+        guard frame.minY.isFinite,
+              frame.maxY.isFinite,
+              frame.width.isFinite,
+              frame.height.isFinite,
+              frame.width > 0,
+              frame.height > 0,
+              frame.maxY > 0,
+              frame.maxY <= window.bounds.height + 1 else {
+            return nil
+        }
+
+        let statusHeight = scene.statusBarManager?.statusBarFrame.height ?? window.safeAreaInsets.top
+
+        return PTNavigationBarGeometry(statusBarHeight: statusHeight, navigationBarFrameInWindow: frame)
+    }
+    
+    public func measuredNavigationTopInset(in targetView: UIView, navigationController: UINavigationController) -> CGFloat? {
+
+        let targetWindow =
+            (targetView as? UIWindow) ?? targetView.window
+
+        guard let targetWindow,
+              navigationController.viewIfLoaded?.window
+                  === targetWindow,
+              navigationGeometry(
+                  in: navigationController
+              ) != nil else {
+            return nil
+        }
+
+        let bar = navigationController.navigationBar
+
+        let frame = bar.convert(bar.bounds, to: targetView)
+
+        guard frame.maxY.isFinite else {
+            return nil
+        }
+        return max(0, frame.maxY)
+    }
 }
 
 extension PTNavigationBarManager {
@@ -706,26 +792,13 @@ extension PTNavigationBarManager {
     // 中文：将实时导航栏底部转换到目标 View 坐标系，避免使用全局估算值。
     public func currentNavigationTopInset(in view: UIView,
                                           navigationController: UINavigationController? = nil) -> CGFloat {
-        let fallback = max(0, view.safeAreaInsets.top)
 
-        guard let nav = navigationController ?? currentNav,
-              let targetWindow = (view as? UIWindow) ?? view.window,
-              nav.viewIfLoaded?.window === targetWindow,
-              !nav.isNavigationBarHidden else {
-            return fallback
+        if let nav = navigationController ?? currentNav,
+           let measured = measuredNavigationTopInset(in: view, navigationController: nav) {
+            return measured
         }
 
-        let bar = nav.navigationBar
-        guard bar.window === targetWindow,
-              !bar.isHidden,
-              !bar.bounds.isEmpty else {
-            return fallback
-        }
-        let rect = bar.convert(bar.bounds, to: view)
-        guard rect.maxY.isFinite else {
-            return fallback
-        }
-        return max(0, rect.maxY)
+        return max(0, view.safeAreaInsets.top)
     }
 }
 

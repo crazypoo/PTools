@@ -64,40 +64,42 @@ public extension CGFloat {
     //MARK: 獲取導航欄總高度
     ///獲取導航欄總高度
     @MainActor static var kNavBarHeight_Total: CGFloat {
+
         let window = PTSceneContext.activeWindow()
 
-        let statusHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? CGFloat.statusBarHeight()
+        let sceneStatusHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height
 
-        // 标准导航栏的兼容回退值
-        let fallback = statusHeight + 44
+        let statusHeight: CGFloat
 
-        guard let window,
-              let scene = window.windowScene,
-              let nav = PTNavigationBarManager.shared
+        if let sceneStatusHeight,
+           sceneStatusHeight > 0,
+           sceneStatusHeight.isFinite {
+            statusHeight = sceneStatusHeight
+        } else if let safeTop = window?.safeAreaInsets.top,
+                  safeTop > 0 {
+            statusHeight = safeTop
+        } else {
+            statusHeight = CGFloat.statusBarHeight()
+        }
+
+        // 先尝试当前真实导航栏
+        if let window,
+           let scene = window.windowScene,
+           let nav = PTNavigationBarManager.shared
                 .currentNavigationController(in: scene),
-              nav.viewIfLoaded?.window === window,
-              !nav.isNavigationBarHidden else {
-            return fallback
+           nav.viewIfLoaded?.window === window,
+           let geometry = PTNavigationBarManager.shared
+                .navigationGeometry(in: nav) {
+
+            return geometry.navigationBottomInWindow
         }
 
-        let bar = nav.navigationBar
+        // 仅用于旧接口兼容，不代表真实布局
+        let legacyHeight = CGFloat.kNavBarHeight
 
-        guard bar.window === window,
-              !bar.isHidden,
-              bar.bounds.width > 0,
-              bar.bounds.height > 0 else {
-            return fallback
-        }
+        let estimatedHeight: CGFloat = legacyHeight.isFinite && legacyHeight > 0 ? legacyHeight : 44
 
-        let bottom = bar.convert(bar.bounds, to: window).maxY
-
-        guard bottom.isFinite,
-              bottom > statusHeight,
-              bottom <= window.bounds.height else {
-            return fallback
-        }
-
-        return bottom
+        return statusHeight + estimatedHeight
     }
 
     //MARK: Tabbar安全高度
