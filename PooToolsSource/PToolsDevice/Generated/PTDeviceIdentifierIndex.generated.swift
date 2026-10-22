@@ -8,7 +8,7 @@
 import Foundation
 
 internal enum PTDeviceCatalogGenerated {
-    static let version = "2026.09.27"
+    static let version = "2026.10.22"
     static let specifications: [PTDeviceSpecification] = [
         PTiPhoneCatalogGenerated.specifications,
         PTiPadCatalogGenerated.specifications,

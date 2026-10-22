@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": "2026.09.27",
+  "catalogVersion": "2026.10.22",
   "devices": [
     {"id":"iphone-4","marketingName":"iPhone 4","family":"iPhone","platform":"iOS","identifiers":["iPhone3,1","iPhone3,2","iPhone3,3"],"releaseYear":2010,"formFactor":"phone","processorFamily":"A4"},
     {"id":"iphone-4s","marketingName":"iPhone 4s","family":"iPhone","platform":"iOS","identifiers":["iPhone4,1"],"releaseYear":2011,"formFactor":"phone","processorFamily":"A5"},
@@ -49,6 +49,9 @@
     {"id":"iphone-17-pro","marketingName":"iPhone 17 Pro","family":"iPhone","platform":"iOS","identifiers":["iPhone18,1"],"releaseYear":2025,"formFactor":"phone","processorFamily":"A19 Pro","traits":{"hasSensorHousing":true,"hasRoundedDisplayCorners":true,"isFaceIDCapable":true,"supportsWirelessCharging":true,"hasLidarSensor":true}},
     {"id":"iphone-17-pro-max","marketingName":"iPhone 17 Pro Max","family":"iPhone","platform":"iOS","identifiers":["iPhone18,2"],"releaseYear":2025,"formFactor":"phone","processorFamily":"A19 Pro","traits":{"hasSensorHousing":true,"hasRoundedDisplayCorners":true,"isFaceIDCapable":true,"supportsWirelessCharging":true,"hasLidarSensor":true}},
     {"id":"iphone-air","marketingName":"iPhone Air","family":"iPhone","platform":"iOS","identifiers":["iPhone18,4"],"releaseYear":2025,"formFactor":"phone","processorFamily":"A19","traits":{"hasSensorHousing":true,"hasRoundedDisplayCorners":true,"isFaceIDCapable":true,"supportsWirelessCharging":true}},
-    {"id":"iphone-17e","marketingName":"iPhone 17e","family":"iPhone","platform":"iOS","identifiers":["iPhone18,5"],"releaseYear":2026,"formFactor":"phone","processorFamily":"A19","traits":{"hasSensorHousing":true,"hasRoundedDisplayCorners":true,"isFaceIDCapable":true,"supportsWirelessCharging":true}}
+    {"id":"iphone-17e","marketingName":"iPhone 17e","family":"iPhone","platform":"iOS","identifiers":["iPhone18,5"],"releaseYear":2026,"formFactor":"phone","processorFamily":"A19","traits":{"hasSensorHousing":true,"hasRoundedDisplayCorners":true,"isFaceIDCapable":true,"supportsWirelessCharging":true}},
+    {"id":"iphone-18-pro","marketingName":"iPhone 18 Pro","family":"iPhone","platform":"iOS","identifiers":["iPhone19,2"],"releaseYear":2026,"formFactor":"phone","processorFamily":"A20 Pro","traits":{"hasSensorHousing":true,"hasRoundedDisplayCorners":true,"isFaceIDCapable":true,"supportsWirelessCharging":true,"hasLidarSensor":true}},
+    {"id":"iphone-18-pro-max","marketingName":"iPhone 18 Pro Max","family":"iPhone","platform":"iOS","identifiers":["iPhone19,3","iPhone19,7"],"releaseYear":2026,"formFactor":"phone","processorFamily":"A20 Pro","traits":{"hasSensorHousing":true,"hasRoundedDisplayCorners":true,"isFaceIDCapable":true,"supportsWirelessCharging":true,"hasLidarSensor":true}},
+    {"id":"iphone-duo","marketingName":"iPhone Duo","family":"iPhone","platform":"iOS","identifiers":["iPhone19,4"],"releaseYear":2026,"formFactor":"phone","processorFamily":"A20 Pro","traits":{"hasRoundedDisplayCorners":true,"supportsWirelessCharging":true,"isTouchIDCapable":true}}
   ]
 }

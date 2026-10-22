@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": "2026.09.27",
+  "catalogVersion": "2026.10.22",
   "devices": [
     {"id":"ipod-touch-5","marketingName":"iPod touch (5th generation)","family":"iPod","platform":"iOS","identifiers":["iPod5,1"],"releaseYear":2012,"formFactor":"mediaPlayer","processorFamily":"A5"},
     {"id":"ipod-touch-6","marketingName":"iPod touch (6th generation)","family":"iPod","platform":"iOS","identifiers":["iPod7,1"],"releaseYear":2015,"formFactor":"mediaPlayer","processorFamily":"A8"},

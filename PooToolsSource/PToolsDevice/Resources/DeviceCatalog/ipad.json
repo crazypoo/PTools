@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": "2026.09.27",
+  "catalogVersion": "2026.10.22",
   "devices": [
     {"id":"ipad-1","marketingName":"iPad","family":"iPad","platform":"iPadOS","identifiers":["iPad1,1"],"releaseYear":2010,"formFactor":"tablet","processorFamily":"A4"},
     {"id":"ipad-2","marketingName":"iPad 2","family":"iPad","platform":"iPadOS","identifiers":["iPad2,1","iPad2,2","iPad2,3","iPad2,4"],"releaseYear":2011,"formFactor":"tablet","processorFamily":"A5"},

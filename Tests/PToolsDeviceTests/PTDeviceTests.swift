@@ -39,4 +39,19 @@ final class PTDeviceTests: XCTestCase {
         XCTAssertFalse(PTDeviceCatalog.allSpecifications.isEmpty)
         XCTAssertEqual(PTDeviceCatalog.model(for: "iPhone18,3")?.rawValue, "iphone-17")
     }
+
+    func testIPhone18ProIdentifiersAreResolved() {
+        XCTAssertEqual(PTDeviceCatalog.model(for: "iPhone19,2")?.rawValue, "iphone-18-pro")
+        XCTAssertEqual(PTDeviceCatalog.model(for: "iPhone19,3")?.rawValue, "iphone-18-pro-max")
+        XCTAssertEqual(PTDeviceCatalog.model(for: "iPhone19,7")?.rawValue, "iphone-18-pro-max")
+        XCTAssertEqual(PTDeviceCatalog.specification(for: "iPhone19,3")?.processorFamily, "A20 Pro")
+    }
+
+    func testIPhoneDuoIdentifierIsResolved() {
+        let specification = PTDeviceCatalog.specification(for: "iPhone19,4")
+
+        XCTAssertEqual(specification?.model.rawValue, "iphone-duo")
+        XCTAssertEqual(specification?.marketingName, "iPhone Duo")
+        XCTAssertTrue(specification?.traits.isTouchIDCapable == true)
+    }
 }

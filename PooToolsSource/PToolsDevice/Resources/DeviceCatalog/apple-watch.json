@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": "2026.09.27",
+  "catalogVersion": "2026.10.22",
   "devices": [
     {"id":"apple-watch-1","marketingName":"Apple Watch (1st generation)","family":"appleWatch","platform":"watchOS","identifiers":["Watch1,1","Watch1,2"],"releaseYear":2015,"formFactor":"watch","processorFamily":"S1"},
     {"id":"apple-watch-series-1","marketingName":"Apple Watch Series 1","family":"appleWatch","platform":"watchOS","identifiers":["Watch2,6","Watch2,7"],"releaseYear":2016,"formFactor":"watch","processorFamily":"S1P"},
