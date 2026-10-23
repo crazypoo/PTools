@@ -8,6 +8,7 @@
 
 import Foundation
 import ARKit
+import UIKit
 
 @MainActor 
 class PTEyeTrackingDataManager {
@@ -15,7 +16,7 @@ class PTEyeTrackingDataManager {
     // 实际设备尺寸(以米为单位)
     private let phoneScreenSize = CGSize(width: 0.0774, height: 0.1575)
     
-    private let screenSize: CGRect = UIScreen.main.bounds
+    private var screenSize: CGRect
     private let smoothingThreshold: Int = 8
     
     private var scene: SCNScene = SCNScene()
@@ -38,7 +39,8 @@ class PTEyeTrackingDataManager {
         return parentNode
     }()
     
-    public init() {
+    public init(screenBounds: CGRect = .zero) {
+        self.screenSize = screenBounds
         lookAtTargetEyeLNode.position.z = 2
         lookAtTargetEyeRNode.position.z = 2
         
@@ -52,6 +54,14 @@ class PTEyeTrackingDataManager {
         
         scene.rootNode.addChildNode(faceNode)
         scene.rootNode.addChildNode(virtualPhoneNode)
+    }
+
+    // English: Update only the view mapping; physical calibration remains independent.
+    // Español: Actualiza solo el mapeo de la vista; la calibración física permanece independiente.
+    // 中文：只更新 View 坐标映射，物理屏幕标定与布局尺寸保持分离。
+    func update(screenBounds: CGRect) {
+        guard !screenBounds.isEmpty else { return }
+        self.screenSize = screenBounds
     }
     
     func calculateEyeLookAtPoint(anchor: ARFaceAnchor) -> CGPoint {
@@ -84,6 +94,7 @@ class PTEyeTrackingDataManager {
         let smoothEyeLookAtPositionX = eyeLookAtPositionXs.average ?? 0
         let smoothEyeLookAtPositionY = eyeLookAtPositionYs.average ?? 0
         
+        guard !screenSize.isEmpty else { return .zero }
         let x = smoothEyeLookAtPositionX / (phoneScreenSize.width / 2) * screenSize.width
         let y = smoothEyeLookAtPositionY / (phoneScreenSize.height / 2) * screenSize.height
         

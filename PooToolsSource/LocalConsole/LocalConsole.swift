@@ -907,9 +907,11 @@ public class LocalConsole: NSObject {
         window.rootViewController = consoleWindow
         window.isHidden = false
         consoleOverlayWindow = window
+        window.layoutIfNeeded()
+        let localTopInset = max(0, consoleWindow.view.safeAreaInsets.top)
         let terminal = PTTerminal(inView: consoleWindow.view ,
                                   frame: CGRect(x: 0,
-                                                y: CGFloat.kNavBarHeight_Total,
+                                                y: localTopInset,
                                                 width: PTDebugPreferences.shared.consoleWidth ?? consoleSize.width,
                                                 height: PTDebugPreferences.shared.consoleHeight ?? consoleSize.height)
         )
@@ -1302,9 +1304,13 @@ extension LocalConsole {
     private func buildTopMenuElements(isTerminalEmpty: Bool) -> [UIMenuElement] {
         var elements: [UIMenuElement] = []
         
-        // 性能优化：弃用遍历视图树找方向，直接根据物理屏幕比例判断
-        let screenSize = UIScreen.main.bounds.size
-        let isLandscapePhone = UIDevice.current.userInterfaceIdiom == .phone && screenSize.width > screenSize.height
+        // English: Use the console host's local bounds, not the process main display.
+        // Español: Usa los límites locales del host de consola, no la pantalla principal del proceso.
+        // 中文：根据控制台宿主的局部 bounds 判断方向，不读取进程主屏幕。
+        let hostView = consoleWindow.viewIfLoaded
+        let hostBounds = hostView?.bounds ?? consoleOverlayWindow?.bounds ?? .zero
+        let isPhone = hostView?.traitCollection.userInterfaceIdiom == .phone
+        let isLandscapePhone = isPhone && hostBounds.width > hostBounds.height
         
         let resize = UIAction(title: .resizeConsole, image: UIImage.resizeImage()) { [weak self] _ in self?.resizeAction() }
         if isLandscapePhone {

@@ -18,9 +18,19 @@ public enum UIScreenShotType {
 public extension UIScreen {
     
     //MARK: 獲取屏幕的Size
-    /// 獲取屏幕的Size
+    /// 获取主显示器的逻辑尺寸，仅用于显示器元数据，不用于布局。
+    /// Obtiene el tamaño lógico de la pantalla principal; solo para metadatos de hardware, no para layout.
+    /// Returns the main display's logical size for display metadata only; do not use it for layout.
     static var size: CGSize {
         UIScreen.main.bounds.size
+    }
+
+    /// Returns the logical size owned by a specific window scene.
+    /// Devuelve el tamaño lógico perteneciente a la escena de una ventana concreta.
+    /// 返回指定 Window Scene 所属的逻辑尺寸。
+    @MainActor
+    static func size(for window: UIWindow?) -> CGSize {
+        window?.bounds.size ?? .zero
     }
     
     //MARK: 獲取豎屏的尺寸

@@ -157,3 +157,15 @@ Example 的 `Navigation & Routing` 分类新增 `iPhone Duo Adaptive Bars`，并
 
 真实 iPhone Duo 的外屏、内屏、折叠转场、相机遮挡区、Live Activity、PiP、分屏和硬件触控仍需要在 Apple 提供的 Duo Simulator / Device Hub 或实体设备上验收；普通 iPhone 模拟器不能证明真实折叠行为。
 
+## 2026-10-23 增量审计与证据边界
+
+本轮 5.69.0 增量审计复用了现有的 `PTAdaptiveBarLayoutContext`、`PTAdaptiveVisibleRegionResolver` 和 `PTSceneContext`，没有新增并行几何体系。`Scripts/audit_duo_uikit_coverage.py --strict` 现在会记录每个命中文件的 owner、目标、行号、布局语义、处理决定、测试归属、运行状态和 reviewer，并把源文件清单、规则版本及 SHA-256 写入报告；过期报告会被判定为 `STALE`。
+
+本轮已收口的高风险入口包括：同一 Window 坐标系下的图片可见性、PhotoPicker fake navigation bar、WebView 导航顶部约束、MediaViewer 零尺寸首屏解码、Inspector 面板尺寸、QRCode/DebugNetwork 控件安全区、LocalConsole 宿主窗口和图片像素化尺度。保留的全局兼容常量和 `UIScreen.size` 仅允许作为展示/物理元数据读取，新的布局代码必须使用宿主 View、Window 或 Scene 的局部几何。
+
+English: The 2026-10-23 audit reuses the existing adaptive geometry owners. Reports are source-revision and manifest-bound; static/build evidence is separate from Duo-only visual and interaction evidence.
+
+Español: La auditoría del 23-10-2026 reutiliza los propietarios geométricos adaptativos existentes. Los informes quedan ligados a la revisión y al manifiesto; la evidencia estática/de compilación se separa de la validación visual e interactiva exclusiva de Duo.
+
+本轮 Xcode iOS Simulator Debug 构建已执行；真实 Duo 的外屏、内屏、折叠、键盘、多 Scene、PhotoPicker、MediaViewer 和性能场景仍记录为 `pending_device`，不能用普通模拟器结果替代。
+

@@ -78,7 +78,7 @@ final class ElementInspectorViewController: ElementInspectorPanelViewController,
     private lazy var viewCode = ElementInspectorViewCode(
         frame: CGRect(
             origin: .zero,
-            size: Inspector.sharedInstance.configuration.elementInspectorConfiguration.panelPreferredCompressedSize
+            size: Inspector.sharedInstance.configuration.elementInspectorConfiguration.panelPreferredCompressedSize(in: nil)
         )
     ).then {
         $0.elementDescriptionView.summaryInfo = viewModel.element.summaryInfo

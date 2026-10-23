@@ -126,6 +126,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     
     var gifImage:UIImage? = nil
     private var lastAdaptiveViewportSignature: String?
+    private var pendingImageLoad: (source: Any, identifier: UUID)?
 
     //MARK: 视频相关
     fileprivate lazy var playBtn:UIButton = {
@@ -217,7 +218,10 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             visibleRect = horizontalRect.isEmpty ? contentView.bounds : horizontalRect
         }
         let signature = "\(region.signature)|\(hasSystemVerticalPane)|\(visibleRect.integral)"
-        guard signature != lastAdaptiveViewportSignature else { return }
+        guard signature != lastAdaptiveViewportSignature else {
+            startPendingImageLoadIfPossible()
+            return
+        }
         lastAdaptiveViewportSignature = signature
 
         contentScrolView.snp.remakeConstraints { make in
@@ -240,6 +244,18 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         if gifImage != nil, contentScrolView.zoomScale <= 1.01 {
             adjustFrame()
         }
+        startPendingImageLoadIfPossible()
+    }
+
+    private var imageTargetSize: CGSize? {
+        [contentScrolView.bounds.size, contentView.bounds.size, bounds.size]
+            .first { $0.width > 0 && $0.height > 0 }
+    }
+
+    private func startPendingImageLoadIfPossible() {
+        guard let pendingImageLoad, imageTargetSize != nil else { return }
+        self.pendingImageLoad = nil
+        baseLoadImageData(imageData: pendingImageLoad.source, currentID: pendingImageLoad.identifier)
     }
     
     private func setupGestureOnce() {
@@ -347,6 +363,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         loadTask?.cancel()
         loadTask = nil
         loadIdentifier = UUID()
+        pendingImageLoad = nil
         lastAdaptiveViewportSignature = nil
         imageView.cancelImageLoad()
         imageView.kf.cancelDownloadTask()
@@ -589,9 +606,13 @@ extension PTMediaBrowserCell {
     }
 
     private func baseLoadImageData(imageData:Any, currentID: UUID) {
-        let targetSize = [contentScrolView.bounds.size, contentView.bounds.size, bounds.size]
-            .first { $0.width > 0 && $0.height > 0 }
-            ?? UIScreen.main.bounds.size
+        guard let targetSize = imageTargetSize else {
+            // English: Wait for Auto Layout instead of decoding against the main display.
+            // Español: Espera a Auto Layout en vez de decodificar usando la pantalla principal.
+            // 中文：等待 Auto Layout 完成，不能用主屏幕尺寸代替当前 Cell。
+            pendingImageLoad = (imageData, currentID)
+            return
+        }
 
         // English: The image view has no intrinsic size before the first image arrives, so use the cell viewport for decoding.
         // Español: La vista de imagen no tiene tamaño intrínseco antes de recibir la primera imagen; usa el viewport de la celda.

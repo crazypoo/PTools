@@ -80,9 +80,9 @@ public class PTScanQRController: PTBaseViewController {
     ///掃描回調
     public var resultBlock:PTQRCodeResultBlock?
     
-    let scanningLineX:CGFloat = 0.5 * (1 - 0.9) * CGFloat.kSCREEN_WIDTH
-    let scanningLineY:CGFloat = 0.25 * CGFloat.kSCREEN_HEIGHT
-    let scanningLineW:CGFloat = 0.9 * CGFloat.kSCREEN_WIDTH
+    private var scanningLineX: CGFloat { view.bounds.width * 0.05 }
+    private var scanningLineY: CGFloat { view.bounds.height * 0.25 }
+    private var scanningLineW: CGFloat { view.bounds.width * 0.9 }
     let scanningLineH:CGFloat = 12
 
     ///掃描線動畫時間,默認0.02秒
@@ -273,7 +273,7 @@ public class PTScanQRController: PTBaseViewController {
         backBtn.snp.makeConstraints { make in
             make.width.height.equalTo(44)
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
         
         photosButton.snp.makeConstraints { make in
@@ -287,7 +287,7 @@ public class PTScanQRController: PTBaseViewController {
                 flashButton.snp.makeConstraints { make in
                     make.width.height.equalTo(self.backBtn)
                     make.centerX.equalToSuperview()
-                    make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + CGFloat.ScaleW(w: 10))
+                    make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(CGFloat.ScaleW(w: 10))
                 }
             }
         }
@@ -436,7 +436,7 @@ public class PTScanQRController: PTBaseViewController {
                 tipsLabel.snp.makeConstraints { make in
                     make.left.equalTo(self.backBtn.snp.right)
                     make.right.equalTo(self.photosButton.snp.left)
-                    make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+                    make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
                 }
             }
         } catch {
@@ -586,7 +586,7 @@ extension PTScanQRController:@MainActor AVCaptureMetadataOutputObjectsDelegate {
             cancel.snp.makeConstraints { make in
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.height.equalTo(44)
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
+                make.top.equalTo(maskView.safeAreaLayoutGuide.snp.top)
             }
             
             let tipsLabel = UILabel()
@@ -597,7 +597,7 @@ extension PTScanQRController:@MainActor AVCaptureMetadataOutputObjectsDelegate {
             maskView.addSubview(tipsLabel)
             tipsLabel.snp.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.bottom.equalToSuperview().inset(CGFloat.kTabbarHeight_Total)
+                make.bottom.equalTo(maskView.safeAreaLayoutGuide.snp.bottom).inset(PTAppBaseConfig.share.defaultViewSpace)
             }
         }
         return maskView

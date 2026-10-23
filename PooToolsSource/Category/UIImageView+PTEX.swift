@@ -91,7 +91,7 @@ public extension UIImageView {
                                                      uniCount: uniCount,
                                                      emptyImage: emptyImage,
                                                      targetSize: resolvedTargetSize,
-                                                     displayScale: window?.screen.scale ?? UIScreen.main.scale)
+                                                     displayScale: window?.screen.scale ?? 1)
         pt_loadCoreImage(
             contentData: contentData,
             configuration: configuration,
@@ -419,15 +419,31 @@ public extension UIImageView {
     ///
     /// - Returns : A boolean for weather the imageView is displayed
     func isDisplayedInScreen(_ imageView: UIView?) -> Bool {
-        guard !isHidden, let imageView = imageView else  {
+        guard !isHidden,
+              let imageView = imageView,
+              !imageView.isHidden,
+              let imageWindow = imageView.window else {
             return false
         }
-        
-        let screenRect = UIScreen.main.bounds
-        let viewRect = imageView.convert(bounds, to:nil)
-        let intersectionRect = viewRect.intersection(screenRect)
-        
-        return window != nil && !intersectionRect.isEmpty && !intersectionRect.isNull
+
+        // English: Keep every rectangle in the image view's own window coordinate space.
+        // Español: Mantiene todos los rectángulos en el sistema de coordenadas de la ventana de la imagen.
+        // 中文：所有矩形都使用图片所在 Window 的局部坐标，避免误用主屏幕坐标。
+        let imageRect = imageView.convert(imageView.bounds, to: imageWindow)
+        var visibleRect = imageRect.intersection(imageWindow.bounds)
+        var ancestor = imageView.superview
+        while let view = ancestor {
+            if view.isHidden { return false }
+            if view.clipsToBounds {
+                visibleRect = visibleRect.intersection(view.convert(view.bounds, to: imageWindow))
+            }
+            ancestor = view.superview
+        }
+
+        guard !visibleRect.isEmpty, !visibleRect.isNull else { return false }
+        let region = PTAdaptiveVisibleRegionResolver.region(for: imageWindow)
+        let panes = region.availablePanes.isEmpty ? [region.visibleRect] : region.availablePanes
+        return panes.contains { $0.intersects(visibleRect) }
     }
     
     func clear() {

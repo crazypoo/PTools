@@ -7,7 +7,8 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # English: Generate the full UIKit inventory before validating the shared Duo contract.
 # Español: Genera el inventario UIKit completo antes de validar el contrato Duo compartido.
 # 中文：在验证共享 Duo 契约前，先生成完整 UIKit 清单。
-python3 "$repo_root/Scripts/audit_duo_uikit_coverage.py" "$repo_root"
+python3 "$repo_root/Scripts/audit_duo_uikit_coverage.py" "$repo_root" --strict
+python3 "$repo_root/Scripts/audit_duo_uikit_coverage.py" "$repo_root" --check --strict
 
 # English: Keep the Duo gate portable on machines that do not install ripgrep.
 # Español: Mantiene la puerta Duo portátil en máquinas sin ripgrep instalado.
@@ -29,8 +30,38 @@ require_file() {
 for report in \
   report/current/duo_uikit_inventory.csv \
   report/current/duo_global_geometry_hits.json \
-  report/current/duo_coverage.md; do
+  report/current/duo_coverage.md \
+  report/current/duo_findings_closed.md \
+  report/current/duo_test_matrix.md; do
   require_file "$report"
+done
+
+for file in \
+  PooToolsSource/Category/UIImageView+PTEX.swift \
+  PooToolsSource/Category/UIImage+PTEX.swift \
+  PooToolsSource/Base/PTBaseWebViewController.swift \
+  PooToolsSource/PhotoPicker/PTMediaLibViewController.swift \
+  PooToolsSource/PhotoPicker/PTMediaLibAlbumListViewController.swift \
+  PooToolsSource/MediaViewer/PTMediaBrowserCell.swift \
+  PooToolsSource/Inspector/ElementInspectorConfiguration.swift \
+  PooToolsSource/Inspector/ViewHierarchyRoot.swift \
+  PooToolsSource/QRCodeScan/PTScanQRController.swift \
+  PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift \
+  PooToolsSource/DebugNetwork/PTNetworkHelper.swift \
+  PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift \
+  PooToolsSource/WhereIsMyEye/PTEyeTrackingManager.swift \
+  PooToolsSource/WhereIsMyEye/PTEyeTrackingTestUtility.swift; do
+  for forbidden in "UIScreen.main" "kSCREEN_WIDTH" "kSCREEN_HEIGHT" "kNavBarHeight_Total" "statusBarHeight()" "UIDevice.current.orientation" ".convert(.*to: nil"; do
+    if [[ "$forbidden" == ".convert(.*to: nil" ]]; then
+      if grep -Eq '\.convert\([^\n]*to:[[:space:]]*nil' "$repo_root/$file"; then
+        printf 'FAIL: forbidden convert-to-nil in %s\n' "$file" >&2
+        exit 1
+      fi
+    elif has_fixed "$forbidden" "$repo_root/$file"; then
+      printf 'FAIL: forbidden %s in %s\n' "$forbidden" "$file" >&2
+      exit 1
+    fi
+  done
 done
 
 require_fixed() {

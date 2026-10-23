@@ -81,7 +81,8 @@ final class PTNetworkHelper {
     @MainActor private func floatingButtonCreate() {
         if floatingView == nil {
             guard let hostView = preferredHostWindow ?? PTSceneContext.activeWindow() else { return }
-            floatingView = PFloatingButton(inView: hostView, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))
+            let y = max(0, hostView.safeAreaInsets.top) + 30
+            floatingView = PFloatingButton(inView: hostView, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: y, width: 100, height: 40))
             floatingView?.tag = PTNetworkFloatingTap
             floatingView?.autoDocking = false
             floatingView?.addSubview(speedLabel)

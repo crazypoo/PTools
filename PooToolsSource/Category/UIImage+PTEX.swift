@@ -651,7 +651,7 @@ public extension PTPOP where Base: UIImage {
         let weakSize = imageSize ?? base.size
         let rect = CGRect(origin: CGPoint(x: 0, y: 0), size: weakSize)
         // 开始图形上下文
-        UIGraphicsBeginImageContextWithOptions(weakSize, false, UIScreen.main.scale)
+        UIGraphicsBeginImageContextWithOptions(weakSize, false, 0)
         guard let contentRef: CGContext = UIGraphicsGetCurrentContext() else {
             // 关闭上下文
             UIGraphicsEndImageContext()
@@ -803,12 +803,17 @@ public extension PTPOP where Base: UIImage {
 
     
     /// 加马赛克
-    @MainActor func mosaicImage() -> UIImage? {
+    @MainActor func mosaicImage(targetDisplayWidth: CGFloat? = nil) -> UIImage? {
         guard let cgImage = base.cgImage else {
             return nil
         }
         
-        let scale = 8 * base.size.width / UIScreen.main.bounds.width
+        // English: Keep the pixelation scale in the source image domain; display width is optional.
+        // Español: Mantiene la escala de pixelado en el dominio de píxeles de origen; el ancho mostrado es opcional.
+        // 中文：像素化强度基于源图像像素域计算，显示宽度只作为可选输入，避免绑定主屏幕。
+        let displayWidth = max(targetDisplayWidth ?? base.size.width, 1)
+        let sourceWidth = CGFloat(cgImage.width)
+        let scale = max(1, 8 * sourceWidth / displayWidth)
         let currCiImage = CIImage(cgImage: cgImage)
         let filter = CIFilter(name: "CIPixellate")
         filter?.setValue(currCiImage, forKey: kCIInputImageKey)

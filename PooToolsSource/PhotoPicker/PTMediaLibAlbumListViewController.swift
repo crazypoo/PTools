@@ -132,11 +132,10 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         super.viewDidLoad()
                         
         view.addSubviews([collectionView,fakeNav])
-        let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight
         let collectionInset_Bottom:CGFloat = max(0, view.safeAreaInsets.bottom)
         
         collectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
-        collectionView.contentCollectionView.contentInset.top = collectionInset_Top
+        collectionView.contentCollectionView.contentInset.top = 0
         collectionView.contentCollectionView.contentInset.bottom = collectionInset_Bottom
         
         collectionView.snp.makeConstraints { make in
@@ -147,7 +146,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() - (self.sheetViewController?.options.pullBarHeight ?? 0) / 2)
+            make.top.equalToSuperview().inset(fakeNavTopInset)
         }
         
         fakeNavSet()
@@ -212,7 +211,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
                 make.left.equalToSuperview().offset(visibleRect.minX)
                 make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
                 make.height.equalTo(CGFloat.kNavBarHeight)
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() - (self.sheetViewController?.options.pullBarHeight ?? 0) / 2)
+                make.top.equalToSuperview().inset(fakeNavTopInset)
             }
         }
         let topInset = max(0, fakeNav.frame.maxY)
@@ -228,6 +227,13 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
             indicatorInset.bottom = bottomInset
             collectionView.contentCollectionView.verticalScrollIndicatorInsets = indicatorInset
         }
+    }
+
+    // English: Keep the album fake bar in the owning view's safe area.
+    // Español: Mantiene la barra falsa de álbum dentro del área segura de su vista anfitriona.
+    // 中文：让相册伪导航栏始终位于所属 View 的局部安全区内。
+    private var fakeNavTopInset: CGFloat {
+        max(0, view.safeAreaInsets.top - (sheetViewController?.options.pullBarHeight ?? 0) / 2)
     }
     
     func loadAlbumList() {

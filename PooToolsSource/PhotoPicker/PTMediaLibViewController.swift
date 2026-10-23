@@ -208,12 +208,11 @@ public class PTMediaLibViewController: PTBaseViewController {
 
     private func setupUI() {
         view.addSubviews([mediaListView,fakeNav])
-        let topInset = CGFloat.kNavBarHeight
         let bottomInset = max(0, viewIfLoaded?.safeAreaInsets.bottom ?? 0)
 
         let cv = mediaListView.collectionView.contentCollectionView
         cv.contentInsetAdjustmentBehavior = .never
-        cv.contentInset.top = topInset
+        cv.contentInset.top = 0
         cv.contentInset.bottom = bottomInset
         cv.verticalScrollIndicatorInsets.bottom = bottomInset
 
@@ -225,7 +224,7 @@ public class PTMediaLibViewController: PTBaseViewController {
 
         fakeNav.snp.makeConstraints {
             $0.left.right.equalToSuperview()
-            $0.top.equalToSuperview().inset(CGFloat.statusBarHeight() - (self.sheetViewController?.options.pullBarHeight ?? 0) / 2)
+            $0.top.equalToSuperview().inset(fakeNavTopInset)
             $0.height.equalTo(CGFloat.kNavBarHeight)
         }
 
@@ -253,7 +252,7 @@ public class PTMediaLibViewController: PTBaseViewController {
             fakeNav.snp.remakeConstraints { make in
                 make.left.equalToSuperview().offset(visibleRect.minX)
                 make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() - (self.sheetViewController?.options.pullBarHeight ?? 0) / 2)
+                make.top.equalToSuperview().inset(fakeNavTopInset)
                 make.height.equalTo(CGFloat.kNavBarHeight)
             }
         }
@@ -263,6 +262,13 @@ public class PTMediaLibViewController: PTBaseViewController {
         cv.contentInset.top = topInset
         cv.contentInset.bottom = bottomInset
         cv.verticalScrollIndicatorInsets.bottom = bottomInset
+    }
+
+    // English: Resolve the fake navigation bar from this controller's local safe area.
+    // Español: Resuelve la barra de navegación falsa desde el área segura local de este controlador.
+    // 中文：根据当前控制器的局部安全区计算伪导航栏顶部，避免叠加全局状态栏高度。
+    private var fakeNavTopInset: CGFloat {
+        max(0, view.safeAreaInsets.top - (sheetViewController?.options.pullBarHeight ?? 0) / 2)
     }
 
     // MARK: - Album

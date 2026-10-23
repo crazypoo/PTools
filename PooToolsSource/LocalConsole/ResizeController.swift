@@ -293,7 +293,11 @@ class ResizeController {
     var initialWidth = CGFloat.zero
     
     static let kMinConsoleWidth: CGFloat = systemLog_base_width
-    @MainActor static let kMaxConsoleWidth: CGFloat = CGFloat.kSCREEN_WIDTH - 56
+    @MainActor static var kMaxConsoleWidth: CGFloat {
+        let hostWidth = LocalConsole.shared.consoleWindow.viewIfLoaded?.bounds.width
+            ?? LocalConsole.shared.consoleSize.width
+        return max(kMinConsoleWidth, hostWidth - 56)
+    }
     
     @MainActor @objc func horizontalPanner(recognizer: UIPanGestureRecognizer) {
         guard let terminal = LocalConsole.shared.terminal else { return } // 🔴 安全解包
@@ -314,13 +318,13 @@ class ResizeController {
             let resolvedWidth = applyRubberBand(estimate: initialEstimate, minVal: Self.kMinConsoleWidth, maxVal: Self.kMaxConsoleWidth)
             
             LocalConsole.shared.consoleSize.width = resolvedWidth
-            terminal.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale
+            terminal.center.x = terminal.superview?.bounds.midX ?? terminal.center.x
         case .ended, .cancelled:
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 0.7) {
                 // 将尺寸修正回安全边界
                 LocalConsole.shared.consoleSize.width = max(Self.kMinConsoleWidth, min(Self.kMaxConsoleWidth, LocalConsole.shared.consoleSize.width))
                 
-                terminal.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale
+                terminal.center.x = terminal.superview?.bounds.midX ?? terminal.center.x
                 terminal.layoutIfNeeded()
                 LocalConsole.shared.consoleWindow.view.layoutIfNeeded()
             }.startAnimation()
@@ -355,7 +359,7 @@ class PlatterView: UIView {
         layer.shadowOffset = CGSize(width: 0, height: 0)
         
         layer.borderColor = UIColor.randomColor.cgColor
-        layer.borderWidth = 1 / UIScreen.main.scale
+        layer.borderWidth = 1 / (window?.screen.scale ?? 1)
         layer.cornerRadius = 30
         layer.cornerCurve = .continuous
 
@@ -611,7 +615,11 @@ class PlatterView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    lazy var possibleEndpoints = [CGPoint(x: 0, y: (UIScreen.hasRoundedCorners ? 44 : -8) + 63), CGPoint(x: 0, y: CGFloat.statusBarHeight() + 5)]
+    lazy var possibleEndpoints: [CGPoint] = {
+        let hostView = LocalConsole.shared.consoleWindow.viewIfLoaded
+        let top = max(0, hostView?.safeAreaInsets.top ?? 0)
+        return [CGPoint(x: 0, y: top + 63), CGPoint(x: 0, y: top + 5)]
+    }()
     
     var initialPlatterOriginY = CGFloat.zero
     

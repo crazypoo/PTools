@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: 4c508f23263c51171d48163d641a4d808069b81a
-Source version: 5.65.6
-Source inputs digest: a87b93f96939b4e60d1a69bd9a8ed165943fd5ee7941c29c3cda17d8649b691d
+Source revision: 0cc0517f96731711a43433fa007425f325286092
+Source version: 5.69.0
+Source inputs digest: 9e6ca39b361ac7c14eea74cb3dd28eeccb27511eb36e8db011428eb274ab4fa9
 Generator version: 1
 Generator: manual Duo validation record maintained with the repository gates
-Generated at: 2026-10-16T23:53:38Z
+Generated at: 2026-10-23T05:50:00Z
 -->
 
 # iPhone Duo 设备验收记录 / Aceptación de dispositivo / Device acceptance
@@ -24,7 +24,7 @@ Generated at: 2026-10-16T23:53:38Z
 
 | 场景 | 模拟器 | Device Hub／真机 | 结果 |
 | --- | --- | --- | --- |
-| Release App 安装、启动、基本画面截取 | 已测：iPhone Duo Simulator，iOS 27.1 | 未测 | 通过：进程启动成功，启动后进入媒体展示界面 |
+| Release App 安装、启动、基本画面截取 | 未测（本轮仅完成 Debug 构建） | 未测 | pending_device；历史版本的启动证据不复用到 5.69.0 |
 | 外屏闭合 | 未测 | 未测 | 未测 |
 | 内屏 portrait | 未测 | 未测 | 未测 |
 | 内屏 landscape | 未测 | 未测 | 未测 |
@@ -39,8 +39,8 @@ Generated at: 2026-10-16T23:53:38Z
 
 ## 说明 / Notas / Notes
 
-- 已执行的构建：`PooTools-Example` Debug / Release，`iphonesimulator`，arm64，目标 Simulator ID 为 `9306D868-28E8-4D61-BBA5-173FBE0BD57F`。
-- 已执行的启动验证：Release App 安装成功，`org.cocoapods.demo.PooTools-Example` 启动成功；截图保存在本次验证临时目录 `/tmp/PTools-Duo-launch-after8s.png`。
+- 本轮已执行的构建：`PooTools-Example` iOS Simulator Debug（arm64/x86_64）和 Release（arm64、无签名）；未执行本轮 Duo Simulator 启动和视觉交互。
+- 旧版本的 Simulator 启动截图和结果不作为 5.69.0 的验收证据；待官方 Duo Simulator、Device Hub 或实体设备可用后重新记录。
 - SwiftPM `PToolsUIFoundationTests` 未在 macOS 主机上运行成功：`swift test` 使用 macOS SDK 编译 iOS-only UIKit target，因无法解析 `UIKit` 而停止；需要在 Xcode iOS Simulator test target 或 CI iOS runner 中执行。该结果不替代 Debug / Release App 构建，也不宣称 UI 测试通过。
 
 English: Static inventory, geometry tests, and Xcode builds are tracked separately from device-only visual and interaction evidence.

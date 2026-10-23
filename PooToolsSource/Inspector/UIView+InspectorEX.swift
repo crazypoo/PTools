@@ -587,7 +587,7 @@ extension UIView {
 
 extension UIView {
     func enableRasterization(maxScale: CGFloat = 2) {
-        layer.rasterizationScale = max(maxScale, UIScreen.main.scale)
+        layer.rasterizationScale = max(maxScale, window?.screen.scale ?? maxScale)
         layer.shouldRasterize = true
     }
 

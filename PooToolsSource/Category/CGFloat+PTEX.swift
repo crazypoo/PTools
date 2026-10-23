@@ -190,8 +190,16 @@ public extension CGFloat {
         }
     }
     
-    @MainActor static let kLeftSafeAreaWidth = AppWindows?.safeAreaInsets.left ?? 0
-    @MainActor static let kRightSafeAreaWidth = AppWindows?.safeAreaInsets.right ?? 0
+    // English: Resolve safe-area edges at read time for the active scene; keep the old symbols source-compatible.
+    // Español: Resuelve los bordes del área segura al leerlos para la escena activa; conserva los símbolos antiguos.
+    // 中文：按读取时的当前 Scene 动态获取安全区边缘，同时保留旧符号兼容性。
+    @MainActor static var kLeftSafeAreaWidth: CGFloat {
+        AppWindows?.safeAreaInsets.left ?? 0
+    }
+
+    @MainActor static var kRightSafeAreaWidth: CGFloat {
+        AppWindows?.safeAreaInsets.right ?? 0
+    }
 }
 
 public extension PTPOP where Base == CGFloat {

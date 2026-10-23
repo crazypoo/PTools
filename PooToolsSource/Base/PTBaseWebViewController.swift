@@ -26,13 +26,26 @@ open class PTBaseWebViewController: PTBaseViewController {
     public var hiddenNav = false {
         didSet {
             navigationController?.navigationBar.isHidden = hiddenNav
-            webView.snp.updateConstraints { make in
-                make.top.equalTo(hiddenNav ? 0 : CGFloat.kNavBarHeight_Total)
-            }
+            updateWebViewTopConstraint()
         }
     }
     
     fileprivate var showString:String = ""
+    private var webViewTopConstraint: Constraint?
+
+    // English: Measure the navigation boundary in the web view's coordinate space.
+    // Español: Mide el límite de navegación en el sistema de coordenadas de la vista web.
+    // 中文：在 WebView 所属坐标系中测量导航边界，避免把全局总高度当作局部偏移。
+    private var webViewTopInset: CGFloat {
+        guard !hiddenNav else { return 0 }
+        return PTNavigationBarManager.shared.currentNavigationTopInset(in: view,
+                                                                        navigationController: navigationController)
+    }
+
+    private func updateWebViewTopConstraint() {
+        guard isViewLoaded else { return }
+        webViewTopConstraint?.update(offset: webViewTopInset)
+    }
     
     fileprivate lazy var webView: WKWebView = {
         let config = WKWebViewConfiguration()
@@ -112,15 +125,23 @@ open class PTBaseWebViewController: PTBaseViewController {
         super.viewDidLoad()
         
         navigationController?.navigationBar.isHidden = hiddenNav
-        var topSpace:CGFloat = 0
         navigationItem.largeTitleDisplayMode = .never
-        topSpace = hiddenNav ? 0 : CGFloat.kNavBarHeight_Total
         view.addSubviews([webView])
         webView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(topSpace)
+            webViewTopConstraint = make.top.equalToSuperview().offset(webViewTopInset).constraint
         }
         self.loadWeb()
+    }
+
+    open override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateWebViewTopConstraint()
+    }
+
+    open override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        updateWebViewTopConstraint()
     }
 
     func loadWeb() {

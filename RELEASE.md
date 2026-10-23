@@ -2,6 +2,11 @@
 
 ## 5.69.0
 
+- [x] iPhone Duo 增量审计已按当前源码 revision 重新生成 inventory、global geometry hits、coverage、findings closure 和 test matrix；报告带有 manifest hash 与规则版本。
+- [x] A01-A06 与 N01-N09 的源码消费点已完成局部坐标、安全区、Window/Scene 所有权和零尺寸媒体路径收口；旧公开兼容入口保留。
+- [x] `validate_duo_adaptive_bars.sh` 严格门禁、Swift 前端解析、`git diff --check` 和 PooTools-Example iOS Simulator Debug 完整构建通过。
+- [x] PooTools-Example iOS Simulator Release（arm64、无签名）构建通过；外部 Pods 弃用警告和 Metal 工具链搜索路径警告单独保留。
+- [ ] XCUITest、截图差异、Instruments 和真实 iPhone Duo 外屏/内屏/折叠验收仍需执行；未执行项保持 pending，不作为发布通过依据。
 - [x] `PTNavigationBarManager` 使用真实 `UINavigationBar` 宿主的内容行解析；左、标题、右内容共享 host-local `contentRect`，保留旧高度 API 兼容语义。
 - [x] 内容行更新接入安装、样式、Push/Pop、Large Title 和 `PTBaseNavControl` 布局生命周期；重复几何不重建约束，背景层仍独立覆盖状态栏区域。
 - [x] 新增 `PTNavigationContentRowResolver` 纯值回归测试、非 44pt 宿主高度测试、safe-area/large-title 边界测试，以及运行时容器高度回归。

@@ -116,7 +116,7 @@ private extension UIImage {
     }
 
     @MainActor var screenScale: CGFloat {
-        UIScreen.main.scale
+        scale
     }
 }
 

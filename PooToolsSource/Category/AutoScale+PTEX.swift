@@ -63,6 +63,28 @@ public extension Double {
         let height = max(screenWidth, screenHeight) - Double(deviceSafeAreaInsets().top - deviceSafeAreaInsets().bottom)
         return (self * (height / base)).rounded(3)
     }
+
+    // English: Scale against the consuming view instead of a process-wide display snapshot.
+    // Español: Escala usando la vista consumidora en lugar de una instantánea global de la pantalla.
+    // 中文：基于实际使用布局的 View 缩放，不再读取进程级屏幕快照。
+    @MainActor func autoWidth(in view: UIView, inch: InchWidth = .TouchIDNormalModel) -> Double {
+        guard view.traitCollection.userInterfaceIdiom == .phone else { return self }
+        let base = inch.rawValue
+        let safeRect = view.bounds.inset(by: view.safeAreaInsets)
+        let width = max(0, safeRect.width)
+        return (self * (Double(width) / base)).rounded(3)
+    }
+
+    // English: Scale height from the view's current local safe rectangle.
+    // Español: Escala la altura desde el rectángulo seguro local actual de la vista.
+    // 中文：基于 View 当前局部安全矩形计算高度缩放。
+    @MainActor func autoHeight(in view: UIView, inch: InchHeight = .TouchIDNormalModel) -> Double {
+        guard view.traitCollection.userInterfaceIdiom == .phone else { return self }
+        let base = inch.rawValue
+        let safeRect = view.bounds.inset(by: view.safeAreaInsets)
+        let height = max(0, safeRect.height)
+        return (self * (Double(height) / base)).rounded(3)
+    }
 }
 
 public extension BinaryInteger {

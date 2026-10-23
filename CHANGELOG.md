@@ -9,6 +9,9 @@
 
 ## 5.69.0 — 2026-10-21
 
+- 完成 2026-10-23 iPhone Duo 全 UIKit 增量审计：修复宿主局部坐标、安全区、Window/Scene 所有权和零尺寸媒体加载路径，保留旧公开几何入口兼容，不再让新增布局依赖主屏幕快照。
+- 强化 `audit_duo_uikit_coverage.py` 与 `validate_duo_adaptive_bars.sh`：报告现在绑定源码 revision、输入 manifest、规则版本和文件级 owner/evidence/decision/test 状态，过期或缺少闭环元数据的报告会失败。
+- 新增 Duo findings closure 与 test matrix 报告；PTools-Example iOS Simulator Debug 构建通过，Pods 和 Metal 工具链警告继续单独记录，真实 Duo 视觉/折叠/交互验收仍为 pending device。
 - 修复 `PTNavigationBarManager` 将自定义导航容器嵌入真实 `UINavigationBar` 时的垂直对齐问题：新增 host-local 内容行解析器，让左侧按钮、标题和右侧按钮共享同一条几何真值；不再依赖全局 `kNavBarHeight` 或 `PTUtils.getCurrentVC()` 推断 Sheet 偏移。
 - 内容行刷新接入导航栏安装、样式、Push/Pop、Large Title 和 `PTBaseNavControl` 布局生命周期；按几何签名幂等更新，保持背景层的状态栏延伸与内容行布局分离，避免重复约束和布局反馈循环。
 - 保留 `currentNavBarHeight()`、`kNavBarHeight` 和 `kNavBarHeight_Total` 的兼容调用方式；`kNavBarHeight_Total` 会优先读取活动场景的实时导航栏底部并在无法解析时回退旧公式，另新增 `currentNavigationContentHeight(in:)` 获取已绑定导航栈的实时内容行高度；新增 DEBUG 环境变量 `PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1` 用于现场 frame/midY 诊断。

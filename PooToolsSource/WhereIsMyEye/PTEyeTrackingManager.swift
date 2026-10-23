@@ -96,10 +96,10 @@ public class PTEyeTrackingManager: NSObject {
     private var eyeRTransformBuffer: [simd_float4x4] = []
     
     private var sessionManager: AnyObject?
-    private var dataManager: AnyObject?
+    private var dataManager: PTEyeTrackingDataManager?
     
     private var portraitScreenSize: CGRect?
-    private var screenSize = kSCREEN_BOUNDS
+    private var screenSize = CGRect.zero
     
     private let testUtility = PTEyeTrackingTestUtility()
     
@@ -112,7 +112,12 @@ public class PTEyeTrackingManager: NSObject {
     @objc public override init() {
         super.init()
         if PTEyeTrackingManager.isSupported {
-            dataManager = PTEyeTrackingDataManager()
+            let initialBounds = PTSceneContext.activeWindow()?.bounds ?? .zero
+            screenSize = initialBounds
+            portraitScreenSize = initialBounds.width <= initialBounds.height
+                ? initialBounds
+                : CGRect(x: initialBounds.minX, y: initialBounds.minY, width: initialBounds.height, height: initialBounds.width)
+            dataManager = PTEyeTrackingDataManager(screenBounds: initialBounds)
             sessionManager = PTEyeTrackingSessionManager()
             if let sessionManager = sessionManager as? PTEyeTrackingSessionManager {
                 sessionManager.delegate = self
@@ -131,6 +136,16 @@ public class PTEyeTrackingManager: NSObject {
 
 //MARK: PTEyeTrackingManager扩展
 extension PTEyeTrackingManager {
+
+    @MainActor private func updateHostBounds(_ parent: UIView) {
+        guard !parent.bounds.isEmpty else { return }
+        screenSize = parent.bounds
+        portraitScreenSize = screenSize.width <= screenSize.height
+            ? screenSize
+            : CGRect(x: screenSize.minX, y: screenSize.minY, width: screenSize.height, height: screenSize.width)
+        testUtility.updateHostBounds(screenSize)
+        dataManager?.update(screenBounds: screenSize)
+    }
     /**
      EyeTracking的ARSession。
      
@@ -172,6 +187,7 @@ extension PTEyeTrackingManager {
      - Parameter parent: 指定添加UILabel的父视图。
      */
     @objc public func showStatusView(parent: UIView) {
+        updateHostBounds(parent)
         testUtility.showStatusView(parent: parent)
     }
     
@@ -186,6 +202,7 @@ extension PTEyeTrackingManager {
      
      */
     @objc public func showCursorView(parent: UIView) {
+        updateHostBounds(parent)
         testUtility.showCursorView(parent: parent)
     }
     
@@ -208,7 +225,7 @@ extension PTEyeTrackingManager {
 extension PTEyeTrackingManager: @preconcurrency PTEyeTrackingSessionManagerDelegate {
     
     @MainActor func update(withFaceAnchor anchor: ARFaceAnchor) {
-        guard let dataManager = dataManager as? PTEyeTrackingDataManager else {
+        guard let dataManager else {
             return
         }
         
@@ -226,17 +243,16 @@ extension PTEyeTrackingManager {
     @MainActor @objc private func rotated() {
         guard let portraitScreenSize = portraitScreenSize else { return }
         
-        switch UIDevice.current.orientation {
-        case UIDeviceOrientation.portrait: fallthrough
-        case UIDeviceOrientation.portraitUpsideDown:
+        switch PTSceneContext.activeWindow()?.windowScene?.interfaceOrientation {
+        case .portrait, .portraitUpsideDown:
             screenSize = portraitScreenSize
-        case UIDeviceOrientation.landscapeLeft: fallthrough
-        case UIDeviceOrientation.landscapeRight:
+        case .landscapeLeft, .landscapeRight:
             screenSize = CGRect(x: 0, y: 0, width: portraitScreenSize.height, height: portraitScreenSize.width)
-        default:break
+        default: return
         }
         
-        testUtility.screenSize = screenSize
+        testUtility.updateHostBounds(screenSize)
+        dataManager?.update(screenBounds: screenSize)
         testUtility.rotated()
     }
 }

@@ -19,6 +19,10 @@ import PToolsSymbols
 // MARK: - 单条请求深度详情展示页面
 class PTNetworkWatcherDetailViewController: PTBaseViewController {
 
+    private var localLayoutWidth: CGFloat {
+        max(viewIfLoaded?.bounds.width ?? PTSceneContext.activeWindow()?.bounds.width ?? 0, 0)
+    }
+
     fileprivate var viewModel: PTHttpModel!
     private var infos: [Config]!
     private var filteredInfos: [Config] = []
@@ -55,7 +59,7 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
             make.edges.equalToSuperview()
         }
         view.snp.makeConstraints { make in
-            make.width.equalTo(CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 88)
+            make.width.equalTo(max(0, self.localLayoutWidth - PTAppBaseConfig.share.defaultViewSpace * 4 - 88))
             make.height.equalTo(32)
         }
         return view
@@ -77,11 +81,11 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         view.customerLayout = { sectionIndex, sectionModel in
             if let headerModel = sectionModel.headerDataModel as? PTFusionCellModel {
                 if headerModel.name == "Simple info" {
-                    return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: CGFloat.kSCREEN_WIDTH, itemHeight: 64, cellRowCount: 1, originalX: 0)
+                    return UICollectionView.girdCollectionLayout(data: sectionModel.rows, groupWidth: self.localLayoutWidth, itemHeight: 64, cellRowCount: 1, originalX: 0)
                 } else {
                     var customers = [NSCollectionLayoutGroupCustomItem]()
                     var groupH: CGFloat = 0
-                    let screenW: CGFloat = CGFloat.kSCREEN_WIDTH
+                    let screenW: CGFloat = self.localLayoutWidth
                     let cellModel = self.currentInfos[sectionIndex - 1]
                     var cellHeight: CGFloat = UIView.sizeFor(string: cellModel.description, font: .appfont(size: 12), width: screenW - PTAppBaseConfig.share.defaultViewSpace * 2).height + 10
                     if cellHeight < 64 { cellHeight = 64 }
@@ -154,8 +158,9 @@ class PTNetworkWatcherDetailViewController: PTBaseViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        let collectionInset: CGFloat = CGFloat.kTabbarSaveAreaHeight
-        let collectionInset_Top: CGFloat = CGFloat.kNavBarHeight_Total
+        let collectionInset: CGFloat = max(0, view.safeAreaInsets.bottom)
+        let collectionInset_Top = PTNavigationBarManager.shared.currentNavigationTopInset(in: view,
+                                                                                             navigationController: navigationController)
         
         newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
         newCollectionView.contentCollectionView.contentInset.top = 0

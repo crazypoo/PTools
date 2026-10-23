@@ -28,7 +28,10 @@ class PTNetworkWatcherViewController: PTBaseViewController {
     private var captureChangeTask: Task<Void, Never>?
     private var testTask: Task<Void, Never>?
     private var testRunID = UUID()
-    let titleViewContainerWidth = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 3 - 88
+    private var titleViewContainerWidth: CGFloat {
+        let width = viewIfLoaded?.bounds.width ?? PTSceneContext.activeWindow()?.bounds.width ?? 0
+        return max(0, width - PTAppBaseConfig.share.defaultViewSpace * 3 - 88)
+    }
     
     lazy var searchBar: PTSearchBar = {
         let view = PTSearchBar()
@@ -184,13 +187,8 @@ class PTNetworkWatcherViewController: PTBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let collectionInset: CGFloat = CGFloat.kTabbarSaveAreaHeight
-        let collectionInset_Top: CGFloat = CGFloat.kNavBarHeight_Total
-        
         newCollectionView.contentCollectionView.contentInsetAdjustmentBehavior = .never
-        newCollectionView.contentCollectionView.contentInset.top = collectionInset_Top
-        newCollectionView.contentCollectionView.contentInset.bottom = collectionInset
-        newCollectionView.contentCollectionView.verticalScrollIndicatorInsets.bottom = collectionInset
+        updateCollectionInsets()
 
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in make.edges.equalToSuperview() }
@@ -199,6 +197,27 @@ class PTNetworkWatcherViewController: PTBaseViewController {
             await self?.refreshData()
         }
         setup()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateCollectionInsets()
+    }
+
+    private func updateCollectionInsets() {
+        guard isViewLoaded else { return }
+        let top = PTNavigationBarManager.shared.currentNavigationTopInset(in: view,
+                                                                           navigationController: navigationController)
+        let bottom = max(0, view.safeAreaInsets.bottom)
+        let collectionView = newCollectionView.contentCollectionView
+        var inset = collectionView.contentInset
+        var indicatorInset = collectionView.verticalScrollIndicatorInsets
+        guard inset.top != top || inset.bottom != bottom || indicatorInset.bottom != bottom else { return }
+        inset.top = top
+        inset.bottom = bottom
+        indicatorInset.bottom = bottom
+        collectionView.contentInset = inset
+        collectionView.verticalScrollIndicatorInsets = indicatorInset
     }
     
     func loadListModel() {
@@ -260,7 +279,9 @@ class PTNetworkWatcherViewController: PTBaseViewController {
     
     private func floatingButtonCreate() {
         if floatingView == nil {
-            floatingView = PFloatingButton(inView: AppWindows, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.statusBarHeight() + 30, width: 100, height: 40))
+            guard let hostView = viewIfLoaded else { return }
+            let y = max(0, hostView.safeAreaInsets.top) + 30
+            floatingView = PFloatingButton(inView: hostView, frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: y, width: 100, height: 40))
             floatingView?.tag = PTNetworkTestFloatingTap
             floatingView?.autoDocking = false
             floatingView?.addSubview(speedLabel)

@@ -19,7 +19,7 @@ class PTEyeTrackingTestUtility {
     
     internal var trackingState: PTEyeTrackingState = .notTracked
     internal var semaphore: Bool = false
-    @MainActor internal var screenSize = kSCREEN_BOUNDS
+    @MainActor internal private(set) var screenSize = CGRect.zero
     
     private var portraitScreenSize: CGRect?
     
@@ -28,20 +28,22 @@ class PTEyeTrackingTestUtility {
     private var upperAreaView: UIView?
     private var bottomAreaView: UIView?
     
-    @MainActor internal init(){
-        // 指定纵向设备屏幕大小
-        if CGFloat.kSCREEN_WIDTH < CGFloat.kSCREEN_HEIGHT {
-            portraitScreenSize = kSCREEN_BOUNDS
-        } else {
-            portraitScreenSize = CGRect(x: 0, y: 0, width: CGFloat.kSCREEN_HEIGHT, height: CGFloat.kSCREEN_WIDTH)
-        }
+    @MainActor internal init() {}
+
+    @MainActor internal func updateHostBounds(_ bounds: CGRect) {
+        guard !bounds.isEmpty else { return }
+        screenSize = bounds
+        portraitScreenSize = bounds.width <= bounds.height
+            ? bounds
+            : CGRect(x: bounds.minX, y: bounds.minY, width: bounds.height, height: bounds.width)
     }
     
     @MainActor internal func showStatusView(parent: UIView) {
+        updateHostBounds(parent.bounds)
         if statusLabel == nil {
             let label = UILabel(frame: CGRect(x: 50,
-                                              y: kSCREEN_BOUNDS.height / 2 - 15,
-                                              width: kSCREEN_BOUNDS.width - 50,
+                                              y: screenSize.height / 2 - 15,
+                                              width: max(0, screenSize.width - 50),
                                               height: 30))
             
             label.textAlignment = NSTextAlignment.left
@@ -55,10 +57,11 @@ class PTEyeTrackingTestUtility {
     }
     
     @MainActor internal func showCursorView(parent: UIView) {
+        updateHostBounds(parent.bounds)
         if cursorView == nil {
             let size = CGFloat(12)
-            let view = UIView(frame: CGRect(x: kSCREEN_BOUNDS.width / 2 - size / 2,
-                                            y: kSCREEN_BOUNDS.height / 2 - size / 2,
+            let view = UIView(frame: CGRect(x: screenSize.width / 2 - size / 2,
+                                            y: screenSize.height / 2 - size / 2,
                                             width: size,
                                             height: size))
             view.layer.cornerRadius = size / 2
@@ -104,16 +107,15 @@ class PTEyeTrackingTestUtility {
     @MainActor internal func updateCursorView(with lookAtPoint: CGPoint) {
         guard let cursorView = cursorView else { return }
         
-        var x = max(-kSCREEN_BOUNDS.width / 2, min(lookAtPoint.x, kSCREEN_BOUNDS.width / 2))
-        var y = max(-kSCREEN_BOUNDS.height / 2, min(lookAtPoint.y, kSCREEN_BOUNDS.height / 2))
+        var x = max(-screenSize.width / 2, min(lookAtPoint.x, screenSize.width / 2))
+        var y = max(-screenSize.height / 2, min(lookAtPoint.y, screenSize.height / 2))
         
-        switch UIDevice.current.orientation {
-        case UIDeviceOrientation.landscapeLeft:
+        switch cursorView.window?.windowScene?.interfaceOrientation {
+        case .landscapeLeft:
             let tmp = x
             x = y
             y = -tmp
-            
-        case UIDeviceOrientation.landscapeRight:
+        case .landscapeRight:
             let tmp = x
             x = y
             y = tmp
@@ -134,13 +136,13 @@ class PTEyeTrackingTestUtility {
     @MainActor internal func rotated(){
         // 存在在屏幕旋转时无法准确定位光标的错误
         let size: CGFloat = 12
-        cursorView?.frame.origin.x = (kSCREEN_BOUNDS.width / 2) - (size / 2)
-        cursorView?.frame.origin.y = (kSCREEN_BOUNDS.height / 2) - (size / 2)
+        cursorView?.frame.origin.x = (screenSize.width / 2) - (size / 2)
+        cursorView?.frame.origin.y = (screenSize.height / 2) - (size / 2)
         
         
-        statusLabel?.frame = CGRect(x: kSCREEN_BOUNDS.width / 2,
-                                         y: kSCREEN_BOUNDS.height / 2,
-                                         width: kSCREEN_BOUNDS.width - 50,
+        statusLabel?.frame = CGRect(x: screenSize.width / 2,
+                                         y: screenSize.height / 2,
+                                         width: max(0, screenSize.width - 50),
                                          height: 30)
     }
 }

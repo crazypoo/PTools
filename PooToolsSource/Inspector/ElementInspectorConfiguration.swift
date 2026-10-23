@@ -30,10 +30,13 @@ final class ElementInspectorConfiguration {
     var animationDuration: TimeInterval = CATransaction.animationDuration()
 
     var panelPreferredCompressedSize: CGSize {
-        CGSize(
-            width: min(UIScreen.main.bounds.width, 414),
-            height: .zero
-        )
+        panelPreferredCompressedSize(in: nil)
+    }
+
+    func panelPreferredCompressedSize(in bounds: CGRect?) -> CGSize {
+        let hostWidth = bounds?.width ?? PTSceneContext.activeWindow()?.bounds.width ?? 0
+        let resolvedWidth = hostWidth > 0 ? hostWidth : 414
+        return CGSize(width: min(resolvedWidth, 414), height: .zero)
     }
 
     let panelSidePresentationAvailable: Bool = true

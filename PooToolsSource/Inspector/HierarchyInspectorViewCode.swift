@@ -26,9 +26,11 @@ final class HierarchyInspectorViewCode: BaseView {
                     return .zero
                 }
 
-                let globalFrame = convert(frame, to: nil)
+                guard let window else { return .zero }
+                let localFrame = convert(bounds, to: window)
+                let localKeyboardFrame = window.convert(keyboardFrame, from: nil)
 
-                return globalFrame.height + globalFrame.origin.y - safeAreaInsets.bottom - keyboardFrame.origin.y
+                return localFrame.height + localFrame.origin.y - safeAreaInsets.bottom - localKeyboardFrame.origin.y
             }()
 
             bottomAnchorConstraint?.update(offset: (visibleHeight + verticalMargin) * -1)
@@ -146,7 +148,7 @@ final class HierarchyInspectorViewCode: BaseView {
                 make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(verticalMargin).priority(UILayoutPriority.defaultHigh.rawValue).constraint,
                 make.centerX.equalTo(safeAreaLayoutGuide.snp.centerX).priority(UILayoutPriority.defaultHigh.rawValue).constraint,
                 make.width.lessThanOrEqualTo(readableContentGuide.snp.width).offset(-horizontalMargin * 4).priority(UILayoutPriority.defaultHigh.rawValue).constraint,
-                make.width.greaterThanOrEqualTo(Inspector.sharedInstance.configuration.elementInspectorConfiguration.panelPreferredCompressedSize.width).priority(UILayoutPriority.defaultHigh.rawValue).constraint
+                make.width.greaterThanOrEqualTo(Inspector.sharedInstance.configuration.elementInspectorConfiguration.panelPreferredCompressedSize(in: bounds).width).priority(UILayoutPriority.defaultHigh.rawValue).constraint
             ]
             let bottomConstraint = make.bottom.lessThanOrEqualTo(safeAreaLayoutGuide.snp.bottom).offset(-verticalMargin).priority(UILayoutPriority.defaultHigh.rawValue).constraint
             bottomAnchorConstraint = bottomConstraint

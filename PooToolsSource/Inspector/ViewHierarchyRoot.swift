@@ -160,7 +160,12 @@ extension ViewHierarchyRoot: @MainActor ViewHierarchyElementReference {
 
     var isUserInteractionEnabled: Bool { false }
 
-    var frame: CGRect { UIScreen.main.bounds }
+    // English: The inspector root follows the inspected window, including secondary scenes.
+    // Español: La raíz del inspector sigue la ventana inspeccionada, incluidas las escenas secundarias.
+    // 中文：Inspector 根节点跟随被检查 Window，支持多 Scene 和非主显示器。
+    var frame: CGRect {
+        windows.first(where: \.isKeyWindow)?.bounds ?? windows.first?.bounds ?? .zero
+    }
 
     var accessibilityIdentifier: String? { nil }
 
