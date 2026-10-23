@@ -200,6 +200,20 @@ public extension CGFloat {
     @MainActor static var kRightSafeAreaWidth: CGFloat {
         AppWindows?.safeAreaInsets.right ?? 0
     }
+
+    // English: Read safe-area edges from the view that owns the layout.
+    // Español: Lee los bordes seguros desde la vista propietaria del diseño.
+    // 中文：从实际拥有布局的 View 读取安全区边缘。
+    @MainActor static func leftSafeAreaWidth(in view: UIView) -> CGFloat {
+        Swift.max(0, view.safeAreaInsets.left)
+    }
+
+    // English: Keep the local right inset independent from any other scene.
+    // Español: Mantiene el inset derecho local independiente de cualquier otra escena.
+    // 中文：读取局部右侧安全区，不受其他 Scene 影响。
+    @MainActor static func rightSafeAreaWidth(in view: UIView) -> CGFloat {
+        Swift.max(0, view.safeAreaInsets.right)
+    }
 }
 
 public extension PTPOP where Base == CGFloat {

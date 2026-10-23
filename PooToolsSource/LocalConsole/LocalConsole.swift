@@ -480,6 +480,13 @@ public class LocalConsole: NSObject {
     private var keyboardObserverTokens: [NSObjectProtocol] = []
     private var dynamicLogs: [String: String] = [:]
     private var dynamicRange: NSRange?
+
+    // English: Resolve display diagnostics from the console's scene instead of the process-wide main screen.
+    // Español: Resuelve los diagnósticos de pantalla desde la escena de la consola y no desde la pantalla principal global.
+    // 中文：从控制台所属场景解析显示器诊断信息，避免依赖进程级主屏幕。
+    private var diagnosticScreen: UIScreen? {
+        preferredWindowScene?.screen ?? AppWindows?.windowScene?.screen
+    }
 #if canImport(PToolsLogging) || POOTOOLS_LOGGING
     private var memoryLogDestination: PTMemoryLogDestination?
     private var memoryLogTask: Task<Void, Never>?
@@ -1601,8 +1608,9 @@ extension LocalConsole {
         let volumeTotalCapacityString = String(describing: PTDevice.volumeTotalCapacity)
         let volumeAvailableCapacityString = String(describing: PTDevice.volumeAvailableCapacity)
 
+        let displayScreen = diagnosticScreen
         var hzString = ""
-        hzString = "MaxFrameRate: \(UIScreen.main.maximumFramesPerSecond) Hz"
+        hzString = "MaxFrameRate: \(displayScreen?.maximumFramesPerSecond ?? 0) Hz"
 
         let supportApplePencilString = UIDevice.pt.supportApplePencil.description
         let safeAreaInsets = AppWindows?.safeAreaInsets ?? .zero
@@ -1630,9 +1638,9 @@ extension LocalConsole {
                 SupportsWirelessCharging: \(PTDevice.current.supportsWirelessCharging ? "Yes" : "No")
                 HasLidarSensor: \(PTDevice.current.hasLidarSensor ? "Yes" : "No")
                 PPI: \(PTDevice.current.ppi ?? 0)
-                ScreenSize: \(UIScreen.main.bounds.size)
+                ScreenSize: \(displayScreen?.bounds.size ?? .zero)
                 ScreenSafeAreaInsets: \(safeAreaInsets)
-                ScreenScale: \(UIScreen.main.scale)
+                ScreenScale: \(displayScreen?.scale ?? 0)
                 \(hzString)
                 Brightness: \(String(format: "%.2f", UIDevice.pt.brightness))
                 IsGuidedAccessSessionActive: \(PTDevice.current.isGuidedAccessSessionActive ? "Yes" : "No")
@@ -1660,14 +1668,15 @@ extension LocalConsole {
         Task { @MainActor [self] in
 
             let safeAreaInsets = PTUtils.getCurrentVC()?.view.safeAreaInsets ?? .zero
+            let displayScreen = self.diagnosticScreen
             
             print(
                   """
-                  Screen Size:       \(UIScreen.main.bounds.size)
+                  Screen Size:       \(displayScreen?.bounds.size ?? .zero)
                   Rounded Corners:   \(UIScreen.hasRoundedCorners ? "Yes" : "No")
-                  Screen Scale:      \(UIScreen.main.scale)
-                  Max Frame Rate:    \(UIScreen.main.maximumFramesPerSecond) Hz
-                  Brightness:        \(String(format: "%.2f", UIScreen.main.brightness))
+                  Screen Scale:      \(displayScreen?.scale ?? 0)
+                  Max Frame Rate:    \(displayScreen?.maximumFramesPerSecond ?? 0) Hz
+                  Brightness:        \(String(format: "%.2f", displayScreen?.brightness ?? 0))
                   
                   Safe Area Insets:  top:    \(String(describing: safeAreaInsets.top))
                                      left:   \(String(describing: safeAreaInsets.left))

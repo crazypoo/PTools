@@ -1,0 +1,136 @@
+{
+  "report_kind": "ci-generated",
+  "snapshot_of": "7c37f5a9fe08f32af3161382c382b286f34e4096",
+  "source_revision": "7c37f5a9fe08f32af3161382c382b286f34e4096",
+  "generated_at": "2026-10-23T06:54:36.864486+00:00",
+  "rule_version": "5.69.0-duo-2026-10-23-r3",
+  "tool_version": "5.69.0-duo-2026-10-23-r3",
+  "source_manifest_hash": "591ce60424fca939d48e5156b10d97aac507d2c5ef253d105e039efed840c2c8",
+  "status_counts": {
+    "not_run": 756,
+    "pass_static": 70,
+    "waived": 26
+  },
+  "focus_findings": {
+    "DUO-A01": {
+      "path": "PooToolsSource/Core/PTMarcos_swift.swift",
+      "decision": "display-only-allowed",
+      "reason": "历史兼容全局值，仅允许展示、像素或兼容读取",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-A02": {
+      "path": "PooToolsSource/Category/AutoScale+PTEX.swift",
+      "decision": "fixed",
+      "reason": "新版缩放支持 View-local overload，旧入口保留兼容",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-A03": {
+      "path": "PooToolsSource/Inspector/ElementInspectorConfiguration.swift",
+      "decision": "fixed",
+      "reason": "面板宽度从宿主 bounds 解析",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-A04": {
+      "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift",
+      "decision": "fixed",
+      "reason": "物理标定与 View 坐标映射分离，并对不可信状态降级",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-A05": {
+      "path": "PooToolsSource/Category/UIScreen+PTEX.swift",
+      "decision": "display-only-allowed",
+      "reason": "UIScreen.size 仅作为显示器元数据",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-A06": {
+      "path": "PooToolsSource/Category/CGFloat+PTEX.swift",
+      "decision": "fixed",
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N01": {
+      "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
+      "decision": "fixed",
+      "reason": "同一 Window 坐标系和可视 pane 判断",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N02": {
+      "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
+      "decision": "fixed",
+      "reason": "fakeNav 使用真实 pullbar frame、本地 safe area 和幂等 inset 更新",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N03": {
+      "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
+      "decision": "fixed",
+      "reason": "WebView top constraint 使用实测局部导航边界",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N04": {
+      "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+      "decision": "fixed",
+      "reason": "零尺寸时延后解码而不是读取主屏",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N05": {
+      "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
+      "decision": "fixed",
+      "reason": "控制台方向和起始位置使用宿主 bounds",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N06": {
+      "path": "PooToolsSource/Inspector/ViewHierarchyRoot.swift",
+      "decision": "fixed",
+      "reason": "Inspector 根节点跟随被检查 Window",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N07": {
+      "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
+      "decision": "fixed",
+      "reason": "扫码控件使用宿主 safe area",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N08": {
+      "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift",
+      "decision": "fixed",
+      "reason": "Debug overlay 使用当前控制器宿主",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N09": {
+      "path": "PooToolsSource/Category/UIImage+PTEX.swift",
+      "decision": "fixed",
+      "reason": "像素化尺度脱离主屏幕宽度",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    }
+  }
+}

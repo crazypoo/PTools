@@ -10,11 +10,25 @@ import Foundation
 import ARKit
 import UIKit
 
+// English: Describe whether eye coordinates are calibrated, estimated, or unusable.
+// Español: Describe si las coordenadas oculares están calibradas, estimadas o no disponibles.
+// 中文：描述眼动坐标当前是已标定、估算还是不可用。
+@objc public enum PTEyeTrackingCalibrationState: Int, Sendable {
+    case estimated = 0
+    case valid = 1
+    case needsRecalibration = 2
+    case unsupported = 3
+}
+
 @MainActor 
 class PTEyeTrackingDataManager {
     
-    // 实际设备尺寸(以米为单位)
-    private let phoneScreenSize = CGSize(width: 0.0774, height: 0.1575)
+    // English: This is only a fallback estimate until the host supplies calibration data.
+    // Español: Es solo una estimación de respaldo hasta que el host proporcione calibración.
+    // 中文：在宿主提供标定数据前，这只是估算尺寸，不能视为精确测量。
+    private var phoneScreenSize = CGSize(width: 0.0774, height: 0.1575)
+    private(set) var calibrationState: PTEyeTrackingCalibrationState
+    private var lastDisplayBounds: CGSize?
     
     private var screenSize: CGRect
     private let smoothingThreshold: Int = 8
@@ -41,6 +55,7 @@ class PTEyeTrackingDataManager {
     
     public init(screenBounds: CGRect = .zero) {
         self.screenSize = screenBounds
+        self.calibrationState = screenBounds.isEmpty ? .unsupported : .estimated
         lookAtTargetEyeLNode.position.z = 2
         lookAtTargetEyeRNode.position.z = 2
         
@@ -59,9 +74,49 @@ class PTEyeTrackingDataManager {
     // English: Update only the view mapping; physical calibration remains independent.
     // Español: Actualiza solo el mapeo de la vista; la calibración física permanece independiente.
     // 中文：只更新 View 坐标映射，物理屏幕标定与布局尺寸保持分离。
-    func update(screenBounds: CGRect) {
-        guard !screenBounds.isEmpty else { return }
+    func update(screenBounds: CGRect, displayBounds: CGSize? = nil) {
+        guard !screenBounds.isEmpty else {
+            calibrationState = .unsupported
+            return
+        }
         self.screenSize = screenBounds
+
+        if let displayBounds,
+           displayBounds.width.isFinite,
+           displayBounds.height.isFinite,
+           displayBounds.width > 0,
+           displayBounds.height > 0 {
+            let normalized = CGSize(width: min(displayBounds.width, displayBounds.height),
+                                    height: max(displayBounds.width, displayBounds.height))
+            if let lastDisplayBounds,
+               abs(lastDisplayBounds.width - normalized.width) > 1,
+               abs(lastDisplayBounds.height - normalized.height) > 1 {
+                calibrationState = .needsRecalibration
+            }
+            self.lastDisplayBounds = normalized
+        }
+    }
+
+    // English: Accept physical dimensions only when both values are finite and positive.
+    // Español: Acepta dimensiones físicas solo cuando ambas son finitas y positivas.
+    // 中文：仅接受有限且大于零的物理尺寸，避免把无效数据当作精确标定。
+    func updateCalibration(screenSizeMeters: CGSize) {
+        guard screenSizeMeters.width.isFinite,
+              screenSizeMeters.height.isFinite,
+              screenSizeMeters.width > 0,
+              screenSizeMeters.height > 0 else {
+            calibrationState = .needsRecalibration
+            return
+        }
+        phoneScreenSize = screenSizeMeters
+        calibrationState = .valid
+    }
+
+    // English: Force callers to acknowledge that the old physical estimate is no longer trusted.
+    // Español: Obliga a reconocer que la estimación física antigua ya no es fiable.
+    // 中文：明确标记旧物理估算已不再可信，等待重新标定。
+    func invalidateCalibration() {
+        calibrationState = .needsRecalibration
     }
     
     func calculateEyeLookAtPoint(anchor: ARFaceAnchor) -> CGPoint {
@@ -94,7 +149,9 @@ class PTEyeTrackingDataManager {
         let smoothEyeLookAtPositionX = eyeLookAtPositionXs.average ?? 0
         let smoothEyeLookAtPositionY = eyeLookAtPositionYs.average ?? 0
         
-        guard !screenSize.isEmpty else { return .zero }
+        guard !screenSize.isEmpty,
+              calibrationState != .unsupported,
+              calibrationState != .needsRecalibration else { return .zero }
         let x = smoothEyeLookAtPositionX / (phoneScreenSize.width / 2) * screenSize.width
         let y = smoothEyeLookAtPositionY / (phoneScreenSize.height / 2) * screenSize.height
         

@@ -848,7 +848,7 @@ fileprivate class PTBaseScreenShotAlert:UIView {
     }()
 
     init(screenShotImage:UIImage,dismiss: PTActionTask? = nil) {
-        super.init(frame: CGRect(x: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace - ItemWidth, y: CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarHeight_Total - ItemHeight - 15 - CGFloat.kNavBarHeight_Total, width: ItemWidth, height: ItemHeight))
+        super.init(frame: .zero)
         backgroundColor = .DevMaskColor
         
         dismissTask = dismiss
@@ -883,7 +883,16 @@ fileprivate class PTBaseScreenShotAlert:UIView {
             make.bottom.equalTo(self.share.snp.top).offset(-5)
         }
         
-        PTUtils.getCurrentVC()?.view.addSubview(self)
+        if let hostView = PTUtils.getCurrentVC()?.view {
+            // English: Position the screenshot overlay in its actual host view.
+            // Español: Coloca la superposición en la vista anfitriona real.
+            // 中文：根据实际宿主 View 定位截图浮层。
+            hostView.addSubview(self)
+            frame = CGRect(x: hostView.bounds.maxX - PTAppBaseConfig.share.defaultViewSpace - ItemWidth,
+                           y: hostView.bounds.maxY - hostView.safeAreaInsets.bottom - ItemHeight - 15,
+                           width: ItemWidth,
+                           height: ItemHeight)
+        }
         showAlert()
         
         Task { @MainActor in

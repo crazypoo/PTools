@@ -66,7 +66,11 @@ public class PTPermissionViewController: PTListViewController {
         let decorationEdges = listView.viewConfig.decorationItemsEdges
         listView.decorationViewReset = { [weak self] collection,decorationView,kind,indexPath,sectionModel in
             guard let self, deviceInfo.isPad else { return }
-            decorationView.frame = CGRectMake(decorationEdges.leading, 0, self.view.frame.size.width - decorationEdges.leading - decorationEdges.trailing, CGFloat(self.permissions.count * 88) + PTPermissionHeader.cellHeight())
+            let width = max(collection.bounds.width, self.view.bounds.width)
+            decorationView.frame = CGRectMake(decorationEdges.leading,
+                                              0,
+                                              max(0, width - decorationEdges.leading - decorationEdges.trailing),
+                                              CGFloat(self.permissions.count * 88) + PTPermissionHeader.cellHeight(forWidth: width))
         }
 
         listView.headerInCollection = { kind,collectionView,model,indexPath in
@@ -244,7 +248,8 @@ public class PTPermissionViewController: PTListViewController {
             row.cellClass = PTPermissionCell.self
             return row
         }
-        let section = PTSection(headerHeight:PTPermissionHeader.cellHeight(),rows: permissionRows)
+        let width = max(listView.bounds.width, view.bounds.width)
+        let section = PTSection(headerHeight: PTPermissionHeader.cellHeight(forWidth: width), rows: permissionRows)
         section.headerClass = PTPermissionHeader.self
         mSections.append(section)
         

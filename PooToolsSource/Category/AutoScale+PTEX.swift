@@ -49,7 +49,11 @@ public extension Double {
         let base = inch.rawValue
         let screenWidth = Double(UIScreen.main.bounds.width)
         let screenHeight = Double(UIScreen.main.bounds.height)
-        let width = min(screenWidth, screenHeight) - Double(deviceSafeAreaInsets().left - deviceSafeAreaInsets().right)
+        // English: Keep the legacy screen-based API compatible, but never subtract one safe-area edge from the other.
+        // Español: Mantén compatible la API basada en pantalla, pero no restes un borde seguro del otro.
+        // 中文：保留旧版屏幕 API 的兼容性，但不能用左边减右边计算安全宽度。
+        let insets = deviceSafeAreaInsets()
+        let width = max(0, min(screenWidth, screenHeight) - Double(insets.left + insets.right))
         return (self * (width / base)).rounded(3)
     }
     
@@ -60,7 +64,11 @@ public extension Double {
         let base = inch.rawValue
         let screenWidth = Double(UIScreen.main.bounds.width)
         let screenHeight = Double(UIScreen.main.bounds.height)
-        let height = max(screenWidth, screenHeight) - Double(deviceSafeAreaInsets().top - deviceSafeAreaInsets().bottom)
+        // English: The old overload is retained for source compatibility; use autoHeight(in:) for view-local layout.
+        // Español: Se conserva la sobrecarga antigua; usa autoHeight(in:) para el diseño local de una vista.
+        // 中文：旧重载仅用于源码兼容；View 布局请使用 autoHeight(in:)。
+        let insets = deviceSafeAreaInsets()
+        let height = max(0, max(screenWidth, screenHeight) - Double(insets.top + insets.bottom))
         return (self * (height / base)).rounded(3)
     }
 
@@ -147,10 +155,26 @@ public extension BinaryFloatingPoint {
 public extension CGSize {
     
     @MainActor func autoWidth(_ inch: InchWidth = .TouchIDNormalModel) -> CGSize {
-        return CGSize(width: width.autoWidth(), height: height.autoWidth())
+        return CGSize(width: width.autoWidth(inch), height: height.autoWidth(inch))
     }
     @MainActor func autoHeight(_ inch: InchHeight = .TouchIDNormalModel) -> CGSize {
-        return CGSize(width: width.autoHeight(), height: height.autoHeight())
+        return CGSize(width: width.autoHeight(inch), height: height.autoHeight(inch))
+    }
+
+    // English: Scale a size using the owning view's local safe rectangle.
+    // Español: Escala un tamaño usando el rectángulo seguro local de la vista anfitriona.
+    // 中文：使用所属 View 的局部安全矩形缩放尺寸。
+    @MainActor func autoWidth(in view: UIView, inch: InchWidth = .TouchIDNormalModel) -> CGSize {
+        CGSize(width: Double(width).autoWidth(in: view, inch: inch),
+               height: Double(height).autoWidth(in: view, inch: inch))
+    }
+
+    // English: Scale height from the owning view without reading global display geometry.
+    // Español: Escala la altura desde la vista anfitriona sin leer la geometría global de pantalla.
+    // 中文：基于所属 View 缩放高度，不读取全局屏幕几何。
+    @MainActor func autoHeight(in view: UIView, inch: InchHeight = .TouchIDNormalModel) -> CGSize {
+        CGSize(width: Double(width).autoHeight(in: view, inch: inch),
+               height: Double(height).autoHeight(in: view, inch: inch))
     }
 }
 

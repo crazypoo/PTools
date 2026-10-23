@@ -1,10 +1,10 @@
 {
   "generator": "Scripts/audit_duo_uikit_coverage.py",
   "generated_by": "Scripts/audit_duo_uikit_coverage.py",
-  "source_revision": "0cc0517f96731711a43433fa007425f325286092",
-  "generated_at": "2026-10-23T06:00:18.981567+00:00",
-  "rule_version": "5.69.0-duo-2026-10-23-r2",
-  "source_manifest_hash": "9e6ca39b361ac7c14eea74cb3dd28eeccb27511eb36e8db011428eb274ab4fa9",
+  "source_revision": "7c37f5a9fe08f32af3161382c382b286f34e4096",
+  "generated_at": "2026-10-23T06:54:36.864486+00:00",
+  "rule_version": "5.69.0-duo-2026-10-23-r3",
+  "source_manifest_hash": "591ce60424fca939d48e5156b10d97aac507d2c5ef253d105e039efed840c2c8",
   "source_manifest": [
     {
       "path": "Example/Extensions/PToolsExampleIntentsExtension.swift",
@@ -132,7 +132,7 @@
     },
     {
       "path": "PooToolsSource/Animation/PTCoinAnimation.swift",
-      "sha256": "126703735968e7c6dad9e3d72184cfe690922f1a4e5627b4b3d262b360aa9caf"
+      "sha256": "0edba199a64fa2ae839e6b9233f7776969c28e6b704d680164f401264190adb9"
     },
     {
       "path": "PooToolsSource/Animation/PTGroupBuyAvatarView.swift",
@@ -320,7 +320,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "sha256": "0781569d39b90893d18ecf189f372d609da8c0ec8c0432d23ca1bd4ab57cf7e9"
+      "sha256": "290a7e59d1de404bc00a49078d9f94fe97ae4da0c16b8def205fb21784874af7"
     },
     {
       "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
@@ -660,7 +660,7 @@
     },
     {
       "path": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift",
-      "sha256": "f047f802bb5769fd337d01603312f5168ad25b256bd5eddb787628f224acfbc8"
+      "sha256": "ba4a91b597231d101833a7a7cd3599fc6b2fc4623c4de97f9ddf439e13c08fef"
     },
     {
       "path": "PooToolsSource/Calendar/PTEventOnCalendar.swift",
@@ -708,7 +708,7 @@
     },
     {
       "path": "PooToolsSource/Category/AutoScale+PTEX.swift",
-      "sha256": "2d2a484428de54d7220e226266823c5bcc644e8d16466c2243143a15e2fb4693"
+      "sha256": "2dc0dc73736f82e3839b53ac87baa72e5d3558282a76c966b9582499d080d14a"
     },
     {
       "path": "PooToolsSource/Category/Bool+PTEX.swift",
@@ -720,7 +720,7 @@
     },
     {
       "path": "PooToolsSource/Category/CGFloat+PTEX.swift",
-      "sha256": "2debbf63f67664c2c2bdc2a3606def105f637a3ad9bc72fb9082f7fde7c60a79"
+      "sha256": "b8e3880987af01951385995a80c0da4dfa310faea049ac4958bf246583d911d2"
     },
     {
       "path": "PooToolsSource/Category/CGPoint+PTEX.swift",
@@ -1248,7 +1248,7 @@
     },
     {
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "sha256": "02615835106e03fe0110799dc15e8447990ef7dd222408fd9763936c0410d0fb"
+      "sha256": "32787183cce7173d5540bda241e2424bb42965a6a31f33578fae8aeccc6f0d09"
     },
     {
       "path": "PooToolsSource/Core/PTMediaCache.swift",
@@ -1632,7 +1632,7 @@
     },
     {
       "path": "PooToolsSource/DebugPerformance/PTLeakListViewController.swift",
-      "sha256": "98bae910381478784cebdda963e0de0cb25cf9dfee4249a67fa306770b5ce4ec"
+      "sha256": "aec6e80b7e1cb42a81f944d07ab287e18fffebb5fb80765aaeb5d30e7c0729dc"
     },
     {
       "path": "PooToolsSource/DebugPerformance/PTLeakViewModel.swift",
@@ -1732,7 +1732,7 @@
     },
     {
       "path": "PooToolsSource/FloatPanel/UIViewController+PTSheetEX.swift",
-      "sha256": "c9e8ef8b3dabfe56968971163ac0c7370023014489e68217a025ff3b49224f41"
+      "sha256": "c8330103a9223cb1ffa03d3d0f5c663ebc06e0299770256c84bcee4c148a115d"
     },
     {
       "path": "PooToolsSource/Font/FontName.swift",
@@ -3268,7 +3268,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "sha256": "6b14a5d624ac265d74dd4eb79fbccad83e4dfa90f76f52e31dba7939219a7929"
+      "sha256": "e2f72a2d42f2f5744fb0674423d4e48af3357f1326759cb907a8e65db42d1d88"
     },
     {
       "path": "PooToolsSource/LocalConsole/PTInvertedTextView.swift",
@@ -4200,7 +4200,7 @@
     },
     {
       "path": "PooToolsSource/PermissionCore/PTPermissionHeader.swift",
-      "sha256": "dde22c6cc5874b5ccd4f6c5ed4dabbd997eef53dffb1441b94589eeea342430b"
+      "sha256": "9077982c7827f64005d5a8b2d0062aff46032c7a0c0a88c0ace195d9e8e4dadd"
     },
     {
       "path": "PooToolsSource/PermissionCore/PTPermissionModel.swift",
@@ -4224,7 +4224,7 @@
     },
     {
       "path": "PooToolsSource/PermissionCore/PTPermissionViewController.swift",
-      "sha256": "031552f2b4595eecac3f9fa70a2170ac4afd7737f82a17398c4ca41a401a2372"
+      "sha256": "a095af49de5092c56967172a477e90ad9944e0e324d7808192e60e81610dd32b"
     },
     {
       "path": "PooToolsSource/PhoneInfo/PTPhoneNetWorkInfo.swift",
@@ -4244,7 +4244,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibAlbumListViewController.swift",
-      "sha256": "160784f65cc03e90673cff720597f956a0b06fbb3fad59210b291be622c79473"
+      "sha256": "14f52d23111426f2ef6b92b5f39256e1048e18328e04713aaf8df54fe2d8afaa"
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibCameraContainerViewController.swift",
@@ -4272,7 +4272,7 @@
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "sha256": "4fbe36aea129196a651d171cca17d55174087c0922caff6624d705a88e3e6c83"
+      "sha256": "b3063325ac45fdfee85e7751370ab5380232592b2e522cd33884cd74a002715c"
     },
     {
       "path": "PooToolsSource/PhotoPicker/PTMediaPickerFeedback.swift",
@@ -4896,7 +4896,7 @@
     },
     {
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift",
-      "sha256": "1c00cf55b3c0f3aecf8c91376c99e897282216df7c4402aa0d3ebd7d5cde2c45"
+      "sha256": "5508710abbeabb60826d17ca3d931b90fa59556591a42fb498af132c011ba5c2"
     },
     {
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingExtensions.swift",
@@ -4904,7 +4904,7 @@
     },
     {
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingManager.swift",
-      "sha256": "9f3d4396179bb983e17ff8fc2fdfe47bca414e8b26ba76570bc58f83ff3e910e"
+      "sha256": "2b8227805a5d67298b53d23699ac42542bdfe31cfa1a564cae877a78a106515c"
     },
     {
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingSessionManager.swift",
@@ -5151,6 +5151,136 @@
       "sha256": "3420a63be25a64de8143389298152513e7e3a210ef86139b41d9d06b7dfe4cc4"
     }
   ],
+  "report_kind": "ci-generated",
+  "snapshot_of": "7c37f5a9fe08f32af3161382c382b286f34e4096",
+  "tool_version": "5.69.0-duo-2026-10-23-r3",
+  "status_counts": {
+    "not_run": 756,
+    "pass_static": 70,
+    "waived": 26
+  },
+  "focus_findings": {
+    "DUO-A01": {
+      "path": "PooToolsSource/Core/PTMarcos_swift.swift",
+      "decision": "display-only-allowed",
+      "reason": "历史兼容全局值，仅允许展示、像素或兼容读取",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-A02": {
+      "path": "PooToolsSource/Category/AutoScale+PTEX.swift",
+      "decision": "fixed",
+      "reason": "新版缩放支持 View-local overload，旧入口保留兼容",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-A03": {
+      "path": "PooToolsSource/Inspector/ElementInspectorConfiguration.swift",
+      "decision": "fixed",
+      "reason": "面板宽度从宿主 bounds 解析",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-A04": {
+      "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift",
+      "decision": "fixed",
+      "reason": "物理标定与 View 坐标映射分离，并对不可信状态降级",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-A05": {
+      "path": "PooToolsSource/Category/UIScreen+PTEX.swift",
+      "decision": "display-only-allowed",
+      "reason": "UIScreen.size 仅作为显示器元数据",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-A06": {
+      "path": "PooToolsSource/Category/CGFloat+PTEX.swift",
+      "decision": "fixed",
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N01": {
+      "path": "PooToolsSource/Category/UIImageView+PTEX.swift",
+      "decision": "fixed",
+      "reason": "同一 Window 坐标系和可视 pane 判断",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N02": {
+      "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
+      "decision": "fixed",
+      "reason": "fakeNav 使用真实 pullbar frame、本地 safe area 和幂等 inset 更新",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N03": {
+      "path": "PooToolsSource/Base/PTBaseWebViewController.swift",
+      "decision": "fixed",
+      "reason": "WebView top constraint 使用实测局部导航边界",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N04": {
+      "path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift",
+      "decision": "fixed",
+      "reason": "零尺寸时延后解码而不是读取主屏",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N05": {
+      "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
+      "decision": "fixed",
+      "reason": "控制台方向和起始位置使用宿主 bounds",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N06": {
+      "path": "PooToolsSource/Inspector/ViewHierarchyRoot.swift",
+      "decision": "fixed",
+      "reason": "Inspector 根节点跟随被检查 Window",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N07": {
+      "path": "PooToolsSource/QRCodeScan/PTScanQRController.swift",
+      "decision": "fixed",
+      "reason": "扫码控件使用宿主 safe area",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N08": {
+      "path": "PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift",
+      "decision": "fixed",
+      "reason": "Debug overlay 使用当前控制器宿主",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    },
+    "DUO-N09": {
+      "path": "PooToolsSource/Category/UIImage+PTEX.swift",
+      "decision": "fixed",
+      "reason": "像素化尺度脱离主屏幕宽度",
+      "missing": [],
+      "forbidden": [],
+      "external_risks": []
+    }
+  },
   "hits": [
     {
       "kind": "kTabbarHeight_Total",
@@ -5578,23 +5708,6 @@
       "reason": "candidate requires semantic review"
     },
     {
-      "kind": "kSCREEN",
-      "path": "PooToolsSource/Animation/PTCoinAnimation.swift",
-      "line": 106,
-      "text": "aniMove.toValue = CGPoint(x: CGFloat.kSCREEN_WIDTH, y: CGFloat.kSCREEN_HEIGHT)",
-      "id": "639c92db1ce2",
-      "owner": "Animation",
-      "target": "Animation",
-      "evidence": "PooToolsSource/Animation/PTCoinAnimation.swift:106",
-      "layout_use": true,
-      "decision": "needs-review",
-      "test_id": "",
-      "test_owner": "Animation",
-      "run_status": "not_run",
-      "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
-    },
-    {
       "kind": "keyWindow",
       "path": "PooToolsSource/Animation/PTPurchaseCarAnimationTool.swift",
       "line": 30,
@@ -5867,82 +5980,14 @@
       "reason": "candidate requires semantic review"
     },
     {
-      "kind": "kSCREEN",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 851,
-      "text": "super.init(frame: CGRect(x: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace - ItemWidth, y: CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarHeight_Total - ItemHeight - 15 - CGFloat.kNavBarHeight_Total, width: ItemWidth, height: ItemHeight))",
-      "id": "0c0439fef36b",
-      "owner": "Base",
-      "target": "Base",
-      "evidence": "PooToolsSource/Base/PTBaseViewController.swift:851",
-      "layout_use": true,
-      "decision": "needs-review",
-      "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
-      "test_owner": "Base",
-      "run_status": "not_run",
-      "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
-    },
-    {
-      "kind": "kNavBarHeight_Total",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 851,
-      "text": "super.init(frame: CGRect(x: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace - ItemWidth, y: CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarHeight_Total - ItemHeight - 15 - CGFloat.kNavBarHeight_Total, width: ItemWidth, height: ItemHeight))",
-      "id": "b4bd361dc8e7",
-      "owner": "Base",
-      "target": "Base",
-      "evidence": "PooToolsSource/Base/PTBaseViewController.swift:851",
-      "layout_use": true,
-      "decision": "needs-review",
-      "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
-      "test_owner": "Base",
-      "run_status": "not_run",
-      "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
-    },
-    {
-      "kind": "kTabbarHeight_Total",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 851,
-      "text": "super.init(frame: CGRect(x: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace - ItemWidth, y: CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarHeight_Total - ItemHeight - 15 - CGFloat.kNavBarHeight_Total, width: ItemWidth, height: ItemHeight))",
-      "id": "8493b28f5e67",
-      "owner": "Base",
-      "target": "Base",
-      "evidence": "PooToolsSource/Base/PTBaseViewController.swift:851",
-      "layout_use": true,
-      "decision": "needs-review",
-      "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
-      "test_owner": "Base",
-      "run_status": "not_run",
-      "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
-    },
-    {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 851,
-      "text": "super.init(frame: CGRect(x: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace - ItemWidth, y: CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarHeight_Total - ItemHeight - 15 - CGFloat.kNavBarHeight_Total, width: ItemWidth, height: ItemHeight))",
-      "id": "3f63af632c1e",
-      "owner": "Base",
-      "target": "Base",
-      "evidence": "PooToolsSource/Base/PTBaseViewController.swift:851",
-      "layout_use": true,
-      "decision": "needs-review",
-      "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
-      "test_owner": "Base",
-      "run_status": "not_run",
-      "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
-    },
-    {
-      "kind": "magic-fixed-dimension",
-      "path": "PooToolsSource/Base/PTBaseViewController.swift",
-      "line": 924,
+      "line": 933,
       "text": "view.imageSize = CGSize(width: 15, height: 15)",
-      "id": "1c1e9098b864",
+      "id": "07b2204b366a",
       "owner": "Base",
       "target": "Base",
-      "evidence": "PooToolsSource/Base/PTBaseViewController.swift:924",
+      "evidence": "PooToolsSource/Base/PTBaseViewController.swift:933",
       "layout_use": true,
       "decision": "needs-review",
       "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
@@ -5966,7 +6011,7 @@
       "test_owner": "Base",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "WebView top constraint 使用实测局部导航边界"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -6845,12 +6890,12 @@
       "target": "C7Collector",
       "evidence": "PooToolsSource/C7Collector/PTFilterCameraViewController.swift:234",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "C7Collector",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Camera image-processing output size."
     },
     {
       "kind": "reloadData-layout",
@@ -6998,90 +7043,22 @@
       "target": "C7Collector",
       "evidence": "PooToolsSource/C7Collector/PTHarBethFilter.swift:47",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "C7Collector",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
-    },
-    {
-      "kind": "kSCREEN",
-      "path": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift",
-      "line": 67,
-      "text": "super.init(frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarHeight_Total - ItemHeight - 15 - CGFloat.kNavBarHeight_Total, width: ItemWidth, height: ItemHeight))",
-      "id": "f6eeca3b1863",
-      "owner": "C7Collector",
-      "target": "C7Collector",
-      "evidence": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift:67",
-      "layout_use": true,
-      "decision": "needs-review",
-      "test_id": "",
-      "test_owner": "C7Collector",
-      "run_status": "not_run",
-      "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
-    },
-    {
-      "kind": "kNavBarHeight_Total",
-      "path": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift",
-      "line": 67,
-      "text": "super.init(frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarHeight_Total - ItemHeight - 15 - CGFloat.kNavBarHeight_Total, width: ItemWidth, height: ItemHeight))",
-      "id": "2057f8200da0",
-      "owner": "C7Collector",
-      "target": "C7Collector",
-      "evidence": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift:67",
-      "layout_use": true,
-      "decision": "needs-review",
-      "test_id": "",
-      "test_owner": "C7Collector",
-      "run_status": "not_run",
-      "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
-    },
-    {
-      "kind": "kTabbarHeight_Total",
-      "path": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift",
-      "line": 67,
-      "text": "super.init(frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarHeight_Total - ItemHeight - 15 - CGFloat.kNavBarHeight_Total, width: ItemWidth, height: ItemHeight))",
-      "id": "296b3fd99a48",
-      "owner": "C7Collector",
-      "target": "C7Collector",
-      "evidence": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift:67",
-      "layout_use": true,
-      "decision": "needs-review",
-      "test_id": "",
-      "test_owner": "C7Collector",
-      "run_status": "not_run",
-      "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Render texture default; caller can provide a local texture size."
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift",
-      "line": 67,
-      "text": "super.init(frame: CGRect(x: PTAppBaseConfig.share.defaultViewSpace, y: CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarHeight_Total - ItemHeight - 15 - CGFloat.kNavBarHeight_Total, width: ItemWidth, height: ItemHeight))",
-      "id": "ca282e65ebfe",
-      "owner": "C7Collector",
-      "target": "C7Collector",
-      "evidence": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift:67",
-      "layout_use": true,
-      "decision": "needs-review",
-      "test_id": "",
-      "test_owner": "C7Collector",
-      "run_status": "not_run",
-      "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
-    },
-    {
-      "kind": "magic-fixed-dimension",
-      "path": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift",
-      "line": 129,
+      "line": 138,
       "text": "view.imageSize = CGSize(width: 15, height: 15)",
-      "id": "f9a7f2fbcffd",
+      "id": "d198c728416b",
       "owner": "C7Collector",
       "target": "C7Collector",
-      "evidence": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift:129",
+      "evidence": "PooToolsSource/C7Collector/PTTakePictureReviewer.swift:138",
       "layout_use": true,
       "decision": "needs-review",
       "test_id": "",
@@ -7139,7 +7116,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "新版缩放支持 View-local overload，旧入口保留兼容"
     },
     {
       "kind": "UIScreen.main",
@@ -7156,7 +7133,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "新版缩放支持 View-local overload，旧入口保留兼容"
     },
     {
       "kind": "UIScreen.main",
@@ -7173,31 +7150,14 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "新版缩放支持 View-local overload，旧入口保留兼容"
     },
     {
       "kind": "trait/device-idiom",
       "path": "PooToolsSource/Category/AutoScale+PTEX.swift",
-      "line": 57,
-      "text": "guard UIDevice.current.userInterfaceIdiom == .phone else {",
-      "id": "787eaedb188d",
-      "owner": "Category",
-      "target": "Category",
-      "evidence": "PooToolsSource/Category/AutoScale+PTEX.swift:57",
-      "layout_use": true,
-      "decision": "fixed",
-      "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
-      "test_owner": "Category",
-      "run_status": "pass_static",
-      "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
-    },
-    {
-      "kind": "UIScreen.main",
-      "path": "PooToolsSource/Category/AutoScale+PTEX.swift",
       "line": 61,
-      "text": "let screenWidth = Double(UIScreen.main.bounds.width)",
-      "id": "2f4de4f4107a",
+      "text": "guard UIDevice.current.userInterfaceIdiom == .phone else {",
+      "id": "924a756aa292",
       "owner": "Category",
       "target": "Category",
       "evidence": "PooToolsSource/Category/AutoScale+PTEX.swift:61",
@@ -7207,58 +7167,75 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "新版缩放支持 View-local overload，旧入口保留兼容"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Category/AutoScale+PTEX.swift",
-      "line": 62,
+      "line": 65,
+      "text": "let screenWidth = Double(UIScreen.main.bounds.width)",
+      "id": "00d457a2da40",
+      "owner": "Category",
+      "target": "Category",
+      "evidence": "PooToolsSource/Category/AutoScale+PTEX.swift:65",
+      "layout_use": true,
+      "decision": "fixed",
+      "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
+      "test_owner": "Category",
+      "run_status": "pass_static",
+      "reviewer": "PTools Duo audit",
+      "reason": "新版缩放支持 View-local overload，旧入口保留兼容"
+    },
+    {
+      "kind": "UIScreen.main",
+      "path": "PooToolsSource/Category/AutoScale+PTEX.swift",
+      "line": 66,
       "text": "let screenHeight = Double(UIScreen.main.bounds.height)",
-      "id": "1f518f104b8c",
+      "id": "b4f7416a79d2",
       "owner": "Category",
       "target": "Category",
-      "evidence": "PooToolsSource/Category/AutoScale+PTEX.swift:62",
+      "evidence": "PooToolsSource/Category/AutoScale+PTEX.swift:66",
       "layout_use": true,
       "decision": "fixed",
       "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "新版缩放支持 View-local overload，旧入口保留兼容"
     },
     {
       "kind": "trait/device-idiom",
       "path": "PooToolsSource/Category/AutoScale+PTEX.swift",
-      "line": 71,
+      "line": 79,
       "text": "guard view.traitCollection.userInterfaceIdiom == .phone else { return self }",
-      "id": "862bb6c0921a",
+      "id": "37b194e7ecbe",
       "owner": "Category",
       "target": "Category",
-      "evidence": "PooToolsSource/Category/AutoScale+PTEX.swift:71",
+      "evidence": "PooToolsSource/Category/AutoScale+PTEX.swift:79",
       "layout_use": true,
       "decision": "fixed",
       "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "新版缩放支持 View-local overload，旧入口保留兼容"
     },
     {
       "kind": "trait/device-idiom",
       "path": "PooToolsSource/Category/AutoScale+PTEX.swift",
-      "line": 82,
+      "line": 90,
       "text": "guard view.traitCollection.userInterfaceIdiom == .phone else { return self }",
-      "id": "1edd9278af91",
+      "id": "a8f96cee1fce",
       "owner": "Category",
       "target": "Category",
-      "evidence": "PooToolsSource/Category/AutoScale+PTEX.swift:82",
+      "evidence": "PooToolsSource/Category/AutoScale+PTEX.swift:90",
       "layout_use": true,
       "decision": "fixed",
       "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "新版缩放支持 View-local overload，旧入口保留兼容"
     },
     {
       "kind": "UIScreen.main",
@@ -7275,7 +7252,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "kSCREEN",
@@ -7292,7 +7269,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "kSCREEN",
@@ -7309,7 +7286,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "kSCREEN",
@@ -7326,7 +7303,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -7343,7 +7320,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "statusBarHeight",
@@ -7360,7 +7337,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "isFaceIDCapable",
@@ -7377,7 +7354,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "kNavBarHeight_Total",
@@ -7394,7 +7371,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "statusBarHeight",
@@ -7411,7 +7388,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "kTabbarHeight_Total",
@@ -7428,7 +7405,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "kTabbarHeight_Total",
@@ -7445,7 +7422,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "kTabbarHeight_Total",
@@ -7462,7 +7439,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "safe-area-global",
@@ -7479,7 +7456,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "AppWindows",
@@ -7496,7 +7473,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "safe-area-global",
@@ -7513,7 +7490,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "AppWindows",
@@ -7530,7 +7507,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"
     },
     {
       "kind": "UIScreen.main",
@@ -7780,12 +7757,12 @@
       "target": "Category",
       "evidence": "PooToolsSource/Category/UICollectionView+PTEX.swift:343",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
       "test_owner": "Category",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Legacy default width when no owner view is supplied."
     },
     {
       "kind": "kSCREEN",
@@ -7797,12 +7774,12 @@
       "target": "Category",
       "evidence": "PooToolsSource/Category/UICollectionView+PTEX.swift:448",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
       "test_owner": "Category",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Legacy default width when no owner view is supplied."
     },
     {
       "kind": "kSCREEN",
@@ -7814,12 +7791,12 @@
       "target": "Category",
       "evidence": "PooToolsSource/Category/UICollectionView+PTEX.swift:474",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
       "test_owner": "Category",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Legacy default width when no owner view is supplied."
     },
     {
       "kind": "kSCREEN",
@@ -7831,12 +7808,12 @@
       "target": "Category",
       "evidence": "PooToolsSource/Category/UICollectionView+PTEX.swift:504",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
       "test_owner": "Category",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Legacy default width when no owner view is supplied."
     },
     {
       "kind": "kSCREEN",
@@ -7848,12 +7825,12 @@
       "target": "Category",
       "evidence": "PooToolsSource/Category/UICollectionView+PTEX.swift:677",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
       "test_owner": "Category",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Legacy default width when no owner view is supplied."
     },
     {
       "kind": "UIScreen.main",
@@ -7887,7 +7864,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "像素化尺度脱离主屏幕宽度"
     },
     {
       "kind": "statusBarHeight",
@@ -7921,7 +7898,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "UIScreen.size 仅作为显示器元数据"
     },
     {
       "kind": "UIScreen.main",
@@ -7938,7 +7915,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "UIScreen.size 仅作为显示器元数据"
     },
     {
       "kind": "UIScreen.main",
@@ -7955,7 +7932,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "UIScreen.size 仅作为显示器元数据"
     },
     {
       "kind": "UIScreen.main",
@@ -7972,7 +7949,7 @@
       "test_owner": "Category",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "UIScreen.size 仅作为显示器元数据"
     },
     {
       "kind": "UIScreen.main",
@@ -8261,7 +8238,7 @@
       "test_owner": "Core",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "历史兼容全局值，仅允许展示、像素或兼容读取"
     },
     {
       "kind": "isFaceIDCapable",
@@ -8278,48 +8255,14 @@
       "test_owner": "Core",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "历史兼容全局值，仅允许展示、像素或兼容读取"
     },
     {
       "kind": "UIScreen.main",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 87,
-      "text": "@MainActor public let kSCREEN_BOUNDS = UIScreen.main.bounds",
-      "id": "bc9b3f7ffb3d",
-      "owner": "Core",
-      "target": "Core",
-      "evidence": "PooToolsSource/Core/PTMarcos_swift.swift:87",
-      "layout_use": true,
-      "decision": "display-only-allowed",
-      "test_id": "",
-      "test_owner": "Core",
-      "run_status": "pass_static",
-      "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
-    },
-    {
-      "kind": "kSCREEN",
-      "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 87,
-      "text": "@MainActor public let kSCREEN_BOUNDS = UIScreen.main.bounds",
-      "id": "90266a5c4088",
-      "owner": "Core",
-      "target": "Core",
-      "evidence": "PooToolsSource/Core/PTMarcos_swift.swift:87",
-      "layout_use": true,
-      "decision": "display-only-allowed",
-      "test_id": "",
-      "test_owner": "Core",
-      "run_status": "pass_static",
-      "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
-    },
-    {
-      "kind": "kSCREEN",
-      "path": "PooToolsSource/Core/PTMarcos_swift.swift",
       "line": 90,
-      "text": "@MainActor public let kSCREEN_SIZE = kSCREEN_BOUNDS.size",
-      "id": "d299db47b73f",
+      "text": "@MainActor public let kSCREEN_BOUNDS = UIScreen.main.bounds",
+      "id": "55e668392954",
       "owner": "Core",
       "target": "Core",
       "evidence": "PooToolsSource/Core/PTMarcos_swift.swift:90",
@@ -8329,31 +8272,31 @@
       "test_owner": "Core",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "历史兼容全局值，仅允许展示、像素或兼容读取"
     },
     {
-      "kind": "UIScreen.main",
+      "kind": "kSCREEN",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
-      "line": 93,
-      "text": "@MainActor public let kSCREEN_SCALE = UIScreen.main.scale",
-      "id": "d4fa99d47f02",
+      "line": 90,
+      "text": "@MainActor public let kSCREEN_BOUNDS = UIScreen.main.bounds",
+      "id": "345dcd039b65",
       "owner": "Core",
       "target": "Core",
-      "evidence": "PooToolsSource/Core/PTMarcos_swift.swift:93",
-      "layout_use": false,
+      "evidence": "PooToolsSource/Core/PTMarcos_swift.swift:90",
+      "layout_use": true,
       "decision": "display-only-allowed",
       "test_id": "",
       "test_owner": "Core",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "历史兼容全局值，仅允许展示、像素或兼容读取"
     },
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/Core/PTMarcos_swift.swift",
       "line": 93,
-      "text": "@MainActor public let kSCREEN_SCALE = UIScreen.main.scale",
-      "id": "280bb1c2a051",
+      "text": "@MainActor public let kSCREEN_SIZE = kSCREEN_BOUNDS.size",
+      "id": "aabc0da5d347",
       "owner": "Core",
       "target": "Core",
       "evidence": "PooToolsSource/Core/PTMarcos_swift.swift:93",
@@ -8363,7 +8306,41 @@
       "test_owner": "Core",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "历史兼容全局值，仅允许展示、像素或兼容读取"
+    },
+    {
+      "kind": "UIScreen.main",
+      "path": "PooToolsSource/Core/PTMarcos_swift.swift",
+      "line": 96,
+      "text": "@MainActor public let kSCREEN_SCALE = UIScreen.main.scale",
+      "id": "ffb1343c0776",
+      "owner": "Core",
+      "target": "Core",
+      "evidence": "PooToolsSource/Core/PTMarcos_swift.swift:96",
+      "layout_use": false,
+      "decision": "display-only-allowed",
+      "test_id": "",
+      "test_owner": "Core",
+      "run_status": "pass_static",
+      "reviewer": "PTools Duo audit",
+      "reason": "历史兼容全局值，仅允许展示、像素或兼容读取"
+    },
+    {
+      "kind": "kSCREEN",
+      "path": "PooToolsSource/Core/PTMarcos_swift.swift",
+      "line": 96,
+      "text": "@MainActor public let kSCREEN_SCALE = UIScreen.main.scale",
+      "id": "118fa4fb8c74",
+      "owner": "Core",
+      "target": "Core",
+      "evidence": "PooToolsSource/Core/PTMarcos_swift.swift:96",
+      "layout_use": true,
+      "decision": "display-only-allowed",
+      "test_id": "",
+      "test_owner": "Core",
+      "run_status": "pass_static",
+      "reviewer": "PTools Duo audit",
+      "reason": "历史兼容全局值，仅允许展示、像素或兼容读取"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -8562,12 +8539,12 @@
       "target": "DarkMode",
       "evidence": "PooToolsSource/DarkMode/PTDarkFollowSystemFooter.swift:18",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DarkMode",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Static legacy text layout default; runtime containers override it."
     },
     {
       "kind": "magic-fixed-dimension",
@@ -8681,12 +8658,12 @@
       "target": "DarkMode",
       "evidence": "PooToolsSource/DarkMode/PTDarkSmartFooter.swift:26",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DarkMode",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Static legacy text layout default; runtime containers override it."
     },
     {
       "kind": "magic-fixed-dimension",
@@ -8851,12 +8828,12 @@
       "target": "DebugColor",
       "evidence": "PooToolsSource/DebugColor/PTColorPickPlugin.swift:22",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DebugColor",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Pixel color conversion scale."
     },
     {
       "kind": "UIScreen.main",
@@ -8885,12 +8862,12 @@
       "target": "DebugCrash",
       "evidence": "PooToolsSource/DebugCrash/PTCrashDetailViewController.swift:34",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DebugCrash",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Legacy text measurement fallback."
     },
     {
       "kind": "kTabbarHeight_Total",
@@ -8936,12 +8913,12 @@
       "target": "DebugCrash",
       "evidence": "PooToolsSource/DebugCrash/PTCrashLogViewController.swift:35",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DebugCrash",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Legacy text measurement fallback."
     },
     {
       "kind": "kSCREEN",
@@ -8953,12 +8930,12 @@
       "target": "DebugCrash",
       "evidence": "PooToolsSource/DebugCrash/PTCrashLogViewController.swift:36",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DebugCrash",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Legacy text measurement fallback."
     },
     {
       "kind": "kTabbarHeight_Total",
@@ -9072,12 +9049,12 @@
       "target": "DebugFile",
       "evidence": "PooToolsSource/DebugFile/PTFileBrowserViewController.swift:92",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DebugFile",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Popover fallback frame; current window is preferred when available."
     },
     {
       "kind": "magic-fixed-dimension",
@@ -9140,12 +9117,12 @@
       "target": "DebugLibs",
       "evidence": "PooToolsSource/DebugLibs/PTLoadedLibsViewController.swift:113",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DebugLibs",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Legacy debug title sizing fallback."
     },
     {
       "kind": "magic-fixed-dimension",
@@ -9191,12 +9168,12 @@
       "target": "DebugLibs",
       "evidence": "PooToolsSource/DebugLibs/PTLoadedLibsViewController.swift:216",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DebugLibs",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Legacy debug title sizing fallback."
     },
     {
       "kind": "reloadData-layout",
@@ -9332,7 +9309,7 @@
       "test_owner": "DebugNetwork",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "Debug overlay 使用当前控制器宿主"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -9349,7 +9326,7 @@
       "test_owner": "DebugNetwork",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "Debug overlay 使用当前控制器宿主"
     },
     {
       "kind": "kSCREEN",
@@ -9361,12 +9338,12 @@
       "target": "DebugPerformance",
       "evidence": "PooToolsSource/DebugPerformance/PTDebugPerformanceToolKit.swift:234",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DebugPerformance",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Debug floating control fallback."
     },
     {
       "kind": "statusBarHeight",
@@ -9378,12 +9355,12 @@
       "target": "DebugPerformance",
       "evidence": "PooToolsSource/DebugPerformance/PTDebugPerformanceToolKit.swift:234",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DebugPerformance",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Debug floating control fallback."
     },
     {
       "kind": "magic-fixed-dimension",
@@ -9412,12 +9389,12 @@
       "target": "DebugPerformance",
       "evidence": "PooToolsSource/DebugPerformance/PTDebugPerformanceViewController.swift:46",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DebugPerformance",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Debug-only layout fallback."
     },
     {
       "kind": "kSCREEN",
@@ -9429,12 +9406,12 @@
       "target": "DebugPerformance",
       "evidence": "PooToolsSource/DebugPerformance/PTDebugPerformanceViewController.swift:48",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DebugPerformance",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Debug-only layout fallback."
     },
     {
       "kind": "kSCREEN",
@@ -9446,12 +9423,12 @@
       "target": "DebugPerformance",
       "evidence": "PooToolsSource/DebugPerformance/PTDebugPerformanceViewController.swift:53",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DebugPerformance",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Debug-only layout fallback."
     },
     {
       "kind": "magic-fixed-dimension",
@@ -9539,31 +9516,14 @@
       "reason": "candidate requires semantic review"
     },
     {
-      "kind": "kSCREEN",
-      "path": "PooToolsSource/DebugPerformance/PTLeakListViewController.swift",
-      "line": 44,
-      "text": "make.width.equalTo(CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 132)",
-      "id": "777177e0c100",
-      "owner": "DebugPerformance",
-      "target": "DebugPerformance",
-      "evidence": "PooToolsSource/DebugPerformance/PTLeakListViewController.swift:44",
-      "layout_use": true,
-      "decision": "needs-review",
-      "test_id": "",
-      "test_owner": "DebugPerformance",
-      "run_status": "not_run",
-      "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
-    },
-    {
       "kind": "kTabbarHeight_Total",
       "path": "PooToolsSource/DebugPerformance/PTLeakListViewController.swift",
-      "line": 109,
+      "line": 114,
       "text": "let collectionInset:CGFloat = CGFloat.kTabbarSaveAreaHeight",
-      "id": "cb0834a54406",
+      "id": "1e2eb2394e44",
       "owner": "DebugPerformance",
       "target": "DebugPerformance",
-      "evidence": "PooToolsSource/DebugPerformance/PTLeakListViewController.swift:109",
+      "evidence": "PooToolsSource/DebugPerformance/PTLeakListViewController.swift:114",
       "layout_use": true,
       "decision": "needs-review",
       "test_id": "",
@@ -9575,12 +9535,12 @@
     {
       "kind": "kNavBarHeight_Total",
       "path": "PooToolsSource/DebugPerformance/PTLeakListViewController.swift",
-      "line": 110,
+      "line": 115,
       "text": "let collectionInset_Top:CGFloat = CGFloat.kNavBarHeight_Total",
-      "id": "e8f9fc72242c",
+      "id": "43664a44abe4",
       "owner": "DebugPerformance",
       "target": "DebugPerformance",
-      "evidence": "PooToolsSource/DebugPerformance/PTLeakListViewController.swift:110",
+      "evidence": "PooToolsSource/DebugPerformance/PTLeakListViewController.swift:115",
       "layout_use": true,
       "decision": "needs-review",
       "test_id": "",
@@ -9633,12 +9593,12 @@
       "target": "DebugRuler",
       "evidence": "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift:246",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "DebugRuler",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Debug overlay fallback before host layout."
     },
     {
       "kind": "magic-fixed-dimension",
@@ -10522,7 +10482,7 @@
       "test_owner": "Inspector",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "面板宽度从宿主 bounds 解析"
     },
     {
       "kind": "trait/device-idiom",
@@ -10539,7 +10499,7 @@
       "test_owner": "Inspector",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "面板宽度从宿主 bounds 解析"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -10556,7 +10516,7 @@
       "test_owner": "Inspector",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "面板宽度从宿主 bounds 解析"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -10573,7 +10533,7 @@
       "test_owner": "Inspector",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "面板宽度从宿主 bounds 解析"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -10590,7 +10550,7 @@
       "test_owner": "Inspector",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "面板宽度从宿主 bounds 解析"
     },
     {
       "kind": "reloadData-layout",
@@ -13424,12 +13384,12 @@
       "target": "Loading",
       "evidence": "PooToolsSource/Loading/PTHudView.swift:64",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "Loading",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Legacy maximum configuration bound."
     },
     {
       "kind": "magic-fixed-dimension",
@@ -13446,7 +13406,7 @@
       "test_owner": "LocalConsole",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "控制台方向和起始位置使用宿主 bounds"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -13463,7 +13423,7 @@
       "test_owner": "LocalConsole",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "控制台方向和起始位置使用宿主 bounds"
     },
     {
       "kind": "trait/device-idiom",
@@ -13480,7 +13440,7 @@
       "test_owner": "LocalConsole",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "控制台方向和起始位置使用宿主 bounds"
     },
     {
       "kind": "trait/device-idiom",
@@ -13497,133 +13457,116 @@
       "test_owner": "LocalConsole",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "控制台方向和起始位置使用宿主 bounds"
     },
     {
-      "kind": "trait/device-idiom",
+      "kind": "AppWindows",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 794,
-      "text": "let isPhone = UIDevice.current.userInterfaceIdiom == .phone",
-      "id": "c23b5839de6a",
+      "line": 488,
+      "text": "preferredWindowScene?.screen ?? AppWindows?.windowScene?.screen",
+      "id": "d96aab291c85",
       "owner": "LocalConsole",
       "target": "LocalConsole",
-      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:794",
+      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:488",
       "layout_use": true,
       "decision": "fixed",
       "test_id": "",
       "test_owner": "LocalConsole",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "控制台方向和起始位置使用宿主 bounds"
+    },
+    {
+      "kind": "trait/device-idiom",
+      "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
+      "line": 801,
+      "text": "let isPhone = UIDevice.current.userInterfaceIdiom == .phone",
+      "id": "bb79357569e8",
+      "owner": "LocalConsole",
+      "target": "LocalConsole",
+      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:801",
+      "layout_use": true,
+      "decision": "fixed",
+      "test_id": "",
+      "test_owner": "LocalConsole",
+      "run_status": "pass_static",
+      "reviewer": "PTools Duo audit",
+      "reason": "控制台方向和起始位置使用宿主 bounds"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 892,
+      "line": 899,
       "text": "let view = PTAlertDebugView(frame: CGRect(x: 40, y: 100, width: 280, height: 250))",
-      "id": "063ced55f637",
+      "id": "f42e65a176ec",
       "owner": "LocalConsole",
       "target": "LocalConsole",
-      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:892",
+      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:899",
       "layout_use": true,
       "decision": "fixed",
       "test_id": "",
       "test_owner": "LocalConsole",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "控制台方向和起始位置使用宿主 bounds"
     },
     {
       "kind": "AppWindows",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1233,
+      "line": 1240,
       "text": "guard let window = AppWindows, let maskView else { return }",
-      "id": "d53e98f3ffa4",
+      "id": "2b0faa6b36c8",
       "owner": "LocalConsole",
       "target": "LocalConsole",
-      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1233",
+      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1240",
       "layout_use": true,
       "decision": "fixed",
       "test_id": "",
       "test_owner": "LocalConsole",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "控制台方向和起始位置使用宿主 bounds"
     },
     {
       "kind": "trait/device-idiom",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1312,
+      "line": 1319,
       "text": "let isPhone = hostView?.traitCollection.userInterfaceIdiom == .phone",
-      "id": "562157f83176",
+      "id": "009024ac438c",
       "owner": "LocalConsole",
       "target": "LocalConsole",
-      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1312",
+      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1319",
       "layout_use": true,
       "decision": "fixed",
       "test_id": "",
       "test_owner": "LocalConsole",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
-    },
-    {
-      "kind": "UIScreen.main",
-      "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1605,
-      "text": "hzString = \"MaxFrameRate: \\(UIScreen.main.maximumFramesPerSecond) Hz\"",
-      "id": "ce28ac02c45a",
-      "owner": "LocalConsole",
-      "target": "LocalConsole",
-      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1605",
-      "layout_use": true,
-      "decision": "fixed",
-      "test_id": "",
-      "test_owner": "LocalConsole",
-      "run_status": "pass_static",
-      "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "控制台方向和起始位置使用宿主 bounds"
     },
     {
       "kind": "AppWindows",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1608,
+      "line": 1616,
       "text": "let safeAreaInsets = AppWindows?.safeAreaInsets ?? .zero",
-      "id": "199181148c77",
+      "id": "2c16975715d2",
       "owner": "LocalConsole",
       "target": "LocalConsole",
-      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1608",
+      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1616",
       "layout_use": true,
       "decision": "fixed",
       "test_id": "",
       "test_owner": "LocalConsole",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "控制台方向和起始位置使用宿主 bounds"
     },
     {
       "kind": "isFaceIDCapable",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1625,
-      "text": "IsFaceIDCapable: \\(PTDevice.current.isFaceIDCapable ? \"Yes\" : \"No\")",
-      "id": "d2b99cc4d46e",
-      "owner": "LocalConsole",
-      "target": "LocalConsole",
-      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1625",
-      "layout_use": true,
-      "decision": "fixed",
-      "test_id": "",
-      "test_owner": "LocalConsole",
-      "run_status": "pass_static",
-      "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
-    },
-    {
-      "kind": "UIScreen.main",
-      "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
       "line": 1633,
-      "text": "ScreenSize: \\(UIScreen.main.bounds.size)",
-      "id": "409821d32b04",
+      "text": "IsFaceIDCapable: \\(PTDevice.current.isFaceIDCapable ? \"Yes\" : \"No\")",
+      "id": "7b4668c7667f",
       "owner": "LocalConsole",
       "target": "LocalConsole",
       "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1633",
@@ -13633,109 +13576,24 @@
       "test_owner": "LocalConsole",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
-    },
-    {
-      "kind": "UIScreen.main",
-      "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1635,
-      "text": "ScreenScale: \\(UIScreen.main.scale)",
-      "id": "a14d77cc1824",
-      "owner": "LocalConsole",
-      "target": "LocalConsole",
-      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1635",
-      "layout_use": false,
-      "decision": "fixed",
-      "test_id": "",
-      "test_owner": "LocalConsole",
-      "run_status": "pass_static",
-      "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
-    },
-    {
-      "kind": "UIScreen.main",
-      "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1666,
-      "text": "Screen Size:       \\(UIScreen.main.bounds.size)",
-      "id": "89888943eb4b",
-      "owner": "LocalConsole",
-      "target": "LocalConsole",
-      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1666",
-      "layout_use": true,
-      "decision": "fixed",
-      "test_id": "",
-      "test_owner": "LocalConsole",
-      "run_status": "pass_static",
-      "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
-    },
-    {
-      "kind": "UIScreen.main",
-      "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1668,
-      "text": "Screen Scale:      \\(UIScreen.main.scale)",
-      "id": "cc88f8a02a16",
-      "owner": "LocalConsole",
-      "target": "LocalConsole",
-      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1668",
-      "layout_use": false,
-      "decision": "fixed",
-      "test_id": "",
-      "test_owner": "LocalConsole",
-      "run_status": "pass_static",
-      "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
-    },
-    {
-      "kind": "UIScreen.main",
-      "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1669,
-      "text": "Max Frame Rate:    \\(UIScreen.main.maximumFramesPerSecond) Hz",
-      "id": "7811f8f4eb8c",
-      "owner": "LocalConsole",
-      "target": "LocalConsole",
-      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1669",
-      "layout_use": true,
-      "decision": "fixed",
-      "test_id": "",
-      "test_owner": "LocalConsole",
-      "run_status": "pass_static",
-      "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
-    },
-    {
-      "kind": "UIScreen.main",
-      "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1670,
-      "text": "Brightness:        \\(String(format: \"%.2f\", UIScreen.main.brightness))",
-      "id": "894cbd65ebf9",
-      "owner": "LocalConsole",
-      "target": "LocalConsole",
-      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1670",
-      "layout_use": false,
-      "decision": "fixed",
-      "test_id": "",
-      "test_owner": "LocalConsole",
-      "run_status": "pass_static",
-      "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "控制台方向和起始位置使用宿主 bounds"
     },
     {
       "kind": "AppWindows",
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 1839,
+      "line": 1848,
       "text": "return (AppWindows?.safeAreaInsets.bottom ?? 0) > 0",
-      "id": "2816e34737d5",
+      "id": "b8a7eadbd565",
       "owner": "LocalConsole",
       "target": "LocalConsole",
-      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1839",
+      "evidence": "PooToolsSource/LocalConsole/LocalConsole.swift:1848",
       "layout_use": true,
       "decision": "fixed",
       "test_id": "",
       "test_owner": "LocalConsole",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "控制台方向和起始位置使用宿主 bounds"
     },
     {
       "kind": "kTabbarHeight_Total",
@@ -13854,7 +13712,7 @@
       "test_owner": "MediaViewer",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "零尺寸时延后解码而不是读取主屏"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -13871,7 +13729,7 @@
       "test_owner": "MediaViewer",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "零尺寸时延后解码而不是读取主屏"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -15933,36 +15791,19 @@
     {
       "kind": "kSCREEN",
       "path": "PooToolsSource/PermissionCore/PTPermissionHeader.swift",
-      "line": 20,
-      "text": "let titleHeight = UIView.sizeFor(string: PTPermissionHeader.headerTitle, font: PTAppBaseConfig.share.permissionTitleFont, width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace).height + CGFloat.ScaleW(w: 5)",
-      "id": "1caa7f476ce4",
+      "line": 23,
+      "text": "return cellHeight(forWidth: CGFloat.kSCREEN_WIDTH)",
+      "id": "a7153788bf5e",
       "owner": "PermissionCore",
       "target": "PermissionCore",
-      "evidence": "PooToolsSource/PermissionCore/PTPermissionHeader.swift:20",
+      "evidence": "PooToolsSource/PermissionCore/PTPermissionHeader.swift:23",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "PermissionCore",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
-    },
-    {
-      "kind": "kSCREEN",
-      "path": "PooToolsSource/PermissionCore/PTPermissionHeader.swift",
-      "line": 21,
-      "text": "let infoHeight = UIView.sizeFor(string: PTPermissionHeader.headerInfo, font: PTAppBaseConfig.share.permissionSubtitleFont, width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace).height + CGFloat.ScaleW(w: 5)",
-      "id": "cad48e29a44f",
-      "owner": "PermissionCore",
-      "target": "PermissionCore",
-      "evidence": "PooToolsSource/PermissionCore/PTPermissionHeader.swift:21",
-      "layout_use": true,
-      "decision": "needs-review",
-      "test_id": "",
-      "test_owner": "PermissionCore",
-      "run_status": "not_run",
-      "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Legacy compatibility API; new callers pass container width."
     },
     {
       "kind": "magic-fixed-dimension",
@@ -16030,7 +15871,7 @@
       "test_owner": "PhotoPicker",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "fakeNav 使用真实 pullbar frame、本地 safe area 和幂等 inset 更新"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -16047,24 +15888,24 @@
       "test_owner": "PhotoPicker",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "fakeNav 使用真实 pullbar frame、本地 safe area 和幂等 inset 更新"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 373,
+      "line": 385,
       "text": "size: CGSize(width: max(1, measuredWidth), height: 34))",
-      "id": "4f1b8919e863",
+      "id": "a7efa909e892",
       "owner": "PhotoPicker",
       "target": "PhotoPicker",
-      "evidence": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:373",
+      "evidence": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift:385",
       "layout_use": true,
       "decision": "fixed",
       "test_id": "testMeasuredWidthIncludesBadgeAndSelectedFont;testSelectedScaleAndRenderedImageSideAreIncludedInMeasurement;testIndicatorUsesItsOwnFixedWidthAndCustomPlacement;testContentIndicatorUsesContentFrameCenter;testManualSegmentScrollDoesNotChangeSelection;testDynamicBadgeKeepsStableSelectionID;testProgrammaticSelectionEmitsOnceWhenAnimationFinishes;testJXCompatibilitySwitchesUseCanonicalPolicies;testTypedBadgeUsesStyleConfigurationAndCoreDisplayRules;testInlineBadgeUsesTheSameMetricsAsOverlayBadge;testAverageSpacingPreservesIntrinsicItemWidths;testAverageSpacingFallsBackToMinimumWhenContentDoesNotFit;testAverageSpacingDoesNotExpandEqualDistributionOrSingleItem;testItemSeparatorDefaultKeepsLegacyAppearance;testItemSeparatorNoneAndBetweenItemsVisibility;testItemSeparatorGeometryAndInvalidValuesAreSafe;testItemSeparatorDoesNotAffectMeasurementOrTitleTransition;testItemSeparatorReuseClearsPreviousStyle;testUIButtonUsesNativeMenuAndRestoresPreviousState;testActionLayoutButtonUsesUIKitControlMenuLifecycle;testPlainUIControlGetsLongPressBridgeWithoutChangingNativeFlags;testPlainUIControlDoesNotFakePrimaryActionMenu;testSelectionMenuUsesOnlySelectedImage;testSelectionMenuDefaultsToCheckmark;testLoadingDisablesMenuThroughExistingInteractionState;testVerticalNavAndTabsNeverOverlap;testVerticalRailAvoidsOcclusionAndDivision;testVerticalBarEdgeLeadingAndTrailing;testAsymmetricSafeAreaIsNotDoubleApplied;testOverflowPreservesBackAndSelectedTab;testSystemCustomRendererSingleOwnership;testFoldResizingPreservesSelectionAndNavigation;testClassicAppearanceAndItemInsetsUnchanged;testMinimizeAndHiddenTransformUsesCorrectAxis;testVisibleRegionMovesControlsAwayFromActiveOcclusion;testVisibleRegionUsesLargestPaneAcrossDivision;testAccessoryDoesNotBlockScrollOrInput;testNonDuoIOS17UsesClassicRenderer;testMultiSceneStateDoesNotLeak;testVisiblePanesExcludeEveryActiveReservedRegion;testNoInteractiveFrameOverlapsReservedRegion;testVerticalRailNavTabAccessoryOverflowNoCollision;testLayoutSignatureChangesOnlyWithGeometry;testNoInfiniteLayoutInvalidationOnResize;testPhotoGridItemFramesStayWithinUsablePanes;testPagingFourMediaAfterResizePreservesItemIdentity;testEditorCropCoordinatesAfterResize;testKeyboardFormFooterAndPopoverAvoidOcclusion;testSplitViewCollapseExpandRetainsSelection;testRTLVerticalEdgeFollowsSystem;testMultiSceneDoesNotReuseStaleGeometry;testSkeletonConfigurationUsesSafeDefaults;testSnapKitConstraintGroupUsesTheSharedSuperview;testSkeletonConfigurationAcceptsBoundedCustomValues;testSkeletonConfigurationKeepsPresentationPolicies;testSkeletonShapeSanitizesInvalidRadius;testSkeletonConfigurationUsesIndependentGeometry;testCustomerAlertMeasurementUsesCapsuleInsetsAndSpacing;testCustomerAlertMeasurementSwitchesLongActionsToVertical;testCustomerAlertMeasurementAddsVerticalInsetsOnceForScrollableActions;testTabBarImageContentExposesNativeImages;testSelectionInsetsClampToTheItemBounds;testOversizedAndNegativeSelectionInsetsNeverCreateNegativeGeometry;testSelectionInsetsDoNotChangeItemImageSize;testContentOffsetDoesNotChangeItemImageSize;testSelectedSurfaceStyleSupportsPlainColorOverride;testSelectionAndOffsetDoNotChangeResolvedContentSize;testContentSizeResolverSupportsShrinkAndExpansion;testContentSizeResolverRejectsInvalidValuesAndCapsExpansion;testItemContentInsetsChangeContentViewBounds;testLabelUsesBackingBackgroundInsteadOfBackgroundGradientSublayer;testImageViewUsesBackingBackgroundAndKeepsImage;testButtonUsesBackingBackgroundThroughUIViewReference;testButtonSupportsStateSpecificGradients;testPlainViewRetainsSublayerGradientPath;testClearingGradientRestoresOriginalBackgroundColor;testLoadedPageIDsFollowDescriptorOrder;testQueriesDoNotCreateUnloadedPagesOrChangeLifecycle;testControllerQueriesReturnTheSameInstanceAndSupportTypedAccess;testWrongControllerTypeReturnsNil;testViewBackedPageHasNoViewController;testDiscardOffscreenUnloadsThePreviousPage;testAdjacentCacheKeepsOnlyTheRequestedRadius;testKeepAllCacheLoadsEveryDescriptor;testLimitCacheKeepsTheSelectedPageAndTheConfiguredCount;testApplyingDescriptorsRemovesDeletedPageFromQueries;testQueriesDoNotChangeSelectionOrLifecycle;testSequenceAndArrayHelpersPreserveOrder;testDictionaryHelpersUseExplicitOrderingAndTypedPaths;testOptionalRangeAndURLHelpers",
       "test_owner": "PhotoPicker",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "fakeNav 使用真实 pullbar frame、本地 safe area 和幂等 inset 更新"
     },
     {
       "kind": "AppWindows",
@@ -16229,12 +16070,12 @@
       "target": "Protocol",
       "evidence": "PooToolsSource/Protocol/PTProtocol.swift:86",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "Protocol",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Legacy device scaling policy."
     },
     {
       "kind": "magic-fixed-dimension",
@@ -16251,7 +16092,7 @@
       "test_owner": "QRCodeScan",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "扫码控件使用宿主 safe area"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -16268,7 +16109,7 @@
       "test_owner": "QRCodeScan",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "扫码控件使用宿主 safe area"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -16285,7 +16126,7 @@
       "test_owner": "QRCodeScan",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "扫码控件使用宿主 safe area"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -16302,7 +16143,7 @@
       "test_owner": "QRCodeScan",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "扫码控件使用宿主 safe area"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -16319,7 +16160,7 @@
       "test_owner": "QRCodeScan",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "扫码控件使用宿主 safe area"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -16336,7 +16177,7 @@
       "test_owner": "QRCodeScan",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "扫码控件使用宿主 safe area"
     },
     {
       "kind": "magic-fixed-dimension",
@@ -16353,7 +16194,7 @@
       "test_owner": "QRCodeScan",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "扫码控件使用宿主 safe area"
     },
     {
       "kind": "UIDevice.current.orientation",
@@ -16824,12 +16665,12 @@
       "target": "Stepper",
       "evidence": "PooToolsSource/Stepper/PTStepperView.swift:144",
       "layout_use": true,
-      "decision": "needs-review",
+      "decision": "legacy-allowlisted",
       "test_id": "",
       "test_owner": "Stepper",
-      "run_status": "not_run",
+      "run_status": "waived",
       "reviewer": "PTools Duo audit",
-      "reason": "candidate requires semantic review"
+      "reason": "Legacy content width fallback when no local width exists."
     },
     {
       "kind": "magic-fixed-dimension",
@@ -17395,36 +17236,36 @@
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift",
-      "line": 17,
-      "text": "private let phoneScreenSize = CGSize(width: 0.0774, height: 0.1575)",
-      "id": "0ec43fd7d1e5",
+      "line": 29,
+      "text": "private var phoneScreenSize = CGSize(width: 0.0774, height: 0.1575)",
+      "id": "dfcaf27659c0",
       "owner": "WhereIsMyEye",
       "target": "WhereIsMyEye",
-      "evidence": "PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift:17",
+      "evidence": "PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift:29",
       "layout_use": true,
       "decision": "fixed",
       "test_id": "",
       "test_owner": "WhereIsMyEye",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "物理标定与 View 坐标映射分离，并对不可信状态降级"
     },
     {
       "kind": "magic-fixed-dimension",
       "path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift",
-      "line": 34,
+      "line": 48,
       "text": "let geometry =  SCNBox(width: 1, height: 1, length: 0.001, chamferRadius: 0)",
-      "id": "b234a86bdc7b",
+      "id": "e9f9f9ed53c1",
       "owner": "WhereIsMyEye",
       "target": "WhereIsMyEye",
-      "evidence": "PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift:34",
+      "evidence": "PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift:48",
       "layout_use": true,
       "decision": "fixed",
       "test_id": "",
       "test_owner": "WhereIsMyEye",
       "run_status": "pass_static",
       "reviewer": "PTools Duo audit",
-      "reason": "focused finding reviewed"
+      "reason": "物理标定与 View 坐标映射分离，并对不可信状态降级"
     },
     {
       "kind": "magic-fixed-dimension",

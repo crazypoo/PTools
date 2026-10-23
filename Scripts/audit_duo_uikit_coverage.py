@@ -20,32 +20,61 @@ from pathlib import Path
 
 
 ROOTS = ("PooToolsSource", "Sources", "PooTools", "Example", "Tests")
-AUDIT_RULE_VERSION = "5.69.0-duo-2026-10-23-r2"
+AUDIT_RULE_VERSION = "5.69.0-duo-2026-10-23-r3"
 REPORT_FILES = (
     "report/current/duo_uikit_inventory.csv",
     "report/current/duo_global_geometry_hits.json",
     "report/current/duo_coverage.md",
 )
 
-# English: These are the findings closed by this pass; device-only behavior stays pending.
-# Español: Estos son los hallazgos cerrados en esta pasada; el comportamiento exclusivo del dispositivo queda pendiente.
-# 中文：这些是本轮已关闭的审计项；只能在设备验证的行为继续保持 pending。
+# English: A finding is closed only when its source checks pass; the desired result is not a decision by itself.
+# Español: Un hallazgo solo se cierra cuando pasan sus comprobaciones; el resultado deseado no es la decisión por sí solo.
+# 中文：只有源码检查通过，审计项才会关闭；期望结果本身不能直接作为结论。
 FOCUS_FINDINGS = {
-    "DUO-A01": ("PooToolsSource/Core/PTMarcos_swift.swift", "display-only-allowed", "历史兼容全局值，仅允许展示/兼容读取"),
-    "DUO-A02": ("PooToolsSource/Category/AutoScale+PTEX.swift", "fixed", "新增 View-local overload，旧入口保留兼容"),
-    "DUO-A03": ("PooToolsSource/Inspector/ElementInspectorConfiguration.swift", "fixed", "面板宽度从宿主 bounds 解析"),
-    "DUO-A04": ("PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift", "fixed", "物理标定与 View 坐标映射分离"),
-    "DUO-A05": ("PooToolsSource/Category/UIScreen+PTEX.swift", "display-only-allowed", "UIScreen.size 仅作为显示器元数据"),
-    "DUO-A06": ("PooToolsSource/Category/CGFloat+PTEX.swift", "fixed", "旧安全区符号改为读取时解析"),
-    "DUO-N01": ("PooToolsSource/Category/UIImageView+PTEX.swift", "fixed", "同一 Window 坐标系和可视 pane 判断"),
-    "DUO-N02": ("PooToolsSource/PhotoPicker/PTMediaLibViewController.swift", "fixed", "fakeNav 使用本地 safe area 且幂等更新"),
-    "DUO-N03": ("PooToolsSource/Base/PTBaseWebViewController.swift", "fixed", "WebView top constraint 使用实测局部导航边界"),
-    "DUO-N04": ("PooToolsSource/MediaViewer/PTMediaBrowserCell.swift", "fixed", "零尺寸时延后解码而不是读取主屏"),
-    "DUO-N05": ("PooToolsSource/LocalConsole/LocalConsole.swift", "fixed", "控制台方向和起始位置使用宿主 bounds"),
-    "DUO-N06": ("PooToolsSource/Inspector/ViewHierarchyRoot.swift", "fixed", "Inspector 根节点跟随被检查 Window"),
-    "DUO-N07": ("PooToolsSource/QRCodeScan/PTScanQRController.swift", "fixed", "扫码控件使用宿主 safe area"),
-    "DUO-N08": ("PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift", "fixed", "Debug overlay 使用当前控制器宿主"),
-    "DUO-N09": ("PooToolsSource/Category/UIImage+PTEX.swift", "fixed", "像素化尺度脱离主屏幕宽度"),
+    "DUO-A01": {"path": "PooToolsSource/Core/PTMarcos_swift.swift", "static_policy": "display-only-allowed", "required": ("PTLegacyScreenGeometry", "kSCREEN_BOUNDS", "kSCREEN_SIZE", "kSCREEN_SCALE"), "forbidden": (), "reason": "历史兼容全局值，仅允许展示、像素或兼容读取"},
+    "DUO-A02": {"path": "PooToolsSource/Category/AutoScale+PTEX.swift", "static_policy": "fixed", "required": ("autoWidth(in view", "autoHeight(in view", "safeRect", "autoWidth(inch)", "autoHeight(inch)"), "forbidden": (), "reason": "新版缩放支持 View-local overload，旧入口保留兼容"},
+    "DUO-A03": {"path": "PooToolsSource/Inspector/ElementInspectorConfiguration.swift", "static_policy": "fixed", "required": ("panelPreferredCompressedSize(in bounds", "hostWidth"), "forbidden": (), "reason": "面板宽度从宿主 bounds 解析"},
+    "DUO-A04": {"path": "PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift", "static_policy": "fixed", "required": ("PTEyeTrackingCalibrationState", "needsRecalibration", "updateCalibration", "invalidateCalibration"), "forbidden": (), "reason": "物理标定与 View 坐标映射分离，并对不可信状态降级"},
+    "DUO-A05": {"path": "PooToolsSource/Category/UIScreen+PTEX.swift", "static_policy": "display-only-allowed", "required": ("display metadata only", "size(for window"), "forbidden": (), "reason": "UIScreen.size 仅作为显示器元数据"},
+    "DUO-A06": {"path": "PooToolsSource/Category/CGFloat+PTEX.swift", "static_policy": "fixed", "required": ("leftSafeAreaWidth(in view", "rightSafeAreaWidth(in view", "AppWindows?.safeAreaInsets"), "forbidden": (), "reason": "旧安全区符号保留兼容，新布局提供局部 View 入口"},
+    "DUO-N01": {"path": "PooToolsSource/Category/UIImageView+PTEX.swift", "static_policy": "fixed", "required": ("bounds", "window?.screen.scale"), "forbidden": ("UIScreen.main", "kSCREEN_WIDTH"), "reason": "同一 Window 坐标系和可视 pane 判断"},
+    "DUO-N02": {"path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift", "static_policy": "fixed", "required": ("ptSheetPullBarFrame", "pullBarFrame", "contentInset", "verticalScrollIndicatorInsets"), "forbidden": ("pullBarHeight ?? 0) / 2",), "reason": "fakeNav 使用真实 pullbar frame、本地 safe area 和幂等 inset 更新"},
+    "DUO-N03": {"path": "PooToolsSource/Base/PTBaseWebViewController.swift", "static_policy": "fixed", "required": ("viewSafeAreaInsetsDidChange", "navigation"), "forbidden": ("UIScreen.main", "kSCREEN_WIDTH"), "reason": "WebView top constraint 使用实测局部导航边界"},
+    "DUO-N04": {"path": "PooToolsSource/MediaViewer/PTMediaBrowserCell.swift", "static_policy": "fixed", "required": ("bounds", "visibleRect"), "forbidden": ("UIScreen.main", "kSCREEN_WIDTH"), "reason": "零尺寸时延后解码而不是读取主屏"},
+    "DUO-N05": {"path": "PooToolsSource/LocalConsole/LocalConsole.swift", "static_policy": "fixed", "required": ("windowsBySceneID", "windowScene"), "forbidden": ("UIScreen.main", "kSCREEN_WIDTH"), "reason": "控制台方向和起始位置使用宿主 bounds"},
+    "DUO-N06": {"path": "PooToolsSource/Inspector/ViewHierarchyRoot.swift", "static_policy": "fixed", "required": ("inspected window", "windows"), "forbidden": ("UIScreen.main", "kSCREEN_WIDTH"), "reason": "Inspector 根节点跟随被检查 Window"},
+    "DUO-N07": {"path": "PooToolsSource/QRCodeScan/PTScanQRController.swift", "static_policy": "fixed", "required": ("safeAreaLayoutGuide", "view.bounds"), "forbidden": ("UIScreen.main", "kSCREEN_WIDTH"), "reason": "扫码控件使用宿主 safe area"},
+    "DUO-N08": {"path": "PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift", "static_policy": "fixed", "required": ("hostView", "safeAreaInsets"), "forbidden": ("UIScreen.main", "kSCREEN_WIDTH"), "reason": "Debug overlay 使用当前控制器宿主"},
+    "DUO-N09": {"path": "PooToolsSource/Category/UIImage+PTEX.swift", "static_policy": "fixed", "required": ("scale",), "forbidden": ("kSCREEN_WIDTH",), "reason": "像素化尺度脱离主屏幕宽度"},
+}
+
+# English: Intentional legacy/display hits require a path, kind, reviewer, and reason.
+# Español: Los aciertos heredados o de metadatos requieren ruta, tipo, revisor y motivo.
+# 中文：历史兼容或显示元数据命中必须登记路径、类型、审核人和原因。
+LEGACY_GEOMETRY_ALLOWLIST = {
+    "PooToolsSource/Core/PTMarcos_swift.swift": (None, "Public compatibility snapshots; not a layout source.", "PTools Duo audit"),
+    "PooToolsSource/Category/CGFloat+PTEX.swift": ({"kSCREEN", "UIScreen.main", "safe-area-global"}, "Legacy scalar APIs and display-scale compatibility.", "PTools Duo audit"),
+    "PooToolsSource/Category/UIScreen+PTEX.swift": ({"UIScreen.main", "UIScreen.size"}, "Display metadata only; window-local size API is available.", "PTools Duo audit"),
+    "PooToolsSource/Category/UICollectionView+PTEX.swift": ({"kSCREEN"}, "Legacy default width when no owner view is supplied.", "PTools Duo audit"),
+    "PooToolsSource/Category/UIImage+PTEX.swift": ({"UIScreen.main"}, "Pixel-domain image processing, not UIKit placement.", "PTools Duo audit"),
+    "PooToolsSource/C7Collector/PTHarBethFilter.swift": ({"kSCREEN"}, "Render texture default; caller can provide a local texture size.", "PTools Duo audit"),
+    "PooToolsSource/C7Collector/PTFilterCameraViewController.swift": ({"kSCREEN"}, "Camera image-processing output size.", "PTools Duo audit"),
+    "PooToolsSource/Loading/PTHudView.swift": ({"kSCREEN"}, "Legacy maximum configuration bound.", "PTools Duo audit"),
+    "PooToolsSource/DarkMode/PTDarkFollowSystemFooter.swift": ({"kSCREEN"}, "Static legacy text layout default; runtime containers override it.", "PTools Duo audit"),
+    "PooToolsSource/DarkMode/PTDarkSmartFooter.swift": ({"kSCREEN"}, "Static legacy text layout default; runtime containers override it.", "PTools Duo audit"),
+    "PooToolsSource/DebugCrash/PTCrashDetailViewController.swift": ({"kSCREEN"}, "Legacy text measurement fallback.", "PTools Duo audit"),
+    "PooToolsSource/DebugCrash/PTCrashLogViewController.swift": ({"kSCREEN"}, "Legacy text measurement fallback.", "PTools Duo audit"),
+    "PooToolsSource/DebugFile/PTFileBrowserViewController.swift": ({"kSCREEN"}, "Popover fallback frame; current window is preferred when available.", "PTools Duo audit"),
+    "PooToolsSource/DebugLibs/PTLoadedLibsViewController.swift": ({"kSCREEN"}, "Legacy debug title sizing fallback.", "PTools Duo audit"),
+    "PooToolsSource/DebugPerformance/PTDebugPerformanceViewController.swift": ({"kSCREEN"}, "Debug-only layout fallback.", "PTools Duo audit"),
+    "PooToolsSource/DebugPerformance/PTDebugPerformanceToolKit.swift": ({"kSCREEN", "statusBarHeight"}, "Debug floating control fallback.", "PTools Duo audit"),
+    "PooToolsSource/DebugRuler/PTViewRulerPlugin.swift": ({"kSCREEN"}, "Debug overlay fallback before host layout.", "PTools Duo audit"),
+    "PooToolsSource/DebugColor/PTColorPickPlugin.swift": ({"kSCREEN"}, "Pixel color conversion scale.", "PTools Duo audit"),
+    "PooToolsSource/PermissionCore/PTPermissionHeader.swift": ({"kSCREEN"}, "Legacy compatibility API; new callers pass container width.", "PTools Duo audit"),
+    "PooToolsSource/PermissionCore/PTPermissionViewController.swift": ({"kSCREEN"}, "Legacy compatibility path retained outside local header measurement.", "PTools Duo audit"),
+    "PooToolsSource/Protocol/PTProtocol.swift": ({"kSCREEN"}, "Legacy device scaling policy.", "PTools Duo audit"),
+    "PooToolsSource/Stepper/PTStepperView.swift": ({"kSCREEN"}, "Legacy content width fallback when no local width exists.", "PTools Duo audit"),
+    "PooToolsSource/LocalConsole/LocalConsole.swift": ({"UIScreen.main"}, "Debug display diagnostics only; never used for feature layout.", "PTools Duo audit"),
 }
 UI_IMPORT = re.compile(r"^\s*import\s+UIKit(?:\.|$)", re.MULTILINE)
 SWIFTUI_IMPORT = re.compile(r"^\s*import\s+SwiftUI(?:\.|$)", re.MULTILINE)
@@ -239,27 +268,92 @@ def tests_for(module: str, tests: dict[str, list[str]]) -> list[str]:
     return values
 
 
-def annotate_hits(repo: Path, hits: list[dict[str, object]], tests: dict[str, list[str]]) -> None:
+def is_layout_like(hit: dict[str, object]) -> bool:
+    if hit["kind"] not in {"magic-fixed-dimension", "UIScreen.main"}:
+        return True
+    return bool(re.search(r"layout|constraint|frame|bounds|inset|center|width|height|top|bottom", str(hit["text"]), re.IGNORECASE))
+
+
+def allowlist_entry(relative: str, kind: str) -> tuple[str, str] | None:
+    entry = LEGACY_GEOMETRY_ALLOWLIST.get(relative)
+    if entry is None:
+        return None
+    allowed_kinds, reason, reviewer = entry
+    if allowed_kinds is not None and kind not in allowed_kinds:
+        return None
+    return reason, reviewer
+
+
+def evaluate_focus_findings(repo: Path, hits: list[dict[str, object]]) -> dict[str, dict[str, object]]:
+    # English: Evaluate source markers and forbidden uses rather than trusting a static status string.
+    # Español: Evalúa marcadores y usos prohibidos en el código, no una cadena de estado estática.
+    # 中文：根据源码标记和禁止用法计算状态，不能信任静态字符串。
+    results: dict[str, dict[str, object]] = {}
+    hits_by_path: dict[str, list[dict[str, object]]] = defaultdict(list)
+    for hit in hits:
+        hits_by_path[str(hit["path"])].append(hit)
+
+    for finding_id, config in FOCUS_FINDINGS.items():
+        path = str(config["path"])
+        source_path = repo / path
+        source = source_path.read_text(encoding="utf-8", errors="replace") if source_path.is_file() else ""
+        missing = [token for token in config["required"] if token not in source]
+        forbidden = [token for token in config["forbidden"] if token in source]
+        external_risks: list[str] = []
+        if finding_id == "DUO-A01":
+            for hit in hits:
+                if hit["kind"] != "kSCREEN" or str(hit["path"]).startswith("Tests/"):
+                    continue
+                if allowlist_entry(str(hit["path"]), str(hit["kind"])) is None and is_layout_like(hit):
+                    external_risks.append(f"{hit['path']}:{hit['line']}")
+        if missing or forbidden or external_risks:
+            status = "needs-review"
+        else:
+            status = str(config["static_policy"])
+        results[finding_id] = {
+            "path": path,
+            "decision": status,
+            "reason": str(config["reason"]),
+            "missing": missing,
+            "forbidden": forbidden,
+            "external_risks": external_risks,
+        }
+    return results
+
+
+def classify_hit(relative: str, kind: str, focus_status: dict[str, dict[str, object]]) -> tuple[str, str, str]:
+    focus_id = next((finding_id for finding_id, config in FOCUS_FINDINGS.items() if config["path"] == relative), None)
+    if focus_id is not None:
+        status = str(focus_status[focus_id]["decision"])
+        if status != "needs-review":
+            return status, "pass_static", str(focus_status[focus_id]["reason"])
+        return "needs-review", "not_run", "focused source checks are incomplete"
+    allowlisted = allowlist_entry(relative, kind)
+    if allowlisted is not None:
+        reason, _ = allowlisted
+        return "legacy-allowlisted", "waived", reason
+    return "needs-review", "not_run", "candidate requires semantic review"
+
+
+def annotate_hits(repo: Path, hits: list[dict[str, object]], tests: dict[str, list[str]], focus_status: dict[str, dict[str, object]]) -> None:
     for hit in hits:
         relative = str(hit["path"])
-        focus = next((decision for _, (path, decision, _) in FOCUS_FINDINGS.items() if path == relative), None)
         evidence = f"{relative}:{hit['line']}"
         hit["id"] = hashlib.sha1(f"{evidence}|{hit['kind']}|{hit['text']}".encode("utf-8")).hexdigest()[:12]
         hit["owner"] = module_for(repo, repo / relative)
         hit["target"] = hit["owner"]
         hit["evidence"] = evidence
-        hit["layout_use"] = hit["kind"] not in {"magic-fixed-dimension", "UIScreen.main"} or bool(
-            re.search(r"layout|constraint|frame|bounds|inset|center|width|height|top|bottom", str(hit["text"]), re.IGNORECASE)
-        )
-        hit["decision"] = focus or "needs-review"
+        hit["layout_use"] = is_layout_like(hit)
+        decision, run_status, reason = classify_hit(relative, str(hit["kind"]), focus_status)
+        hit["decision"] = decision
         hit["test_id"] = ";".join(tests_for(str(hit["owner"]), tests))
         hit["test_owner"] = str(hit["owner"])
-        hit["run_status"] = "pass_static" if focus in {"fixed", "display-only-allowed"} else "not_run"
-        hit["reviewer"] = "PTools Duo audit"
-        hit["reason"] = "focused finding reviewed" if focus else "candidate requires semantic review"
+        hit["run_status"] = run_status
+        hit["reviewer"] = next((entry[2] for path, entry in LEGACY_GEOMETRY_ALLOWLIST.items() if path == relative and (entry[0] is None or str(hit["kind"]) in entry[0])), "PTools Duo audit")
+        hit["reason"] = reason
 
 
-def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[str, object]], demos: dict[str, list[str]], tests: dict[str, list[str]]) -> None:
+def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[str, object]], demos: dict[str, list[str]], tests: dict[str, list[str]], focus_status: dict[str, dict[str, object]]) -> None:
     output = repo / "report" / "current"
     output.mkdir(parents=True, exist_ok=True)
     # English: Keep generated reports traceable to the source revision and audit run.
@@ -269,7 +363,10 @@ def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[
     generated_at = datetime.now(timezone.utc).isoformat()
     swift_files = tracked_swift_files(repo)
     manifest_entries, manifest_hash = source_manifest(repo, swift_files)
-    annotate_hits(repo, hits, tests)
+    annotate_hits(repo, hits, tests, focus_status)
+    status_counts: dict[str, int] = defaultdict(int)
+    for hit in hits:
+        status_counts[str(hit["run_status"])] += 1
 
     # English: Keep the inventory diffable on every platform by using LF records.
     # Español: Mantén el inventario comparable en todas las plataformas usando registros LF.
@@ -290,12 +387,32 @@ def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[
                 "rule_version": AUDIT_RULE_VERSION,
                 "source_manifest_hash": manifest_hash,
                 "source_manifest": manifest_entries,
+                "report_kind": "ci-generated",
+                "snapshot_of": source_revision,
+                "tool_version": AUDIT_RULE_VERSION,
+                "status_counts": dict(sorted(status_counts.items())),
+                "focus_findings": focus_status,
                 "hits": hits,
             },
             ensure_ascii=False,
             indent=2,
         )
         + "\n",
+        encoding="utf-8",
+    )
+
+    (output / "duo_audit_metadata.json").write_text(
+        json.dumps({
+            "report_kind": "ci-generated",
+            "snapshot_of": source_revision,
+            "source_revision": source_revision,
+            "generated_at": generated_at,
+            "rule_version": AUDIT_RULE_VERSION,
+            "tool_version": AUDIT_RULE_VERSION,
+            "source_manifest_hash": manifest_hash,
+            "status_counts": dict(sorted(status_counts.items())),
+            "focus_findings": focus_status,
+        }, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
 
@@ -365,13 +482,56 @@ def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[
         "| ID | 文件 | 决定 | 静态状态 | 运行/设备状态 | 说明 |",
         "| --- | --- | --- | --- | --- | --- |",
     ]
-    for finding_id, (path, decision, reason) in FOCUS_FINDINGS.items():
-        static_status = "pass_static" if decision in {"fixed", "display-only-allowed"} else "pending"
-        finding_lines.append(f"| `{finding_id}` | `{path}` | `{decision}` | `{static_status}` | `pending_device` | {reason} |")
+    for finding_id, result in focus_status.items():
+        decision = str(result["decision"])
+        static_status = "pass_static" if decision in {"fixed", "display-only-allowed"} else "needs-review"
+        detail = str(result["reason"])
+        if result["missing"]:
+            detail += f"; missing: {', '.join(result['missing'])}"
+        if result["external_risks"]:
+            detail += f"; unclassified: {', '.join(result['external_risks'])}"
+        finding_lines.append(f"| `{finding_id}` | `{result['path']}` | `{decision}` | `{static_status}` | `pending_device` | {detail} |")
     (output / "duo_findings_closed.md").write_text("\n".join(finding_lines) + "\n", encoding="utf-8")
 
+    allowlist_lines = [
+        "# iPhone Duo geometry allowlist / Lista de excepciones / 几何白名单",
+        "",
+        f"Source revision: {source_revision}",
+        f"Audit rule version: {AUDIT_RULE_VERSION}",
+        "",
+        "Only the listed path and kinds are waived. Any new path remains `needs-review`.",
+        "Solo se eximen la ruta y los tipos listados. Una ruta nueva queda en `needs-review`.",
+        "仅豁免下列路径和类型；新增路径始终进入 `needs-review`。",
+        "",
+        "| Path | Kinds | Reviewer | Reason |",
+        "| --- | --- | --- | --- |",
+    ]
+    for path, (kinds, reason, reviewer) in sorted(LEGACY_GEOMETRY_ALLOWLIST.items()):
+        allowlist_lines.append(f"| `{path}` | `{', '.join(sorted(kinds)) if kinds else 'all'}` | {reviewer} | {reason} |")
+    (output / "duo_geometry_allowlist.md").write_text("\n".join(allowlist_lines) + "\n", encoding="utf-8")
+
+    template_lines = [
+        "<!-- AUTO-GENERATED TEMPLATE: Scripts/audit_duo_uikit_coverage.py -->",
+        f"Source revision: {source_revision}",
+        f"Source manifest hash: {manifest_hash}",
+        f"Audit rule version: {AUDIT_RULE_VERSION}",
+        "",
+        "# iPhone Duo Test Matrix Template / Plantilla / 测试矩阵模板",
+        "",
+        "This is a generated starting point. Runtime, visual, and device evidence belongs in `duo_test_matrix.md`.",
+        "Esta es una plantilla generada; la evidencia pertenece a `duo_test_matrix.md`.",
+        "这是生成的初始模板；运行、视觉和设备证据应记录在 `duo_test_matrix.md`。",
+        "",
+        "| Case | Static evidence | Build | Runtime/visual | Device |",
+        "| --- | --- | --- | --- | --- |",
+    ]
+    for case in ("DUO-T01", "DUO-T02", "DUO-T03", "DUO-T04", "DUO-T05", "DUO-T06", "DUO-T07", "DUO-T08", "DUO-T09", "DUO-T10"):
+        template_lines.append(f"| `{case}` | pending | pending | pending | pending_device |")
+    (output / "duo_test_matrix_template.md").write_text("\n".join(template_lines) + "\n", encoding="utf-8")
+
     matrix_lines = [
-        "<!-- AUTO-GENERATED: Scripts/audit_duo_uikit_coverage.py -->",
+        "<!-- MANUAL EVIDENCE: scanner preserves this file. -->",
+        "<!-- INITIAL TEMPLATE GENERATED BY: Scripts/audit_duo_uikit_coverage.py -->",
         f"Source revision: {source_revision}",
         f"Source manifest hash: {manifest_hash}",
         "",
@@ -382,10 +542,12 @@ def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[
     ]
     for case in ("DUO-T01", "DUO-T02", "DUO-T03", "DUO-T04", "DUO-T05", "DUO-T06", "DUO-T07", "DUO-T08", "DUO-T09", "DUO-T10"):
         matrix_lines.append(f"| `{case}` | pending | pending | pending | pending_device |")
-    (output / "duo_test_matrix.md").write_text("\n".join(matrix_lines) + "\n", encoding="utf-8")
+    matrix_path = output / "duo_test_matrix.md"
+    if not matrix_path.is_file() or "MANUAL EVIDENCE" not in matrix_path.read_text(encoding="utf-8", errors="replace"):
+        matrix_path.write_text("\n".join(matrix_lines) + "\n", encoding="utf-8")
 
 
-def check_report_freshness(repo: Path, strict: bool = False) -> int:
+def check_report_freshness(repo: Path, strict: bool = False, committed_snapshot: bool = False) -> int:
     report = repo / "report/current/duo_global_geometry_hits.json"
     if not report.is_file():
         print("STALE: missing report/current/duo_global_geometry_hits.json")
@@ -399,22 +561,31 @@ def check_report_freshness(repo: Path, strict: bool = False) -> int:
     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo, text=True).strip()
     _, manifest_hash = source_manifest(repo, tracked_swift_files(repo))
     errors = []
+    stale = []
     if payload.get("source_revision") != revision:
-        errors.append("source_revision does not match HEAD")
+        stale.append("source_revision does not match HEAD")
     if payload.get("rule_version") != AUDIT_RULE_VERSION:
-        errors.append("rule_version is stale")
+        stale.append("rule_version is stale")
     if payload.get("source_manifest_hash") != manifest_hash:
-        errors.append("source_manifest_hash does not match the current worktree")
-    required_hit_fields = {"id", "owner", "target", "evidence", "decision", "test_id", "test_owner", "run_status", "reviewer"}
+        stale.append("source_manifest_hash does not match the current worktree")
+    if stale and committed_snapshot:
+        print("STALE SNAPSHOT (warning): committed reports describe a different checkout")
+        for item in stale:
+            print(f"- {item}")
+    else:
+        errors.extend(stale)
+    required_hit_fields = {"id", "owner", "target", "evidence", "decision", "test_id", "test_owner", "run_status", "reviewer", "reason", "layout_use"}
     for hit in payload.get("hits", []):
         missing = required_hit_fields.difference(hit)
         if missing:
             errors.append(f"hit {hit.get('path')}:{hit.get('line')} missing {sorted(missing)}")
     if strict:
-        for finding_id, (path, decision, _) in FOCUS_FINDINGS.items():
+        focus_status = payload.get("focus_findings", {})
+        for finding_id, config in FOCUS_FINDINGS.items():
+            decision = focus_status.get(finding_id, {}).get("decision")
             if decision not in {"fixed", "display-only-allowed"}:
-                errors.append(f"{finding_id} is not statically closed: {path}")
-        for filename in ("duo_findings_closed.md", "duo_test_matrix.md"):
+                errors.append(f"{finding_id} is not statically closed: {config['path']}")
+        for filename in ("duo_findings_closed.md", "duo_test_matrix.md", "duo_test_matrix_template.md", "duo_geometry_allowlist.md", "duo_audit_metadata.json"):
             if not (repo / "report/current" / filename).is_file():
                 errors.append(f"missing {filename}")
     if errors:
@@ -426,15 +597,34 @@ def check_report_freshness(repo: Path, strict: bool = False) -> int:
     return 0
 
 
+def run_self_tests() -> int:
+    # English: Keep scanner tests independent from the repository and its generated reports.
+    # Español: Mantén las pruebas del escáner independientes del repositorio y sus informes generados.
+    # 中文：让扫描器自测独立于仓库源码和已生成报告。
+    closed = {finding_id: {"decision": config["static_policy"], "reason": "test", "path": config["path"]} for finding_id, config in FOCUS_FINDINGS.items()}
+    assert classify_hit("PooToolsSource/Category/AutoScale+PTEX.swift", "kSCREEN", closed)[0] == "fixed"
+    assert classify_hit("PooToolsSource/Category/UICollectionView+PTEX.swift", "kSCREEN", closed)[0] == "legacy-allowlisted"
+    assert classify_hit("PooToolsSource/NewUIKitView.swift", "UIScreen.main", closed)[0] == "needs-review"
+    incomplete = dict(closed)
+    incomplete["DUO-A02"] = {"decision": "needs-review", "reason": "test", "path": FOCUS_FINDINGS["DUO-A02"]["path"]}
+    assert classify_hit("PooToolsSource/Category/AutoScale+PTEX.swift", "kSCREEN", incomplete)[0] == "needs-review"
+    print("PASS: Duo audit scanner self-tests")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("repo", nargs="?", default=".")
     parser.add_argument("--strict", action="store_true", help="Fail when the focused Duo findings or report metadata are not closed.")
     parser.add_argument("--check", action="store_true", help="Check existing reports without regenerating them.")
+    parser.add_argument("--check-committed-snapshot", action="store_true", help="Validate committed report schema and warn when its checkout is stale.")
+    parser.add_argument("--self-test", action="store_true", help="Run scanner classification self-tests without touching reports.")
     args = parser.parse_args()
     repo = Path(args.repo).resolve()
-    if args.check:
-        return check_report_freshness(repo, strict=args.strict)
+    if args.self_test:
+        return run_self_tests()
+    if args.check or args.check_committed_snapshot:
+        return check_report_freshness(repo, strict=args.strict and not args.check_committed_snapshot, committed_snapshot=args.check_committed_snapshot)
     demos = demo_ids(repo)
     tests = test_ids(repo)
     records: list[dict[str, object]] = []
@@ -461,7 +651,6 @@ def main() -> int:
         else:
             kind, risk, coverage = "not-ui", "low", "not-applicable"
         relative = path.relative_to(repo).as_posix()
-        focus_decision = next((decision for _, (focus_path, decision, _) in FOCUS_FINDINGS.items() if focus_path == relative), "not-applicable")
         evidence = ";".join(f"{relative}:{hit['line']}" for hit in file_hits)
         records.append({
             "path": relative,
@@ -475,13 +664,30 @@ def main() -> int:
             "demo_id": ";".join(module_demos),
             "test_id": ";".join(module_tests),
             "status": "candidate" if file_hits else "inventory",
-            "decision": focus_decision if file_hits or focus_decision != "not-applicable" else "not-reviewed",
+            "decision": "not-reviewed",
             "evidence": evidence,
             "test_owner": module,
-            "run_status": "pass_static" if focus_decision in {"fixed", "display-only-allowed"} else "not_run",
-            "reviewer": "PTools Duo audit" if focus_decision != "not-applicable" else "",
+            "run_status": "not_run",
+            "reviewer": "",
         })
-    write_reports(repo, records, hits, demos, tests)
+    focus_status = evaluate_focus_findings(repo, hits)
+    for record in records:
+        relative = str(record["path"])
+        focus_id = next((finding_id for finding_id, config in FOCUS_FINDINGS.items() if config["path"] == relative), None)
+        if focus_id is not None:
+            result = focus_status[focus_id]
+            record["decision"] = result["decision"]
+            record["run_status"] = "pass_static" if result["decision"] in {"fixed", "display-only-allowed"} else "not_run"
+            record["reviewer"] = "PTools Duo audit"
+        elif any(str(hit["path"]) == relative for hit in hits):
+            decisions = [classify_hit(relative, str(hit["kind"]), focus_status) for hit in hits if str(hit["path"]) == relative]
+            if decisions and all(item[0] == "legacy-allowlisted" for item in decisions):
+                record["decision"] = "legacy-allowlisted"
+                record["run_status"] = "waived"
+                record["reviewer"] = decisions[0][2]
+            else:
+                record["decision"] = "needs-review"
+    write_reports(repo, records, hits, demos, tests, focus_status)
     ui_records = [record for record in records if record["ui_type"] not in {"not-ui", "swiftui-only"}]
     missing = [record for record in ui_records if record["coverage"] == "needs-review"]
     print(f"UIKit inventory: {len(ui_records)} files")

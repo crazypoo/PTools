@@ -2,6 +2,8 @@
 
 ## 5.69.0
 
+- [x] Duo 收尾代码项已完成：AutoScale/Permission 使用局部容器几何，PhotoPicker pullbar 使用实测 frame 并幂等更新 inset，EyeTracking 增加标定可信度和失效降级。
+- [x] 审计器改为证据驱动：焦点状态不再由硬编码 `fixed` 直接决定；新增几何白名单、self-test、CI metadata、测试矩阵模板和提交快照过期告警。
 - [x] iPhone Duo 增量审计已按当前源码 revision 重新生成 inventory、global geometry hits、coverage、findings closure 和 test matrix；报告带有 manifest hash 与规则版本。
 - [x] A01-A06 与 N01-N09 的源码消费点已完成局部坐标、安全区、Window/Scene 所有权和零尺寸媒体路径收口；旧公开兼容入口保留。
 - [x] `validate_duo_adaptive_bars.sh` 严格门禁、Swift 前端解析、`git diff --check` 和 PooTools-Example iOS Simulator Debug 完整构建通过。

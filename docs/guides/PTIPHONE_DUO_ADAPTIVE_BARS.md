@@ -151,6 +151,27 @@ Example 的 `Navigation & Routing` 分类新增 `iPhone Duo Adaptive Bars`，并
 
 真实 Duo 的姿态、折叠保留区、系统侧栏、键盘和多 Scene 结果记录在 `report/current/duo_device_acceptance.md`。静态扫描、Xcode 编译和几何单测只能证明对应层级，不能代替设备视觉与交互验收。
 
+### 报告快照与几何白名单
+
+审计报告分为两类：CI 在当前 checkout 即时生成的报告，以及仓库内保存的不可变快照。CI 使用：
+
+```bash
+python3 Scripts/audit_duo_uikit_coverage.py . --strict
+python3 Scripts/audit_duo_uikit_coverage.py . --check --strict
+```
+
+已提交快照不能自引用未来 Git commit；需要检查它时使用：
+
+```bash
+python3 Scripts/audit_duo_uikit_coverage.py . --check-committed-snapshot
+```
+
+该命令在 revision 或 manifest 不一致时只报告 `STALE SNAPSHOT`，不会把快照冒充当前 checkout 的通过证据。`duo_test_matrix_template.md` 是扫描器生成的初始模板，`duo_test_matrix.md` 是保留人工运行、视觉和设备证据的结果文件，扫描器不会把已有证据重置为 `pending`。`duo_geometry_allowlist.md` 逐条记录历史兼容、像素域、诊断和显示器元数据命中；新的命中默认进入 `needs-review`，不会因为所属模块有 Demo 或 XCTest 就自动通过。
+
+English: CI reports are generated and checked on the same checkout. Committed snapshots are immutable references and stale snapshots warn instead of claiming a current pass.
+
+Español: Los informes de CI se generan y comprueban en el mismo checkout. Las instantáneas committeadas son referencias inmutables; una instantánea obsoleta avisa y no se presenta como aprobación actual.
+
 ## 验证边界
 
 几何单测使用可注入的 bounds、safe area、edge 和 reserved region，不要求实体设备；同时覆盖可视区域避让、多个可用 pane 和 hinge division。脚本 `Scripts/validate_duo_adaptive_bars.sh` 会先生成全库审计报告，再检查共享 Bar、媒体、分享、MessageKit、Paging 操作层不得新增全局屏幕尺寸定位，并校验 18 个 Demo 登记。完整 Xcode Simulator Debug / Release 构建用于验证 iOS 17+ 编译、旧横向回归和 Example 入口。
@@ -168,4 +189,6 @@ English: The 2026-10-23 audit reuses the existing adaptive geometry owners. Repo
 Español: La auditoría del 23-10-2026 reutiliza los propietarios geométricos adaptativos existentes. Los informes quedan ligados a la revisión y al manifiesto; la evidencia estática/de compilación se separa de la validación visual e interactiva exclusiva de Duo.
 
 本轮 Xcode iOS Simulator Debug 构建已执行；真实 Duo 的外屏、内屏、折叠、键盘、多 Scene、PhotoPicker、MediaViewer 和性能场景仍记录为 `pending_device`，不能用普通模拟器结果替代。
+
+本轮剩余源码边界已补齐：AutoScale 新布局使用 owning View 的局部安全矩形，权限 Header 提供 `cellHeight(forWidth:)`，PhotoPicker fakeNav 使用 Sheet 实际 pullbar frame 并比较更新 inset，EyeTracking 暴露 `calibrationState`、`calibrate(screenSizeMeters:)` 与失效降级入口。默认物理尺寸仍是 `estimated`，未完成真实设备标定前不宣称精确眼动坐标。
 

@@ -9,6 +9,9 @@
 
 ## 5.69.0 — 2026-10-21
 
+- 完成 2026-10-23 Duo 收尾源码项：AutoScale 的新布局入口使用 owning View 局部 safe area，旧非对称安全区公式保留兼容但改为安全求和；权限 Header 新增按容器宽度测量，PhotoPicker fakeNav 改用 Sheet 实际 pullbar frame、局部布局签名和 compare-before-set inset。
+- EyeTracking 新增 `PTEyeTrackingCalibrationState`、物理尺寸标定与失效降级；未标定时只提供低可信估算，标定失效时不返回精确点位。新增布局和显示几何白名单，明确区分兼容、像素域、诊断和真实布局命中。
+- 修正 Duo 审计门禁：焦点项由源码检查动态计算，新增扫描器 self-test、逐命中 allowlist、`duo_audit_metadata.json`、测试矩阵模板和 `--check-committed-snapshot`；旧快照只报告 `STALE SNAPSHOT`，不会冒充当前 checkout 证据。
 - 完成 2026-10-23 iPhone Duo 全 UIKit 增量审计：修复宿主局部坐标、安全区、Window/Scene 所有权和零尺寸媒体加载路径，保留旧公开几何入口兼容，不再让新增布局依赖主屏幕快照。
 - 强化 `audit_duo_uikit_coverage.py` 与 `validate_duo_adaptive_bars.sh`：报告现在绑定源码 revision、输入 manifest、规则版本和文件级 owner/evidence/decision/test 状态，过期或缺少闭环元数据的报告会失败。
 - 新增 Duo findings closure 与 test matrix 报告；PTools-Example iOS Simulator Debug 构建通过，Pods 和 Metal 工具链警告继续单独记录，真实 Duo 视觉/折叠/交互验收仍为 pending device。

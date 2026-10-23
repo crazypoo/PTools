@@ -7,8 +7,16 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # English: Generate the full UIKit inventory before validating the shared Duo contract.
 # Español: Genera el inventario UIKit completo antes de validar el contrato Duo compartido.
 # 中文：在验证共享 Duo 契约前，先生成完整 UIKit 清单。
+python3 "$repo_root/Scripts/audit_duo_uikit_coverage.py" --self-test
 python3 "$repo_root/Scripts/audit_duo_uikit_coverage.py" "$repo_root" --strict
 python3 "$repo_root/Scripts/audit_duo_uikit_coverage.py" "$repo_root" --check --strict
+
+# English: A committed report is an immutable snapshot, not a self-referential CI gate.
+# Español: Un informe committeado es una instantánea inmutable, no una puerta CI autorreferencial.
+# 中文：已提交报告是不可变快照，不作为自引用的 CI 门禁；需要时只给出过期警告。
+if [[ "${DUO_CHECK_COMMITTED_SNAPSHOT:-0}" == "1" ]]; then
+  python3 "$repo_root/Scripts/audit_duo_uikit_coverage.py" "$repo_root" --check-committed-snapshot
+fi
 
 # English: Keep the Duo gate portable on machines that do not install ripgrep.
 # Español: Mantiene la puerta Duo portátil en máquinas sin ripgrep instalado.
@@ -30,9 +38,12 @@ require_file() {
 for report in \
   report/current/duo_uikit_inventory.csv \
   report/current/duo_global_geometry_hits.json \
+  report/current/duo_audit_metadata.json \
   report/current/duo_coverage.md \
   report/current/duo_findings_closed.md \
-  report/current/duo_test_matrix.md; do
+  report/current/duo_geometry_allowlist.md \
+  report/current/duo_test_matrix.md \
+  report/current/duo_test_matrix_template.md; do
   require_file "$report"
 done
 
@@ -124,6 +135,9 @@ for test_name in \
   require_fixed "$test_name" Tests/PToolsUIFoundationTests/PTAdaptiveBarLayoutTests.swift
 done
 require_fixed "availablePanes" PooToolsSource/Base/PTAdaptiveVisibleRegionResolver.swift
+require_fixed "ptSheetPullBarFrame" PooToolsSource/FloatPanel/UIViewController+PTSheetEX.swift
+require_fixed "PTEyeTrackingCalibrationState" PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift
+require_fixed "calibrate(screenSizeMeters:" PooToolsSource/WhereIsMyEye/PTEyeTrackingManager.swift
 
 # English: These shared bar files must use local geometry rather than screen or device heuristics.
 # Español: Estos archivos compartidos deben usar geometría local y no heurísticas de pantalla o dispositivo.

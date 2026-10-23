@@ -82,6 +82,9 @@ public var isXModel: Bool {
     return deviceInfo.isFaceIDCapable
 }
 
+// English: PTLegacyScreenGeometry is a compatibility namespace for display metadata and old callers only.
+// Español: PTLegacyScreenGeometry es un espacio de compatibilidad solo para metadatos y callers antiguos.
+// 中文：PTLegacyScreenGeometry 仅作为显示元数据和旧调用方的兼容命名空间。
 //MARK: 当前屏幕Bounds
 ///当前屏幕Bounds
 @MainActor public let kSCREEN_BOUNDS = UIScreen.main.bounds

@@ -60,6 +60,13 @@ public protocol PTEyeTrackingDelegate: NSObjectProtocol {
  */
 @MainActor
 public class PTEyeTrackingManager: NSObject {
+
+    // English: Expose calibration confidence without changing the existing point callback API.
+    // Español: Expone la confianza de calibración sin cambiar la API existente de puntos.
+    // 中文：在不改变原有坐标回调 API 的前提下暴露标定可信度。
+    @objc public var calibrationState: PTEyeTrackingCalibrationState {
+        dataManager?.calibrationState ?? .unsupported
+    }
     
     /**
      EyeTracking功能是否可用。
@@ -144,7 +151,22 @@ extension PTEyeTrackingManager {
             ? screenSize
             : CGRect(x: screenSize.minX, y: screenSize.minY, width: screenSize.height, height: screenSize.width)
         testUtility.updateHostBounds(screenSize)
-        dataManager?.update(screenBounds: screenSize)
+        dataManager?.update(screenBounds: screenSize,
+                            displayBounds: parent.window?.screen.nativeBounds.size)
+    }
+
+    // English: Supply a measured physical display size before treating eye points as precise.
+    // Español: Proporciona el tamaño físico medido antes de tratar los puntos como precisos.
+    // 中文：提供实测物理屏幕尺寸后，才将眼动坐标视为精确结果。
+    @objc public func calibrate(screenSizeMeters: CGSize) {
+        dataManager?.updateCalibration(screenSizeMeters: screenSizeMeters)
+    }
+
+    // English: Mark calibration stale after a display or tracking setup change.
+    // Español: Marca la calibración como obsoleta tras cambiar la pantalla o la sesión.
+    // 中文：屏幕或追踪环境变化后，将当前标定标记为需要重新校准。
+    @objc public func invalidateCalibration() {
+        dataManager?.invalidateCalibration()
     }
     /**
      EyeTracking的ARSession。
@@ -252,7 +274,8 @@ extension PTEyeTrackingManager {
         }
         
         testUtility.updateHostBounds(screenSize)
-        dataManager?.update(screenBounds: screenSize)
+        dataManager?.update(screenBounds: screenSize,
+                            displayBounds: PTSceneContext.activeWindow()?.screen.nativeBounds.size)
         testUtility.rotated()
     }
 }

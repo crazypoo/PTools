@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: master
-Source revision: 0cc0517f96731711a43433fa007425f325286092
+Source revision: 7c37f5a9fe08f32af3161382c382b286f34e4096
 Source version: 5.69.0
-Source inputs digest: 9e6ca39b361ac7c14eea74cb3dd28eeccb27511eb36e8db011428eb274ab4fa9
+Source inputs digest: 3ba458becead5d2d41ea8e3574496c474e0917a20840d500c158002348916a15
 Generator version: 1
 Generator: manual Duo validation record maintained with the repository gates
-Generated at: 2026-10-23T05:50:00Z
+Generated at: 2026-10-23T06:35:20Z
 -->
 
 # iPhone Duo 设备验收记录 / Aceptación de dispositivo / Device acceptance
@@ -39,7 +39,7 @@ Generated at: 2026-10-23T05:50:00Z
 
 ## 说明 / Notas / Notes
 
-- 本轮已执行的构建：`PooTools-Example` iOS Simulator Debug（arm64/x86_64）和 Release（arm64、无签名）；未执行本轮 Duo Simulator 启动和视觉交互。
+- 本轮已执行的构建：`PooTools-Example` iOS Simulator Debug 和 Release（均为 arm64、无签名）；未执行本轮 Duo Simulator 启动和视觉交互。
 - 旧版本的 Simulator 启动截图和结果不作为 5.69.0 的验收证据；待官方 Duo Simulator、Device Hub 或实体设备可用后重新记录。
 - SwiftPM `PToolsUIFoundationTests` 未在 macOS 主机上运行成功：`swift test` 使用 macOS SDK 编译 iOS-only UIKit target，因无法解析 `UIKit` 而停止；需要在 Xcode iOS Simulator test target 或 CI iOS runner 中执行。该结果不替代 Debug / Release App 构建，也不宣称 UI 测试通过。
 

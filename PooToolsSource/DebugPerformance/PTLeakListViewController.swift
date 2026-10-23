@@ -41,11 +41,16 @@ class PTLeakListViewController: PTBaseViewController {
             make.edges.equalToSuperview()
         }
         view.snp.makeConstraints { make in
-            make.width.equalTo(CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 4 - 132)
+            make.width.equalTo(titleContainerWidth)
             make.height.equalTo(32)
         }
         return view
     }()
+
+    private var titleContainerWidth: CGFloat {
+        let hostWidth = navigationController?.navigationBar.bounds.width ?? view.bounds.width
+        return max(0, hostWidth - PTAppBaseConfig.share.defaultViewSpace * 4 - 132)
+    }
 
     lazy var newCollectionView:PTCollectionView = {
         let config = PTCollectionViewConfig()
@@ -146,5 +151,12 @@ extension PTLeakListViewController:UISearchBarDelegate {
         viewModel.leakSearchWord = searchText
         viewModel.applyFilter()
         loadListModel()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        titleViewContailer.snp.updateConstraints { make in
+            make.width.equalTo(titleContainerWidth)
+        }
     }
 }

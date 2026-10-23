@@ -224,7 +224,7 @@ public class PTMediaLibViewController: PTBaseViewController {
 
         fakeNav.snp.makeConstraints {
             $0.left.right.equalToSuperview()
-            $0.top.equalToSuperview().inset(fakeNavTopInset)
+            $0.top.equalToSuperview().inset(fakeNavTopInset())
             $0.height.equalTo(CGFloat.kNavBarHeight)
         }
 
@@ -243,7 +243,9 @@ public class PTMediaLibViewController: PTBaseViewController {
                                             width: region.visibleRect.width,
                                             height: view.bounds.height).intersection(view.bounds)
         let visibleRect = horizontalVisibleRect.isEmpty ? view.bounds : horizontalVisibleRect
-        let layoutSignature = "\(region.signature)|\(visibleRect.integral)"
+        let pullBarFrame = ptSheetPullBarFrame(in: view)
+        let navTopInset = fakeNavTopInset(pullBarFrame: pullBarFrame)
+        let layoutSignature = "\(region.signature)|\(visibleRect.integral)|\(pullBarFrame?.integral ?? .zero)|\(navTopInset)"
         if layoutSignature != lastAdaptiveNavigationLayoutSignature {
             lastAdaptiveNavigationLayoutSignature = layoutSignature
             // English: Keep the fake navigation controls inside the local visible pane so the Done button avoids the Duo rail.
@@ -252,23 +254,33 @@ public class PTMediaLibViewController: PTBaseViewController {
             fakeNav.snp.remakeConstraints { make in
                 make.left.equalToSuperview().offset(visibleRect.minX)
                 make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
-                make.top.equalToSuperview().inset(fakeNavTopInset)
+                make.top.equalToSuperview().inset(navTopInset)
                 make.height.equalTo(CGFloat.kNavBarHeight)
             }
         }
         let cv = mediaListView.collectionView.contentCollectionView
-        let topInset = max(fakeNav.frame.maxY, view.safeAreaInsets.top)
+        let topInset = max(fakeNav.frame.maxY, navTopInset + CGFloat.kNavBarHeight, view.safeAreaInsets.top)
         let bottomInset = max(0, view.safeAreaInsets.bottom)
-        cv.contentInset.top = topInset
-        cv.contentInset.bottom = bottomInset
-        cv.verticalScrollIndicatorInsets.bottom = bottomInset
+        var contentInset = cv.contentInset
+        if contentInset.top != topInset || contentInset.bottom != bottomInset {
+            contentInset.top = topInset
+            contentInset.bottom = bottomInset
+            cv.contentInset = contentInset
+        }
+        var indicatorInsets = cv.verticalScrollIndicatorInsets
+        if indicatorInsets.bottom != bottomInset {
+            indicatorInsets.bottom = bottomInset
+            cv.verticalScrollIndicatorInsets = indicatorInsets
+        }
     }
 
     // English: Resolve the fake navigation bar from this controller's local safe area.
     // Español: Resuelve la barra de navegación falsa desde el área segura local de este controlador.
     // 中文：根据当前控制器的局部安全区计算伪导航栏顶部，避免叠加全局状态栏高度。
-    private var fakeNavTopInset: CGFloat {
-        max(0, view.safeAreaInsets.top - (sheetViewController?.options.pullBarHeight ?? 0) / 2)
+    private func fakeNavTopInset(pullBarFrame: CGRect? = nil) -> CGFloat {
+        let safeTop = max(0, view.safeAreaInsets.top)
+        guard let pullBarFrame else { return safeTop }
+        return max(safeTop, pullBarFrame.maxY)
     }
 
     // MARK: - Album

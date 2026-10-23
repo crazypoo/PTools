@@ -103,7 +103,11 @@ public class PTCoinAnimation: UIView {
     func babyCoinFadeAway() {
         let aniMove = CABasicAnimation(keyPath: "position")
         aniMove.fromValue = showLabel.layer.position
-        aniMove.toValue = CGPoint(x: CGFloat.kSCREEN_WIDTH, y: CGFloat.kSCREEN_HEIGHT)
+        // English: Animate to the owning view's local edge instead of the main display snapshot.
+        // Español: Anima hasta el borde local de la vista propietaria, no hasta la instantánea de la pantalla principal.
+        // 中文：使用所属 View 的局部边界作为动画终点，不再读取主屏快照。
+        let hostBounds = showLabel.superview?.bounds ?? bounds
+        aniMove.toValue = CGPoint(x: hostBounds.maxX, y: hostBounds.maxY)
         
         let aniScale = CABasicAnimation(keyPath: "transform.scale")
         aniScale.fromValue = 3

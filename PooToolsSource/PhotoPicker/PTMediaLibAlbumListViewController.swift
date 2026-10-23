@@ -146,7 +146,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight)
-            make.top.equalToSuperview().inset(fakeNavTopInset)
+            make.top.equalToSuperview().inset(fakeNavTopInset())
         }
         
         fakeNavSet()
@@ -192,7 +192,9 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
                                             width: region.visibleRect.width,
                                             height: view.bounds.height).intersection(view.bounds)
         let visibleRect = horizontalVisibleRect.isEmpty ? view.bounds : horizontalVisibleRect
-        let layoutSignature = "\(region.signature)|\(visibleRect.integral)"
+        let pullBarFrame = ptSheetPullBarFrame(in: view)
+        let navTopInset = fakeNavTopInset(pullBarFrame: pullBarFrame)
+        let layoutSignature = "\(region.signature)|\(visibleRect.integral)|\(pullBarFrame?.integral ?? .zero)|\(navTopInset)"
         if layoutSignature != lastAdaptiveLayoutSignature {
             lastAdaptiveLayoutSignature = layoutSignature
             // English: Keep album rows inside the visible pane while the fake navigation bar remains full-height.
@@ -201,7 +203,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
             collectionView.snp.remakeConstraints { make in
                 make.left.equalToSuperview().offset(visibleRect.minX)
                 make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
-                make.top.equalToSuperview().inset(self.sheetViewController?.options.pullBarHeight ?? 0)
+                make.top.equalToSuperview()
                 make.bottom.equalToSuperview()
             }
             // English: Give the fake navigation bar the same local pane as its title and back button.
@@ -211,10 +213,10 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
                 make.left.equalToSuperview().offset(visibleRect.minX)
                 make.right.equalToSuperview().inset(max(0, view.bounds.width - visibleRect.maxX))
                 make.height.equalTo(CGFloat.kNavBarHeight)
-                make.top.equalToSuperview().inset(fakeNavTopInset)
+                make.top.equalToSuperview().inset(navTopInset)
             }
         }
-        let topInset = max(0, fakeNav.frame.maxY)
+        let topInset = max(fakeNav.frame.maxY, navTopInset + CGFloat.kNavBarHeight, view.safeAreaInsets.top)
         let bottomInset = max(0, view.safeAreaInsets.bottom)
         var inset = collectionView.contentCollectionView.contentInset
         var indicatorInset = collectionView.contentCollectionView.verticalScrollIndicatorInsets
@@ -232,8 +234,10 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     // English: Keep the album fake bar in the owning view's safe area.
     // Español: Mantiene la barra falsa de álbum dentro del área segura de su vista anfitriona.
     // 中文：让相册伪导航栏始终位于所属 View 的局部安全区内。
-    private var fakeNavTopInset: CGFloat {
-        max(0, view.safeAreaInsets.top - (sheetViewController?.options.pullBarHeight ?? 0) / 2)
+    private func fakeNavTopInset(pullBarFrame: CGRect? = nil) -> CGFloat {
+        let safeTop = max(0, view.safeAreaInsets.top)
+        guard let pullBarFrame else { return safeTop }
+        return max(safeTop, pullBarFrame.maxY)
     }
     
     func loadAlbumList() {

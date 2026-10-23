@@ -17,8 +17,23 @@ class PTPermissionHeader: PTBaseCollectionReusableView,@MainActor PTSupplementar
     static public var reuseID: String { PTPermissionHeader.ID }
 
     open class func cellHeight()->CGFloat {
-        let titleHeight = UIView.sizeFor(string: PTPermissionHeader.headerTitle, font: PTAppBaseConfig.share.permissionTitleFont, width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace).height + CGFloat.ScaleW(w: 5)
-        let infoHeight = UIView.sizeFor(string: PTPermissionHeader.headerInfo, font: PTAppBaseConfig.share.permissionSubtitleFont, width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace).height + CGFloat.ScaleW(w: 5)
+        // English: Legacy callers keep the old display-based width; new layouts must provide their container width.
+        // Español: Los callers heredados conservan el ancho de pantalla; los diseños nuevos pasan el ancho del contenedor.
+        // 中文：旧调用保留屏幕宽度兼容行为；新布局必须传入容器宽度。
+        return cellHeight(forWidth: CGFloat.kSCREEN_WIDTH)
+    }
+
+    // English: Measure the header in the collection view's own coordinate space.
+    // Español: Mide el encabezado en el espacio de coordenadas de su propia colección.
+    // 中文：在集合视图自己的坐标系内测量 Header 高度。
+    open class func cellHeight(forWidth width: CGFloat) -> CGFloat {
+        let contentWidth = max(0, width - PTAppBaseConfig.share.defaultViewSpace)
+        let titleHeight = UIView.sizeFor(string: PTPermissionHeader.headerTitle,
+                                         font: PTAppBaseConfig.share.permissionTitleFont,
+                                         width: contentWidth).height + CGFloat.ScaleW(w: 5)
+        let infoHeight = UIView.sizeFor(string: PTPermissionHeader.headerInfo,
+                                        font: PTAppBaseConfig.share.permissionSubtitleFont,
+                                        width: contentWidth).height + CGFloat.ScaleW(w: 5)
         return titleHeight + infoHeight + CGFloat.ScaleW(w: 5) * 3
     }
     
