@@ -91,6 +91,8 @@ open class PTNavigationBarContainer: UIView {
         largeTitleContainer.addSubview(largeTitleLabel)
         clipsToBounds = false
         backgroundView.isUserInteractionEnabled = false
+        backgroundView.isAccessibilityElement = false
+        backgroundView.accessibilityElementsHidden = true
         contentView.backgroundColor = .clear
         topBarContainer.backgroundColor = .clear
         largeTitleContainer.backgroundColor = .clear

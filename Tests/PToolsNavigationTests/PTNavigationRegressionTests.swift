@@ -76,6 +76,21 @@ final class PTNavigationRegressionTests: XCTestCase {
         XCTAssertEqual(rightButton.bounds.size.height, 40, accuracy: 0.5)
     }
 
+    // English: Verify that an embedded PTNavBar uses its host row instead of the legacy 44-point estimate.
+    // Español: Verifica que un PTNavBar integrado use la fila del host y no la estimación heredada de 44 puntos.
+    // 中文：验证嵌入式 PTNavBar 使用宿主内容行，而不是旧的 44pt 高度估算。
+    func testEmbeddedNavigationBarUsesItsHostContentRow() {
+        let bar = PTNavBar(frame: CGRect(x: 0, y: 0, width: 320, height: 91))
+        bar.isFakeNav = false
+        bar.setLeftButtons([UIView(frame: CGRect(x: 0, y: 0, width: 72, height: 48))])
+        bar.setRightButtons([UIView(frame: CGRect(x: 0, y: 0, width: 48, height: 40))])
+        bar.layoutIfNeeded()
+
+        XCTAssertEqual(bar.topBarContainer.bounds.height, 91, accuracy: 0.5)
+        XCTAssertEqual(bar.leftContainer.bounds.height, 91, accuracy: 0.5)
+        XCTAssertEqual(bar.rightContainer.bounds.height, 91, accuracy: 0.5)
+    }
+
     func testFakeNavigationBarTitleModesRemainWithinHost() {
         let bar = PTNavBar(frame: CGRect(x: 0, y: 0, width: 320, height: 72))
         bar.isFakeNav = true

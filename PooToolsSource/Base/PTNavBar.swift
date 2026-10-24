@@ -11,10 +11,24 @@ import SnapKit
 
 @MainActor
 open class PTNavBar: PTNavigationBarContainer {
-    
-    fileprivate func navOffset() -> CGFloat {
-        guard let current = PTUtils.getCurrentVC(), let sheet = current.sheetViewController else { return 0 }
-        return sheet.options.useFullScreenMode ? 0 : max(0, sheet.options.pullBarHeight)
+
+    // English: Resolve the standalone bar row from its own bounds and safe area.
+    // Español: Resuelve la fila de la barra independiente desde sus propios bounds y área segura.
+    // 中文：根据独立导航栏自身的 bounds 和安全区解析内容行。
+    private func navigationContentRow() -> CGRect {
+        guard !bounds.isEmpty else { return .zero }
+        let hostBounds = CGRect(origin: .zero, size: bounds.size)
+        let safeInsets = UIEdgeInsets(top: max(0, safeAreaInsets.top),
+                                      left: max(0, safeAreaInsets.left),
+                                      bottom: max(0, safeAreaInsets.bottom),
+                                      right: max(0, safeAreaInsets.right))
+        let insetRect = hostBounds.inset(by: safeInsets)
+        let safeRect = insetRect.isEmpty ? hostBounds : insetRect
+        let input = PTNavigationContentRowInput(hostBounds: hostBounds,
+                                                hostSafeRect: safeRect,
+                                                fallbackRowRect: safeRect,
+                                                evidence: .fallback)
+        return PTNavigationContentRowResolver.resolve(input)?.contentRect ?? safeRect
     }
     
     // English: Mark this instance as a standalone view that does not own the system status bar.
@@ -142,13 +156,12 @@ open class PTNavBar: PTNavigationBarContainer {
                 // 中文：伪导航栏必须严格使用宿主 View 提供的实际高度。
                 make.top.bottom.equalToSuperview()
             } else {
-                // English: Use the navigation host's local safe-area position and sheet pull distance.
-                // Español: Usa la posición local del área segura del host y la distancia de la hoja.
-                // 中文：使用导航宿主的局部安全区位置和 Sheet 拉手距离。
-                let sheetOffset = navOffset()
-                let hostTopInset = navigationHostTopInset
-                make.top.equalToSuperview().offset(-sheetOffset)
-                make.height.equalTo(hostTopInset + sheetOffset + CGFloat.kNavBarHeight)
+                // English: Use the resolved local content row instead of a global bar-height estimate.
+                // Español: Usa la fila local resuelta en vez de una estimación global de altura.
+                // 中文：使用解析出的局部内容行，不再依赖全局导航栏高度估算。
+                let row = navigationContentRow()
+                make.top.equalToSuperview().offset(row.minY)
+                make.height.equalTo(row.height)
             }
         }
     }
@@ -176,11 +189,12 @@ open class PTNavBar: PTNavigationBarContainer {
                 make.centerY.equalToSuperview()
                 make.height.equalToSuperview()
             } else {
-                // English: Keep button groups inside the local host geometry.
-                // Español: Mantiene los grupos de botones dentro de la geometría local del host.
-                // 中文：让按钮组始终落在当前宿主的局部几何区域内。
-                make.top.equalToSuperview().inset(navigationHostTopInset + navOffset())
-                make.bottom.equalToSuperview()
+                // English: Align both button groups to the same resolved local content row.
+                // Español: Alinea ambos grupos de botones con la misma fila local resuelta.
+                // 中文：让左右按钮组共同对齐到同一个局部内容行。
+                let row = navigationContentRow()
+                make.top.equalToSuperview().offset(row.minY)
+                make.height.equalTo(row.height)
             }
             
             make.width.equalTo(widthTotal)

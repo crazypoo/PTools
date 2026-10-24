@@ -509,10 +509,11 @@ class PTFuncNameViewController: PTBaseViewController {
             make.height.equalTo(32)
             make.centerY.equalToSuperview()
         }
-        view.frame = CGRect(origin: .zero, size: .init(width: CGFloat.kSCREEN_WIDTH - 150, height: PTAppBaseConfig.share.bavTitleContainerHeight))
-        view.snp.makeConstraints { make in
-            make.size.equalTo(CGSize.init(width: CGFloat.kSCREEN_WIDTH - 150, height: PTAppBaseConfig.share.bavTitleContainerHeight))
-        }
+        // English: Let the navigation title resolver provide the width from the live host.
+        // Español: Deja que el resolver del título obtenga el ancho del host real.
+        // 中文：让导航标题解析器根据当前宿主实时计算宽度。
+        view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return view
     }()
 
@@ -891,30 +892,29 @@ class PTFuncNameViewController: PTBaseViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
-        // 1. 旋转开始前：可以隐蔽索引条或清理部分旧高度缓存
+        // English: Clear only list caches that are invalidated by the new bounds.
+        // Español: Limpia solo las cachés de lista invalidadas por los nuevos bounds.
+        // 中文：只清理会被新 bounds 失效的列表缓存。
         collectionView.hideIndicator()
         collectionView.clearLayoutCaches()
         self.view.setNeedsLayout()
-        // 2. 伴随系统的物理旋转动画一起过渡
+
+        // English: Let UIKit own the view-controller frame during the transition.
+        // Español: Deja que UIKit sea dueño del frame del controlador durante la transición.
+        // 中文：转场期间由 UIKit 负责控制器 frame，不手动覆盖它。
         coordinator.animate(alongsideTransition: { [weak self] _ in
-            // 这里可以放置需要与旋转动画同步变宽的自定义 UI 代码
-            guard let self = self else { return }
-            self.view.frame = CGRect(origin: .zero, size: size)
+            guard let self else { return }
             self.view.layoutIfNeeded()
             self.collectionView.contentCollectionView.collectionViewLayout.invalidateLayout()
             
             self.view.backgroundColor = .blue
             self.collectionView.backgroundColor = .green
         }, completion: { [weak self] _ in
-            // 🌟 3. 核心修复：当屏幕已经完全成功切换、动画彻底结束、宽度绝对稳定后，在这里触发重绘！
-            // 此时 myCollectionView 内部的 layoutCache、heightCache 会在最新的横/竖屏宽度下进行按需精准重新计算，UI 绝不会再发生任何错位或挤压
+            // English: Reload after UIKit commits the new bounds so measurements use the final width.
+            // Español: Recarga después de que UIKit confirme los nuevos bounds para medir con el ancho final.
+            // 中文：等 UIKit 提交新 bounds 后再刷新，确保测量使用最终宽度。
             PTNSLogConsole("【旋转闭环】屏幕尺寸已稳定，最新宽度: \(size.width)")
             self?.collectionView.reloadAllData(animated: false)
-            self?.collectionView.snp.remakeConstraints { make in
-                make.top.equalToSuperview()
-                make.right.bottom.equalToSuperview()
-                make.left.right.equalToSuperview()
-            }
         })
     }
 

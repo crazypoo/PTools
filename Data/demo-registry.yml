@@ -1075,6 +1075,7 @@ modules:
     - "ui.collection-refresh-lab"
     - "ui.collection-layout-switch-lab"
     - "navigation.duo-adaptive-bars"
+    - "navigation.duo-custom-nav-alignment-regression"
     - "duo.photo-picker-grid"
     - "duo.image-editor-controls"
     - "duo.video-editor-controls"

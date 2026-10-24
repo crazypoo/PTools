@@ -12,8 +12,10 @@
 - [x] `PTNavigationBarManager` 使用真实 `UINavigationBar` 宿主的内容行解析；左、标题、右内容共享 host-local `contentRect`，保留旧高度 API 兼容语义。
 - [x] 内容行更新接入安装、样式、Push/Pop、Large Title 和 `PTBaseNavControl` 布局生命周期；重复几何不重建约束，背景层仍独立覆盖状态栏区域。
 - [x] 新增 `PTNavigationContentRowResolver` 纯值回归测试、非 44pt 宿主高度测试、safe-area/large-title 边界测试，以及运行时容器高度回归。
-- [x] 新增默认关闭的 `PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1` DEBUG 诊断开关；仅输出 host/frame/midY，不输出业务内容。
+- [x] 新增默认关闭的 `PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1` DEBUG 诊断开关；仅在异常时输出 host/frame/row/reserved-intersection/midY，不输出业务内容。
 - [x] 导航栏内容行对齐指南和 `currentNavigationContentHeight(in:)` 兼容说明已补齐。
+- [x] 自定义导航栏内容行现在区分 observed/fallback/deferred 几何证据，系统/自定义渲染器切换按导航栈收敛；背景层不再依赖私有 UIKit 子视图清理。
+- [x] 新增 `navigation.duo-custom-nav-alignment-regression` Demo，覆盖自定义标题、左右按钮、旋转、分屏和安全区变化。
 - [ ] iPhone 15 Pro Max / BaboBuy 真机 View Debugger、iOS 17/26/27 视觉回归和现场 frame 证据仍需宿主现场完成；不能以模拟器构建替代真机验收。
 - [x] `VERSION`、`PooTools.podspec` 的 canonical version source、CHANGELOG、README、ROADMAP 和 Podfile.lock 同步到 `5.69.0`。
 - [x] PhotoPicker 拆分为页面协调、实例 Session、唯一选择 Store、Selection Policy、PhotoKit Album Repository、提交协调器和纯 UI View/Cell 边界。

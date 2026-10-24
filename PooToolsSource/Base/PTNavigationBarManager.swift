@@ -296,6 +296,26 @@ public final class PTNavigationBarManager:NSObject {
         }
     }
 
+    // English: Track which renderer owns a navigation stack during adaptive-bar changes.
+    // Español: Registra qué renderizador posee la pila durante los cambios de barra adaptativa.
+    // 中文：记录自适应导航栏切换期间由哪套渲染器拥有导航栈。
+    private enum NavigationRendererMode: String {
+        case customHorizontal
+        case systemVertical
+        case transitioning
+    }
+
+    // English: Keep renderer state weakly keyed per navigation controller and scene.
+    // Español: Conserva el estado del renderizador por controlador y escena usando claves débiles.
+    // 中文：按导航控制器和场景保存渲染器状态，并使用弱引用键。
+    private final class NavigationRendererStateBox: NSObject {
+        var mode: NavigationRendererMode
+
+        init(mode: NavigationRendererMode) {
+            self.mode = mode
+        }
+    }
+
     // English: Keep the currently visible controller per scene while retaining the legacy active-stack pointers.
     // Español: Conserva el controlador visible por escena y mantiene los punteros heredados de la pila activa.
     // 中文：按场景保存当前可见控制器，同时保留旧的活动导航栈指针。
@@ -316,6 +336,7 @@ public final class PTNavigationBarManager:NSObject {
     private var styleCache = NSMapTable<UINavigationController, NavigationStyleBox>(keyOptions: .weakMemory, valueOptions: .strongMemory)
     private var tabBarHandlerCache = NSMapTable<UINavigationController, TabBarHandlerBox>(keyOptions: .weakMemory, valueOptions: .strongMemory)
     private var delegateProxyMap = NSMapTable<UINavigationController, PTNavigationDelegateProxy>(keyOptions: .weakMemory, valueOptions: .strongMemory)
+    private var rendererStateMap = NSMapTable<UINavigationController, NavigationRendererStateBox>(keyOptions: .weakMemory, valueOptions: .strongMemory)
     
     private weak var currentVC: UIViewController?
     weak var currentNav: UINavigationController?
@@ -351,6 +372,58 @@ public final class PTNavigationBarManager:NSObject {
         container?.isUserInteractionEnabled = visible
     }
 
+    // English: Remove only framework-owned native items before the custom renderer becomes authoritative.
+    // Español: Elimina solo los elementos nativos propios del framework antes de que mande el renderizador personalizado.
+    // 中文：自定义渲染器接管前，只清理框架拥有的原生导航项。
+    private func clearNativeNavigationItem(in navigationController: UINavigationController) {
+        let navigationItem = navigationController.topViewController?.navigationItem
+        navigationItem?.leftBarButtonItem = nil
+        navigationItem?.leftBarButtonItems = nil
+        navigationItem?.rightBarButtonItem = nil
+        navigationItem?.rightBarButtonItems = nil
+        navigationItem?.titleView = nil
+        navigationItem?.backAction = nil
+        navigationItem?.leadingItemGroups = []
+        navigationItem?.trailingItemGroups = []
+    }
+
+    private func rendererMode(for navigationController: UINavigationController) -> NavigationRendererMode? {
+        rendererStateMap.object(forKey: navigationController)?.mode
+    }
+
+    private func setRendererMode(_ mode: NavigationRendererMode,
+                                 for navigationController: UINavigationController) {
+        if let state = rendererStateMap.object(forKey: navigationController) {
+            state.mode = mode
+        } else {
+            rendererStateMap.setObject(NavigationRendererStateBox(mode: mode), forKey: navigationController)
+        }
+    }
+
+    // English: Switch renderer ownership atomically so a resize cannot leave two bars interactive.
+    // Español: Cambia la propiedad del renderizador de forma atómica para que un resize no deje dos barras interactivas.
+    // 中文：原子切换渲染器所有权，避免尺寸变化期间两套导航栏同时可交互。
+    private func transitionRendererIfNeeded(in navigationController: UINavigationController,
+                                            useSystemRenderer: Bool) {
+        let target: NavigationRendererMode = useSystemRenderer ? .systemVertical : .customHorizontal
+        guard rendererMode(for: navigationController) != target else { return }
+
+        setRendererMode(.transitioning, for: navigationController)
+        if target == .systemVertical {
+            if let container = containerMap.object(forKey: navigationController) {
+                container.clearTitleLayout()
+                setCustomContainer(container, visible: false)
+            }
+            applyAdaptiveSystemPolicy(to: navigationController)
+        } else {
+            clearNativeNavigationItem(in: navigationController)
+            if let container = containerMap.object(forKey: navigationController) {
+                setCustomContainer(container, visible: true)
+            }
+        }
+        setRendererMode(target, for: navigationController)
+    }
+
     // English: Resolve the real UINavigationBar row in local coordinates before updating any child constraints.
     // Español: Resuelve la fila real de UINavigationBar en coordenadas locales antes de actualizar restricciones hijas.
     // 中文：先在 UINavigationBar 局部坐标中解析真实内容行，再更新子视图约束。
@@ -372,15 +445,31 @@ public final class PTNavigationBarManager:NSObject {
                                       left: max(0, navBar.safeAreaInsets.left),
                                       bottom: max(0, navBar.safeAreaInsets.bottom),
                                       right: max(0, navBar.safeAreaInsets.right))
-        let hostSafeRect = hostBounds.inset(by: safeInsets)
+        let insetSafeRect = hostBounds.inset(by: safeInsets)
+        let hostSafeRect = insetSafeRect.isEmpty ? hostBounds : insetSafeRect
         let isLargeTitleExpanded = container.isLargeTitleExpandedForLayout
         let compactRowHeight = isLargeTitleExpanded
             ? compactNavigationRowHeight(in: navBar, container: container)
             : nil
+        let observedSystemRowRect = isLargeTitleExpanded
+            ? nil
+            : observedNavigationContentRow(in: navBar, hostBounds: hostBounds)
+        let fallbackRowRect: CGRect?
+        if isLargeTitleExpanded, let compactRowHeight {
+            fallbackRowRect = CGRect(x: hostSafeRect.minX,
+                                     y: hostSafeRect.minY,
+                                     width: hostSafeRect.width,
+                                     height: compactRowHeight)
+        } else {
+            fallbackRowRect = hostSafeRect
+        }
+        let evidence: PTNavigationContentRowEvidence = observedSystemRowRect == nil ? .fallback : .observed
         let input = PTNavigationContentRowInput(
             hostBounds: hostBounds,
             hostSafeRect: hostSafeRect,
-            systemContentRect: isLargeTitleExpanded ? nil : hostSafeRect,
+            observedSystemRowRect: observedSystemRowRect,
+            fallbackRowRect: fallbackRowRect,
+            evidence: evidence,
             isLargeTitleExpanded: isLargeTitleExpanded,
             compactRowHeight: compactRowHeight
         )
@@ -398,6 +487,26 @@ public final class PTNavigationBarManager:NSObject {
 #if DEBUG
         dumpNavigationVerticalGeometryIfEnabled(nav: nav, container: container)
 #endif
+    }
+
+    // English: Read the public layout-margin frame as an observation, never as a fixed system height.
+    // Español: Lee el frame público de layoutMargins como observación, nunca como una altura fija del sistema.
+    // 中文：读取公开的 layoutMargins frame 作为观测值，不把它当作固定系统高度。
+    private func observedNavigationContentRow(in navigationBar: UINavigationBar,
+                                              hostBounds: CGRect) -> CGRect? {
+        let marginsFrame = navigationBar.layoutMarginsGuide.layoutFrame
+        guard marginsFrame.origin.x.isFinite,
+              marginsFrame.origin.y.isFinite,
+              marginsFrame.width.isFinite,
+              marginsFrame.height.isFinite,
+              marginsFrame.height > 0,
+              marginsFrame.height <= hostBounds.height else {
+            return nil
+        }
+        return CGRect(x: hostBounds.minX,
+                      y: marginsFrame.minY,
+                      width: hostBounds.width,
+                      height: marginsFrame.height)
     }
 
 #if DEBUG
@@ -419,15 +528,61 @@ public final class PTNavigationBarManager:NSObject {
         let leftRect = rect(container.leftContainer)
         let rightRect = rect(container.rightContainer)
         let titleRect = rect(container.titleContainer)
+        let windowBounds = window.bounds
+        let sceneID = nav.viewIfLoaded?.window?.windowScene?.session.persistentIdentifier ?? "none"
+        let mode = rendererMode(for: nav)?.rawValue ?? "unset"
+        let navigationViewBounds = nav.viewIfLoaded?.bounds ?? .zero
+        let navigationViewSafeInsets = nav.viewIfLoaded?.safeAreaInsets ?? .zero
+        let verticalBarEdge: String = {
+            guard #available(iOS 27.1, *) else { return "unavailable" }
+            guard let traitCollection = nav.viewIfLoaded?.traitCollection else { return "unavailable" }
+            switch traitCollection.verticalBarEdge {
+            case .leading:
+                return "leading"
+            case .trailing:
+                return "trailing"
+            default:
+                return "unspecified"
+            }
+        }()
+        let layoutContext = PTAdaptiveBarLayoutContext.make(for: nav.navigationBar)
+        let reservedWindowRects = layoutContext.reservedRegions
+            .filter(\.isActive)
+            .map { nav.navigationBar.convert($0.frame, to: window) }
+        let reservedIntersections = reservedWindowRects.flatMap { reservedRect in
+            [leftRect, titleRect, rightRect].compactMap { itemRect in
+                let intersection = reservedRect.intersection(itemRect)
+                return intersection.isNull || intersection.isEmpty ? nil : intersection
+            }
+        }
+        let rowMidY = rowRect.midY
+        let midYValues = [leftRect.midY, titleRect.midY, rightRect.midY]
+        let maxMidYDelta = midYValues.map { abs($0 - rowMidY) }.max() ?? 0
+        let hasInvalidFrame = [barRect, hostRect, rowRect, leftRect, titleRect, rightRect]
+            .contains { !$0.origin.x.isFinite || !$0.origin.y.isFinite || !$0.width.isFinite || !$0.height.isFinite }
+        let hasAlignmentIssue = maxMidYDelta > 1.0
+            || hasInvalidFrame
+            || !windowBounds.contains(barRect)
+            || !reservedIntersections.isEmpty
+        guard hasAlignmentIssue else { return }
         PTNSLogConsole("""
         [PTNavY]
+        scene=\(sceneID) / renderer=\(mode)
+        window=\(windowBounds)
         bar=\(barRect) / safe=\(nav.navigationBar.safeAreaInsets)
+        navView.bounds=\(navigationViewBounds) / navView.safe=\(navigationViewSafeInsets)
+        verticalBarEdge=\(verticalBarEdge)
         host=\(hostRect) / safe=\(container.safeAreaInsets)
         row=\(rowRect) / safe=\(container.topBarContainer.safeAreaInsets)
         left.midY=\(leftRect.midY)
         right.midY=\(rightRect.midY)
         title.midY=\(titleRect.midY)
-        navSafe=\(nav.view.safeAreaInsets)
+        row.midY=\(rowMidY) / maxDelta=\(maxMidYDelta)
+        row.evidence=\(container.lastContentRowInput?.evidence.rawValue ?? "none")
+        title.hidden=\(container.titleContainer.isHidden) / title.superview=\(container.titleContainer.superview != nil)
+        reserved=\(layoutContext.reservedRegions)
+        reservedWindow=\(reservedWindowRects)
+        reservedIntersections=\(reservedIntersections)
         """)
     }
 #endif
@@ -463,13 +618,17 @@ public final class PTNavigationBarManager:NSObject {
     // Español: Actualiza la geometría sin reinstalar el contenedor propio del controlador de navegación.
     // 中文：只刷新几何，不重新安装每个导航控制器独立拥有的容器。
     func refreshGeometry(in nav: UINavigationController) {
-        guard !usesNativeVerticalBar(nav),
+        let useSystemRenderer = usesNativeVerticalBar(nav)
+        transitionRendererIfNeeded(in: nav, useSystemRenderer: useSystemRenderer)
+        guard !useSystemRenderer,
               let container = containerMap.object(forKey: nav) else { return }
         refreshNavigationContentRow(in: nav, container: container)
     }
     
     public func installIfNeeded(in nav: UINavigationController) {
-        if usesNativeVerticalBar(nav) {
+        let useSystemRenderer = usesNativeVerticalBar(nav)
+        transitionRendererIfNeeded(in: nav, useSystemRenderer: useSystemRenderer)
+        if useSystemRenderer {
             if let container = containerMap.object(forKey: nav) {
                 container.clearTitleLayout()
                 setCustomContainer(container, visible: false)
@@ -612,14 +771,6 @@ public final class PTNavigationBarManager:NSObject {
         nav.navigationBar.barTintColor = .clear
         nav.navigationBar.isTranslucent = true
         
-        nav.navigationBar.subviews.forEach {
-            if NSStringFromClass(type(of: $0)).contains("UIBarBackground") {
-                $0.isHidden = true
-                $0.isUserInteractionEnabled = false
-                $0.alpha = 0
-            }
-        }
-
         // English: Keep the navigation-controller backing transparent so a clear style reveals the child view.
         // Español: Mantiene transparente el fondo del controlador de navegación para que un estilo claro muestre la vista hija.
         // 中文：保持导航控制器的底层背景透明，让 clear 样式能够显示子控制器内容。
@@ -931,7 +1082,14 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         let fromVC = navigationController.transitionCoordinator?.viewController(forKey: .from)
         let fromStyle = (fromVC as? PTNavigationConfigurable)?.preferredNavigationBarStyle() ?? .transparent
 
-        // 预设起点，准备动画
+        // English: Mark the stack as transitioning before changing the visible item set.
+        // Español: Marca la pila como en transición antes de cambiar sus elementos visibles.
+        // 中文：切换可见导航项前，先将导航栈标记为转场中。
+        setRendererMode(.transitioning, for: navigationController)
+
+        // English: Seed the transition from the current style before UIKit starts moving views.
+        // Español: Inicializa la transición desde el estilo actual antes de que UIKit mueva las vistas.
+        // 中文：在 UIKit 移动视图前，先用当前样式设置转场起点。
         container.prepareTransition(from: fromStyle, to: toStyle)
         // 🌟 判断这是否是导航栈的“根视图”（代表是新 Present 出来的）
         let isRoot = navigationController.viewControllers.first == viewController
@@ -941,6 +1099,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             // 整个 NavController 正在被系统整体推上来（Slide Up）。
             container.apply(style: toStyle)
             self.apply(item: item, in: navigationController, viewController: viewController)
+            setRendererMode(.customHorizontal, for: navigationController)
             if let vc = viewController as? PTBaseViewController {
                 vc.setNeedsStatusBarAppearanceUpdate()
             }
@@ -985,7 +1144,9 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                 }
             } else {
                 stopTransition(for: navigationController)
-                // 兜底无动画情况
+                // English: Complete the no-coordinator path without leaving a transitioning renderer behind.
+                // Español: Completa la ruta sin coordinador sin dejar el renderizador en transición.
+                // 中文：无转场协调器时也要完成状态收敛，不能遗留 transitioning 状态。
                 if animated {
                     UIView.animate(withDuration: PTUIAccessibility.animationDuration(0.25)) {
                         container.apply(style: toStyle)
@@ -1007,6 +1168,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
                         vc.setNeedsStatusBarAppearanceUpdate()
                     }
                 }
+                setRendererMode(.customHorizontal, for: navigationController)
             }
         }
 
@@ -1078,6 +1240,9 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             StatusBarManager.shared.update(with: toStyle)
             toVC.setNeedsStatusBarAppearanceUpdate()
             toVC.navigationController?.setNeedsStatusBarAppearanceUpdate()
+        }
+        if let navigationController = toVC.navigationController {
+            setRendererMode(.customHorizontal, for: navigationController)
         }
     }
 
@@ -1380,12 +1545,7 @@ extension PTNavigationBarManager {
 }
 
 extension PTNavigationBarManager {
-    
-    fileprivate func navOffset() -> CGFloat {
-        let offsetHeight = (PTUtils.getCurrentVC()?.sheetViewController != nil) ? CGFloat.statusBarHeight() : 0
-        return offsetHeight
-    }
-    
+
     public func setLeftView(_ views: [UIView], spacing: CGFloat = 8) {
         guard let nav = currentNav else { return }
         setLeftView(views, spacing: spacing, in: nav)

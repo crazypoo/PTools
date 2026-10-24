@@ -17,18 +17,22 @@ final class PTNavigationContentRowResolverTests: XCTestCase {
         let input = PTNavigationContentRowInput(
             hostBounds: CGRect(x: 0, y: 0, width: 430, height: 50),
             hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 50),
-            systemContentRect: CGRect(x: 0, y: 0, width: 430, height: 50)
+            observedSystemRowRect: CGRect(x: 0, y: 0, width: 430, height: 50),
+            fallbackRowRect: CGRect(x: 0, y: 0, width: 430, height: 44),
+            evidence: .observed
         )
 
         let result = try XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
-        XCTAssertEqual(result.contentRect, input.systemContentRect)
+        XCTAssertEqual(result.contentRect, input.observedSystemRowRect)
+        XCTAssertEqual(result.evidence, .observed)
     }
 
     func testAlreadyPositionedHostDoesNotAddASecondTopInset() throws {
         let input = PTNavigationContentRowInput(
             hostBounds: CGRect(x: 0, y: 0, width: 390, height: 44),
             hostSafeRect: CGRect(x: 0, y: 0, width: 390, height: 44),
-            systemContentRect: CGRect(x: 0, y: 0, width: 390, height: 44)
+            observedSystemRowRect: CGRect(x: 0, y: 0, width: 390, height: 44),
+            evidence: .observed
         )
 
         let result = try XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
@@ -40,7 +44,8 @@ final class PTNavigationContentRowResolverTests: XCTestCase {
         let input = PTNavigationContentRowInput(
             hostBounds: CGRect(x: 0, y: 0, width: 430, height: 56),
             hostSafeRect: CGRect(x: 0, y: 8, width: 430, height: 40),
-            systemContentRect: nil
+            fallbackRowRect: CGRect(x: 0, y: 8, width: 430, height: 40),
+            evidence: .fallback
         )
 
         let result = try XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
@@ -52,6 +57,8 @@ final class PTNavigationContentRowResolverTests: XCTestCase {
         let input = PTNavigationContentRowInput(
             hostBounds: CGRect(x: 0, y: 0, width: 430, height: 96),
             hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 96),
+            fallbackRowRect: CGRect(x: 0, y: 0, width: 430, height: 96),
+            evidence: .fallback,
             isLargeTitleExpanded: true,
             compactRowHeight: 50
         )
@@ -66,10 +73,56 @@ final class PTNavigationContentRowResolverTests: XCTestCase {
         let input = PTNavigationContentRowInput(
             hostBounds: .zero,
             hostSafeRect: .zero,
-            systemContentRect: nil
+            evidence: .deferred
         )
 
         XCTAssertNil(PTNavigationContentRowResolver.resolve(input))
+    }
+
+    // English: A safe-area fallback must never be reported as an observed UIKit row.
+    // Español: Un fallback del área segura nunca debe reportarse como una fila observada de UIKit.
+    // 中文：安全区域回退值不能伪装成 UIKit 实测内容行。
+    func testFallbackEvidenceDoesNotUseAnUnverifiedSystemRect() throws {
+        let input = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 430, height: 60),
+            hostSafeRect: CGRect(x: 0, y: 8, width: 430, height: 44),
+            fallbackRowRect: CGRect(x: 0, y: 8, width: 430, height: 44),
+            evidence: .fallback
+        )
+
+        let result = try XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
+        XCTAssertEqual(result.contentRect, CGRect(x: 0, y: 8, width: 430, height: 44))
+        XCTAssertEqual(result.evidence, .fallback)
+    }
+
+    // English: Defer while UIKit reports a zero or transitional geometry instead of caching it.
+    // Español: Difiere cuando UIKit informa una geometría cero o transitoria en vez de guardarla.
+    // 中文：UIKit 返回零尺寸或转场中的几何时延后处理，不缓存无效结果。
+    func testDeferredEvidenceReturnsNoRow() {
+        let input = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 430, height: 60),
+            hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 60),
+            evidence: .deferred
+        )
+
+        XCTAssertNil(PTNavigationContentRowResolver.resolve(input))
+    }
+
+    // English: Preserve asymmetric horizontal safe areas in the host-local fallback.
+    // Español: Conserva las áreas seguras horizontales asimétricas en el fallback local del host.
+    // 中文：保留宿主局部回退值中的非对称水平安全区。
+    func testAsymmetricSafeAreaRemainsAsymmetric() throws {
+        let fallback = CGRect(x: 24, y: 4, width: 390, height: 52)
+        let input = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 438, height: 60),
+            hostSafeRect: fallback,
+            fallbackRowRect: fallback,
+            evidence: .fallback
+        )
+
+        let result = try XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
+        XCTAssertEqual(result.contentRect.minX, 24, accuracy: 0.001)
+        XCTAssertEqual(result.contentRect.maxX, 414, accuracy: 0.001)
     }
 
     func testContainerUsesAHostHeightDifferentFromTheLegacyEstimate() {

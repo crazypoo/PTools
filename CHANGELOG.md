@@ -6,6 +6,8 @@
 
 - PTLayout 5.67.1 专项记录：已撤销的全仓 SnapKit → PTLayout 迁移不重新执行；本轮只修复引擎语义、增加运行时 XCTest 和严格门禁，生产模块继续保留 `.snp` 兼容路径。
 - 后续变更记录继续写入新的正式版本章节。
+- 自定义导航栏内容行改为区分 UIKit 实测与宿主局部回退证据，转场/零尺寸阶段不缓存无效几何；系统垂直导航栏与自定义横向容器按导航栈原子切换所有权。
+- 移除对 UIKit 私有 `UIBarBackground` 子视图的清理，背景仅通过公开 `UINavigationBarAppearance` 配置；补充 `navigation.duo-custom-nav-alignment-regression` Demo 和左右/标题对齐回归覆盖。
 
 ## 5.69.0 — 2026-10-21
 

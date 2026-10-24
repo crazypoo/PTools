@@ -196,6 +196,7 @@ enum PTDemoRegistry {
         make("navigation.segment-paging-regression", "PooToolsSegmented", "Segmented / JX Parity & Paging", .navigationRouting, .interactive, .push, .runnable, legacy: "SegmentedPagingRegression", tags: ["segment", "paging", "badge", "jx-parity", "regression"]),
         make("navigation.segment-item-separator", "PooToolsSegmented", "Segmented / Item Separator", .navigationRouting, .interactive, .push, .runnable, legacy: "SegmentedItemSeparator", tags: ["segment", "separator", "rtl", "reuse"]),
         make("navigation.duo-adaptive-bars", "PToolsUIFoundation", "iPhone Duo Adaptive Bars", .navigationRouting, .interactive, .push, .runnable, legacy: "iPhone Duo Adaptive Bars", tags: ["iphone-duo", "navigation", "tabbar", "adaptive", "iOS27.1"]),
+        make("navigation.duo-custom-nav-alignment-regression", "PToolsUIFoundation", "Duo · Custom Navigation Alignment", .navigationRouting, .interactive, .push, .runnable, tags: ["iphone-duo", "navigation", "custom-bar", "title-view", "rotation"]),
         // English: Keep each Duo regression surface directly discoverable in the normal catalog.
         // Español: Mantiene cada superficie de regresión Duo accesible desde el catálogo normal.
         // 中文：让每个 Duo 回归场景都能从常规目录直接进入。
@@ -313,6 +314,10 @@ final class PTDemoCoordinator {
     func viewController(for descriptor: PTDemoDescriptor) -> UIViewController {
         if let registered = PTDemoFactoryRegistry.shared.makeViewController(for: descriptor) {
             return registered
+        }
+
+        if descriptor.id.rawValue == "navigation.duo-custom-nav-alignment-regression" {
+            return PTDuoCustomNavigationAlignmentDemoViewController()
         }
 
         // English: Every Duo descriptor gets a visible host even when its real module needs hardware or permissions.
@@ -750,6 +755,65 @@ private final class PTDuoFormKeyboardSearchDemoViewController: PTBaseViewControl
         stack.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide).inset(20)
             make.width.equalTo(scrollView.frameLayoutGuide).offset(-40)
+        }
+    }
+}
+
+// English: Exercise custom navigation title, side controls, resizing and safe-area ownership in one host.
+// Español: Prueba el título personalizado, los controles laterales, el resize y el área segura en un único host.
+// 中文：在同一个宿主页面验证自定义标题、左右按钮、尺寸变化和安全区所有权。
+@MainActor
+private final class PTDuoCustomNavigationAlignmentDemoViewController: PTBaseViewController {
+    override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
+        .solid(.systemBackground)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        pt_Title = "Custom Navigation Alignment"
+        view.backgroundColor = .systemBackground
+
+        let backButton = UIButton(type: .system)
+        backButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        backButton.tintColor = .label
+        backButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        setCustomBackButtonView(backButton, size: backButton.bounds.size)
+
+        let moreButton = UIButton(type: .system)
+        moreButton.setImage(UIImage(systemName: "ellipsis.circle"), for: .normal)
+        moreButton.tintColor = .label
+        moreButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        setCustomRightButtons(buttons: [moreButton])
+
+        let titleLabel = UILabel()
+        titleLabel.text = "Duo Custom Navigation"
+        titleLabel.textAlignment = .center
+        titleLabel.textColor = .label
+        titleLabel.font = .preferredFont(forTextStyle: .headline)
+        setCustomTitleView(titleLabel, fillSpace: true)
+
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 12
+        stack.alignment = .fill
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(stack)
+        stack.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(24)
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(20)
+        }
+
+        [
+            "左侧按钮、标题和右侧按钮共享同一内容行",
+            "旋转、分屏和 iPhone Duo 保留宿主安全区域",
+            "PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1 可查看异常 frame"
+        ].forEach { text in
+            let label = UILabel()
+            label.text = text
+            label.textColor = .secondaryLabel
+            label.numberOfLines = 0
+            label.font = .preferredFont(forTextStyle: .body)
+            stack.addArrangedSubview(label)
         }
     }
 }
