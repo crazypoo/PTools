@@ -18,6 +18,10 @@
 - 强化 `audit_duo_uikit_coverage.py` 与 `validate_duo_adaptive_bars.sh`：报告现在绑定源码 revision、输入 manifest、规则版本和文件级 owner/evidence/decision/test 状态，过期或缺少闭环元数据的报告会失败。
 - 新增 Duo findings closure 与 test matrix 报告；PTools-Example iOS Simulator Debug 构建通过，Pods 和 Metal 工具链警告继续单独记录，真实 Duo 视觉/折叠/交互验收仍为 pending device。
 - 修复 `PTNavigationBarManager` 将自定义导航容器嵌入真实 `UINavigationBar` 时的垂直对齐问题：新增 host-local 内容行解析器，让左侧按钮、标题和右侧按钮共享同一条几何真值；不再依赖全局 `kNavBarHeight` 或 `PTUtils.getCurrentVC()` 推断 Sheet 偏移。
+- 收敛 iPhone Duo 合盖/展开后的导航栏恢复：`PTBaseNavControl` 的 trait、safe-area、布局、尺寸转场和容器入 Window 事件统一进入幂等 reconciliation；系统垂直 Bar 与自定义横向 Bar 切换后会重新挂载当前可见页面的导航项，不再依赖旋转才能恢复。
+- 导航渲染切换只清理 PTools 自己创建的 native wrapper，宿主原有 `UIBarButtonItem` 不再被全量置空；增加原生/自定义 owner、状态栏 frame、reserved region、点击区域和 generation 的 DEBUG 去重诊断。
+- 内容行 resolver 新增状态栏和 active reserved region 排斥校验；展开竖屏时背景仍可延伸到状态栏，标题、左右按钮和搜索输入共享同一条不碰撞系统顶部区域的内容行。
+- 扩充 `navigation.duo-custom-nav-alignment-regression` 的 A1/A2/A4/A5/A6 场景说明、Scene-local 几何摘要和渲染器生命周期纯值测试；真实 Duo 折叠设备的 A1–A9 截图与 20 轮稳定性继续标记为 `PENDING_DEVICE`，不以模拟器构建替代。
 - 内容行刷新接入导航栏安装、样式、Push/Pop、Large Title 和 `PTBaseNavControl` 布局生命周期；按几何签名幂等更新，保持背景层的状态栏延伸与内容行布局分离，避免重复约束和布局反馈循环。
 - 保留 `currentNavBarHeight()`、`kNavBarHeight` 和 `kNavBarHeight_Total` 的兼容调用方式；`kNavBarHeight_Total` 会优先读取活动场景的实时导航栏底部并在无法解析时回退旧公式，另新增 `currentNavigationContentHeight(in:)` 获取已绑定导航栈的实时内容行高度；新增 DEBUG 环境变量 `PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1` 用于现场 frame/midY 诊断。
 - 新增 `currentNavigationTopInset(in:navigationController:)`，按目标 View 和当前导航栈实时换算导航栏底部；避免新系统页面继续使用 `kNavBarHeight_Total` 的全局估算值造成二次偏移。

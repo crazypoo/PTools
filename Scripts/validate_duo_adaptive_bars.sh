@@ -144,12 +144,26 @@ require_fixed "ptSheetPullBarFrame" PooToolsSource/FloatPanel/UIViewController+P
 require_fixed "PTEyeTrackingCalibrationState" PooToolsSource/WhereIsMyEye/PTEyeTrackingDataManager.swift
 require_fixed "calibrate(screenSizeMeters:" PooToolsSource/WhereIsMyEye/PTEyeTrackingManager.swift
 
+# English: Keep the navigation regression contract wired to the shared ownership and collision paths.
+# Español: Mantiene el contrato de regresión de navegación conectado a las rutas compartidas de propiedad y colisión.
+# 中文：确保导航回归契约接入共享的所有权和碰撞处理路径。
+require_fixed "reconcileNavigationBar(in:" PooToolsSource/Base/PTNavigationBarManager.swift
+require_fixed "PTNavigationRendererReconciliationPlanner" PooToolsSource/Base/PTNavigationBarManager.swift
+require_fixed "exclusionRects" PooToolsSource/Base/PTNavigationBarManager.swift
+require_fixed "viewWillTransition(to size:" PooToolsSource/Base/PTBaseNavControl.swift
+require_fixed "didMoveToWindow" PooToolsSource/Base/PTBaseViewController+Navigation.swift
+require_fixed "testStatusBarOverlapRejectsObservedRow" Tests/PToolsNavigationTests/PTNavigationContentRowResolverTests.swift
+require_fixed "PTNavigationRendererReconciliationTests" Tests/PToolsNavigationTests/PTNavigationRendererReconciliationTests.swift
+require_fixed "A2 直接展开不旋转" PooTools/PTDemoCatalog.swift
+require_fixed "A4 展开竖屏" PooTools/PTDemoCatalog.swift
+
 # English: These shared bar files must use local geometry rather than screen or device heuristics.
 # Español: Estos archivos compartidos deben usar geometría local y no heurísticas de pantalla o dispositivo.
 # 中文：这些共享 Bar 文件必须使用局部几何，不能依赖全局屏幕或设备特征判断。
 for file in \
   PooToolsSource/Base/PTBaseTabBarViewController.swift \
   PooToolsSource/Base/PTNavBar.swift \
+  PooToolsSource/Base/PTNavigationBarManager.swift \
   PooToolsSource/Base/PTBaseViewController+Navigation.swift \
   PooToolsSource/Base/PTTabBarView.swift \
   PooToolsSource/ApplicationFunction/PTLaunchAdMonitor.swift \

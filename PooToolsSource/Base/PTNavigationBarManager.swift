@@ -124,6 +124,59 @@ public final class PTNavBarItem {
     public var barColorStyle:PTNavigationBarStyle = .transparent
 }
 
+// English: Keep renderer ownership decisions as pure values so lifecycle branches can be tested without UIKit.
+// Español: Mantiene las decisiones de propiedad del renderizador como valores puros para probar el ciclo de vida sin UIKit.
+// 中文：将渲染器所有权决策保持为纯值，便于脱离 UIKit 测试生命周期分支。
+enum PTNavigationRendererMode: String, Equatable, Sendable {
+    case customHorizontal
+    case systemVertical
+    case transitioning
+}
+
+// English: Describe only the facts needed to decide whether a navigation stack must be reconciled.
+// Español: Describe solo los hechos necesarios para decidir si una pila debe reconciliarse.
+// 中文：只描述判断导航栈是否需要重新收敛所需的事实。
+struct PTNavigationRendererReconciliationInput: Equatable, Sendable {
+    let currentMode: PTNavigationRendererMode?
+    let targetMode: PTNavigationRendererMode
+    let itemAttached: Bool
+    let geometryChanged: Bool
+    let transitionActive: Bool
+}
+
+enum PTNavigationRendererReconciliationDecision: Equatable, Sendable {
+    case noOp
+    case reconcile
+    case deferUntilTransitionCompletes
+}
+
+enum PTNavigationRendererReconciliationPlanner {
+    static func decision(for input: PTNavigationRendererReconciliationInput) -> PTNavigationRendererReconciliationDecision {
+        if input.transitionActive {
+            return .deferUntilTransitionCompletes
+        }
+        if input.currentMode != input.targetMode || !input.itemAttached || input.geometryChanged {
+            return .reconcile
+        }
+        return .noOp
+    }
+}
+
+enum PTNavigationReconciliationReason: String, Sendable {
+    case initialInstall
+    case traitChange
+    case safeArea
+    case viewDidLayout
+    case sceneResize
+    case willShow
+    case didShow
+    case styleUpdate
+    case itemUpdate
+    case restoration
+    case geometryRefresh
+    case transitionCompleted
+}
+
 // English: Multiplex navigation callbacks so the framework does not replace a host application's delegate.
 // Español: Multiplexa los callbacks de navegación para que el framework no reemplace el delegate de la aplicación anfitriona.
 // 中文：复用导航回调，避免框架覆盖宿主应用自己的 delegate。
@@ -296,24 +349,54 @@ public final class PTNavigationBarManager:NSObject {
         }
     }
 
-    // English: Track which renderer owns a navigation stack during adaptive-bar changes.
-    // Español: Registra qué renderizador posee la pila durante los cambios de barra adaptativa.
-    // 中文：记录自适应导航栏切换期间由哪套渲染器拥有导航栈。
-    private enum NavigationRendererMode: String {
-        case customHorizontal
-        case systemVertical
-        case transitioning
-    }
-
     // English: Keep renderer state weakly keyed per navigation controller and scene.
     // Español: Conserva el estado del renderizador por controlador y escena usando claves débiles.
     // 中文：按导航控制器和场景保存渲染器状态，并使用弱引用键。
     private final class NavigationRendererStateBox: NSObject {
-        var mode: NavigationRendererMode
+        var mode: PTNavigationRendererMode
 
-        init(mode: NavigationRendererMode) {
+        init(mode: PTNavigationRendererMode) {
             self.mode = mode
         }
+    }
+
+    // English: Remember only native items created by PTools so host-owned UIKit items survive renderer changes.
+    // Español: Recuerda solo los elementos nativos creados por PTools para conservar los elementos UIKit del host.
+    // 中文：只记录 PTools 创建的原生项，渲染器切换时保留宿主自己的 UIKit 项。
+    private final class NativeNavigationOwnershipBox: NSObject {
+        // English: Keep the controller whose navigation item owns the tracked UIKit wrappers.
+        // Español: Conserva el controlador cuyo elemento de navegación posee los wrappers UIKit registrados.
+        // 中文：记录当前拥有这些 UIKit wrapper 的页面控制器。
+        weak var viewController: UIViewController?
+        var leftItems: [UIBarButtonItem] = []
+        var rightItems: [UIBarButtonItem] = []
+        var leadingGroups: [UIBarButtonItemGroup] = []
+        var trailingGroups: [UIBarButtonItemGroup] = []
+        // English: Restore host items that were temporarily folded into a PTools-owned adaptive group.
+        // Español: Restaura los elementos del host que se agruparon temporalmente dentro de un grupo adaptativo de PTools.
+        // 中文：恢复临时并入 PTools 自适应分组的宿主按钮。
+        var leadingGroupHostItems: [UIBarButtonItem] = []
+        var trailingGroupHostItems: [UIBarButtonItem] = []
+        // English: Keep a host-owned pinned trailing group so the renderer can restore it after a Duo transition.
+        // Español: Conserva el grupo trailing fijado del host para restaurarlo después de una transición de Duo.
+        // 中文：记录宿主原有的 pinned trailing group，Duo 渲染器切换后恢复它。
+        var hostPinnedTrailingGroup: UIBarButtonItemGroup?
+        var pinnedTrailingGroup: UIBarButtonItemGroup?
+        weak var titleView: UIView?
+        var title: String?
+        var backAction: UIAction?
+    }
+
+    // English: Isolate reconciliation re-entry, pending reasons, and diagnostic signatures per navigation stack.
+    // Español: Aísla la reentrada, las razones pendientes y las firmas de diagnóstico por pila de navegación.
+    // 中文：按导航栈隔离收敛重入、待处理原因和诊断签名。
+    private final class NavigationReconciliationStateBox: NSObject {
+        var isReconciling = false
+        var pendingReason: PTNavigationReconciliationReason?
+        var generation: UInt64 = 0
+        var lastGeometrySignature: String?
+        var lastDiagnosticSignature: String?
+        var pendingReconciliationScheduled = false
     }
 
     // English: Keep the currently visible controller per scene while retaining the legacy active-stack pointers.
@@ -337,6 +420,8 @@ public final class PTNavigationBarManager:NSObject {
     private var tabBarHandlerCache = NSMapTable<UINavigationController, TabBarHandlerBox>(keyOptions: .weakMemory, valueOptions: .strongMemory)
     private var delegateProxyMap = NSMapTable<UINavigationController, PTNavigationDelegateProxy>(keyOptions: .weakMemory, valueOptions: .strongMemory)
     private var rendererStateMap = NSMapTable<UINavigationController, NavigationRendererStateBox>(keyOptions: .weakMemory, valueOptions: .strongMemory)
+    private var nativeOwnershipMap = NSMapTable<UINavigationController, NativeNavigationOwnershipBox>(keyOptions: .weakMemory, valueOptions: .strongMemory)
+    private var reconciliationStateMap = NSMapTable<UINavigationController, NavigationReconciliationStateBox>(keyOptions: .weakMemory, valueOptions: .strongMemory)
     
     private weak var currentVC: UIViewController?
     weak var currentNav: UINavigationController?
@@ -372,26 +457,199 @@ public final class PTNavigationBarManager:NSObject {
         container?.isUserInteractionEnabled = visible
     }
 
+    private func navigationOwnership(for navigationController: UINavigationController) -> NativeNavigationOwnershipBox {
+        if let ownership = nativeOwnershipMap.object(forKey: navigationController) {
+            return ownership
+        }
+        let ownership = NativeNavigationOwnershipBox()
+        nativeOwnershipMap.setObject(ownership, forKey: navigationController)
+        return ownership
+    }
+
+    // English: Mark PTools items as visible in both horizontal and iPhone Duo vertical bars.
+    // Español: Marca los elementos de PTools como visibles en barras horizontales y verticales de iPhone Duo.
+    // 中文：让 PTools 按钮在普通横向导航栏和 iPhone Duo 垂直导航栏中都保持可见。
+    private func makeNativeBarButtonItem(contentView: UIView) -> UIBarButtonItem {
+        let item = UIBarButtonItem(customView: PTNativeNavigationItemView(contentView: contentView))
+        if #available(iOS 27.0, *) {
+            item.visibilityPriority = .high
+        }
+        if #available(iOS 27.1, *) {
+            item.axisBehavior = .verticalPreferred
+        }
+        return item
+    }
+
+    // English: Use UIKit item groups because iPhone Duo vertical bars do not reliably render the legacy arrays.
+    // Español: Usa grupos de UIKit porque las barras verticales de iPhone Duo no siempre muestran las matrices antiguas.
+    // 中文：iPhone Duo 垂直导航栏不稳定显示旧数组，因此统一使用 UIKit item group。
+    private func installNativeLeadingItems(_ items: [UIBarButtonItem],
+                                           existingItems: [UIBarButtonItem],
+                                           existingGroups: [UIBarButtonItemGroup],
+                                           on navigationItem: UINavigationItem,
+                                           ownership: NativeNavigationOwnershipBox) {
+        guard !items.isEmpty else {
+            navigationItem.leadingItemGroups = existingGroups
+            navigationItem.leftBarButtonItems = existingItems.isEmpty ? nil : existingItems
+            return
+        }
+
+        var groups = existingGroups
+        if !existingItems.isEmpty {
+            groups.append(UIBarButtonItemGroup.fixedGroup(representativeItem: nil,
+                                                           items: existingItems))
+            ownership.leadingGroupHostItems = existingItems
+        }
+        let group = UIBarButtonItemGroup.fixedGroup(representativeItem: nil, items: items)
+        group.alwaysAvailable = true
+        ownership.leadingGroups = [group]
+        navigationItem.leadingItemGroups = groups + [group]
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.leftBarButtonItems = nil
+        navigationItem.leftItemsSupplementBackButton = false
+    }
+
+    // English: Keep every custom trailing action in one system-managed group during layout changes.
+    // Español: Mantiene todas las acciones trailing personalizadas en un grupo gestionado por el sistema durante los cambios de layout.
+    // 中文：布局变化期间，将所有自定义右侧操作放入一个系统管理的分组。
+    private func installNativeTrailingItems(_ items: [UIBarButtonItem],
+                                            existingItems: [UIBarButtonItem],
+                                            existingGroups: [UIBarButtonItemGroup],
+                                            existingPinnedGroup: UIBarButtonItemGroup?,
+                                            on navigationItem: UINavigationItem,
+                                            ownership: NativeNavigationOwnershipBox) {
+        guard !items.isEmpty else {
+            navigationItem.trailingItemGroups = existingGroups
+            navigationItem.rightBarButtonItems = existingItems.isEmpty ? nil : existingItems
+            navigationItem.pinnedTrailingGroup = existingPinnedGroup
+            return
+        }
+
+        var groups = existingGroups
+        if !existingItems.isEmpty {
+            groups.append(UIBarButtonItemGroup.fixedGroup(representativeItem: nil,
+                                                           items: existingItems))
+            ownership.trailingGroupHostItems = existingItems
+        }
+        let group = UIBarButtonItemGroup.fixedGroup(representativeItem: nil, items: items)
+        group.alwaysAvailable = true
+        ownership.trailingGroups = [group]
+        ownership.hostPinnedTrailingGroup = existingPinnedGroup
+        if existingPinnedGroup == nil {
+            // English: Pin the framework group so critical trailing actions stay visible beside the Duo status region.
+            // Español: Fija el grupo del framework para mantener visibles las acciones críticas junto al estado de Duo.
+            // 中文：没有宿主 pinned group 时固定框架分组，避免关键右侧操作被 Duo 状态区域或溢出菜单吞掉。
+            ownership.pinnedTrailingGroup = group
+            navigationItem.pinnedTrailingGroup = group
+            navigationItem.trailingItemGroups = groups
+        } else {
+            navigationItem.trailingItemGroups = groups + [group]
+        }
+        navigationItem.rightBarButtonItem = nil
+        navigationItem.rightBarButtonItems = nil
+    }
+
+    private func reconciliationState(for navigationController: UINavigationController) -> NavigationReconciliationStateBox {
+        if let state = reconciliationStateMap.object(forKey: navigationController) {
+            return state
+        }
+        let state = NavigationReconciliationStateBox()
+        reconciliationStateMap.setObject(state, forKey: navigationController)
+        return state
+    }
+
+    private func detachOwnedNativeContent(from navigationItem: UINavigationItem,
+                                          ownership: NativeNavigationOwnershipBox) {
+        if let item = navigationItem.leftBarButtonItem,
+           ownership.leftItems.contains(where: { $0 === item }) {
+            navigationItem.leftBarButtonItem = nil
+        }
+        if let items = navigationItem.leftBarButtonItems {
+            let retained = items.filter { item in
+                !ownership.leftItems.contains(where: { $0 === item })
+            }
+            navigationItem.leftBarButtonItems = retained.isEmpty ? nil : retained
+        }
+        if let item = navigationItem.rightBarButtonItem,
+           ownership.rightItems.contains(where: { $0 === item }) {
+            navigationItem.rightBarButtonItem = nil
+        }
+        if let items = navigationItem.rightBarButtonItems {
+            let retained = items.filter { item in
+                !ownership.rightItems.contains(where: { $0 === item })
+            }
+            navigationItem.rightBarButtonItems = retained.isEmpty ? nil : retained
+        }
+        navigationItem.leadingItemGroups = navigationItem.leadingItemGroups.filter { group in
+            !ownership.leadingGroups.contains(where: { $0 === group })
+        }
+        navigationItem.trailingItemGroups = navigationItem.trailingItemGroups.filter { group in
+            !ownership.trailingGroups.contains(where: { $0 === group })
+        }
+        if !ownership.leadingGroupHostItems.isEmpty {
+            var restoredItems = ownership.leadingGroupHostItems
+            for item in navigationItem.leftBarButtonItems ?? [] where !restoredItems.contains(where: { $0 === item }) {
+                restoredItems.append(item)
+            }
+            navigationItem.leftBarButtonItems = restoredItems
+        }
+        if !ownership.trailingGroupHostItems.isEmpty {
+            var restoredItems = ownership.trailingGroupHostItems
+            for item in navigationItem.rightBarButtonItems ?? [] where !restoredItems.contains(where: { $0 === item }) {
+                restoredItems.append(item)
+            }
+            navigationItem.rightBarButtonItems = restoredItems
+        }
+        if let pinnedGroup = ownership.pinnedTrailingGroup,
+           navigationItem.pinnedTrailingGroup === pinnedGroup {
+            navigationItem.pinnedTrailingGroup = ownership.hostPinnedTrailingGroup
+        }
+        if let titleView = navigationItem.titleView, titleView === ownership.titleView {
+            navigationItem.titleView = nil
+        }
+        if let ownedTitle = ownership.title, navigationItem.title == ownedTitle {
+            navigationItem.title = nil
+        }
+        if let backAction = ownership.backAction, navigationItem.backAction === backAction {
+            navigationItem.backAction = nil
+        }
+        ownership.leftItems.removeAll()
+        ownership.rightItems.removeAll()
+        ownership.leadingGroups.removeAll()
+        ownership.trailingGroups.removeAll()
+        ownership.leadingGroupHostItems.removeAll()
+        ownership.trailingGroupHostItems.removeAll()
+        ownership.hostPinnedTrailingGroup = nil
+        ownership.pinnedTrailingGroup = nil
+        ownership.titleView = nil
+        ownership.title = nil
+        ownership.backAction = nil
+        ownership.viewController = nil
+    }
+
     // English: Remove only framework-owned native items before the custom renderer becomes authoritative.
     // Español: Elimina solo los elementos nativos propios del framework antes de que mande el renderizador personalizado.
     // 中文：自定义渲染器接管前，只清理框架拥有的原生导航项。
     private func clearNativeNavigationItem(in navigationController: UINavigationController) {
-        let navigationItem = navigationController.topViewController?.navigationItem
-        navigationItem?.leftBarButtonItem = nil
-        navigationItem?.leftBarButtonItems = nil
-        navigationItem?.rightBarButtonItem = nil
-        navigationItem?.rightBarButtonItems = nil
-        navigationItem?.titleView = nil
-        navigationItem?.backAction = nil
-        navigationItem?.leadingItemGroups = []
-        navigationItem?.trailingItemGroups = []
+        let ownership = navigationOwnership(for: navigationController)
+        let ownedViewController = ownership.viewController
+        if let ownedViewController {
+            detachOwnedNativeContent(from: ownedViewController.navigationItem,
+                                     ownership: ownership)
+        }
+
+        let visibleViewController = navigationController.visibleViewController ?? navigationController.topViewController
+        guard let visibleViewController,
+              visibleViewController !== ownedViewController else { return }
+        detachOwnedNativeContent(from: visibleViewController.navigationItem,
+                                 ownership: ownership)
     }
 
-    private func rendererMode(for navigationController: UINavigationController) -> NavigationRendererMode? {
+    private func rendererMode(for navigationController: UINavigationController) -> PTNavigationRendererMode? {
         rendererStateMap.object(forKey: navigationController)?.mode
     }
 
-    private func setRendererMode(_ mode: NavigationRendererMode,
+    private func setRendererMode(_ mode: PTNavigationRendererMode,
                                  for navigationController: UINavigationController) {
         if let state = rendererStateMap.object(forKey: navigationController) {
             state.mode = mode
@@ -405,7 +663,7 @@ public final class PTNavigationBarManager:NSObject {
     // 中文：原子切换渲染器所有权，避免尺寸变化期间两套导航栏同时可交互。
     private func transitionRendererIfNeeded(in navigationController: UINavigationController,
                                             useSystemRenderer: Bool) {
-        let target: NavigationRendererMode = useSystemRenderer ? .systemVertical : .customHorizontal
+        let target: PTNavigationRendererMode = useSystemRenderer ? .systemVertical : .customHorizontal
         guard rendererMode(for: navigationController) != target else { return }
 
         setRendererMode(.transitioning, for: navigationController)
@@ -424,11 +682,90 @@ public final class PTNavigationBarManager:NSObject {
         setRendererMode(target, for: navigationController)
     }
 
+    // English: Choose the status-bar conversion that is actually inside the current window.
+    // Español: Elige la conversión de la barra de estado que realmente queda dentro de la ventana actual.
+    // 中文：选择实际落在当前窗口内的状态栏坐标转换结果。
+    private func statusBarFrameInWindow(_ statusBarFrame: CGRect,
+                                        window: UIWindow,
+                                        scene: UIWindowScene) -> CGRect? {
+        let candidates = [
+            window.screen.coordinateSpace.convert(statusBarFrame, to: window),
+            scene.coordinateSpace.convert(statusBarFrame, to: window)
+        ]
+        let bounds = window.bounds
+        var best: (rect: CGRect, area: CGFloat, edgeDistance: CGFloat)?
+        for candidate in candidates {
+            guard candidate.origin.x.isFinite,
+                  candidate.origin.y.isFinite,
+                  candidate.width.isFinite,
+                  candidate.height.isFinite,
+                  !candidate.isNull,
+                  !candidate.isEmpty else { continue }
+            let clipped = candidate.intersection(bounds)
+            guard !clipped.isNull, !clipped.isEmpty else { continue }
+            let area = clipped.width * clipped.height
+            let edgeDistance = min(
+                min(abs(clipped.minX - bounds.minX), abs(clipped.maxX - bounds.maxX)),
+                min(abs(clipped.minY - bounds.minY), abs(clipped.maxY - bounds.maxY))
+            )
+            if best == nil || area > best!.area ||
+                (area == best!.area && edgeDistance < best!.edgeDistance) {
+                best = (clipped, area, edgeDistance)
+            }
+        }
+        return best?.rect
+    }
+
+    // English: Convert the current scene's status-bar frame into the navigation-bar host coordinates.
+    // Español: Convierte el frame de la barra de estado de la escena actual a las coordenadas del host de navegación.
+    // 中文：将当前 Scene 的状态栏 frame 转换到导航栏宿主坐标系。
+    private func navigationExclusionRects(in nav: UINavigationController,
+                                           navigationBar: UINavigationBar) -> (local: [CGRect],
+                                                                               statusWindow: CGRect?,
+                                                                               reservedWindow: [CGRect]) {
+        guard let window = nav.viewIfLoaded?.window,
+              let scene = window.windowScene else {
+            return ([], nil, [])
+        }
+
+        var localRects: [CGRect] = []
+        var statusWindowRect: CGRect?
+        if let statusBarFrame = scene.statusBarManager?.statusBarFrame,
+           statusBarFrame.width.isFinite,
+           statusBarFrame.height.isFinite,
+           statusBarFrame.width > 0,
+           statusBarFrame.height > 0 {
+            if let converted = statusBarFrameInWindow(statusBarFrame,
+                                                      window: window,
+                                                      scene: scene) {
+                statusWindowRect = converted
+                let local = window.convert(converted, to: navigationBar)
+                if !local.isNull, !local.isEmpty {
+                    localRects.append(local)
+                }
+            }
+        }
+
+        let context = PTAdaptiveBarLayoutContext.make(for: navigationBar)
+        let reservedWindowRects = context.reservedRegions
+            .filter { $0.isActive }
+            .map { navigationBar.convert($0.frame, to: window) }
+            .filter { !$0.isNull && !$0.isEmpty }
+        localRects.append(contentsOf: context.reservedRegions
+            .filter { $0.isActive }
+            .map(\.frame)
+            .filter { !$0.isNull && !$0.isEmpty })
+        return (localRects, statusWindowRect, reservedWindowRects)
+    }
+
     // English: Resolve the real UINavigationBar row in local coordinates before updating any child constraints.
     // Español: Resuelve la fila real de UINavigationBar en coordenadas locales antes de actualizar restricciones hijas.
     // 中文：先在 UINavigationBar 局部坐标中解析真实内容行，再更新子视图约束。
     private func refreshNavigationContentRow(in nav: UINavigationController,
-                                             container: PTNavigationBarContainer) {
+                                             container: PTNavigationBarContainer,
+                                             reason: PTNavigationReconciliationReason = .geometryRefresh,
+                                             generation: UInt64 = 0,
+                                             rendererTransition: String? = nil) {
         let navBar = nav.navigationBar
         let hostFrame = navBar.bounds
         let hostBounds = CGRect(origin: .zero, size: hostFrame.size)
@@ -447,6 +784,7 @@ public final class PTNavigationBarManager:NSObject {
                                       right: max(0, navBar.safeAreaInsets.right))
         let insetSafeRect = hostBounds.inset(by: safeInsets)
         let hostSafeRect = insetSafeRect.isEmpty ? hostBounds : insetSafeRect
+        let exclusions = navigationExclusionRects(in: nav, navigationBar: navBar)
         let isLargeTitleExpanded = container.isLargeTitleExpandedForLayout
         let compactRowHeight = isLargeTitleExpanded
             ? compactNavigationRowHeight(in: navBar, container: container)
@@ -469,6 +807,7 @@ public final class PTNavigationBarManager:NSObject {
             hostSafeRect: hostSafeRect,
             observedSystemRowRect: observedSystemRowRect,
             fallbackRowRect: fallbackRowRect,
+            exclusionRects: exclusions.local,
             evidence: evidence,
             isLargeTitleExpanded: isLargeTitleExpanded,
             compactRowHeight: compactRowHeight
@@ -485,8 +824,22 @@ public final class PTNavigationBarManager:NSObject {
             refreshTitleLayout(in: nav, container: container)
         }
 #if DEBUG
-        dumpNavigationVerticalGeometryIfEnabled(nav: nav, container: container)
+        dumpNavigationVerticalGeometryIfEnabled(nav: nav,
+                                                container: container,
+                                                reason: reason,
+                                                generation: generation,
+                                                statusWindowRect: exclusions.statusWindow,
+                                                reservedWindowRects: exclusions.reservedWindow,
+                                                rendererTransition: rendererTransition)
 #endif
+    }
+
+    // English: Keep renderer transition evidence stable and free of application content.
+    // Español: Mantiene estable la evidencia del cambio de renderizador sin incluir contenido de la aplicación.
+    // 中文：保持渲染器切换证据稳定，且不包含业务内容。
+    private func rendererTransitionDescription(from oldMode: PTNavigationRendererMode?,
+                                                to newMode: PTNavigationRendererMode) -> String {
+        "\(oldMode?.rawValue ?? "none")->\(newMode.rawValue)"
     }
 
     // English: Read the public layout-margin frame as an observation, never as a fixed system height.
@@ -514,7 +867,12 @@ public final class PTNavigationBarManager:NSObject {
     // Español: Mantiene el registro geométrico optativo para no añadir salida en las compilaciones debug normales.
     // 中文：垂直几何日志默认关闭，避免普通 Debug 构建产生额外输出。
     private func dumpNavigationVerticalGeometryIfEnabled(nav: UINavigationController,
-                                                         container: PTNavigationBarContainer) {
+                                                         container: PTNavigationBarContainer,
+                                                         reason: PTNavigationReconciliationReason,
+                                                         generation: UInt64,
+                                                         statusWindowRect: CGRect?,
+                                                         reservedWindowRects: [CGRect],
+                                                         rendererTransition: String? = nil) {
         guard ProcessInfo.processInfo.environment["PTOOLS_NAVIGATION_GEOMETRY_DEBUG"] == "1",
               let window = nav.viewIfLoaded?.window else { return }
 
@@ -546,9 +904,6 @@ public final class PTNavigationBarManager:NSObject {
             }
         }()
         let layoutContext = PTAdaptiveBarLayoutContext.make(for: nav.navigationBar)
-        let reservedWindowRects = layoutContext.reservedRegions
-            .filter(\.isActive)
-            .map { nav.navigationBar.convert($0.frame, to: window) }
         let reservedIntersections = reservedWindowRects.flatMap { reservedRect in
             [leftRect, titleRect, rightRect].compactMap { itemRect in
                 let intersection = reservedRect.intersection(itemRect)
@@ -558,21 +913,61 @@ public final class PTNavigationBarManager:NSObject {
         let rowMidY = rowRect.midY
         let midYValues = [leftRect.midY, titleRect.midY, rightRect.midY]
         let maxMidYDelta = midYValues.map { abs($0 - rowMidY) }.max() ?? 0
+        let itemRects = [leftRect, titleRect, rightRect]
+        let statusIntersections = statusWindowRect.map { statusRect in
+            itemRects.compactMap { itemRect -> CGRect? in
+                let intersection = statusRect.intersection(itemRect)
+                return intersection.isNull || intersection.isEmpty ? nil : intersection
+            }
+        } ?? []
+        let navigationItem = nav.visibleViewController?.navigationItem
+        let ownership = nativeOwnershipMap.object(forKey: nav)
+        let customInHost = container.superview === nav.navigationBar
+        let customPresented = !container.isHidden && container.alpha > 0.01 && container.isUserInteractionEnabled
+        let detachedItem = rendererMode(for: nav) == .systemVertical && (navigationItem == nil || (!customPresented &&
+            navigationItem?.titleView == nil &&
+            navigationItem?.leftBarButtonItems?.isEmpty != false &&
+            navigationItem?.rightBarButtonItems?.isEmpty != false &&
+            navigationItem?.title?.isEmpty != false))
         let hasInvalidFrame = [barRect, hostRect, rowRect, leftRect, titleRect, rightRect]
             .contains { !$0.origin.x.isFinite || !$0.origin.y.isFinite || !$0.width.isFinite || !$0.height.isFinite }
         let hasAlignmentIssue = maxMidYDelta > 1.0
             || hasInvalidFrame
             || !windowBounds.contains(barRect)
+            || !statusIntersections.isEmpty
             || !reservedIntersections.isEmpty
+            || !customInHost
+            || (!customPresented && rendererMode(for: nav) == .customHorizontal)
+            || detachedItem
         guard hasAlignmentIssue else { return }
+        let diagnosticSignature = [
+            reason.rawValue,
+            String(describing: windowBounds.integral),
+            String(describing: barRect.integral),
+            String(describing: rowRect.integral),
+            String(describing: statusWindowRect?.integral ?? .null),
+            String(describing: reservedWindowRects.map(\.integral)),
+            rendererMode(for: nav)?.rawValue ?? "unset",
+            rendererTransition ?? "none",
+            String(customInHost),
+            String(customPresented),
+            String(describing: navigationItem?.leftBarButtonItems?.count ?? 0),
+            String(describing: navigationItem?.rightBarButtonItems?.count ?? 0),
+            String(describing: navigationItem?.titleView != nil),
+            String(describing: generation)
+        ].joined(separator: "|")
+        let state = reconciliationState(for: nav)
+        guard state.lastDiagnosticSignature != diagnosticSignature else { return }
+        state.lastDiagnosticSignature = diagnosticSignature
         PTNSLogConsole("""
-        [PTNavY]
-        scene=\(sceneID) / renderer=\(mode)
+        [PTNavDuo]
+        reason=\(reason.rawValue) / scene=\(sceneID) / generation=\(generation) / renderer=\(rendererTransition ?? mode)
         window=\(windowBounds)
         bar=\(barRect) / safe=\(nav.navigationBar.safeAreaInsets)
         navView.bounds=\(navigationViewBounds) / navView.safe=\(navigationViewSafeInsets)
         verticalBarEdge=\(verticalBarEdge)
         host=\(hostRect) / safe=\(container.safeAreaInsets)
+        container.present=\(customPresented) / hidden=\(container.isHidden) / inHost=\(customInHost) / alpha=\(container.alpha)
         row=\(rowRect) / safe=\(container.topBarContainer.safeAreaInsets)
         left.midY=\(leftRect.midY)
         right.midY=\(rightRect.midY)
@@ -580,9 +975,105 @@ public final class PTNavigationBarManager:NSObject {
         row.midY=\(rowMidY) / maxDelta=\(maxMidYDelta)
         row.evidence=\(container.lastContentRowInput?.evidence.rawValue ?? "none")
         title.hidden=\(container.titleContainer.isHidden) / title.superview=\(container.titleContainer.superview != nil)
+        itemOwner=\(rendererMode(for: nav)?.rawValue ?? "none") / left=\(navigationItem?.leftBarButtonItems?.count ?? 0) / title=\(navigationItem?.titleView != nil || !(navigationItem?.title?.isEmpty ?? true)) / right=\(navigationItem?.rightBarButtonItems?.count ?? 0)
+        statusBar.windowRect=\(statusWindowRect ?? .null) / statusCollision=\(!statusIntersections.isEmpty)
         reserved=\(layoutContext.reservedRegions)
         reservedWindow=\(reservedWindowRects)
         reservedIntersections=\(reservedIntersections)
+        statusIntersections=\(statusIntersections) / ptoolsOwnedLeft=\(ownership?.leftItems.count ?? 0) / ptoolsOwnedRight=\(ownership?.rightItems.count ?? 0)
+        """)
+    }
+#endif
+
+#if DEBUG
+    // English: Diagnose UIKit-owned navigation items using only public custom-view frames and scene-local exclusions.
+    // Español: Diagnostica los elementos de UIKit usando solo frames públicos de vistas personalizadas y exclusiones de la escena.
+    // 中文：仅使用公开 customView frame 和当前 Scene 排斥区诊断 UIKit 原生导航项。
+    private func dumpNativeNavigationGeometryIfEnabled(nav: UINavigationController,
+                                                       reason: PTNavigationReconciliationReason,
+                                                       generation: UInt64,
+                                                       previousMode: PTNavigationRendererMode?,
+                                                       currentMode: PTNavigationRendererMode) {
+        guard ProcessInfo.processInfo.environment["PTOOLS_NAVIGATION_GEOMETRY_DEBUG"] == "1",
+              let window = nav.viewIfLoaded?.window else { return }
+
+        let navigationItem = nav.visibleViewController?.navigationItem
+        let item = nav.visibleViewController.map { item(for: $0) }
+        let ownership = nativeOwnershipMap.object(forKey: nav)
+        let exclusions = navigationExclusionRects(in: nav, navigationBar: nav.navigationBar)
+        let barRect = nav.navigationBar.convert(nav.navigationBar.bounds, to: window)
+        let container = containerMap.object(forKey: nav)
+
+        func windowRect(for view: UIView?) -> CGRect? {
+            guard let view,
+                  view.window === window,
+                  !view.bounds.isEmpty else { return nil }
+            let converted = view.convert(view.bounds, to: window)
+            return converted.isNull || converted.isEmpty ? nil : converted
+        }
+
+        let nativeViews = (navigationItem?.leftBarButtonItems ?? []) +
+            (navigationItem?.rightBarButtonItems ?? []) +
+            (navigationItem?.leadingItemGroups.flatMap(\.barButtonItems) ?? []) +
+            (navigationItem?.trailingItemGroups.flatMap(\.barButtonItems) ?? []) +
+            (navigationItem?.pinnedTrailingGroup?.barButtonItems ?? [])
+        let itemRects = nativeViews.compactMap { windowRect(for: $0.customView) } +
+            [windowRect(for: navigationItem?.titleView)].compactMap { $0 }
+        let statusIntersections = exclusions.statusWindow.map { statusRect in
+            itemRects.compactMap { itemRect in
+                let intersection = statusRect.intersection(itemRect)
+                return intersection.isNull || intersection.isEmpty ? nil : intersection
+            }
+        } ?? []
+        let reservedIntersections = exclusions.reservedWindow.flatMap { reservedRect in
+            itemRects.compactMap { itemRect in
+                let intersection = reservedRect.intersection(itemRect)
+                return intersection.isNull || intersection.isEmpty ? nil : intersection
+            }
+        }
+        let itemAttached = item.map {
+            isNativeItemAttached($0,
+                                 navigationController: nav,
+                                 viewController: nav.visibleViewController ?? nav)
+        } ?? false
+        let hasInvalidBar = !barRect.origin.x.isFinite ||
+            !barRect.origin.y.isFinite ||
+            !barRect.width.isFinite ||
+            !barRect.height.isFinite ||
+            barRect.isEmpty
+        let hasIssue = hasInvalidBar ||
+            (item?.isConfigured == true && !itemAttached) ||
+            !statusIntersections.isEmpty ||
+            !reservedIntersections.isEmpty
+        guard hasIssue else { return }
+
+        let signature = [
+            reason.rawValue,
+            String(describing: barRect.integral),
+            String(describing: exclusions.statusWindow?.integral ?? .null),
+            String(describing: exclusions.reservedWindow.map(\.integral)),
+            previousMode?.rawValue ?? "none",
+            currentMode.rawValue,
+            String(itemAttached),
+            String(describing: itemRects.map(\.integral)),
+            String(describing: generation)
+        ].joined(separator: "|")
+        let state = reconciliationState(for: nav)
+        guard state.lastDiagnosticSignature != signature else { return }
+        state.lastDiagnosticSignature = signature
+
+        let sceneID = window.windowScene?.session.persistentIdentifier ?? "none"
+        PTNSLogConsole("""
+        [PTNavDuo]
+        reason=\(reason.rawValue) / scene=\(sceneID) / generation=\(generation) / renderer=\(previousMode?.rawValue ?? "none")->\(currentMode.rawValue)
+        window=\(window.bounds) / window.safe=\(window.safeAreaInsets)
+        nav.bounds=\(nav.viewIfLoaded?.bounds ?? .zero) / nav.safe=\(nav.viewIfLoaded?.safeAreaInsets ?? .zero)
+        navBar.windowRect=\(barRect) / hidden=\(nav.navigationBar.isHidden)
+        container.present=\(!(container?.isHidden ?? true)) / inHost=\(container?.superview === nav.navigationBar)
+        itemOwner=systemVertical / attached=\(itemAttached) / left=\(navigationItem?.leftBarButtonItems?.count ?? 0) / title=\(navigationItem?.titleView != nil || !(navigationItem?.title?.isEmpty ?? true)) / right=\(navigationItem?.rightBarButtonItems?.count ?? 0)
+        statusBar.windowRect=\(exclusions.statusWindow ?? .null) / statusCollision=\(!statusIntersections.isEmpty)
+        reservedWindowRects=\(exclusions.reservedWindow) / reservedCollision=\(!reservedIntersections.isEmpty)
+        itemRects=\(itemRects) / ptoolsOwnedLeft=\(ownership?.leftItems.count ?? 0) / ptoolsOwnedRight=\(ownership?.rightItems.count ?? 0)
         """)
     }
 #endif
@@ -614,78 +1105,268 @@ public final class PTNavigationBarManager:NSObject {
         return seed > 0 ? seed : nil
     }
 
-    // English: Refresh geometry without reinstalling the per-navigation-controller container.
-    // Español: Actualiza la geometría sin reinstalar el contenedor propio del controlador de navegación.
-    // 中文：只刷新几何，不重新安装每个导航控制器独立拥有的容器。
-    func refreshGeometry(in nav: UINavigationController) {
-        let useSystemRenderer = usesNativeVerticalBar(nav)
-        transitionRendererIfNeeded(in: nav, useSystemRenderer: useSystemRenderer)
-        guard !useSystemRenderer,
-              let container = containerMap.object(forKey: nav) else { return }
-        refreshNavigationContentRow(in: nav, container: container)
-    }
-    
-    public func installIfNeeded(in nav: UINavigationController) {
-        let useSystemRenderer = usesNativeVerticalBar(nav)
-        transitionRendererIfNeeded(in: nav, useSystemRenderer: useSystemRenderer)
-        if useSystemRenderer {
-            if let container = containerMap.object(forKey: nav) {
-                container.clearTitleLayout()
-                setCustomContainer(container, visible: false)
-            }
-            applyAdaptiveSystemPolicy(to: nav)
-            return
+    private func ensureCustomContainer(in nav: UINavigationController) -> PTNavigationBarContainer? {
+        let navBar = nav.navigationBar
+        guard !navBar.bounds.isEmpty,
+              navBar.bounds.width.isFinite,
+              navBar.bounds.height.isFinite else {
+            navBar.setNeedsLayout()
+            return nil
         }
         if let existingContainer = containerMap.object(forKey: nav) {
-            setCustomContainer(existingContainer, visible: true)
-            
-            if PTNavigationGlassCompatibility.requiresWorkaround {
-                resetSystemNavBarAppearance(nav)
-            }
-            refreshNavigationContentRow(in: nav, container: existingContainer)
-            return
+            existingContainer.bind(to: nav)
+            return existingContainer
         }
 
-        let navBar = nav.navigationBar
         resetSystemNavBarAppearance(nav)
-        
-        let totalHeight = navBar.bounds.height
-        
-        // 往上扩展，打好地基
-        let container = PTNavigationBarContainer(frame: CGRect(x: 0, y: 0, width: navBar.bounds.width, height: totalHeight))
-        
+        let container = PTNavigationBarContainer(frame: navBar.bounds)
         container.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         container.bind(to: nav)
-
-        // English: Let the manager refresh title geometry after the host changes size.
-        // Español: Permite que el gestor actualice la geometría del título cuando cambia el tamaño del host.
-        // 中文：宿主尺寸变化后，由 Manager 负责重新计算标题几何。
         container.titleLayoutUpdateHandler = { [weak self, weak nav, weak container] in
             guard let self, let nav, let container else { return }
             self.refreshTitleLayout(in: nav, container: container)
         }
-                
         navBar.addSubview(container)
         navBar.sendSubviewToBack(container)
         containerMap.setObject(container, forKey: nav)
-        refreshNavigationContentRow(in: nav, container: container)
+        return container
+    }
+
+    private func navigationGeometrySignature(for nav: UINavigationController,
+                                             container: PTNavigationBarContainer?) -> String {
+        let window = nav.viewIfLoaded?.window
+        let sceneID = window?.windowScene?.session.persistentIdentifier ?? "none"
+        let windowDescription = window.map { "\($0.bounds.integral)|\($0.safeAreaInsets)" } ?? "none"
+        let navigationDescription = "\(nav.viewIfLoaded?.bounds.integral ?? .zero)|\(nav.viewIfLoaded?.safeAreaInsets ?? .zero)"
+        let bar = nav.navigationBar
+        let barDescription = "\(bar.frame.integral)|\(bar.bounds.integral)|\(bar.safeAreaInsets)"
+        let containerDescription = container.map { "\($0.frame.integral)|\($0.isHidden)|\($0.alpha)" } ?? "none"
+        let edge: String = {
+            guard #available(iOS 27.1, *) else { return "unavailable" }
+            switch nav.viewIfLoaded?.traitCollection.verticalBarEdge {
+            case .leading: return "leading"
+            case .trailing: return "trailing"
+            default: return "unspecified"
+            }
+        }()
+        return [sceneID,
+                windowDescription,
+                navigationDescription,
+                barDescription,
+                containerDescription,
+                edge,
+                String(describing: ObjectIdentifier(nav.visibleViewController ?? nav))].joined(separator: "|")
+    }
+
+    private func isNativeItemAttached(_ item: PTNavBarItem,
+                                      navigationController: UINavigationController,
+                                      viewController: UIViewController) -> Bool {
+        let navigationItem = viewController.navigationItem
+        let ownership = navigationOwnership(for: navigationController)
+        guard ownership.viewController === viewController else { return false }
+        let leftAttached: Bool
+        if item.leftView.isEmpty {
+            leftAttached = ownership.leftItems.isEmpty && ownership.leadingGroups.isEmpty
+        } else {
+            leftAttached = item.leftView.count == ownership.leftItems.count &&
+                ownership.leftItems.allSatisfy { owned in
+                    navigationItem.leftBarButtonItems?.contains(where: { $0 === owned }) == true ||
+                    navigationItem.leadingItemGroups.contains(where: { $0.barButtonItems.contains(where: { $0 === owned }) })
+                }
+        }
+        let rightAttached: Bool
+        if item.rightViews.isEmpty {
+            rightAttached = ownership.rightItems.isEmpty &&
+                ownership.trailingGroups.isEmpty &&
+                ownership.pinnedTrailingGroup == nil
+        } else {
+            rightAttached = item.rightViews.count == ownership.rightItems.count &&
+                ownership.rightItems.allSatisfy { owned in
+                    navigationItem.rightBarButtonItems?.contains(where: { $0 === owned }) == true ||
+                    navigationItem.trailingItemGroups.contains(where: { group in
+                        group.barButtonItems.contains(where: { $0 === owned })
+                    }) ||
+                    navigationItem.pinnedTrailingGroup?.barButtonItems.contains(where: { $0 === owned }) == true
+                }
+        }
+        let titleAttached: Bool
+        if let titleView = item.titleView {
+            titleAttached = navigationItem.titleView === titleView
+        } else {
+            let expectedTitle = item.navTitle.isEmpty ? viewController.title : item.navTitle
+            titleAttached = ownership.titleView == nil &&
+                (expectedTitle == nil || navigationItem.title == expectedTitle)
+        }
+        return leftAttached && rightAttached && titleAttached
+    }
+
+    private func isCustomItemAttached(_ item: PTNavBarItem,
+                                      container: PTNavigationBarContainer,
+                                      navigationController: UINavigationController) -> Bool {
+        let leftAttached = container.leftContainer.arrangedSubviews.count == item.leftView.count &&
+            zip(container.leftContainer.arrangedSubviews, item.leftView).allSatisfy { arrangedView, itemView in
+                arrangedView === itemView
+            }
+        let rightAttached = container.rightContainer.arrangedSubviews.count == item.rightViews.count &&
+            zip(container.rightContainer.arrangedSubviews, item.rightViews).allSatisfy { arrangedView, itemView in
+                arrangedView === itemView
+            }
+        let titleAttached: Bool
+        if let titleView = item.titleView {
+            titleAttached = container.titleContainer.subviews.first === titleView
+        } else {
+            titleAttached = item.navTitle.isEmpty
+                ? container.titleContainer.subviews.isEmpty
+                : !container.titleContainer.subviews.isEmpty
+        }
+        return container.superview === navigationController.navigationBar &&
+            !container.isHidden && leftAttached && rightAttached && titleAttached
+    }
+
+    // English: Reconcile renderer ownership, item attachment, and content-row geometry in one idempotent pass.
+    // Español: Reconcilia la propiedad del renderizador, los elementos y la fila geométrica en una pasada idempotente.
+    // 中文：在一次幂等流程中收敛渲染器所有权、导航项挂载和内容行几何。
+    @discardableResult
+    func reconcileNavigationBar(in nav: UINavigationController,
+                               reason: PTNavigationReconciliationReason) -> Bool {
+        let state = reconciliationState(for: nav)
+        if state.isReconciling {
+            state.pendingReason = reason
+            return false
+        }
+
+        let transitionActive = transitionStates.object(forKey: nav)?.coordinator != nil ||
+            nav.transitionCoordinator != nil
+        if transitionActive && reason != .transitionCompleted && reason != .didShow {
+            state.pendingReason = reason
+            return false
+        }
+
+        state.isReconciling = true
+        let previousMode = rendererMode(for: nav)
+        defer {
+            state.isReconciling = false
+            if let pendingReason = state.pendingReason,
+               pendingReason != reason,
+               !state.pendingReconciliationScheduled {
+                state.pendingReason = nil
+                state.pendingReconciliationScheduled = true
+                // English: Drain re-entrant layout callbacks on the next MainActor turn instead of recursing synchronously.
+                // Español: Drena los callbacks de layout reentrantes en el siguiente turno de MainActor para evitar recursión síncrona.
+                // 中文：将重入的布局回调延后到下一次 MainActor 执行，避免同步递归。
+                Task { @MainActor [weak self, weak nav] in
+                    guard let self, let nav else { return }
+                    let pendingState = self.reconciliationState(for: nav)
+                    pendingState.pendingReconciliationScheduled = false
+                    _ = self.reconcileNavigationBar(in: nav, reason: pendingReason)
+                }
+            } else if state.pendingReason == reason {
+                state.pendingReason = nil
+            }
+        }
+
+        guard let viewController = nav.visibleViewController ?? nav.topViewController else {
+            applyAdaptiveSystemPolicy(to: nav)
+            return false
+        }
+        if let configurable = viewController as? PTNavigationConfigurable,
+           !configurable.allowControlNavBar() {
+            return false
+        }
+        if let baseViewController = viewController as? PTBaseViewController {
+            baseViewController.prepareDefaultNavigationBarItem()
+        }
+
+        let item = itemCache.object(forKey: viewController) ?? item(for: viewController)
+        let useSystemRenderer = usesNativeVerticalBar(nav)
+        let targetMode: PTNavigationRendererMode = useSystemRenderer ? .systemVertical : .customHorizontal
+        let existingContainer = containerMap.object(forKey: nav)
+        let geometrySignature = navigationGeometrySignature(for: nav, container: existingContainer)
+        let geometryChanged = state.lastGeometrySignature != geometrySignature
+        let itemAttached = useSystemRenderer
+            ? isNativeItemAttached(item, navigationController: nav, viewController: viewController)
+            : (existingContainer.map {
+                isCustomItemAttached(item, container: $0, navigationController: nav)
+            } ?? false)
+        let decision = PTNavigationRendererReconciliationPlanner.decision(for: PTNavigationRendererReconciliationInput(
+            currentMode: rendererMode(for: nav),
+            targetMode: targetMode,
+            itemAttached: itemAttached,
+            geometryChanged: geometryChanged,
+            transitionActive: false
+        ))
+        guard decision == .reconcile else {
+            if state.pendingReason == reason { state.pendingReason = nil }
+            return true
+        }
+
+        state.generation &+= 1
+        transitionRendererIfNeeded(in: nav, useSystemRenderer: useSystemRenderer)
+        if useSystemRenderer {
+            if let container = existingContainer {
+                container.clearTitleLayout()
+                setCustomContainer(container, visible: false)
+            }
+            applyNativeItem(item, in: nav, viewController: viewController)
+            applyAdaptiveSystemPolicy(to: nav)
+            setRendererMode(.systemVertical, for: nav)
+#if DEBUG
+            dumpNativeNavigationGeometryIfEnabled(nav: nav,
+                                                  reason: reason,
+                                                  generation: state.generation,
+                                                  previousMode: previousMode,
+                                                  currentMode: .systemVertical)
+#endif
+        } else {
+            guard let container = ensureCustomContainer(in: nav) else {
+                state.pendingReason = reason
+                return false
+            }
+            clearNativeNavigationItem(in: nav)
+            setCustomContainer(container, visible: true)
+            if PTNavigationGlassCompatibility.requiresWorkaround {
+                resetSystemNavBarAppearance(nav)
+            }
+            let style = item.isConfigured ? item.barColorStyle : (styleCache.object(forKey: nav)?.style ?? .default)
+            container.apply(style: style)
+            apply(item: item, in: nav, viewController: viewController)
+            refreshNavigationContentRow(in: nav,
+                                        container: container,
+                                        reason: reason,
+                                        generation: state.generation,
+                                        rendererTransition: rendererTransitionDescription(from: previousMode,
+                                                                                          to: .customHorizontal))
+            setRendererMode(.customHorizontal, for: nav)
+        }
+        state.lastGeometrySignature = navigationGeometrySignature(for: nav,
+                                                                   container: containerMap.object(forKey: nav))
+        if state.pendingReason == reason { state.pendingReason = nil }
+        rememberCurrent(nav, viewController: viewController)
+        StatusBarManager.shared.update(with: item.barColorStyle)
+        viewController.setNeedsStatusBarAppearanceUpdate()
+        nav.setNeedsStatusBarAppearanceUpdate()
+        return true
+    }
+
+    // English: Refresh geometry without reinstalling a second container or losing the current item owner.
+    // Español: Actualiza la geometría sin instalar otro contenedor ni perder el propietario actual.
+    // 中文：只刷新当前几何，不重复安装容器，也不丢失当前导航项所有权。
+    func refreshGeometry(in nav: UINavigationController) {
+        _ = reconcileNavigationBar(in: nav, reason: .geometryRefresh)
+    }
+
+    public func installIfNeeded(in nav: UINavigationController) {
+        bind(to: nav)
+        _ = reconcileNavigationBar(in: nav, reason: .initialInstall)
     }
     
     public func apply(style: PTNavigationBarStyle, in nav: UINavigationController) {
-        installIfNeeded(in: nav)
-        rememberCurrent(nav, viewController: nav.topViewController)
         styleCache.setObject(NavigationStyleBox(style: style), forKey: nav)
-        if usesNativeVerticalBar(nav) {
-            applyAdaptiveSystemPolicy(to: nav)
-            return
+        if let viewController = nav.visibleViewController ?? nav.topViewController {
+            let item = item(for: viewController)
+            item.barColorStyle = style
         }
-        let container = containerMap.object(forKey: nav)
-        container?.apply(style: style)
-        if let container {
-            refreshNavigationContentRow(in: nav, container: container)
-        }
-        
-        resetSystemNavBarAppearance(nav)
+        _ = reconcileNavigationBar(in: nav, reason: .styleUpdate)
     }
 
     // English: Remember the active navigation stack for its scene without retaining either UIKit object.
@@ -835,7 +1516,9 @@ public final class PTNavigationBarManager:NSObject {
         
         // 如果当前正在显示，立即刷新
         if vc === currentVC {
-            apply(item: item)
+            if let nav = vc.navigationController {
+                _ = reconcileNavigationBar(in: nav, reason: .itemUpdate)
+            }
         }
     }
     
@@ -1060,10 +1743,10 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         let item = itemCache.object(forKey: viewController) ?? PTNavBarItem()
 
         if usesNativeVerticalBar(navigationController) {
-            // English: Map the existing navigation item into UIKit instead of overlaying a second custom bar.
-            // Español: Mapea el elemento de navegación existente a UIKit en lugar de superponer otra barra personalizada.
-            // 中文：把现有导航项映射到 UIKit，避免叠加第二套自定义导航栏。
-            applyNativeItem(item, in: navigationController, viewController: viewController)
+            // English: Let the shared reconciliation pass decide when the final visible controller owns UIKit's bar.
+            // Español: Deja que la reconciliación compartida decida cuándo el controlador visible final posee la barra de UIKit.
+            // 中文：由统一收敛流程决定最终可见控制器何时接管 UIKit 导航栏。
+            _ = reconcileNavigationBar(in: navigationController, reason: .willShow)
             StatusBarManager.shared.update(with: toStyle)
             if let handler = tabBarHandlerCache.object(forKey: navigationController)?.handler {
                 handler(navigationController, viewController, animated, navigationController.transitionCoordinator)
@@ -1211,14 +1894,11 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             style = .default
         }
 
-        apply(style: style, in: navigationController)
         // English: Prefer UIKit's didShow callback over a transient navigation-stack snapshot.
         // Español: Da prioridad al callback didShow de UIKit sobre una instantánea transitoria de la pila.
         // 中文：优先使用 UIKit 的 didShow 回调，避免被转场瞬间的导航栈快照覆盖。
         rememberCurrent(navigationController, viewController: viewController)
-        let item = itemCache.object(forKey: viewController) ?? PTNavBarItem()
-        apply(item: item, in: navigationController, viewController: viewController)
-        refreshGeometry(in: navigationController)
+        _ = reconcileNavigationBar(in: navigationController, reason: .didShow)
         StatusBarManager.shared.update(with: style)
         viewController.setNeedsStatusBarAppearanceUpdate()
         navigationController.setNeedsStatusBarAppearanceUpdate()
@@ -1243,6 +1923,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         }
         if let navigationController = toVC.navigationController {
             setRendererMode(.customHorizontal, for: navigationController)
+            _ = reconcileNavigationBar(in: navigationController, reason: .transitionCompleted)
         }
     }
 
@@ -1353,6 +2034,20 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         // 中文：UIKit 接管原生 titleView 前，先释放自定义标题容器的布局所有权。
         containerMap.object(forKey: navigationController)?.clearTitleLayout()
         let navigationItem = viewController.navigationItem
+        let ownership = navigationOwnership(for: navigationController)
+        let previousOwner = ownership.viewController
+        if let previousOwner, previousOwner !== viewController {
+            detachOwnedNativeContent(from: previousOwner.navigationItem,
+                                     ownership: ownership)
+        }
+        detachOwnedNativeContent(from: navigationItem, ownership: ownership)
+        let existingLeftItems = navigationItem.leftBarButtonItems ??
+            navigationItem.leftBarButtonItem.map { [$0] } ?? []
+        let existingRightItems = navigationItem.rightBarButtonItems ??
+            navigationItem.rightBarButtonItem.map { [$0] } ?? []
+        let existingLeadingGroups = navigationItem.leadingItemGroups
+        let existingTrailingGroups = navigationItem.trailingItemGroups
+        let existingPinnedTrailingGroup = navigationItem.pinnedTrailingGroup
         let isPresentedRoot = navigationController.viewControllers.first === viewController &&
             (navigationController.presentingViewController != nil ||
              viewController.presentingViewController != nil ||
@@ -1363,57 +2058,67 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
             // English: A presented root has no natural stack back item, so expose UIKit's synthesized system back action.
             // Español: Una raíz presentada no tiene un elemento de retroceso natural de la pila; expone la acción de retroceso sintetizada por UIKit.
             // 中文：modal 根页面没有天然的栈返回项，因此使用 UIKit 合成的系统返回动作。
-            navigationItem.leftBarButtonItems = nil
-            navigationItem.leftBarButtonItem = nil
-            navigationItem.leadingItemGroups = []
             navigationItem.leftItemsSupplementBackButton = false
-            navigationItem.backAction = UIAction(title: "Back",
-                                                 image: PTAppBaseConfig.share.viewControllerBackItemImage) { [weak viewController, weak navigationController] _ in
+            let backAction = UIAction(title: "Back",
+                                      image: PTAppBaseConfig.share.viewControllerBackItemImage) { [weak viewController, weak navigationController] _ in
                 if let baseViewController = viewController as? PTBaseViewController {
                     baseViewController.returnFrontVC()
                 } else {
                     navigationController?.dismiss(animated: true)
                 }
             }
+            navigationItem.backAction = backAction
+            ownership.backAction = backAction
             navigationItem.hidesBackButton = false
         } else {
             // English: Wrap custom views only when UIKit will actually display them, preserving the original container for renderer changes.
             // Español: Envuelve las vistas personalizadas solo cuando UIKit realmente las mostrará, conservando el contenedor original para cambios de renderizador.
             // 中文：仅在 UIKit 确实要显示自定义视图时创建 wrapper，保留原容器以支持渲染器切换。
-            let leftBarButtonItems = item.leftView.map {
-                UIBarButtonItem(customView: PTNativeNavigationItemView(contentView: $0))
-            }
+            let leftBarButtonItems = item.leftView.map { makeNativeBarButtonItem(contentView: $0) }
+            ownership.leftItems = leftBarButtonItems
 
-            if isPresentedRoot, !leftBarButtonItems.isEmpty, #available(iOS 16.0, *) {
-            // English: Keep an explicitly supplied modal close button in the system leading group.
-            // Español: Mantiene el botón de cierre modal explícito dentro del grupo leading del sistema.
-            // 中文：将调用方显式提供的 modal 关闭按钮放入系统 leading group。
-            navigationItem.backAction = nil
-            navigationItem.leftBarButtonItems = nil
-            navigationItem.leftBarButtonItem = nil
-            navigationItem.leadingItemGroups = [
-                UIBarButtonItemGroup.fixedGroup(representativeItem: nil,
-                                                items: leftBarButtonItems)
-            ]
-            navigationItem.leftItemsSupplementBackButton = false
-            navigationItem.hidesBackButton = true
+            if isPresentedRoot, !leftBarButtonItems.isEmpty {
+                // English: Keep an explicitly supplied modal close button in the system leading group.
+                // Español: Mantiene el botón de cierre modal explícito dentro del grupo leading del sistema.
+                // 中文：将调用方显式提供的 modal 关闭按钮放入系统 leading group。
+                installNativeLeadingItems(leftBarButtonItems,
+                                          existingItems: existingLeftItems,
+                                          existingGroups: existingLeadingGroups,
+                                          on: navigationItem,
+                                          ownership: ownership)
+                navigationItem.hidesBackButton = true
             } else {
-                navigationItem.backAction = nil
-                navigationItem.leadingItemGroups = []
-                navigationItem.leftBarButtonItems = leftBarButtonItems
+                installNativeLeadingItems(leftBarButtonItems,
+                                          existingItems: existingLeftItems,
+                                          existingGroups: existingLeadingGroups,
+                                          on: navigationItem,
+                                          ownership: ownership)
             }
         }
 
-        navigationItem.rightBarButtonItems = item.rightViews.map {
-            UIBarButtonItem(customView: PTNativeNavigationItemView(contentView: $0))
-        }
+        let rightBarButtonItems = item.rightViews.map { makeNativeBarButtonItem(contentView: $0) }
+        ownership.rightItems = rightBarButtonItems
+        installNativeTrailingItems(rightBarButtonItems,
+                                   existingItems: existingRightItems,
+                                   existingGroups: existingTrailingGroups,
+                                   existingPinnedGroup: existingPinnedTrailingGroup,
+                                   on: navigationItem,
+                                   ownership: ownership)
 
         if let titleView = item.titleView {
             navigationItem.title = nil
             navigationItem.titleView = titleView
+            ownership.titleView = titleView
+            ownership.title = nil
         } else {
-            navigationItem.titleView = nil
-            navigationItem.title = item.navTitle.isEmpty ? viewController.title : item.navTitle
+            if navigationItem.titleView == nil || navigationItem.titleView === ownership.titleView {
+                navigationItem.titleView = nil
+            }
+            let title = item.navTitle.isEmpty ? viewController.title : item.navTitle
+            if item.isConfigured || !item.navTitle.isEmpty {
+                navigationItem.title = title
+                ownership.title = title
+            }
         }
 
         if let configurable = viewController as? PTNavigationConfigurable {
@@ -1423,6 +2128,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         PTAdaptiveSystemBarBridge.apply(policy: (navigationController as? PTBaseNavControl)?.adaptiveBarPresentationPolicy
                                          ?? PTAppBaseConfig.share.adaptiveBarPresentationPolicy,
                                          to: navigationController)
+        ownership.viewController = viewController
     }
 
     private func clear() {
@@ -1432,18 +2138,27 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
     }
     
     public func restoreIfNeeded(for vc: UIViewController) {
-        // ❗关键：只处理有 navigationController 的 VC
-        let realVC = PTUtils.getCurrentVC(from: vc)
-        guard let nav = realVC.navigationController else { return }
+        // English: Resolve only the navigation stack containing the supplied controller; never cross scenes through a global lookup.
+        // Español: Resuelve solo la pila que contiene al controlador suministrado; nunca cruza escenas mediante una búsqueda global.
+        // 中文：只解析传入控制器所属的导航栈，不通过全局查找跨 Scene 取页面。
+        let nav: UINavigationController?
+        if let navigationController = vc as? UINavigationController {
+            nav = navigationController
+        } else {
+            nav = vc.navigationController
+        }
+        guard let nav,
+              let realVC = nav.visibleViewController ?? nav.topViewController else { return }
         rememberCurrent(nav, viewController: realVC)
         guard let item = itemCache.object(forKey: realVC),
                   item.isConfigured else {
             return
         }
-        apply(style: item.barColorStyle, in: nav)
-        apply(item: item, in: nav, viewController: realVC)
+        _ = reconcileNavigationBar(in: nav, reason: .restoration)
         
-        // 🔥 关键：同步更新状态栏单例并通知系统刷新
+        // English: Refresh status-bar appearance after the scene-local renderer has settled.
+        // Español: Actualiza la apariencia de la barra de estado después de estabilizar el renderizador de la escena.
+        // 中文：场景内渲染器收敛后，再刷新状态栏外观。
         StatusBarManager.shared.update(with: item.barColorStyle)
         realVC.setNeedsStatusBarAppearanceUpdate()
         nav.setNeedsStatusBarAppearanceUpdate()
@@ -1456,8 +2171,7 @@ extension PTNavigationBarManager: UINavigationControllerDelegate {
         guard let item = itemCache.object(forKey: vc),
               item.isConfigured else { return }
         
-        apply(style: item.barColorStyle, in: nav)
-        apply(item: item)
+        _ = reconcileNavigationBar(in: nav, reason: .restoration)
     }
 }
 

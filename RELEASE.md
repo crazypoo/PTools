@@ -16,7 +16,11 @@
 - [x] 导航栏内容行对齐指南和 `currentNavigationContentHeight(in:)` 兼容说明已补齐。
 - [x] 自定义导航栏内容行现在区分 observed/fallback/deferred 几何证据，系统/自定义渲染器切换按导航栈收敛；背景层不再依赖私有 UIKit 子视图清理。
 - [x] 新增 `navigation.duo-custom-nav-alignment-regression` Demo，覆盖自定义标题、左右按钮、旋转、分屏和安全区变化。
+- [x] Duo 合盖/展开恢复改为统一 `reconcileNavigationBar(in:reason:)`：trait、safe-area、layout、尺寸转场和容器入 Window 都会按当前可见控制器重新收敛 renderer 与导航项 owner。
+- [x] 自定义/系统渲染器切换仅清理 PTools-owned native wrapper；状态栏与 active reserved region 进入内容行 resolver，DEBUG 诊断包含 owner、window rect、碰撞交集和 generation，并按签名去重。
+- [x] 新增导航渲染器重复切换、可见控制器变化、取消转场和稳定回调 no-op 的纯值回归用例；Demo 展示 A1/A2/A4/A5/A6 场景与当前 Scene 几何摘要。
 - [ ] iPhone 15 Pro Max / BaboBuy 真机 View Debugger、iOS 17/26/27 视觉回归和现场 frame 证据仍需宿主现场完成；不能以模拟器构建替代真机验收。
+- [ ] 真正可折叠 iPhone Duo 的 A1–A9（含不旋转展开、展开竖屏、重复 20 轮、交互式 Pop 和系统/经典双策略）截图、日志与点击验证仍为 `PENDING_DEVICE`；未获得设备前不宣称 100% 完成。
 - [x] `VERSION`、`PooTools.podspec` 的 canonical version source、CHANGELOG、README、ROADMAP 和 Podfile.lock 同步到 `5.69.0`。
 - [x] PhotoPicker 拆分为页面协调、实例 Session、唯一选择 Store、Selection Policy、PhotoKit Album Repository、提交协调器和纯 UI View/Cell 边界。
 - [x] 图片/视频混选、pending 选择、取消、编辑替换、相册变化、截图刷新和临时视频回收路径已完成代码级收敛。

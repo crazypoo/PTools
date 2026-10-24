@@ -193,6 +193,17 @@ open class PTNavigationBarContainer: UIView {
         updateBackgroundFrame()
         requestTitleLayoutUpdate()
     }
+
+    // English: Reconcile once when the embedded container enters a window so deferred zero-window installs self-heal.
+    // Español: Reconcilia una vez cuando el contenedor entra en una ventana para reparar instalaciones aplazadas sin temporizadores.
+    // 中文：自定义容器进入 Window 后主动收敛一次，让此前因无 Window 延后的安装自动恢复。
+    open override func didMoveToWindow() {
+        super.didMoveToWindow()
+        guard window != nil,
+              let navigationController = ownerNavigationController else { return }
+        PTNavigationBarManager.shared.reconcileNavigationBar(in: navigationController,
+                                                              reason: .sceneResize)
+    }
 }
 
 extension PTNavigationBarContainer {

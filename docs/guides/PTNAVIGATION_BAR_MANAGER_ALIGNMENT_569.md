@@ -29,6 +29,14 @@ let topInset = PTNavigationBarManager.shared.currentNavigationTopInset(
 
 Example 目录中的 `navigation.duo-custom-nav-alignment-regression` 用于验证 More、搜索/标题视图、左右按钮、旋转和安全区变化。
 
+### 展开恢复与状态栏避让
+
+折叠/展开不再依赖旋转回调。每个 `UINavigationController` 都通过同一个幂等的 `reconcileNavigationBar(in:reason:)` 收敛当前可见控制器、渲染器所有权、导航项挂载和内容行几何。切换到系统垂直 Bar 时只隐藏并停用 PTools 自己的自定义容器；切回自定义 Bar 时只清理 PTools 创建的原生 wrapper，宿主自己设置的 `UIBarButtonItem` 会保留。
+
+内容行会把当前 Window 的状态栏 frame 和 active reserved regions 转换到 `UINavigationBar` 局部坐标后再验证。背景可以延伸到状态栏，但左侧、标题、右侧和搜索输入必须共享同一条安全内容行；没有可用宿主尺寸时延后提交，不缓存零尺寸。
+
+Demo 中的回归页展示 A1 合盖冷启动、A2 不旋转展开、A4 展开竖屏以及 A5/A6 重复尺寸变化的检查说明和 Scene-local frame 摘要。完整的 A1–A9 Duo 物理折叠验证仍需要真实可折叠设备，未连接设备时保持 `PENDING_DEVICE`。
+
 旧的 `currentNavBarHeight()` 保持原有总高度语义，避免破坏旧项目。
 
 ### DEBUG 几何诊断
@@ -61,6 +69,14 @@ The custom horizontal container and the iOS 27.1+ system vertical navigation bar
 
 Use the Example entry `navigation.duo-custom-nav-alignment-regression` to exercise More, title/search views, side buttons, rotation and safe-area changes.
 
+### Unfold recovery and status-bar exclusion
+
+Fold/unfold recovery no longer depends on a rotation callback. Each `UINavigationController` converges the visible controller, renderer ownership, navigation-item attachment and content-row geometry through the idempotent `reconcileNavigationBar(in:reason:)` path. Switching to the system vertical bar hides and disables only the PTools-owned custom container; switching back removes only PTools-created native wrappers and preserves host-owned `UIBarButtonItem` values.
+
+The content row validates the current window's status-bar frame and active reserved regions after converting them into the local `UINavigationBar` coordinate space. The background may extend under the status bar, but leading, title, trailing and search content share one safe row. Invalid or zero-size host geometry is deferred instead of cached.
+
+The Demo page documents A1 cold launch while closed, A2 unfold without rotation, A4 expanded portrait and A5/A6 repeated resize checks, and shows a scene-local frame summary. Full A1–A9 physical fold validation still requires a real foldable Duo device and remains `PENDING_DEVICE` when unavailable.
+
 Set `PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1` in a Debug scheme to log host-window frames and vertical centers. The diagnostic is disabled by default and does not log application content.
 
 The UIKit manager is an iOS/iPadOS boundary. watchOS has no matching UIKit navigation-bar host; visionOS and macOS use their native host containers. The value-only resolver is the portable CoreGraphics boundary.
@@ -80,6 +96,14 @@ Para contenido en varias escenas o con un host conocido, no uses la propiedad gl
 El contenedor horizontal personalizado y la barra vertical del sistema en iOS 27.1+ cambian de propietario por pila de navegación. Primero se desliga el renderizador anterior y después el nuevo restaura sus elementos, evitando dos superficies interactivas o la pérdida del título. El fondo personalizado solo dibuja y no participa en los toques ni en VoiceOver.
 
 Usa la entrada `navigation.duo-custom-nav-alignment-regression` del Example para probar More, los títulos/búsquedas, los botones laterales, la rotación y el área segura.
+
+### Recuperación al desplegar y exclusión de la barra de estado
+
+La recuperación al plegar/desplegar ya no depende de una callback de rotación. Cada `UINavigationController` reconcilia el controlador visible, la propiedad del renderizador, los elementos y la fila geométrica mediante `reconcileNavigationBar(in:reason:)`. Al usar la barra vertical del sistema solo se oculta y desactiva el contenedor personalizado de PTools; al volver al renderizador personalizado solo se eliminan los wrappers nativos creados por PTools y se conservan los `UIBarButtonItem` del host.
+
+La fila de contenido valida el frame de la barra de estado y las regiones reservadas activas de la ventana después de convertirlas al sistema local de `UINavigationBar`. El fondo puede extenderse bajo la barra de estado, pero los controles izquierdo, título, derecho y búsqueda comparten una única fila segura. La geometría cero o inválida se aplaza y no se guarda.
+
+La página Demo documenta las comprobaciones A1 de arranque en estado cerrado, A2 de despliegue sin rotación, A4 de retrato desplegado y A5/A6 de cambios repetidos, además de mostrar un resumen geométrico de la escena. La validación física A1–A9 sigue requiriendo un dispositivo Duo plegable real y permanece como `PENDING_DEVICE` si no está disponible.
 
 Para diagnosticar un dispositivo real, añade `PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1` al esquema Debug. El diagnóstico está desactivado por defecto y no registra contenido de la aplicación.
 

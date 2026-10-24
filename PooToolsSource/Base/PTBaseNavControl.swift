@@ -49,7 +49,7 @@ open class PTBaseNavControl: UINavigationController {
         super.viewWillAppear(animated)
         PTBaseNavControl.globalNavControl(nav: self)
         PTNavigationBarManager.shared.bind(to: self)
-        PTNavigationBarManager.shared.installIfNeeded(in: self)
+        _ = PTNavigationBarManager.shared.reconcileNavigationBar(in: self, reason: .initialInstall)
         PTAdaptiveSystemBarBridge.apply(policy: adaptiveBarPresentationPolicy, to: self)
 
         // English: Prime the visible root item because a presented navigation stack may not emit willShow after binding.
@@ -66,7 +66,7 @@ open class PTBaseNavControl: UINavigationController {
         super.viewDidLoad()        
         pushStatusBars(for: viewControllers)
         PTNavigationBarManager.shared.bind(to: self)
-        PTNavigationBarManager.shared.installIfNeeded(in: self)
+        _ = PTNavigationBarManager.shared.reconcileNavigationBar(in: self, reason: .initialInstall)
         PTAdaptiveSystemBarBridge.apply(policy: adaptiveBarPresentationPolicy, to: self)
         // English: Keep the navigation-controller backing transparent; the child controller owns the content surface.
         // Español: Mantiene transparente el fondo del controlador de navegación; el controlador hijo posee la superficie de contenido.
@@ -83,7 +83,7 @@ open class PTBaseNavControl: UINavigationController {
         if #available(iOS 27.1, *) {
             registerForTraitChanges(UITraitCollection.systemTraitsAffectingVerticalBarEdge) { (self: Self, previousTraitCollection: UITraitCollection) in
                 guard previousTraitCollection.verticalBarEdge != self.traitCollection.verticalBarEdge else { return }
-                PTNavigationBarManager.shared.installIfNeeded(in: self)
+                _ = PTNavigationBarManager.shared.reconcileNavigationBar(in: self, reason: .traitChange)
                 PTAdaptiveSystemBarBridge.apply(policy: self.adaptiveBarPresentationPolicy, to: self)
             }
         }
@@ -95,7 +95,7 @@ open class PTBaseNavControl: UINavigationController {
     open override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
         guard isViewLoaded else { return }
-        PTNavigationBarManager.shared.installIfNeeded(in: self)
+        _ = PTNavigationBarManager.shared.reconcileNavigationBar(in: self, reason: .safeArea)
         PTAdaptiveSystemBarBridge.apply(policy: adaptiveBarPresentationPolicy, to: self)
     }
 
@@ -104,7 +104,20 @@ open class PTBaseNavControl: UINavigationController {
     // 中文：UIKit 完成导航栏布局后，由 Manager 刷新实测几何。
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        PTNavigationBarManager.shared.refreshGeometry(in: self)
+        PTNavigationBarManager.shared.reconcileNavigationBar(in: self, reason: .viewDidLayout)
+    }
+
+    // English: Treat a size transition as a supplementary reconciliation signal; the measured scene geometry remains authoritative.
+    // Español: Trata el cambio de tamaño como una señal suplementaria; la geometría medida de la escena sigue siendo la autoridad.
+    // 中文：将尺寸转场作为补充收敛信号，最终仍以当前 Scene 的实测几何为准。
+    open override func viewWillTransition(to size: CGSize,
+                                          with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        _ = PTNavigationBarManager.shared.reconcileNavigationBar(in: self, reason: .sceneResize)
+        coordinator.animate(alongsideTransition: nil) { [weak self] _ in
+            guard let self else { return }
+            _ = PTNavigationBarManager.shared.reconcileNavigationBar(in: self, reason: .sceneResize)
+        }
     }
 
     open func baseTraitCollectionDidChange(style:UIUserInterfaceStyle) { }

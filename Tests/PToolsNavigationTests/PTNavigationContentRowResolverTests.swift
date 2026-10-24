@@ -125,6 +125,75 @@ final class PTNavigationContentRowResolverTests: XCTestCase {
         XCTAssertEqual(result.contentRect.maxX, 414, accuracy: 0.001)
     }
 
+    // English: Reject an observed row that overlaps the current status-bar exclusion and choose a local fallback.
+    // Español: Rechaza una fila observada que invade la exclusión de la barra de estado y usa un fallback local.
+    // 中文：拒绝与当前状态栏排斥区重叠的实测内容行，并选择局部安全回退行。
+    func testStatusBarOverlapRejectsObservedRow() throws {
+        let input = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 430, height: 60),
+            hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 60),
+            observedSystemRowRect: CGRect(x: 0, y: 0, width: 430, height: 44),
+            fallbackRowRect: CGRect(x: 0, y: 0, width: 430, height: 60),
+            exclusionRects: [CGRect(x: 0, y: 0, width: 430, height: 24)],
+            evidence: .observed
+        )
+
+        let result = try XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
+        XCTAssertEqual(result.evidence, .fallback)
+        XCTAssertGreaterThanOrEqual(result.contentRect.minY, 24)
+        XCTAssertFalse(result.contentRect.intersects(input.exclusionRects[0]))
+    }
+
+    // English: A host already below the status bar must not receive a second top offset.
+    // Español: Un host que ya está debajo de la barra de estado no debe recibir otro desplazamiento superior.
+    // 中文：宿主已经位于状态栏下方时，不应再次增加顶部偏移。
+    func testHostBelowStatusBarKeepsObservedRow() throws {
+        let input = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 430, height: 44),
+            hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 44),
+            observedSystemRowRect: CGRect(x: 0, y: 0, width: 430, height: 44),
+            exclusionRects: [CGRect(x: 0, y: -24, width: 430, height: 20)],
+            evidence: .observed
+        )
+
+        let result = try XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
+        XCTAssertEqual(result.evidence, .observed)
+        XCTAssertEqual(result.contentRect.minY, 0, accuracy: 0.001)
+    }
+
+    // English: Return no row when an exclusion consumes the complete host instead of caching a misleading frame.
+    // Español: Devuelve ninguna fila cuando una exclusión consume todo el host, en vez de guardar un frame engañoso.
+    // 中文：排斥区占满宿主时返回空结果，避免缓存误导性的内容行。
+    func testInsufficientHostHeightDefersInsteadOfOverlapping() {
+        let input = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 430, height: 30),
+            hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 30),
+            fallbackRowRect: CGRect(x: 0, y: 0, width: 430, height: 30),
+            exclusionRects: [CGRect(x: 0, y: 0, width: 430, height: 30)],
+            evidence: .fallback
+        )
+
+        XCTAssertNil(PTNavigationContentRowResolver.resolve(input))
+    }
+
+    // English: Active reserved regions use the same collision path as the status bar.
+    // Español: Las regiones reservadas activas usan la misma ruta de colisión que la barra de estado.
+    // 中文：激活的 reserved region 与状态栏使用同一套碰撞校验路径。
+    func testActiveReservedRegionIsExcluded() throws {
+        let input = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 430, height: 80),
+            hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 80),
+            observedSystemRowRect: CGRect(x: 0, y: 0, width: 430, height: 44),
+            fallbackRowRect: CGRect(x: 0, y: 0, width: 430, height: 80),
+            exclusionRects: [CGRect(x: 0, y: 0, width: 430, height: 32)],
+            evidence: .observed
+        )
+
+        let result = try XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
+        XCTAssertEqual(result.evidence, .fallback)
+        XCTAssertGreaterThanOrEqual(result.contentRect.minY, 32)
+    }
+
     func testContainerUsesAHostHeightDifferentFromTheLegacyEstimate() {
         let navigationController = PTBaseNavControl(rootViewController: UIViewController())
         navigationController.loadViewIfNeeded()

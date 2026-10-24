@@ -764,6 +764,9 @@ private final class PTDuoFormKeyboardSearchDemoViewController: PTBaseViewControl
 // 中文：在同一个宿主页面验证自定义标题、左右按钮、尺寸变化和安全区所有权。
 @MainActor
 private final class PTDuoCustomNavigationAlignmentDemoViewController: PTBaseViewController {
+    private let geometryLabel = UILabel()
+    private var lastGeometrySummary: String?
+
     override func preferredNavigationBarStyle() -> PTNavigationBarStyle {
         .solid(.systemBackground)
     }
@@ -804,9 +807,10 @@ private final class PTDuoCustomNavigationAlignmentDemoViewController: PTBaseView
         }
 
         [
-            "左侧按钮、标题和右侧按钮共享同一内容行",
-            "旋转、分屏和 iPhone Duo 保留宿主安全区域",
-            "PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1 可查看异常 frame"
+            "A1 合盖冷启动：首次显示完整自定义导航栏",
+            "A2 直接展开不旋转：导航项按当前 Scene 重新收敛",
+            "A4 展开竖屏：标题和左右按钮不得进入状态栏排斥区",
+            "A5/A6 重复展开与合盖：不叠加 wrapper、不丢失点击"
         ].forEach { text in
             let label = UILabel()
             label.text = text
@@ -815,6 +819,50 @@ private final class PTDuoCustomNavigationAlignmentDemoViewController: PTBaseView
             label.font = .preferredFont(forTextStyle: .body)
             stack.addArrangedSubview(label)
         }
+
+        geometryLabel.font = .monospacedSystemFont(ofSize: 12, weight: .regular)
+        geometryLabel.textColor = .secondaryLabel
+        geometryLabel.numberOfLines = 0
+        geometryLabel.text = "等待当前 Scene 几何 / Esperando geometría / Waiting for scene geometry"
+        stack.addArrangedSubview(geometryLabel)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateGeometrySummary()
+    }
+
+    // English: Show only scene-local geometry and collision state so the Demo can explain a real Duo run without user data.
+    // Español: Muestra solo la geometría local de la escena y las colisiones para explicar una ejecución Duo sin datos del usuario.
+    // 中文：只展示当前 Scene 的局部几何和碰撞状态，便于现场验证且不记录用户数据。
+    private func updateGeometrySummary() {
+        guard let window = viewIfLoaded?.window,
+              let navigationController,
+              let scene = window.windowScene else { return }
+
+        let barRect = navigationController.navigationBar.convert(
+            navigationController.navigationBar.bounds,
+            to: window
+        )
+        let statusRect: CGRect?
+        if let statusBarManager = scene.statusBarManager {
+            statusRect = scene.coordinateSpace.convert(statusBarManager.statusBarFrame, to: window)
+        } else {
+            statusRect = nil
+        }
+        let statusCollision = statusRect.map { barRect.intersects($0) } ?? false
+        let statusDescription = statusRect.map { String(describing: $0.integral) } ?? "none"
+        let summaryLines = [
+            "Scene: \(scene.session.persistentIdentifier)",
+            "Window: \(window.bounds.integral) safe=\(window.safeAreaInsets)",
+            "NavBar: \(barRect.integral) hidden=\(navigationController.navigationBar.isHidden)",
+            "Status: \(statusDescription) collision=\(statusCollision)",
+            "PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1 可输出详细诊断"
+        ]
+        let summary = summaryLines.joined(separator: "\n")
+        guard summary != lastGeometrySummary else { return }
+        lastGeometrySummary = summary
+        geometryLabel.text = summary
     }
 }
 

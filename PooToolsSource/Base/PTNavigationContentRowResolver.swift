@@ -23,6 +23,7 @@ struct PTNavigationContentRowInput: Equatable, Sendable {
     let hostSafeRect: CGRect
     let observedSystemRowRect: CGRect?
     let fallbackRowRect: CGRect?
+    let exclusionRects: [CGRect]
     let evidence: PTNavigationContentRowEvidence
     let isLargeTitleExpanded: Bool
     let compactRowHeight: CGFloat?
@@ -31,6 +32,7 @@ struct PTNavigationContentRowInput: Equatable, Sendable {
          hostSafeRect: CGRect,
          observedSystemRowRect: CGRect? = nil,
          fallbackRowRect: CGRect? = nil,
+         exclusionRects: [CGRect] = [],
          evidence: PTNavigationContentRowEvidence = .fallback,
          isLargeTitleExpanded: Bool = false,
          compactRowHeight: CGFloat? = nil) {
@@ -38,6 +40,7 @@ struct PTNavigationContentRowInput: Equatable, Sendable {
         self.hostSafeRect = hostSafeRect
         self.observedSystemRowRect = observedSystemRowRect
         self.fallbackRowRect = fallbackRowRect
+        self.exclusionRects = exclusionRects
         self.evidence = evidence
         self.isLargeTitleExpanded = isLargeTitleExpanded
         self.compactRowHeight = compactRowHeight
@@ -55,6 +58,7 @@ struct PTNavigationContentRowInput: Equatable, Sendable {
                   hostSafeRect: hostSafeRect,
                   observedSystemRowRect: systemContentRect,
                   fallbackRowRect: hostSafeRect,
+                  exclusionRects: [],
                   evidence: systemContentRect == nil ? .fallback : .observed,
                   isLargeTitleExpanded: isLargeTitleExpanded,
                   compactRowHeight: compactRowHeight)
@@ -79,33 +83,109 @@ enum PTNavigationContentRowResolver {
         guard input.evidence != .deferred else { return nil }
 
         let safeRect = bounded(input.hostSafeRect, in: host) ?? host
+        let exclusions = input.exclusionRects.compactMap { bounded($0, in: host) }
         if input.evidence == .observed,
            let systemRect = input.observedSystemRowRect,
            let contentRect = bounded(systemRect, in: host),
-           !contentRect.isEmpty {
+           !contentRect.isEmpty,
+           !intersectsAny(contentRect, exclusions) {
             return PTNavigationContentRowResult(contentRect: contentRect, evidence: .observed)
         }
 
         let fallbackRect = bounded(input.fallbackRowRect ?? safeRect, in: host) ?? safeRect
+        guard let safeFallbackRect = fallbackRectAvoidingExclusions(fallbackRect,
+                                                                    in: host,
+                                                                    exclusions: exclusions) else {
+            return nil
+        }
         guard input.isLargeTitleExpanded else {
-            guard !fallbackRect.isEmpty else { return nil }
-            return PTNavigationContentRowResult(contentRect: fallbackRect, evidence: .fallback)
+            guard !safeFallbackRect.isEmpty else { return nil }
+            return PTNavigationContentRowResult(contentRect: safeFallbackRect, evidence: .fallback)
         }
 
         let compactRect: CGRect
         if let compactHeight = normalizedLength(input.compactRowHeight), compactHeight > 0 {
-            let rowY = max(host.minY, fallbackRect.minY)
-            let availableHeight = min(compactHeight, max(0, host.maxY - rowY))
+            let rowY = max(host.minY, safeFallbackRect.minY)
+            let availableHeight = min(compactHeight, max(0, safeFallbackRect.maxY - rowY))
             guard availableHeight > 0 else { return nil }
-            compactRect = CGRect(x: fallbackRect.minX,
+            compactRect = CGRect(x: safeFallbackRect.minX,
                                  y: rowY,
-                                 width: fallbackRect.width,
+                                 width: safeFallbackRect.width,
                                  height: availableHeight)
         } else {
-            compactRect = fallbackRect
+            compactRect = safeFallbackRect
         }
-        guard !compactRect.isEmpty else { return nil }
+        guard !compactRect.isEmpty,
+              !intersectsAny(compactRect, exclusions) else { return nil }
         return PTNavigationContentRowResult(contentRect: compactRect, evidence: .fallback)
+    }
+
+    // English: Reject an observed row that intersects a real status or occlusion region.
+    // Español: Rechaza una fila observada que intersecta una región real de estado u oclusión.
+    // 中文：拒绝与真实状态栏或遮挡区域相交的实测内容行。
+    private static func intersectsAny(_ rect: CGRect, _ exclusions: [CGRect]) -> Bool {
+        exclusions.contains { rect.intersects($0) }
+    }
+
+    // English: Keep the row inside the host while choosing the largest usable vertical segment.
+    // Español: Mantiene la fila dentro del host y elige el mayor segmento vertical utilizable.
+    // 中文：让内容行保持在宿主内，并选择最大的可用垂直区域。
+    private static func fallbackRectAvoidingExclusions(_ rect: CGRect,
+                                                       in host: CGRect,
+                                                       exclusions: [CGRect]) -> CGRect? {
+        guard !intersectsAny(rect, exclusions) else {
+            let relevantExclusions = exclusions.filter {
+                $0.minX < rect.maxX && $0.maxX > rect.minX
+            }
+            var segments = [CGRect(x: host.minX,
+                                   y: host.minY,
+                                   width: host.width,
+                                   height: host.height)]
+            for exclusion in relevantExclusions {
+                var nextSegments: [CGRect] = []
+                for segment in segments {
+                    guard segment.intersects(exclusion) else {
+                        nextSegments.append(segment)
+                        continue
+                    }
+
+                    let upper = CGRect(x: segment.minX,
+                                       y: segment.minY,
+                                       width: segment.width,
+                                       height: max(0, min(segment.maxY, exclusion.minY) - segment.minY))
+                    let lower = CGRect(x: segment.minX,
+                                       y: max(segment.minY, exclusion.maxY),
+                                       width: segment.width,
+                                       height: max(0, segment.maxY - max(segment.minY, exclusion.maxY)))
+                    if !upper.isEmpty { nextSegments.append(upper) }
+                    if !lower.isEmpty { nextSegments.append(lower) }
+                }
+                segments = nextSegments
+            }
+
+            guard let usableSegment = segments
+                .filter({ !$0.isEmpty })
+                .max(by: { lhs, rhs in
+                    let lhsDistance = abs(lhs.midY - rect.midY)
+                    let rhsDistance = abs(rhs.midY - rect.midY)
+                    if lhs.height == rhs.height { return lhsDistance > rhsDistance }
+                    return lhs.height < rhs.height
+                }) else {
+                return nil
+            }
+
+            let height = min(rect.height, usableSegment.height)
+            guard height > 0 else { return nil }
+            let y = min(max(rect.midY - height / 2,
+                            usableSegment.minY),
+                        usableSegment.maxY - height)
+            let adjusted = CGRect(x: min(max(rect.minX, host.minX), host.maxX - rect.width),
+                                  y: y,
+                                  width: min(rect.width, host.width),
+                                  height: height)
+            return intersectsAny(adjusted, exclusions) ? nil : adjusted
+        }
+        return rect
     }
 
     private static func bounded(_ candidate: CGRect, in host: CGRect) -> CGRect? {
