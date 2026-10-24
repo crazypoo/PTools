@@ -1,8 +1,8 @@
 <!-- AUTO-GENERATED: Scripts/audit_duo_uikit_coverage.py -->
-Source revision: 6659aef825fba5ebaba376922681f56f7df62918
-Generated at: 2026-10-24T06:06:15.807222+00:00
+Source revision: be6cf4b34b62ce2c36f7639993c3eac176fd9ecb
+Generated at: 2026-10-24T11:12:53.132022+00:00
 Audit rule version: 5.69.0-duo-2026-10-24-r4
-Source manifest hash: 5695ad4f624d2d0006687d66bec5602618663f6c28d0b18315f5d4e75ae259bc
+Source manifest hash: 94c1e59b766ece9262682fde24122d12c890cba2c87e2cf367c113fc1db6bb39
 
 # iPhone Duo Findings Closure / Hallazgos / 审计项闭环
 

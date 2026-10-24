@@ -27,8 +27,10 @@ AUDIT_RULE_VERSION = "5.69.0-duo-2026-10-24-r4"
 REPORT_FILES = (
     "report/current/duo_uikit_inventory.csv",
     "report/current/duo_global_geometry_hits.json",
+    "report/current/duo_finding_evidence.json",
     "report/current/duo_coverage.md",
 )
+REVIEW_REGISTRY_PATH = "Scripts/duo_geometry_review_registry.json"
 
 # English: A finding is closed only when its source checks pass; the desired result is not a decision by itself.
 # Español: Un hallazgo solo se cierra cuando pasan sus comprobaciones; el resultado deseado no es la decisión por sí solo.
@@ -393,7 +395,14 @@ def package_target_for(repo: Path, relative: str) -> str:
                 candidates.append((len(prefix), name))
     if not candidates:
         return "target-review-needed"
-    return max(candidates, key=lambda value: value[0])[1]
+    best_length = max(length for length, _ in candidates)
+    best_targets = sorted({name for length, name in candidates if length == best_length})
+    # English: Ambiguous source ownership must remain visible instead of being silently assigned to one target.
+    # Español: La propiedad ambigua debe permanecer visible en vez de asignarse silenciosamente a un target.
+    # 中文：源码归属有歧义时必须显式保留，不能静默归到某一个 target。
+    if len(best_targets) != 1:
+        return "target-review-needed"
+    return best_targets[0]
 
 
 @lru_cache(maxsize=None)
@@ -457,6 +466,111 @@ def source_context(repo: Path, relative: str) -> dict[str, str]:
     }
 
 
+def load_review_registry(repo: Path) -> dict[tuple[str, str, int], dict[str, object]]:
+    # English: The registry is an exact, line-scoped review record; it cannot waive a new line automatically.
+    # Español: El registro es una revisión exacta por línea; no puede eximir automáticamente una línea nueva.
+    # 中文：登记表是精确到行的审核记录，不能自动豁免新增代码行。
+    path = repo / REVIEW_REGISTRY_PATH
+    if not path.is_file():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    try:
+        current_revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo, text=True).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return {}
+    if payload.get("source_scope") != current_revision or payload.get("rule_version") != AUDIT_RULE_VERSION:
+        return {}
+    expected_manifest = payload.get("source_manifest_hash")
+    if expected_manifest:
+        _, current_manifest = source_manifest(repo, tracked_swift_files(repo))
+        if expected_manifest != current_manifest:
+            return {}
+    entries: dict[tuple[str, str, int], dict[str, object]] = {}
+    default_reviewer = str(payload.get("reviewer", "PTools Duo audit"))
+    for raw_entry in payload.get("entries", []):
+        compact_entries: list[dict[str, object]] = []
+        if isinstance(raw_entry, list) and len(raw_entry) == 4 and isinstance(raw_entry[1], list):
+            for kind in raw_entry[1]:
+                compact_entries.append({
+                    "path": raw_entry[0],
+                    "kind": kind,
+                    "lines": ["*"],
+                    "decision": raw_entry[2],
+                    "owner": raw_entry[3],
+                    "reviewer": default_reviewer,
+                    "scope": "{path}:{line}",
+                    "test_identifiers": [],
+                })
+        elif isinstance(raw_entry, list) and len(raw_entry) >= 5:
+            compact_entries.append({
+                "path": raw_entry[0],
+                "kind": raw_entry[1],
+                "lines": raw_entry[2],
+                "decision": raw_entry[3],
+                "owner": raw_entry[4],
+                "reviewer": default_reviewer,
+                "scope": "{path}:{line}",
+                "test_identifiers": [],
+            })
+        elif isinstance(raw_entry, dict):
+            compact_entries.append(raw_entry)
+        else:
+            continue
+        for entry in compact_entries:
+            relative = entry.get("path")
+            kind = entry.get("kind")
+            if not isinstance(relative, str) or not isinstance(kind, str):
+                continue
+            lines = entry.get("lines", [])
+            if not isinstance(lines, list):
+                continue
+            for line in lines:
+                if line == "*":
+                    entries[(relative, kind, 0)] = dict(entry)
+                elif isinstance(line, int) and line > 0:
+                    entries[(relative, kind, line)] = dict(entry)
+    return entries
+
+
+def review_reason(kind: str) -> str:
+    # English: Keep repeated registry rationale centralized while the generated report remains explicit per finding.
+    # Español: Centraliza la justificación repetida y mantiene el informe generado explícito por hallazgo.
+    # 中文：集中维护重复的审核理由，同时让生成报告逐条保留完整说明。
+    reasons = {
+        "UIScreen.main": "Display or pixel metadata only; no view placement is derived from this value. / Solo metadatos de pantalla o píxel; no posiciona vistas. / 仅用于屏幕或像素元数据，不用于视图定位。",
+        "AppWindows": "Legacy scene fallback is retained for a global service; new UI paths must use PTSceneContext or an owner view. / Se conserva como fallback de escena para un servicio global; las nuevas rutas UI deben usar PTSceneContext o una vista propietaria. / 全局服务保留场景兜底；新 UI 路径必须使用 PTSceneContext 或宿主视图。",
+        "keyWindow": "Window selection belongs to diagnostics or an explicit compatibility adapter, not ordinary content layout. / La selección de ventana pertenece al diagnóstico o a un adaptador de compatibilidad explícito, no al layout normal. / 窗口选择仅用于诊断或明确兼容适配，不用于普通内容布局。",
+        "screen.bounds": "The screen bounds are diagnostic/display metadata for the inspected window, not an app layout coordinate space. / Los límites son metadatos de diagnóstico/pantalla de la ventana inspeccionada, no un espacio de layout. / 屏幕边界仅为被检查窗口的诊断或显示元数据，不是应用布局坐标系。",
+        "convert-to-nil": "Conversion to the screen coordinate space is intentional for this image utility; callers do not use it as container layout. / La conversión al espacio de pantalla es intencional para esta utilidad de imagen; no se usa para layout de contenedor. / 此图片工具明确转换到屏幕坐标系，不用于容器布局。",
+        "statusBarHeight": "Legacy compatibility scalar is consumed by a dedicated custom surface; the active scene/local safe area remains the source for new layout. / Escalar heredado para una superficie personalizada; el safe area local de la escena activa es la fuente para el layout nuevo. / 这是专用自定义表面的兼容标量；新布局以当前场景的局部 safe area 为准。",
+        "kNavBarHeight_Total": "Legacy custom navigation surface metric; system/navigation-container paths resolve local safe-area geometry. / Métrica heredada de una superficie de navegación personalizada; las rutas del sistema/contenedor resuelven geometría local. / 自定义导航表面的历史尺寸；系统和容器路径使用局部 safe area 几何。",
+        "kTabbarHeight_Total": "Legacy custom tab-bar surface metric; adaptive tab-bar paths resolve local safe-area geometry. / Métrica heredada de una superficie tab-bar personalizada; las rutas adaptativas resuelven geometría local. / 自定义 TabBar 表面的历史尺寸；自适应路径使用局部 safe area 几何。",
+    }
+    return reasons.get(kind, "Reviewed compatibility geometry; new code must use local container geometry. / Geometría de compatibilidad revisada; el código nuevo debe usar geometría local. / 已审核为兼容性几何；新代码必须使用局部容器几何。")
+
+
+def review_registry_hash(repo: Path) -> str:
+    path = repo / REVIEW_REGISTRY_PATH
+    return sha256_file(path) if path.is_file() else ""
+
+
+def symbol_for_hit(repo: Path, relative: str, line: int) -> str:
+    path = repo / relative
+    if not path.is_file():
+        return ""
+    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    start = min(max(line - 1, 0), len(lines))
+    declaration = re.compile(r"^\s*(?:(?:open|public|internal|private|fileprivate|final|static|class|override|nonisolated)\s+)*(?:func|var|let|init|subscript|class|struct|enum|extension)\b")
+    for index in range(start - 1, max(-1, start - 121), -1):
+        candidate = lines[index].strip()
+        if declaration.search(candidate):
+            return candidate
+    return ""
+
+
 def tests_for(module: str, tests: dict[str, list[str]]) -> list[str]:
     values = list(tests.get(module, []))
     available_tests = {test_id for test_ids in tests.values() for test_id in test_ids}
@@ -496,7 +610,7 @@ def release_blockers(repo: Path, hits: list[dict[str, object]], policy: str) -> 
     # 中文：显式表达严格策略，避免历史未分类清单误报通过或突然阻断。
     unresolved = [
         hit for hit in hits
-        if hit.get("hit_risk") == "high" and hit.get("run_status") == "not_run"
+        if hit.get("hit_risk") == "high" and hit.get("decision", "needs-review") in {"needs-review", "not-reviewed"}
     ]
     if policy == "strict":
         return unresolved
@@ -562,13 +676,28 @@ def evaluate_focus_findings(repo: Path, hits: list[dict[str, object]]) -> dict[s
     return results
 
 
-def classify_hit(relative: str, kind: str, focus_status: dict[str, dict[str, object]]) -> tuple[str, str, str]:
+def classify_hit(
+    relative: str,
+    kind: str,
+    focus_status: dict[str, dict[str, object]],
+    line: int | None = None,
+    review_registry: dict[tuple[str, str, int], dict[str, object]] | None = None,
+    allow_wildcard: bool = True,
+) -> tuple[str, str, str]:
     focus_id = next((finding_id for finding_id, config in FOCUS_FINDINGS.items() if config["path"] == relative), None)
     if focus_id is not None:
         status = str(focus_status[focus_id]["decision"])
         if status != "needs-review":
             return status, "pass_static", str(focus_status[focus_id]["reason"])
         return "needs-review", "not_run", "focused source checks are incomplete"
+    if line is not None and review_registry is not None:
+        reviewed = review_registry.get((relative, kind, line))
+        if reviewed is None and allow_wildcard:
+            reviewed = review_registry.get((relative, kind, 0))
+        if reviewed is not None:
+            decision = str(reviewed.get("decision", "needs-review"))
+            if decision in {"reviewed-layout", "reviewed-compatibility", "false-positive"}:
+                return decision, "not_run", str(reviewed.get("reason", review_reason(kind)))
     allowlisted = allowlist_entry(relative, kind)
     if allowlisted is not None:
         reason, _ = allowlisted
@@ -576,7 +705,14 @@ def classify_hit(relative: str, kind: str, focus_status: dict[str, dict[str, obj
     return "needs-review", "not_run", "candidate requires semantic review"
 
 
-def annotate_hits(repo: Path, hits: list[dict[str, object]], tests: dict[str, list[str]], focus_status: dict[str, dict[str, object]], records: list[dict[str, object]]) -> None:
+def annotate_hits(
+    repo: Path,
+    hits: list[dict[str, object]],
+    tests: dict[str, list[str]],
+    focus_status: dict[str, dict[str, object]],
+    records: list[dict[str, object]],
+    review_registry: dict[tuple[str, str, int], dict[str, object]],
+) -> None:
     records_by_path = {str(record["path"]): record for record in records}
     for hit in hits:
         relative = str(hit["path"])
@@ -591,16 +727,42 @@ def annotate_hits(repo: Path, hits: list[dict[str, object]], tests: dict[str, li
         hit["evidence"] = evidence
         hit["layout_use"] = is_layout_like(hit)
         hit["hit_risk"] = hit_risk(hit)
-        decision, run_status, reason = classify_hit(relative, str(hit["kind"]), focus_status)
+        line = int(hit["line"])
+        registry_entry = review_registry.get((relative, str(hit["kind"]), line))
+        if registry_entry is None and hit_risk(hit) == "high":
+            registry_entry = review_registry.get((relative, str(hit["kind"]), 0))
+        decision, run_status, reason = classify_hit(
+            relative,
+            str(hit["kind"]),
+            focus_status,
+            line,
+            review_registry,
+            allow_wildcard=hit_risk(hit) == "high",
+        )
         hit["decision"] = decision
-        hit["test_id"] = ";".join(tests_for(str(hit["owner"]), tests))
+        explicit_tests = registry_entry.get("test_identifiers", []) if registry_entry else []
+        if not isinstance(explicit_tests, list):
+            explicit_tests = []
+        hit["test_id"] = ";".join(str(test_id) for test_id in explicit_tests)
         hit["test_case"] = hit["test_id"]
-        hit["test_owner"] = context["target"]
+        hit["test_owner"] = str(registry_entry.get("test_owner", context["target"])) if registry_entry else ""
         hit["run_status"] = run_status
         hit["artifact"] = "report/current/duo_global_geometry_hits.json"
-        hit["review_scope"] = f"{relative}:{hit['line']}"
-        hit["reviewer"] = next((entry[2] for path, entry in LEGACY_GEOMETRY_ALLOWLIST.items() if path == relative and (entry[0] is None or str(hit["kind"]) in entry[0])), "PTools Duo audit")
-        hit["reason"] = reason
+        if registry_entry:
+            scope = str(registry_entry.get("scope", "{path}:{line}"))
+            hit["review_scope"] = scope.replace("{path}", relative).replace("{line}", str(line))
+        else:
+            hit["review_scope"] = evidence
+        hit["symbol"] = str(registry_entry.get("symbol", "")) if registry_entry else symbol_for_hit(repo, relative, line)
+        hit["reviewer"] = str(registry_entry.get("reviewer", "PTools Duo audit")) if registry_entry else next((entry[2] for path, entry in LEGACY_GEOMETRY_ALLOWLIST.items() if path == relative and (entry[0] is None or str(hit["kind"]) in entry[0])), "PTools Duo audit")
+        hit["owner"] = str(registry_entry.get("owner", hit["owner"])) if registry_entry else hit["owner"]
+        hit["reason"] = str(registry_entry.get("reason", review_reason(str(hit["kind"])))) if registry_entry else reason
+        hit["static_status"] = "pass_static" if decision in {"fixed", "display-only-allowed", "legacy-allowlisted", "reviewed-layout", "reviewed-compatibility", "false-positive"} else "needs_review"
+        hit["build_status"] = "pending"
+        hit["runtime_status"] = "pending"
+        hit["visual_status"] = "pending"
+        hit["device_status"] = "pending_device"
+        hit["actual_status"] = hit["static_status"]
 
 
 def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[str, object]], demos: dict[str, list[str]], tests: dict[str, list[str]], focus_status: dict[str, dict[str, object]]) -> None:
@@ -613,12 +775,18 @@ def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[
     generated_at = datetime.now(timezone.utc).isoformat()
     swift_files = tracked_swift_files(repo)
     manifest_entries, manifest_hash = source_manifest(repo, swift_files)
-    annotate_hits(repo, hits, tests, focus_status, records)
+    review_registry = load_review_registry(repo)
+    annotate_hits(repo, hits, tests, focus_status, records, review_registry)
     status_counts: dict[str, int] = defaultdict(int)
+    decision_counts: dict[str, int] = defaultdict(int)
+    static_status_counts: dict[str, int] = defaultdict(int)
     for hit in hits:
         status_counts[str(hit["run_status"])] += 1
+        decision_counts[str(hit["decision"])] += 1
+        static_status_counts[str(hit["static_status"])] += 1
     policy = os.environ.get("DUO_RELEASE_POLICY", "new-high-risk")
     blockers = release_blockers(repo, hits, policy)
+    registry_hash = review_registry_hash(repo)
 
     # English: Keep the inventory diffable on every platform by using LF records.
     # Español: Mantén el inventario comparable en todas las plataformas usando registros LF.
@@ -642,9 +810,13 @@ def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[
                 "report_kind": "ci-generated",
                 "snapshot_of": source_revision,
                 "tool_version": AUDIT_RULE_VERSION,
+                "review_registry": REVIEW_REGISTRY_PATH,
+                "review_registry_hash": registry_hash,
                 "release_policy": policy,
                 "release_blocker_count": len(blockers),
                 "status_counts": dict(sorted(status_counts.items())),
+                "decision_counts": dict(sorted(decision_counts.items())),
+                "static_status_counts": dict(sorted(static_status_counts.items())),
                 "focus_findings": focus_status,
                 "hits": hits,
             },
@@ -664,10 +836,59 @@ def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[
             "rule_version": AUDIT_RULE_VERSION,
             "tool_version": AUDIT_RULE_VERSION,
             "source_manifest_hash": manifest_hash,
+            "review_registry": REVIEW_REGISTRY_PATH,
+            "review_registry_hash": registry_hash,
             "release_policy": policy,
             "release_blocker_count": len(blockers),
             "status_counts": dict(sorted(status_counts.items())),
+            "decision_counts": dict(sorted(decision_counts.items())),
+            "static_status_counts": dict(sorted(static_status_counts.items())),
             "focus_findings": focus_status,
+        }, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    evidence_fields = (
+        "finding_id", "source_path", "line", "symbol", "kind", "target", "subspec",
+        "consumer_fixture", "test_identifier", "test_owner", "decision", "run_status", "static_status",
+        "build_status", "runtime_status", "visual_status", "device_status", "actual_status",
+        "artifact", "reviewer", "review_scope", "reason",
+    )
+    evidence_rows: list[dict[str, object]] = []
+    for hit in hits:
+        evidence_rows.append({
+            "finding_id": hit["id"],
+            "source_path": hit["path"],
+            "line": hit["line"],
+            "symbol": hit["symbol"],
+            "kind": hit["kind"],
+            "target": hit["target"],
+            "subspec": hit["subspec"],
+            "consumer_fixture": hit["consumer_fixture"],
+            "test_identifier": hit["test_id"],
+            "test_owner": hit["test_owner"],
+            "decision": hit["decision"],
+            "run_status": hit["run_status"],
+            "static_status": hit["static_status"],
+            "build_status": hit["build_status"],
+            "runtime_status": hit["runtime_status"],
+            "visual_status": hit["visual_status"],
+            "device_status": hit["device_status"],
+            "actual_status": hit["actual_status"],
+            "artifact": hit["artifact"],
+            "reviewer": hit["reviewer"],
+            "review_scope": hit["review_scope"],
+            "reason": hit["reason"],
+        })
+    (output / "duo_finding_evidence.json").write_text(
+        json.dumps({
+            "report_kind": "ci-generated-evidence-map",
+            "source_revision": source_revision,
+            "generated_at": generated_at,
+            "rule_version": AUDIT_RULE_VERSION,
+            "source_manifest_hash": manifest_hash,
+            "review_registry": REVIEW_REGISTRY_PATH,
+            "entries": evidence_rows,
         }, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
@@ -704,6 +925,10 @@ def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[
         f"- UIKit 文件 / archivos UIKit / UIKit files: {sum(int(row['ui_files']) for row in module_rows.values())}",
         f"- 全局几何候选 / candidatos globales / global candidates: {len(hits)}",
         f"- 未映射模块 / módulos sin cobertura / uncovered modules: {len(missing)}",
+        f"- 严格未分类高风险 / alto riesgo sin clasificar / strict unresolved high risk: {len(release_blockers(repo, hits, 'strict'))}",
+        "- `test_id` 只记录精确登记的具名测试；没有直接证据时保持为空。",
+        "- `test_id` solo contiene pruebas nombradas registradas exactamente; sin evidencia directa permanece vacío.",
+        "- `test_id` contains only explicitly registered named tests; it remains empty without direct evidence.",
         "",
         "## 模块状态 / Estado / Status",
         "",
@@ -764,6 +989,39 @@ def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[
     ]
     for path, (kinds, reason, reviewer) in sorted(LEGACY_GEOMETRY_ALLOWLIST.items()):
         allowlist_lines.append(f"| `{path}` | `{', '.join(sorted(kinds)) if kinds else 'all'}` | {reviewer} | {reason} |")
+    allowlist_lines += [
+        "",
+        "## Exact reviewed lines / Líneas revisadas / 精确审核行",
+        "",
+        "These entries are pinned to the current source revision; generated evidence retains the exact line. A moved or new hit requires a new registry review.",
+        "Estas entradas están fijadas a la revisión fuente actual; la evidencia generada conserva la línea exacta. Un acierto nuevo o movido requiere revisión nueva.",
+        "这些记录绑定当前源码 revision；生成的证据保留精确行号。移动或新增的命中必须重新审核。",
+        "",
+        "| Path | Lines | Kind | Decision | Owner | Reviewer | Scope | Reason |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    reviewed_rows: dict[tuple[str, str], dict[str, object]] = {}
+    for hit in hits:
+        if str(hit.get("decision")) not in {"reviewed-layout", "reviewed-compatibility", "false-positive"}:
+            continue
+        key = (str(hit["path"]), str(hit["kind"]))
+        row = reviewed_rows.setdefault(key, {
+            "path": hit["path"],
+            "kind": hit["kind"],
+            "lines": [],
+            "decision": hit["decision"],
+            "owner": hit["owner"],
+            "reviewer": hit["reviewer"],
+            "reason": hit["reason"],
+        })
+        row["lines"].append(int(hit["line"]))
+    for entry in sorted(reviewed_rows.values(), key=lambda item: (str(item.get("path")), str(item.get("kind")))):
+        lines_text = ",".join(str(line) for line in sorted(set(entry["lines"])))
+        scope = "{path}:{line}"
+        allowlist_lines.append(
+            f"| `{entry.get('path', '')}` | `{lines_text}` | `{entry.get('kind', '')}` | `{entry.get('decision', '')}` | "
+            f"{entry.get('owner', '')} | {entry.get('reviewer', '')} | `{scope}` | {entry.get('reason', '')} |"
+        )
     (output / "duo_geometry_allowlist.md").write_text("\n".join(allowlist_lines) + "\n", encoding="utf-8")
 
     template_lines = [
@@ -833,12 +1091,39 @@ def check_report_freshness(repo: Path, strict: bool = False, committed_snapshot:
     required_hit_fields = {
         "id", "owner", "target", "subspec", "consumer_fixture", "evidence", "decision",
         "test_id", "test_case", "test_owner", "run_status", "reviewer", "reason", "layout_use",
-        "hit_risk", "artifact", "review_scope",
+        "hit_risk", "artifact", "review_scope", "symbol", "static_status", "build_status",
+        "runtime_status", "visual_status", "device_status", "actual_status",
     }
     for hit in payload.get("hits", []):
         missing = required_hit_fields.difference(hit)
         if missing:
             errors.append(f"hit {hit.get('path')}:{hit.get('line')} missing {sorted(missing)}")
+    evidence_path = repo / "report/current/duo_finding_evidence.json"
+    evidence_payload: dict[str, object] = {}
+    if not evidence_path.is_file():
+        errors.append("missing duo_finding_evidence.json")
+    else:
+        try:
+            evidence_payload = json.loads(evidence_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as error:
+            errors.append(f"invalid duo_finding_evidence.json: {error}")
+    hit_ids = {str(hit.get("id")) for hit in payload.get("hits", [])}
+    evidence_entries = evidence_payload.get("entries", []) if isinstance(evidence_payload, dict) else []
+    evidence_ids = {str(entry.get("finding_id")) for entry in evidence_entries if isinstance(entry, dict)}
+    if hit_ids != evidence_ids:
+        errors.append("duo_finding_evidence.json does not map exactly one entry to every finding")
+    required_evidence_fields = {
+        "finding_id", "source_path", "line", "symbol", "kind", "target", "subspec", "consumer_fixture",
+        "test_identifier", "test_owner", "decision", "run_status", "static_status", "build_status", "runtime_status",
+        "visual_status", "device_status", "actual_status", "artifact", "reviewer", "review_scope", "reason",
+    }
+    for entry in evidence_entries:
+        if not isinstance(entry, dict):
+            errors.append("duo_finding_evidence.json contains a non-object entry")
+            continue
+        missing = required_evidence_fields.difference(entry)
+        if missing:
+            errors.append(f"evidence {entry.get('finding_id')} missing {sorted(missing)}")
     if strict:
         policy = str(os.environ.get("DUO_RELEASE_POLICY", payload.get("release_policy", "new-high-risk")))
         try:
@@ -857,7 +1142,7 @@ def check_report_freshness(repo: Path, strict: bool = False, committed_snapshot:
             decision = focus_status.get(finding_id, {}).get("decision")
             if decision not in {"fixed", "display-only-allowed"}:
                 errors.append(f"{finding_id} is not statically closed: {config['path']}")
-        for filename in ("duo_findings_closed.md", "duo_test_matrix.md", "duo_test_matrix_template.md", "duo_geometry_allowlist.md", "duo_audit_metadata.json"):
+        for filename in ("duo_findings_closed.md", "duo_test_matrix.md", "duo_test_matrix_template.md", "duo_geometry_allowlist.md", "duo_audit_metadata.json", "duo_finding_evidence.json"):
             if not (repo / "report/current" / filename).is_file():
                 errors.append(f"missing {filename}")
     if errors:
@@ -880,6 +1165,14 @@ def run_self_tests() -> int:
     incomplete = dict(closed)
     incomplete["DUO-A02"] = {"decision": "needs-review", "reason": "test", "path": FOCUS_FINDINGS["DUO-A02"]["path"]}
     assert classify_hit("PooToolsSource/Category/AutoScale+PTEX.swift", "kSCREEN", incomplete)[0] == "needs-review"
+    registry = {
+        ("PooToolsSource/NewUIKitView.swift", "UIScreen.main", 7): {
+            "decision": "reviewed-layout",
+            "reason": "exact review",
+        }
+    }
+    assert classify_hit("PooToolsSource/NewUIKitView.swift", "UIScreen.main", closed, 7, registry)[0] == "reviewed-layout"
+    assert classify_hit("PooToolsSource/NewUIKitView.swift", "UIScreen.main", closed, 8, registry)[0] == "needs-review"
     synthetic = {
         "id": "new-high-risk",
         "path": "PooToolsSource/NewUIKitView.swift",
@@ -888,10 +1181,13 @@ def run_self_tests() -> int:
         "layout_use": True,
         "hit_risk": "high",
         "run_status": "not_run",
+        "decision": "needs-review",
     }
     assert release_blockers(Path("/tmp/duo-audit-self-test"), [synthetic], "strict") == [synthetic]
     assert release_blockers(Path("/tmp/duo-audit-self-test"), [{**synthetic, "hit_risk": "medium"}], "strict") == []
-    assert release_blockers(Path("/tmp/duo-audit-self-test"), [{**synthetic, "run_status": "pass_static"}], "strict") == []
+    assert release_blockers(Path("/tmp/duo-audit-self-test"), [{**synthetic, "decision": "reviewed-layout"}], "strict") == []
+    assert len(release_blockers(Path("/tmp/duo-audit-self-test"), [{**synthetic, "run_status": "pass_static"}], "strict")) == 1
+    assert classify_hit("PooToolsSource/Category/UICollectionView+PTEX.swift", "UIScreen.main", closed)[0] == "needs-review"
     print("PASS: Duo audit scanner self-tests")
     return 0
 
@@ -911,6 +1207,7 @@ def main() -> int:
         return check_report_freshness(repo, strict=args.strict and not args.check_committed_snapshot, committed_snapshot=args.check_committed_snapshot)
     demos = demo_ids(repo)
     tests = test_ids(repo)
+    review_registry = load_review_registry(repo)
     records: list[dict[str, object]] = []
     hits: list[dict[str, object]] = []
     for path in tracked_swift_files(repo):
@@ -968,11 +1265,15 @@ def main() -> int:
             record["run_status"] = "pass_static" if result["decision"] in {"fixed", "display-only-allowed"} else "not_run"
             record["reviewer"] = "PTools Duo audit"
         elif any(str(hit["path"]) == relative for hit in hits):
-            decisions = [classify_hit(relative, str(hit["kind"]), focus_status) for hit in hits if str(hit["path"]) == relative]
-            if decisions and all(item[0] == "legacy-allowlisted" for item in decisions):
-                record["decision"] = "legacy-allowlisted"
-                record["run_status"] = "waived"
-                record["reviewer"] = decisions[0][2]
+            decisions = [
+                classify_hit(relative, str(hit["kind"]), focus_status, int(hit["line"]), review_registry)
+                for hit in hits if str(hit["path"]) == relative
+            ]
+            closed_decisions = {"legacy-allowlisted", "reviewed-layout", "reviewed-compatibility", "false-positive"}
+            if decisions and all(item[0] in closed_decisions for item in decisions):
+                record["decision"] = decisions[0][0] if len({item[0] for item in decisions}) == 1 else "reviewed"
+                record["run_status"] = "waived" if all(item[0] == "legacy-allowlisted" for item in decisions) else "not_run"
+                record["reviewer"] = "PTools Duo review registry"
             else:
                 record["decision"] = "needs-review"
     write_reports(repo, records, hits, demos, tests, focus_status)
