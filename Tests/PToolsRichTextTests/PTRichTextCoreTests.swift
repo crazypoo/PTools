@@ -113,7 +113,10 @@ final class PTRichTextCoreTests: XCTestCase {
         let rawOffset = value.value.attribute(.baselineOffset,
                                               at: 0,
                                               effectiveRange: nil) as? NSNumber
-        XCTAssertEqual(rawOffset?.doubleValue, 3.5, accuracy: 0.001)
+        guard let rawOffset else {
+            return XCTFail("Expected a baseline offset on the inline image")
+        }
+        XCTAssertEqual(rawOffset.doubleValue, 3.5, accuracy: 0.001)
     }
 
     // English: Verify both URL and dynamic-source image builders expose the same baseline contract.
@@ -122,13 +125,17 @@ final class PTRichTextCoreTests: XCTestCase {
     @MainActor
     func testRemoteImageBaselineOffsetIsApplied() {
         let url = URL(string: "https://example.com/image.png")!
-        let remote = PTRichText.image(url,
-                                      .custom(size: CGSize(width: 24, height: 16)),
-                                      baselineOffset: -2)
+        let remote = PTRichText(string: "\u{FFFC}",
+                                with: [.image(url,
+                                              .custom(size: CGSize(width: 24, height: 16)),
+                                              baselineOffset: -2)])
         let remoteOffset = remote.value.attribute(.baselineOffset,
                                                   at: 0,
                                                   effectiveRange: nil) as? NSNumber
-        XCTAssertEqual(remoteOffset?.doubleValue, -2, accuracy: 0.001)
+        guard let remoteOffset else {
+            return XCTFail("Expected a baseline offset on the remote image")
+        }
+        XCTAssertEqual(remoteOffset.doubleValue, -2, accuracy: 0.001)
 
         let configuration = PTRichTextImageConfiguration(size: CGSize(width: 32, height: 18),
                                                          baselineOffset: 4)
@@ -140,7 +147,10 @@ final class PTRichTextCoreTests: XCTestCase {
                                                         at: 0,
                                                         effectiveRange: nil) as? PTRichTextMediaTextAttachment
 
-        XCTAssertEqual(dynamicOffset?.doubleValue, 4, accuracy: 0.001)
+        guard let dynamicOffset else {
+            return XCTFail("Expected a baseline offset on the dynamic image")
+        }
+        XCTAssertEqual(dynamicOffset.doubleValue, 4, accuracy: 0.001)
         XCTAssertEqual(dynamicAttachment?.baselineOffset, 4)
     }
 

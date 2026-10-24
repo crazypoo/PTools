@@ -87,7 +87,10 @@ extension C7Collector {
             return nil
         }
         delegate?.captureOutput?(self, pixelBuffer: pixelBuffer)
-        guard let texture = pixelBuffer.c7.toMTLTexture(textureCache: Harbeth.Device.sharedTextureCache()) else {
+        // English: Let each Harbeth distribution provide its own shared texture cache.
+        // Español: Deja que cada distribución de Harbeth proporcione su caché compartida.
+        // 中文：让 CocoaPods 和 SwiftPM 的 Harbeth 版本分别使用各自的共享纹理缓存。
+        guard let texture = pixelBuffer.c7.toMTLTexture() else {
             return nil
         }
         let dest = HarbethIO<MTLTexture>(element: texture, filters: filters)
@@ -103,7 +106,10 @@ extension C7Collector {
             return
         }
         delegate?.captureOutput?(self, pixelBuffer: pixelBuffer)
-        guard let texture = pixelBuffer.c7.toMTLTexture(textureCache: Harbeth.Device.sharedTextureCache()) else {
+        // English: Use Harbeth's public conversion API so CocoaPods and SwiftPM share one path.
+        // Español: Usa la API pública de conversión de Harbeth para compartir una sola ruta.
+        // 中文：使用 Harbeth 的公开转换 API，让 CocoaPods 和 SwiftPM 共用同一条路径。
+        guard let texture = pixelBuffer.c7.toMTLTexture() else {
             return
         }
         var dest = HarbethIO<MTLTexture>(element: texture, filters: filters)

@@ -113,7 +113,10 @@ public typealias PTCollectionViewUpdateErrorHandler = @MainActor (PTCollectionVi
 public typealias PTReusableViewHandler = @MainActor (_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath: IndexPath) -> UICollectionReusableView?
 
 ///Cell设置
-public typealias PTCellInCollectionHandler = @MainActor (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> UICollectionViewCell?
+// English: Mark stored cell callbacks as Sendable so Swift 6 preserves their MainActor boundary when moved between targets.
+// Español: Marca los callbacks de celdas almacenados como Sendable para conservar su límite MainActor entre targets de Swift 6.
+// 中文：将存储的 Cell 回调标记为 Sendable，确保 Swift 6 跨 target 传递时保持 MainActor 边界。
+public typealias PTCellInCollectionHandler = @MainActor @Sendable (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> UICollectionViewCell?
 
 // English: Pass the latest section and row together so custom cells do not have to read stale snapshot objects.
 // Español: Pasa la sección y la fila más recientes juntas para que las celdas no lean objetos obsoletos del snapshot.
@@ -173,7 +176,7 @@ public enum PTCollectionLayoutScrollPolicy: Sendable {
 }
 
 ///Cell点击事件
-public typealias PTCellDidSelectedHandler = @MainActor (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void
+public typealias PTCellDidSelectedHandler = @MainActor @Sendable (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void
 
 ///Cell将要
 public typealias PTCellDisplayHandler = @MainActor (_ collectionView:UICollectionView,_ cell:UICollectionViewCell,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void

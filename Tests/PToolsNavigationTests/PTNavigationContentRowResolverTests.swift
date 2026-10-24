@@ -20,7 +20,7 @@ final class PTNavigationContentRowResolverTests: XCTestCase {
             systemContentRect: CGRect(x: 0, y: 0, width: 430, height: 50)
         )
 
-        let result = XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
+        let result = try XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
         XCTAssertEqual(result.contentRect, input.systemContentRect)
     }
 
@@ -31,7 +31,7 @@ final class PTNavigationContentRowResolverTests: XCTestCase {
             systemContentRect: CGRect(x: 0, y: 0, width: 390, height: 44)
         )
 
-        let result = XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
+        let result = try XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
         XCTAssertEqual(result.contentRect.minY, 0, accuracy: 0.001)
         XCTAssertEqual(result.contentRect.midY, 22, accuracy: 0.001)
     }
@@ -43,7 +43,7 @@ final class PTNavigationContentRowResolverTests: XCTestCase {
             systemContentRect: nil
         )
 
-        let result = XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
+        let result = try XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
         XCTAssertEqual(result.contentRect, input.hostSafeRect)
         XCTAssertTrue(input.hostBounds.contains(result.contentRect))
     }
@@ -56,7 +56,7 @@ final class PTNavigationContentRowResolverTests: XCTestCase {
             compactRowHeight: 50
         )
 
-        let result = XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
+        let result = try XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
         XCTAssertEqual(result.contentRect.height, 50, accuracy: 0.001)
         XCTAssertEqual(result.contentRect.midY, 25, accuracy: 0.001)
         XCTAssertLessThan(result.contentRect.maxY, input.hostBounds.maxY)

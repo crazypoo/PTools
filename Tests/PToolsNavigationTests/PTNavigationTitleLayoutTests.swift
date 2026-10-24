@@ -165,10 +165,10 @@ final class PTNavigationTitleLayoutTests: XCTestCase {
     func testNAV_TITLE_013_invalidNumbersAreNormalized() {
         let result = resolve(leftWidth: .infinity,
                              rightWidth: -10,
-                             desiredSize: CGSize(width: .nan, height: .infinity),
+                             desiredSize: CGSize(width: CGFloat.nan, height: CGFloat.infinity),
                              mode: .centerMeasured,
-                             minimumEdgeInset: .nan,
-                             itemSpacing: -.infinity)
+                             minimumEdgeInset: CGFloat.nan,
+                             itemSpacing: -CGFloat.infinity)
 
         XCTAssertFalse(result.titleFrame.minX.isNaN)
         XCTAssertFalse(result.titleFrame.minY.isNaN)

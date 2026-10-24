@@ -1079,7 +1079,7 @@ let package = Package(
         // 高级业务模块
         // ==========================================
         .target(name: "PooToolsImagePicker", dependencies: ["ptools", "PTCameraPermission", "SnapKit"], path: "PooToolsSource/ImagePicker", swiftSettings: [.define("POOTOOLS_IMAGEPICKER"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsPhotoPicker", dependencies: ["ptools", "PToolsSymbols", "PToolsUIFoundation", "PooToolsMediaCore", "PooToolsImagePicker", "PTCameraPermission", "PooToolsLoading", "SnapKit"], path: "PooToolsSource", sources: ["PhotoPicker"], swiftSettings: [.define("POOTOOLS_PHOTOPICKER"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsPhotoPicker", dependencies: ["ptools", "PToolsCore", "PToolsSymbols", "PToolsUIFoundation", "PooToolsMediaCore", "PooToolsImagePicker", "PTCameraPermission", "PooToolsLoading", "SnapKit"], path: "PooToolsSource", sources: ["PhotoPicker"], swiftSettings: [.define("POOTOOLS_PHOTOPICKER"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsHarbethKit", dependencies: ["ptools", "PToolsSymbols", "Harbeth", "PTCameraPermission", "PooToolsMediaViewer", "PooToolsHud", "PooToolsLoading", "SnapKit"], path: "PooToolsSource/C7Collector", sources: ["C7CameraConfig.swift", "C7Collector.swift", "C7CollectorCamera.swift", "C7CollectorVideo.swift", "PTC7VideoExportService.swift", "PTCameraAnimationUtils.swift", "PTCameraFilterConfig.swift", "PTFilterImageCell.swift", "PTHarBethFilter.swift", "PTTakePictureReviewer.swift"], swiftSettings: [.define("POOTOOLS_HARBETHKIT"), .define("POOTOOLS_COCOAPODS")]),
         // English: Re-export the existing implementation targets without compiling FilterCamera source a second time.
         // Español: Reexporta los targets de implementación existentes sin compilar dos veces el código de FilterCamera.
@@ -1288,7 +1288,7 @@ let package = Package(
         // 中文：将 PhotoPicker 选择策略测试放在 iOS PhotoKit target 旁，避免把 UIKit 依赖带入 Core 测试。
         .testTarget(
             name: "PToolsPhotoPickerTests",
-            dependencies: ["PooToolsPhotoPicker"],
+            dependencies: ["PooToolsPhotoPicker", "ptools"],
             path: "Tests/PToolsPhotoPickerTests"
         ),
         .testTarget(
@@ -1335,7 +1335,7 @@ let package = Package(
         // 中文：让 DebugNetwork 合约测试紧邻观测 target，避免新增第二套抓包实现。
         .testTarget(
             name: "PToolsDebugTests",
-            dependencies: ["PooToolsDEBUG"],
+            dependencies: ["PooToolsDEBUG", "PooToolsDEBUGTrackingEyes"],
             path: "Tests/PToolsDebugTests",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")

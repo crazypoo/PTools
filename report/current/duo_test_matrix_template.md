@@ -1,7 +1,7 @@
 <!-- AUTO-GENERATED TEMPLATE: Scripts/audit_duo_uikit_coverage.py -->
-Source revision: 7c37f5a9fe08f32af3161382c382b286f34e4096
-Source manifest hash: 591ce60424fca939d48e5156b10d97aac507d2c5ef253d105e039efed840c2c8
-Audit rule version: 5.69.0-duo-2026-10-23-r3
+Source revision: 6659aef825fba5ebaba376922681f56f7df62918
+Source manifest hash: 5695ad4f624d2d0006687d66bec5602618663f6c28d0b18315f5d4e75ae259bc
+Audit rule version: 5.69.0-duo-2026-10-24-r4
 
 # iPhone Duo Test Matrix Template / Plantilla / 测试矩阵模板
 

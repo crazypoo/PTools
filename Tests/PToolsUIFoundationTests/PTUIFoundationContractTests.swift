@@ -115,7 +115,7 @@ final class PTUIFoundationContractTests: XCTestCase {
                 sectionInsets: insets,
                 verticalSpacing: 8
             ),
-            max(rowHeights) + 28,
+            (rowHeights.max() ?? 0) + 28,
             accuracy: 0.001
         )
     }

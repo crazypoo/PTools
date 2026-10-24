@@ -4,6 +4,11 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+# English: New high-risk findings block by default; set DUO_RELEASE_POLICY=strict for a full historical review.
+# Español: Los hallazgos nuevos de alto riesgo bloquean por defecto; usa DUO_RELEASE_POLICY=strict para revisar todo el histórico.
+# 中文：默认只阻断新增高风险命中；设置 DUO_RELEASE_POLICY=strict 可执行全量历史审查。
+export DUO_RELEASE_POLICY="${DUO_RELEASE_POLICY:-new-high-risk}"
+
 # English: Generate the full UIKit inventory before validating the shared Duo contract.
 # Español: Genera el inventario UIKit completo antes de validar el contrato Duo compartido.
 # 中文：在验证共享 Duo 契约前，先生成完整 UIKit 清单。

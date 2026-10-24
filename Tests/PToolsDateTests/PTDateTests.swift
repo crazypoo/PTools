@@ -19,8 +19,9 @@ final class PTDateTests: XCTestCase {
             expected
         )
         XCTAssertEqual(
-            Date.fromTimestamp(expected.timestamp(unit: .milliseconds), unit: .milliseconds),
-            expected,
+            Date.fromTimestamp(expected.timestamp(unit: .milliseconds), unit: .milliseconds)
+                .timeIntervalSince(expected),
+            0,
             accuracy: 0.001
         )
     }

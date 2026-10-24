@@ -16,15 +16,19 @@ final class PTDebugNetworkCaptureMatrixTests: XCTestCase {
         let jsonSnapshot = PTNetworkRequestSnapshot(request: jsonRequest)
         XCTAssertEqual(jsonSnapshot.method, "POST")
         XCTAssertEqual(jsonSnapshot.body.totalBytes, Int64(jsonRequest.httpBody?.count ?? 0))
-        XCTAssertEqual(try await load(request: jsonRequest).response.statusCode, 200)
+        let jsonResponse = try await load(request: jsonRequest)
+        XCTAssertEqual(jsonResponse.response.statusCode, 200)
 
         var formRequest = request(path: "/form", method: "POST")
         formRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         formRequest.httpBody = Data("name=fixture".utf8)
-        XCTAssertEqual(try await load(request: formRequest).response.statusCode, 200)
+        let formResponse = try await load(request: formRequest)
+        XCTAssertEqual(formResponse.response.statusCode, 200)
 
-        XCTAssertEqual(try await load(path: "/client-error").response.statusCode, 404)
-        XCTAssertEqual(try await load(path: "/server-error").response.statusCode, 503)
+        let clientErrorResponse = try await load(path: "/client-error")
+        XCTAssertEqual(clientErrorResponse.response.statusCode, 404)
+        let serverErrorResponse = try await load(path: "/server-error")
+        XCTAssertEqual(serverErrorResponse.response.statusCode, 503)
     }
 
     func testRedirectChunkedGzipAndLargeResponse() async throws {
@@ -35,7 +39,7 @@ final class PTDebugNetworkCaptureMatrixTests: XCTestCase {
         let chunked = try await load(path: "/chunked")
         XCTAssertEqual(chunked.data, Data("onetwothree".utf8))
 
-        var gzipRequest = request(path: "/gzip")
+        let gzipRequest = request(path: "/gzip")
         let gzip = try await load(request: gzipRequest)
         XCTAssertEqual(gzip.response.value(forHTTPHeaderField: "Content-Encoding"), "gzip")
 
@@ -47,7 +51,8 @@ final class PTDebugNetworkCaptureMatrixTests: XCTestCase {
         let session = makePTDebugNetworkFixtureSession()
         defer { session.invalidateAndCancel() }
 
-        let cancelTask = Task { try await session.data(for: request(path: "/cancel")) }
+        let cancelRequest = request(path: "/cancel")
+        let cancelTask = Task { try await session.data(for: cancelRequest) }
         cancelTask.cancel()
         do {
             _ = try await cancelTask.value

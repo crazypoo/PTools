@@ -53,10 +53,15 @@ public extension PTPOP where Base: UIScreen {
     // MARK: 截屏或者录屏通知
     /// 截屏或者录屏通知
     /// - Parameter action: 事件
-    static func detectScreenShot(_ action: @escaping @Sendable (UIScreenShotType) -> Void) {
+    // English: Screenshot notifications are delivered to MainActor because every consumer updates UIKit state.
+    // Español: Las notificaciones de captura se entregan en MainActor porque todos los consumidores actualizan UIKit.
+    // 中文：截图通知统一回到 MainActor，因为所有调用方都会更新 UIKit 状态。
+    static func detectScreenShot(_ action: @escaping @MainActor @Sendable (UIScreenShotType) -> Void) {
         let mainQueue = OperationQueue.main
         NotificationCenter.default.addObserver(forName: UIApplication.userDidTakeScreenshotNotification, object: nil, queue: mainQueue) { _ in
-            action(UIScreenShotType.Normal)
+            PTMainActorBridge.perform {
+                action(UIScreenShotType.Normal)
+            }
         }
         //监听录屏通知,iOS 11后才有录屏
         //如果正在捕获此屏幕（例如，录制、空中播放、镜像等），则为真
@@ -67,7 +72,9 @@ public extension PTPOP where Base: UIScreen {
         }
         //捕获的屏幕状态发生变化时,会发送UIScreenCapturedDidChange通知,监听该通知
         NotificationCenter.default.addObserver(forName: UIScreen.capturedDidChangeNotification, object: nil, queue: mainQueue) { _ in
-            action(UIScreenShotType.Video)
+            PTMainActorBridge.perform {
+                action(UIScreenShotType.Video)
+            }
         }
     }
 }

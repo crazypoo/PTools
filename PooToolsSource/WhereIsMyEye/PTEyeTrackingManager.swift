@@ -105,8 +105,8 @@ public class PTEyeTrackingManager: NSObject {
     private var sessionManager: AnyObject?
     private var dataManager: PTEyeTrackingDataManager?
     
-    private var portraitScreenSize: CGRect?
     private var screenSize = CGRect.zero
+    private weak var trackingHostView: UIView?
     
     private let testUtility = PTEyeTrackingTestUtility()
     
@@ -121,9 +121,6 @@ public class PTEyeTrackingManager: NSObject {
         if PTEyeTrackingManager.isSupported {
             let initialBounds = PTSceneContext.activeWindow()?.bounds ?? .zero
             screenSize = initialBounds
-            portraitScreenSize = initialBounds.width <= initialBounds.height
-                ? initialBounds
-                : CGRect(x: initialBounds.minX, y: initialBounds.minY, width: initialBounds.height, height: initialBounds.width)
             dataManager = PTEyeTrackingDataManager(screenBounds: initialBounds)
             sessionManager = PTEyeTrackingSessionManager()
             if let sessionManager = sessionManager as? PTEyeTrackingSessionManager {
@@ -146,13 +143,13 @@ extension PTEyeTrackingManager {
 
     @MainActor private func updateHostBounds(_ parent: UIView) {
         guard !parent.bounds.isEmpty else { return }
+        trackingHostView = parent
         screenSize = parent.bounds
-        portraitScreenSize = screenSize.width <= screenSize.height
-            ? screenSize
-            : CGRect(x: screenSize.minX, y: screenSize.minY, width: screenSize.height, height: screenSize.width)
         testUtility.updateHostBounds(screenSize)
         dataManager?.update(screenBounds: screenSize,
-                            displayBounds: parent.window?.screen.nativeBounds.size)
+                            displayBounds: parent.window?.screen.nativeBounds.size,
+                            displayIdentifier: parent.window.map { ObjectIdentifier($0.screen) },
+                            sceneIdentifier: parent.window?.windowScene?.session.persistentIdentifier)
     }
 
     // English: Supply a measured physical display size before treating eye points as precise.
@@ -176,6 +173,7 @@ extension PTEyeTrackingManager {
      */
     @objc public func run() {
         if PTEyeTrackingManager.isSupported {
+            dataManager?.trackingSessionDidReset()
             if let sessionManager = sessionManager as? PTEyeTrackingSessionManager {
                 sessionManager.run()
             }
@@ -252,9 +250,10 @@ extension PTEyeTrackingManager: @preconcurrency PTEyeTrackingSessionManagerDeleg
         }
         
         let lookAtPoint = dataManager.calculateEyeLookAtPoint(anchor: anchor)
-        
-        findLookAt(with : lookAtPoint)
         checkTrackingState(withFaceAnchor: anchor)
+
+        guard let lookAtPoint else { return }
+        findLookAt(with : lookAtPoint)
         testUtility.updateTestViews(with: lookAtPoint)
     }
 }
@@ -263,19 +262,8 @@ extension PTEyeTrackingManager: @preconcurrency PTEyeTrackingSessionManagerDeleg
 extension PTEyeTrackingManager {
     
     @MainActor @objc private func rotated() {
-        guard let portraitScreenSize = portraitScreenSize else { return }
-        
-        switch PTSceneContext.activeWindow()?.windowScene?.interfaceOrientation {
-        case .portrait, .portraitUpsideDown:
-            screenSize = portraitScreenSize
-        case .landscapeLeft, .landscapeRight:
-            screenSize = CGRect(x: 0, y: 0, width: portraitScreenSize.height, height: portraitScreenSize.width)
-        default: return
-        }
-        
-        testUtility.updateHostBounds(screenSize)
-        dataManager?.update(screenBounds: screenSize,
-                            displayBounds: PTSceneContext.activeWindow()?.screen.nativeBounds.size)
+        guard let trackingHostView else { return }
+        updateHostBounds(trackingHostView)
         testUtility.rotated()
     }
 }

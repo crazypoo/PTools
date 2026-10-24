@@ -42,6 +42,7 @@ final class PTDebugNetworkPerformanceTests: XCTestCase {
                 }
             }
         }
-        XCTAssertEqual((await store.records()).count, 1_000)
+        let recordCount = await store.records().count
+        XCTAssertEqual(recordCount, 1_000)
     }
 }

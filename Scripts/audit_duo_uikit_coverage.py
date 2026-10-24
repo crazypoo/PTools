@@ -10,17 +10,20 @@ from __future__ import annotations
 
 import argparse
 import csv
+import fnmatch
 import hashlib
 import json
+import os
 import re
 import subprocess
 from datetime import datetime, timezone
 from collections import defaultdict
+from functools import lru_cache
 from pathlib import Path
 
 
 ROOTS = ("PooToolsSource", "Sources", "PooTools", "Example", "Tests")
-AUDIT_RULE_VERSION = "5.69.0-duo-2026-10-23-r3"
+AUDIT_RULE_VERSION = "5.69.0-duo-2026-10-24-r4"
 REPORT_FILES = (
     "report/current/duo_uikit_inventory.csv",
     "report/current/duo_global_geometry_hits.json",
@@ -75,6 +78,63 @@ LEGACY_GEOMETRY_ALLOWLIST = {
     "PooToolsSource/Protocol/PTProtocol.swift": ({"kSCREEN"}, "Legacy device scaling policy.", "PTools Duo audit"),
     "PooToolsSource/Stepper/PTStepperView.swift": ({"kSCREEN"}, "Legacy content width fallback when no local width exists.", "PTools Duo audit"),
     "PooToolsSource/LocalConsole/LocalConsole.swift": ({"UIScreen.main"}, "Debug display diagnostics only; never used for feature layout.", "PTools Duo audit"),
+}
+
+# English: These are the geometry patterns that can block a release; pixels, assets, and generic reloads stay informational.
+# Español: Estos patrones geométricos pueden bloquear una versión; píxeles, recursos y recargas genéricas son informativos.
+# 中文：只有这些几何模式可以阻断发布；像素、资源和普通 reload 仅作信息记录。
+HIGH_RISK_KINDS = {
+    "UIScreen.main",
+    "kSCREEN",
+    "statusBarHeight",
+    "keyWindow",
+    "screen.bounds",
+    "kNavBarHeight_Total",
+    "kTabbarHeight_Total",
+    "safe-area-global",
+    "AppWindows",
+    "convert-to-nil",
+}
+
+# English: Map source owners to the named tests that actually exercise their geometry; never copy an entire test target.
+# Español: Mapea propietarios de código a pruebas con nombre que ejercen su geometría; nunca copia un target completo.
+# 中文：把源码 owner 映射到真正验证其几何行为的具名测试，禁止把整个测试 target 灌入每个文件。
+MODULE_TEST_CASES = {
+    "Base": (
+        "testVerticalNavAndTabsNeverOverlap",
+        "testVerticalRailNavTabAccessoryOverflowNoCollision",
+        "testAsymmetricSafeAreaIsNotDoubleApplied",
+        "testVisiblePanesExcludeEveryActiveReservedRegion",
+        "testNoInteractiveFrameOverlapsReservedRegion",
+        "testLayoutSignatureChangesOnlyWithGeometry",
+        "testNoInfiniteLayoutInvalidationOnResize",
+        "testSplitViewCollapseExpandRetainsSelection",
+        "testRTLVerticalEdgeFollowsSystem",
+        "testMultiSceneDoesNotReuseStaleGeometry",
+    ),
+    "Category": (
+        "testSequenceAndArrayHelpersPreserveOrder",
+        "testDictionaryHelpersUseExplicitOrderingAndTypedPaths",
+        "testOptionalRangeAndURLHelpers",
+    ),
+    "PhotoPicker": (
+        "testPhotoGridItemFramesStayWithinUsablePanes",
+        "testMultiSceneDoesNotReuseStaleGeometry",
+    ),
+    "MediaViewer": (
+        "testPagingFourMediaAfterResizePreservesItemIdentity",
+        "testMultiSceneDoesNotReuseStaleGeometry",
+    ),
+    "VideoEditor": (
+        "testEditorCropCoordinatesAfterResize",
+    ),
+    "WhereIsMyEye": (
+        "testEmptyViewportDoesNotEmitOrigin",
+        "testInvalidationRejectsOriginUntilCalibrationIsValid",
+        "testDisplayOrSceneChangeRequiresRecalibration",
+        "testRotationOnlyUpdatesLocalViewportAndKeepsPhysicalCalibration",
+        "testTrackingSessionResetClearsSamplesAndMarksPreciseCalibrationStale",
+    ),
 }
 UI_IMPORT = re.compile(r"^\s*import\s+UIKit(?:\.|$)", re.MULTILINE)
 SWIFTUI_IMPORT = re.compile(r"^\s*import\s+SwiftUI(?:\.|$)", re.MULTILINE)
@@ -259,13 +319,194 @@ def demos_for(module: str, demos: dict[str, list[str]]) -> list[str]:
     return values
 
 
+def swift_invocations(source: str, marker: str) -> list[str]:
+    """Return balanced Swift calls without pretending to parse Swift."""
+    calls: list[str] = []
+    start = 0
+    while True:
+        marker_start = source.find(marker, start)
+        if marker_start < 0:
+            break
+        open_index = marker_start + len(marker) - 1
+        depth = 0
+        in_string = False
+        escaped = False
+        end_index = None
+        for index in range(open_index, len(source)):
+            character = source[index]
+            if in_string:
+                if escaped:
+                    escaped = False
+                elif character == "\\":
+                    escaped = True
+                elif character == '"':
+                    in_string = False
+                continue
+            if character == '"':
+                in_string = True
+            elif character == "(":
+                depth += 1
+            elif character == ")":
+                depth -= 1
+                if depth == 0:
+                    end_index = index + 1
+                    break
+        if end_index is None:
+            break
+        calls.append(source[marker_start:end_index])
+        start = end_index
+    return calls
+
+
+@lru_cache(maxsize=None)
+def package_target_specs(repo: Path) -> list[dict[str, object]]:
+    package_file = repo / "Package.swift"
+    if not package_file.is_file():
+        return []
+    specs: list[dict[str, object]] = []
+    for call in swift_invocations(package_file.read_text(encoding="utf-8", errors="replace"), ".target("):
+        name_match = re.search(r"\bname:\s*\"([^\"]+)\"", call)
+        if name_match is None:
+            continue
+        path_match = re.search(r"\bpath:\s*\"([^\"]+)\"", call)
+        sources_match = re.search(r"\bsources:\s*\[(.*?)\]", call, flags=re.DOTALL)
+        specs.append({
+            "name": name_match.group(1),
+            "path": path_match.group(1) if path_match else "",
+            "sources": re.findall(r'"([^"]+)"', sources_match.group(1)) if sources_match else [],
+        })
+    return specs
+
+
+def package_target_for(repo: Path, relative: str) -> str:
+    candidates: list[tuple[int, str]] = []
+    for spec in package_target_specs(repo):
+        name = str(spec["name"])
+        root = str(spec["path"])
+        sources = [str(source) for source in spec["sources"]]
+        if not root:
+            root = f"Sources/{name}"
+        prefixes = [root.rstrip("/")]
+        prefixes.extend(f"{root.rstrip('/')}/{source.strip('/')}" for source in sources)
+        for prefix in prefixes:
+            if relative == prefix or relative.startswith(prefix + "/"):
+                candidates.append((len(prefix), name))
+    if not candidates:
+        return "target-review-needed"
+    return max(candidates, key=lambda value: value[0])[1]
+
+
+@lru_cache(maxsize=None)
+def podspec_subspec_specs(repo: Path) -> list[dict[str, object]]:
+    podspec = repo / "PooTools.podspec"
+    if not podspec.is_file():
+        return []
+    source = podspec.read_text(encoding="utf-8", errors="replace")
+    matches = list(re.finditer(r"^\s*s\.subspec\s+['\"]([^'\"]+)['\"]\s+do\s+\|subspec\|", source, flags=re.MULTILINE))
+    specs: list[dict[str, object]] = []
+    for index, match in enumerate(matches):
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(source)
+        body = source[match.end():end]
+        patterns = re.findall(r"\bsource_files\s*=\s*([^\n]+)", body)
+        source_patterns: list[str] = []
+        for line in patterns:
+            source_patterns.extend(re.findall(r"['\"]([^'\"]+)['\"]", line))
+        specs.append({"name": match.group(1), "patterns": source_patterns})
+    return specs
+
+
+def source_pattern_matches(relative: str, pattern: str) -> bool:
+    # English: CocoaPods brace globs are reduced only for reporting, never for source selection.
+    # Español: Los patrones con llaves de CocoaPods se simplifican solo para informar, nunca para seleccionar fuentes.
+    # 中文：CocoaPods 花括号 glob 只用于报告匹配，不参与源码选择。
+    expanded = re.sub(r"\{[^}]+\}", "*", pattern)
+    return fnmatch.fnmatch(relative, expanded) or fnmatch.fnmatch(relative, expanded.replace("/**/", "/"))
+
+
+def podspec_subspec_for(repo: Path, relative: str) -> str:
+    matches: list[tuple[int, str]] = []
+    for spec in podspec_subspec_specs(repo):
+        for pattern in spec["patterns"]:
+            if source_pattern_matches(relative, str(pattern)):
+                matches.append((len(str(pattern)), str(spec["name"])))
+    return max(matches, key=lambda value: value[0])[1] if matches else "subspec-review-needed"
+
+
+def consumer_fixture_for(repo: Path, target: str) -> str:
+    matrix = repo / "Tests/SPMConsumerFixtures/ProductImportMatrix.json"
+    if not matrix.is_file():
+        return "consumer-review-needed"
+    try:
+        products = json.loads(matrix.read_text(encoding="utf-8")).get("products", [])
+    except (OSError, json.JSONDecodeError):
+        return "consumer-review-needed"
+    for product in products:
+        if target == product.get("product") or target in product.get("targets", []) or target in product.get("modules", []):
+            fixture = product.get("targetName")
+            if fixture:
+                return str(fixture)
+    return "consumer-review-needed"
+
+
+def source_context(repo: Path, relative: str) -> dict[str, str]:
+    target = package_target_for(repo, relative)
+    return {
+        "target": target,
+        "subspec": podspec_subspec_for(repo, relative),
+        "consumer_fixture": consumer_fixture_for(repo, target),
+    }
+
+
 def tests_for(module: str, tests: dict[str, list[str]]) -> list[str]:
     values = list(tests.get(module, []))
-    if module in {"Base", "Category", "SegmentControl", "Segmented", "PhotoPicker", "MediaViewer", "VideoEditor"}:
-        for test_id in tests.get("PToolsUIFoundationTests", []):
-            if test_id not in values:
-                values.append(test_id)
+    available_tests = {test_id for test_ids in tests.values() for test_id in test_ids}
+    for test_id in MODULE_TEST_CASES.get(module, ()):
+        if test_id in available_tests and test_id not in values:
+            values.append(test_id)
     return values
+
+
+def hit_risk(hit: dict[str, object]) -> str:
+    # English: Only layout-like global geometry can block release; pixel and reload candidates remain review data.
+    # Español: Solo la geometría global usada para layout puede bloquear la versión; píxeles y reload siguen siendo datos de revisión.
+    # 中文：只有用于布局的全局几何命中可以阻断发布；像素和 reload 命中只作为审查数据。
+    kind = str(hit["kind"])
+    if kind not in HIGH_RISK_KINDS:
+        return "low"
+    return "high" if bool(hit.get("layout_use", is_layout_like(hit))) else "medium"
+
+
+def baseline_hit_ids(repo: Path) -> set[str]:
+    try:
+        raw = subprocess.check_output(
+            ["git", "show", "HEAD:report/current/duo_global_geometry_hits.json"],
+            cwd=repo,
+            text=True,
+            stderr=subprocess.DEVNULL,
+        )
+        payload = json.loads(raw)
+    except (OSError, subprocess.CalledProcessError, json.JSONDecodeError):
+        return set()
+    return {str(hit["id"]) for hit in payload.get("hits", []) if hit.get("id")}
+
+
+def release_blockers(repo: Path, hits: list[dict[str, object]], policy: str) -> list[dict[str, object]]:
+    # English: Make strictness explicit so historical unresolved inventory does not become a false pass or a surprise block.
+    # Español: Hace explícita la política para que el inventario histórico no produzca un falso PASS ni un bloqueo inesperado.
+    # 中文：显式表达严格策略，避免历史未分类清单误报通过或突然阻断。
+    unresolved = [
+        hit for hit in hits
+        if hit.get("hit_risk") == "high" and hit.get("run_status") == "not_run"
+    ]
+    if policy == "strict":
+        return unresolved
+    if policy == "new-high-risk":
+        baseline = baseline_hit_ids(repo)
+        return [hit for hit in unresolved if str(hit.get("id")) not in baseline]
+    if policy == "focus-only":
+        focus_paths = {str(config["path"]) for config in FOCUS_FINDINGS.values()}
+        return [hit for hit in unresolved if str(hit.get("path")) in focus_paths]
+    raise ValueError(f"unsupported DUO_RELEASE_POLICY: {policy}")
 
 
 def is_layout_like(hit: dict[str, object]) -> bool:
@@ -335,20 +576,29 @@ def classify_hit(relative: str, kind: str, focus_status: dict[str, dict[str, obj
     return "needs-review", "not_run", "candidate requires semantic review"
 
 
-def annotate_hits(repo: Path, hits: list[dict[str, object]], tests: dict[str, list[str]], focus_status: dict[str, dict[str, object]]) -> None:
+def annotate_hits(repo: Path, hits: list[dict[str, object]], tests: dict[str, list[str]], focus_status: dict[str, dict[str, object]], records: list[dict[str, object]]) -> None:
+    records_by_path = {str(record["path"]): record for record in records}
     for hit in hits:
         relative = str(hit["path"])
         evidence = f"{relative}:{hit['line']}"
         hit["id"] = hashlib.sha1(f"{evidence}|{hit['kind']}|{hit['text']}".encode("utf-8")).hexdigest()[:12]
         hit["owner"] = module_for(repo, repo / relative)
-        hit["target"] = hit["owner"]
+        context = source_context(repo, relative)
+        hit["target"] = context["target"]
+        hit["subspec"] = context["subspec"]
+        hit["consumer_fixture"] = context["consumer_fixture"]
+        hit["file_risk"] = str(records_by_path.get(relative, {}).get("risk", "unknown"))
         hit["evidence"] = evidence
         hit["layout_use"] = is_layout_like(hit)
+        hit["hit_risk"] = hit_risk(hit)
         decision, run_status, reason = classify_hit(relative, str(hit["kind"]), focus_status)
         hit["decision"] = decision
         hit["test_id"] = ";".join(tests_for(str(hit["owner"]), tests))
-        hit["test_owner"] = str(hit["owner"])
+        hit["test_case"] = hit["test_id"]
+        hit["test_owner"] = context["target"]
         hit["run_status"] = run_status
+        hit["artifact"] = "report/current/duo_global_geometry_hits.json"
+        hit["review_scope"] = f"{relative}:{hit['line']}"
         hit["reviewer"] = next((entry[2] for path, entry in LEGACY_GEOMETRY_ALLOWLIST.items() if path == relative and (entry[0] is None or str(hit["kind"]) in entry[0])), "PTools Duo audit")
         hit["reason"] = reason
 
@@ -363,16 +613,18 @@ def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[
     generated_at = datetime.now(timezone.utc).isoformat()
     swift_files = tracked_swift_files(repo)
     manifest_entries, manifest_hash = source_manifest(repo, swift_files)
-    annotate_hits(repo, hits, tests, focus_status)
+    annotate_hits(repo, hits, tests, focus_status, records)
     status_counts: dict[str, int] = defaultdict(int)
     for hit in hits:
         status_counts[str(hit["run_status"])] += 1
+    policy = os.environ.get("DUO_RELEASE_POLICY", "new-high-risk")
+    blockers = release_blockers(repo, hits, policy)
 
     # English: Keep the inventory diffable on every platform by using LF records.
     # Español: Mantén el inventario comparable en todas las plataformas usando registros LF.
     # 中文：使用 LF 换行，让清单在所有平台上的 diff 保持稳定。
     with (output / "duo_uikit_inventory.csv").open("w", newline="", encoding="utf-8") as handle:
-        fields = ["path", "module", "public_api", "ui_type", "ownership", "layout_mode", "risk", "coverage", "demo_id", "test_id", "status", "decision", "evidence", "test_owner", "run_status", "reviewer"]
+        fields = ["path", "module", "target", "subspec", "consumer_fixture", "public_api", "ui_type", "ownership", "layout_mode", "risk", "coverage", "demo_id", "test_id", "status", "decision", "evidence", "test_owner", "run_status", "reviewer"]
         writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(records)
@@ -390,6 +642,8 @@ def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[
                 "report_kind": "ci-generated",
                 "snapshot_of": source_revision,
                 "tool_version": AUDIT_RULE_VERSION,
+                "release_policy": policy,
+                "release_blocker_count": len(blockers),
                 "status_counts": dict(sorted(status_counts.items())),
                 "focus_findings": focus_status,
                 "hits": hits,
@@ -410,6 +664,8 @@ def write_reports(repo: Path, records: list[dict[str, object]], hits: list[dict[
             "rule_version": AUDIT_RULE_VERSION,
             "tool_version": AUDIT_RULE_VERSION,
             "source_manifest_hash": manifest_hash,
+            "release_policy": policy,
+            "release_blocker_count": len(blockers),
             "status_counts": dict(sorted(status_counts.items())),
             "focus_findings": focus_status,
         }, ensure_ascii=False, indent=2) + "\n",
@@ -574,12 +830,28 @@ def check_report_freshness(repo: Path, strict: bool = False, committed_snapshot:
             print(f"- {item}")
     else:
         errors.extend(stale)
-    required_hit_fields = {"id", "owner", "target", "evidence", "decision", "test_id", "test_owner", "run_status", "reviewer", "reason", "layout_use"}
+    required_hit_fields = {
+        "id", "owner", "target", "subspec", "consumer_fixture", "evidence", "decision",
+        "test_id", "test_case", "test_owner", "run_status", "reviewer", "reason", "layout_use",
+        "hit_risk", "artifact", "review_scope",
+    }
     for hit in payload.get("hits", []):
         missing = required_hit_fields.difference(hit)
         if missing:
             errors.append(f"hit {hit.get('path')}:{hit.get('line')} missing {sorted(missing)}")
     if strict:
+        policy = str(os.environ.get("DUO_RELEASE_POLICY", payload.get("release_policy", "new-high-risk")))
+        try:
+            blockers = release_blockers(repo, payload.get("hits", []), policy)
+        except ValueError as error:
+            errors.append(str(error))
+            blockers = []
+        if payload.get("release_blocker_count") != len(blockers):
+            errors.append("release_blocker_count does not match the current release policy")
+        for hit in blockers[:20]:
+            errors.append(f"release blocker {hit.get('path')}:{hit.get('line')} {hit.get('kind')} policy={policy}")
+        if len(blockers) > 20:
+            errors.append(f"release blocker list truncated: {len(blockers)} total")
         focus_status = payload.get("focus_findings", {})
         for finding_id, config in FOCUS_FINDINGS.items():
             decision = focus_status.get(finding_id, {}).get("decision")
@@ -608,6 +880,18 @@ def run_self_tests() -> int:
     incomplete = dict(closed)
     incomplete["DUO-A02"] = {"decision": "needs-review", "reason": "test", "path": FOCUS_FINDINGS["DUO-A02"]["path"]}
     assert classify_hit("PooToolsSource/Category/AutoScale+PTEX.swift", "kSCREEN", incomplete)[0] == "needs-review"
+    synthetic = {
+        "id": "new-high-risk",
+        "path": "PooToolsSource/NewUIKitView.swift",
+        "line": 1,
+        "kind": "UIScreen.main",
+        "layout_use": True,
+        "hit_risk": "high",
+        "run_status": "not_run",
+    }
+    assert release_blockers(Path("/tmp/duo-audit-self-test"), [synthetic], "strict") == [synthetic]
+    assert release_blockers(Path("/tmp/duo-audit-self-test"), [{**synthetic, "hit_risk": "medium"}], "strict") == []
+    assert release_blockers(Path("/tmp/duo-audit-self-test"), [{**synthetic, "run_status": "pass_static"}], "strict") == []
     print("PASS: Duo audit scanner self-tests")
     return 0
 
@@ -615,7 +899,7 @@ def run_self_tests() -> int:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("repo", nargs="?", default=".")
-    parser.add_argument("--strict", action="store_true", help="Fail when the focused Duo findings or report metadata are not closed.")
+    parser.add_argument("--strict", action="store_true", help="Fail when focused findings, report metadata, or the configured release policy are not closed.")
     parser.add_argument("--check", action="store_true", help="Check existing reports without regenerating them.")
     parser.add_argument("--check-committed-snapshot", action="store_true", help="Validate committed report schema and warn when its checkout is stale.")
     parser.add_argument("--self-test", action="store_true", help="Run scanner classification self-tests without touching reports.")
@@ -640,6 +924,7 @@ def main() -> int:
         module = module_for(repo, path)
         module_demos = demos_for(module, demos)
         module_tests = tests_for(module, tests)
+        context = source_context(repo, path.relative_to(repo).as_posix())
         if is_ui:
             kind = ui_type(text, path)
             risk = "high" if any(hit["kind"] in {"UIScreen.main", "kSCREEN", "keyWindow", "screen.bounds", "kNavBarHeight_Total", "kTabbarHeight_Total", "safe-area-global", "AppWindows", "convert-to-nil"} for hit in file_hits) else "medium"
@@ -655,6 +940,9 @@ def main() -> int:
         records.append({
             "path": relative,
             "module": module,
+            "target": context["target"],
+            "subspec": context["subspec"],
+            "consumer_fixture": context["consumer_fixture"],
             "public_api": "yes" if PUBLIC_API.search(text) else "no",
             "ui_type": kind,
             "ownership": ownership(path.relative_to(repo), module),
@@ -666,7 +954,7 @@ def main() -> int:
             "status": "candidate" if file_hits else "inventory",
             "decision": "not-reviewed",
             "evidence": evidence,
-            "test_owner": module,
+            "test_owner": context["target"],
             "run_status": "not_run",
             "reviewer": "",
         })

@@ -64,9 +64,9 @@ final class PTCollectionHeaderSpacingTests: XCTestCase {
         let row = PTRows(title: "Cell", ID: "PTCollectionSpacingTestCell", diffId: "spacing-row")
         let section = PTSection(identifier: "spacing-section",
                                 headerID: headerHeight == nil ? "" : PTCollectionSpacingTestHeader.reuseID,
-                                headerHeight: headerHeight,
                                 footerID: footerHeight == nil ? "" : PTCollectionSpacingTestFooter.reuseID,
                                 footerHeight: footerHeight,
+                                headerHeight: headerHeight,
                                 rows: [row])
         section.layoutConfiguration = PTSectionLayoutConfiguration(contentInsets: sectionInsets,
                                                                     headerSpacing: headerSpacing,
@@ -197,7 +197,7 @@ final class PTCollectionHeaderSpacingTests: XCTestCase {
 
     func testCustomSupplementaryItemsRemainCompatible() async {
         let (list, section) = makeList(viewType: .Custom)
-        list.customReuseViews = true
+        list.viewConfig.customReuseViews = true
         list.customerReuseViews = { _, _ in
             [NSCollectionLayoutBoundarySupplementaryItem(
                 layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),

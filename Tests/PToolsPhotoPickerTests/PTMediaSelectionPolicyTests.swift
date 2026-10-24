@@ -77,8 +77,8 @@ final class PTMediaSelectionPolicyTests: XCTestCase {
     }
 
     func testImageFamilyAllowsGifWhenGifIsEnabled() {
-        let options = PTMediaLibSelectionOptions(allowMixSelect: false,
-                                                 allowSelectGif: true)
+        let options = PTMediaLibSelectionOptions(allowSelectGif: true,
+                                                 allowMixSelect: false)
         let context = PTMediaSelectionContext(selectedCount: 1,
                                                selectedFamilies: [.image],
                                                candidateType: .gif,

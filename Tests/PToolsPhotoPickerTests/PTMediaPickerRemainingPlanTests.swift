@@ -1,5 +1,6 @@
 import XCTest
 @testable import PooToolsPhotoPicker
+@testable import ptools
 
 @MainActor
 private final class PTMediaFeedbackTestRecorder {

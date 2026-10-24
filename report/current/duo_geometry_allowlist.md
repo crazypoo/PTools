@@ -1,7 +1,7 @@
 # iPhone Duo geometry allowlist / Lista de excepciones / 几何白名单
 
-Source revision: 7c37f5a9fe08f32af3161382c382b286f34e4096
-Audit rule version: 5.69.0-duo-2026-10-23-r3
+Source revision: 6659aef825fba5ebaba376922681f56f7df62918
+Audit rule version: 5.69.0-duo-2026-10-24-r4
 
 Only the listed path and kinds are waived. Any new path remains `needs-review`.
 Solo se eximen la ruta y los tipos listados. Una ruta nueva queda en `needs-review`.

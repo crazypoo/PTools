@@ -58,7 +58,8 @@ final class PTDebugNetworkBodyStoreTests: XCTestCase {
                                      error: nil,
                                      completion: .completed)
         }
-        XCTAssertEqual((await store.records()).count, 500)
+        let recordCount = await store.records().count
+        XCTAssertEqual(recordCount, 500)
     }
 
     func testConcurrentInsertAndFinalizeAreExactlyOnce() async {
@@ -88,12 +89,13 @@ final class PTDebugNetworkBodyStoreTests: XCTestCase {
         }
 
         let duplicate = records[0]
-        XCTAssertFalse(await store.finalize(id: duplicate.id,
-                                             response: nil,
-                                             timing: duplicate.timing,
-                                             metrics: nil,
-                                             error: nil,
-                                             completion: .completed))
+        let duplicateFinalization = await store.finalize(id: duplicate.id,
+                                                         response: nil,
+                                                         timing: duplicate.timing,
+                                                         metrics: nil,
+                                                         error: nil,
+                                                         completion: .completed)
+        XCTAssertFalse(duplicateFinalization)
     }
 
     private func record(index: Int = 0, body: PTNetworkBodyCapture = .none) -> PTNetworkCaptureRecord {

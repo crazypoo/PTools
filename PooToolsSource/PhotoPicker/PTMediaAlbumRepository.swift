@@ -10,6 +10,9 @@
 import Foundation
 import Photos
 import os
+#if canImport(PToolsCore)
+import PToolsCore
+#endif
 
 // English: Keep picker tracing in an already exported source file so CocoaPods and SwiftPM compile the same source set.
 // Español: Mantiene el trazado del selector en un archivo ya exportado para que CocoaPods y SwiftPM compilen el mismo conjunto.

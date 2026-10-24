@@ -66,22 +66,6 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         config.contentBottomSpace = max(0, view.safeAreaInsets.bottom)
 
         let view = PTCollectionView(viewConfig: config)
-        view.cellInCollection = { [weak self] collection,sectionModel,indexPath in
-            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTMediaLibListModel,let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTMediaLibAlbumCell {
-                cell.albumModel = cellModel
-                cell.selectedButton.isSelected = (cellModel.collection.localIdentifier == self?.selectedAlbum?.collection.localIdentifier)
-                return cell
-            }
-            return nil
-        }
-        view.collectionDidSelect = { [weak self] collection,sectionModel,indexPath in
-            if let itemRow = sectionModel.rows?[indexPath.row],let cellModel = itemRow.dataModel as? PTMediaLibListModel {
-                if self?.selectedModelHandler != nil {
-                    self?.navigationController?.popViewController(animated: true)
-                }
-                self?.selectedModelHandler?(cellModel)
-            }
-        }
         return view
     }()
 
@@ -130,6 +114,8 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        configureCollectionCallbacks()
                         
         view.addSubviews([collectionView,fakeNav])
         let collectionInset_Bottom:CGFloat = max(0, view.safeAreaInsets.bottom)
@@ -157,12 +143,10 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         }
         _ = albumRepository.prepare(selectedAlbum)
         
-        UIScreen.pt.detectScreenShot { type in
+        UIScreen.pt.detectScreenShot { [weak self] type in
             switch type {
             case .Normal:
-                PTGCDManager.shared.runOnMain {
-                    self.loadAlbumList()
-                }
+                self?.loadAlbumList()
             case .Video:
                 break
             }
@@ -171,6 +155,29 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         loadAlbumList()
         albumRepository.onAlbumsChange = { [weak self] models in
             self?.applyAlbumList(models)
+        }
+    }
+
+    private func configureCollectionCallbacks() {
+        collectionView.cellInCollection = { [weak self] collection, sectionModel, indexPath in
+            guard let itemRow = sectionModel.rows?[indexPath.row],
+                  let cellModel = itemRow.dataModel as? PTMediaLibListModel,
+                  let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.reuseID, for: indexPath) as? PTMediaLibAlbumCell else {
+                return nil
+            }
+            cell.albumModel = cellModel
+            cell.selectedButton.isSelected = (cellModel.collection.localIdentifier == self?.selectedAlbum?.collection.localIdentifier)
+            return cell
+        }
+        collectionView.collectionDidSelect = { [weak self] _, sectionModel, indexPath in
+            guard let itemRow = sectionModel.rows?[indexPath.row],
+                  let cellModel = itemRow.dataModel as? PTMediaLibListModel else {
+                return
+            }
+            if self?.selectedModelHandler != nil {
+                self?.navigationController?.popViewController(animated: true)
+            }
+            self?.selectedModelHandler?(cellModel)
         }
     }
     
@@ -194,7 +201,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         let visibleRect = horizontalVisibleRect.isEmpty ? view.bounds : horizontalVisibleRect
         let pullBarFrame = ptSheetPullBarFrame(in: view)
         let navTopInset = fakeNavTopInset(pullBarFrame: pullBarFrame)
-        let layoutSignature = "\(region.signature)|\(visibleRect.integral)|\(pullBarFrame?.integral ?? .zero)|\(navTopInset)"
+        let layoutSignature = "\(region.signature)|\(visibleRect.integral)|\(pullBarFrame?.integral ?? CGRect.zero)|\(navTopInset)"
         if layoutSignature != lastAdaptiveLayoutSignature {
             lastAdaptiveLayoutSignature = layoutSignature
             // English: Keep album rows inside the visible pane while the fake navigation bar remains full-height.

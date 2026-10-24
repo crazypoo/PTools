@@ -55,7 +55,7 @@ internal class PTEyeTrackingSessionManager: NSObject {
 extension PTEyeTrackingSessionManager: ARSessionDelegate {
 
     internal func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
-        guard let faceAnchor = anchors[0] as? ARFaceAnchor else { return }
+        guard let faceAnchor = anchors.first as? ARFaceAnchor else { return }
         delegate?.update(withFaceAnchor: faceAnchor)
     }
     

@@ -22,15 +22,15 @@ extension PTCollectionView {
     // English: Expose a small compatibility bridge for legacy banner controls.
     // Español: Expone un pequeño puente de compatibilidad para los controles heredados del banner.
     // 中文：为旧版 Banner 控制入口提供轻量兼容桥接。
-    func pauseAutomaticScroll() {
+    public func pauseAutomaticScroll() {
         autoScrollCoordinator.pause()
     }
 
-    func resumeAutomaticScroll() {
+    public func resumeAutomaticScroll() {
         autoScrollCoordinator.resume()
     }
 
-    func stopAutomaticScroll() {
+    public func stopAutomaticScroll() {
         autoScrollCoordinator.stop()
     }
 

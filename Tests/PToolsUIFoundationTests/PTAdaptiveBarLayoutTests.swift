@@ -126,15 +126,15 @@ final class PTAdaptiveBarLayoutTests: XCTestCase {
 
     func testClassicAppearanceAndItemInsetsUnchanged() {
         let geometry = PTAdaptiveBarLayoutResolver.resolve(
-            context: PTAdaptiveBarLayoutContext(bounds: CGRect(x: 0, y: 0, width: 390, height: 844)),
+            context: PTAdaptiveBarLayoutContext(bounds: CGRect(x: 0, y: 0, width: 390, height: 844), safeAreaInsets: .zero),
             configuration: .init(presentationPolicy: .legacyClassic),
             navigationActionCount: 1,
             tabItemIDs: tabIDs,
             selectedTabID: "home"
         )
 
-        XCTAssertEqual(geometry.axis, .horizontalClassic)
-        XCTAssertEqual(geometry.renderer, .legacyClassic)
+        XCTAssertEqual(geometry.axis, PTAdaptiveBarAxis.horizontalClassic)
+        XCTAssertEqual(geometry.renderer, PTAdaptiveBarRenderer.legacyClassic)
         XCTAssertEqual(geometry.visibleTabItemIDs, tabIDs)
     }
 
@@ -144,7 +144,7 @@ final class PTAdaptiveBarLayoutTests: XCTestCase {
                                                            navigationActionCount: 1,
                                                            tabItemIDs: tabIDs,
                                                            selectedTabID: "home")
-        let classic = PTAdaptiveBarLayoutResolver.resolve(context: PTAdaptiveBarLayoutContext(bounds: CGRect(x: 0, y: 0, width: 390, height: 844)),
+        let classic = PTAdaptiveBarLayoutResolver.resolve(context: PTAdaptiveBarLayoutContext(bounds: CGRect(x: 0, y: 0, width: 390, height: 844), safeAreaInsets: .zero),
                                                           configuration: .init(presentationPolicy: .legacyClassic),
                                                           navigationActionCount: 1,
                                                           tabItemIDs: tabIDs,
@@ -208,15 +208,15 @@ final class PTAdaptiveBarLayoutTests: XCTestCase {
 
     func testNonDuoIOS17UsesClassicRenderer() {
         let geometry = PTAdaptiveBarLayoutResolver.resolve(
-            context: PTAdaptiveBarLayoutContext(bounds: CGRect(x: 0, y: 0, width: 390, height: 844)),
+            context: PTAdaptiveBarLayoutContext(bounds: CGRect(x: 0, y: 0, width: 390, height: 844), safeAreaInsets: .zero),
             configuration: .init(),
             navigationActionCount: 1,
             tabItemIDs: tabIDs,
             selectedTabID: "home"
         )
 
-        XCTAssertEqual(geometry.axis, .horizontalClassic)
-        XCTAssertEqual(geometry.renderer, .legacyClassic)
+        XCTAssertEqual(geometry.axis, PTAdaptiveBarAxis.horizontalClassic)
+        XCTAssertEqual(geometry.renderer, PTAdaptiveBarRenderer.legacyClassic)
     }
 
     func testMultiSceneStateDoesNotLeak() {

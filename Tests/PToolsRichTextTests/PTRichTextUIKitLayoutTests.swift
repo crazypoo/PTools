@@ -23,7 +23,10 @@ final class PTRichTextUIKitLayoutTests: XCTestCase {
         let value = makeRichText(offset: -7)
         let model = value.value
         let modelOffset = model.attribute(.baselineOffset, at: 0, effectiveRange: nil) as? NSNumber
-        XCTAssertEqual(modelOffset?.doubleValue, -7, accuracy: 0.001)
+        guard let modelOffset else {
+            return XCTFail("Expected a baseline offset on the model attachment")
+        }
+        XCTAssertEqual(modelOffset.doubleValue, -7, accuracy: 0.001)
 
         let prepared = PTRichTextLabelRendering.prepare(model)
         XCTAssertNil(prepared.attribute(.baselineOffset, at: 0, effectiveRange: nil))
@@ -118,9 +121,10 @@ final class PTRichTextUIKitLayoutTests: XCTestCase {
 
     func testRemoteReplacementKeepsAttachmentContract() {
         let url = URL(string: "https://example.com/image.png")!
-        let value = PTRichText.image(url,
-                                     .custom(size: CGSize(width: 24, height: 24)),
-                                     baselineOffset: -7)
+        let value = PTRichText(string: "\u{FFFC}",
+                               with: [.image(url,
+                                             .custom(size: CGSize(width: 24, height: 24)),
+                                             baselineOffset: -7)])
         let remote = value.value.attribute(.attachment, at: 0, effectiveRange: nil) as? PTRemoteImageTextAttachment
         XCTAssertNotNil(remote)
         let replacement = remote?.resolvedAttachment(with: makeImage(size: CGSize(width: 24, height: 24)))
@@ -130,8 +134,11 @@ final class PTRichTextUIKitLayoutTests: XCTestCase {
         }
         let prepared = PTRichTextLabelRendering.prepare(updated)
         let resolved = prepared.attribute(.attachment, at: 0, effectiveRange: nil) as? PTRemoteImageTextAttachment
-        XCTAssertEqual(resolved?.mediaID, remote?.mediaID)
-        XCTAssertEqual(resolved?.bounds.origin.y, -7, accuracy: 0.001)
+        guard let resolved, let remote else {
+            return XCTFail("Expected the remote attachment to remain resolvable")
+        }
+        XCTAssertEqual(resolved.mediaID, remote.mediaID)
+        XCTAssertEqual(resolved.bounds.origin.y, -7, accuracy: 0.001)
         XCTAssertNil(prepared.attribute(.baselineOffset, at: 0, effectiveRange: nil))
     }
 

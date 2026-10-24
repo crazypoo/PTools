@@ -19,7 +19,9 @@ final class PTNetworkCaptureContractTests: XCTestCase {
         let request = PTNetworkRequestSnapshot(url: url,
                                                 headers: ["Authorization": "Bearer secret", "Content-Type": "application/json"],
                                                 body: .complete(data: Data(#"{"password":"secret","ok":true}"#.utf8), totalBytes: 31))
-        let record = PTNetworkCaptureRecord(request: request, source: .importedHAR)
+        let record = PTNetworkCaptureRecord(request: request,
+                                            timing: PTNetworkTiming(startedAt: .now),
+                                            source: .importedHAR)
         let redacted = record.redacted(using: policy)
         XCTAssertFalse(redacted.request.url.absoluteString.contains("secret"))
         XCTAssertEqual(redacted.request.headers["Authorization"], policy.replacement)
@@ -28,7 +30,9 @@ final class PTNetworkCaptureContractTests: XCTestCase {
 
     func testStoreSequencesAndFinalizesOnce() async {
         let store = PTNetworkCaptureStore(maxRecords: 10, bodyMemoryBudget: 1024, diskBudget: 1024)
-        let first = PTNetworkCaptureRecord(request: PTNetworkRequestSnapshot(url: URL(string: "https://example.com/1")!), source: .urlProtocol)
+        let first = PTNetworkCaptureRecord(request: PTNetworkRequestSnapshot(url: URL(string: "https://example.com/1")!),
+                                            timing: PTNetworkTiming(startedAt: .now),
+                                            source: .urlProtocol)
         let inserted = await store.insert(first)
         XCTAssertEqual(inserted.sequence, 0)
         let didFinalize = await store.finalize(id: inserted.id,
@@ -50,6 +54,7 @@ final class PTNetworkCaptureContractTests: XCTestCase {
     func testFilterMatchesFailureAndHost() {
         let request = PTNetworkRequestSnapshot(url: URL(string: "https://example.com/error")!, method: "GET")
         let record = PTNetworkCaptureRecord(request: request,
+                                            timing: PTNetworkTiming(startedAt: .now),
                                             error: PTNetworkCaptureError(domain: "test", code: 1, description: "failed"),
                                             source: .urlProtocol,
                                             completion: .failed,

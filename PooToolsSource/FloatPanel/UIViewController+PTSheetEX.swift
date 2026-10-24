@@ -26,7 +26,7 @@ extension UIViewController {
     // English: Convert the real pull-bar frame into the child controller's local coordinate space.
     // Español: Convierte el marco real de la barra en el espacio local del controlador hijo.
     // 中文：将真实 pullbar 框架转换到子控制器的局部坐标系。
-    func ptSheetPullBarFrame(in view: UIView) -> CGRect? {
+    public func ptSheetPullBarFrame(in view: UIView) -> CGRect? {
         guard let sheet = sheetViewController,
               sheet.isViewLoaded,
               sheet.contentViewController.isViewLoaded else { return nil }
