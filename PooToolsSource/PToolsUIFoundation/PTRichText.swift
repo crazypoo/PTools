@@ -55,22 +55,27 @@ public struct PTTextActionToken: Hashable, Sendable {
 public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
                           ExpressibleByStringLiteral, ExpressibleByStringInterpolation {
     fileprivate var storage: Foundation.AttributedString
+    fileprivate var fragmentRuns: [PTTextFragmentRun]
 
     private static let matcherCache = PTTextMatcherCache()
 
     static let actionAttributeKey = NSAttributedString.Key("PTools.actionID")
     static let attachmentAttributeKey = NSAttributedString.Key("PTools.attachmentID")
+    static let fragmentLayoutAttributeKey = NSAttributedString.Key("PTools.fragmentLayout")
 
     public init(_ text: String) {
         storage = Foundation.AttributedString(text)
+        fragmentRuns = []
     }
 
     public init(_ attributedString: Foundation.AttributedString) {
         storage = attributedString
+        fragmentRuns = Self.fragmentRuns(from: attributedString)
     }
 
     public init(_ attributedString: NSAttributedString) {
         storage = Self.makeStorage(from: attributedString)
+        fragmentRuns = Self.fragmentRuns(from: attributedString)
     }
 
     public init(string text: String, _ attributes: PTTextAttribute...) {
@@ -84,6 +89,8 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
                    range: NSRange(location: 0, length: value.length),
                    policy: .keepNew)
         storage = Self.makeStorage(from: value)
+        fragmentRuns = Self.fragmentRuns(from: attributes,
+                                         range: NSRange(location: 0, length: value.length))
     }
 
     public init(_ text: String, _ attributes: PTTextAttribute...) {
@@ -109,6 +116,10 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
                    range: NSRange(location: 0, length: value.length),
                    policy: .keepNew)
         storage = Self.makeStorage(from: value)
+        fragmentRuns = Self.applyingFragmentAttributes(attributes,
+                                                        to: text.fragmentRuns,
+                                                        range: NSRange(location: 0, length: value.length),
+                                                        policy: .keepNew)
     }
 
     public init(wrap mode: PTTextWrapMode, _ attributes: PTTextAttribute...) {
@@ -133,14 +144,20 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
                    range: NSRange(location: 0, length: value.length),
                    policy: policy)
         storage = Self.makeStorage(from: value)
+        fragmentRuns = Self.applyingFragmentAttributes(attributes,
+                                                        to: source.fragmentRuns,
+                                                        range: NSRange(location: 0, length: value.length),
+                                                        policy: policy)
     }
 
     public init(markdown: String) throws {
         storage = try Foundation.AttributedString(markdown: markdown)
+        fragmentRuns = []
     }
 
     public init(localized resource: LocalizedStringResource) {
         storage = Foundation.AttributedString(localized: resource)
+        fragmentRuns = []
     }
 
     public var attributedString: Foundation.AttributedString {
@@ -148,11 +165,19 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
     }
 
     public var value: NSAttributedString {
-        Self.makeUIKitValue(from: storage)
+        Self.makeUIKitValue(from: storage, fragmentRuns: fragmentRuns)
     }
 
     public var nsAttributedString: NSAttributedString {
         value
+    }
+
+    public var textFragmentRuns: [PTTextFragmentRun] {
+        fragmentRuns
+    }
+
+    public var containsFragmentLayout: Bool {
+        !fragmentRuns.isEmpty
     }
 
     public var plainText: String {
@@ -256,7 +281,12 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
         guard let safeRange = validatedNSRange(range) else { return }
         let value = NSMutableAttributedString(attributedString: self.value)
         Self.apply(attributes, to: value, range: safeRange, policy: policy)
+        let oldRuns = fragmentRuns
         storage = Self.makeStorage(from: value)
+        fragmentRuns = Self.applyingFragmentAttributes(attributes,
+                                                        to: oldRuns,
+                                                        range: safeRange,
+                                                        policy: policy)
     }
 
     // English: Keep semantic action metadata typed at the API boundary and mirror it to the UIKit bridge.
@@ -272,7 +302,9 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
         let nsRange = NSRange(range, in: storage)
         guard nsRange.length > 0 else { return }
         value.addAttribute(Self.actionAttributeKey, value: actionID.rawValue, range: nsRange)
+        let oldRuns = fragmentRuns
         storage = Self.makeStorage(from: value)
+        fragmentRuns = oldRuns
     }
 
     // English: Keep attachment identifiers typed at the API boundary and retain the UIKit compatibility attribute.
@@ -288,7 +320,9 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
         let nsRange = NSRange(range, in: storage)
         guard nsRange.length > 0 else { return }
         value.addAttribute(Self.attachmentAttributeKey, value: identifier, range: nsRange)
+        let oldRuns = fragmentRuns
         storage = Self.makeStorage(from: value)
+        fragmentRuns = oldRuns
     }
 
     public mutating func replaceAttributes(_ attributes: [PTTextAttribute],
@@ -332,7 +366,13 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
             Self.apply(inherited, to: replacementAttributes, range: replacementRange, policy: policy)
             replacementValue = PTRichText(replacementAttributes)
         }
+        let sourceRange = nsRange(from: range)
+        let oldRuns = fragmentRuns
         storage.replaceSubrange(range, with: replacementValue.storage)
+        fragmentRuns = Self.replacingRuns(oldRuns,
+                                          in: sourceRange,
+                                          with: replacementValue.fragmentRuns,
+                                          replacementLength: replacementValue.value.length)
     }
 
     private func inheritedAttributeIndex(for range: NSRange,
@@ -350,11 +390,20 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
 
     public mutating func insert(_ content: PTRichText,
                                 at index: Foundation.AttributedString.Index) {
+        let insertionLocation = NSRange(index..<index, in: storage).location
+        let oldRuns = fragmentRuns
         storage.insert(content.storage, at: index)
+        fragmentRuns = Self.insertingRuns(oldRuns,
+                                          content.fragmentRuns,
+                                          at: insertionLocation,
+                                          length: content.value.length)
     }
 
     public mutating func removeSubrange(_ range: Range<Foundation.AttributedString.Index>) {
+        let sourceRange = nsRange(from: range)
+        let oldRuns = fragmentRuns
         storage.removeSubrange(range)
+        fragmentRuns = Self.removingRuns(oldRuns, range: sourceRange)
     }
 
     public func matches(for rule: PTTextMatchRule,
@@ -430,6 +479,11 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
     public static func + (lhs: PTRichText, rhs: PTRichText) -> PTRichText {
         var result = lhs
         result.storage.append(rhs.storage)
+        result.fragmentRuns = lhs.fragmentRuns + rhs.fragmentRuns.map {
+            PTTextFragmentRun(location: $0.location + lhs.value.length,
+                              length: $0.length,
+                              layout: $0.layout)
+        }
         return result
     }
 
@@ -438,7 +492,13 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
     }
 
     public static func += (lhs: inout PTRichText, rhs: PTRichText) {
+        let offset = lhs.value.length
         lhs.storage.append(rhs.storage)
+        lhs.fragmentRuns += rhs.fragmentRuns.map {
+            PTTextFragmentRun(location: $0.location + offset,
+                              length: $0.length,
+                              layout: $0.layout)
+        }
     }
 
     public static func += (lhs: inout PTRichText, rhs: String) {
@@ -549,14 +609,156 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
         case .keepNew:
             value.addAttributes(requested, range: range)
         case .replaceAll:
+            guard !requested.isEmpty else { return }
             value.setAttributes(requested, range: range)
         case .keepExisting:
+            guard !requested.isEmpty else { return }
             value.enumerateAttributes(in: range, options: []) { existing, subrange, _ in
                 let missing = requested.filter { existing[$0.key] == nil }
                 guard !missing.isEmpty else { return }
                 value.addAttributes(missing, range: subrange)
             }
         }
+    }
+
+    private static func fragmentRuns(from attributes: [PTTextAttribute],
+                                     range: NSRange) -> [PTTextFragmentRun] {
+        let overrides = attributes.reduce(into: PTTextFragmentLayoutOverrides(maxLines: nil,
+                                                                                lineBreakMode: nil,
+                                                                                keepWithNextAttachment: nil)) { result, attribute in
+            guard let fragmentLayout = attribute.fragmentLayout else { return }
+            if let maxLines = fragmentLayout.maxLines { result.maxLines = maxLines }
+            if let lineBreakMode = fragmentLayout.lineBreakMode { result.lineBreakMode = lineBreakMode }
+            if let keepWithNextAttachment = fragmentLayout.keepWithNextAttachment {
+                result.keepWithNextAttachment = keepWithNextAttachment
+            }
+        }
+        guard overrides.isMeaningful, range.length > 0 else { return [] }
+        return [PTTextFragmentRun(range: range, layout: overrides.resolved())]
+    }
+
+    private static func applyingFragmentAttributes(_ attributes: [PTTextAttribute],
+                                                   to existing: [PTTextFragmentRun],
+                                                   range: NSRange,
+                                                   policy: PTTextMergePolicy) -> [PTTextFragmentRun] {
+        let override = attributes.reduce(into: PTTextFragmentLayoutOverrides(maxLines: nil,
+                                                                               lineBreakMode: nil,
+                                                                               keepWithNextAttachment: nil)) { result, attribute in
+            guard let fragmentLayout = attribute.fragmentLayout else { return }
+            if let maxLines = fragmentLayout.maxLines { result.maxLines = maxLines }
+            if let lineBreakMode = fragmentLayout.lineBreakMode { result.lineBreakMode = lineBreakMode }
+            if let keepWithNextAttachment = fragmentLayout.keepWithNextAttachment {
+                result.keepWithNextAttachment = keepWithNextAttachment
+            }
+        }
+
+        var runs = existing
+        guard range.length > 0 else { return runs }
+        if override.isMeaningful {
+            var boundaries = Set([range.location, NSMaxRange(range)])
+            for run in runs {
+                let intersection = NSIntersectionRange(run.range, range)
+                guard intersection.length > 0 else { continue }
+                boundaries.insert(intersection.location)
+                boundaries.insert(NSMaxRange(intersection))
+            }
+            let orderedBoundaries = boundaries.sorted()
+            var updated = runs.flatMap { split($0, around: range) }
+            for index in 0..<(max(0, orderedBoundaries.count - 1)) {
+                let segment = NSRange(location: orderedBoundaries[index],
+                                      length: orderedBoundaries[index + 1] - orderedBoundaries[index])
+                let defaults = runs.first(where: { NSIntersectionRange($0.range, segment).length > 0 })?.layout ?? .init()
+                updated.append(PTTextFragmentRun(range: segment,
+                                                 layout: override.resolved(defaults: defaults)))
+            }
+            runs = updated
+        } else if policy == .replaceAll {
+            runs = runs.flatMap { split($0, around: range) }
+                .filter { NSIntersectionRange($0.range, range).length == 0 }
+        }
+        return normalize(runs)
+    }
+
+    private static func split(_ run: PTTextFragmentRun,
+                              around range: NSRange) -> [PTTextFragmentRun] {
+        let intersection = NSIntersectionRange(run.range, range)
+        guard intersection.length > 0 else { return [run] }
+        var result: [PTTextFragmentRun] = []
+        if run.location < intersection.location {
+            result.append(PTTextFragmentRun(location: run.location,
+                                            length: intersection.location - run.location,
+                                            layout: run.layout))
+        }
+        if NSMaxRange(intersection) < NSMaxRange(run.range) {
+            result.append(PTTextFragmentRun(location: NSMaxRange(intersection),
+                                            length: NSMaxRange(run.range) - NSMaxRange(intersection),
+                                            layout: run.layout))
+        }
+        return result
+    }
+
+    private static func normalize(_ runs: [PTTextFragmentRun]) -> [PTTextFragmentRun] {
+        runs.filter { $0.length > 0 }
+            .sorted { lhs, rhs in
+                lhs.location == rhs.location ? lhs.length < rhs.length : lhs.location < rhs.location
+            }
+    }
+
+    private static func insertingRuns(_ existing: [PTTextFragmentRun],
+                                      _ inserted: [PTTextFragmentRun],
+                                      at location: Int,
+                                      length: Int) -> [PTTextFragmentRun] {
+        let shifted = existing.flatMap { run -> [PTTextFragmentRun] in
+            let end = NSMaxRange(run.range)
+            if run.location >= location {
+                return [PTTextFragmentRun(location: run.location + length,
+                                          length: run.length,
+                                          layout: run.layout)]
+            }
+            guard end > location else { return [run] }
+            return [
+                PTTextFragmentRun(location: run.location,
+                                  length: location - run.location,
+                                  layout: run.layout),
+                PTTextFragmentRun(location: location + length,
+                                  length: end - location,
+                                  layout: run.layout)
+            ]
+        }
+        let insertedRuns = inserted.map {
+            PTTextFragmentRun(location: $0.location + location,
+                              length: $0.length,
+                              layout: $0.layout)
+        }
+        return normalize(shifted + insertedRuns)
+    }
+
+    private static func replacingRuns(_ existing: [PTTextFragmentRun],
+                                      in range: NSRange,
+                                      with replacement: [PTTextFragmentRun],
+                                      replacementLength: Int) -> [PTTextFragmentRun] {
+        let delta = replacementLength - range.length
+        var result: [PTTextFragmentRun] = []
+        for run in existing {
+            let pieces = split(run, around: range)
+            for piece in pieces where NSIntersectionRange(piece.range, range).length == 0 {
+                let location = piece.location >= NSMaxRange(range) ? piece.location + delta : piece.location
+                result.append(PTTextFragmentRun(location: location,
+                                                length: piece.length,
+                                                layout: piece.layout))
+            }
+        }
+        result += replacement.map {
+            PTTextFragmentRun(location: $0.location + range.location,
+                              length: $0.length,
+                              layout: $0.layout)
+        }
+        return normalize(result)
+    }
+
+    private static func removingRuns(_ existing: [PTTextFragmentRun],
+                                     range: NSRange) -> [PTTextFragmentRun] {
+        replacingRuns(existing, in: range, with: [], replacementLength: 0)
     }
 
     // English: Preserve semantic identifiers across the Foundation/UIKit attributed-string bridge.
@@ -590,13 +792,52 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
             storage.replaceSubrange(storageRange, with: slice)
         }
 
+        value.enumerateAttribute(fragmentLayoutAttributeKey,
+                                 in: fullRange,
+                                 options: []) { rawValue, range, _ in
+            guard let dictionary = rawValue as? NSDictionary,
+                  let spec = PTTextFragmentLayoutSpec(dictionary: dictionary),
+                  let storageRange = Range(range, in: storage) else {
+                return
+            }
+            var slice = storage[storageRange]
+            slice[PTTextFragmentLayoutAttribute.self] = spec
+            storage.replaceSubrange(storageRange, with: slice)
+        }
+
         return storage
+    }
+
+    private static func fragmentRuns(from value: NSAttributedString) -> [PTTextFragmentRun] {
+        let fullRange = NSRange(location: 0, length: value.length)
+        var result: [PTTextFragmentRun] = []
+        value.enumerateAttribute(fragmentLayoutAttributeKey,
+                                 in: fullRange,
+                                 options: []) { rawValue, range, _ in
+            guard let dictionary = rawValue as? NSDictionary,
+                  let run = PTTextFragmentRun(dictionary: dictionary),
+                  run.length > 0 else { return }
+            result.append(run)
+        }
+        return normalize(result)
+    }
+
+    private static func fragmentRuns(from value: Foundation.AttributedString) -> [PTTextFragmentRun] {
+        var result: [PTTextFragmentRun] = []
+        for run in value.runs {
+            guard let spec = run[PTTextFragmentLayoutAttribute.self] else { continue }
+            let range = NSRange(run.range, in: value)
+            guard range.length > 0 else { continue }
+            result.append(PTTextFragmentRun(range: range, layout: spec))
+        }
+        return normalize(result)
     }
 
     // English: Rehydrate semantic identifiers only at the UIKit rendering boundary.
     // Español: Rehidrata los identificadores semánticos únicamente en el límite de renderizado UIKit.
     // 中文：仅在 UIKit 渲染边界恢复语义标识。
-    private static func makeUIKitValue(from storage: Foundation.AttributedString) -> NSAttributedString {
+    private static func makeUIKitValue(from storage: Foundation.AttributedString,
+                                       fragmentRuns: [PTTextFragmentRun]) -> NSAttributedString {
         let value = NSMutableAttributedString(storage)
 
         for run in storage.runs {
@@ -607,6 +848,15 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
             if let attachmentID = run[PTTextAttachmentAttribute.self] {
                 value.addAttribute(attachmentAttributeKey, value: attachmentID, range: range)
             }
+        }
+
+        for run in fragmentRuns {
+            guard run.range.location >= 0,
+                  run.range.length > 0,
+                  NSMaxRange(run.range) <= value.length else { continue }
+            value.addAttribute(fragmentLayoutAttributeKey,
+                               value: run.dictionary,
+                               range: run.range)
         }
 
         return value

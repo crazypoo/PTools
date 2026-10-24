@@ -205,10 +205,11 @@
   target: "PToolsRichTextTests"
   path: "Tests/PToolsRichTextTests"
   level: "CONTRACT"
-  file_count: 2
+  file_count: 3
   files:
     - "Tests/PToolsRichTextTests/PTRichTextCoreTests.swift"
     - "Tests/PToolsRichTextTests/PTRichTextUIKitLayoutTests.swift"
+    - "Tests/PToolsRichTextTests/PTRichTextFragmentLayoutTests.swift"
   canonical: true
   action: "KEEP"
 -

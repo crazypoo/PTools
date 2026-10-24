@@ -331,6 +331,20 @@ func applyMedia() {
 中打开 `Rich Text · Attachment Multiline Regression` 验证 24×24 图片、不同高度和换行 Action。
 详见 [PTRichText 多行附件布局指南](docs/guides/PTRICHTEXT_MULTILINE_ATTACHMENTS.md)。
 
+需要只限制一段长文本而保留后续日期、Action 和附件时，使用 `PTRichTextFlowLabel` 与显式片段属性：
+
+```swift
+let order = PTRichText(string: "Order 20261024-PT-000000000000",
+                       with: [.numberOfLines(1),
+                              .fragmentLineBreakMode(.byTruncatingTail),
+                              .keepWithNextAttachment()])
+let flowLabel = PTRichTextFlowLabel()
+flowLabel.numberOfLines = 0
+flowLabel.pt_apply(richText: order + " " + attachment + "\nCreated 2026-10-24 12:34")
+```
+
+旧的 `UILabel`/`UITextView` 入口继续保持完整文本行为；片段限行不会隐式改写宿主的全局行数或段落换行配置。
+
 ### 搜索页面
 
 需要完整搜索容器时选择 `PooTools/Search` 或 `PooToolsSearch`；只使用输入框时继续选择

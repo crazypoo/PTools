@@ -65,6 +65,31 @@ action highlighting use the same path, so the first render cannot be fixed while
 The Example regression screen covers 24×24 attachments, 40/64/80/120pt heights, widths 280/366/430pt,
 negative/zero/positive offsets, word/character wrapping, and an action on a wrapped line.
 
+### Fragment line limits
+
+`numberOfLines`, `fragmentLineBreakMode` and `keepWithNextAttachment` are explicit fragment metadata.
+They do not change the paragraph `lineBreakMode`, do not truncate the whole label, and do not modify the
+original `PTRichText` value. Use `PTRichTextFlowLabel` only when fragment-level limits are required:
+
+```swift
+let order = PTRichText(
+    string: "Order 20261024-PT-000000000000",
+    with: [.numberOfLines(1),
+           .fragmentLineBreakMode(.byTruncatingTail),
+           .keepWithNextAttachment()]
+)
+let text = order + " " + attachment + "\nCreated 2026-10-24 12:34"
+let label = PTRichTextFlowLabel()
+label.numberOfLines = 0
+label.pt_apply(richText: text, actionRegistry: actionRegistry, interactionMode: .actionsOnly)
+```
+
+The fragment limit applies only to the order text. The following date and attachment remain in the
+source and are laid out separately; `0` means unlimited. `UILabel` and `UITextView` keep their legacy
+full-text behavior and emit a Debug diagnostic when they receive fragment metadata. Use the Example
+screen `Rich Text · Fragment Line Limit Lab` to inspect 0/1/2/3 lines, all UIKit break modes, language,
+width, attachment and Action combinations.
+
 ## Español
 
 Usa `UILabel.pt_apply(richText:)` con `numberOfLines` y `lineBreakMode` definidos por el host. El modelo
@@ -75,3 +100,12 @@ a romper el layout.
 
 La pantalla de regresión del Example cubre adjuntos de 24×24, alturas 40/64/80/120pt, anchos 280/366/430pt,
 desplazamientos negativos/cero/positivos, ajuste por palabra o carácter y una acción en una línea envuelta.
+
+### Límites por fragmento
+
+`numberOfLines`, `fragmentLineBreakMode` y `keepWithNextAttachment` son metadatos explícitos del
+fragmento. No cambian `lineBreakMode` del párrafo, no truncan todo el label y no modifican el valor
+original de `PTRichText`. Usa `PTRichTextFlowLabel` cuando necesites límites por fragmento. El valor `0`
+significa sin límite; el texto de fecha, el adjunto y las acciones posteriores conservan sus rangos de
+origen. `UILabel` y `UITextView` mantienen el comportamiento heredado y muestran un diagnóstico Debug
+si reciben metadatos de fragmento.

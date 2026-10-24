@@ -125,6 +125,7 @@ enum PTDemoRegistry {
         make("media.image-review", "PooToolsMediaViewer", "图片展示", .mediaGraphics, .interactive, .fullScreen, .runnable, legacy: "图片展示", tags: ["image", "gif", "video"]),
         make("media.image-clarity", "PooToolsCore", "Image Loading Clarity", .mediaGraphics, .interactive, .push, .runnable, tags: ["image", "placeholder", "downsampling", "scale"]),
         make("ui.rich-text-attachment-multiline", "PToolsUIFoundation", "Rich Text · Attachment Multiline Regression", .uiComponents, .interactive, .push, .runnable, tags: ["rich-text", "attachment", "multiline", "baseline", "action"]),
+        make("ui.rich-text-fragment-line-limit", "PToolsUIFoundation", "Rich Text · Fragment Line Limit Lab", .uiComponents, .interactive, .push, .runnable, tags: ["rich-text", "fragment", "line-limit", "truncation", "action", "attachment"]),
         make("media.video-editor", "PooToolsVideoEditor", "视频编辑", .mediaGraphics, .hostRequired, .fullScreen, .physicalDeviceRequired, [.photoLibrary, .physicalDevice], legacy: "视频编辑", tags: ["video", "export"]),
         make("media.signature", "PooToolsHandSign", "签名", .mediaGraphics, .interactive, .sheet, .runnable, legacy: "签名", tags: ["drawing"]),
         make("media.dynamic-code", "PooToolsCodeView", "动态验证码", .mediaGraphics, .interactive, .sheet, .runnable, legacy: "动态验证码", tags: ["code"]),
@@ -352,6 +353,8 @@ final class PTDemoCoordinator {
             return PTImageClarityDemoViewController()
         case "ui.rich-text-attachment-multiline":
             return PTRichTextAttachmentMultilineDemoViewController()
+        case "ui.rich-text-fragment-line-limit":
+            return PTRichTextFragmentLineLimitDemoViewController()
         case "security.acknowledgements":
             guard let manifest = PTDemoAcknowledgementsData.manifest else {
                 return PTFuncDetailViewController(descriptor: descriptor)
@@ -2393,6 +2396,183 @@ private final class PTRichTextAttachmentMultilineDemoViewController: PTBaseViewC
                                    .font(.systemFont(ofSize: 14))])
         return PTRichText(wrap: .embedding(value),
                           .paragraph(.lineBreakMode(.byWordWrapping)))
+    }
+}
+
+// English: Demonstrate fragment-only line limits while keeping following dates, actions, and attachments intact.
+// Español: Demuestra límites por fragmento y conserva intactos las fechas, acciones y adjuntos posteriores.
+// 中文：展示片段级限行，同时保留后续日期、Action 和附件的完整显示。
+@MainActor
+private final class PTRichTextFragmentLineLimitDemoViewController: PTBaseViewController {
+    private let scrollView = UIScrollView()
+    private let stackView = UIStackView()
+    private let previewScrollView = UIScrollView()
+    private let previewContentView = UIView()
+    private let previewLabel = PTRichTextFlowLabel()
+    private let statusLabel = UILabel()
+    private let lineControl = UISegmentedControl(items: ["0", "1", "2", "3"])
+    private let modeControl = UISegmentedControl(items: ["Word", "Char", "Clip", "Head", "Tail", "Middle"])
+    private let widthControl = UISegmentedControl(items: ["120", "280", "366", "430"])
+    private let languageControl = UISegmentedControl(items: ["EN", "中文", "العربية"])
+    private let lengthControl = UISegmentedControl(items: ["Short", "Long"])
+    private let actionID = PTTextActionID("fragment-order")
+    private lazy var actionRegistry: PTTextActionRegistry = {
+        let registry = PTTextActionRegistry()
+        registry.register(actionID) { [weak self] event in
+            self?.statusLabel.text = "Action: \(event.actionID.rawValue) / \(event.text)"
+        }
+        return registry
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.title = "Fragment Line Limit"
+        view.backgroundColor = .systemBackground
+        configureViews()
+        updatePreview()
+    }
+
+    private func configureViews() {
+        let description = UILabel()
+        description.numberOfLines = 0
+        description.font = .preferredFont(forTextStyle: .footnote)
+        description.textColor = .secondaryLabel
+        description.text = "仅限制订单号片段；后面的时间和图片附件不被截断。\nOnly the order fragment is limited; the date and attachment remain visible."
+
+        lineControl.selectedSegmentIndex = 0
+        modeControl.selectedSegmentIndex = 4
+        widthControl.selectedSegmentIndex = 1
+        languageControl.selectedSegmentIndex = 0
+        lengthControl.selectedSegmentIndex = 1
+        [lineControl, modeControl, widthControl, languageControl, lengthControl].forEach {
+            $0.addTarget(self, action: #selector(controlChanged), for: .valueChanged)
+        }
+
+        previewLabel.numberOfLines = 0
+        previewLabel.lineBreakMode = .byWordWrapping
+        previewLabel.font = .systemFont(ofSize: 16)
+        previewLabel.backgroundColor = .secondarySystemBackground
+        previewLabel.layer.cornerRadius = 12
+        previewLabel.clipsToBounds = true
+        previewLabel.isUserInteractionEnabled = true
+
+        statusLabel.numberOfLines = 0
+        statusLabel.font = .monospacedSystemFont(ofSize: 11, weight: .regular)
+        statusLabel.textColor = .secondaryLabel
+
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        stackView.addArrangedSubview(description)
+        stackView.addArrangedSubview(makeControlRow(title: "Lines", control: lineControl))
+        stackView.addArrangedSubview(makeControlRow(title: "Break", control: modeControl))
+        stackView.addArrangedSubview(makeControlRow(title: "Width", control: widthControl))
+        stackView.addArrangedSubview(makeControlRow(title: "Language", control: languageControl))
+        stackView.addArrangedSubview(makeControlRow(title: "Length", control: lengthControl))
+
+        previewScrollView.showsHorizontalScrollIndicator = true
+        previewScrollView.alwaysBounceHorizontal = true
+        previewScrollView.addSubview(previewContentView)
+        previewContentView.addSubview(previewLabel)
+        previewLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(12)
+        }
+        previewScrollView.snp.makeConstraints { make in
+            make.height.equalTo(220)
+        }
+        stackView.addArrangedSubview(previewScrollView)
+        stackView.addArrangedSubview(statusLabel)
+
+        view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        stackView.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView.contentLayoutGuide).inset(16)
+            make.width.equalTo(scrollView.frameLayoutGuide).offset(-32)
+        }
+    }
+
+    @objc private func controlChanged() {
+        updatePreview()
+    }
+
+    private func updatePreview() {
+        let width = [120, 280, 366, 430][max(0, min(widthControl.selectedSegmentIndex, 3))]
+        let maxLines = [0, 1, 2, 3][max(0, min(lineControl.selectedSegmentIndex, 3))]
+        let mode = [NSLineBreakMode.byWordWrapping,
+                    .byCharWrapping,
+                    .byClipping,
+                    .byTruncatingHead,
+                    .byTruncatingTail,
+                    .byTruncatingMiddle][max(0, min(modeControl.selectedSegmentIndex, 5))]
+
+        previewContentView.snp.remakeConstraints { make in
+            make.edges.equalTo(previewScrollView.contentLayoutGuide)
+            make.height.equalTo(previewScrollView.frameLayoutGuide)
+            make.width.equalTo(width)
+        }
+        previewLabel.semanticContentAttribute = languageControl.selectedSegmentIndex == 2 ? .forceRightToLeft : .unspecified
+        PTRichTextRenderer.apply(makeRichText(maxLines: maxLines, mode: mode),
+                                 to: previewLabel,
+                                 actionRegistry: actionRegistry,
+                                 interactionMode: .actionsOnly)
+        view.layoutIfNeeded()
+
+        #if DEBUG
+        statusLabel.text = "width=\(width), maxLines=\(maxLines), mode=\(mode.rawValue)\n\(previewLabel.pt_richTextFlowDiagnosticReport())"
+        #else
+        statusLabel.text = "width=\(width), maxLines=\(maxLines), mode=\(mode.rawValue)"
+        #endif
+    }
+
+    private func makeControlRow(title: String, control: UISegmentedControl) -> UIView {
+        let row = UIStackView(arrangedSubviews: [UILabel(), control])
+        row.axis = .horizontal
+        row.alignment = .center
+        row.spacing = 8
+        let titleLabel = row.arrangedSubviews.first as? UILabel
+        titleLabel?.text = title
+        titleLabel?.setContentHuggingPriority(.required, for: .horizontal)
+        return row
+    }
+
+    private func makeRichText(maxLines: Int, mode: NSLineBreakMode) -> PTRichText {
+        let language = languageControl.selectedSegmentIndex
+        let long = lengthControl.selectedSegmentIndex == 1
+        let order: String
+        let date: String
+        switch language {
+        case 1:
+            order = long ? "订单号 20261024-PT-000000000000-中文测试" : "订单号 20261024"
+            date = "创建时间 2026-10-24 12:34"
+        case 2:
+            order = long ? "رقم الطلب 20261024-PT-000000000000" : "رقم الطلب 20261024"
+            date = "تاريخ الإنشاء 2026-10-24 12:34"
+        default:
+            order = long ? "Order 20261024-PT-000000000000-Fragment-Test" : "Order 20261024"
+            date = "Created 2026-10-24 12:34"
+        }
+
+        let orderFragment = PTRichText(string: order,
+                                       with: [.foreground(.label),
+                                              .font(.systemFont(ofSize: 16, weight: .semibold)),
+                                              .action(actionID),
+                                              .numberOfLines(maxLines),
+                                              .fragmentLineBreakMode(mode),
+                                              .keepWithNextAttachment()])
+        let image = UIImage(named: "DemoImage") ?? UIGraphicsImageRenderer(size: CGSize(width: 16, height: 16)).image { context in
+            UIColor.systemBlue.setFill()
+            context.fill(CGRect(x: 0, y: 0, width: 16, height: 16))
+        }
+        let attachment = PTRichText(string: "\u{FFFC}",
+                                    with: [.image(image, .custom(size: CGSize(width: 16, height: 16)))])
+        var result = orderFragment
+        result += " "
+        result += attachment
+        result += "\n"
+        result += PTRichText(date, .foreground(.secondaryLabel), .font(.systemFont(ofSize: 14)))
+        return PTRichText(wrap: .embedding(result), .paragraph(.alignment(language == 2 ? .right : .left)))
     }
 }
 

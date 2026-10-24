@@ -144,7 +144,11 @@ final class PTRichTextMediaController: NSObject {
                                  range: subrange)
         }
         if let label {
-            PTRichTextLabelRendering.apply(updated, to: label)
+            if let flowLabel = label as? PTRichTextFlowLabel {
+                flowLabel.applyResolvedAttributedText(updated)
+            } else {
+                PTRichTextLabelRendering.apply(updated, to: label)
+            }
         }
         if let textView {
             PTRichTextLabelRendering.apply(updated, to: textView)

@@ -22,13 +22,22 @@ public struct PTTextAttachmentAttribute: CodableAttributedStringKey {
     public init() {}
 }
 
+public struct PTTextFragmentLayoutAttribute: CodableAttributedStringKey {
+    public typealias Value = PTTextFragmentLayoutSpec
+    public static let name = "PTools.fragmentLayout"
+
+    public init() {}
+}
+
 public struct PTTextAttributes: AttributeScope {
     public let actionID: PTTextActionAttribute
     public let attachmentID: PTTextAttachmentAttribute
+    public let fragmentLayout: PTTextFragmentLayoutAttribute
 
     public init() {
         actionID = PTTextActionAttribute()
         attachmentID = PTTextAttachmentAttribute()
+        fragmentLayout = PTTextFragmentLayoutAttribute()
     }
 }
 
@@ -108,9 +117,41 @@ public enum PTTextParagraphAttribute {
 
 public struct PTTextAttribute {
     let values: [NSAttributedString.Key: Any]
+    let fragmentLayout: PTTextFragmentLayoutOverrides?
 
-    init(values: [NSAttributedString.Key: Any]) {
+    init(values: [NSAttributedString.Key: Any],
+         fragmentLayout: PTTextFragmentLayoutOverrides? = nil) {
         self.values = values
+        self.fragmentLayout = fragmentLayout
+    }
+
+    // English: Fragment limits are opt-in metadata, not paragraph attributes or global UILabel limits.
+    // Español: Los límites de fragmento son metadatos opt-in, no atributos de párrafo ni límites globales de UILabel.
+    // 中文：片段限行是显式元数据，不是段落属性，也不是 UILabel 的全局限行。
+    public static func numberOfLines(_ count: Int) -> Self {
+        #if DEBUG
+        if count < 0 {
+            print("PTRichText: negative fragment line count normalized to zero")
+        }
+        #endif
+        return Self(values: [:],
+                    fragmentLayout: PTTextFragmentLayoutOverrides(maxLines: max(0, count),
+                                                                   lineBreakMode: nil,
+                                                                   keepWithNextAttachment: nil))
+    }
+
+    public static func fragmentLineBreakMode(_ mode: NSLineBreakMode) -> Self {
+        Self(values: [:],
+             fragmentLayout: PTTextFragmentLayoutOverrides(maxLines: nil,
+                                                            lineBreakMode: PTTextFragmentLineBreakMode(mode),
+                                                            keepWithNextAttachment: nil))
+    }
+
+    public static func keepWithNextAttachment(_ enabled: Bool = true) -> Self {
+        Self(values: [:],
+             fragmentLayout: PTTextFragmentLayoutOverrides(maxLines: nil,
+                                                            lineBreakMode: nil,
+                                                            keepWithNextAttachment: enabled))
     }
 
     public static func font(_ font: UIFont) -> Self {

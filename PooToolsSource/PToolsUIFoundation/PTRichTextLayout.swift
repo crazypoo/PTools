@@ -364,6 +364,7 @@ private final class PTRichTextRemoteImageController: NSObject {
     private weak var textView: UITextView?
     private let richText: PTRichText
     private let coordinator: PTTextAttachmentCoordinator
+    private var resolvedImages: [String: UIImage] = [:]
 
     init(richText: PTRichText,
          label: UILabel? = nil,
@@ -399,23 +400,29 @@ private final class PTRichTextRemoteImageController: NSObject {
 
     func cancel() {
         coordinator.cancelAll()
+        resolvedImages.removeAll(keepingCapacity: false)
     }
 
     private func apply(_ image: UIImage, for identifier: String) {
+        resolvedImages[identifier] = image
         let updated = NSMutableAttributedString(attributedString: richText.value)
         let range = NSRange(location: 0, length: updated.length)
         updated.enumerateAttribute(.attachment, in: range, options: []) { value, subrange, _ in
             guard let attachment = value as? PTRemoteImageTextAttachment,
-                  attachment.identifier == identifier else {
+                  let resolvedImage = resolvedImages[attachment.identifier] else {
                 return
             }
             updated.addAttribute(.attachment,
-                                 value: attachment.resolvedAttachment(with: image),
+                                 value: attachment.resolvedAttachment(with: resolvedImage),
                                  range: subrange)
         }
 
         if let label {
-            PTRichTextLabelRendering.apply(updated, to: label)
+            if let flowLabel = label as? PTRichTextFlowLabel {
+                flowLabel.applyResolvedAttributedText(updated)
+            } else {
+                PTRichTextLabelRendering.apply(updated, to: label)
+            }
         }
         if let textView {
             PTRichTextLabelRendering.apply(updated, to: textView)
@@ -433,6 +440,53 @@ public enum PTRichTextRenderer {
                              attachmentCoordinator: PTTextAttachmentCoordinator? = nil,
                              mediaLoader: PTRichTextMediaLoader? = nil,
                              onInteraction: PTRichTextInteractionHandler? = nil) {
+        if let flowLabel = label as? PTRichTextFlowLabel {
+            (objc_getAssociatedObject(flowLabel, &ptRichTextInteractionAssociationKey) as? PTRichTextInteractionController)?.detach()
+            objc_setAssociatedObject(flowLabel,
+                                     &ptRichTextInteractionAssociationKey,
+                                     nil,
+                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            flowLabel.apply(richText: richText,
+                            actionRegistry: actionRegistry,
+                            interactionMode: interactionMode,
+                            onInteraction: onInteraction)
+            (objc_getAssociatedObject(flowLabel, &ptRichTextRemoteImageAssociationKey) as? PTRichTextRemoteImageController)?.cancel()
+            objc_setAssociatedObject(flowLabel,
+                                     &ptRichTextRemoteImageAssociationKey,
+                                     nil,
+                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            (objc_getAssociatedObject(flowLabel, &ptRichTextMediaAssociationKey) as? PTRichTextMediaController)?.cancel()
+            objc_setAssociatedObject(flowLabel,
+                                     &ptRichTextMediaAssociationKey,
+                                     nil,
+                                     .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            if let attachmentCoordinator {
+                let controller = PTRichTextRemoteImageController(richText: richText,
+                                                                  label: flowLabel,
+                                                                  coordinator: attachmentCoordinator)
+                objc_setAssociatedObject(flowLabel,
+                                         &ptRichTextRemoteImageAssociationKey,
+                                         controller,
+                                         .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+                controller.start()
+            }
+            if let mediaLoader {
+                let controller = PTRichTextMediaController(richText: richText,
+                                                            label: flowLabel,
+                                                            loader: mediaLoader)
+                objc_setAssociatedObject(flowLabel,
+                                         &ptRichTextMediaAssociationKey,
+                                         controller,
+                                         .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+                controller.start()
+            }
+            return
+        }
+        #if DEBUG
+        if richText.containsFragmentLayout {
+            print("PTRichText: fragment layout requires PTRichTextFlowLabel; UILabel fallback keeps the full source text")
+        }
+        #endif
         PTRichTextLabelRendering.apply(richText.value, to: label)
         (objc_getAssociatedObject(label, &ptRichTextRemoteImageAssociationKey) as? PTRichTextRemoteImageController)?.cancel()
         objc_setAssociatedObject(label,
@@ -492,6 +546,11 @@ public enum PTRichTextRenderer {
                              attachmentCoordinator: PTTextAttachmentCoordinator? = nil,
                              mediaLoader: PTRichTextMediaLoader? = nil,
                              onInteraction: PTRichTextInteractionHandler? = nil) {
+        #if DEBUG
+        if richText.containsFragmentLayout {
+            print("PTRichText: fragment layout is opt-in for PTRichTextFlowLabel; UITextView keeps the full source text")
+        }
+        #endif
         PTRichTextLabelRendering.apply(richText.value, to: textView)
         textView.isEditable = false
         textView.isSelectable = interactionMode != .actionsOnly
