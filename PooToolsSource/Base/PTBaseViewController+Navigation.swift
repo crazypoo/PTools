@@ -43,6 +43,8 @@ open class PTNavigationBarContainer: UIView {
     // 中文：保存最近一次宿主局部内容行，让重复布局保持幂等。
     private(set) var lastAppliedContentRect: CGRect = .null
     private(set) var lastContentRowInput: PTNavigationContentRowInput?
+    private(set) var lastValidCompactRow: PTNavigationContentRowSnapshot?
+    private var preferredItemSizes: [ObjectIdentifier: CGSize] = [:]
 
     let backgroundView = UIView()
     let contentView = UIView()
@@ -166,7 +168,7 @@ open class PTNavigationBarContainer: UIView {
     // Español: Considera expandido un título visible con altura positiva; el título colapsado usa la fila compacta.
     // 中文：大标题可见且高度大于零时视为展开，否则使用紧凑内容行。
     var isLargeTitleExpandedForLayout: Bool {
-        !largeTitleContainer.isHidden && largeTitleContentHeightForLayout > 0.5
+        largeTitleBackgroundVisible && largeTitleBackgroundHeight > 0.5
     }
 
     // English: Expose only local host geometry to PTNavBar; never infer layout from a global status-bar constant.
@@ -225,6 +227,10 @@ extension PTNavigationBarContainer {
         let changed = frame != hostBounds
         if changed {
             frame = hostBounds
+            // English: A resized host cannot reuse a compact row measured in the old coordinate space.
+            // Español: Un host redimensionado no puede reutilizar una fila medida en el sistema anterior.
+            // 中文：宿主尺寸变化后，不能继续使用旧坐标系中的紧凑行缓存。
+            lastValidCompactRow = nil
         }
         let localBounds = bounds
         if contentView.frame != localBounds {
@@ -253,12 +259,23 @@ extension PTNavigationBarContainer {
             return false
         }
 
+        if let input,
+           !PTNavigationRowUsability.isUsable(clippedRect,
+                                              requiredContentHeight: input.requiredContentHeight,
+                                              in: hostBounds) {
+            return false
+        }
+
         let geometryChanged = lastAppliedContentRect != clippedRect
         let signatureChanged = lastContentRowInput != input
-        guard geometryChanged || signatureChanged else { return false }
+        guard geometryChanged || signatureChanged else {
+            rememberValidCompactRow(clippedRect, input: input)
+            return false
+        }
 
         lastAppliedContentRect = clippedRect
         lastContentRowInput = input
+        rememberValidCompactRow(clippedRect, input: input)
 
         if geometryChanged {
             topBarContainer.snp.remakeConstraints { make in
@@ -270,6 +287,58 @@ extension PTNavigationBarContainer {
             setNeedsLayout()
         }
         return true
+    }
+
+    // English: Cache only an expanded large-title compact row that satisfies the current content requirement.
+    // Español: Guarda solo una fila compacta de título grande expandido que cumpla el requisito actual.
+    // 中文：只缓存满足当前内容高度要求的大标题展开紧凑行。
+    func rememberValidCompactRow(_ rect: CGRect,
+                                 input: PTNavigationContentRowInput?) {
+        guard let input,
+              input.isLargeTitleExpanded,
+              let required = input.requiredContentHeight,
+              required.isFinite,
+              required >= 0,
+              rect.height < input.hostBounds.height - 0.5,
+              PTNavigationRowUsability.isUsable(rect,
+                                                requiredContentHeight: required,
+                                                in: input.hostBounds) else { return }
+        lastValidCompactRow = PTNavigationContentRowSnapshot(
+            contentRect: rect,
+            hostBounds: input.hostBounds,
+            hostSafeRect: input.hostSafeRect,
+            exclusionRects: input.exclusionRects,
+            requiredContentHeight: required
+        )
+    }
+
+    // English: Reuse a compact row only while every geometry input still matches its snapshot.
+    // Español: Reutiliza la fila compacta solo mientras coincidan todas las entradas geométricas guardadas.
+    // 中文：只有所有几何输入仍与快照一致时，才复用紧凑行。
+    func validatedCompactRowHeight(hostBounds: CGRect,
+                                   hostSafeRect: CGRect,
+                                   exclusionRects: [CGRect],
+                                   requiredContentHeight: CGFloat) -> CGFloat? {
+        guard let snapshot = lastValidCompactRow,
+              approximatelyEqual(snapshot.hostBounds, hostBounds),
+              approximatelyEqual(snapshot.hostSafeRect, hostSafeRect),
+              snapshot.exclusionRects.count == exclusionRects.count,
+              zip(snapshot.exclusionRects, exclusionRects).allSatisfy({ approximatelyEqual($0.0, $0.1) }),
+              abs(snapshot.requiredContentHeight - requiredContentHeight) <= 0.5,
+              PTNavigationRowUsability.isUsable(snapshot.contentRect,
+                                                requiredContentHeight: requiredContentHeight,
+                                                in: hostBounds) else {
+            lastValidCompactRow = nil
+            return nil
+        }
+        return snapshot.contentRect.height
+    }
+
+    private func approximatelyEqual(_ lhs: CGRect, _ rhs: CGRect) -> Bool {
+        abs(lhs.minX - rhs.minX) <= 0.5 &&
+            abs(lhs.minY - rhs.minY) <= 0.5 &&
+            abs(lhs.width - rhs.width) <= 0.5 &&
+            abs(lhs.height - rhs.height) <= 0.5
     }
 
     // English: Resolve the usable title region from the navigation host's local bounds and safe regions.
@@ -400,6 +469,8 @@ extension PTNavigationBarContainer {
     // Español: Captura el tamaño de cada elemento antes de cambiarlo a la jerarquía de la barra.
     // 中文：在把自定义按钮重新加入导航栏层级前，先快照它们的尺寸。
     func navigationBarItemSize(for view: UIView) -> CGSize {
+        let cacheKey = ObjectIdentifier(view)
+        let cachedSize = preferredItemSizes[cacheKey]
         let boundsSize = view.bounds.size
         let frameSize = view.frame.size
         let intrinsicSize = view.intrinsicContentSize
@@ -409,21 +480,52 @@ extension PTNavigationBarContainer {
         func resolvedDimension(bounds: CGFloat,
                                frame: CGFloat,
                                intrinsic: CGFloat,
+                               cached: CGFloat?,
                                fallback: CGFloat) -> CGFloat {
+            // English: A 0/1-point reparenting frame is compressed UIKit state, not an explicit size.
+            // Español: Un frame de 0/1 punto durante el reparenting es estado comprimido de UIKit, no un tamaño explícito.
+            // 中文：重新挂载期间的 0/1 点 frame 是 UIKit 的压缩中间态，不是调用方的显式尺寸。
+            if bounds.isFinite, bounds > 1 { return bounds }
+            if intrinsic.isFinite, intrinsic > 1 { return intrinsic }
+            if frame.isFinite, frame > 1 { return frame }
+            if let cached, cached.isFinite, cached > 0 { return cached }
             if bounds.isFinite, bounds > 0 { return bounds }
-            if frame.isFinite, frame > 0 { return frame }
             if intrinsic.isFinite, intrinsic > 0 { return intrinsic }
+            if frame.isFinite, frame > 0 { return frame }
             return fallback
         }
 
-        return CGSize(width: resolvedDimension(bounds: boundsSize.width,
-                                               frame: frameSize.width,
-                                               intrinsic: intrinsicSize.width,
-                                               fallback: fallbackSize.width),
-                      height: resolvedDimension(bounds: boundsSize.height,
-                                                frame: frameSize.height,
-                                                intrinsic: intrinsicSize.height,
-                                                fallback: fallbackSize.height))
+        let resolved = CGSize(width: resolvedDimension(bounds: boundsSize.width,
+                                                       frame: frameSize.width,
+                                                       intrinsic: intrinsicSize.width,
+                                                       cached: cachedSize?.width,
+                                                       fallback: fallbackSize.width),
+                              height: resolvedDimension(bounds: boundsSize.height,
+                                                        frame: frameSize.height,
+                                                        intrinsic: intrinsicSize.height,
+                                                        cached: cachedSize?.height,
+                                                        fallback: fallbackSize.height))
+        preferredItemSizes[cacheKey] = resolved
+        return resolved
+    }
+
+    // English: Use measured controls and title content to reject rows that cannot contain their hit targets.
+    // Español: Usa los controles y el título medidos para rechazar filas que no pueden contener sus áreas táctiles.
+    // 中文：根据按钮和标题实测高度，拒绝无法容纳点击区域的内容行。
+    func requiredNavigationContentHeight(hostHeight: CGFloat) -> CGFloat {
+        let candidateViews = leftContainer.arrangedSubviews +
+            rightContainer.arrangedSubviews +
+            titleContainer.subviews
+        let measured = candidateViews.map { view in
+            let intrinsic = view.intrinsicContentSize.height
+            let bounds = view.bounds.height
+            let frame = view.frame.height
+            return [intrinsic, bounds, frame]
+                .first(where: { $0.isFinite && $0 > 1 }) ?? 0
+        }.max() ?? 0
+        if measured > 0 { return measured }
+        let fallback = CGFloat.kNavBarHeight
+        return min(max(0, hostHeight), max(0, fallback))
     }
 
     // English: Apply one deterministic item layout to both native navigation content and PTNavBar.

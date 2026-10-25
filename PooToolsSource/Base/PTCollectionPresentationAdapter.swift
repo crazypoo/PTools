@@ -90,7 +90,7 @@ final class PTCollectionPresentationAdapter {
         var snapshot = PTCollectionIDSnapshot()
         guard isActive,
               let sectionID,
-              let section = sections.first(where: { $0.identifier == sectionID.rawValue }) else {
+              let _ = sections.first(where: { $0.identifier == sectionID.rawValue }) else {
             snapshot.appendSections(sections)
             for section in sections {
                 if let rows = section.rows, !rows.isEmpty {

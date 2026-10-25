@@ -76,7 +76,7 @@ public extension UIView {
             }
         }
 
-        func item(from view: UIView) -> ConstraintItem {
+        @MainActor func item(from view: UIView) -> ConstraintItem {
             switch self {
             case .leading: return view.snp.leading
             case .trailing: return view.snp.trailing

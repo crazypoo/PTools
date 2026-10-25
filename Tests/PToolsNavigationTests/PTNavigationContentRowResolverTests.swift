@@ -269,4 +269,127 @@ final class PTNavigationContentRowResolverTests: XCTestCase {
         XCTAssertEqual(CGFloat.kNavBarHeight_Total, expected, accuracy: 0.5)
         window.isHidden = true
     }
+
+    // English: Large-title regression cases reject transitional rows before they can reach layout or cache state.
+    // Español: Las regresiones de título grande rechazan filas transitorias antes de llegar al layout o la caché.
+    // 中文：大标题回归场景在进入布局或缓存前拒绝转场中的残余内容行。
+    func testLargeTitleRejectsOnePointResidualRow() {
+        let input = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 430, height: 96),
+            hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 96),
+            fallbackRowRect: CGRect(x: 0, y: 0, width: 430, height: 96),
+            isLargeTitleExpanded: true,
+            compactRowHeight: 1,
+            requiredContentHeight: 44
+        )
+
+        XCTAssertNil(PTNavigationContentRowResolver.resolve(input))
+    }
+
+    func testLargeTitleRetainsValidCompactRowAfterBadIntermediateFrame() throws {
+        let container = PTNavigationBarContainer(frame: CGRect(x: 0, y: 0, width: 430, height: 96))
+        let validInput = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 430, height: 96),
+            hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 96),
+            fallbackRowRect: CGRect(x: 0, y: 0, width: 430, height: 44),
+            isLargeTitleExpanded: true,
+            compactRowHeight: 44,
+            requiredContentHeight: 44
+        )
+        XCTAssertTrue(container.applyNavigationContentRow(CGRect(x: 0, y: 0, width: 430, height: 44), input: validInput))
+
+        let badInput = PTNavigationContentRowInput(
+            hostBounds: validInput.hostBounds,
+            hostSafeRect: validInput.hostSafeRect,
+            fallbackRowRect: validInput.fallbackRowRect,
+            isLargeTitleExpanded: true,
+            compactRowHeight: 1,
+            requiredContentHeight: 44
+        )
+        XCTAssertNil(PTNavigationContentRowResolver.resolve(badInput))
+        XCTAssertEqual(container.validatedCompactRowHeight(hostBounds: validInput.hostBounds,
+                                                           hostSafeRect: validInput.hostSafeRect,
+                                                           exclusionRects: [],
+                                                           requiredContentHeight: 44), CGFloat(44))
+    }
+
+    func testLargeTitleExpandedCollapsedExpandedRestoresSameControlRow() throws {
+        let expanded = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 430, height: 96),
+            hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 96),
+            fallbackRowRect: CGRect(x: 0, y: 0, width: 430, height: 96),
+            isLargeTitleExpanded: true,
+            compactRowHeight: 44,
+            requiredContentHeight: 44
+        )
+        let collapsed = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 430, height: 44),
+            hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 44),
+            observedSystemRowRect: CGRect(x: 0, y: 0, width: 430, height: 44),
+            evidence: .observed,
+            requiredContentHeight: 44
+        )
+
+        let first = try XCTUnwrap(PTNavigationContentRowResolver.resolve(expanded))
+        _ = try XCTUnwrap(PTNavigationContentRowResolver.resolve(collapsed))
+        let restored = try XCTUnwrap(PTNavigationContentRowResolver.resolve(expanded))
+        XCTAssertEqual(first.contentRect, restored.contentRect)
+    }
+
+    func testHostResizeInvalidatesStaleCompactRow() throws {
+        let container = PTNavigationBarContainer(frame: CGRect(x: 0, y: 0, width: 430, height: 96))
+        let input = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 430, height: 96),
+            hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 96),
+            fallbackRowRect: CGRect(x: 0, y: 0, width: 430, height: 44),
+            isLargeTitleExpanded: true,
+            compactRowHeight: 44,
+            requiredContentHeight: 44
+        )
+        XCTAssertTrue(container.applyNavigationContentRow(input.fallbackRowRect!, input: input))
+        XCTAssertNil(container.validatedCompactRowHeight(hostBounds: CGRect(x: 0, y: 0, width: 430, height: 80),
+                                                         hostSafeRect: input.hostSafeRect,
+                                                         exclusionRects: [],
+                                                         requiredContentHeight: 44))
+    }
+
+    func testSideReservedRegionDoesNotCollapseVerticalRow() throws {
+        let input = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 430, height: 80),
+            hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 80),
+            fallbackRowRect: CGRect(x: 0, y: 0, width: 430, height: 80),
+            exclusionRects: [CGRect(x: 390, y: 0, width: 40, height: 80)],
+            isLargeTitleExpanded: true,
+            compactRowHeight: 44,
+            requiredContentHeight: 44
+        )
+
+        let result = try XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
+        XCTAssertEqual(result.contentRect.height, 44, accuracy: 0.001)
+    }
+
+    func testLegitimateNon44PointHostRowIsAccepted() throws {
+        let input = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 430, height: 50),
+            hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 50),
+            observedSystemRowRect: CGRect(x: 0, y: 0, width: 430, height: 50),
+            evidence: .observed,
+            requiredContentHeight: 48
+        )
+
+        let result = try XCTUnwrap(PTNavigationContentRowResolver.resolve(input))
+        XCTAssertEqual(result.contentRect.height, 50, accuracy: 0.001)
+    }
+
+    func testFullStatusBarOcclusionDefersWithoutOverlap() {
+        let input = PTNavigationContentRowInput(
+            hostBounds: CGRect(x: 0, y: 0, width: 430, height: 60),
+            hostSafeRect: CGRect(x: 0, y: 0, width: 430, height: 60),
+            fallbackRowRect: CGRect(x: 0, y: 0, width: 430, height: 60),
+            exclusionRects: [CGRect(x: 0, y: 0, width: 430, height: 60)],
+            requiredContentHeight: 44
+        )
+
+        XCTAssertNil(PTNavigationContentRowResolver.resolve(input))
+    }
 }

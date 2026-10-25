@@ -8,6 +8,8 @@
 - 后续变更记录继续写入新的正式版本章节。
 - 自定义导航栏内容行改为区分 UIKit 实测与宿主局部回退证据，转场/零尺寸阶段不缓存无效几何；系统垂直导航栏与自定义横向容器按导航栈原子切换所有权。
 - 移除对 UIKit 私有 `UIBarBackground` 子视图的清理，背景仅通过公开 `UINavigationBarAppearance` 配置；补充 `navigation.duo-custom-nav-alignment-regression` Demo 和左右/标题对齐回归覆盖。
+- 修复 Large Title 展开时缓存 1–2pt 中间内容行的问题：内容行现在按控件所需高度、宿主/安全区和状态排斥区校验，侧边保留区不再切断纵向行；宿主尺寸变化会使紧凑行缓存失效。
+- 修复标题和导航按钮在 UIKit 重新挂载期间被压缩 bounds 污染首选尺寸的问题；补充展开/收起/旋转/标题压缩回归测试，并扩展 `PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1` 的高度与缓存诊断字段。
 
 ## 5.69.0 — 2026-10-21
 

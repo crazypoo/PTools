@@ -27,6 +27,7 @@ struct PTNavigationContentRowInput: Equatable, Sendable {
     let evidence: PTNavigationContentRowEvidence
     let isLargeTitleExpanded: Bool
     let compactRowHeight: CGFloat?
+    let requiredContentHeight: CGFloat?
 
     init(hostBounds: CGRect,
          hostSafeRect: CGRect,
@@ -35,7 +36,8 @@ struct PTNavigationContentRowInput: Equatable, Sendable {
          exclusionRects: [CGRect] = [],
          evidence: PTNavigationContentRowEvidence = .fallback,
          isLargeTitleExpanded: Bool = false,
-         compactRowHeight: CGFloat? = nil) {
+         compactRowHeight: CGFloat? = nil,
+         requiredContentHeight: CGFloat? = nil) {
         self.hostBounds = hostBounds
         self.hostSafeRect = hostSafeRect
         self.observedSystemRowRect = observedSystemRowRect
@@ -44,6 +46,7 @@ struct PTNavigationContentRowInput: Equatable, Sendable {
         self.evidence = evidence
         self.isLargeTitleExpanded = isLargeTitleExpanded
         self.compactRowHeight = compactRowHeight
+        self.requiredContentHeight = requiredContentHeight
     }
 
     // English: Preserve the old internal initializer while routing it through explicit row evidence.
@@ -61,7 +64,8 @@ struct PTNavigationContentRowInput: Equatable, Sendable {
                   exclusionRects: [],
                   evidence: systemContentRect == nil ? .fallback : .observed,
                   isLargeTitleExpanded: isLargeTitleExpanded,
-                  compactRowHeight: compactRowHeight)
+                  compactRowHeight: compactRowHeight,
+                  requiredContentHeight: nil)
     }
 }
 
@@ -73,12 +77,52 @@ struct PTNavigationContentRowResult: Equatable, Sendable {
     let evidence: PTNavigationContentRowEvidence
 }
 
+// English: Keep the last known compact row together with the geometry that made it valid.
+// Español: Conserva la última fila compacta válida junto con la geometría que la validó.
+// 中文：保存最近一次有效紧凑行，以及让它有效的完整几何条件。
+struct PTNavigationContentRowSnapshot: Equatable, Sendable {
+    let contentRect: CGRect
+    let hostBounds: CGRect
+    let hostSafeRect: CGRect
+    let exclusionRects: [CGRect]
+    let requiredContentHeight: CGFloat
+}
+
 // English: Keep horizontal edge avoidance as a value so custom navigation bars can share the same collision result.
 // Español: Mantiene la evitación horizontal de los bordes como un valor para que las barras personalizadas compartan el mismo resultado de colisión.
 // 中文：将横向边缘避让保持为值类型，让自定义导航栏共享同一套碰撞结果。
 struct PTNavigationContentEdgeInsets: Equatable, Sendable {
     let leading: CGFloat
     let trailing: CGFloat
+}
+
+// English: Reject a thin or out-of-host row before it can become a cache entry.
+// Español: Rechaza una fila demasiado fina o fuera del host antes de convertirla en caché.
+// 中文：在内容行进入缓存前，拒绝过薄或越界的内容行。
+enum PTNavigationRowUsability {
+    static func isUsable(_ rect: CGRect,
+                         requiredContentHeight: CGFloat?,
+                         in hostBounds: CGRect) -> Bool {
+        guard rect.origin.x.isFinite,
+              rect.origin.y.isFinite,
+              rect.width.isFinite,
+              rect.height.isFinite,
+              rect.width > 0,
+              rect.height > 0,
+              hostBounds.origin.x.isFinite,
+              hostBounds.origin.y.isFinite,
+              hostBounds.width.isFinite,
+              hostBounds.height.isFinite,
+              hostBounds.width > 0,
+              hostBounds.height > 0,
+              hostBounds.contains(rect) else { return false }
+
+        guard let requiredContentHeight else { return true }
+        guard requiredContentHeight.isFinite,
+              requiredContentHeight >= 0,
+              requiredContentHeight <= 100_000 else { return false }
+        return rect.height + 0.001 >= requiredContentHeight
+    }
 }
 
 enum PTNavigationContentRowResolver {
@@ -146,39 +190,50 @@ enum PTNavigationContentRowResolver {
 
         let safeRect = bounded(input.hostSafeRect, in: host) ?? host
         let exclusions = input.exclusionRects.compactMap { bounded($0, in: host) }
+        // English: Side rails are horizontal collision inputs, not vertical row cuts.
+        // Español: Los raíles laterales solo afectan la colisión horizontal, no cortan la fila vertical.
+        // 中文：侧边保留区只参与横向碰撞，不能切断纵向内容行。
+        let verticalExclusions = exclusions.filter { $0.width + 0.5 >= host.width }
         if input.evidence == .observed,
            let systemRect = input.observedSystemRowRect,
            let contentRect = bounded(systemRect, in: host),
            !contentRect.isEmpty,
-           !intersectsAny(contentRect, exclusions) {
+           PTNavigationRowUsability.isUsable(contentRect,
+                                             requiredContentHeight: input.requiredContentHeight,
+                                             in: host),
+           !intersectsAny(contentRect, verticalExclusions) {
             return PTNavigationContentRowResult(contentRect: contentRect, evidence: .observed)
         }
 
         let fallbackRect = bounded(input.fallbackRowRect ?? safeRect, in: host) ?? safeRect
         guard let safeFallbackRect = fallbackRectAvoidingExclusions(fallbackRect,
                                                                     in: host,
-                                                                    exclusions: exclusions) else {
+                                                                    exclusions: verticalExclusions) else {
             return nil
         }
         guard input.isLargeTitleExpanded else {
-            guard !safeFallbackRect.isEmpty else { return nil }
+            guard PTNavigationRowUsability.isUsable(safeFallbackRect,
+                                                    requiredContentHeight: input.requiredContentHeight,
+                                                    in: host) else { return nil }
             return PTNavigationContentRowResult(contentRect: safeFallbackRect, evidence: .fallback)
         }
 
-        let compactRect: CGRect
-        if let compactHeight = normalizedLength(input.compactRowHeight), compactHeight > 0 {
-            let rowY = max(host.minY, safeFallbackRect.minY)
-            let availableHeight = min(compactHeight, max(0, safeFallbackRect.maxY - rowY))
-            guard availableHeight > 0 else { return nil }
-            compactRect = CGRect(x: safeFallbackRect.minX,
+        // English: Large-title mode must wait for a measured compact row; the full bar is not a safe fallback.
+        // Español: El modo de título grande espera una fila compacta medida; la barra completa no es un fallback seguro.
+        // 中文：大标题展开时必须等待实测紧凑行，不能把整条导航栏当作安全回退。
+        guard let compactHeight = normalizedLength(input.compactRowHeight), compactHeight > 0 else { return nil }
+        let rowY = max(host.minY, safeFallbackRect.minY)
+        let availableHeight = min(compactHeight, max(0, safeFallbackRect.maxY - rowY))
+        guard availableHeight > 0 else { return nil }
+        let compactRect = CGRect(x: safeFallbackRect.minX,
                                  y: rowY,
                                  width: safeFallbackRect.width,
                                  height: availableHeight)
-        } else {
-            compactRect = safeFallbackRect
-        }
         guard !compactRect.isEmpty,
-              !intersectsAny(compactRect, exclusions) else { return nil }
+              !intersectsAny(compactRect, verticalExclusions),
+              PTNavigationRowUsability.isUsable(compactRect,
+                                                requiredContentHeight: input.requiredContentHeight,
+                                                in: host) else { return nil }
         return PTNavigationContentRowResult(contentRect: compactRect, evidence: .fallback)
     }
 

@@ -39,6 +39,16 @@ Demo 中的回归页展示 A1 合盖冷启动、A2 不旋转展开、A4 展开�
 
 旧的 `currentNavBarHeight()` 保持原有总高度语义，避免破坏旧项目。
 
+### 紧凑行可用性、缓存和大标题顺序
+
+内容行提交前会按宿主 bounds 和当前控件实测高度做可用性校验。1–2pt 的残留中间行、无法容纳按钮的行、与完整宽度状态栏排斥区重叠的行都会延后，不会写入 `lastAppliedContentRect` 或紧凑行缓存。Duo 侧边保留区只参与左右按钮避让，不会把纵向内容行切成几像素高。
+
+Large Title 使用同一份不可变快照计算紧凑行和左右/标题布局。缓存只在宿主 bounds、安全区、排斥区和所需内容高度都匹配时复用；尺寸、分屏或导航栈上下文改变后自动失效。应用顺序保持为：绑定/挂载导航项 → 解析大标题状态 → 解析内容行 → 应用左右/标题约束，避免递归重建约束。
+
+`PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1` 额外输出 `requiredContentHeight`、`compactRowHeight`、缓存行、Large Title 高度、标题期望尺寸、压缩状态和状态栏/保留区交集，用来区分“高度不足”和“横向冲突”。
+
+`PToolsNavigationTests` 覆盖 1pt 残留行、坏中间帧恢复、展开/收起/再展开、宿主尺寸失效、侧边保留区、非 44pt 合法行、完整状态栏遮挡，以及标题尺寸恢复、长标题压缩和非对称按钮旋转。
+
 ### DEBUG 几何诊断
 
 如需在现场核对真实窗口坐标，可在 Debug Scheme 的环境变量中加入：
@@ -79,6 +89,16 @@ The Demo page documents A1 cold launch while closed, A2 unfold without rotation,
 
 Set `PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1` in a Debug scheme to log host-window frames and vertical centers. The diagnostic is disabled by default and does not log application content.
 
+### Compact-row validity, cache and Large Title ordering
+
+Before a row is committed, PTools validates it against the host bounds and the measured height required by the current controls. 1–2-point transitional rows, rows that cannot contain the controls, and rows intersecting a full-width status exclusion are deferred instead of being written to `lastAppliedContentRect` or the compact-row cache. Duo side rails remain horizontal collision inputs; they do not split the vertical row into a few pixels.
+
+Large Title uses one immutable geometry snapshot for the compact row and the left/title/right layout. A cached row is reused only when host bounds, safe area, exclusions and required content height still match; resize, split view or stack changes invalidate it. The ordering remains bind/mount navigation items → resolve Large Title state → resolve the content row → apply item constraints, avoiding recursive constraint rebuilds.
+
+With `PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1`, diagnostics also include `requiredContentHeight`, `compactRowHeight`, cached row, Large Title height, desired title size, compression state, and status/reserved intersections so height failures can be separated from horizontal collisions.
+
+`PToolsNavigationTests` covers thin transitional rows, cache recovery and invalidation, expand/collapse/expand, side rails, full status occlusion, legitimate non-44-point rows, and title preferred-size recovery under long/asymmetric content.
+
 The UIKit manager is an iOS/iPadOS boundary. watchOS has no matching UIKit navigation-bar host; visionOS and macOS use their native host containers. The value-only resolver is the portable CoreGraphics boundary.
 
 ## Español
@@ -106,5 +126,15 @@ La fila de contenido valida el frame de la barra de estado y las regiones reserv
 La página Demo documenta las comprobaciones A1 de arranque en estado cerrado, A2 de despliegue sin rotación, A4 de retrato desplegado y A5/A6 de cambios repetidos, además de mostrar un resumen geométrico de la escena. La validación física A1–A9 sigue requiriendo un dispositivo Duo plegable real y permanece como `PENDING_DEVICE` si no está disponible.
 
 Para diagnosticar un dispositivo real, añade `PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1` al esquema Debug. El diagnóstico está desactivado por defecto y no registra contenido de la aplicación.
+
+### Validez de la fila compacta, caché y orden del Large Title
+
+Antes de guardar una fila, PTools la valida contra los bounds del host y la altura medida que necesitan los controles actuales. Las filas transitorias de 1–2 puntos, las que no pueden contener los controles y las que chocan con una exclusión de ancho completo se aplazan; no se escriben en `lastAppliedContentRect` ni en la caché compacta. Los raíles laterales del Duo solo participan en la colisión horizontal y no cortan la fila vertical.
+
+Large Title usa una instantánea geométrica inmutable para la fila compacta y el layout izquierdo/título/derecho. La caché solo se reutiliza si coinciden bounds, área segura, exclusiones y altura requerida; un resize, split view o cambio de pila la invalida. El orden sigue siendo montar los elementos → resolver el estado Large Title → resolver la fila → aplicar restricciones, sin reconstrucciones recursivas.
+
+Con `PTOOLS_NAVIGATION_GEOMETRY_DEBUG=1`, el diagnóstico incluye también `requiredContentHeight`, `compactRowHeight`, la fila guardada, la altura Large Title, el tamaño deseado del título, su compresión y las intersecciones de estado/reservas para separar fallos de altura de colisiones horizontales.
+
+`PToolsNavigationTests` cubre filas finas de transición, recuperación e invalidación de caché, expandir/contraer/expandir, raíles laterales, oclusión completa de estado, filas válidas distintas de 44 puntos y recuperación del tamaño preferido del título.
 
 El gestor UIKit es un límite de iOS/iPadOS. watchOS no tiene un host equivalente de barra de navegación UIKit; visionOS y macOS usan sus contenedores nativos. El resolver de valores basado en CoreGraphics es el límite portable.

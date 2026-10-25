@@ -786,8 +786,14 @@ public final class PTNavigationBarManager:NSObject {
         let hostSafeRect = insetSafeRect.isEmpty ? hostBounds : insetSafeRect
         let exclusions = navigationExclusionRects(in: nav, navigationBar: navBar)
         let isLargeTitleExpanded = container.isLargeTitleExpandedForLayout
+        let requiredContentHeight = container.requiredNavigationContentHeight(hostHeight: hostBounds.height)
         let compactRowHeight = isLargeTitleExpanded
-            ? compactNavigationRowHeight(in: navBar, container: container)
+            ? compactNavigationRowHeight(in: navBar,
+                                         container: container,
+                                         hostBounds: hostBounds,
+                                         hostSafeRect: hostSafeRect,
+                                         exclusionRects: exclusions.local,
+                                         requiredContentHeight: requiredContentHeight)
             : nil
         let observedSystemRowRect = isLargeTitleExpanded
             ? nil
@@ -810,7 +816,8 @@ public final class PTNavigationBarManager:NSObject {
             exclusionRects: exclusions.local,
             evidence: evidence,
             isLargeTitleExpanded: isLargeTitleExpanded,
-            compactRowHeight: compactRowHeight
+            compactRowHeight: compactRowHeight,
+            requiredContentHeight: requiredContentHeight
         )
         guard let result = PTNavigationContentRowResolver.resolve(input) else {
             // English: Do not cache a zero frame while UIKit is between layout states.
@@ -963,6 +970,22 @@ public final class PTNavigationBarManager:NSObject {
                 return intersection.isNull || intersection.isEmpty ? nil : intersection
             }
         } ?? []
+        let rowInput = container.lastContentRowInput
+        let requiredContentHeight = rowInput?.requiredContentHeight ?? 0
+        let rowIsThin = requiredContentHeight > 0 && rowRect.height + 0.5 < requiredContentHeight
+        // English: Keep diagnostic geometry value-only so logging never triggers another layout pass or exposes app content.
+        // Español: Mantén la geometría de diagnóstico como valores para no provocar otro layout ni exponer contenido.
+        // 中文：诊断只读取几何值，不能触发布局，也不能输出业务内容。
+        let fallbackRowRect = rowInput?.fallbackRowRect ?? .null
+        let observedRowRect = rowInput?.observedSystemRowRect ?? .null
+        let resolvedContentRect = container.lastAppliedContentRect
+        let titleLayout = container.titleLayoutView.map { titleView in
+            container.navigationTitleLayout(for: titleView,
+                                            mode: container.titleLayoutMode ?? .centerMeasured,
+                                            visibleRect: container.navigationTitleVisibleRect())
+        }
+        let titleDesiredSize = titleLayout?.input.desiredTitleSize ?? .zero
+        let titleIsCompressed = titleLayout?.result.isWidthCompressed ?? false
         let navigationItem = nav.visibleViewController?.navigationItem
         let ownership = nativeOwnershipMap.object(forKey: nav)
         let customInHost = container.superview === nav.navigationBar
@@ -975,6 +998,7 @@ public final class PTNavigationBarManager:NSObject {
         let hasInvalidFrame = [barRect, hostRect, rowRect, leftRect, titleRect, rightRect]
             .contains { !$0.origin.x.isFinite || !$0.origin.y.isFinite || !$0.width.isFinite || !$0.height.isFinite }
         let hasAlignmentIssue = maxMidYDelta > 1.0
+            || rowIsThin
             || hasInvalidFrame
             || !windowBounds.contains(barRect)
             || !statusIntersections.isEmpty
@@ -988,6 +1012,13 @@ public final class PTNavigationBarManager:NSObject {
             String(describing: windowBounds.integral),
             String(describing: barRect.integral),
             String(describing: rowRect.integral),
+            String(describing: fallbackRowRect.integral),
+            String(describing: observedRowRect.integral),
+            String(describing: resolvedContentRect.integral),
+            String(describing: requiredContentHeight),
+            String(describing: rowInput?.compactRowHeight ?? 0),
+            String(describing: container.lastValidCompactRow?.contentRect.integral ?? .null),
+            String(rowIsThin),
             String(describing: statusWindowRect?.integral ?? .null),
             String(describing: reservedWindowRects.map(\.integral)),
             rendererMode(for: nav)?.rawValue ?? "unset",
@@ -1012,6 +1043,9 @@ public final class PTNavigationBarManager:NSObject {
         host=\(hostRect) / safe=\(container.safeAreaInsets)
         container.present=\(customPresented) / hidden=\(container.isHidden) / inHost=\(customInHost) / alpha=\(container.alpha)
         row=\(rowRect) / safe=\(container.topBarContainer.safeAreaInsets)
+        row.hostBounds=\(rowInput?.hostBounds ?? .null) / hostSafe=\(rowInput?.hostSafeRect ?? .null) / fallback=\(fallbackRowRect) / observed=\(observedRowRect) / lastApplied=\(resolvedContentRect)
+        row.expanded=\(rowInput?.isLargeTitleExpanded ?? false) / row.required=\(requiredContentHeight) / row.compact=\(rowInput?.compactRowHeight ?? 0) / row.lastValid=\(container.lastValidCompactRow?.contentRect ?? .null) / row.thin=\(rowIsThin)
+        largeTitle.bounds=\(container.largeTitleContainer.bounds) / largeTitle.backgroundHeight=\(container.largeTitleContentHeightForLayout)
         left.midY=\(leftRect.midY)
         right.midY=\(rightRect.midY)
         title.midY=\(titleRect.midY)
@@ -1024,6 +1058,7 @@ public final class PTNavigationBarManager:NSObject {
         reservedWindow=\(reservedWindowRects)
         reservedIntersections=\(reservedIntersections)
         statusIntersections=\(statusIntersections) / ptoolsOwnedLeft=\(ownership?.leftItems.count ?? 0) / ptoolsOwnedRight=\(ownership?.rightItems.count ?? 0)
+        title.bounds=\(container.titleLayoutView?.bounds ?? .zero) / title.widths=\(leftRect.width),\(titleRect.width),\(rightRect.width) / title.desired=\(titleDesiredSize) / title.compressed=\(titleIsCompressed) / title.frame=\(titleRect) / title.display=\(!container.titleContainer.isHidden)
         """)
     }
 #endif
@@ -1121,31 +1156,43 @@ public final class PTNavigationBarManager:NSObject {
     }
 #endif
 
-    // English: Use the previous measured row first, then infer a compact row from the host and large-title area.
-    // Español: Usa primero la fila medida anterior y luego infiere la fila compacta desde el host y el título grande.
-    // 中文：优先复用上一次实测内容行，再根据宿主和大标题区域推导紧凑行。
+    // English: Use only a geometry-validated compact row, then test measured fallbacks before caching.
+    // Español: Usa solo una fila compacta validada por geometría y prueba fallbacks medidos antes de guardar.
+    // 中文：只复用通过几何校验的紧凑行，并在缓存前验证实测回退值。
     private func compactNavigationRowHeight(in navBar: UINavigationBar,
-                                             container: PTNavigationBarContainer) -> CGFloat? {
+                                             container: PTNavigationBarContainer,
+                                             hostBounds: CGRect,
+                                             hostSafeRect: CGRect,
+                                             exclusionRects: [CGRect],
+                                             requiredContentHeight: CGFloat) -> CGFloat? {
         let hostHeight = navBar.bounds.height
-        let previousHeight = container.lastAppliedContentRect.height
-        if previousHeight.isFinite,
-           previousHeight > 0,
-           previousHeight < hostHeight - 0.5 {
-            return previousHeight
+        if let cached = container.validatedCompactRowHeight(hostBounds: hostBounds,
+                                                            hostSafeRect: hostSafeRect,
+                                                            exclusionRects: exclusionRects,
+                                                            requiredContentHeight: requiredContentHeight) {
+            return cached
         }
 
         let largeTitleHeight = max(container.largeTitleContentHeightForLayout,
                                    container.largeTitleHeight)
         let inferredHeight = hostHeight - largeTitleHeight
-        if inferredHeight > 0, inferredHeight < hostHeight {
-            return inferredHeight
+        let candidates = [inferredHeight, min(hostHeight, CGFloat.kNavBarHeight)]
+        for candidate in candidates where candidate.isFinite && candidate > 0 && candidate < hostHeight {
+            let input = PTNavigationContentRowInput(
+                hostBounds: hostBounds,
+                hostSafeRect: hostSafeRect,
+                fallbackRowRect: hostSafeRect,
+                exclusionRects: exclusionRects,
+                evidence: .fallback,
+                isLargeTitleExpanded: true,
+                compactRowHeight: candidate,
+                requiredContentHeight: requiredContentHeight
+            )
+            if let result = PTNavigationContentRowResolver.resolve(input) {
+                return result.contentRect.height
+            }
         }
-
-        // English: This is only a first-pass compatibility seed; the next host layout replaces it.
-        // Español: Esta es solo una semilla de compatibilidad inicial; el siguiente layout del host la reemplaza.
-        // 中文：这只是首次布局的兼容种子，下一次宿主布局会用实测值替换。
-        let seed = min(hostHeight, CGFloat.kNavBarHeight)
-        return seed > 0 ? seed : nil
+        return nil
     }
 
     private func ensureCustomContainer(in nav: UINavigationController) -> PTNavigationBarContainer? {

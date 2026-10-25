@@ -367,7 +367,7 @@ extension PTCollectionView {
             }
             let resolvedPhysicalIndexPath = physicalIndexPath
                 ?? diffableDataSource.indexPath(for: displayedRowID)
-            guard let resolvedPhysicalIndexPath else { return }
+            guard resolvedPhysicalIndexPath != nil else { return }
             let context = PTCollectionPageContext(page: logicalPage,
                                                    pageCount: totalPages,
                                                    sectionID: sectionID,

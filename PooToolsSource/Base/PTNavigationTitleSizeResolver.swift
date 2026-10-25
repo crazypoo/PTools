@@ -22,8 +22,11 @@ enum PTNavigationTitleSizeResolver {
         let bounds = view.bounds.size
         let intrinsic = view.intrinsicContentSize
 
-        var width = explicitWidth ?? validDimension(bounds.width) ?? validDimension(intrinsic.width)
-        var height = validDimension(bounds.height) ?? validDimension(intrinsic.height)
+        // English: Ignore a 0/1-point transition bound when UIKit still exposes a useful preferred size.
+        // Español: Ignora un bounds de 0/1 punto durante la transición si UIKit aún ofrece un tamaño preferido útil.
+        // 中文：如果 UIKit 仍提供有效首选尺寸，就不要让转场中的 0/1 点 bounds 覆盖它。
+        var width = explicitWidth ?? preferredDimension(bounds.width) ?? validDimension(intrinsic.width)
+        var height = preferredDimension(bounds.height) ?? validDimension(intrinsic.height)
 
         if width == nil || height == nil {
             let fitting = view.systemLayoutSizeFitting(
@@ -42,6 +45,11 @@ enum PTNavigationTitleSizeResolver {
 
     private static func validDimension(_ value: CGFloat) -> CGFloat? {
         guard value.isFinite, value > 0, value <= 100_000 else { return nil }
+        return value
+    }
+
+    private static func preferredDimension(_ value: CGFloat) -> CGFloat? {
+        guard let value = validDimension(value), value > 1 else { return nil }
         return value
     }
 }
