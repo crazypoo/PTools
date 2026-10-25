@@ -50,6 +50,7 @@ public actor PTStudioBridge {
     private var droppedEvents: UInt64 = 0
     private var isSending = false
     private var retryExponent = 0
+    private var generation: UInt64 = 0
     private var queue: [PTStudioEnvelope] = []
     private var pending: [UUID: PTStudioMessageKind] = [:]
     private var pendingOrder: [UUID] = []
@@ -73,6 +74,7 @@ public actor PTStudioBridge {
         #else
         guard configuration.isEnabled else { throw PTStudioBridgeError.disabledInRelease }
         guard self.transport == nil else { throw PTStudioBridgeError.alreadyRunning }
+        generation &+= 1
         self.config = configuration
         self.transport = transport
         sessionID = UUID()
@@ -110,6 +112,7 @@ public actor PTStudioBridge {
     }
 
     public func stop() async {
+        generation &+= 1
         let previous = transport
         transport = nil
         streamTask?.cancel()
@@ -196,8 +199,9 @@ public actor PTStudioBridge {
                                       source: source, kind: kind, payload: payload))
         if queue.count > config.maximumQueuedEvents {
             // Gaps are observable through session sequence numbers and status.droppedEvents.
-            queue.removeFirst(queue.count - config.maximumQueuedEvents)
-            droppedEvents &+= 1
+            let removed = queue.count - config.maximumQueuedEvents
+            queue.removeFirst(removed)
+            droppedEvents &+= UInt64(removed)
         }
     }
 
@@ -216,6 +220,7 @@ public actor PTStudioBridge {
         await materializePending()
         guard let transport, !queue.isEmpty else { return }
         let batch = Array(queue.prefix(config.maximumBatchCount))
+        let sendingGeneration = generation
         isSending = true
         do {
             let acknowledgement = try await transport.send(batch)
@@ -224,7 +229,9 @@ public actor PTStudioBridge {
                   acknowledgement.acceptedSequence >= batch[batch.count - 1].sequence else {
                 throw PTStudioBridgeError.invalidAcknowledgement
             }
-            // While the actor was awaiting the network, reset/stop could have intervened.
+            // A stopped or restarted bridge must never mutate the new session.
+            guard sendingGeneration == generation else { return }
+            // While the actor was awaiting the network, reset could have intervened.
             if self.transport != nil,
                Array(queue.prefix(batch.count)).map(\.eventID) == batch.map(\.eventID) {
                 queue.removeFirst(batch.count)
@@ -234,6 +241,7 @@ public actor PTStudioBridge {
             isSending = false
             if !queue.isEmpty || !pending.isEmpty { scheduleFlush(after: .zero) }
         } catch {
+            guard sendingGeneration == generation else { return }
             isSending = false
             guard self.transport != nil else { return }
             retryExponent = min(retryExponent + 1, 5)
