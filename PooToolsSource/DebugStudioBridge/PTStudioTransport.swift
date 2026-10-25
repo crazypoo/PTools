@@ -123,8 +123,8 @@ public actor PTStudioHTTPSPushTransport: PTStudioTransport {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         let data = try encoder.encode(PTStudioBatch(events: events))
-        // 256 KiB hard batch cap, irrespective of the consumer's configurable queue bounds.
-        guard data.count <= 256 * 1024 else { throw PTStudioBridgeError.transportRejected }
+        // Bounded at 2 MiB so 24 events with both 16 KiB previews cannot deadlock retry.
+        guard data.count <= 2 * 1024 * 1024 else { throw PTStudioBridgeError.transportRejected }
         var request = URLRequest(url: endpoint)
         request.httpMethod = "POST"
         request.httpBody = data
