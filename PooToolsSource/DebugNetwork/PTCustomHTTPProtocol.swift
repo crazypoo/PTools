@@ -54,6 +54,9 @@ final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {
 
     private class func canServeRequest(_ request: URLRequest) -> Bool {
         guard PTNetworkCaptureState.isEnabled else { return false }
+        // Studio's own HTTPS push must not recursively enter the capture store.
+        // This is an opt-out marker for diagnostics only, never a network policy.
+        guard request.value(forHTTPHeaderField: "X-PTStudio-Internal") != "1" else { return false }
         guard property(forKey: requestProperty, in: request) == nil else { return false }
         guard let scheme = request.url?.scheme?.lowercased() else { return false }
         return scheme == "http" || scheme == "https"
