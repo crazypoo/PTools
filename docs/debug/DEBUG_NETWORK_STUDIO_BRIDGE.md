@@ -1,6 +1,6 @@
 # PTNetwork Studio read-only Bridge (PTools 5.69.x)
 
-> **Status:** PTools-side opt-in protocol, bounded capture consumer and HTTPS push client. **Not** a complete end-to-end macOS integration. The PTNetwork Studio desktop collector must implement the wire contract below and needs independent macOS/Xcode and device acceptance.
+> **Status (2026-10-25):** The corresponding DevNetworkWatcher collector now implements the schema-v1 `POST /v1/events` batch and JSON ACK on TCP 9453 (see its protocol-fix branch). Mac/iOS end-to-end physical-device acceptance and macOS Xcode build remain pending. Unlike the old 9443 endpoint, it uses a developer-trusted CA plus a pinned leaf certificate; it does **not** bypass system trust.
 
 ## Scope and compatibility
 
@@ -22,12 +22,12 @@ import PToolsDebugStudioBridge
 // from the collector's verified pairing UI.
 let credentials = try PTStudioPairingCredentials(
     bearerToken: pairingToken,
-    leafCertificateSHA256: leafCertSHA256  // 32 raw bytes, not UTF-8 hex
+    leafCertificateSHA256Hex: fingerprintHex // 64 chars from Mac UI
 )
 // Only if the user approved storing these secrets:
 try PTStudioPairingKeychain.save(credentials, account: "my-dev-mac")
 let transport = try PTStudioHTTPSPushTransport(
-    endpoint: URL(string: "https://my-dev-mac.local:9453/v1/events")!,
+    endpoint: URL(string: "https://192.168.1.20:9453/v1/events")!,
     credentials: credentials
 )
 try await PTStudioBridge.shared.start(
@@ -40,6 +40,10 @@ await PTStudioBridge.shared.stop()
 PTStudioPairingKeychain.revoke(account: "my-dev-mac")
 #endif
 ```
+
+**Mac setup:** In DevNetworkWatcher choose **iPhone → PTools Live Bridge**, enter the Mac's real Wi-Fi LAN IP (not `127.0.0.1`), then Start Bridge. The collector generates a private development root CA and a 90-day leaf with SAN for that address. Use **Reveal Development CA (.cer)** to AirDrop/install the root CA on the authorized iOS test device and enable full trust under **Settings → General → About → Certificate Trust Settings**. Enter the displayed bearer token and leaf fingerprint in the iOS Debug-only pairing UI. Changing the Mac IP rotates the leaf fingerprint; pair again. The root CA is separate from mitmproxy's HTTPS-inspection CA. Never install either CA or token in a distributed app.
+
+**Capture startup:** `@MainActor PTDebugManager.shared.start(identifier: "network")` starts the existing URLProtocol observer; starting `PTStudioBridge` alone does **not** capture traffic. Stop via `PTDebugManager.shared.stop(identifier: "network")` if your Debug UI has no other network-capture owner.
 
 The host application's `Info.plist` must include `NSLocalNetworkUsageDescription` for local network use. This implementation performs **no Bonjour discovery** and does not require `NSBonjourServices`. Use a host address entered/selected by the user. Apple local-network permission behavior varies by OS and needs a device check.
 
@@ -116,7 +120,7 @@ Control `kind` variants: `hello`, `capabilities`, `recordUpsert`, `recordFinaliz
 | Default-off Debug gate and subscriber cleanup | Implemented in source; tests added |
 | Conservative redaction, bounded preview, file URL omission | Implemented in source; tests added |
 | Bounded Store stream, queue, coalescing, retries, ACK | Implemented in source; load tests pending |
-| Mac Collector HTTPS endpoint + nonce/ACK/token server validation | **Not implemented here** |
+| Mac Collector HTTPS endpoint + nonce/ACK/token server validation | Implemented in DevNetworkWatcher protocol-fix branch; real iOS acceptance pending |
 | Actual Mac app import/compose/proxy/MITM/Rewrite/Map Local etc. (P4) | **Separate PTNetwork Studio repository** |
 | 10k requests, 100MB response, recovery, multi-Scene / iPhone Duo | **Physical runtime acceptance pending** |
 | macOS Tahoe 26 / Apple Silicon Xcode build and proxy curl smoke test | **Not executable from GitHub source inspection** |
