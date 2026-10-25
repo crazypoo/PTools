@@ -49,6 +49,12 @@ open class PTNavigationBarContainer: UIView {
         
     public var leftContainerWidth: CGFloat = 0
     public var rightContainerWidth: CGFloat = 0
+
+    // English: Store scene-local edge insets so buttons and title share one safe horizontal row.
+    // Español: Guarda los insets laterales locales de la escena para que botones y título compartan una fila horizontal segura.
+    // 中文：保存场景局部的左右边距，让按钮和标题共用一条安全的横向内容行。
+    var contentRowLeadingInset: CGFloat = 0
+    var contentRowTrailingInset: CGFloat = 0
     
     // ✅ 新增三块区域
     public lazy var leftContainer:UIStackView = {
@@ -296,7 +302,33 @@ extension PTNavigationBarContainer {
         }
         visible.origin.y = rowBounds.minY
         visible.size.height = rowBounds.height
+
+        // English: Reserve only the extra horizontal displacement introduced by active status or occlusion regions.
+        // Español: Reserva solo el desplazamiento horizontal adicional causado por regiones activas de estado u oclusión.
+        // 中文：只扣除状态栏或遮挡区导致的额外横向偏移，避免重复计算基础安全边距。
+        let baseInset = max(0, PTAppBaseConfig.share.defaultViewSpace)
+        let leadingExtra = max(0, contentRowLeadingInset - baseInset)
+        let trailingExtra = max(0, contentRowTrailingInset - baseInset)
+        let availableWidth = visible.width - leadingExtra - trailingExtra
+        if availableWidth > 0 {
+            visible.origin.x += leadingExtra
+            visible.size.width = availableWidth
+        }
         return visible
+    }
+
+    // English: Update the shared horizontal safe row without changing the public navigation-bar API.
+    // Español: Actualiza la fila horizontal segura compartida sin cambiar la API pública de la barra de navegación.
+    // 中文：在不改变公开导航栏 API 的前提下，更新共享的横向安全内容行。
+    @discardableResult
+    func applyContentRowEdgeInsets(leading: CGFloat, trailing: CGFloat) -> Bool {
+        let normalizedLeading = leading.isFinite ? max(0, leading) : 0
+        let normalizedTrailing = trailing.isFinite ? max(0, trailing) : 0
+        let changed = contentRowLeadingInset != normalizedLeading ||
+            contentRowTrailingInset != normalizedTrailing
+        contentRowLeadingInset = normalizedLeading
+        contentRowTrailingInset = normalizedTrailing
+        return changed
     }
 
     // English: Share one measurement input between the system-container and standalone-bar adapters.

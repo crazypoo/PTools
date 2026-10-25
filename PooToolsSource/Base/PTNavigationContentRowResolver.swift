@@ -73,7 +73,69 @@ struct PTNavigationContentRowResult: Equatable, Sendable {
     let evidence: PTNavigationContentRowEvidence
 }
 
+// English: Keep horizontal edge avoidance as a value so custom navigation bars can share the same collision result.
+// Español: Mantiene la evitación horizontal de los bordes como un valor para que las barras personalizadas compartan el mismo resultado de colisión.
+// 中文：将横向边缘避让保持为值类型，让自定义导航栏共享同一套碰撞结果。
+struct PTNavigationContentEdgeInsets: Equatable, Sendable {
+    let leading: CGFloat
+    let trailing: CGFloat
+}
+
 enum PTNavigationContentRowResolver {
+    // English: Move an edge item group away from an exclusion that overlaps its current host-local slot.
+    // Español: Aleja el grupo de elementos del borde de una exclusión que invade su posición local actual.
+    // 中文：当排斥区侵入按钮当前的宿主局部位置时，将按钮组向内容区域内移动。
+    static func resolveEdgeInsets(rowBounds: CGRect,
+                                  leadingItemWidth: CGFloat,
+                                  trailingItemWidth: CGFloat,
+                                  minimumLeading: CGFloat,
+                                  minimumTrailing: CGFloat,
+                                  exclusionRects: [CGRect]) -> PTNavigationContentEdgeInsets {
+        guard let row = normalizedRect(rowBounds), !row.isEmpty else {
+            return PTNavigationContentEdgeInsets(leading: max(0, minimumLeading),
+                                                 trailing: max(0, minimumTrailing))
+        }
+
+        let leadingWidth = normalizedLength(leadingItemWidth) ?? 0
+        let trailingWidth = normalizedLength(trailingItemWidth) ?? 0
+        let leadingMinimum = normalizedLength(minimumLeading) ?? 0
+        let trailingMinimum = normalizedLength(minimumTrailing) ?? 0
+        var leading = leadingMinimum
+        var trailing = trailingMinimum
+        let leadingSlot = CGRect(x: row.minX + leadingMinimum,
+                                 y: row.minY,
+                                 width: leadingWidth,
+                                 height: row.height)
+        let trailingSlot = CGRect(x: row.maxX - trailingMinimum - trailingWidth,
+                                  y: row.minY,
+                                  width: trailingWidth,
+                                  height: row.height)
+
+        for exclusion in exclusionRects.compactMap({ bounded($0, in: row) }) {
+            if !leadingSlot.isEmpty, leadingSlot.intersects(exclusion) {
+                leading = max(leading,
+                              exclusion.maxX - row.minX + leadingMinimum)
+            }
+            if !trailingSlot.isEmpty, trailingSlot.intersects(exclusion) {
+                trailing = max(trailing,
+                               row.maxX - exclusion.minX + trailingMinimum)
+            }
+        }
+
+        // English: Never create impossible constraints when an exclusion consumes nearly the whole row.
+        // Español: Nunca crea restricciones imposibles cuando una exclusión consume casi toda la fila.
+        // 中文：当排斥区几乎占满内容行时，不创建不可能满足的约束。
+        let availableForLeading = max(leadingMinimum,
+                                      row.width - trailingWidth - trailingMinimum)
+        leading = min(leading, availableForLeading)
+        let availableForTrailing = max(trailingMinimum,
+                                       row.width - leadingWidth - leading)
+        trailing = min(trailing, availableForTrailing)
+
+        return PTNavigationContentEdgeInsets(leading: max(leadingMinimum, leading),
+                                             trailing: max(trailingMinimum, trailing))
+    }
+
     // English: Use UIKit observations only when valid; otherwise use a host-local fallback or defer.
     // Español: Usa observaciones de UIKit solo cuando son válidas; si no, usa un fallback local o difiere.
     // 中文：仅在 UIKit 观测值有效时使用，否则使用宿主局部回退或延后布局。

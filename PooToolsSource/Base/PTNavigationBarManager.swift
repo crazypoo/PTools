@@ -820,9 +820,9 @@ public final class PTNavigationBarManager:NSObject {
             return
         }
 
-        if container.applyNavigationContentRow(result.contentRect, input: input) {
-            refreshTitleLayout(in: nav, container: container)
-        }
+        _ = container.applyNavigationContentRow(result.contentRect, input: input)
+        container.layoutIfNeeded()
+        refreshCustomNavigationEdgeLayout(in: nav, container: container)
 #if DEBUG
         dumpNavigationVerticalGeometryIfEnabled(nav: nav,
                                                 container: container,
@@ -832,6 +832,49 @@ public final class PTNavigationBarManager:NSObject {
                                                 reservedWindowRects: exclusions.reservedWindow,
                                                 rendererTransition: rendererTransition)
 #endif
+    }
+
+    // English: Keep custom trailing controls outside the live status or reserved region in the current scene.
+    // Español: Mantiene los controles trailing personalizados fuera de la región viva de estado o reservada de la escena actual.
+    // 中文：让自定义右侧按钮避开当前 Scene 的实时状态栏或保留区域。
+    private func refreshCustomNavigationEdgeLayout(in nav: UINavigationController,
+                                                   container: PTNavigationBarContainer) {
+        let rowBounds = container.topBarContainer.bounds
+        guard !rowBounds.isEmpty,
+              rowBounds.width.isFinite,
+              rowBounds.height.isFinite else { return }
+
+        let minimumInset = max(0, PTAppBaseConfig.share.defaultViewSpace)
+        let navigationBar = nav.navigationBar
+        let exclusions = navigationExclusionRects(in: nav, navigationBar: navigationBar).local.compactMap { rect -> CGRect? in
+            let converted = navigationBar.convert(rect, to: container.topBarContainer)
+            let intersection = converted.intersection(rowBounds)
+            return intersection.isNull || intersection.isEmpty ? nil : intersection
+        }
+        let edgeInsets = PTNavigationContentRowResolver.resolveEdgeInsets(
+            rowBounds: rowBounds,
+            leadingItemWidth: container.leftContainerWidth,
+            trailingItemWidth: container.rightContainerWidth,
+            minimumLeading: minimumInset,
+            minimumTrailing: minimumInset,
+            exclusionRects: exclusions
+        )
+        let edgeChanged = container.applyContentRowEdgeInsets(leading: edgeInsets.leading,
+                                                               trailing: edgeInsets.trailing)
+
+        container.leftContainer.snp.remakeConstraints { make in
+            make.left.equalToSuperview().inset(edgeInsets.leading)
+            make.top.bottom.equalToSuperview()
+            make.width.equalTo(container.leftContainerWidth)
+        }
+        container.rightContainer.snp.remakeConstraints { make in
+            make.right.equalToSuperview().inset(edgeInsets.trailing)
+            make.top.bottom.equalToSuperview()
+            make.width.equalTo(container.rightContainerWidth)
+        }
+        if edgeChanged || !exclusions.isEmpty {
+            refreshTitleLayout(in: nav, container: container)
+        }
     }
 
     // English: Keep renderer transition evidence stable and free of application content.

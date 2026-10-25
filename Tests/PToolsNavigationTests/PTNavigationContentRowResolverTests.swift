@@ -194,6 +194,23 @@ final class PTNavigationContentRowResolverTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(result.contentRect.minY, 32)
     }
 
+    // English: Move a trailing action left when a status-region exclusion overlaps its original slot.
+    // Español: Mueve una acción trailing hacia la izquierda cuando una exclusión de estado invade su posición original.
+    // 中文：当状态栏排斥区侵入右侧按钮原始位置时，将按钮向左移动。
+    func testTrailingItemsMoveInsideTheHorizontalSafeRow() {
+        let result = PTNavigationContentRowResolver.resolveEdgeInsets(
+            rowBounds: CGRect(x: 0, y: 0, width: 430, height: 50),
+            leadingItemWidth: 64,
+            trailingItemWidth: 54,
+            minimumLeading: 16,
+            minimumTrailing: 16,
+            exclusionRects: [CGRect(x: 370, y: 0, width: 48, height: 50)]
+        )
+
+        XCTAssertEqual(result.leading, 16, accuracy: 0.001)
+        XCTAssertEqual(result.trailing, 76, accuracy: 0.001)
+    }
+
     func testContainerUsesAHostHeightDifferentFromTheLegacyEstimate() {
         let navigationController = PTBaseNavControl(rootViewController: UIViewController())
         navigationController.loadViewIfNeeded()
