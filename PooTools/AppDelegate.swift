@@ -120,6 +120,12 @@ class AppDelegate: PTAppWindowsDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         runFontCollectorIfRequested()
         
+        Task {
+            do {
+                let _ = try await AppMacNetworkDebugManager.shared.connect(host: "192.168.50.133", token: "LhGoeyKqr__mqucmBiZsEEpMF-i2McnqNpUBQXY_mLM", fingerprint: "dc6eba0dd8763b5d44bd56bb80201917543dbdd31b44d18bdf88300a4d388b41")
+            }
+        }
+
         PTFullscreenPopGesture.configure()
         
         let locationAlways = PTPermissionModel()
@@ -518,5 +524,73 @@ extension AppDelegate {
         
     override class func appDelegate() -> AppDelegate? {
         UIApplication.shared.delegate as? AppDelegate
+    }
+}
+
+@MainActor
+final class AppMacNetworkDebugManager {
+
+    static let shared = AppMacNetworkDebugManager()
+
+    private init() {}
+
+    /// 用户主动开启调试时调用
+    func connect(
+        host: String,
+        token: String,
+        fingerprint: String
+    ) async throws {
+
+        let host = host.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        )
+
+        guard !host.isEmpty,
+              let endpoint = URL(
+                string: "https://\(host):9453/v1/events"
+              ) else {
+            throw URLError(.badURL)
+        }
+
+        // 1. 准备配对信息
+        let credentials = try PTStudioPairingCredentials(
+            bearerToken: token,
+            leafCertificateSHA256Hex: fingerprint
+        )
+
+        // 2. 建立安全传输
+        let transport = try PTStudioHTTPSPushTransport(
+            endpoint: endpoint,
+            credentials: credentials
+        )
+
+        // 3. 启动 PTools 原有的网络采集功能
+        PTDebugManager.shared.start(identifier: "network")
+
+        // 4. 启动 Mac Bridge
+        try await PTStudioBridge.shared.start(
+            using: transport,
+            configuration: PTStudioBridgeConfiguration(
+                isEnabled: true,
+                maximumQueuedEvents: 512,
+                maximumPendingRequests: 512,
+                maximumBatchCount: 24,
+                batchInterval: .milliseconds(150)
+            )
+        )
+    }
+
+    /// 查询 Bridge 运行和传输状态
+    func status() async -> PTStudioBridgeStatus {
+        await PTStudioBridge.shared.status()
+    }
+
+    /// 关闭 Mac 实时连接
+    func disconnect() async {
+        await PTStudioBridge.shared.stop()
+
+        // 如果此网络采集器没有其他调试会话在使用，
+        // 可以一起停止。
+        PTDebugManager.shared.stop(identifier: "network")
     }
 }

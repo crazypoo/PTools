@@ -164,6 +164,8 @@ PODS:
     - PooTools/Share
     - PooTools/Storage
     - PooTools/Symbols
+  - PooTools/DEBUG_StudioBridge (5.69.0):
+    - PooTools/DEBUG
   - PooTools/DEBUG_TrackingEyes (5.69.0):
     - PooTools/CameraPermission
     - PooTools/Core
@@ -525,6 +527,7 @@ DEPENDENCIES:
   - PooTools/AppIntegrity (from `./`)
   - PooTools/Auth (from `./`)
   - PooTools/Database (from `./`)
+  - PooTools/DEBUG_StudioBridge (from `./`)
   - PooTools/HandSign (from `./`)
   - PooTools/InputAll (from `./`)
   - PooTools/Map (from `./`)
@@ -620,7 +623,7 @@ SPEC CHECKSUMS:
   lottie-ios: 6467ca7035120c5b0e0acee58bb679cf15875686
   PhoneNumberKit: d8a400a22cea696c20028ebfdf75560dc31144e1
   PocketSVG: ca3bc53ea8d68336ba830c47b2e547790507b901
-  PooTools: 49ed1819e596c0931da756b045d988d7ad077aca
+  PooTools: f21347e5ba31cb487782f146d10677a6870a4ac0
   Protobuf: d7f7c8329edf5eb8af65547a8ba3e9c1cee927d5
   SmartCodable: db7f9dc94eb9022ede18adf5052772432c5286c7
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
@@ -630,6 +633,6 @@ SPEC CHECKSUMS:
   SwiftLint: 7d51ad56923e88694cee5ca806dbbab30f85eaaa
   Swinject: a827d508c6270da03ec74e558e728917a888fa9b
 
-PODFILE CHECKSUM: 2181483c2bc318d02b652b7a9f3174dfd850e656
+PODFILE CHECKSUM: d6b3c07db4128f3e7d95ed8381169de3077d015b
 
 COCOAPODS: 1.16.2

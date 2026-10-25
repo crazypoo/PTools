@@ -91,6 +91,7 @@ target 'PooTools_Example' do
   pod 'PooTools/Map', :path => './'
   pod 'PooTools/AppIntegrity', :path => './'
   pod 'PooTools/Realtime', :path => './'
+  pod 'PooTools/DEBUG_StudioBridge', :path => './'
 
   # English: Keep modules imported directly by the example target explicit.
   # Español: Mantén explícitos los módulos que el target de ejemplo importa directamente.
