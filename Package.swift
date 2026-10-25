@@ -291,6 +291,8 @@ let package = Package(
         // 调试工具模块 (DEBUG)
         // ==========================================
         .library(name: "PooToolsDEBUG", targets: ["PooToolsDEBUG"]),
+        // Explicit opt-in transport of redacted DebugNetwork events; omitted from PooToolsAll.
+        .library(name: "PToolsDebugStudioBridge", targets: ["PToolsDebugStudioBridge"]),
         .library(name: "PooToolsDEBUGTrackingEyes", targets: ["PooToolsDEBUGTrackingEyes"]),
         .library(name: "PooToolsLaunchTimeProfiler", targets: ["PooToolsLaunchTimeProfiler"]),
 
@@ -1158,6 +1160,13 @@ let package = Package(
             ],
             swiftSettings: [.define("POOTOOLS_DEBUG"), .define("POOTOOLS_COCOAPODS")]
         ),
+        // Standalone target avoids compiling DebugNetwork/StudioBridge sources twice.
+        .target(
+            name: "PToolsDebugStudioBridge",
+            dependencies: ["PooToolsDEBUG"],
+            path: "PooToolsSource/DebugStudioBridge",
+            swiftSettings: [.define("POOTOOLS_DEBUG_STUDIO_BRIDGE")]
+        ),
         .target(
             name: "PooToolsDEBUGTrackingEyes",
             dependencies: ["ptools", "PooToolsDEBUG", "PTCameraPermission"],
@@ -1340,6 +1349,12 @@ let package = Package(
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]
+        ),
+        .testTarget(
+            name: "PToolsDebugStudioBridgeTests",
+            dependencies: ["PToolsDebugStudioBridge", "PooToolsDEBUG"],
+            path: "Tests/PToolsDebugStudioBridgeTests",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         // English: Keep HTTP framing tests independent from UIKit and live network services.
         // Español: Mantén las pruebas de framing HTTP independientes de UIKit y de servicios de red reales.
