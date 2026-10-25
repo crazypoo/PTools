@@ -54,6 +54,9 @@ final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {
 
     private class func canServeRequest(_ request: URLRequest) -> Bool {
         guard PTNetworkCaptureState.isEnabled else { return false }
+        // Studio batches are diagnostic transport, not business requests.
+        // Ignore them even when URLSessionConfiguration was runtime-swizzled.
+        guard request.value(forHTTPHeaderField: "X-PTStudio-Internal") != "1" else { return false }
         // Studio's own HTTPS push must not recursively enter the capture store.
         // This is an opt-out marker for diagnostics only, never a network policy.
         guard request.value(forHTTPHeaderField: "X-PTStudio-Internal") != "1" else { return false }
