@@ -79,6 +79,33 @@ final class PTStudioBridgeTests: XCTestCase {
                                                               credentials: credentials))
     }
 
+    func testMacPairingHexFingerprintAndSchemaV1Batch() throws {
+        let hex = String(repeating: "aB", count: 32)
+        let token = String(repeating: "x", count: 32)
+        let credentials = try PTStudioPairingCredentials(
+            bearerToken: token, leafCertificateSHA256Hex: hex
+        )
+        XCTAssertEqual(credentials.leafCertificateSHA256, Data(repeating: 0xAB, count: 32))
+        XCTAssertThrowsError(try PTStudioPairingCredentials(
+            bearerToken: token, leafCertificateSHA256Hex: "not-hex"
+        ))
+        let sessionID = UUID()
+        let event = PTStudioEnvelope(
+            sessionID: sessionID, deviceID: UUID(), requestID: UUID(),
+            sequence: 1, monotonicTime: 12,
+            source: "urlProtocol", kind: .recordFinalize
+        )
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let payload = try encoder.encode(PTStudioBatch(events: [event]))
+        let json = try XCTUnwrap(JSONSerialization.jsonObject(with: payload) as? [String: Any])
+        XCTAssertEqual(json["schemaVersion"] as? Int, 1)
+        let events = try XCTUnwrap(json["events"] as? [[String: Any]])
+        XCTAssertEqual(events.first?["kind"] as? String, "recordFinalize")
+        XCTAssertEqual(events.first?["sessionID"] as? String, sessionID.uuidString)
+        XCTAssertNotNil(events.first?["wallTime"] as? String)
+    }
+
     func testChangeStreamUpsertFinalizeACKAndOptOut() async throws {
         #if DEBUG
         let store = PTNetworkCaptureStore(maxRecords: 10)

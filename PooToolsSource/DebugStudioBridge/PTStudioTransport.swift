@@ -12,6 +12,22 @@ public struct PTStudioPairingCredentials: Codable, Sendable, Equatable {
     public let bearerToken: String
     public let leafCertificateSHA256: Data
 
+    /// Convenience for pasting the Mac UI's 64-character leaf SHA-256 fingerprint.
+    /// This does not waive system TLS trust: the developer must trust the Mac CA first.
+    public init(bearerToken: String, leafCertificateSHA256Hex: String) throws {
+        let hex = leafCertificateSHA256Hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard hex.utf8.count == 64 else { throw PTStudioBridgeError.invalidCredentials }
+        let characters = Array(hex)
+        var digest = Data()
+        for offset in stride(from: 0, to: 64, by: 2) {
+            guard let byte = UInt8(String(characters[offset...offset + 1]), radix: 16) else {
+                throw PTStudioBridgeError.invalidCredentials
+            }
+            digest.append(byte)
+        }
+        try self.init(bearerToken: bearerToken, leafCertificateSHA256: digest)
+    }
+
     public init(bearerToken: String, leafCertificateSHA256: Data) throws {
         guard bearerToken.utf8.count >= 24, leafCertificateSHA256.count == 32 else {
             throw PTStudioBridgeError.invalidCredentials
