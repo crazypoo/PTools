@@ -195,6 +195,7 @@ public class PTLaunchAdMonitor: NSObject {
     @MainActor public func showAd(adModels: [PTLaunchADModel],
                                   onView: Any,
                                   skipFont: UIFont = .appfont(size: 16),
+                                  skipColor:UIColor = .black,
                                   ltdString: String = "",
                                   comNameFont: UIFont = .appfont(size: 12),
                                   callBack: PTActionTask? = nil,
@@ -209,12 +210,12 @@ public class PTLaunchAdMonitor: NSObject {
         adLaunchSnapshots = adModels.map { PTLaunchADSnapshot(model: $0) }
         
         guard !adLaunchSnapshots.isEmpty else { return }
-        setupBaseUI(onView: onView, ltdString: ltdString, comNameFont: comNameFont, skipFont: skipFont)
+        setupBaseUI(onView: onView, ltdString: ltdString, comNameFont: comNameFont, skipFont: skipFont,skipColor: skipColor)
         startAdSequence(snapshots: adLaunchSnapshots)
     }
     
     // MARK: - 私有方法：基础 UI 设置
-    @MainActor private func setupBaseUI(onView: Any, ltdString: String, comNameFont: UIFont, skipFont: UIFont) {
+    @MainActor private func setupBaseUI(onView: Any, ltdString: String, comNameFont: UIFont, skipFont: UIFont,skipColor:UIColor) {
         let hostView: UIView?
         if let onWindow = onView as? UIWindow {
             hostView = onWindow
@@ -238,6 +239,7 @@ public class PTLaunchAdMonitor: NSObject {
         guard hostView != nil else { return }
         contentView.snp.remakeConstraints { $0.edges.equalToSuperview() }
         
+        skipButton.setTitleColor(skipColor, for: .normal)
         skipButton.setTitle(skipName, for: .normal)
         skipButton.titleLabel?.font = skipFont
         if !hasInstalledActionHandlers {
