@@ -115,6 +115,20 @@ public actor PTNetworkCaptureStore {
         }
     }
 
+    /// A bounded subscription for independent diagnostic consumers such as Studio.
+    /// Existing changes() behavior remains unchanged for legacy UI observers.
+    public func changes(bufferingNewest limit: Int) -> AsyncStream<PTNetworkCaptureChange> {
+        let token = UUID()
+        return AsyncStream(bufferingPolicy: .bufferingNewest(max(1, limit))) { continuation in
+            continuations[token] = continuation
+            continuation.onTermination = { [weak self] _ in
+                Task { await self?.removeContinuation(token) }
+            }
+        }
+    }
+
+    public func activeChangeSubscriberCount() -> Int { continuations.count }
+
     public func currentBodyMemoryCost() -> Int { bodyMemoryCost }
     public func currentDiskCost() -> Int64 { diskCost }
 
