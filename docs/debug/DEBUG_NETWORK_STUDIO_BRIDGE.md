@@ -86,7 +86,7 @@ The iOS client sends `POST /v1/events` over HTTPS. Each batch has the following 
 }
 ```
 
-**Decoder note:** JSONEncoder's default Date strategy encodes dates as seconds relative to the Apple reference date (2001-01-01), not ISO8601. The time strings above are human-readable schema illustrations only. The collector must mirror the client's date format or introduce an explicitly negotiated, versioned date strategy.
+**Date contract:** The HTTPS sender sets `JSONEncoder.dateEncodingStrategy = .iso8601`. The collector must decode `wallTime` and `startedAt` as ISO8601 in schema v1. `monotonicTime` remains seconds since system boot and must not be treated as a UTC timestamp.
 
 Request headers: `Authorization: Bearer <pairing token>`, `X-PTStudio-Nonce` (random UUID per POST), and `X-PTStudio-Sent-At` (Unix seconds). Collector must enforce trusted TLS, valid token, nonce uniqueness, a short timestamp TTL, a schema allowlist, bounded request size, and deduplication of `eventID`/`sequence` per `sessionID`. For every accepted batch respond HTTP 200:
 
