@@ -84,7 +84,8 @@ final class PTStudioBridgeTests: XCTestCase {
         let store = PTNetworkCaptureStore(maxRecords: 10)
         let bridge = PTStudioBridge(store: store)
         let transport = StudioRecordingTransport()
-        XCTAssertEqual(await bridge.status().isRunning, false)
+        let initialStatus = await bridge.status()
+        XCTAssertFalse(initialStatus.isRunning)
         try await bridge.start(using: transport,
                                configuration: .init(isEnabled: true, batchInterval: .milliseconds(10)))
         let record = PTNetworkCaptureRecord(
@@ -100,10 +101,13 @@ final class PTStudioBridgeTests: XCTestCase {
         XCTAssertTrue(events.contains { $0.kind == .hello })
         XCTAssertTrue(events.contains { $0.kind == .capabilities })
         XCTAssertEqual(events.filter { $0.kind == .recordFinalize && $0.requestID == record.id }.count, 1)
-        XCTAssertEqual(await bridge.status().queuedEvents, 0)
+        let postSendStatus = await bridge.status()
+        XCTAssertEqual(postSendStatus.queuedEvents, 0)
         await bridge.stop()
-        XCTAssertTrue(await transport.isClosed())
-        XCTAssertFalse(await bridge.status().isRunning)
+        let closed = await transport.isClosed()
+        XCTAssertTrue(closed)
+        let stoppedStatus = await bridge.status()
+        XCTAssertFalse(stoppedStatus.isRunning)
         #else
         let bridge = PTStudioBridge(store: PTNetworkCaptureStore())
         do {
@@ -121,7 +125,8 @@ final class PTStudioBridgeTests: XCTestCase {
                                configuration: .init(isEnabled: true))
         await bridge.stop()
         try await Task.sleep(for: .milliseconds(100))
-        XCTAssertEqual(await store.activeChangeSubscriberCount(), 0)
+        let subscriberCount = await store.activeChangeSubscriberCount()
+        XCTAssertEqual(subscriberCount, 0)
         #endif
     }
 }
