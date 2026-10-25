@@ -129,6 +129,7 @@ public actor PTStudioHTTPSPushTransport: PTStudioTransport {
         request.httpMethod = "POST"
         request.httpBody = data
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("1", forHTTPHeaderField: "X-PTStudio-Internal")
         request.setValue("Bearer " + bearerToken, forHTTPHeaderField: "Authorization")
         request.setValue(UUID().uuidString, forHTTPHeaderField: "X-PTStudio-Nonce")
         request.setValue(String(Int(Date().timeIntervalSince1970)), forHTTPHeaderField: "X-PTStudio-Sent-At")
