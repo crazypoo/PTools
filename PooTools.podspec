@@ -153,7 +153,7 @@ Pod::Spec.new do |s|
     s.subspec 'PToolsUIFoundation' do |subspec|
         subspec.dependency 'PooTools/PToolsCore'
         subspec.dependency 'SnapKit'
-        subspec.source_files = 'PooToolsSource/PToolsUIFoundation/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/PToolsUIFoundation/**/*.{h,m,swift}'
         subspec.frameworks = 'UIKit','Foundation'
     end
 
