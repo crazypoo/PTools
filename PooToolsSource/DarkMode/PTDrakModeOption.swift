@@ -108,6 +108,7 @@ private final class PTDarkModeScheduleMonitor: NSObject {
 
     private var boundaryTimer: Timer?
     private var didInstallObservers = false
+    private var environmentObserverTokens: [NSObjectProtocol] = []
 
     func modeDidChange() {
         installObserversIfNeeded()
@@ -134,15 +135,6 @@ private final class PTDarkModeScheduleMonitor: NSObject {
         modeDidChange()
     }
 
-    // English: NotificationCenter may invoke this Objective-C selector on the posting queue; hop before touching MainActor state.
-    // Español: NotificationCenter puede invocar este selector Objective-C en la cola emisora; cambia de contexto antes de tocar el estado de MainActor.
-    // 中文：NotificationCenter 可能在发送通知的后台队列调用这个 Objective-C selector，先切回 MainActor 再访问主线程状态。
-    @objc private nonisolated func environmentDidChange() {
-        PTMainActorBridge.perform { [weak self] in
-            self?.handleEnvironmentDidChange()
-        }
-    }
-
     private func handleEnvironmentDidChange() {
         PTDarkModeOption.refreshCurrentMode(notify: false)
         modeDidChange()
@@ -162,12 +154,19 @@ private final class PTDarkModeScheduleMonitor: NSObject {
             Notification.Name("NSSystemTimeZoneDidChangeNotification")
         ]
         for name in notifications {
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(environmentDidChange),
-                name: name,
-                object: nil
-            )
+            // English: Use a block observer so a background notification never enters an Objective-C actor-isolation thunk.
+            // Español: Usa un observador por bloque para que una notificación en segundo plano nunca entre en un thunk de aislamiento de actor Objective-C.
+            // 中文：使用 block 观察者，避免后台通知先进入 Objective-C 的 actor 隔离桥接方法。
+            let token = NotificationCenter.default.addObserver(
+                forName: name,
+                object: nil,
+                queue: nil
+            ) { [weak self] _ in
+                PTMainActorBridge.perform { [weak self] in
+                    self?.handleEnvironmentDidChange()
+                }
+            }
+            environmentObserverTokens.append(token)
         }
     }
 
