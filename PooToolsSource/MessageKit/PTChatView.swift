@@ -77,16 +77,28 @@ public class PTChatView: UIView {
 
         let view = PTCollectionView(viewConfig: collectionConfig)
         view.registerClassCells(classs: [PTChatSystemMessageCell.ID:PTChatSystemMessageCell.self,PTChatTextCell.ID:PTChatTextCell.self,PTChatMediaCell.ID:PTChatMediaCell.self,PTChatMapCell.ID:PTChatMapCell.self,PTChatVoiceCell.ID:PTChatVoiceCell.self,PTChatTypingIndicatorCell.ID:PTChatTypingIndicatorCell.self,PTChatFileCell.ID:PTChatFileCell.self])
-        view.customerLayout = { [weak self] sectionIndex, sectionModel in
+        // English: Resolve custom message groups from the collection layout environment so Duo panes use their real width.
+        // Español: Resuelve los grupos personalizados desde el entorno de layout para que los paneles Duo usen su ancho real.
+        // 中文：从 Collection 布局环境解析自定义消息分组，让 Duo pane 使用真实可用宽度。
+        view.customerLayoutWithEnvironment = { [weak self] sectionIndex, sectionModel, environment in
             let customerCellHeightHandler = self?.customerCellHeightHandler
+            let environmentWidth = environment.container.contentSize.width
             let containerWidth: CGFloat
-            if let collectionView = self?.listCollection.contentCollectionView {
+            if environmentWidth.isFinite, environmentWidth > 0 {
+                containerWidth = environmentWidth
+            } else if let collectionView = self?.listCollection.contentCollectionView {
                 containerWidth = PTChatBaseCell.adaptiveContainerWidth(for: collectionView)
             } else {
                 containerWidth = 320
             }
             let contentMaxWidth = PTChatConfig.contentMaxWidth(containerWidth: containerWidth)
-            return UICollectionView.waterFallLayout(data: sectionModel.rows,rowCount:1,itemOriginalX: 0,topContentSpace:PTChatConfig.share.chatTopFixel, bottomContentSpace: PTChatConfig.share.chatBottomFixel,itemSpace: 0) { index, model in
+            return UICollectionView.waterFallLayout(data: sectionModel.rows,
+                                                    screenWidth: containerWidth,
+                                                    rowCount: 1,
+                                                    itemOriginalX: 0,
+                                                    topContentSpace: PTChatConfig.share.chatTopFixel,
+                                                    bottomContentSpace: PTChatConfig.share.chatBottomFixel,
+                                                    itemSpace: 0) { index, model in
                 guard let rowModel = model as? PTRows,
                       let cellModel = rowModel.dataModel as? PTChatListModel else {
                     return 44
