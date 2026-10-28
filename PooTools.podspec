@@ -411,8 +411,14 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/RouteCore'
         subspec.source_files = 'PooToolsSource/PToolsAppIntents/**/*.swift'
         subspec.frameworks = 'Foundation', 'AppIntents'
+        # English: AppIntents sources are extension-safe, but the umbrella PooTools pod also contains UIKit app APIs.
+        # Español: Las fuentes AppIntents son seguras para extensiones, pero el pod paraguas PooTools también contiene API UIKit de la app.
+        # 中文：AppIntents 源码支持扩展，但 PooTools 总 Pod 同时包含应用侧 UIKit API。
+        # English: Keep the aggregate pod available to the UIKit host; extension targets must depend on the dedicated safe products.
+        # Español: Mantén el pod agregado disponible para el host UIKit; los targets de extensión deben usar productos seguros dedicados.
+        # 中文：让聚合 Pod 可供 UIKit 宿主使用；扩展 Target 应依赖专用的安全产品。
         subspec.pod_target_xcconfig = {
-            "APPLICATION_EXTENSION_API_ONLY" => "YES",
+            "APPLICATION_EXTENSION_API_ONLY" => "NO",
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_APPINTENTS POOTOOLS_COCOAPODS"
         }
     end
@@ -427,7 +433,10 @@ Pod::Spec.new do |s|
         subspec.source_files = 'PooToolsSource/PToolsWidgetCore/**/*.swift'
         subspec.frameworks = 'Foundation', 'WidgetKit'
         subspec.pod_target_xcconfig = {
-            "APPLICATION_EXTENSION_API_ONLY" => "YES",
+            # English: This value applies to the aggregate CocoaPods target, not only WidgetCore files.
+            # Español: Este valor se aplica al target agregado de CocoaPods, no solo a los archivos de WidgetCore.
+            # 中文：该值作用于 CocoaPods 聚合 Target，而不仅是 WidgetCore 文件。
+            "APPLICATION_EXTENSION_API_ONLY" => "NO",
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_WIDGET_CORE POOTOOLS_COCOAPODS"
         }
     end
@@ -439,7 +448,10 @@ Pod::Spec.new do |s|
         subspec.source_files = 'PooToolsSource/PToolsActivities/**/*.swift'
         subspec.frameworks = 'Foundation', 'ActivityKit'
         subspec.pod_target_xcconfig = {
-            "APPLICATION_EXTENSION_API_ONLY" => "YES",
+            # English: Keep UIKit application sources compilable when Activities is selected in the host pod.
+            # Español: Mantén compilables las fuentes UIKit de la aplicación cuando el host incluye Activities.
+            # 中文：宿主 Pod 选择 Activities 时，保持应用侧 UIKit 源码可编译。
+            "APPLICATION_EXTENSION_API_ONLY" => "NO",
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_ACTIVITIES POOTOOLS_COCOAPODS"
         }
     end
