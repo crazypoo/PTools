@@ -8,6 +8,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE || canImport(PToolsCore)
+import PToolsCore
+#endif
 
 @MainActor
 public final class PTSearchTaskCoordinator {
@@ -21,8 +24,25 @@ public final class PTSearchTaskCoordinator {
     }
 
     private var tasks: [Key: Task<Void, Never>] = [:]
+    private let generationCoordinator = PTLoadGenerationCoordinator()
 
     public init() {}
+
+    // English: Search owners can opt into stale-result protection without changing task keys.
+    // Español: Los propietarios de búsqueda pueden activar la protección contra resultados obsoletos sin cambiar las claves.
+    // 中文：搜索控制器可以在不改变任务键的情况下启用陈旧结果保护。
+    @discardableResult
+    public func beginGeneration() -> PTLoadGenerationToken {
+        generationCoordinator.begin()
+    }
+
+    public func isCurrent(_ token: PTLoadGenerationToken) -> Bool {
+        generationCoordinator.isCurrent(token)
+    }
+
+    public func invalidateGeneration() {
+        generationCoordinator.invalidate()
+    }
 
     public func replace(_ task: Task<Void, Never>, for key: Key) {
         tasks[key]?.cancel()
@@ -40,6 +60,7 @@ public final class PTSearchTaskCoordinator {
     public func cancelAll() {
         tasks.values.forEach { $0.cancel() }
         tasks.removeAll(keepingCapacity: true)
+        generationCoordinator.invalidate()
     }
 
     deinit {

@@ -28,11 +28,12 @@ public enum PTImageDownsampler {
 
     public nonisolated static func decode(data: Data,
                                           targetSize: CGSize?,
-                                          scale: CGFloat = 1) -> UIImage? {
+                                          scale: CGFloat = 1,
+                                          budget: PTImageMemoryBudget = .default) -> UIImage? {
         guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
             return nil
         }
-        return decode(source: source, targetSize: targetSize, scale: scale, budget: .default)
+        return decode(source: source, targetSize: targetSize, scale: scale, budget: budget)
     }
 
     public nonisolated static func decode(url: URL,

@@ -8,6 +8,9 @@
 //
 
 import Foundation
+#if SWIFT_PACKAGE || canImport(PToolsCore)
+import PToolsCore
+#endif
 
 @MainActor
 public enum PTSearchPaginationState {
@@ -62,5 +65,61 @@ public struct PTSearchPagination {
 
     public mutating func fail(_ error: Error) {
         state = .failed(error)
+    }
+}
+
+// English: Opt-in adapter for callers that need generation-safe pagination without changing the legacy type.
+// Español: Adaptador opt-in para paginación segura por generación sin cambiar el tipo heredado.
+// 中文：为需要代次安全分页的调用方提供可选适配器，不改变旧类型。
+@MainActor
+public struct PTSearchPaginationAdapter {
+    private var machine: PTPaginationMachine
+
+    public init(configuration: PTPaginationConfiguration = .init()) {
+        machine = PTPaginationMachine(configuration: configuration)
+    }
+
+    public var currentPage: Int { machine.currentPage }
+    public var pageSize: Int { machine.configuration.pageSize }
+    public var hasMore: Bool { machine.hasMore }
+    public var isLoading: Bool { machine.isLoading }
+
+    @discardableResult
+    public mutating func beginRefresh() -> PTPaginationRequestToken {
+        machine.beginRefresh()
+    }
+
+    @discardableResult
+    public mutating func beginNextPage() -> PTPaginationRequestToken? {
+        machine.beginNextPage()
+    }
+
+    public func isCurrent(_ token: PTPaginationRequestToken) -> Bool {
+        machine.isCurrent(token)
+    }
+
+    @discardableResult
+    public mutating func applySuccess(_ token: PTPaginationRequestToken,
+                                      itemCount: Int,
+                                      hasMore: Bool? = nil,
+                                      totalPages: Int? = nil) -> Bool {
+        machine.applySuccess(token,
+                             itemCount: itemCount,
+                             hasMore: hasMore,
+                             totalPages: totalPages)
+    }
+
+    @discardableResult
+    public mutating func applyFailure(_ token: PTPaginationRequestToken) -> Bool {
+        machine.applyFailure(token)
+    }
+
+    @discardableResult
+    public mutating func cancel(_ token: PTPaginationRequestToken) -> Bool {
+        machine.cancel(token)
+    }
+
+    public mutating func invalidate() {
+        machine.invalidate()
     }
 }

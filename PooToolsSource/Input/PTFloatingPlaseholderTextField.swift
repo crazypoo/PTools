@@ -46,6 +46,15 @@ public class PTFloatingPlaseholderConfig: NSObject {
     public var textAlignment: NSTextAlignment = .left    
 }
 
+// English: Describe the three stable interaction states of the composite field.
+// Español: Describe los tres estados estables de interacción del campo compuesto.
+// 中文：描述复合输入框的三种稳定交互状态。
+public enum PTFloatingInputState: String, Sendable, Equatable {
+    case idleEmpty
+    case editing
+    case idleWithText
+}
+
 @MainActor
 public class PTFloatingPlaseholderTextField: UIView {
 
@@ -97,6 +106,65 @@ public class PTFloatingPlaseholderTextField: UIView {
     public var inputingCallback: ((String) -> Void)?
     public var actionTouchBlock: TouchedBlock?
 
+    // English: Report the composite field's active state without exposing UIKit event wiring.
+    // Español: Informa del estado activo del campo compuesto sin exponer el cableado de eventos de UIKit.
+    // 中文：对外报告复合输入框的激活状态，不要求调用方自行监听 UIKit 事件。
+    public typealias ActivityChangeHandler = @MainActor @Sendable (_ isActive: Bool) -> Void
+
+    // English: Report the explicit idle/editing state so form owners can react without inspecting UIKit.
+    // Español: Informa del estado idle/edición para que el formulario reaccione sin inspeccionar UIKit.
+    // 中文：提供明确的空闲/编辑状态，让表单无需检查 UIKit 就能响应。
+    public typealias StateChangeHandler = @MainActor @Sendable (_ state: PTFloatingInputState) -> Void
+
+    // English: Report intrinsic-height changes after placeholder or text layout settles.
+    // Español: Informa de los cambios de altura intrínseca después de estabilizar el layout del placeholder o texto.
+    // 中文：在占位符或文本布局稳定后报告内容高度变化。
+    public typealias HeightChangeHandler = @MainActor @Sendable (_ height: CGFloat) -> Void
+
+    public var activityChangeHandler: ActivityChangeHandler? {
+        didSet {
+            lastReportedActivity = nil
+            notifyActivityIfNeeded()
+        }
+    }
+
+    public var stateChangeHandler: StateChangeHandler? {
+        didSet {
+            lastReportedInputState = nil
+            notifyInputStateIfNeeded()
+        }
+    }
+
+    public var heightChangeHandler: HeightChangeHandler? {
+        didSet {
+            lastReportedHeight = .nan
+            notifyHeightIfNeeded()
+        }
+    }
+
+    public var minimumHeight: CGFloat = 44 {
+        didSet {
+            minimumHeight = max(1, minimumHeight)
+            invalidateIntrinsicContentSize()
+            notifyHeightIfNeeded()
+        }
+    }
+
+    public var isActive: Bool {
+        textField.isFirstResponder || !(textField.text?.isEmpty ?? true)
+    }
+
+    public var inputState: PTFloatingInputState {
+        if textField.isFirstResponder {
+            return .editing
+        }
+        return (textField.text?.isEmpty ?? true) ? .idleEmpty : .idleWithText
+    }
+
+    private var lastReportedActivity: Bool?
+    private var lastReportedInputState: PTFloatingInputState?
+    private var lastReportedHeight: CGFloat = .nan
+
     public lazy var textField: UITextField = {
         let view = UITextField()
         view.borderStyle = .none
@@ -131,6 +199,40 @@ public class PTFloatingPlaseholderTextField: UIView {
         })
         return view
     }()
+
+    // English: Update the optional trailing action images without rebuilding the field.
+    // Español: Actualiza las imágenes opcionales de la acción final sin reconstruir el campo.
+    // 中文：不重建输入框，直接更新可选的尾部操作图片。
+    public func updateActionImages(normal: Any?, selected: Any?) {
+        viewConfig.actionNormal = normal
+        viewConfig.actionSelected = selected
+        actionButton.setImage(nil, for: .normal)
+        actionButton.setImage(nil, for: .selected)
+
+        if let normal {
+            actionButton.loadImage(contentData: normal, controlState: .normal)
+        }
+        if let selected {
+            actionButton.loadImage(contentData: selected, controlState: .selected)
+        }
+    }
+
+    // English: Toggle the trailing action while keeping all content constraints valid.
+    // Español: Activa o desactiva la acción final manteniendo válidas todas las restricciones del contenido.
+    // 中文：切换尾部操作显示状态，并同步重建内容约束，避免约束仍指向旧布局。
+    public func setActionVisible(_ visible: Bool) {
+        guard viewConfig.haveAction != visible else {
+            actionButton.isHidden = !visible
+            return
+        }
+
+        viewConfig.haveAction = visible
+        actionButton.isHidden = !visible
+        remakeContentConstraints()
+        invalidateIntrinsicContentSize()
+        updateBorderPath()
+        notifyHeightIfNeeded()
+    }
     
     private let borderLayer = CAShapeLayer()
 
@@ -222,7 +324,10 @@ public class PTFloatingPlaseholderTextField: UIView {
         updateInputConstraints()
         placeholderLabel.attributedText = resolvedPlaceholder(isNormal: !isFloating)?.value
         placeholderLabel.invalidateIntrinsicContentSize()
+        invalidateIntrinsicContentSize()
         updateBorderPath()
+        notifyActivityIfNeeded()
+        notifyHeightIfNeeded()
     }
 
     private func updateInputConstraints() {
@@ -249,6 +354,43 @@ public class PTFloatingPlaseholderTextField: UIView {
         }
     }
 
+    // English: Rebuild only the two content constraints that change when the action appears.
+    // Español: Reconstruye solo las restricciones de contenido que cambian al mostrar la acción.
+    // 中文：只重建尾部操作出现或隐藏时会变化的两组内容约束。
+    private func remakeContentConstraints() {
+        let leading = max(0, inputAppearance.leadingSpace)
+        let edges = inputAppearance.textEditingEdges
+        let leftInset = max(0, viewConfig.insidePadding + leading + edges.left)
+        let rightInset = max(0, viewConfig.insidePadding + edges.right)
+        let topInset = max(0, viewConfig.floatingPlaceholderFont.pointSize / 2 + edges.top)
+        let bottomInset = max(0, viewConfig.floatingPlaceholderFont.pointSize / 2 + edges.bottom)
+
+        placeholderLabel.snp.remakeConstraints { make in
+            make.left.equalToSuperview().offset(leftInset + viewConfig.placeholderPaddingOffset)
+            if viewConfig.haveAction {
+                make.right.equalTo(actionButton.snp.left).offset(-viewConfig.actionSapcing)
+            } else {
+                make.right.equalToSuperview().inset(rightInset)
+            }
+            if isFloating {
+                make.top.equalToSuperview().offset(viewConfig.placeholderFloatingTopOffset)
+            } else {
+                make.centerY.equalToSuperview()
+            }
+        }
+
+        textField.snp.remakeConstraints { make in
+            make.left.equalToSuperview().inset(leftInset)
+            if viewConfig.haveAction {
+                make.right.equalTo(actionButton.snp.left).offset(-viewConfig.actionSapcing)
+            } else {
+                make.right.equalToSuperview().inset(rightInset)
+            }
+            make.top.equalToSuperview().inset(topInset)
+            make.bottom.equalToSuperview().inset(bottomInset)
+        }
+    }
+
     public override func layoutSubviews() {
         super.layoutSubviews()
         // 【优化】只在尺寸真正改变时才重新计算边框路径，降低 CPU 消耗
@@ -256,6 +398,94 @@ public class PTFloatingPlaseholderTextField: UIView {
             lastBounds = bounds
             updateBorderPath()
         }
+        notifyHeightIfNeeded()
+    }
+
+    // English: Measure the actual rich placeholder instead of guessing from one font line.
+    // Español: Mide el placeholder enriquecido real en vez de estimarlo con una sola línea de fuente.
+    // 中文：使用富文本占位符的实际测量高度，而不是只按单行字体高度估算。
+    private func measuredPlaceholderHeight(for width: CGFloat) -> CGFloat {
+        let safeWidth = max(1, width)
+        guard let attributedText = placeholderLabel.attributedText,
+              attributedText.length > 0 else {
+            return max(viewConfig.normalPlaceholderFont.lineHeight,
+                       viewConfig.floatingPlaceholderFont.lineHeight)
+        }
+
+        let rect = attributedText.boundingRect(with: CGSize(width: safeWidth,
+                                                            height: .greatestFiniteMagnitude),
+                                               options: [.usesLineFragmentOrigin, .usesFontLeading],
+                                               context: nil)
+        let measuredHeight = rect.height.isFinite ? rect.height : 0
+        return max(1, ceil(measuredHeight))
+    }
+
+    // English: Keep the height calculation local to this view so the external constraint owner stays in control.
+    // Español: Mantiene el cálculo de altura dentro de esta vista para que el propietario externo de las restricciones conserve el control.
+    // 中文：高度计算只在控件内部完成，外部约束的所有权仍归调用方。
+    private func calculatedIntrinsicHeight(for width: CGFloat) -> CGFloat {
+        let edges = inputAppearance.textEditingEdges
+        let horizontalInset = viewConfig.insidePadding
+            + max(0, inputAppearance.leadingSpace)
+            + max(0, edges.left)
+            + max(0, edges.right)
+        let actionInset = viewConfig.haveAction
+            ? max(0, viewConfig.actionSize.width + viewConfig.actionSapcing)
+            : 0
+        let availableWidth = max(1, width - horizontalInset - actionInset)
+        let labelHeight = measuredPlaceholderHeight(for: availableWidth)
+        let textHeight = max(textField.font?.lineHeight ?? viewConfig.textFont.lineHeight,
+                             viewConfig.normalPlaceholderFont.lineHeight)
+        let textVerticalInsets = max(0, viewConfig.floatingPlaceholderFont.pointSize)
+            + max(0, edges.top)
+            + max(0, edges.bottom)
+
+        let contentHeight: CGFloat
+        if isFloating {
+            let topAllowance = max(0, -viewConfig.placeholderFloatingTopOffset)
+            contentHeight = topAllowance
+                + labelHeight
+                + max(0, inputAppearance.textAndPlaceholderSpace)
+                + textHeight
+                + textVerticalInsets
+        } else {
+            contentHeight = max(labelHeight, textHeight) + textVerticalInsets
+        }
+
+        return max(max(1, minimumHeight), ceil(contentHeight))
+    }
+
+    public override var intrinsicContentSize: CGSize {
+        let width = bounds.width > 0 ? bounds.width : 240
+        return CGSize(width: UIView.noIntrinsicMetric,
+                      height: calculatedIntrinsicHeight(for: width))
+    }
+
+    private func notifyActivityIfNeeded() {
+        let currentActivity = isActive
+        if lastReportedActivity != currentActivity {
+            lastReportedActivity = currentActivity
+            activityChangeHandler?(currentActivity)
+        }
+        notifyInputStateIfNeeded()
+    }
+
+    private func notifyInputStateIfNeeded() {
+        let currentState = inputState
+        guard lastReportedInputState != currentState else { return }
+        lastReportedInputState = currentState
+        stateChangeHandler?(currentState)
+    }
+
+    private func notifyHeightIfNeeded() {
+        guard heightChangeHandler != nil else { return }
+        let width = bounds.width > 0 ? bounds.width : 240
+        let height = calculatedIntrinsicHeight(for: width)
+        guard height.isFinite,
+              height <= CGFloat.greatestFiniteMagnitude,
+              !lastReportedHeight.isFinite || abs(lastReportedHeight - height) > 0.5 else { return }
+        lastReportedHeight = height
+        heightChangeHandler?(height)
     }
     
     private func getPlaceholderAtt(mainString: String, isNormal: Bool) -> PTRichText {
@@ -291,21 +521,33 @@ public class PTFloatingPlaseholderTextField: UIView {
 
         let textIsNotEmpty = !(text ?? "").stringIsEmpty()
         setFloating(textIsNotEmpty, animated: false)
+        invalidateIntrinsicContentSize()
+        notifyActivityIfNeeded()
+        notifyHeightIfNeeded()
     }
 
     // MARK: - Events
     @objc private func beginEdit() {
         setFloating(true, animated: true)
+        notifyActivityIfNeeded()
+        invalidateIntrinsicContentSize()
+        notifyHeightIfNeeded()
     }
 
     @objc private func endEdit() {
         let textIsNotEmpty = !(textField.text ?? "").stringIsEmpty()
         setFloating(textIsNotEmpty, animated: true)
+        notifyActivityIfNeeded()
+        invalidateIntrinsicContentSize()
+        notifyHeightIfNeeded()
     }
 
     @objc private func textChanged() {
         let textIsNotEmpty = !(textField.text ?? "").stringIsEmpty()
         setFloating(textIsNotEmpty, animated: true)
+        notifyActivityIfNeeded()
+        invalidateIntrinsicContentSize()
+        notifyHeightIfNeeded()
     }
 
     // MARK: - Floating
@@ -316,15 +558,15 @@ public class PTFloatingPlaseholderTextField: UIView {
 
         placeholderLabel.snp.remakeConstraints { make in
             make.left.equalToSuperview().offset(self.viewConfig.insidePadding + self.inputAppearance.leadingSpace + self.viewConfig.placeholderPaddingOffset)
+            if self.viewConfig.haveAction {
+                make.right.equalTo(self.actionButton.snp.left).offset(-self.viewConfig.actionSapcing)
+            } else {
+                make.right.equalToSuperview().inset(self.viewConfig.insidePadding)
+            }
             if float {
                 make.top.equalToSuperview().offset(self.viewConfig.placeholderFloatingTopOffset)
             } else {
                 make.centerY.equalToSuperview()
-                if self.viewConfig.haveAction {
-                    make.right.equalTo(self.actionButton.snp.left).offset(-self.viewConfig.actionSapcing)
-                } else {
-                    make.right.equalToSuperview().inset(self.viewConfig.insidePadding)
-                }
             }
         }
 
@@ -333,6 +575,8 @@ public class PTFloatingPlaseholderTextField: UIView {
             self.placeholderLabel.attributedText = self.resolvedPlaceholder(isNormal: !float)?.value
             self.layoutIfNeeded()
             self.updateBorderPath()
+            self.invalidateIntrinsicContentSize()
+            self.notifyHeightIfNeeded()
         }
 
         if animated {

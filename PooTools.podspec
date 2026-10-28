@@ -33,6 +33,17 @@ Pod::Spec.new do |s|
         subspec.frameworks = 'Foundation'
     end
 
+    # English: Publish the pure variant engine as an opt-in Foundation-only subspec.
+    # Español: Publica el motor puro de variantes como un subspec opt-in basado solo en Foundation.
+    # 中文：将纯规格引擎作为仅依赖 Foundation 的可选 subspec 发布。
+    s.subspec 'VariantCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsVariantCore/**/*.swift'
+        subspec.frameworks = 'Foundation'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_VARIANT_CORE POOTOOLS_COCOAPODS"
+        }
+    end
+
     # English: Publish the UIKit-native Auto Layout DSL without SnapKit or the PTools umbrella.
     # Español: Publica el DSL nativo de Auto Layout para UIKit sin SnapKit ni el umbrella de PTools.
     # 中文：公开不依赖 SnapKit 和 PTools umbrella 的 UIKit 原生 Auto Layout DSL。

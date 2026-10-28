@@ -28,6 +28,10 @@ let package = Package(
         // Español: Publica las capas basadas solo en Foundation para que los clientes dependan del módulo mínimo estable.
         // 中文：公开仅依赖 Foundation 的分层模块，让调用方按需依赖最小稳定模块。
         .library(name: "PToolsCore", targets: ["PToolsCore"]),
+        // English: Publish the pure SKU/variant engine without UIKit or commerce-specific models.
+        // Español: Publica el motor puro de SKU/variantes sin UIKit ni modelos comerciales específicos.
+        // 中文：公开不依赖 UIKit 和商城业务模型的纯 SKU/规格引擎。
+        .library(name: "PToolsVariantCore", targets: ["PToolsVariantCore"]),
         // English: Publish the native, SnapKit-independent Auto Layout DSL as a separate product.
         // Español: Publica el DSL nativo de Auto Layout independiente de SnapKit como producto separado.
         // 中文：将不依赖 SnapKit 的原生 Auto Layout DSL 作为独立产品发布。
@@ -381,6 +385,13 @@ let package = Package(
         .target(
             name: "PToolsCore",
             path: "PooToolsSource/PToolsCore",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
+        ),
+        .target(
+            name: "PToolsVariantCore",
+            path: "PooToolsSource/PToolsVariantCore",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]
@@ -1074,7 +1085,7 @@ let package = Package(
         .target(name: "PooToolsDataEncrypt", dependencies: ["ptools", "CryptoSwift"], path: "PooToolsSource/AESAndDES", swiftSettings: [.define("POOTOOLS_DATAENCRYPT"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSecurity", dependencies: [], path: "PooToolsSource/Security", swiftSettings: [.define("POOTOOLS_SECURITY"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsSearchBar", dependencies: ["ptools"], path: "PooToolsSource/SearchBar", swiftSettings: [.define("POOTOOLS_SEARCHBAR"), .define("POOTOOLS_COCOAPODS")]),
-        .target(name: "PooToolsSearch", dependencies: ["ptools", "PooToolsSearchBar", "PToolsUIFoundation", "SnapKit"], path: "PooToolsSource/Search", swiftSettings: [.define("POOTOOLS_SEARCH"), .define("POOTOOLS_COCOAPODS")]),
+        .target(name: "PooToolsSearch", dependencies: ["ptools", "PToolsCore", "PooToolsSearchBar", "PToolsUIFoundation", "SnapKit"], path: "PooToolsSource/Search", swiftSettings: [.define("POOTOOLS_SEARCH"), .define("POOTOOLS_COCOAPODS")]),
         .target(name: "PooToolsMediaViewer", dependencies: ["ptools", "PToolsUIFoundation", "PooToolsMediaCore", "PooToolsProgressBar", "PooToolsPageControl", "PooToolsLivePhoto", "SnapKit"], path: "PooToolsSource/MediaViewer", swiftSettings: [.define("POOTOOLS_MEDIAVIEWER"), .define("POOTOOLS_COCOAPODS")]),
 
         // ==========================================
@@ -1185,7 +1196,7 @@ let package = Package(
         // 中文：保留仅面向 iOS 的质量测试目标，覆盖 Core、UI、Network、列表、导航、媒体和权限回归。
         .testTarget(
             name: "PToolsCoreTests",
-            dependencies: ["PToolsCore"],
+            dependencies: ["PToolsCore", "PToolsVariantCore"],
             path: "Tests/PooToolsCoreTests"
         ),
         .testTarget(
