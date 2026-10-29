@@ -10,6 +10,7 @@ import UIKit
 #if SWIFT_PACKAGE
 import ptools
 import PToolsStorage
+import PToolsDebugCore
 import PooToolsNetWork
 #endif
 import Kingfisher
