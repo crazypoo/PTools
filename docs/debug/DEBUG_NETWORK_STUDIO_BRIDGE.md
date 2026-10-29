@@ -62,6 +62,20 @@ Host app `Info.plist` requirements (in addition to the app's usual Debug capabil
 <array><string>_ptstudio._tcp</string></array>
 ```
 
+The optional Debug-only SwiftUI `PTStudioPairingView()` supplies the first-pairing UI (Bonjour peer selection, opt-in switch, token + SHA-256 confirmation, Keychain save/revoke). Present it from your app's existing developer/debug settings screen:
+
+```swift
+#if DEBUG
+import SwiftUI
+import PToolsDebugStudioBridge
+
+// Inside a Debug-only settings view:
+NavigationStack { PTStudioPairingView() }
+#endif
+```
+
+The PooTools example exposes `AppMacNetworkDebugManager.shared.presentStudioPairing(from: presenter)` for UIKit projects. The host app must still explicitly include the optional Bridge product and be responsible for turning its capture observer on/off.
+
 Example Debug settings code (on the main actor, never for a Release build):
 
 ```swift
