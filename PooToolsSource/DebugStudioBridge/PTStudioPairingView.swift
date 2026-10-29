@@ -7,6 +7,9 @@ import SwiftUI
 @MainActor
 public struct PTStudioPairingView: View {
     @AppStorage("PTStudio.autoConnectEnabled") private var autoConnect = false
+    @AppStorage("PTStudio.diagnosticsEnabled") private var diagnosticsEnabled = false
+    @AppStorage("PTStudio.editingEnabled") private var editingEnabled = false
+    @AppStorage("PTStudio.previewEnabled") private var previewEnabled = false
     @State private var peers: [PTStudioDiscoveredPeer] = []
     @State private var selectedPeerID: String?
     @State private var token = ""
@@ -118,6 +121,24 @@ public struct PTStudioPairingView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+            Section("Optional Studio diagnostics") {
+                Toggle("Allow Inspector, Storage, Console and Performance", isOn: $diagnosticsEnabled)
+                    .onChange(of: diagnosticsEnabled) { enabled in
+                        Task {
+                            if enabled { await PTStudioDiagnosticAgent.shared.startIfAuthorized() }
+                            else { await PTStudioDiagnosticAgent.shared.stop() }
+                        }
+                    }
+                Text("Diagnostics is off by default. The Mac can request read-only view hierarchy, file names, UserDefaults keys, explicit logs and basic performance measurements only while this Debug permission is enabled.")
+                    .font(.caption).foregroundStyle(.secondary)
+                Toggle("Allow live view property editing and Undo", isOn: $editingEnabled)
+                    .disabled(!diagnosticsEnabled)
+                Toggle("Allow screen previews", isOn: $previewEnabled)
+                    .disabled(!diagnosticsEnabled)
+                Text("Screen previews may expose on-screen personal data. Enable only while testing. Revoke pairing to end the authorized session.")
+                    .font(.caption).foregroundStyle(.orange)
+            }
+
             if let discoveryError {
                 Section("Discovery error") {
                     Text(discoveryError).foregroundStyle(.orange).textSelection(.enabled)
