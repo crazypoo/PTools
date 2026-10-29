@@ -866,6 +866,7 @@ Pod::Spec.new do |s|
     # 中文：SearchViewController 是建立在 Core 和 SearchBar 之上的可选容器模块。
     s.subspec 'Search' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/PToolsCore'
         subspec.dependency 'PooTools/PToolsUIFoundation'
         subspec.dependency 'PooTools/SearchBar'
         subspec.source_files = 'PooToolsSource/Search/*.{h,m,swift}'

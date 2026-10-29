@@ -247,7 +247,12 @@ compatibility_matches = compatibility_modules.map do |entry|
     "source_path" => entry.fetch("source_path")
   }
 end
-compatibility_names = compatibility_matches.map { |item| canonical_name(item.fetch("pod_subspec")) }
+# English: A compatibility mapping consumes BOTH distribution identities; never leave the SwiftPM side as an orphan.
+# Español: Una correspondencia de compatibilidad consume ambas identidades de distribución.
+# 中文：兼容映射同时识别 SwiftPM 与 CocoaPods 的模块身份，避免单边误报。
+compatibility_names = compatibility_matches.flat_map do |item|
+  [canonical_name(item.fetch("spm_target")), canonical_name(item.fetch("pod_subspec"))]
+end.uniq
 matched = (raw_matched - compatibility_names).sort
 spm_only = (raw_spm_only - compatibility_names).sort
 pod_only = (raw_pod_only - compatibility_names).sort
