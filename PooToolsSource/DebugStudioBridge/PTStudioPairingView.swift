@@ -124,6 +124,12 @@ public struct PTStudioPairingView: View {
             Section("Optional Studio diagnostics") {
                 Toggle("Allow Inspector, Storage, Console and Performance", isOn: $diagnosticsEnabled)
                     .onChange(of: diagnosticsEnabled) { enabled in
+                        if !enabled {
+                            // A fresh diagnostics opt-in must not silently restore editing
+                            // or on-screen previews after the user switched diagnostics off.
+                            editingEnabled = false
+                            previewEnabled = false
+                        }
                         Task {
                             if enabled { await PTStudioDiagnosticAgent.shared.startIfAuthorized() }
                             else { await PTStudioDiagnosticAgent.shared.stop() }
