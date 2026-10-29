@@ -1050,9 +1050,29 @@ Pod::Spec.new do |s|
     }
     end
     
+    # Standalone DTO and opt-in remote diagnostic services; no default pod dependencies.
+    s.subspec 'StudioProtocolCore' do |subspec|
+        subspec.source_files = 'PooToolsSource/PToolsStudioProtocolCore/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
+    s.subspec 'StudioInspector' do |subspec|
+        subspec.dependency 'PooTools/StudioProtocolCore'
+        subspec.source_files = 'PooToolsSource/PToolsInspectorRuntime/**/*.swift'
+        subspec.frameworks = 'UIKit', 'Foundation'
+    end
+
+    s.subspec 'StudioStorage' do |subspec|
+        subspec.dependency 'PooTools/StudioProtocolCore'
+        subspec.source_files = 'PooToolsSource/PToolsStudioStorageRuntime/**/*.swift'
+        subspec.frameworks = 'Foundation'
+        subspec.libraries = 'sqlite3'
+    end
+
     # Optional diagnostics stream for PTNetwork Studio. Not included by default.
     s.subspec 'DEBUG_StudioBridge' do |subspec|
         subspec.dependency 'PooTools/DEBUG'
+        subspec.dependency 'PooTools/StudioProtocolCore'
         subspec.source_files = 'PooToolsSource/DebugStudioBridge/**/*.swift'
         subspec.frameworks = 'Foundation', 'Security', 'CryptoKit'
         subspec.pod_target_xcconfig = {
