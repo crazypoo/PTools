@@ -98,7 +98,7 @@ public final class PTStudioDiagnosticAgent {
     /// Explicit logging integration point; no intercept of NSLog or os_log.
     public func recordLog(_ message: String) {
         guard UserDefaults.standard.bool(forKey: "PTStudio.diagnosticsEnabled") else { return }
-        let value = PTInstrumentRedactor.redactText(String(message.prefix(180)))
+        let value = PTStudioDiagnosticPrivacy.scrub(String(message.prefix(180)))
         guard !value.isEmpty else { return }
         logs.append(value)
         if logs.count > 200 { logs.removeFirst(logs.count - 200) }
@@ -170,7 +170,7 @@ public final class PTStudioDiagnosticAgent {
             }.value
             let converted = records.map {
                 PTStudioDiagnosticEntry(id: $0.id, kind: $0.kind,
-                    name: PTInstrumentRedactor.redactText($0.name),
+                    name: PTStudioDiagnosticPrivacy.scrub($0.name),
                     detail: $0.source,
                     attributes: ["bytes": String($0.byteCount),
                                  "directory": String($0.isDirectory)])
