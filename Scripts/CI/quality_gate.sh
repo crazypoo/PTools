@@ -132,9 +132,9 @@ run_named_gate() {
     tests)
       run_gate TESTS bash -c '
         set -euo pipefail
-        # English: SwiftPM synthesizes one XCTest product for each declared XCTest target; select products explicitly.
-        # Español: SwiftPM sintetiza un producto XCTest por cada objetivo XCTest declarado; selecciona los productos explícitamente.
-        # 中文：SwiftPM 会为每个声明的 XCTest target 生成对应产品，因此显式选择测试产品。
+        # English: XCTest targets are not standalone --test-product artifacts; use SwiftPM's supported test filter.
+        # Español: Los targets XCTest no son productos --test-product; selecciónalos con --filter.
+        # 中文：XCTest target 并非可直接 --test-product 选择的产品，使用 SwiftPM 支持的 --filter。
         foundation_test_products=(
           PToolsPlatformTests
           PToolsAdvancedTests
@@ -144,7 +144,7 @@ run_named_gate() {
         )
         for test_product in "${foundation_test_products[@]}"; do
           swift test \
-            --test-product "$test_product" \
+            --filter "^${test_product}\." \
             --enable-xctest \
             --disable-swift-testing \
             --no-parallel
