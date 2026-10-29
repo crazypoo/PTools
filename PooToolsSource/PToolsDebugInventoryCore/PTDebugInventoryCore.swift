@@ -29,16 +29,18 @@ public enum PTDebugInventoryCore {
         var output: [PTDebugInventoryRecord] = []
         for (area, folder) in roots {
             guard let root = manager.urls(for: folder, in: .userDomainMask).first else { continue }
-            let values = (try? manager.contentsOfDirectory(
+            // Stable ordering is required for diffable local and remote Debug UIs.
+            let values = ((try? manager.contentsOfDirectory(
                 at: root, includingPropertiesForKeys: [.fileSizeKey, .isDirectoryKey],
-                options: [.skipsHiddenFiles])) ?? []
+                options: [.skipsHiddenFiles])) ?? [])
+                .sorted { $0.lastPathComponent < $1.lastPathComponent }
             for item in values {
                 if output.count == limit { return output }
                 if databasesOnly && !["db", "sqlite", "sqlite3"]
                     .contains(item.pathExtension.lowercased()) { continue }
                 let data = try? item.resourceValues(forKeys: [.fileSizeKey, .isDirectoryKey])
                 output.append(PTDebugInventoryRecord(
-                    identity: area + "/" + String(output.count),
+                    identity: area + "/" + item.lastPathComponent,
                     name: item.lastPathComponent, area: area,
                     kind: databasesOnly ? "database" : "file",
                     bytes: data?.fileSize ?? 0, directory: data?.isDirectory ?? false))
