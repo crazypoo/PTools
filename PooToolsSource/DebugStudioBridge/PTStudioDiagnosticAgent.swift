@@ -10,6 +10,8 @@ public final class PTStudioDiagnosticAgent {
     public typealias Handler = @MainActor @Sendable (PTStudioDiagnosticCommand) async -> PTStudioDiagnosticReply
     public private(set) var sessionID = UUID()
     private var task: Task<Void, Never>?
+    private var replies: [UUID: PTStudioDiagnosticReply] = [:]
+    private var replyOrder: [UUID] = []
 
     public init() {}
 
@@ -18,13 +20,25 @@ public final class PTStudioDiagnosticAgent {
         #if DEBUG
         guard task == nil else { return }
         sessionID = UUID()
+        replies.removeAll()
+        replyOrder.removeAll()
         let current = sessionID
         task = Task {
             while !Task.isCancelled {
                 do {
                     let commands = try await transport.pollDiagnostics(sessionID: current)
                     for command in commands where !Task.isCancelled {
-                        let response = await handler(command)
+                        let response: PTStudioDiagnosticReply
+                        if let prior = replies[command.id] {
+                            response = prior
+                        } else {
+                            response = await handler(command)
+                            replies[command.id] = response
+                            replyOrder.append(command.id)
+                            if replyOrder.count > 256 {
+                                replies.removeValue(forKey: replyOrder.removeFirst())
+                            }
+                        }
                         try await transport.sendDiagnosticReply(response)
                     }
                 } catch {
@@ -43,5 +57,4 @@ public final class PTStudioDiagnosticAgent {
         task = nil
     }
 
-    deinit { task?.cancel() }
 }
