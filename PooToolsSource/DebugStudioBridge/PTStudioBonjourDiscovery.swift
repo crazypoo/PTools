@@ -1,6 +1,8 @@
 // Opt-in, Debug-only Bonjour rendezvous for the existing authenticated TLS bridge.
 // Advertisements are untrusted hints. No pairing secrets travel through mDNS.
-import Foundation
+@preconcurrency import Foundation
+
+#if os(iOS)
 
 public struct PTStudioDiscoveredPeer: Identifiable, Equatable, Sendable {
     /// Persistent, public Studio installation UUID. Not a credential.
@@ -25,7 +27,7 @@ public enum PTStudioDiscoveryError: Error, Equatable {
 /// The host Info.plist must declare NSBonjourServices = [_ptstudio._tcp]
 /// and NSLocalNetworkUsageDescription.
 @MainActor
-public final class PTStudioBonjourDiscovery: NSObject, NetServiceBrowserDelegate, NetServiceDelegate {
+public final class PTStudioBonjourDiscovery: NSObject, @preconcurrency NetServiceBrowserDelegate, @preconcurrency NetServiceDelegate {
     public static let serviceType = "_ptstudio._tcp."
     public private(set) var peers: [PTStudioDiscoveredPeer] = []
     public var onChange: (([PTStudioDiscoveredPeer]) -> Void)?
@@ -216,8 +218,10 @@ public final class PTStudioAutoConnectionManager {
         let hadManagedBridge = ownsBridge
         ownsBridge = false
         currentPeer = nil
-        if hadManagedBridge {
-            transition = Task { [weak self] in
+        let previous = transition
+        transition = Task { [weak self] in
+            await previous?.value
+            if hadManagedBridge {
                 await PTStudioBridge.shared.stop()
                 self?.onBridgeStopped?()
             }
@@ -233,9 +237,11 @@ public final class PTStudioAutoConnectionManager {
         requestedPeer = desired
         generation &+= 1
         let run = generation
+        let previous = transition
         transition?.cancel()
         transition = Task { [weak self] in
-            guard let self else { return }
+            await previous?.value
+            guard let self, run == self.generation, self.enabled else { return }
             if self.ownsBridge {
                 await PTStudioBridge.shared.stop()
                 self.ownsBridge = false
@@ -267,3 +273,5 @@ public final class PTStudioAutoConnectionManager {
         }
     }
 }
+
+#endif // os(iOS)
