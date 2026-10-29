@@ -541,9 +541,16 @@ final class AppMacNetworkDebugManager {
     private init() {
         PTStudioAutoConnectionManager.shared.onBridgeStarted = {
             PTDebugManager.shared.start(identifier: "network")
+            #if DEBUG
+            PTStudioDiagnosticAgent.shared.recordLog("PTools Demo: secure Studio Bridge configured")
+            Task { await PTStudioDiagnosticAgent.shared.startIfAuthorized() }
+            #endif
         }
         PTStudioAutoConnectionManager.shared.onBridgeStopped = {
             PTDebugManager.shared.stop(identifier: "network")
+            #if DEBUG
+            Task { await PTStudioDiagnosticAgent.shared.stop() }
+            #endif
         }
     }
 

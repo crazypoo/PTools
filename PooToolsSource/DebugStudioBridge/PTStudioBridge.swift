@@ -72,6 +72,12 @@ public actor PTStudioBridge {
         self.store = store
     }
 
+    /// Same ephemeral session used by the authenticated Network Bridge ACKs.
+    /// Not a device identifier and never persisted.
+    public func diagnosticSessionID() -> UUID? {
+        transport == nil ? nil : sessionID
+    }
+
     public func status() -> PTStudioBridgeStatus {
         let state: PTStudioDeliveryState
         if transport == nil {

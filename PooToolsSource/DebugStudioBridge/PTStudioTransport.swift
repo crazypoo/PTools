@@ -74,7 +74,7 @@ public enum PTStudioPairingKeychain {
     }
 }
 
-private final class PTStudioCertificatePinDelegate: NSObject, URLSessionDelegate, @unchecked Sendable {
+final class PTStudioCertificatePinDelegate: NSObject, URLSessionDelegate, @unchecked Sendable {
     private let expectedSHA256: Data
     private let lock = NSLock()
     private enum Rejection {
