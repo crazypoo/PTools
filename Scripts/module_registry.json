@@ -146,8 +146,13 @@
       "spm_target": "PooToolsCodeView",
       "pod_subspec": "CodeView",
       "source_path": "PooToolsSource/CodeView",
-      "dependencies": ["Core"],
-      "compile_flags": ["POOTOOLS_CODEVIEW", "StrictConcurrency"],
+      "dependencies": [
+        "Core"
+      ],
+      "compile_flags": [
+        "POOTOOLS_CODEVIEW",
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "ui-leaf"
     },
@@ -569,7 +574,9 @@
       "pod_subspec": "DatabaseCore",
       "source_path": "PooToolsSource/PToolsDatabaseCore",
       "dependencies": [],
-      "compile_flags": ["StrictConcurrency"],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -582,8 +589,12 @@
       "spm_target": "PToolsDatabase",
       "pod_subspec": "Database",
       "source_path": "PooToolsSource/PToolsDatabase",
-      "dependencies": ["PToolsDatabaseCore"],
-      "compile_flags": ["StrictConcurrency"],
+      "dependencies": [
+        "PToolsDatabaseCore"
+      ],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -597,7 +608,9 @@
       "pod_subspec": "AuthCore",
       "source_path": "PooToolsSource/PToolsAuthCore",
       "dependencies": [],
-      "compile_flags": ["StrictConcurrency"],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -610,8 +623,13 @@
       "spm_target": "PToolsAuth",
       "pod_subspec": "Auth",
       "source_path": "PooToolsSource/PToolsAuth",
-      "dependencies": ["PToolsAuthCore", "PToolsStorage"],
-      "compile_flags": ["StrictConcurrency"],
+      "dependencies": [
+        "PToolsAuthCore",
+        "PToolsStorage"
+      ],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -625,7 +643,9 @@
       "pod_subspec": "SyncCore",
       "source_path": "PooToolsSource/PToolsSyncCore",
       "dependencies": [],
-      "compile_flags": ["StrictConcurrency"],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -638,8 +658,12 @@
       "spm_target": "PToolsSync",
       "pod_subspec": "Sync",
       "source_path": "PooToolsSource/PToolsSync",
-      "dependencies": ["PToolsSyncCore"],
-      "compile_flags": ["StrictConcurrency"],
+      "dependencies": [
+        "PToolsSyncCore"
+      ],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -653,7 +677,9 @@
       "pod_subspec": "TransferCore",
       "source_path": "PooToolsSource/PToolsTransferCore",
       "dependencies": [],
-      "compile_flags": ["StrictConcurrency"],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -666,8 +692,12 @@
       "spm_target": "PToolsTransfer",
       "pod_subspec": "Transfer",
       "source_path": "PooToolsSource/PToolsTransfer",
-      "dependencies": ["PToolsTransferCore"],
-      "compile_flags": ["StrictConcurrency"],
+      "dependencies": [
+        "PToolsTransferCore"
+      ],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -681,7 +711,9 @@
       "pod_subspec": "StoreKit",
       "source_path": "PooToolsSource/PToolsStoreKit",
       "dependencies": [],
-      "compile_flags": ["StrictConcurrency"],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -695,7 +727,9 @@
       "pod_subspec": "ObservabilityCore",
       "source_path": "PooToolsSource/PToolsObservabilityCore",
       "dependencies": [],
-      "compile_flags": ["StrictConcurrency"],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -708,8 +742,12 @@
       "spm_target": "PToolsObservability",
       "pod_subspec": "Observability",
       "source_path": "PooToolsSource/PToolsObservability",
-      "dependencies": ["PToolsObservabilityCore"],
-      "compile_flags": ["StrictConcurrency"],
+      "dependencies": [
+        "PToolsObservabilityCore"
+      ],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -723,7 +761,9 @@
       "pod_subspec": "WebCore",
       "source_path": "PooToolsSource/PToolsWebCore",
       "dependencies": [],
-      "compile_flags": ["StrictConcurrency"],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -736,8 +776,12 @@
       "spm_target": "PToolsWebBridge",
       "pod_subspec": "WebBridge",
       "source_path": "PooToolsSource/PToolsWebBridge",
-      "dependencies": ["PToolsWebCore"],
-      "compile_flags": ["StrictConcurrency"],
+      "dependencies": [
+        "PToolsWebCore"
+      ],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -750,8 +794,12 @@
       "spm_target": "PToolsWeb",
       "pod_subspec": "Web",
       "source_path": "PooToolsSource/PToolsWeb",
-      "dependencies": ["PToolsWebBridge"],
-      "compile_flags": ["StrictConcurrency"],
+      "dependencies": [
+        "PToolsWebBridge"
+      ],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -765,7 +813,9 @@
       "pod_subspec": "MapCore",
       "source_path": "PooToolsSource/PToolsMapCore",
       "dependencies": [],
-      "compile_flags": ["StrictConcurrency"],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -778,8 +828,12 @@
       "spm_target": "PToolsMap",
       "pod_subspec": "Map",
       "source_path": "PooToolsSource/PToolsMap",
-      "dependencies": ["PToolsMapCore"],
-      "compile_flags": ["StrictConcurrency"],
+      "dependencies": [
+        "PToolsMapCore"
+      ],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -793,7 +847,9 @@
       "pod_subspec": "AppIntegrity",
       "source_path": "PooToolsSource/PToolsAppIntegrity",
       "dependencies": [],
-      "compile_flags": ["StrictConcurrency"],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -807,7 +863,9 @@
       "pod_subspec": "RealtimeCore",
       "source_path": "PooToolsSource/PToolsRealtimeCore",
       "dependencies": [],
-      "compile_flags": ["StrictConcurrency"],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -820,8 +878,13 @@
       "spm_target": "PToolsRealtime",
       "pod_subspec": "Realtime",
       "source_path": "PooToolsSource/PToolsRealtime",
-      "dependencies": ["PToolsRealtimeCore", "PooToolsSocketKit"],
-      "compile_flags": ["StrictConcurrency"],
+      "dependencies": [
+        "PToolsRealtimeCore",
+        "PooToolsSocketKit"
+      ],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "application-infrastructure"
     },
@@ -834,8 +897,13 @@
       "spm_target": "PooToolsWebKit",
       "pod_subspec": "WebKit",
       "source_path": "PooToolsSource/WebKit",
-      "dependencies": ["Core"],
-      "compile_flags": ["POOTOOLS_WEBKIT", "StrictConcurrency"],
+      "dependencies": [
+        "Core"
+      ],
+      "compile_flags": [
+        "POOTOOLS_WEBKIT",
+        "StrictConcurrency"
+      ],
       "resources": [],
       "category": "compatibility"
     },
@@ -848,8 +916,12 @@
       "spm_target": "ptools",
       "pod_subspec": "VideoCache",
       "source_path": "PooToolsSource/Base",
-      "dependencies": ["Core"],
-      "compile_flags": ["POOTOOLS_VIDEOCACHE"],
+      "dependencies": [
+        "Core"
+      ],
+      "compile_flags": [
+        "POOTOOLS_VIDEOCACHE"
+      ],
       "resources": [],
       "category": "compatibility"
     },
@@ -862,10 +934,87 @@
       "spm_target": "PooToolsFilterCamera",
       "pod_subspec": "FilterCamera",
       "source_path": "PooToolsSource/C7Collector",
-      "dependencies": ["HarbethKit", "MediaViewer"],
-      "compile_flags": ["POOTOOLS_FILTERCAMERA"],
+      "dependencies": [
+        "HarbethKit",
+        "MediaViewer"
+      ],
+      "compile_flags": [
+        "POOTOOLS_FILTERCAMERA"
+      ],
       "resources": [],
       "category": "compatibility"
+    },
+    {
+      "name": "PToolsStudioProtocolCore",
+      "module_id": "ptools-studio-protocol-core",
+      "canonical_slug": "ptools-studio-protocol-core",
+      "aliases": [],
+      "spm_product": "PToolsStudioProtocolCore",
+      "spm_target": "PToolsStudioProtocolCore",
+      "pod_subspec": "StudioProtocolCore",
+      "source_path": "PooToolsSource/PToolsStudioProtocolCore",
+      "dependencies": [],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "debug-infrastructure"
+    },
+    {
+      "name": "PToolsInspectorRuntime",
+      "module_id": "ptools-inspector-runtime",
+      "canonical_slug": "ptools-inspector-runtime",
+      "aliases": [],
+      "spm_product": "PToolsInspectorRuntime",
+      "spm_target": "PToolsInspectorRuntime",
+      "pod_subspec": "StudioInspector",
+      "source_path": "PooToolsSource/PToolsInspectorRuntime",
+      "dependencies": [
+        "PToolsStudioProtocolCore"
+      ],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "debug-infrastructure"
+    },
+    {
+      "name": "PToolsStudioStorageRuntime",
+      "module_id": "ptools-studio-storage-runtime",
+      "canonical_slug": "ptools-studio-storage-runtime",
+      "aliases": [],
+      "spm_product": "PToolsStudioStorageRuntime",
+      "spm_target": "PToolsStudioStorageRuntime",
+      "pod_subspec": "StudioStorage",
+      "source_path": "PooToolsSource/PToolsStudioStorageRuntime",
+      "dependencies": [
+        "PToolsStudioProtocolCore",
+        "SQLite3"
+      ],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "debug-infrastructure"
+    },
+    {
+      "name": "PToolsStudioTelemetryRuntime",
+      "module_id": "ptools-studio-telemetry-runtime",
+      "canonical_slug": "ptools-studio-telemetry-runtime",
+      "aliases": [],
+      "spm_product": "PToolsStudioTelemetryRuntime",
+      "spm_target": "PToolsStudioTelemetryRuntime",
+      "pod_subspec": "StudioTelemetry",
+      "source_path": "PooToolsSource/PToolsStudioTelemetryRuntime",
+      "dependencies": [
+        "PToolsStudioProtocolCore",
+        "PToolsLogging"
+      ],
+      "compile_flags": [
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "debug-infrastructure"
     }
   ],
   "known_module_only": [
