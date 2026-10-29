@@ -2,49 +2,16 @@
 import Foundation
 import UIKit
 import Darwin
+import CryptoKit
 #if SWIFT_PACKAGE
 import PToolsStudioProtocolCore
+import PooToolsDEBUG
 #endif
 
 @MainActor
 private final class PTStudioWeakView {
     weak var view: UIView?
     init(_ view: UIView) { self.view = view }
-}
-
-/// The counter runs only while diagnostics is enabled and is destroyed on stop.
-@MainActor
-private final class PTStudioFrameCounter: NSObject {
-    private var link: CADisplayLink?
-    private var startTimestamp: CFTimeInterval = 0
-    private var frames = 0
-    private(set) var fps = 0.0
-
-    func start() {
-        guard link == nil else { return }
-        let display = CADisplayLink(target: self, selector: #selector(tick(_:)))
-        display.add(to: .main, forMode: .common)
-        link = display
-    }
-
-    @objc private func tick(_ display: CADisplayLink) {
-        if startTimestamp == 0 { startTimestamp = display.timestamp; return }
-        frames += 1
-        let elapsed = display.timestamp - startTimestamp
-        if elapsed >= 1 {
-            fps = Double(frames) / elapsed
-            frames = 0
-            startTimestamp = display.timestamp
-        }
-    }
-
-    func stop() {
-        link?.invalidate()
-        link = nil
-        startTimestamp = 0
-        frames = 0
-        fps = 0
-    }
 }
 
 /// Opt-in Debug-only diagnostics. This is independent of the established
@@ -65,8 +32,8 @@ public final class PTStudioDiagnosticAgent {
     private var referencedViews: [String: PTStudioWeakView] = [:]
     private var edits: [Edit] = []
     private var logs: [String] = []
-    private var frameCounter: PTStudioFrameCounter?
-    private var lastCPUSample: (totalSeconds: Double, uptime: TimeInterval)?
+    /// Shared PTInstruments sampling source; never create a second DisplayLink.
+    private var ownsInstrumentSession = false
     private init() {}
 
     /// Enables only after the developer has opted in and paired this exact Mac.
@@ -86,25 +53,30 @@ public final class PTStudioDiagnosticAgent {
             let client = try PTStudioDiagnosticHTTPSClient(endpoint: endpoint, credentials: credentials)
             self.client = client
             activePeerID = peer.id
-            let counter = PTStudioFrameCounter()
-            counter.start()
-            frameCounter = counter
             worker = Task { [weak self] in
                 guard let self else { return }
+                var failures = 0
                 while !Task.isCancelled {
+                    if UIApplication.shared.applicationState != .active {
+                        do { try await Task.sleep(for: .seconds(2)) } catch { return }
+                        continue
+                    }
                     do {
                         let commands = try await client.poll(sessionID: sessionID)
+                        failures = 0
                         for command in commands {
                             if Task.isCancelled { return }
-                            let response = self.execute(command, sessionID: sessionID)
+                            let response = await self.execute(command, sessionID: sessionID)
                             try await client.reply(response)
                         }
                     } catch {
-                        // No user data or credentials in error logs. The Network
-                        // Bridge remains independent and able to reconnect.
+                        // Bounded reconnect backoff instead of hammering a failed TLS endpoint.
+                        failures = min(failures + 1, 5)
+                        let backoff = Double(1 << failures)
+                        do { try await Task.sleep(for: .seconds(backoff)) } catch { return }
                     }
-                    do { try await Task.sleep(for: .seconds(1)) }
-                    catch { return }
+                    // Successful long polls already wait on the server.
+                    if Task.isCancelled { return }
                 }
             }
         } catch {
@@ -121,23 +93,24 @@ public final class PTStudioDiagnosticAgent {
         referencedViews.removeAll()
         identifiers.removeAll()
         edits.removeAll()
-        frameCounter?.stop()
-        frameCounter = nil
-        lastCPUSample = nil
+        if ownsInstrumentSession {
+            ownsInstrumentSession = false
+            _ = await PTInstrumentRecorder.shared.stop()
+        }
         await previous?.close()
     }
 
     /// Explicit logging integration point; no intercept of NSLog or os_log.
     public func recordLog(_ message: String) {
         guard UserDefaults.standard.bool(forKey: "PTStudio.diagnosticsEnabled") else { return }
-        let value = String(message.prefix(180))
+        let value = PTInstrumentRedactor.redactText(String(message.prefix(180)))
         guard !value.isEmpty else { return }
         logs.append(value)
         if logs.count > 200 { logs.removeFirst(logs.count - 200) }
     }
 
     private func execute(_ command: PTStudioDiagnosticCommand,
-                         sessionID: UUID) -> PTStudioDiagnosticReply {
+                         sessionID: UUID) async -> PTStudioDiagnosticReply {
         guard command.schemaVersion == 2, command.sessionID == sessionID,
               UserDefaults.standard.bool(forKey: "PTStudio.diagnosticsEnabled") else {
             return reply(command, sessionID: sessionID, success: false, message: "Not authorized")
@@ -145,8 +118,26 @@ public final class PTStudioDiagnosticAgent {
         let editing = UserDefaults.standard.bool(forKey: "PTStudio.editingEnabled")
         switch (command.domain, command.operation) {
         case (.inspector, "snapshot"):
-            return reply(command, sessionID: sessionID, entries: snapshot(
-                includePreview: UserDefaults.standard.bool(forKey: "PTStudio.previewEnabled")))
+            let previewEnabled = UserDefaults.standard.bool(forKey: "PTStudio.previewEnabled")
+            let tree = snapshot(includePreview: previewEnabled)
+            // A snapshot still traverses the current UI on MainActor, but unchanged
+            // trees avoid JSON image/attribute transfer and Mac list invalidation.
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.sortedKeys]
+            let valueTypes = tree.map {
+                PTStudioDiagnosticEntry(id: $0.id, parentID: $0.parentID,
+                    kind: $0.kind, name: $0.name, detail: $0.detail,
+                    frame: $0.frame, attributes: $0.attributes)
+            }
+            guard !previewEnabled, let bytes = try? encoder.encode(valueTypes) else {
+                return reply(command, sessionID: sessionID, entries: tree)
+            }
+            let digest = SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
+            if command.arguments["knownFingerprint"] == digest {
+                return reply(command, sessionID: sessionID, message: "unchanged:" + digest)
+            }
+            return reply(command, sessionID: sessionID,
+                         message: "fingerprint:" + digest, entries: tree)
         case (.inspector, "highlight"):
             guard let view = referencedViews[command.targetID ?? ""]?.view else {
                 return reply(command, sessionID: sessionID, success: false, message: "View expired")
@@ -184,12 +175,29 @@ public final class PTStudioDiagnosticAgent {
             view.isHidden = edit.hidden
             view.alpha = edit.alpha
             return reply(command, sessionID: sessionID, message: "Restored")
-        case (.storage, "list"):
-            return reply(command, sessionID: sessionID, entries: fileInventory(databasesOnly: false))
-        case (.database, "list"):
-            return reply(command, sessionID: sessionID, entries: fileInventory(databasesOnly: true))
+        case (.storage, "list"), (.database, "list"):
+            let databasesOnly = command.domain == .database
+            let records = await Task.detached(priority: .utility) {
+                PTDebugFileInventory.list(databasesOnly: databasesOnly)
+            }.value
+            let converted = records.map {
+                PTStudioDiagnosticEntry(id: $0.id, kind: $0.kind,
+                    name: PTInstrumentRedactor.redactText($0.name),
+                    detail: $0.source,
+                    attributes: ["bytes": String($0.byteCount),
+                                 "directory": String($0.isDirectory)])
+            }
+            return reply(command, sessionID: sessionID, entries: converted)
         case (.defaults, "list"):
-            return reply(command, sessionID: sessionID, entries: defaultsInventory())
+            let records = await Task.detached(priority: .utility) {
+                PTDebugDefaultsInventory.list()
+            }.value
+            let converted = records.map {
+                PTStudioDiagnosticEntry(id: "default-" + $0.key, kind: "UserDefaults",
+                    name: $0.key, detail: "Value withheld by default",
+                    attributes: ["type": $0.type])
+            }
+            return reply(command, sessionID: sessionID, entries: converted)
         case (.logging, "snapshot"):
             let data = logs.enumerated().map { idx, message in
                 PTStudioDiagnosticEntry(id: "log-\(idx)", kind: "log",
@@ -197,7 +205,7 @@ public final class PTStudioDiagnosticAgent {
             }
             return reply(command, sessionID: sessionID, entries: data)
         case (.performance, "snapshot"):
-            return reply(command, sessionID: sessionID, entries: performanceInventory())
+            return reply(command, sessionID: sessionID, entries: await performanceInventory())
         default:
             return reply(command, sessionID: sessionID, success: false, message: "Unsupported operation")
         }
@@ -206,9 +214,10 @@ public final class PTStudioDiagnosticAgent {
     private func reply(_ command: PTStudioDiagnosticCommand, sessionID: UUID,
                        success: Bool = true, message: String? = nil,
                        entries: [PTStudioDiagnosticEntry] = []) -> PTStudioDiagnosticReply {
-        PTStudioDiagnosticReply(id: command.id, sessionID: sessionID,
-                                success: success, message: message,
-                                entries: Array(entries.prefix(1200)))
+        PTStudioDiagnosticPrivacy.sanitize(
+            PTStudioDiagnosticReply(id: command.id, sessionID: sessionID,
+                                    success: success, message: message,
+                                    entries: Array(entries.prefix(1200))))
     }
 
     private func snapshot(includePreview: Bool) -> [PTStudioDiagnosticEntry] {
@@ -282,82 +291,28 @@ public final class PTStudioDiagnosticAgent {
         }
     }
 
-    private func rootFolders() -> [URL] {
-        let fm = FileManager.default
-        return [
-            fm.urls(for: .documentDirectory, in: .userDomainMask).first,
-            fm.urls(for: .cachesDirectory, in: .userDomainMask).first,
-            fm.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
-        ].compactMap { $0 }
-    }
-
-    private func fileInventory(databasesOnly: Bool) -> [PTStudioDiagnosticEntry] {
-        let fm = FileManager.default
-        var result: [PTStudioDiagnosticEntry] = []
-        for root in rootFolders() {
-            let files = (try? fm.contentsOfDirectory(
-                at: root, includingPropertiesForKeys: [.fileSizeKey, .isDirectoryKey],
-                options: [.skipsHiddenFiles])) ?? []
-            for file in files.prefix(200) where result.count < 500 {
-                let ext = file.pathExtension.lowercased()
-                if databasesOnly && !["db", "sqlite", "sqlite3"].contains(ext) { continue }
-                let props = try? file.resourceValues(forKeys: [.fileSizeKey, .isDirectoryKey])
-                result.append(PTStudioDiagnosticEntry(
-                    id: UUID().uuidString, kind: databasesOnly ? "database" : "file",
-                    name: file.lastPathComponent,
-                    detail: root.lastPathComponent,
-                    attributes: ["bytes": String(props?.fileSize ?? 0),
-                                 "directory": String(props?.isDirectory ?? false)]))
-            }
+    private func performanceInventory() async -> [PTStudioDiagnosticEntry] {
+        let recorder = PTInstrumentRecorder.shared
+        if !recorder.isRecording {
+            _ = recorder.start(instruments: [.fps, .cpu, .memory])
+            ownsInstrumentSession = true
         }
-        return result
-    }
-
-    private func defaultsInventory() -> [PTStudioDiagnosticEntry] {
-        let filtered = UserDefaults.standard.dictionaryRepresentation()
-        return filtered.keys.sorted().filter { key in
-            !["token", "secret", "password", "cookie", "auth", "key", "credential"]
-                .contains(where: { key.lowercased().contains($0) })
-        }.prefix(400).map { key in
-            PTStudioDiagnosticEntry(
-                id: "default-" + key, kind: "UserDefaults",
-                name: key, detail: "Value withheld by default",
-                attributes: ["type": filtered[key].map { String(describing: Swift.type(of: $0)) } ?? "Unknown"])
+        let snapshot = await recorder.session?.snapshot()
+        let tracks = snapshot?.timeline.tracks ?? []
+        func latest(_ kind: PTInstrumentKind) -> Double? {
+            tracks.first(where: { $0.kind == kind })?.samples.last?.value
         }
-    }
-
-    private func performanceInventory() -> [PTStudioDiagnosticEntry] {
-        var info = mach_task_basic_info()
-        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size /
-                                           MemoryLayout<natural_t>.size)
-        let status = withUnsafeMutablePointer(to: &info) {
-            $0.withMemoryRebound(to: integer_t.self, capacity: Int(count)) {
-                task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
-            }
-        }
-        let bytes = status == KERN_SUCCESS ? UInt64(info.resident_size) : 0
         let process = ProcessInfo.processInfo
-        let totalCPU = Double(info.user_time.seconds) +
-            Double(info.user_time.microseconds) / 1_000_000 +
-            Double(info.system_time.seconds) +
-            Double(info.system_time.microseconds) / 1_000_000
-        let sample = (totalSeconds: totalCPU, uptime: process.systemUptime)
-        let cpuPercent: Double
-        if status == KERN_SUCCESS, let previous = lastCPUSample,
-           sample.uptime > previous.uptime {
-            cpuPercent = max(0, (totalCPU - previous.totalSeconds) /
-                             (sample.uptime - previous.uptime) * 100)
-        } else {
-            cpuPercent = 0 // First sample requires another Refresh to calculate delta.
-        }
-        lastCPUSample = status == KERN_SUCCESS ? sample : nil
+        let cpu = latest(.cpu)
+        let fps = latest(.fps)
+        let memory = latest(.memory)
         return [
             PTStudioDiagnosticEntry(id: "cpu", kind: "performance",
-                name: "Process CPU (sampled)", detail: String(format: "%.1f%%", cpuPercent)),
+                name: "Process CPU", detail: cpu.map { String(format: "%.1f%%", $0) } ?? "Sampling…"),
             PTStudioDiagnosticEntry(id: "fps", kind: "performance",
-                name: "Observed display FPS", detail: String(format: "%.1f", frameCounter?.fps ?? 0)),
+                name: "Observed display FPS", detail: fps.map { String(format: "%.1f", $0) } ?? "Sampling…"),
             PTStudioDiagnosticEntry(id: "memory", kind: "performance",
-                name: "Resident memory", detail: "\(bytes) bytes"),
+                name: "Resident memory", detail: memory.map { String(format: "%.1f MB", $0) } ?? "Sampling…"),
             PTStudioDiagnosticEntry(id: "uptime", kind: "performance",
                 name: "System uptime", detail: String(format: "%.1f s", process.systemUptime)),
             PTStudioDiagnosticEntry(id: "thermal", kind: "performance",

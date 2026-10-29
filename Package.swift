@@ -294,6 +294,7 @@ let package = Package(
         // ==========================================
         // 调试工具模块 (DEBUG)
         // ==========================================
+        .library(name: "PToolsDebugInventoryCore", targets: ["PToolsDebugInventoryCore"]),
         .library(name: "PooToolsDEBUG", targets: ["PooToolsDEBUG"]),
         // Explicit opt-in transport of redacted DebugNetwork events; omitted from PooToolsAll.
         .library(name: "PToolsStudioProtocolCore", targets: ["PToolsStudioProtocolCore"]),
@@ -1163,7 +1164,7 @@ let package = Package(
         // ==========================================
         .target(
             name: "PooToolsDEBUG",
-            dependencies: ["ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
+            dependencies: ["PToolsDebugInventoryCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
             path: "PooToolsSource",
             sources: [
                 "Debug", "LocalConsole", "DevMask", "TouchInspector", "DEBUGLocation",
@@ -1171,6 +1172,12 @@ let package = Package(
                 "DebugRuler", "DebugPerformance", "DebugCategory", "DebugUserDefault", "DebugNetwork"
             ],
             swiftSettings: [.define("POOTOOLS_DEBUG"), .define("POOTOOLS_COCOAPODS")]
+        ),
+        // File/defaults Debug inventory is pure Foundation and has no UIKit dependency.
+        .target(
+            name: "PToolsDebugInventoryCore",
+            path: "PooToolsSource/PToolsDebugInventoryCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         // Standalone target avoids compiling DebugNetwork/StudioBridge sources twice.
         // Shared Foundation-only wire contract. The Mac host never imports UIKit or PooToolsDEBUG.
@@ -1368,6 +1375,12 @@ let package = Package(
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]
+        ),
+        .testTarget(
+            name: "PToolsDebugInventoryCoreTests",
+            dependencies: ["PToolsDebugInventoryCore"],
+            path: "Tests/PToolsDebugInventoryCoreTests",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .testTarget(
             name: "PToolsDebugStudioBridgeTests",
