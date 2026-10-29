@@ -156,6 +156,8 @@ public final class PTStudioAutoConnectionManager {
     public static let shared = PTStudioAutoConnectionManager()
     public let discovery = PTStudioBonjourDiscovery()
     public private(set) var currentPeer: PTStudioDiscoveredPeer?
+    public var isEnabled: Bool { enabled }
+    public var onPeersChanged: (@MainActor ([PTStudioDiscoveredPeer]) -> Void)?
     /// Called when a bridge transport starts. The host may enable capture here.
     public var onBridgeStarted: (@MainActor () -> Void)?
     /// Called after the managed bridge is stopped. The host may disable capture.
@@ -169,7 +171,10 @@ public final class PTStudioAutoConnectionManager {
     private var transition: Task<Void, Never>?
 
     public init() {
-        discovery.onChange = { [weak self] _ in self?.reconcile() }
+        discovery.onChange = { [weak self] peers in
+            self?.reconcile()
+            self?.onPeersChanged?(peers)
+        }
         discovery.onError = { [weak self] message in self?.onError?(message) }
     }
 
