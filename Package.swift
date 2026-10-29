@@ -294,6 +294,8 @@ let package = Package(
         // ==========================================
         // 调试工具模块 (DEBUG)
         // ==========================================
+        .library(name: "PToolsDebugCore", targets: ["PToolsDebugCore"]),
+        .library(name: "PToolsDebugMetricsCore", targets: ["PToolsDebugMetricsCore"]),
         .library(name: "PToolsDebugInventoryCore", targets: ["PToolsDebugInventoryCore"]),
         .library(name: "PooToolsDEBUG", targets: ["PooToolsDEBUG"]),
         // Explicit opt-in transport of redacted DebugNetwork events; omitted from PooToolsAll.
@@ -1164,7 +1166,7 @@ let package = Package(
         // ==========================================
         .target(
             name: "PooToolsDEBUG",
-            dependencies: ["PToolsDebugInventoryCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
+            dependencies: ["PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
             path: "PooToolsSource",
             sources: [
                 "Debug", "LocalConsole", "DevMask", "TouchInspector", "DEBUGLocation",
@@ -1172,6 +1174,17 @@ let package = Package(
                 "DebugRuler", "DebugPerformance", "DebugCategory", "DebugUserDefault", "DebugNetwork"
             ],
             swiftSettings: [.define("POOTOOLS_DEBUG"), .define("POOTOOLS_COCOAPODS")]
+        ),
+        // Runtime-neutral ownership and bounded metrics: independently buildable.
+        .target(
+            name: "PToolsDebugCore",
+            path: "PooToolsSource/PToolsDebugCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsDebugMetricsCore",
+            path: "PooToolsSource/PToolsDebugMetricsCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         // File/defaults Debug inventory is pure Foundation and has no UIKit dependency.
         .target(
@@ -1375,6 +1388,12 @@ let package = Package(
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]
+        ),
+        .testTarget(
+            name: "PToolsDebugCoreTests",
+            dependencies: ["PToolsDebugCore", "PToolsDebugMetricsCore"],
+            path: "Tests/PToolsDebugCoreTests",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .testTarget(
             name: "PToolsDebugInventoryCoreTests",
