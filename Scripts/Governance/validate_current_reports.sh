@@ -32,7 +32,8 @@ Dir.glob(File.join(directory, "*.json")).sort.each do |path|
   payload = JSON.parse(File.read(path))
   required.each { |key| failures << "#{path}: missing #{key}" unless payload.key?(key) }
   failures << "#{path}: repository mismatch" unless payload["repository"] == expected_repository
-  failures << "#{path}: branch mismatch" unless payload["branch"] == branch
+  # Branch is provenance, not freshness; PR detached checkouts and merged branches share source inputs.
+  failures << "#{path}: branch provenance missing" if payload["branch"].to_s.empty?
   # English: sourceRevision is provenance only; sourceInputsDigest is the freshness authority.
   # Español: sourceRevision solo describe la procedencia; sourceInputsDigest decide la vigencia.
   # 中文：sourceRevision 仅用于来源追踪，sourceInputsDigest 才是新鲜度依据。
@@ -43,7 +44,7 @@ end
 Dir.glob(File.join(directory, "*.md")).sort.each do |path|
   content = File.read(path)
   failures << "#{path}: missing Repository" unless content.include?("Repository: #{expected_repository}")
-  failures << "#{path}: missing Branch" unless content.include?("Branch: #{branch}")
+  failures << "#{path}: missing Branch provenance" unless content.match?(/^Branch:\s+\S+/)
   # English: Keep the revision as provenance; freshness is checked by the digest.
   # Español: Conserva la revisión como procedencia; la vigencia se valida con el resumen.
   # 中文：版本号只用于来源追踪；报告新鲜度由摘要校验。

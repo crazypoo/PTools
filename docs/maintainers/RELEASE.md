@@ -14,6 +14,16 @@
 6. `PACKAGE_MATRIX.md`、`DEPENDENCY_MATRIX.md`、`TEST_MATRIX.md`、`MODULE_CHECKLIST.md` 和
    `api-baseline/` 必须与当前版本和最新正式 tag 对齐。
 
+## Canonical documentation and report regeneration
+
+Run these commands on a clean full checkout before the quality gate. Generated assets belong in the same reviewed change set as the source/registry edits; do not hand-edit `report/current` metadata or trust old SHA provenance as current validation.
+
+```bash
+bash Scripts/Governance/refresh_release_candidate.sh
+```
+
+A GitHub-hosted refresh workflow is available for the dedicated PR05 regeneration branch. It commits generated artifacts only if the generator's check and freshness validator succeed. After any generated commit, rerun required Quality and SwiftPM checks on that exact head SHA; a documentation regeneration alone is not a release pass.
+
 ## Preflight
 
 ```bash
