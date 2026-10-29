@@ -29,7 +29,7 @@ def canonicalize(source, destination)
               # English: The digest is authoritative; revision fields are informational.
               # Español: El resumen es la autoridad; las revisiones solo son informativas.
               # 中文：摘要是唯一新鲜度依据；版本字段仅供信息展示。
-              next if %w[generatedAt generated_at sourceRevision source_revision].include?(key)
+              next if %w[generatedAt generated_at sourceRevision source_revision branch].include?(key)
               result[key] = scrub.call(child)
             end
           when Array
@@ -45,7 +45,7 @@ def canonicalize(source, destination)
     else
       content = File.read(path)
       content = content.lines.reject do |line|
-        line.match?(/Generated at: /) || line.match?(/Source revision: /)
+        line.match?(/Generated at: /) || line.match?(/Source revision: /) || line.match?(/^Branch: /)
       end.join
       File.write(output, content)
     end
