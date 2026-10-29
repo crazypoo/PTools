@@ -715,6 +715,34 @@ class PTFuncNameViewController: PTBaseViewController {
                 view.iKnowTapHandler = {
                     PTGCDManager.shared.runOnMain {
                         AppMacNetworkDebugManager.shared.presentStudioPairing(from: self)
+                        
+                        Task {
+                            let before = await PTNetworkCaptureStore.shared.summaries().count
+
+                            let session = URLSession(
+                                configuration: .ephemeral
+                            )
+
+                            do {
+                                let url = URL(string: "https://www.apple.com")!
+                                _ = try await session.data(from: url)
+                            } catch {
+                                print("Test request:", error.localizedDescription)
+                            }
+
+                            session.invalidateAndCancel()
+
+                            try? await Task.sleep(for: .seconds(2))
+
+                            let after = await PTNetworkCaptureStore.shared.summaries().count
+                            let bridge = await PTStudioBridge.shared.status()
+
+                            print("Capture records:", before, "→", after)
+                            print("Bridge:", bridge.deliveryState)
+                            print("ACK:", bridge.lastAcknowledgedSequence as Any)
+                            print("Queued:", bridge.queuedEvents)
+                            print("Pending:", bridge.pendingRequests)
+                        }
                     }
                 }
             }
