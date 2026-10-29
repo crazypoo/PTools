@@ -222,6 +222,9 @@ public final class PTStudioDiagnosticAgent {
             let value = id.uuidString.lowercased()
             live[value] = PTStudioWeakView(view)
             let frame = view.convert(view.bounds, to: nil)
+            // Offscreen/transition geometry must not poison the entire reply.
+            guard [frame.minX, frame.minY, frame.width, frame.height]
+                .allSatisfy({ $0.isFinite && abs($0) <= 100_000 }) else { return }
             var preview: String?
             if isWindow && includePreview && view.bounds.width > 0 && view.bounds.height > 0 {
                 let size = CGSize(width: min(460, view.bounds.width),
