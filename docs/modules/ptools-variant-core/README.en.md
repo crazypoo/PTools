@@ -6,7 +6,7 @@ status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
 swiftpm_product: "PToolsVariantCore"
-cocoapods_subspec: "PToolsVariantCore"
+cocoapods_subspec: "VariantCore"
 source: "PooToolsSource/PToolsVariantCore"
 category: "compatibility"
 last_reviewed: "2026-09-28"
@@ -40,7 +40,7 @@ import PToolsVariantCore
 CocoaPods:
 
 ```ruby
-pod 'PooTools/PToolsVariantCore'
+pod 'PooTools/VariantCore'
 ```
 
 ## 4. Import
@@ -55,7 +55,7 @@ Use the smallest published product or subspec. The registry name is `PToolsVaria
 
 ## 6. Core Concepts
 
-The public boundary is value-first where possible. Direct dependencies recorded by the registry: None declared by the registry..
+The public boundary is value-first where possible. Direct dependencies recorded by the registry: None declared by the registry.
 
 ## 7. Main APIs
 

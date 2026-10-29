@@ -6,8 +6,8 @@ status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
 swiftpm_product: "PToolsDebugStudioBridge"
-cocoapods_subspec: "PToolsDebugStudioBridge"
-source: "PooToolsSource/PToolsDebugStudioBridge"
+cocoapods_subspec: "DEBUG_StudioBridge"
+source: "PooToolsSource/DebugStudioBridge"
 category: "compatibility"
 last_reviewed: "2026-09-28"
 canonical: true
@@ -40,7 +40,7 @@ import PToolsDebugStudioBridge
 CocoaPods:
 
 ```ruby
-pod 'PooTools/PToolsDebugStudioBridge'
+pod 'PooTools/DEBUG_StudioBridge'
 ```
 
 ## 4. Import
@@ -55,7 +55,7 @@ Use the smallest published product or subspec. The registry name is `PToolsDebug
 
 ## 6. Core Concepts
 
-The public boundary is value-first where possible. Direct dependencies recorded by the registry: PooToolsDEBUG.
+The public boundary is value-first where possible. Direct dependencies recorded by the registry: PooToolsDEBUG
 
 ## 7. Main APIs
 

@@ -6,7 +6,7 @@ status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
 swiftpm_product: "PToolsVariantCore"
-cocoapods_subspec: "PToolsVariantCore"
+cocoapods_subspec: "VariantCore"
 source: "PooToolsSource/PToolsVariantCore"
 category: "compatibility"
 last_reviewed: "2026-09-28"
@@ -40,7 +40,7 @@ import PToolsVariantCore
 CocoaPods:
 
 ```ruby
-pod 'PooTools/PToolsVariantCore'
+pod 'PooTools/VariantCore'
 ```
 
 ## 4. Importación
@@ -55,7 +55,7 @@ Usa el producto o subspec mínimo publicado. El nombre del registro es `PToolsVa
 
 ## 6. Conceptos principales
 
-La frontera pública prioriza tipos de valor. Dependencias directas registradas: None declared by the registry..
+La frontera pública prioriza tipos de valor. Dependencias directas registradas: None declared by the registry.
 
 ## 7. API principales
 

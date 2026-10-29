@@ -6,8 +6,8 @@ status: "review"
 minimum_ios: "17.0"
 swift: "6+"
 swiftpm_product: "PToolsFontCatalogCore"
-cocoapods_subspec: "PToolsFontCatalogCore"
-source: "PooToolsSource/PToolsFontCatalogCore"
+cocoapods_subspec: "null"
+source: "manifest-only"
 category: "unclassified"
 last_reviewed: "2026-09-28"
 canonical: true
@@ -40,7 +40,7 @@ import PToolsFontCatalogCore
 CocoaPods:
 
 ```ruby
-pod 'PooTools/PToolsFontCatalogCore'
+# No standalone CocoaPods subspec is published for this product.
 ```
 
 ## 4. Import
@@ -55,7 +55,7 @@ Use the smallest published product or subspec. The registry name is `PToolsFontC
 
 ## 6. Core Concepts
 
-The public boundary is value-first where possible. Direct dependencies recorded by the registry: None declared by the registry..
+The public boundary is value-first where possible. Direct dependencies recorded by the registry: None declared by the registry.
 
 ## 7. Main APIs
 

@@ -6,8 +6,8 @@ status: "review"
 minimum_ios: "17.0"
 swift: "6+"
 swiftpm_product: "PToolsAcknowledgements"
-cocoapods_subspec: "PToolsAcknowledgements"
-source: "PooToolsSource/PToolsAcknowledgements"
+cocoapods_subspec: "null"
+source: "manifest-only"
 category: "unclassified"
 last_reviewed: "2026-09-28"
 canonical: false
@@ -40,7 +40,7 @@ import PToolsAcknowledgements
 CocoaPods：
 
 ```ruby
-pod 'PooTools/PToolsAcknowledgements'
+# No standalone CocoaPods subspec is published for this product.
 ```
 
 ## 4. 导入

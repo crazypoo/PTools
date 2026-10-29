@@ -6,8 +6,8 @@ status: "review"
 minimum_ios: "17.0"
 swift: "6+"
 swiftpm_product: "PToolsFontCatalogCore"
-cocoapods_subspec: "PToolsFontCatalogCore"
-source: "PooToolsSource/PToolsFontCatalogCore"
+cocoapods_subspec: "null"
+source: "manifest-only"
 category: "unclassified"
 last_reviewed: "2026-09-28"
 canonical: false
@@ -40,7 +40,7 @@ import PToolsFontCatalogCore
 CocoaPods：
 
 ```ruby
-pod 'PooTools/PToolsFontCatalogCore'
+# No standalone CocoaPods subspec is published for this product.
 ```
 
 ## 4. 导入

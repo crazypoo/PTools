@@ -7,7 +7,7 @@ minimum_ios: "17.0"
 swift: "6+"
 swiftpm_product: "null"
 cocoapods_subspec: "ConstraintLayout"
-source: "PooToolsSource/ConstraintLayout"
+source: "manifest-only"
 category: "compatibility"
 last_reviewed: "2026-09-28"
 canonical: false
@@ -34,7 +34,7 @@ ConstraintLayout 是 PTools 的 compatibility 模块。本指南由 canonical �
 Swift Package Manager：
 
 ```swift
-// CocoaPods-only compatibility entry
+// This entry is CocoaPods-only; import the module exposed by the selected subspec.
 ```
 
 CocoaPods：
@@ -46,7 +46,7 @@ pod 'PooTools/ConstraintLayout'
 ## 4. 导入
 
 ```swift
-// CocoaPods-only compatibility entry
+// This entry is CocoaPods-only; import the module exposed by the selected subspec.
 ```
 
 ## 5. 快速开始

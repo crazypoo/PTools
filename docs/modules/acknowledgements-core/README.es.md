@@ -7,7 +7,7 @@ minimum_ios: "17.0"
 swift: "6+"
 swiftpm_product: "null"
 cocoapods_subspec: "AcknowledgementsCore"
-source: "PooToolsSource/AcknowledgementsCore"
+source: "manifest-only"
 category: "compatibility"
 last_reviewed: "2026-09-28"
 canonical: false
@@ -34,7 +34,7 @@ AcknowledgementsCore es un módulo PTools de categoría compatibility. Esta guí
 Swift Package Manager:
 
 ```swift
-// CocoaPods-only compatibility entry
+// This entry is CocoaPods-only; import the module exposed by the selected subspec.
 ```
 
 CocoaPods:
@@ -46,7 +46,7 @@ pod 'PooTools/AcknowledgementsCore'
 ## 4. Importación
 
 ```swift
-// CocoaPods-only compatibility entry
+// This entry is CocoaPods-only; import the module exposed by the selected subspec.
 ```
 
 ## 5. Inicio rápido
@@ -55,7 +55,7 @@ Usa el producto o subspec mínimo publicado. El nombre del registro es `Acknowle
 
 ## 6. Conceptos principales
 
-La frontera pública prioriza tipos de valor. Dependencias directas registradas: None declared by the registry..
+La frontera pública prioriza tipos de valor. Dependencias directas registradas: None declared by the registry.
 
 ## 7. API principales
 

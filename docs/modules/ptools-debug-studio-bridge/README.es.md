@@ -6,8 +6,8 @@ status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
 swiftpm_product: "PToolsDebugStudioBridge"
-cocoapods_subspec: "PToolsDebugStudioBridge"
-source: "PooToolsSource/PToolsDebugStudioBridge"
+cocoapods_subspec: "DEBUG_StudioBridge"
+source: "PooToolsSource/DebugStudioBridge"
 category: "compatibility"
 last_reviewed: "2026-09-28"
 canonical: false
@@ -40,7 +40,7 @@ import PToolsDebugStudioBridge
 CocoaPods:
 
 ```ruby
-pod 'PooTools/PToolsDebugStudioBridge'
+pod 'PooTools/DEBUG_StudioBridge'
 ```
 
 ## 4. Importación
@@ -55,7 +55,7 @@ Usa el producto o subspec mínimo publicado. El nombre del registro es `PToolsDe
 
 ## 6. Conceptos principales
 
-La frontera pública prioriza tipos de valor. Dependencias directas registradas: PooToolsDEBUG.
+La frontera pública prioriza tipos de valor. Dependencias directas registradas: PooToolsDEBUG
 
 ## 7. API principales
 

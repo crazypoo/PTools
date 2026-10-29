@@ -6,8 +6,8 @@ status: "review"
 minimum_ios: "17.0"
 swift: "6+"
 swiftpm_product: "PToolsConstraintLayout"
-cocoapods_subspec: "PToolsConstraintLayout"
-source: "PooToolsSource/PToolsConstraintLayout"
+cocoapods_subspec: "null"
+source: "manifest-only"
 category: "unclassified"
 last_reviewed: "2026-09-28"
 canonical: false
@@ -40,7 +40,7 @@ import PToolsConstraintLayout
 CocoaPods:
 
 ```ruby
-pod 'PooTools/PToolsConstraintLayout'
+# No standalone CocoaPods subspec is published for this product.
 ```
 
 ## 4. Importación
@@ -55,7 +55,7 @@ Usa el producto o subspec mínimo publicado. El nombre del registro es `PToolsCo
 
 ## 6. Conceptos principales
 
-La frontera pública prioriza tipos de valor. Dependencias directas registradas: None declared by the registry..
+La frontera pública prioriza tipos de valor. Dependencias directas registradas: None declared by the registry.
 
 ## 7. API principales
 
