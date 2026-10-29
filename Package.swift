@@ -1377,6 +1377,12 @@ let package = Package(
             ]
         ),
         .testTarget(
+            name: "PToolsDebugInventoryCoreTests",
+            dependencies: ["PToolsDebugInventoryCore"],
+            path: "Tests/PToolsDebugInventoryCoreTests",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .testTarget(
             name: "PToolsDebugStudioBridgeTests",
             dependencies: ["PToolsDebugStudioBridge", "PooToolsDEBUG"],
             path: "Tests/PToolsDebugStudioBridgeTests",
