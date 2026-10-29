@@ -226,7 +226,10 @@ public final class PTStudioDiagnosticAgent {
             guard [frame.minX, frame.minY, frame.width, frame.height]
                 .allSatisfy({ $0.isFinite && abs($0) <= 100_000 }) else { return }
             var preview: String?
-            if isWindow && includePreview && view.bounds.width > 0 && view.bounds.height > 0 {
+            // One bounded preview per snapshot. Multiple full-window previews
+            // could exceed the collector's 512 KiB reply limit.
+            if isWindow && includePreview && !result.contains(where: { $0.previewBase64 != nil })
+                && view.bounds.width > 0 && view.bounds.height > 0 {
                 let size = CGSize(width: min(460, view.bounds.width),
                                   height: min(600, view.bounds.height))
                 let renderer = UIGraphicsImageRenderer(size: size)
@@ -235,7 +238,7 @@ public final class PTStudioDiagnosticAgent {
                                        afterScreenUpdates: false)
                 }
                 preview = image.jpegData(compressionQuality: 0.45)?.base64EncodedString()
-                if (preview?.count ?? 0) > 250_000 { preview = nil }
+                if (preview?.count ?? 0) > 120_000 { preview = nil }
             }
             result.append(PTStudioDiagnosticEntry(
                 id: value, parentID: parentID,
