@@ -125,12 +125,10 @@ class AppDelegate: PTAppWindowsDelegate {
         
         // Discovery only resumes after the developer has explicitly opted in
         // and previously paired this Debug app with a Mac. No embedded secrets.
-        #if DEBUG
         Task { @MainActor in
             AppMacNetworkDebugManager.shared.startAutomaticDiscoveryIfEnabled()
         }
-        #endif
-
+    
         PTFullscreenPopGesture.configure()
         
         let locationAlways = PTPermissionModel()
@@ -525,11 +523,9 @@ extension AppDelegate {
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         PSecurityStrategy.removeBlurEffect()
-        #if DEBUG
         Task { @MainActor in
             AppMacNetworkDebugManager.shared.refreshAutomaticDiscovery()
         }
-        #endif
     }
         
     override class func appDelegate() -> AppDelegate? {
@@ -537,7 +533,6 @@ extension AppDelegate {
     }
 }
 
-#if DEBUG
 @MainActor
 final class AppMacNetworkDebugManager {
 
@@ -654,4 +649,3 @@ final class AppMacNetworkDebugManager {
         PTDebugManager.shared.stop(identifier: "network")
     }
 }
-#endif

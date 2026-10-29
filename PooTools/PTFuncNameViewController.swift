@@ -712,6 +712,11 @@ class PTFuncNameViewController: PTBaseViewController {
                 
                 let view = PTWhatsNewsViewController(titleItem: PTWhatsNewsTitleItem(),iKnowItem: iKnowItem,newsItem: [item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2])
                 view.whatsNewsShow(vc: self)
+                view.iKnowTapHandler = {
+                    PTGCDManager.shared.runOnMain {
+                        AppMacNetworkDebugManager.shared.presentStudioPairing(from: self)
+                    }
+                }
             }
         })
         
