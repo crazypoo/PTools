@@ -156,12 +156,29 @@ public final class PTStudioDiagnosticAgent {
             view.isHidden = edit.hidden
             view.alpha = edit.alpha
             return reply(command, sessionID: sessionID, message: "Restored")
-        case (.storage, "list"):
-            return reply(command, sessionID: sessionID, entries: fileInventory(databasesOnly: false))
-        case (.database, "list"):
-            return reply(command, sessionID: sessionID, entries: fileInventory(databasesOnly: true))
+        case (.storage, "list"), (.database, "list"):
+            let databasesOnly = command.domain == .database
+            let records = await Task.detached(priority: .utility) {
+                PTDebugFileInventory.list(databasesOnly: databasesOnly)
+            }.value
+            let converted = records.map {
+                PTStudioDiagnosticEntry(id: $0.id, kind: $0.kind,
+                    name: PTInstrumentRedactor.redactText($0.name),
+                    detail: $0.source,
+                    attributes: ["bytes": String($0.byteCount),
+                                 "directory": String($0.isDirectory)])
+            }
+            return reply(command, sessionID: sessionID, entries: converted)
         case (.defaults, "list"):
-            return reply(command, sessionID: sessionID, entries: defaultsInventory())
+            let records = await Task.detached(priority: .utility) {
+                PTDebugDefaultsInventory.list()
+            }.value
+            let converted = records.map {
+                PTStudioDiagnosticEntry(id: "default-" + $0.key, kind: "UserDefaults",
+                    name: $0.key, detail: "Value withheld by default",
+                    attributes: ["type": $0.type])
+            }
+            return reply(command, sessionID: sessionID, entries: converted)
         case (.logging, "snapshot"):
             let data = logs.enumerated().map { idx, message in
                 PTStudioDiagnosticEntry(id: "log-\(idx)", kind: "log",
@@ -251,50 +268,6 @@ public final class PTStudioDiagnosticAgent {
         Task {
             try? await Task.sleep(for: .seconds(2))
             layer.removeFromSuperlayer()
-        }
-    }
-
-    private func rootFolders() -> [URL] {
-        let fm = FileManager.default
-        return [
-            fm.urls(for: .documentDirectory, in: .userDomainMask).first,
-            fm.urls(for: .cachesDirectory, in: .userDomainMask).first,
-            fm.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
-        ].compactMap { $0 }
-    }
-
-    private func fileInventory(databasesOnly: Bool) -> [PTStudioDiagnosticEntry] {
-        let fm = FileManager.default
-        var result: [PTStudioDiagnosticEntry] = []
-        for root in rootFolders() {
-            let files = (try? fm.contentsOfDirectory(
-                at: root, includingPropertiesForKeys: [.fileSizeKey, .isDirectoryKey],
-                options: [.skipsHiddenFiles])) ?? []
-            for file in files.prefix(200) where result.count < 500 {
-                let ext = file.pathExtension.lowercased()
-                if databasesOnly && !["db", "sqlite", "sqlite3"].contains(ext) { continue }
-                let props = try? file.resourceValues(forKeys: [.fileSizeKey, .isDirectoryKey])
-                result.append(PTStudioDiagnosticEntry(
-                    id: UUID().uuidString, kind: databasesOnly ? "database" : "file",
-                    name: file.lastPathComponent,
-                    detail: root.lastPathComponent,
-                    attributes: ["bytes": String(props?.fileSize ?? 0),
-                                 "directory": String(props?.isDirectory ?? false)]))
-            }
-        }
-        return result
-    }
-
-    private func defaultsInventory() -> [PTStudioDiagnosticEntry] {
-        let filtered = UserDefaults.standard.dictionaryRepresentation()
-        return filtered.keys.sorted().filter { key in
-            !["token", "secret", "password", "cookie", "auth", "key", "credential"]
-                .contains(where: { key.lowercased().contains($0) })
-        }.prefix(400).map { key in
-            PTStudioDiagnosticEntry(
-                id: "default-" + key, kind: "UserDefaults",
-                name: key, detail: "Value withheld by default",
-                attributes: ["type": filtered[key].map { String(describing: Swift.type(of: $0)) } ?? "Unknown"])
         }
     }
 
