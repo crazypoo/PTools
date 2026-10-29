@@ -25,6 +25,31 @@ public struct PTStudioBridgeConfiguration: Sendable {
         self.batchInterval = batchInterval
         self.privacy = privacy
     }
+
+    private static func safeDiagnostic(for error: Error) -> String {
+        if let failure = error as? PTStudioBridgeError {
+            switch failure {
+            case .serverStatus(401): return "HTTP 401: pairing token rejected. Confirm or re-pair in Studio."
+            case .serverStatus(400): return "HTTP 400: collector rejected the event schema."
+            case .serverStatus(let status): return "Collector returned HTTP \(status)."
+            case .invalidAcknowledgement: return "Collector ACK was invalid."
+            case .transportRejected: return "Collector rejected the request."
+            default: return "Bridge setup failed."
+            }
+        }
+        let nsError = error as NSError
+        if nsError.domain == NSURLErrorDomain {
+            switch nsError.code {
+            case -1202, -1200: return "TLS trust failed. Trust the Studio Development CA and confirm the leaf pin."
+            case -1003: return "Mac hostname could not be resolved; check Bonjour and Wi-Fi."
+            case -1004: return "Mac TLS port unavailable; check Bridge listener and firewall."
+            case -1001: return "Mac Bridge timed out."
+            case -1009: return "iPhone network is unavailable."
+            default: return "Network error \(nsError.code) during secure Studio transport."
+            }
+        }
+        return "Secure Studio transport error (\(nsError.domain), code \(nsError.code))."
+    }
 }
 
 /// A running bridge is not necessarily connected: only an ACK proves delivery.
@@ -40,6 +65,8 @@ public struct PTStudioBridgeStatus: Sendable, Equatable {
     public let lastAcknowledgedSequence: UInt64?
     public let deliveryState: PTStudioDeliveryState
     public let consecutiveSendFailures: Int
+    /// Sanitized diagnostic; never includes tokens, bodies, or full URLs.
+    public let lastSendError: String?
 }
 
 public actor PTStudioBridge {
@@ -58,6 +85,7 @@ public actor PTStudioBridge {
     private var isSending = false
     private var retryExponent = 0
     private var consecutiveSendFailures = 0
+    private var lastSendError: String?
     private var generation: UInt64 = 0
     private var queue: [PTStudioEnvelope] = []
     private var pending: [UUID: PTStudioMessageKind] = [:]
@@ -80,7 +108,8 @@ public actor PTStudioBridge {
                                     queuedEvents: queue.count, pendingRequests: pending.count,
                                     droppedEvents: droppedEvents, lastAcknowledgedSequence: lastAck,
                                     deliveryState: state,
-                                    consecutiveSendFailures: consecutiveSendFailures)
+                                    consecutiveSendFailures: consecutiveSendFailures,
+                                    lastSendError: lastSendError)
     }
 
     /// Call only after a user explicitly switches on diagnostics in a Debug build.
@@ -102,6 +131,7 @@ public actor PTStudioBridge {
         droppedEvents = 0
         retryExponent = 0
         consecutiveSendFailures = 0
+        lastSendError = nil
         queue.removeAll()
         pending.removeAll()
         pendingOrder.removeAll()
@@ -146,6 +176,7 @@ public actor PTStudioBridge {
         isSending = false
         retryExponent = 0
         consecutiveSendFailures = 0
+        lastSendError = nil
         await previous?.close()
     }
 
@@ -259,6 +290,7 @@ public actor PTStudioBridge {
             }
             retryExponent = 0
             consecutiveSendFailures = 0
+            lastSendError = nil
             isSending = false
             if !queue.isEmpty || !pending.isEmpty { scheduleFlush(after: .zero) }
         } catch {
@@ -267,6 +299,7 @@ public actor PTStudioBridge {
             guard self.transport != nil else { return }
             retryExponent = min(retryExponent + 1, 5)
             consecutiveSendFailures = min(consecutiveSendFailures + 1, Int.max - 1)
+            lastSendError = Self.safeDiagnostic(for: error)
             // Retain the same eventIDs and sequences across retries for deduplication.
             scheduleFlush(after: .seconds(1 << retryExponent))
         }
