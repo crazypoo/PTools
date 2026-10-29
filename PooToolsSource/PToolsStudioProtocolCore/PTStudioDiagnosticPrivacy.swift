@@ -26,9 +26,9 @@ public enum PTStudioDiagnosticPrivacy {
 
     public static func sanitize(_ reply: PTStudioDiagnosticReply) -> PTStudioDiagnosticReply {
         let entries = reply.entries.prefix(1_200).map { item in
-            let attributes = item.attributes.filter { key, _ in
+            let attributes = item.attributes.filter { pair in
                 !sensitiveKeys.contains(where: {
-                    key.replacingOccurrences(of: "_", with: "").lowercased().contains($0)
+                    pair.key.replacingOccurrences(of: "_", with: "").lowercased().contains($0)
                 })
             }.mapValues { scrub($0) }
             return PTStudioDiagnosticEntry(
