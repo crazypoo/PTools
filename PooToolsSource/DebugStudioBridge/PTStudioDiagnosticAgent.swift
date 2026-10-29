@@ -2,6 +2,7 @@
 import Foundation
 import UIKit
 import Darwin
+import CryptoKit
 #if SWIFT_PACKAGE
 import PToolsStudioProtocolCore
 import PooToolsDEBUG
@@ -117,8 +118,26 @@ public final class PTStudioDiagnosticAgent {
         let editing = UserDefaults.standard.bool(forKey: "PTStudio.editingEnabled")
         switch (command.domain, command.operation) {
         case (.inspector, "snapshot"):
-            return reply(command, sessionID: sessionID, entries: snapshot(
-                includePreview: UserDefaults.standard.bool(forKey: "PTStudio.previewEnabled")))
+            let previewEnabled = UserDefaults.standard.bool(forKey: "PTStudio.previewEnabled")
+            let tree = snapshot(includePreview: previewEnabled)
+            // A snapshot still traverses the current UI on MainActor, but unchanged
+            // trees avoid JSON image/attribute transfer and Mac list invalidation.
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.sortedKeys]
+            let valueTypes = tree.map {
+                PTStudioDiagnosticEntry(id: $0.id, parentID: $0.parentID,
+                    kind: $0.kind, name: $0.name, detail: $0.detail,
+                    frame: $0.frame, attributes: $0.attributes)
+            }
+            guard !previewEnabled, let bytes = try? encoder.encode(valueTypes) else {
+                return reply(command, sessionID: sessionID, entries: tree)
+            }
+            let digest = SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
+            if command.arguments["knownFingerprint"] == digest {
+                return reply(command, sessionID: sessionID, message: "unchanged:" + digest)
+            }
+            return reply(command, sessionID: sessionID,
+                         message: "fingerprint:" + digest, entries: tree)
         case (.inspector, "highlight"):
             guard let view = referencedViews[command.targetID ?? ""]?.view else {
                 return reply(command, sessionID: sessionID, success: false, message: "View expired")
