@@ -623,6 +623,13 @@ private struct PTInstrumentRingBuffer<Element> {
         return true
     }
 
+    var latestValue: Element? {
+        guard !values.isEmpty else { return nil }
+        return values.count == capacity
+            ? values[(head + capacity - 1) % capacity]
+            : values.last
+    }
+
     var orderedValues: [Element] {
         guard values.count == capacity, head != 0 else { return values }
         return Array(values[head..<values.count]) + Array(values[0..<head])
@@ -700,6 +707,18 @@ public actor PTInstrumentSession {
         if buffer.append(event) { droppedCount += 1 }
         eventBuffers[event.kind] = buffer
         eventCount += 1
+    }
+
+    /// Cheap point-in-time read for remote Debug consumers.
+    /// Unlike snapshot(), this does not construct every track and timeline.
+    public func latestSamples(for kinds: Set<PTInstrumentKind>) -> [PTInstrumentKind: PTInstrumentSample] {
+        var output: [PTInstrumentKind: PTInstrumentSample] = [:]
+        for kind in kinds {
+            if let sample = sampleBuffers[kind]?.latestValue {
+                output[kind] = sample
+            }
+        }
+        return output
     }
 
     public func snapshot() -> PTInstrumentSessionSnapshot {
@@ -1143,6 +1162,21 @@ public final class PTInstrumentRecorder: NSObject {
     private var memoryLogDestination: PTMemoryLogDestination?
 #endif
     private var durationTask: Task<Void, Never>?
+    // A remote Studio session can lazily start instruments, but another local
+    // consumer taking over must not be stopped when the Studio disconnects.
+    private var studioOwnsSession = false
+
+    public func startStudioSamplerIfNeeded() {
+        guard !isRecording else { return }
+        _ = start(instruments: [.fps, .cpu, .memory])
+        studioOwnsSession = true
+    }
+
+    public func releaseStudioSamplerIfOwned() async {
+        guard studioOwnsSession else { return }
+        studioOwnsSession = false
+        _ = await stop()
+    }
 
     public override init() {
         super.init()
@@ -1153,8 +1187,11 @@ public final class PTInstrumentRecorder: NSObject {
                      policy: PTInstrumentSamplingPolicy = PTInstrumentSamplingPolicy(),
                      window: UIWindow? = nil) -> PTInstrumentSession {
         if isRecording, let session {
+            // A normal recorder start is an explicit local consumer takeover.
+            studioOwnsSession = false
             return session
         }
+        studioOwnsSession = false
         let instrumentSet = Set(instruments)
         let metadata = PTInstrumentSessionMetadata.current(window: window)
         let session = PTInstrumentSession(selectedInstruments: instruments,
@@ -1201,6 +1238,7 @@ public final class PTInstrumentRecorder: NSObject {
 
     public func stop() async -> PTInstrumentSessionSnapshot? {
         guard let session else { return nil }
+        studioOwnsSession = false
         durationTask?.cancel()
         durationTask = nil
         displayLinkSampler?.stop()
