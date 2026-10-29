@@ -623,6 +623,13 @@ private struct PTInstrumentRingBuffer<Element> {
         return true
     }
 
+    var latestValue: Element? {
+        guard !values.isEmpty else { return nil }
+        return values.count == capacity
+            ? values[(head + capacity - 1) % capacity]
+            : values.last
+    }
+
     var orderedValues: [Element] {
         guard values.count == capacity, head != 0 else { return values }
         return Array(values[head..<values.count]) + Array(values[0..<head])
@@ -707,7 +714,7 @@ public actor PTInstrumentSession {
     public func latestSamples(for kinds: Set<PTInstrumentKind>) -> [PTInstrumentKind: PTInstrumentSample] {
         var output: [PTInstrumentKind: PTInstrumentSample] = [:]
         for kind in kinds {
-            if let sample = sampleBuffers[kind]?.orderedValues.last {
+            if let sample = sampleBuffers[kind]?.latestValue {
                 output[kind] = sample
             }
         }
