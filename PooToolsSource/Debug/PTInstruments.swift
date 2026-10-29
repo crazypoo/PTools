@@ -4,6 +4,9 @@
 
 import Foundation
 #if SWIFT_PACKAGE
+import PToolsDebugMetricsCore
+#endif
+#if SWIFT_PACKAGE
 import ptools
 #endif
 import UIKit
@@ -604,37 +607,7 @@ public enum PTInstrumentTraceStore {
 // English: The bounded ring buffer overwrites the oldest diagnostics entry instead of growing without limit.
 // Español: El buffer circular limitado sobrescribe la entrada más antigua en lugar de crecer sin límite.
 // 中文：有界环形缓冲覆盖最旧的诊断记录，避免内存随录制时间无限增长。
-private struct PTInstrumentRingBuffer<Element> {
-    private let capacity: Int
-    private var values: [Element] = []
-    private var head = 0
-
-    init(capacity: Int) {
-        self.capacity = max(1, capacity)
-    }
-
-    mutating func append(_ element: Element) -> Bool {
-        guard values.count == capacity else {
-            values.append(element)
-            return false
-        }
-        values[head] = element
-        head = (head + 1) % capacity
-        return true
-    }
-
-    var latestValue: Element? {
-        guard !values.isEmpty else { return nil }
-        return values.count == capacity
-            ? values[(head + capacity - 1) % capacity]
-            : values.last
-    }
-
-    var orderedValues: [Element] {
-        guard values.count == capacity, head != 0 else { return values }
-        return Array(values[head..<values.count]) + Array(values[0..<head])
-    }
-}
+private typealias PTInstrumentRingBuffer<Element> = PTDebugRingBuffer<Element>
 
 // English: The session actor is the single mutable owner for samples, events, limits, and export snapshots.
 // Español: El actor de sesión es el único propietario mutable de muestras, eventos, límites y snapshots exportables.
