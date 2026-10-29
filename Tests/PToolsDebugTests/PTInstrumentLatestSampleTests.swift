@@ -6,7 +6,7 @@ final class PTInstrumentLatestSampleTests: XCTestCase {
         let metadata = PTInstrumentSessionMetadata(
             bundleIdentifier: "tests", appVersion: "1",
             operatingSystem: "iOS", deviceModel: "Simulator", screenRefreshRate: 60)
-        let policy = PTInstrumentSamplingPolicy()
+        let policy = PTInstrumentSamplingPolicy(maxSampleCount: 8)
         let session = PTInstrumentSession(selectedInstruments: [.fps],
                                           metadata: metadata, policy: policy)
         for index in 0..<1_000 {
