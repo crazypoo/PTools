@@ -1069,6 +1069,13 @@ Pod::Spec.new do |s|
         subspec.libraries = 'sqlite3'
     end
 
+    s.subspec 'StudioTelemetry' do |subspec|
+        subspec.dependency 'PooTools/StudioProtocolCore'
+        subspec.dependency 'PooTools/Logging'
+        subspec.source_files = 'PooToolsSource/PToolsStudioTelemetryRuntime/**/*.swift'
+        subspec.frameworks = 'Foundation'
+    end
+
     # Optional diagnostics stream for PTNetwork Studio. Not included by default.
     s.subspec 'DEBUG_StudioBridge' do |subspec|
         subspec.dependency 'PooTools/DEBUG'

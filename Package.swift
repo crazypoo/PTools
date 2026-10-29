@@ -299,6 +299,7 @@ let package = Package(
         .library(name: "PToolsStudioProtocolCore", targets: ["PToolsStudioProtocolCore"]),
         .library(name: "PToolsInspectorRuntime", targets: ["PToolsInspectorRuntime"]),
         .library(name: "PToolsStudioStorageRuntime", targets: ["PToolsStudioStorageRuntime"]),
+        .library(name: "PToolsStudioTelemetryRuntime", targets: ["PToolsStudioTelemetryRuntime"]),
         .library(name: "PToolsDebugStudioBridge", targets: ["PToolsDebugStudioBridge"]),
         .library(name: "PooToolsDEBUGTrackingEyes", targets: ["PooToolsDEBUGTrackingEyes"]),
         .library(name: "PooToolsLaunchTimeProfiler", targets: ["PooToolsLaunchTimeProfiler"]),
@@ -1183,6 +1184,7 @@ let package = Package(
         ),
         .target(name: "PToolsInspectorRuntime", dependencies: ["PToolsStudioProtocolCore"], path: "PooToolsSource/PToolsInspectorRuntime"),
         .target(name: "PToolsStudioStorageRuntime", dependencies: ["PToolsStudioProtocolCore"], path: "PooToolsSource/PToolsStudioStorageRuntime", linkerSettings: [.linkedLibrary("sqlite3")]),
+        .target(name: "PToolsStudioTelemetryRuntime", dependencies: ["PToolsStudioProtocolCore", "PToolsLogging"], path: "PooToolsSource/PToolsStudioTelemetryRuntime"),
         .target(
             name: "PToolsDebugStudioBridge",
             dependencies: ["PooToolsDEBUG", "PToolsStudioProtocolCore"],
