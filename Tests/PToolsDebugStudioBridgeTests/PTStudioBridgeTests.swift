@@ -18,6 +18,13 @@ private actor StudioRecordingTransport: PTStudioTransport {
     func isClosed() -> Bool { closed }
 }
 
+private actor StudioUnauthorizedTransport: PTStudioTransport {
+    func send(_ events: [PTStudioEnvelope]) async throws -> PTStudioAcknowledgement {
+        throw PTStudioBridgeError.serverStatus(401)
+    }
+    func close() {}
+}
+
 final class PTStudioBridgeTests: XCTestCase {
     #if os(iOS)
     @MainActor
@@ -178,6 +185,25 @@ final class PTStudioBridgeTests: XCTestCase {
             try await bridge.start(using: StudioRecordingTransport(), configuration: .init(isEnabled: true))
             XCTFail("Release must not enable Studio capture")
         } catch PTStudioBridgeError.disabledInRelease {}
+        #endif
+    }
+
+    func testUnauthorizedPairingIsNotReportedAsConnected() async throws {
+        #if DEBUG
+        let bridge = PTStudioBridge(store: PTNetworkCaptureStore())
+        try await bridge.start(using: StudioUnauthorizedTransport(),
+                               configuration: PTStudioBridgeConfiguration(isEnabled: true))
+        try await Task.sleep(for: .milliseconds(200))
+        let status = await bridge.status()
+        XCTAssertEqual(status.deliveryState, .retrying)
+        XCTAssertNil(status.lastAcknowledgedSequence)
+        XCTAssertGreaterThan(status.consecutiveSendFailures, 0)
+        XCTAssertTrue(status.lastSendError?.contains("HTTP 401") == true)
+        XCTAssertFalse(status.lastSendError?.contains("Bearer") == true)
+        await bridge.stop()
+        let stopped = await bridge.status()
+        XCTAssertEqual(stopped.deliveryState, .stopped)
+        XCTAssertNil(stopped.lastSendError)
         #endif
     }
 
