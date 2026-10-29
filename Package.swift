@@ -296,6 +296,7 @@ let package = Package(
         // ==========================================
         .library(name: "PooToolsDEBUG", targets: ["PooToolsDEBUG"]),
         // Explicit opt-in transport of redacted DebugNetwork events; omitted from PooToolsAll.
+        .library(name: "PToolsStudioProtocolCore", targets: ["PToolsStudioProtocolCore"]),
         .library(name: "PToolsDebugStudioBridge", targets: ["PToolsDebugStudioBridge"]),
         .library(name: "PooToolsDEBUGTrackingEyes", targets: ["PooToolsDEBUGTrackingEyes"]),
         .library(name: "PooToolsLaunchTimeProfiler", targets: ["PooToolsLaunchTimeProfiler"]),
@@ -1172,9 +1173,15 @@ let package = Package(
             swiftSettings: [.define("POOTOOLS_DEBUG"), .define("POOTOOLS_COCOAPODS")]
         ),
         // Standalone target avoids compiling DebugNetwork/StudioBridge sources twice.
+        // Shared Foundation-only wire contract. The Mac host never imports UIKit or PooToolsDEBUG.
+        .target(
+            name: "PToolsStudioProtocolCore",
+            path: "PooToolsSource/PToolsStudioProtocolCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
         .target(
             name: "PToolsDebugStudioBridge",
-            dependencies: ["PooToolsDEBUG"],
+            dependencies: ["PooToolsDEBUG", "PToolsStudioProtocolCore"],
             path: "PooToolsSource/DebugStudioBridge",
             swiftSettings: [.define("POOTOOLS_DEBUG_STUDIO_BRIDGE")]
         ),
@@ -1194,6 +1201,7 @@ let package = Package(
         // English: Keep iOS-only quality targets for Core, UI, Network, list, navigation, media, and permission regression checks.
         // Español: Mantiene objetivos de calidad exclusivos de iOS para las regresiones de Core, UI, Network, listas, navegación, medios y permisos.
         // 中文：保留仅面向 iOS 的质量测试目标，覆盖 Core、UI、Network、列表、导航、媒体和权限回归。
+        .testTarget(name: "PToolsStudioProtocolCoreTests", dependencies: ["PToolsStudioProtocolCore"], path: "Tests/PToolsStudioProtocolCoreTests"),
         .testTarget(
             name: "PToolsCoreTests",
             dependencies: ["PToolsCore", "PToolsVariantCore"],
