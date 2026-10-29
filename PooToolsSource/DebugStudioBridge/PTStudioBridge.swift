@@ -26,30 +26,7 @@ public struct PTStudioBridgeConfiguration: Sendable {
         self.privacy = privacy
     }
 
-    private static func safeDiagnostic(for error: Error) -> String {
-        if let failure = error as? PTStudioBridgeError {
-            switch failure {
-            case .serverStatus(401): return "HTTP 401: pairing token rejected. Confirm or re-pair in Studio."
-            case .serverStatus(400): return "HTTP 400: collector rejected the event schema."
-            case .serverStatus(let status): return "Collector returned HTTP \(status)."
-            case .invalidAcknowledgement: return "Collector ACK was invalid."
-            case .transportRejected: return "Collector rejected the request."
-            default: return "Bridge setup failed."
-            }
-        }
-        let nsError = error as NSError
-        if nsError.domain == NSURLErrorDomain {
-            switch nsError.code {
-            case -1202, -1200: return "TLS trust failed. Trust the Studio Development CA and confirm the leaf pin."
-            case -1003: return "Mac hostname could not be resolved; check Bonjour and Wi-Fi."
-            case -1004: return "Mac TLS port unavailable; check Bridge listener and firewall."
-            case -1001: return "Mac Bridge timed out."
-            case -1009: return "iPhone network is unavailable."
-            default: return "Network error \(nsError.code) during secure Studio transport."
-            }
-        }
-        return "Secure Studio transport error (\(nsError.domain), code \(nsError.code))."
-    }
+
 }
 
 /// A running bridge is not necessarily connected: only an ACK proves delivery.
@@ -304,4 +281,29 @@ public actor PTStudioBridge {
             scheduleFlush(after: .seconds(1 << retryExponent))
         }
     }
+    private static func safeDiagnostic(for error: Error) -> String {
+        if let failure = error as? PTStudioBridgeError {
+            switch failure {
+            case .serverStatus(401): return "HTTP 401: pairing token rejected. Confirm or re-pair in Studio."
+            case .serverStatus(400): return "HTTP 400: collector rejected the event schema."
+            case .serverStatus(let status): return "Collector returned HTTP \(status)."
+            case .invalidAcknowledgement: return "Collector ACK was invalid."
+            case .transportRejected: return "Collector rejected the request."
+            default: return "Bridge setup failed."
+            }
+        }
+        let nsError = error as NSError
+        if nsError.domain == NSURLErrorDomain {
+            switch nsError.code {
+            case -1202, -1200: return "TLS trust failed. Trust the Studio Development CA and confirm the leaf pin."
+            case -1003: return "Mac hostname could not be resolved; check Bonjour and Wi-Fi."
+            case -1004: return "Mac TLS port unavailable; check Bridge listener and firewall."
+            case -1001: return "Mac Bridge timed out."
+            case -1009: return "iPhone network is unavailable."
+            default: return "Network error \(nsError.code) during secure Studio transport."
+            }
+        }
+        return "Secure Studio transport error (\(nsError.domain), code \(nsError.code))."
+    }
+
 }
