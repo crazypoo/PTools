@@ -547,7 +547,9 @@ final class AppMacNetworkDebugManager {
         }
         PTStudioAutoConnectionManager.shared.onBridgeStopped = {
             PTDebugManager.shared.stop(identifier: "network")
+            #if DEBUG
             Task { await PTStudioDiagnosticAgent.shared.stop() }
+            #endif
         }
     }
 
