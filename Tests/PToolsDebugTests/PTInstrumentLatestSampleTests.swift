@@ -29,4 +29,21 @@ final class PTInstrumentLatestSampleTests: XCTestCase {
         let state = await session.currentState()
         XCTAssertEqual(state, .recording)
     }
+
+    @MainActor
+    func testStudioOwnedRecorderStopsButLocalTakeoverSurvivesDisconnect() async {
+        let studioOnly = PTInstrumentRecorder()
+        studioOnly.startStudioSamplerIfNeeded()
+        XCTAssertTrue(studioOnly.isRecording)
+        await studioOnly.releaseStudioSamplerIfOwned()
+        XCTAssertFalse(studioOnly.isRecording)
+
+        let sharedWithLocalUI = PTInstrumentRecorder()
+        sharedWithLocalUI.startStudioSamplerIfNeeded()
+        let localSession = sharedWithLocalUI.start(instruments: [.fps])
+        await sharedWithLocalUI.releaseStudioSamplerIfOwned()
+        XCTAssertTrue(sharedWithLocalUI.isRecording)
+        XCTAssertTrue(sharedWithLocalUI.session === localSession)
+        _ = await sharedWithLocalUI.stop()
+    }
 }
