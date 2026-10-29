@@ -70,7 +70,11 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>定位</string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Connect to your development Mac for opt-in network debugging.</string>
+	<string>Discover your paired development Mac for opt-in network debugging.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_ptstudio._tcp</string>
+	</array>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Mic使用</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

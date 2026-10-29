@@ -13,6 +13,9 @@ import OSLog
 #if DEBUG && canImport(YCSymbolTracker)
 import YCSymbolTracker
 #endif
+#if DEBUG
+import SwiftUI
+#endif
 #if canImport(InAppViewDebugger)
 import InAppViewDebugger
 #endif
@@ -120,8 +123,13 @@ class AppDelegate: PTAppWindowsDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         runFontCollectorIfRequested()
         
-        // PTNetworkStudio pairing is an explicit, Debug-only developer action.
-        // Never start capture or embed a pairing token during normal app launch.
+        // Discovery only resumes after the developer has explicitly opted in
+        // and previously paired this Debug app with a Mac. No embedded secrets.
+        #if DEBUG
+        Task { @MainActor in
+            AppMacNetworkDebugManager.shared.startAutomaticDiscoveryIfEnabled()
+        }
+        #endif
 
         PTFullscreenPopGesture.configure()
         
@@ -517,6 +525,11 @@ extension AppDelegate {
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         PSecurityStrategy.removeBlurEffect()
+        #if DEBUG
+        Task { @MainActor in
+            AppMacNetworkDebugManager.shared.refreshAutomaticDiscovery()
+        }
+        #endif
     }
         
     override class func appDelegate() -> AppDelegate? {
@@ -530,7 +543,57 @@ final class AppMacNetworkDebugManager {
 
     static let shared = AppMacNetworkDebugManager()
 
-    private init() {}
+    private init() {
+        PTStudioAutoConnectionManager.shared.onBridgeStarted = {
+            PTDebugManager.shared.start(identifier: "network")
+        }
+        PTStudioAutoConnectionManager.shared.onBridgeStopped = {
+            PTDebugManager.shared.stop(identifier: "network")
+        }
+    }
+
+    private let automaticConnectionSetting = "PTStudio.autoConnectEnabled"
+
+    /// Only resume Bonjour scanning when the user previously consented.
+    func startAutomaticDiscoveryIfEnabled() {
+        guard UserDefaults.standard.bool(forKey: automaticConnectionSetting) else { return }
+        do {
+            try PTStudioAutoConnectionManager.shared.start()
+        } catch {
+            PTNSLogConsole("PTStudio Bonjour discovery: \(error.localizedDescription)")
+        }
+    }
+
+    /// A Debug-settings switch should call this after explicit opt-in.
+    func setAutomaticDiscovery(enabled: Bool) throws {
+        if enabled {
+            try PTStudioAutoConnectionManager.shared.start()
+            UserDefaults.standard.set(true, forKey: automaticConnectionSetting)
+        } else {
+            UserDefaults.standard.set(false, forKey: automaticConnectionSetting)
+            PTStudioAutoConnectionManager.shared.stop()
+        }
+    }
+
+    /// Present from any existing Debug settings screen, not on normal launch.
+    func presentStudioPairing(from presenter: UIViewController) {
+        let screen = UIHostingController(rootView:
+            NavigationStack { PTStudioPairingView() })
+        presenter.present(screen, animated: true)
+    }
+
+    /// Pair only after the developer picks a discovered Mac and confirms the
+    /// token/fingerprint visible in that Mac's Bridge setup screen.
+    func approveStudio(peerID: String, token: String, fingerprint: String) throws {
+        try PTStudioAutoConnectionManager.shared.approvePairing(
+            peerID: peerID, token: token, fingerprintHex: fingerprint)
+    }
+
+    func refreshAutomaticDiscovery() {
+        guard UserDefaults.standard.bool(forKey: automaticConnectionSetting) else { return }
+        do { try PTStudioAutoConnectionManager.shared.refresh() }
+        catch { PTNSLogConsole("PTStudio discovery refresh: \(error.localizedDescription)") }
+    }
 
     /// 用户主动开启调试时调用
     func connect(

@@ -41,7 +41,7 @@ PTStudioPairingKeychain.revoke(account: "my-dev-mac")
 #endif
 ```
 
-**Mac setup:** In DevNetworkWatcher choose **iPhone → PTools Live Bridge**, enter the Mac's real Wi-Fi LAN IP (not `127.0.0.1`), then Start Bridge. The collector generates a private development root CA and a 90-day leaf with SAN for that address. Use **Reveal Development CA (.cer)** to AirDrop/install the root CA on the authorized iOS test device and enable full trust under **Settings → General → About → Certificate Trust Settings**. Enter the displayed bearer token and leaf fingerprint in the iOS Debug-only pairing UI. Changing the Mac IP rotates the leaf fingerprint; pair again. The root CA is separate from mitmproxy's HTTPS-inspection CA. Never install either CA or token in a distributed app.
+**Mac setup:** In DevNetworkWatcher choose **iPhone → PTools Live Bridge** and Start Bridge using a stable `.local` TLS hostname (preferred) or a manually entered LAN IPv4. The collector generates a private development root CA and a 90-day leaf with SAN for that address. Use **Reveal Development CA (.cer)** to AirDrop/install the root CA on the authorized iOS test device and enable full trust under **Settings → General → About → Certificate Trust Settings**. Enter the displayed bearer token and leaf fingerprint in the iOS Debug-only pairing UI. Changing the configured TLS hostname (or manually entered IP) rotates the leaf fingerprint; pair again. The root CA is separate from mitmproxy's HTTPS-inspection CA. Never install either CA or token in a distributed app.
 
 **Capture startup:** `@MainActor PTDebugManager.shared.start(identifier: "network")` starts the existing URLProtocol observer; starting `PTStudioBridge` alone does **not** capture traffic. Initiate pairing only after the developer enables a Debug UI action (never unconditionally in `AppDelegate`). The example helper now starts the capture observer **after** successfully subscribing the Bridge, so a failed Bridge start cannot leave unexpected capture enabled. Stop via `PTDebugManager.shared.stop(identifier: "network")` if your Debug UI has no other network-capture owner.
 
@@ -49,7 +49,69 @@ PTStudioPairingKeychain.revoke(account: "my-dev-mac")
 
 **2026-10-29 pairing migration:** An old example app had a fixed LAN IP and pairing secret committed in source. Those literals are removed and automatic launch-time pairing is disabled. The matching Mac Collector now replaces legacy `bridge-token` with `bridge-token-v2` on first launch, so you **must re-pair** after upgrading. Because the old secret is in Git history, never reuse it.
 
-The host application's `Info.plist` must include `NSLocalNetworkUsageDescription` for local network use. This implementation performs **no Bonjour discovery** and does not require `NSBonjourServices`. Use a host address entered/selected by the user. Apple local-network permission behavior varies by OS and needs a device check.
+### Bonjour discovery and paired automatic reconnection (2026-10-29)
+
+The **opt-in** `PTStudioBonjourDiscovery` browses `_ptstudio._tcp.` on the local network. The collector advertises a stable, public installation UUID, protocol version and TLS hostname; it **never** broadcasts the token or fingerprint. `PTStudioAutoConnectionManager` matches advertisements against Keychain credentials stored under that UUID and starts the existing HTTPS transport. Lost services stop the managed bridge; reappearing services and app-foreground `refresh()` can restart it. Existing manual pairing APIs remain supported.
+
+Host app `Info.plist` requirements (in addition to the app's usual Debug capabilities):
+
+```xml
+<key>NSLocalNetworkUsageDescription</key>
+<string>Discover my paired developer Mac for network debugging.</string>
+<key>NSBonjourServices</key>
+<array><string>_ptstudio._tcp</string></array>
+```
+
+The optional Debug-only SwiftUI `PTStudioPairingView()` supplies the first-pairing UI (Bonjour peer selection, opt-in switch, token + SHA-256 confirmation, Keychain save/revoke). Present it from your app's existing developer/debug settings screen:
+
+```swift
+#if DEBUG
+import SwiftUI
+import PToolsDebugStudioBridge
+
+// Inside a Debug-only settings view:
+NavigationStack { PTStudioPairingView() }
+#endif
+```
+
+The PooTools example exposes `AppMacNetworkDebugManager.shared.presentStudioPairing(from: presenter)` for UIKit projects. The host app must still explicitly include the optional Bridge product and be responsible for turning its capture observer on/off.
+
+Example Debug settings code (on the main actor, never for a Release build):
+
+```swift
+#if DEBUG
+import PToolsDebugStudioBridge
+
+let connector = PTStudioAutoConnectionManager.shared
+connector.onBridgeStarted = {
+    // Explicit opt-in: the host owns capture and stops it when disconnected.
+    PTDebugManager.shared.start(identifier: "network")
+}
+connector.onBridgeStopped = {
+    PTDebugManager.shared.stop(identifier: "network")
+}
+
+// Only after the developer enables an "Auto-connect paired Studio" switch:
+try connector.start()
+// Show connector.discovery.peers in a Debug pairing picker.
+// On first pairing, the developer verifies the Mac's UI and manually enters
+// its Token + leaf certificate fingerprint; the token is NEVER in Bonjour TXT.
+try connector.approvePairing(
+    peerID: selectedPeer.id, token: confirmedToken, fingerprintHex: confirmedPin)
+
+// Later launches may call connector.start() only if that opt-in persists.
+// After foreground / Wi-Fi changes:
+try connector.refresh()
+// On switch off (does not erase Keychain):
+connector.stop()
+// On explicitly unpairing:
+connector.revokePairing(peerID: selectedPeer.id)
+#endif
+```
+
+**Mac:** In Studio → iPhone, start Bridge with the Mac's stable `.local` hostname (now the default), not a changing IP address. Bonjour only advertises after the Python TLS listener reports ready. Opt into "Start secure Bridge automatically when Studio opens" to advertise on subsequent launches. Installing and explicitly trusting the generated Development CA on the test iPhone is still mandatory. If the host name or leaf certificate changes, verify and re-pair the fingerprint; rotating the token also revokes existing pairings. A forged service advertisement cannot bypass trusted TLS, pinning or Bearer authorization. Bonjour and the network connection require local network permission and working multicast DNS; VPNs and some guest Wi-Fi networks can block discovery.
+
+**Important:** The example AppDelegate scans automatically only after the developer's Debug opt-in preference was set and at least one Mac is Keychain-paired. Discovering an unpaired Mac does not enable capture. `onBridgeStarted` means the transport was configured; verify `PTStudioBridge.status().deliveryState == .connected` to prove the Mac has ACKed events. The example's previous manual connect helper remains usable separately. Physical iPhone + macOS verification is still required.
 
 ## Wire contract (schemaVersion = 1)
 
