@@ -76,20 +76,56 @@ public enum PTStudioPairingKeychain {
 
 private final class PTStudioCertificatePinDelegate: NSObject, URLSessionDelegate, @unchecked Sendable {
     private let expectedSHA256: Data
+    private let lock = NSLock()
+    private enum Rejection {
+        case trust, pin
+    }
+    private var rejection: Rejection?
 
     init(expectedSHA256: Data) { self.expectedSHA256 = expectedSHA256 }
 
+    // These are called on URLSession's delegate queue, never from the UI.
+    // A cancelled TLS challenge otherwise surfaces as the misleading URLError(-999).
+    private func record(_ value: Rejection) {
+        lock.lock()
+        rejection = value
+        lock.unlock()
+    }
+
+    func clearRejection() {
+        lock.lock()
+        rejection = nil
+        lock.unlock()
+    }
+
+    func takeRejection() -> PTStudioBridgeError? {
+        lock.lock()
+        defer { lock.unlock() }
+        let result = rejection
+        rejection = nil
+        switch result {
+        case .trust: return .tlsUntrustedCertificate
+        case .pin: return .tlsPinMismatch
+        case nil: return nil
+        }
+    }
+
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge,
                     completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-              let trust = challenge.protectionSpace.serverTrust,
+        guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust else {
+            completionHandler(.performDefaultHandling, nil)
+            return
+        }
+        guard let trust = challenge.protectionSpace.serverTrust,
               SecTrustEvaluateWithError(trust, nil),
               let leaf = SecTrustGetCertificateAtIndex(trust, 0) else {
+            record(.trust)
             completionHandler(.cancelAuthenticationChallenge, nil)
             return
         }
         let digest = Data(SHA256.hash(data: SecCertificateCopyData(leaf) as Data))
         guard digest == expectedSHA256 else {
+            record(.pin)
             completionHandler(.cancelAuthenticationChallenge, nil)
             return
         }
@@ -110,6 +146,7 @@ public actor PTStudioHTTPSPushTransport: PTStudioTransport {
     private let endpoint: URL
     private let bearerToken: String
     private let session: URLSession
+    private let pinDelegate: PTStudioCertificatePinDelegate
     private var closed = false
 
     /// The collector must provide a real trusted TLS certificate; leaf pinning adds a second check.
@@ -129,8 +166,10 @@ public actor PTStudioHTTPSPushTransport: PTStudioTransport {
         config.timeoutIntervalForResource = 15
         // Do not register the application's custom URLProtocol classes on this session.
         config.protocolClasses = []
+        let pinDelegate = PTStudioCertificatePinDelegate(expectedSHA256: credentials.leafCertificateSHA256)
+        self.pinDelegate = pinDelegate
         self.session = URLSession(configuration: config,
-                                  delegate: PTStudioCertificatePinDelegate(expectedSHA256: credentials.leafCertificateSHA256),
+                                  delegate: pinDelegate,
                                   delegateQueue: nil)
     }
 
@@ -149,7 +188,19 @@ public actor PTStudioHTTPSPushTransport: PTStudioTransport {
         request.setValue("Bearer " + bearerToken, forHTTPHeaderField: "Authorization")
         request.setValue(UUID().uuidString, forHTTPHeaderField: "X-PTStudio-Nonce")
         request.setValue(String(Int(Date().timeIntervalSince1970)), forHTTPHeaderField: "X-PTStudio-Sent-At")
-        let (responseData, response) = try await session.data(for: request)
+        pinDelegate.clearRejection()
+        let responseData: Data
+        let response: URLResponse
+        do {
+            (responseData, response) = try await session.data(for: request)
+        } catch {
+            // Trust or pin failures intentionally cancel their challenge.
+            // Report the exact category instead of a generic Network -999.
+            if let authenticationFailure = pinDelegate.takeRejection() {
+                throw authenticationFailure
+            }
+            throw error
+        }
         guard let http = response as? HTTPURLResponse else {
             throw PTStudioBridgeError.transportRejected
         }
