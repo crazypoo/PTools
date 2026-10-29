@@ -3921,3 +3921,139 @@
   docs: true
   canonical_slug: "zip-archive"
   aliases: []
+-
+  id: "acknowledgements-core"
+  name: "AcknowledgementsCore"
+  swiftpm_product: ""
+  cocoapods_subspec: "AcknowledgementsCore"
+  source: "manifest-only"
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "acknowledgements-core"
+  aliases: []
+-
+  id: "constraint-layout"
+  name: "ConstraintLayout"
+  swiftpm_product: ""
+  cocoapods_subspec: "ConstraintLayout"
+  source: "manifest-only"
+  category: "compatibility"
+  status: "compatibility"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "constraint-layout"
+  aliases: []
+-
+  id: "ptools-acknowledgements"
+  name: "PToolsAcknowledgements"
+  swiftpm_product: "PToolsAcknowledgements"
+  cocoapods_subspec: ""
+  source: "manifest-only"
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-acknowledgements"
+  aliases: []
+-
+  id: "ptools-acknowledgements-core"
+  name: "PToolsAcknowledgementsCore"
+  swiftpm_product: "PToolsAcknowledgementsCore"
+  cocoapods_subspec: ""
+  source: "manifest-only"
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-acknowledgements-core"
+  aliases: []
+-
+  id: "ptools-constraint-layout"
+  name: "PToolsConstraintLayout"
+  swiftpm_product: "PToolsConstraintLayout"
+  cocoapods_subspec: ""
+  source: "manifest-only"
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-constraint-layout"
+  aliases: []
+-
+  id: "ptools-debug-studio-bridge"
+  name: "PToolsDebugStudioBridge"
+  swiftpm_product: "PToolsDebugStudioBridge"
+  cocoapods_subspec: "DEBUG_StudioBridge"
+  source: "PooToolsSource/DebugStudioBridge"
+  category: "compatibility"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: 
+    - "PooToolsDEBUG"
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-debug-studio-bridge"
+  aliases: []
+-
+  id: "ptools-font-catalog-core"
+  name: "PToolsFontCatalogCore"
+  swiftpm_product: "PToolsFontCatalogCore"
+  cocoapods_subspec: ""
+  source: "manifest-only"
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-font-catalog-core"
+  aliases: []
+-
+  id: "ptools-network-model-core"
+  name: "PToolsNetworkModelCore"
+  swiftpm_product: "PToolsNetworkModelCore"
+  cocoapods_subspec: ""
+  source: "manifest-only"
+  category: "unclassified"
+  status: "review"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-network-model-core"
+  aliases: []
+-
+  id: "ptools-variant-core"
+  name: "PToolsVariantCore"
+  swiftpm_product: "PToolsVariantCore"
+  cocoapods_subspec: "VariantCore"
+  source: "PooToolsSource/PToolsVariantCore"
+  category: "compatibility"
+  status: "stable"
+  minimum_ios: "17.0"
+  swift: "6+"
+  dependencies: []
+  owner: "PTools maintainers"
+  docs: true
+  canonical_slug: "ptools-variant-core"
+  aliases: []
