@@ -67,4 +67,25 @@ if rg -n 'PTInstrumentRecorder\.shared\.start\(' PooToolsSource --glob '*.swift'
   exit 1
 fi
 
+# PR15: Studio must reuse PTInstruments and must not install a second FPS
+# DisplayLink or another Mach-based CPU/memory reader.
+studio_agent="PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift"
+inventory_core="PooToolsSource/PToolsDebugInventoryCore/PTDebugInventoryCore.swift"
+require_fragment "$studio_agent" "startStudioSamplerIfNeeded()" "Studio requests an existing recorder"
+require_fragment "$studio_agent" "releaseStudioSamplerIfOwned()" "Studio releases only its own session"
+require_fragment "$instrument_file" "public func latestSamples(for kinds:" "bounded metric snapshot API"
+require_fragment "$instrument_file" "var latestValue: Element?" "O(1) ring buffer latest accessor"
+require_fragment "$inventory_core" "public enum PTDebugInventoryCore" "Foundation-only Debug inventory owner"
+
+if rg -n 'CADisplayLink|mach_task_basic_info|task_threads|task_info\\(' "$studio_agent"; then
+  printf 'FAIL: Studio reintroduces a duplicate performance collector\n' >&2
+  exit 1
+fi
+if rg -n '^import (UIKit|AppKit|SwiftUI)' "$inventory_core"; then
+  printf 'FAIL: DebugInventoryCore must remain Foundation-only\n' >&2
+  exit 1
+fi
+require_fragment "Package.swift" 'name: "PToolsDebugInventoryCore"' "SwiftPM independent inventory target"
+require_fragment "PooTools.podspec" 'PooToolsSource/PToolsDebugInventoryCore/**/*.swift' "CocoaPods inventory parity"
+
 printf 'PTInstruments 5.11 static contract OK\n'
