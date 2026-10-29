@@ -69,6 +69,8 @@
 	<string>定位</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>定位</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Connect to your development Mac for opt-in network debugging.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Mic使用</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

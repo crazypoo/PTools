@@ -27,12 +27,19 @@ public struct PTStudioBridgeConfiguration: Sendable {
     }
 }
 
+/// A running bridge is not necessarily connected: only an ACK proves delivery.
+public enum PTStudioDeliveryState: String, Sendable, Equatable {
+    case stopped, awaitingAcknowledgement, connected, retrying
+}
+
 public struct PTStudioBridgeStatus: Sendable, Equatable {
     public let isRunning: Bool
     public let queuedEvents: Int
     public let pendingRequests: Int
     public let droppedEvents: UInt64
     public let lastAcknowledgedSequence: UInt64?
+    public let deliveryState: PTStudioDeliveryState
+    public let consecutiveSendFailures: Int
 }
 
 public actor PTStudioBridge {
@@ -50,6 +57,7 @@ public actor PTStudioBridge {
     private var droppedEvents: UInt64 = 0
     private var isSending = false
     private var retryExponent = 0
+    private var consecutiveSendFailures = 0
     private var generation: UInt64 = 0
     private var queue: [PTStudioEnvelope] = []
     private var pending: [UUID: PTStudioMessageKind] = [:]
@@ -60,9 +68,19 @@ public actor PTStudioBridge {
     }
 
     public func status() -> PTStudioBridgeStatus {
-        PTStudioBridgeStatus(isRunning: transport != nil,
-                             queuedEvents: queue.count, pendingRequests: pending.count,
-                             droppedEvents: droppedEvents, lastAcknowledgedSequence: lastAck)
+        let state: PTStudioDeliveryState
+        if transport == nil {
+            state = .stopped
+        } else if consecutiveSendFailures > 0 {
+            state = .retrying
+        } else {
+            state = lastAck == nil ? .awaitingAcknowledgement : .connected
+        }
+        return PTStudioBridgeStatus(isRunning: transport != nil,
+                                    queuedEvents: queue.count, pendingRequests: pending.count,
+                                    droppedEvents: droppedEvents, lastAcknowledgedSequence: lastAck,
+                                    deliveryState: state,
+                                    consecutiveSendFailures: consecutiveSendFailures)
     }
 
     /// Call only after a user explicitly switches on diagnostics in a Debug build.
@@ -83,6 +101,7 @@ public actor PTStudioBridge {
         lastAck = nil
         droppedEvents = 0
         retryExponent = 0
+        consecutiveSendFailures = 0
         queue.removeAll()
         pending.removeAll()
         pendingOrder.removeAll()
@@ -126,6 +145,7 @@ public actor PTStudioBridge {
         pendingOrder.removeAll()
         isSending = false
         retryExponent = 0
+        consecutiveSendFailures = 0
         await previous?.close()
     }
 
@@ -238,6 +258,7 @@ public actor PTStudioBridge {
                 lastAck = acknowledgement.acceptedSequence
             }
             retryExponent = 0
+            consecutiveSendFailures = 0
             isSending = false
             if !queue.isEmpty || !pending.isEmpty { scheduleFlush(after: .zero) }
         } catch {
@@ -245,6 +266,7 @@ public actor PTStudioBridge {
             isSending = false
             guard self.transport != nil else { return }
             retryExponent = min(retryExponent + 1, 5)
+            consecutiveSendFailures = min(consecutiveSendFailures + 1, Int.max - 1)
             // Retain the same eventIDs and sequences across retries for deduplication.
             scheduleFlush(after: .seconds(1 << retryExponent))
         }

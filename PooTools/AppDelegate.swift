@@ -120,11 +120,8 @@ class AppDelegate: PTAppWindowsDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         runFontCollectorIfRequested()
         
-        Task {
-            do {
-                let _ = try await AppMacNetworkDebugManager.shared.connect(host: "192.168.50.133", token: "LhGoeyKqr__mqucmBiZsEEpMF-i2McnqNpUBQXY_mLM", fingerprint: "dc6eba0dd8763b5d44bd56bb80201917543dbdd31b44d18bdf88300a4d388b41")
-            }
-        }
+        // PTNetworkStudio pairing is an explicit, Debug-only developer action.
+        // Never start capture or embed a pairing token during normal app launch.
 
         PTFullscreenPopGesture.configure()
         
@@ -527,6 +524,7 @@ extension AppDelegate {
     }
 }
 
+#if DEBUG
 @MainActor
 final class AppMacNetworkDebugManager {
 
@@ -564,10 +562,8 @@ final class AppMacNetworkDebugManager {
             credentials: credentials
         )
 
-        // 3. 启动 PTools 原有的网络采集功能
-        PTDebugManager.shared.start(identifier: "network")
-
-        // 4. 启动 Mac Bridge
+        // Subscribe first, so a failed/already-running Bridge does not leave
+        // the legacy network capture switched on unexpectedly.
         try await PTStudioBridge.shared.start(
             using: transport,
             configuration: PTStudioBridgeConfiguration(
@@ -578,6 +574,7 @@ final class AppMacNetworkDebugManager {
                 batchInterval: .milliseconds(150)
             )
         )
+        PTDebugManager.shared.start(identifier: "network")
     }
 
     /// 查询 Bridge 运行和传输状态
@@ -594,3 +591,4 @@ final class AppMacNetworkDebugManager {
         PTDebugManager.shared.stop(identifier: "network")
     }
 }
+#endif
