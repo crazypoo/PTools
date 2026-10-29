@@ -1,5 +1,8 @@
 #if os(iOS) && DEBUG
 import Foundation
+#if SWIFT_PACKAGE
+import PToolsStudioProtocolCore
+#endif
 
 private struct PTStudioDiagnosticPoll: Decodable {
     let schemaVersion: Int
