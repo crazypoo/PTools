@@ -115,6 +115,14 @@ connector.revokePairing(peerID: selectedPeer.id)
 
 **Important:** The example AppDelegate scans automatically only after the developer's Debug opt-in preference was set and at least one Mac is Keychain-paired. Discovering an unpaired Mac does not enable capture. `onBridgeStarted` means the transport was configured; verify `PTStudioBridge.status().deliveryState == .connected` to prove the Mac has ACKed events. The example's previous manual connect helper remains usable separately. Physical iPhone + macOS verification is still required.
 
+## Debug troubleshooting: `Retrying`, `Network -999`
+
+`NSURLErrorCancelled (-999)` is a cancelled URLSession request, **not** proof of a bad bearer token or successful TLS. Two known paths previously produced this opaque status: (a) `SecTrustEvaluateWithError` failing or the SHA-256 leaf pin mismatching and the certificate delegate cancelling its authentication challenge, and (b) an app-foreground Bonjour refresh forcibly stopping discovery and removing the active peer, which then closed its URLSession.
+
+The TLS delegate now records a safe, explicit `tlsUntrustedCertificate` or `tlsPinMismatch` category before declining the challenge. The bridge reports an actionable error instead of `Network -999`. The foreground refresh reuses the existing Bonjour browser; transient discovery loss receives a four-second grace period before intentionally disconnecting. Explicit user stop, credential revocation, and genuine cancellations continue to stop the bridge.
+
+If status is still `Retrying`, inspect the **Secure delivery** section: check `Development CA` trust and certificate fingerprint if those messages appear; for `Network -999` check rapid foreground transitions, Wi-Fi changes or manual Stop. A genuine successful connection requires `deliveryState == .connected`, a valid ACK sequence, and a recent authenticated session in Studio. No certificate trust bypass or automatic CA installation has been added.
+
 ## Wire contract (schemaVersion = 1)
 
 The iOS client sends `POST /v1/events` over HTTPS. Each batch has the following shape:

@@ -287,6 +287,8 @@ public actor PTStudioBridge {
             case .serverStatus(401): return "HTTP 401: pairing token rejected. Confirm or re-pair in Studio."
             case .serverStatus(400): return "HTTP 400: collector rejected the event schema."
             case .serverStatus(let status): return "Collector returned HTTP \(status)."
+            case .tlsUntrustedCertificate: return "TLS certificate is not trusted. Install and fully trust the Studio Development CA on this iPhone."
+            case .tlsPinMismatch: return "TLS leaf fingerprint mismatch. Compare Studio's current fingerprint and approve pairing again."
             case .invalidAcknowledgement: return "Collector ACK was invalid."
             case .transportRejected: return "Collector rejected the request."
             default: return "Bridge setup failed."
@@ -300,6 +302,7 @@ public actor PTStudioBridge {
             case -1004: return "Mac TLS port unavailable; check Bridge listener and firewall."
             case -1001: return "Mac Bridge timed out."
             case -1009: return "iPhone network is unavailable."
+            case -999: return "Bridge request was cancelled. Check app foreground refresh, network changes, or a manually stopped session."
             default: return "Network error \(nsError.code) during secure Studio transport."
             }
         }

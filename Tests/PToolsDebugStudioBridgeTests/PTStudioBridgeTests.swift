@@ -25,6 +25,17 @@ private actor StudioUnauthorizedTransport: PTStudioTransport {
     func close() {}
 }
 
+private actor StudioTLSRejectedTransport: PTStudioTransport {
+    let failure: PTStudioBridgeError
+    init(failure: PTStudioBridgeError) { self.failure = failure }
+
+    func send(_ events: [PTStudioEnvelope]) async throws -> PTStudioAcknowledgement {
+        throw failure
+    }
+
+    func close() {}
+}
+
 final class PTStudioBridgeTests: XCTestCase {
     #if os(iOS)
     @MainActor
@@ -204,6 +215,27 @@ final class PTStudioBridgeTests: XCTestCase {
         let stopped = await bridge.status()
         XCTAssertEqual(stopped.deliveryState, .stopped)
         XCTAssertNil(stopped.lastSendError)
+        #endif
+    }
+
+    func testTLSChallengeFailuresAreNotReportedAsNetworkCancelled() async throws {
+        #if DEBUG
+        for (failure, expected) in [
+            (PTStudioBridgeError.tlsUntrustedCertificate, "Development CA"),
+            (PTStudioBridgeError.tlsPinMismatch, "fingerprint mismatch")
+        ] {
+            let bridge = PTStudioBridge(store: PTNetworkCaptureStore())
+            try await bridge.start(
+                using: StudioTLSRejectedTransport(failure: failure),
+                configuration: PTStudioBridgeConfiguration(isEnabled: true))
+            try await Task.sleep(for: .milliseconds(200))
+            let status = await bridge.status()
+            XCTAssertEqual(status.deliveryState, .retrying)
+            XCTAssertNil(status.lastAcknowledgedSequence)
+            XCTAssertTrue(status.lastSendError?.contains(expected) == true)
+            XCTAssertFalse(status.lastSendError?.contains("-999") == true)
+            await bridge.stop()
+        }
         #endif
     }
 

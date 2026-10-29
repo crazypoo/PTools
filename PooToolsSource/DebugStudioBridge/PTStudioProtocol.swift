@@ -161,5 +161,7 @@ public enum PTStudioBridgeError: Error, Sendable, Equatable {
     case invalidCredentials
     case transportRejected
     case serverStatus(Int)
+    case tlsUntrustedCertificate
+    case tlsPinMismatch
     case invalidAcknowledgement
 }
