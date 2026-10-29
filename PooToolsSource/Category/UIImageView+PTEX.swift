@@ -91,7 +91,7 @@ public extension UIImageView {
                                                      uniCount: uniCount,
                                                      emptyImage: emptyImage,
                                                      targetSize: resolvedTargetSize,
-                                                     displayScale: window?.screen.scale ?? 1)
+                                                     displayScale: window?.screen.scale ?? UIScreen.main.scale)
         pt_loadCoreImage(
             contentData: contentData,
             configuration: configuration,
