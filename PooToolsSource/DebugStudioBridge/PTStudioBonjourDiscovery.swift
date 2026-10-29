@@ -30,8 +30,8 @@ public enum PTStudioDiscoveryError: Error, Equatable {
 public final class PTStudioBonjourDiscovery: NSObject, @preconcurrency NetServiceBrowserDelegate, @preconcurrency NetServiceDelegate {
     public static let serviceType = "_ptstudio._tcp."
     public private(set) var peers: [PTStudioDiscoveredPeer] = []
-    public var onChange: (([PTStudioDiscoveredPeer]) -> Void)?
-    public var onError: ((String) -> Void)?
+    public var onChange: (@MainActor ([PTStudioDiscoveredPeer]) -> Void)?
+    public var onError: (@MainActor (String) -> Void)?
 
     private let browser = NetServiceBrowser()
     private var services: [ObjectIdentifier: NetService] = [:]
@@ -157,9 +157,9 @@ public final class PTStudioAutoConnectionManager {
     public let discovery = PTStudioBonjourDiscovery()
     public private(set) var currentPeer: PTStudioDiscoveredPeer?
     /// Called when a bridge transport starts. The host may enable capture here.
-    public var onBridgeStarted: (() -> Void)?
+    public var onBridgeStarted: (@MainActor () -> Void)?
     /// Called after the managed bridge is stopped. The host may disable capture.
-    public var onBridgeStopped: (() -> Void)?
+    public var onBridgeStopped: (@MainActor () -> Void)?
     public var onError: ((String) -> Void)?
 
     private var enabled = false
