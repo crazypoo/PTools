@@ -541,9 +541,11 @@ final class AppMacNetworkDebugManager {
     private init() {
         PTStudioAutoConnectionManager.shared.onBridgeStarted = {
             PTDebugManager.shared.start(identifier: "network")
+            Task { await PTStudioDiagnosticAgent.shared.startIfAuthorized() }
         }
         PTStudioAutoConnectionManager.shared.onBridgeStopped = {
             PTDebugManager.shared.stop(identifier: "network")
+            Task { await PTStudioDiagnosticAgent.shared.stop() }
         }
     }
 
