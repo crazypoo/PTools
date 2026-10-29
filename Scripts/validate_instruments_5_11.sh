@@ -74,7 +74,20 @@ inventory_core="PooToolsSource/PToolsDebugInventoryCore/PTDebugInventoryCore.swi
 require_fragment "$studio_agent" "startStudioSamplerIfNeeded()" "Studio requests an existing recorder"
 require_fragment "$studio_agent" "releaseStudioSamplerIfOwned()" "Studio releases only its own session"
 require_fragment "$instrument_file" "public func latestSamples(for kinds:" "bounded metric snapshot API"
-require_fragment "$instrument_file" "var latestValue: Element?" "O(1) ring buffer latest accessor"
+metrics_core="PooToolsSource/PToolsDebugMetricsCore/PTDebugRingBuffer.swift"
+ownership_core="PooToolsSource/PToolsDebugCore/PTDebugSessionOwnerLedger.swift"
+require_fragment "$metrics_core" "public var latestValue: Element?" "O(1) ring buffer latest accessor"
+require_fragment "$instrument_file" "private typealias PTInstrumentRingBuffer<Element> = PTDebugRingBuffer<Element>" "single metrics buffer backend"
+require_fragment "$ownership_core" "public struct PTDebugSessionOwnerLedger" "Foundation Debug lifecycle owner"
+require_fragment "PooToolsSource/Debug/PTDebugFunction.swift" "sessionOwners.acquire(owner)" "DebugManager lifecycle adapter"
+require_fragment "Package.swift" 'name: "PToolsDebugCore"' "SwiftPM Debug Core"
+require_fragment "Package.swift" 'name: "PToolsDebugMetricsCore"' "SwiftPM Debug Metrics Core"
+require_fragment "PooTools.podspec" 'PooToolsSource/PToolsDebugCore/**/*.swift' "CocoaPods Debug Core source parity"
+require_fragment "PooTools.podspec" 'PooToolsSource/PToolsDebugMetricsCore/**/*.swift' "CocoaPods Debug Metrics Core source parity"
+if rg -n '^import (UIKit|AppKit|SwiftUI)' "$metrics_core" "$ownership_core"; then
+  printf 'FAIL: shared Debug Core and Metrics Core must be platform-neutral\n' >&2
+  exit 1
+fi
 require_fragment "$inventory_core" "public enum PTDebugInventoryCore" "Foundation-only Debug inventory owner"
 
 if rg -n 'CADisplayLink|mach_task_basic_info|task_threads|task_info\\(' "$studio_agent"; then
@@ -86,6 +99,15 @@ if rg -n '^import (UIKit|AppKit|SwiftUI)' "$inventory_core"; then
   exit 1
 fi
 require_fragment "Package.swift" 'name: "PToolsDebugInventoryCore"' "SwiftPM independent inventory target"
+inspector_core="PooToolsSource/PToolsDebugInspectorCore/PTDebugInspectorSnapshotSignature.swift"
+require_fragment "$inspector_core" "public enum PTDebugInspectorSnapshotSignature" "UIKit-free Inspector fingerprint owner"
+require_fragment "$studio_agent" "PTDebugInspectorSnapshotSignature.fingerprint(entries:" "Studio reuses canonical fingerprint"
+require_fragment "Package.swift" 'name: "PToolsDebugInspectorCore"' "SwiftPM inspector target"
+require_fragment "PooTools.podspec" 'PooToolsSource/PToolsDebugInspectorCore/**/*.swift' "CocoaPods inspector source parity"
+if rg -n '^import (UIKit|AppKit|SwiftUI)' "$inspector_core"; then
+  printf 'FAIL: DebugInspectorCore must remain platform-neutral\n' >&2
+  exit 1
+fi
 require_fragment "PooTools.podspec" 'PooToolsSource/PToolsDebugInventoryCore/**/*.swift' "CocoaPods inventory parity"
 
 printf 'PTInstruments 5.11 static contract OK\n'

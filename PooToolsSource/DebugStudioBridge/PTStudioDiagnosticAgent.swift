@@ -2,9 +2,9 @@
 import Foundation
 import UIKit
 import Darwin
-import CryptoKit
 #if SWIFT_PACKAGE
 import PToolsStudioProtocolCore
+import PToolsDebugInspectorCore
 import PooToolsDEBUG
 #endif
 
@@ -98,7 +98,7 @@ public final class PTStudioDiagnosticAgent {
     /// Explicit logging integration point; no intercept of NSLog or os_log.
     public func recordLog(_ message: String) {
         guard UserDefaults.standard.bool(forKey: "PTStudio.diagnosticsEnabled") else { return }
-        let value = PTInstrumentRedactor.redactText(String(message.prefix(180)))
+        let value = PTStudioDiagnosticPrivacy.scrub(String(message.prefix(180)))
         guard !value.isEmpty else { return }
         logs.append(value)
         if logs.count > 200 { logs.removeFirst(logs.count - 200) }
@@ -117,17 +117,10 @@ public final class PTStudioDiagnosticAgent {
             let tree = snapshot(includePreview: previewEnabled)
             // A snapshot still traverses the current UI on MainActor, but unchanged
             // trees avoid JSON image/attribute transfer and Mac list invalidation.
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = [.sortedKeys]
-            let valueTypes = tree.map {
-                PTStudioDiagnosticEntry(id: $0.id, parentID: $0.parentID,
-                    kind: $0.kind, name: $0.name, detail: $0.detail,
-                    frame: $0.frame, attributes: $0.attributes)
-            }
-            guard !previewEnabled, let bytes = try? encoder.encode(valueTypes) else {
+            guard !previewEnabled,
+                  let digest = PTDebugInspectorSnapshotSignature.fingerprint(entries: tree) else {
                 return reply(command, sessionID: sessionID, entries: tree)
             }
-            let digest = SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
             if command.arguments["knownFingerprint"] == digest {
                 return reply(command, sessionID: sessionID, message: "unchanged:" + digest)
             }
@@ -177,7 +170,7 @@ public final class PTStudioDiagnosticAgent {
             }.value
             let converted = records.map {
                 PTStudioDiagnosticEntry(id: $0.id, kind: $0.kind,
-                    name: PTInstrumentRedactor.redactText($0.name),
+                    name: PTStudioDiagnosticPrivacy.scrub($0.name),
                     detail: $0.source,
                     attributes: ["bytes": String($0.byteCount),
                                  "directory": String($0.isDirectory)])

@@ -141,6 +141,10 @@ run_named_gate() {
           PToolsModelTests
           PToolsNetworkTests
           PToolsFontTests
+          PToolsDebugCoreTests
+          PToolsDebugInventoryCoreTests
+          PToolsDebugInspectorCoreTests
+          PToolsStudioProtocolCoreTests
         )
         for test_product in "${foundation_test_products[@]}"; do
           swift test \
@@ -149,7 +153,7 @@ run_named_gate() {
             --disable-swift-testing \
             --no-parallel
         done
-        for test_target in PToolsP2Tests PToolsMediaTests PToolsNetworkRuntimeTests PToolsFontRuntimeTests; do
+        for test_target in PToolsP2Tests PToolsMediaTests PToolsNetworkRuntimeTests PToolsFontRuntimeTests PToolsDebugTests PToolsDebugStudioBridgeTests; do
           swift build \
             --triple arm64-apple-ios17.0-simulator \
             --target "$test_target"
