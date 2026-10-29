@@ -32,8 +32,6 @@ public final class PTStudioDiagnosticAgent {
     private var referencedViews: [String: PTStudioWeakView] = [:]
     private var edits: [Edit] = []
     private var logs: [String] = []
-    /// Shared PTInstruments sampling source; never create a second DisplayLink.
-    private var ownsInstrumentSession = false
     private init() {}
 
     /// Enables only after the developer has opted in and paired this exact Mac.
@@ -93,10 +91,7 @@ public final class PTStudioDiagnosticAgent {
         referencedViews.removeAll()
         identifiers.removeAll()
         edits.removeAll()
-        if ownsInstrumentSession {
-            ownsInstrumentSession = false
-            _ = await PTInstrumentRecorder.shared.stop()
-        }
+        await PTInstrumentRecorder.shared.releaseStudioSamplerIfOwned()
         await previous?.close()
     }
 
@@ -293,14 +288,10 @@ public final class PTStudioDiagnosticAgent {
 
     private func performanceInventory() async -> [PTStudioDiagnosticEntry] {
         let recorder = PTInstrumentRecorder.shared
-        if !recorder.isRecording {
-            _ = recorder.start(instruments: [.fps, .cpu, .memory])
-            ownsInstrumentSession = true
-        }
-        let snapshot = await recorder.session?.snapshot()
-        let tracks = snapshot?.timeline.tracks ?? []
+        recorder.startStudioSamplerIfNeeded()
+        let latestValues = await recorder.session?.latestSamples(for: [.fps, .cpu, .memory]) ?? [:]
         func latest(_ kind: PTInstrumentKind) -> Double? {
-            tracks.first(where: { $0.kind == kind })?.samples.last?.value
+            latestValues[kind]?.value
         }
         let process = ProcessInfo.processInfo
         let cpu = latest(.cpu)
