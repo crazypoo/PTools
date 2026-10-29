@@ -19,6 +19,34 @@ private actor StudioRecordingTransport: PTStudioTransport {
 }
 
 final class PTStudioBridgeTests: XCTestCase {
+    #if os(iOS)
+    @MainActor
+    func testBonjourRejectsInternetAndMalformedTXTEndpoints() {
+        XCTAssertTrue(PTStudioBonjourDiscovery.isLocalHost("macbook.local"))
+        XCTAssertTrue(PTStudioBonjourDiscovery.isLocalHost("192.168.50.2"))
+        XCTAssertTrue(PTStudioBonjourDiscovery.isLocalHost("10.0.0.5"))
+        XCTAssertFalse(PTStudioBonjourDiscovery.isLocalHost("8.8.8.8"))
+        XCTAssertFalse(PTStudioBonjourDiscovery.isLocalHost("example.com"))
+        XCTAssertFalse(PTStudioBonjourDiscovery.isLocalHost("localhost"))
+        XCTAssertFalse(PTStudioBonjourDiscovery.isLocalHost("evil.local/redirect"))
+        XCTAssertFalse(PTStudioBonjourDiscovery.isLocalHost("fe80::1%en0"))
+
+        let peer = PTStudioDiscoveredPeer(
+            id: UUID().uuidString.lowercased(), name: "Developer Mac",
+            tlsHost: "macbook.local", port: 9453)
+        XCTAssertEqual(peer.endpoint?.absoluteString,
+                       "https://macbook.local:9453/v1/events")
+    }
+
+    @MainActor
+    func testNoImplicitBonjourDiscoveryBeforeOptIn() {
+        let discovery = PTStudioBonjourDiscovery()
+        XCTAssertTrue(discovery.peers.isEmpty)
+        discovery.stop()
+        XCTAssertTrue(discovery.peers.isEmpty)
+    }
+    #endif
+
     func testPrivacyGateRedactsSecretsAndNeverSendsBodyFileURLs() throws {
         let gate = PTStudioPrivacyGate(maximumPreviewBytes: 4096)
         let body = Data(#"{"password":"raw-secret","nested":{"token":"raw-secret"},"safe":true}"#.utf8)
