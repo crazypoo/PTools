@@ -15,6 +15,8 @@ public final class PTStudioUIKitInspector {
     private var identifiers: [ObjectIdentifier: String] = [:]
     private var views: [String: WeakView] = [:]
     public var permitsRemoteMutation = false
+    /// Accessibility labels and identifiers may contain user data. Never export them by default.
+    public var permitsAccessibilityMetadata = false
     public var permitsHighlight = true
     private enum PreviousValue {
         case alpha(CGFloat)
@@ -170,8 +172,8 @@ public final class PTStudioUIKitInspector {
         return PTStudioDiagnosticEntry(
             id: identifier(for: view), parentID: parentID,
             kind: String(describing: type(of: view)),
-            name: view.accessibilityLabel ?? String(describing: type(of: view)),
-            detail: view.accessibilityIdentifier,
+            name: permitsAccessibilityMetadata ? (view.accessibilityLabel ?? String(describing: type(of: view))) : String(describing: type(of: view)),
+            detail: permitsAccessibilityMetadata ? view.accessibilityIdentifier : nil,
             frame: geometry,
             attributes: [
                 "alpha": String(Double(view.alpha)),
@@ -183,23 +185,29 @@ public final class PTStudioUIKitInspector {
     }
 
     public func snapshot(maximumNodes: Int = 2048) -> [PTStudioDiagnosticEntry] {
-        let limit = min(4096, max(1, maximumNodes))
-        var captured: [PTStudioDiagnosticEntry] = []
-        // Weak references are collected each snapshot; never retain a UIView for remote clients.
-        views = views.filter { $0.value.value != nil }
-        identifiers = identifiers.filter { views[$0.value]?.value != nil }
         let windows = UIApplication.shared.connectedScenes
             .compactMap { $0 as? UIWindowScene }
             .flatMap(\.windows)
             .filter { !$0.isHidden }
-        for window in windows {
-            var stack: [(UIView, String?, Int)] = [(window, nil, 0)]
+        return capture(roots: windows, maximumNodes: maximumNodes)
+    }
+
+    /// An explicit root override is useful for fixture tests without a UIWindowScene.
+    public func capture(roots: [UIView], maximumNodes: Int = 2048) -> [PTStudioDiagnosticEntry] {
+        let limit = min(4096, max(1, maximumNodes))
+        var captured: [PTStudioDiagnosticEntry] = []
+        views = views.filter { $0.value.value != nil }
+        identifiers = identifiers.filter { views[$0.value]?.value != nil }
+        for root in roots {
+            let window = (root as? UIWindow) ?? root.window
+            var stack: [(UIView, String?, Int)] = [(root, nil, 0)]
             while let (view, parentID, depth) = stack.popLast() {
                 guard captured.count < limit else { return captured }
                 let item = entry(for: view, parentID: parentID, window: window)
                 captured.append(item)
                 if depth < 48 {
-                    for child in view.subviews.reversed() {
+                    for child in view.subviews.reversed()
+                        where child.accessibilityIdentifier != "PTStudio.DebugHighlight" {
                         stack.append((child, item.id, depth + 1))
                     }
                 }

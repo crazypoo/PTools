@@ -1387,3 +1387,23 @@ modules:
   coverage: "compatibility_alias"
   canonical_module_id: "poo-tools-split-view"
   demos: []
+-
+  module_id: "ptools-studio-protocol-core"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-inspector-runtime"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-studio-storage-runtime"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []
+-
+  module_id: "ptools-studio-telemetry-runtime"
+  coverage: "documentation"
+  canonical_module_id: null
+  demos: []

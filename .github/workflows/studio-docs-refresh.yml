@@ -1,0 +1,36 @@
+name: Studio Documentation Generator Refresh
+
+on:
+  push:
+    branches:
+      - feature/studio-06-hardening-tests-20261030
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    if: github.actor != 'github-actions[bot]' && github.repository == 'crazypoo/PTools'
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Generate canonical docs from current manifests and registry
+        run: |
+          python3 Scripts/Docs/audit_docs.py --write-all
+          python3 Scripts/Docs/audit_docs.py --check
+          bash Scripts/Governance/generate_all_current_reports.sh --write
+          bash Scripts/Governance/generate_all_current_reports.sh --check
+          bash Scripts/Governance/validate_current_reports.sh
+          bash Scripts/validate_docs.sh
+      - name: Commit generated documentation and reports only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A docs report
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(studio): regenerate canonical docs from module registry"
+            git push origin HEAD:refs/heads/feature/studio-06-hardening-tests-20261030
+          fi
