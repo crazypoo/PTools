@@ -296,6 +296,7 @@ let package = Package(
         // ==========================================
         .library(name: "PToolsDebugCore", targets: ["PToolsDebugCore"]),
         .library(name: "PToolsDebugMetricsCore", targets: ["PToolsDebugMetricsCore"]),
+        .library(name: "PToolsDebugInspectorCore", targets: ["PToolsDebugInspectorCore"]),
         .library(name: "PToolsDebugInventoryCore", targets: ["PToolsDebugInventoryCore"]),
         .library(name: "PooToolsDEBUG", targets: ["PooToolsDEBUG"]),
         // Explicit opt-in transport of redacted DebugNetwork events; omitted from PooToolsAll.
@@ -1186,6 +1187,13 @@ let package = Package(
             path: "PooToolsSource/PToolsDebugMetricsCore",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
+        // UIKit-free Inspector snapshot identity reused by Studio and tests.
+        .target(
+            name: "PToolsDebugInspectorCore",
+            dependencies: ["PToolsStudioProtocolCore"],
+            path: "PooToolsSource/PToolsDebugInspectorCore",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
         // File/defaults Debug inventory is pure Foundation and has no UIKit dependency.
         .target(
             name: "PToolsDebugInventoryCore",
@@ -1201,7 +1209,7 @@ let package = Package(
         ),
         .target(
             name: "PToolsDebugStudioBridge",
-            dependencies: ["PooToolsDEBUG", "PToolsStudioProtocolCore"],
+            dependencies: ["PooToolsDEBUG", "PToolsStudioProtocolCore", "PToolsDebugInspectorCore"],
             path: "PooToolsSource/DebugStudioBridge",
             swiftSettings: [.define("POOTOOLS_DEBUG_STUDIO_BRIDGE")]
         ),
@@ -1393,6 +1401,12 @@ let package = Package(
             name: "PToolsDebugCoreTests",
             dependencies: ["PToolsDebugCore", "PToolsDebugMetricsCore"],
             path: "Tests/PToolsDebugCoreTests",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .testTarget(
+            name: "PToolsDebugInspectorCoreTests",
+            dependencies: ["PToolsDebugInspectorCore", "PToolsStudioProtocolCore"],
+            path: "Tests/PToolsDebugInspectorCoreTests",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .testTarget(
