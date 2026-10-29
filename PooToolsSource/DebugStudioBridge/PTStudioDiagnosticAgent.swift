@@ -322,7 +322,7 @@ public final class PTStudioDiagnosticAgent {
             PTStudioDiagnosticEntry(
                 id: "default-" + key, kind: "UserDefaults",
                 name: key, detail: "Value withheld by default",
-                attributes: ["type": String(describing: type(of: filtered[key] as Any))])
+                attributes: ["type": filtered[key].map { String(describing: Swift.type(of: $0)) } ?? "Unknown"])
         }
     }
 
