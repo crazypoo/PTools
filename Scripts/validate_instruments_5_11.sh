@@ -99,6 +99,15 @@ if rg -n '^import (UIKit|AppKit|SwiftUI)' "$inventory_core"; then
   exit 1
 fi
 require_fragment "Package.swift" 'name: "PToolsDebugInventoryCore"' "SwiftPM independent inventory target"
+inspector_core="PooToolsSource/PToolsDebugInspectorCore/PTDebugInspectorSnapshotSignature.swift"
+require_fragment "$inspector_core" "public enum PTDebugInspectorSnapshotSignature" "UIKit-free Inspector fingerprint owner"
+require_fragment "$studio_agent" "PTDebugInspectorSnapshotSignature.fingerprint(entries:" "Studio reuses canonical fingerprint"
+require_fragment "Package.swift" 'name: "PToolsDebugInspectorCore"' "SwiftPM inspector target"
+require_fragment "PooTools.podspec" 'PooToolsSource/PToolsDebugInspectorCore/**/*.swift' "CocoaPods inspector source parity"
+if rg -n '^import (UIKit|AppKit|SwiftUI)' "$inspector_core"; then
+  printf 'FAIL: DebugInspectorCore must remain platform-neutral\n' >&2
+  exit 1
+fi
 require_fragment "PooTools.podspec" 'PooToolsSource/PToolsDebugInventoryCore/**/*.swift' "CocoaPods inventory parity"
 
 printf 'PTInstruments 5.11 static contract OK\n'
