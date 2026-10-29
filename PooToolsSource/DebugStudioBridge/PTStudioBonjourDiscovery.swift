@@ -169,6 +169,7 @@ public final class PTStudioAutoConnectionManager {
     private var requestedPeer: PTStudioDiscoveredPeer?
     private var generation = 0
     private var transition: Task<Void, Never>?
+    private var peerLossTask: Task<Void, Never>?
 
     public init() {
         discovery.onChange = { [weak self] peers in
@@ -189,11 +190,11 @@ public final class PTStudioAutoConnectionManager {
         #endif
     }
 
-    /// Refresh mDNS after foregrounding or a Wi-Fi change.
+    /// The active Bonjour browser already observes network/interface changes.
+    /// Do not stop/restart it on foreground: that emits a synthetic peer removal,
+    /// tears down the authenticated URLSession, and produces URLError(-999).
     public func refresh() throws {
         guard enabled else { return }
-        discovery.stop()
-        try discovery.start()
         reconcile()
     }
 
@@ -216,6 +217,8 @@ public final class PTStudioAutoConnectionManager {
 
     public func stop() {
         enabled = false
+        peerLossTask?.cancel()
+        peerLossTask = nil
         discovery.stop()
         generation &+= 1
         transition?.cancel()
@@ -237,6 +240,24 @@ public final class PTStudioAutoConnectionManager {
         guard enabled else { return }
         let desired = discovery.peers.first {
             PTStudioPairingKeychain.load(account: $0.id) != nil
+        }
+        if desired != nil {
+            peerLossTask?.cancel()
+            peerLossTask = nil
+        } else if !force, requestedPeer != nil {
+            // Bonjour can briefly remove then restore a service during Wi-Fi
+            // handoff, screen unlock, or Mac network interface changes.
+            // Avoid cancelling an active HTTPS POST on that transient signal.
+            if peerLossTask == nil {
+                peerLossTask = Task { [weak self] in
+                    do { try await Task.sleep(for: .seconds(4)) }
+                    catch { return }
+                    guard let self else { return }
+                    self.peerLossTask = nil
+                    self.reconcile(force: true)
+                }
+            }
+            return
         }
         if !force, desired == requestedPeer { return }
         requestedPeer = desired
