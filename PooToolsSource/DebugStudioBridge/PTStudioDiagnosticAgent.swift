@@ -12,6 +12,41 @@ private final class PTStudioWeakView {
     init(_ view: UIView) { self.view = view }
 }
 
+/// The counter runs only while diagnostics is enabled and is destroyed on stop.
+@MainActor
+private final class PTStudioFrameCounter: NSObject {
+    private var link: CADisplayLink?
+    private var startTimestamp: CFTimeInterval = 0
+    private var frames = 0
+    private(set) var fps = 0.0
+
+    func start() {
+        guard link == nil else { return }
+        let display = CADisplayLink(target: self, selector: #selector(tick(_:)))
+        display.add(to: .main, forMode: .common)
+        link = display
+    }
+
+    @objc private func tick(_ display: CADisplayLink) {
+        if startTimestamp == 0 { startTimestamp = display.timestamp; return }
+        frames += 1
+        let elapsed = display.timestamp - startTimestamp
+        if elapsed >= 1 {
+            fps = Double(frames) / elapsed
+            frames = 0
+            startTimestamp = display.timestamp
+        }
+    }
+
+    func stop() {
+        link?.invalidate()
+        link = nil
+        startTimestamp = 0
+        frames = 0
+        fps = 0
+    }
+}
+
 /// Opt-in Debug-only diagnostics. This is independent of the established
 /// read-only Network schema-v1 Bridge. No method evaluates arbitrary code.
 @MainActor
@@ -30,6 +65,8 @@ public final class PTStudioDiagnosticAgent {
     private var referencedViews: [String: PTStudioWeakView] = [:]
     private var edits: [Edit] = []
     private var logs: [String] = []
+    private var frameCounter: PTStudioFrameCounter?
+    private var lastCPUSample: (totalSeconds: Double, uptime: TimeInterval)?
     private init() {}
 
     /// Enables only after the developer has opted in and paired this exact Mac.
@@ -49,6 +86,9 @@ public final class PTStudioDiagnosticAgent {
             let client = try PTStudioDiagnosticHTTPSClient(endpoint: endpoint, credentials: credentials)
             self.client = client
             activePeerID = peer.id
+            let counter = PTStudioFrameCounter()
+            counter.start()
+            frameCounter = counter
             worker = Task { [weak self] in
                 guard let self else { return }
                 while !Task.isCancelled {
@@ -81,6 +121,9 @@ public final class PTStudioDiagnosticAgent {
         referencedViews.removeAll()
         identifiers.removeAll()
         edits.removeAll()
+        frameCounter?.stop()
+        frameCounter = nil
+        lastCPUSample = nil
         await previous?.close()
     }
 
@@ -112,7 +155,7 @@ public final class PTStudioDiagnosticAgent {
             return reply(command, sessionID: sessionID, message: "Highlighted")
         case (.inspector, "setHidden"), (.inspector, "setAlpha"):
             guard editing, let view = referencedViews[command.targetID ?? ""]?.view,
-                  view.window != nil else {
+                  view.window != nil, !(view is UIWindow) else {
                 return reply(command, sessionID: sessionID, success: false,
                              message: "Editing disabled or view expired")
             }
@@ -288,7 +331,25 @@ public final class PTStudioDiagnosticAgent {
         }
         let bytes = status == KERN_SUCCESS ? UInt64(info.resident_size) : 0
         let process = ProcessInfo.processInfo
+        let totalCPU = Double(info.user_time.seconds) +
+            Double(info.user_time.microseconds) / 1_000_000 +
+            Double(info.system_time.seconds) +
+            Double(info.system_time.microseconds) / 1_000_000
+        let sample = (totalSeconds: totalCPU, uptime: process.systemUptime)
+        let cpuPercent: Double
+        if status == KERN_SUCCESS, let previous = lastCPUSample,
+           sample.uptime > previous.uptime {
+            cpuPercent = max(0, (totalCPU - previous.totalSeconds) /
+                             (sample.uptime - previous.uptime) * 100)
+        } else {
+            cpuPercent = 0 // First sample requires another Refresh to calculate delta.
+        }
+        lastCPUSample = status == KERN_SUCCESS ? sample : nil
         return [
+            PTStudioDiagnosticEntry(id: "cpu", kind: "performance",
+                name: "Process CPU (sampled)", detail: String(format: "%.1f%%", cpuPercent)),
+            PTStudioDiagnosticEntry(id: "fps", kind: "performance",
+                name: "Observed display FPS", detail: String(format: "%.1f", frameCounter?.fps ?? 0)),
             PTStudioDiagnosticEntry(id: "memory", kind: "performance",
                 name: "Resident memory", detail: "\(bytes) bytes"),
             PTStudioDiagnosticEntry(id: "uptime", kind: "performance",
