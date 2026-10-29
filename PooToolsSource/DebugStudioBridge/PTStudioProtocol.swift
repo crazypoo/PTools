@@ -160,5 +160,6 @@ public enum PTStudioBridgeError: Error, Sendable, Equatable {
     case unsupportedScheme
     case invalidCredentials
     case transportRejected
+    case serverStatus(Int)
     case invalidAcknowledgement
 }
