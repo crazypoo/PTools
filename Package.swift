@@ -1208,6 +1208,8 @@ let package = Package(
         // Español: Mantiene objetivos de calidad exclusivos de iOS para las regresiones de Core, UI, Network, listas, navegación, medios y permisos.
         // 中文：保留仅面向 iOS 的质量测试目标，覆盖 Core、UI、Network、列表、导航、媒体和权限回归。
         .testTarget(name: "PToolsStudioProtocolCoreTests", dependencies: ["PToolsStudioProtocolCore"], path: "Tests/PToolsStudioProtocolCoreTests"),
+        .testTarget(name: "PToolsStudioInspectorRuntimeTests", dependencies: ["PToolsInspectorRuntime", "PToolsStudioProtocolCore"], path: "Tests/PToolsStudioInspectorRuntimeTests"),
+        .testTarget(name: "PToolsStudioStorageRuntimeTests", dependencies: ["PToolsStudioStorageRuntime", "PToolsStudioProtocolCore"], path: "Tests/PToolsStudioStorageRuntimeTests"),
         .testTarget(
             name: "PToolsCoreTests",
             dependencies: ["PToolsCore", "PToolsVariantCore"],
