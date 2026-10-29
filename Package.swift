@@ -297,6 +297,7 @@ let package = Package(
         .library(name: "PooToolsDEBUG", targets: ["PooToolsDEBUG"]),
         // Explicit opt-in transport of redacted DebugNetwork events; omitted from PooToolsAll.
         .library(name: "PToolsStudioProtocolCore", targets: ["PToolsStudioProtocolCore"]),
+        .library(name: "PToolsInspectorRuntime", targets: ["PToolsInspectorRuntime"]),
         .library(name: "PToolsDebugStudioBridge", targets: ["PToolsDebugStudioBridge"]),
         .library(name: "PooToolsDEBUGTrackingEyes", targets: ["PooToolsDEBUGTrackingEyes"]),
         .library(name: "PooToolsLaunchTimeProfiler", targets: ["PooToolsLaunchTimeProfiler"]),
@@ -1179,6 +1180,7 @@ let package = Package(
             path: "PooToolsSource/PToolsStudioProtocolCore",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
+        .target(name: "PToolsInspectorRuntime", dependencies: ["PToolsStudioProtocolCore"], path: "PooToolsSource/PToolsInspectorRuntime"),
         .target(
             name: "PToolsDebugStudioBridge",
             dependencies: ["PooToolsDEBUG", "PToolsStudioProtocolCore"],

@@ -2,6 +2,9 @@
 import Foundation
 import CryptoKit
 import Security
+#if SWIFT_PACKAGE
+import PToolsStudioProtocolCore
+#endif
 
 public protocol PTStudioTransport: Sendable {
     func send(_ events: [PTStudioEnvelope]) async throws -> PTStudioAcknowledgement
@@ -211,6 +214,60 @@ public actor PTStudioHTTPSPushTransport: PTStudioTransport {
             throw PTStudioBridgeError.transportRejected
         }
         return try JSONDecoder().decode(PTStudioAcknowledgement.self, from: responseData)
+    }
+
+    /// Paired diagnostics extension. Retains the existing /v1/events API unchanged.
+    /// Poll and submit use the same system-trusted TLS + SHA-256 leaf pin as capture.
+    public func pollDiagnostics(sessionID: UUID) async throws -> [PTStudioDiagnosticCommand] {
+        struct Poll: Encodable { let sessionID: UUID }
+        struct Response: Decodable { let commands: [PTStudioDiagnosticCommand] }
+        let response: Response = try await diagnosticPost(
+            "v2/diagnostics/poll", Poll(sessionID: sessionID), as: Response.self)
+        guard response.commands.count <= 16,
+              response.commands.allSatisfy({ $0.schemaVersion == PTStudioDiagnosticCommand.schemaVersion && $0.sessionID == sessionID }) else {
+            throw PTStudioBridgeError.transportRejected
+        }
+        return response.commands
+    }
+
+    public func sendDiagnosticReply(_ reply: PTStudioDiagnosticReply) async throws {
+        struct Receipt: Decodable { let accepted: Bool }
+        let response: Receipt = try await diagnosticPost(
+            "v2/diagnostics/reply", reply, as: Receipt.self)
+        guard response.accepted else { throw PTStudioBridgeError.transportRejected }
+    }
+
+    private func diagnosticPost<Input: Encodable, Output: Decodable>(
+        _ path: String, _ payload: Input, as type: Output.Type
+    ) async throws -> Output {
+        guard !closed, let host = endpoint.host else { throw PTStudioBridgeError.transportRejected }
+        var parts = URLComponents()
+        parts.scheme = "https"; parts.host = host
+        parts.port = endpoint.port
+        parts.path = "/" + path
+        guard let url = parts.url else { throw PTStudioBridgeError.unsupportedScheme }
+        let data = try JSONEncoder().encode(payload)
+        guard data.count < 512 * 1024 else { throw PTStudioBridgeError.transportRejected }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = data
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("1", forHTTPHeaderField: "X-PTStudio-Internal")
+        request.setValue("Bearer " + bearerToken, forHTTPHeaderField: "Authorization")
+        request.setValue(UUID().uuidString, forHTTPHeaderField: "X-PTStudio-Nonce")
+        request.setValue(String(Int(Date().timeIntervalSince1970)), forHTTPHeaderField: "X-PTStudio-Sent-At")
+        pinDelegate.clearRejection()
+        let response: (Data, URLResponse)
+        do { response = try await session.data(for: request) }
+        catch {
+            if let failure = pinDelegate.takeRejection() { throw failure }
+            throw error
+        }
+        guard let http = response.1 as? HTTPURLResponse else { throw PTStudioBridgeError.transportRejected }
+        guard http.statusCode == 200, response.0.count <= 2 * 1024 * 1024 else {
+            throw PTStudioBridgeError.serverStatus(http.statusCode)
+        }
+        return try JSONDecoder().decode(type, from: response.0)
     }
 
     public func close() {
