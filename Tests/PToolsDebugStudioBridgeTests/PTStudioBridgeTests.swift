@@ -113,8 +113,11 @@ final class PTStudioBridgeTests: XCTestCase {
         let transport = StudioRecordingTransport()
         let initialStatus = await bridge.status()
         XCTAssertFalse(initialStatus.isRunning)
+        XCTAssertEqual(initialStatus.deliveryState, .stopped)
         try await bridge.start(using: transport,
                                configuration: .init(isEnabled: true, batchInterval: .milliseconds(10)))
+        let awaitingStatus = await bridge.status()
+        XCTAssertEqual(awaitingStatus.deliveryState, .awaitingAcknowledgement)
         let record = PTNetworkCaptureRecord(
             request: PTNetworkRequestSnapshot(url: URL(string: "https://example.org/users?id=3")!),
             timing: PTNetworkTiming(startedAt: .now), source: .urlProtocol)
@@ -130,11 +133,14 @@ final class PTStudioBridgeTests: XCTestCase {
         XCTAssertEqual(events.filter { $0.kind == .recordFinalize && $0.requestID == record.id }.count, 1)
         let postSendStatus = await bridge.status()
         XCTAssertEqual(postSendStatus.queuedEvents, 0)
+        XCTAssertEqual(postSendStatus.deliveryState, .connected)
+        XCTAssertEqual(postSendStatus.consecutiveSendFailures, 0)
         await bridge.stop()
         let closed = await transport.isClosed()
         XCTAssertTrue(closed)
         let stoppedStatus = await bridge.status()
         XCTAssertFalse(stoppedStatus.isRunning)
+        XCTAssertEqual(stoppedStatus.deliveryState, .stopped)
         #else
         let bridge = PTStudioBridge(store: PTNetworkCaptureStore())
         do {
