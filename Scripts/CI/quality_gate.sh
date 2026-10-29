@@ -143,6 +143,7 @@ run_named_gate() {
           PToolsFontTests
           PToolsDebugCoreTests
           PToolsDebugInventoryCoreTests
+          PToolsDebugInspectorCoreTests
           PToolsStudioProtocolCoreTests
         )
         for test_product in "${foundation_test_products[@]}"; do
