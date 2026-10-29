@@ -195,9 +195,10 @@ public final class PTStudioDiagnosticAgent {
     private func reply(_ command: PTStudioDiagnosticCommand, sessionID: UUID,
                        success: Bool = true, message: String? = nil,
                        entries: [PTStudioDiagnosticEntry] = []) -> PTStudioDiagnosticReply {
-        PTStudioDiagnosticReply(id: command.id, sessionID: sessionID,
-                                success: success, message: message,
-                                entries: Array(entries.prefix(1200)))
+        PTStudioDiagnosticPrivacy.sanitize(
+            PTStudioDiagnosticReply(id: command.id, sessionID: sessionID,
+                                    success: success, message: message,
+                                    entries: Array(entries.prefix(1200))))
     }
 
     private func snapshot(includePreview: Bool) -> [PTStudioDiagnosticEntry] {
