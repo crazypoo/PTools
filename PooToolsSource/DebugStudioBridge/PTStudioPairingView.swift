@@ -12,6 +12,8 @@ public struct PTStudioPairingView: View {
     @State private var token = ""
     @State private var fingerprint = ""
     @State private var notice: String?
+    @State private var bridgeStatus: PTStudioBridgeStatus?
+    @State private var discoveryError: String?
 
     public init() {}
 
@@ -28,6 +30,14 @@ public struct PTStudioPairingView: View {
             }
 
             Section("Macs discovered on this Wi-Fi") {
+                HStack {
+                    Text("Bonjour service: _ptstudio._tcp")
+                        .font(.caption.monospaced())
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Button("Refresh") { refresh() }
+                        .disabled(!autoConnect)
+                }
                 if peers.isEmpty {
                     Text(autoConnect ? "No PTNetworkStudio bridge discovered." : "Enable discovery to find your Mac.")
                         .foregroundStyle(.secondary)
@@ -43,10 +53,16 @@ public struct PTStudioPairingView: View {
                                 Text("\(peer.tlsHost):\(peer.port)")
                                     .font(.caption.monospaced())
                                     .foregroundStyle(.secondary)
-                                Text(PTStudioPairingKeychain.load(account: peer.id) == nil
-                                     ? "Not paired" : "Paired on this device")
-                                    .font(.caption2)
-                                    .foregroundStyle(.secondary)
+                                Text(connectionLabel(for: peer))
+                                    .font(.caption)
+                                    .foregroundStyle(connectionColor(for: peer))
+                                if PTStudioAutoConnectionManager.shared.currentPeer?.id == peer.id,
+                                   let bridgeStatus,
+                                   bridgeStatus.consecutiveSendFailures > 0 {
+                                    Text("Retries: \(bridgeStatus.consecutiveSendFailures)")
+                                        .font(.caption2)
+                                        .foregroundStyle(.orange)
+                                }
                             }
                             Spacer()
                             if selectedPeerID == peer.id {
@@ -81,6 +97,32 @@ public struct PTStudioPairingView: View {
                 }
             }
 
+            Section("Secure delivery") {
+                if let peer = PTStudioAutoConnectionManager.shared.currentPeer {
+                    Text("Selected Mac: \(peer.name)")
+                    Text("TLS / ACK: \(deliveryLabel)")
+                    if let bridgeStatus {
+                        if let ack = bridgeStatus.lastAcknowledgedSequence {
+                            Text("Last ACK sequence: \(ack)")
+                        }
+                        if let lastError = bridgeStatus.lastSendError {
+                            Text(lastError).foregroundStyle(.orange)
+                                .textSelection(.enabled)
+                        }
+                    }
+                } else {
+                    Text("No active Bridge transport. A saved pairing is not a connection.")
+                        .foregroundStyle(.secondary)
+                }
+                Text("The Mac must show an authenticated session; the Bridge needs a valid TLS certificate and a matching Token.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            if let discoveryError {
+                Section("Discovery error") {
+                    Text(discoveryError).foregroundStyle(.orange).textSelection(.enabled)
+                }
+            }
             if let notice {
                 Section { Text(notice).font(.footnote).textSelection(.enabled) }
             }
@@ -92,6 +134,7 @@ public struct PTStudioPairingView: View {
             manager.onPeersChanged = { updated in
                 peers = updated
             }
+            manager.onError = { message in discoveryError = message }
             if autoConnect {
                 do { try manager.start() }
                 catch { notice = error.localizedDescription }
@@ -99,8 +142,58 @@ public struct PTStudioPairingView: View {
         }
         .onDisappear {
             PTStudioAutoConnectionManager.shared.onPeersChanged = nil
+            PTStudioAutoConnectionManager.shared.onError = nil
             token = ""
             fingerprint = ""
+        }
+        .task {
+            while !Task.isCancelled {
+                bridgeStatus = await PTStudioBridge.shared.status()
+                do { try await Task.sleep(for: .seconds(1)) }
+                catch { break }
+            }
+        }
+    }
+
+    private var deliveryLabel: String {
+        switch bridgeStatus?.deliveryState {
+        case .connected: return "Connected — authenticated ACK received"
+        case .retrying: return "Retrying — inspect the error below"
+        case .awaitingAcknowledgement: return "Connecting — awaiting ACK"
+        case .stopped, .none: return "Not connected"
+        }
+    }
+
+    private func connectionLabel(for peer: PTStudioDiscoveredPeer) -> String {
+        guard PTStudioPairingKeychain.load(account: peer.id) != nil else {
+            return "Not paired"
+        }
+        guard PTStudioAutoConnectionManager.shared.currentPeer?.id == peer.id else {
+            return "Paired — offline"
+        }
+        return deliveryLabel
+    }
+
+    private func connectionColor(for peer: PTStudioDiscoveredPeer) -> Color {
+        guard PTStudioPairingKeychain.load(account: peer.id) != nil else {
+            return .secondary
+        }
+        guard PTStudioAutoConnectionManager.shared.currentPeer?.id == peer.id else {
+            return .orange
+        }
+        switch bridgeStatus?.deliveryState {
+        case .connected: return .green
+        case .retrying: return .red
+        default: return .orange
+        }
+    }
+
+    private func refresh() {
+        do {
+            try PTStudioAutoConnectionManager.shared.refresh()
+            discoveryError = nil
+        } catch {
+            discoveryError = error.localizedDescription
         }
     }
 
@@ -130,7 +223,7 @@ public struct PTStudioPairingView: View {
                 peerID: peer.id, token: token, fingerprintHex: fingerprint)
             token = ""
             fingerprint = ""
-            notice = "Pairing stored in Keychain. The secure connection starts automatically; verify ACK status before considering it connected."
+            notice = "Credentials saved to Keychain. Waiting for the Mac's authenticated HTTPS ACK. Saved pairing alone is not connected."
         } catch {
             notice = error.localizedDescription
         }
