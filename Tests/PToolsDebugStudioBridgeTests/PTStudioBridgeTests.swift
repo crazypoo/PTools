@@ -116,8 +116,11 @@ final class PTStudioBridgeTests: XCTestCase {
         XCTAssertEqual(initialStatus.deliveryState, .stopped)
         try await bridge.start(using: transport,
                                configuration: .init(isEnabled: true, batchInterval: .milliseconds(10)))
-        let awaitingStatus = await bridge.status()
-        XCTAssertEqual(awaitingStatus.deliveryState, .awaitingAcknowledgement)
+        // The initial zero-delay flush may already have ACKed by this point.
+        let startingStatus = await bridge.status()
+        XCTAssertTrue(startingStatus.isRunning)
+        XCTAssertTrue([PTStudioDeliveryState.awaitingAcknowledgement, .connected]
+            .contains(startingStatus.deliveryState))
         let record = PTNetworkCaptureRecord(
             request: PTNetworkRequestSnapshot(url: URL(string: "https://example.org/users?id=3")!),
             timing: PTNetworkTiming(startedAt: .now), source: .urlProtocol)
