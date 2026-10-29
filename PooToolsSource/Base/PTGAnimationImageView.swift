@@ -40,8 +40,11 @@ open class PTGAnimationImageView: UIView {
                     if let lottieURL = URL(string: urlString),
                        lottieURL.pathExtension.contains("json"),
                        urlString.isURL() {
-                        Task { @MainActor in
+                        Task { @MainActor [weak self] in
                             let lottieAnimation = await LottieAnimation.loadedFrom(url: lottieURL)
+                            // Reused cells may bind a different source while the JSON is
+                            // downloading. Never let the old result hide the new image.
+                            guard let self, (self.imageSet as? String) == urlString else { return }
                             if let findAnimation = lottieAnimation {
                                 lottieView.isHidden = false
                                 imageBG.isHidden = true
