@@ -150,8 +150,13 @@ public actor PTStudioHTTPSPushTransport: PTStudioTransport {
         request.setValue(UUID().uuidString, forHTTPHeaderField: "X-PTStudio-Nonce")
         request.setValue(String(Int(Date().timeIntervalSince1970)), forHTTPHeaderField: "X-PTStudio-Sent-At")
         let (responseData, response) = try await session.data(for: request)
-        guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode),
-              responseData.count <= 16 * 1024 else {
+        guard let http = response as? HTTPURLResponse else {
+            throw PTStudioBridgeError.transportRejected
+        }
+        guard (200..<300).contains(http.statusCode) else {
+            throw PTStudioBridgeError.serverStatus(http.statusCode)
+        }
+        guard responseData.count <= 16 * 1024 else {
             throw PTStudioBridgeError.transportRejected
         }
         return try JSONDecoder().decode(PTStudioAcknowledgement.self, from: responseData)
