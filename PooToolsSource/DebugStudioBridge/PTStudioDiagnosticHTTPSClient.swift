@@ -28,7 +28,8 @@ actor PTStudioDiagnosticHTTPSClient {
         config.httpShouldSetCookies = false
         config.urlCache = nil
         config.requestCachePolicy = .reloadIgnoringLocalCacheData
-        config.timeoutIntervalForRequest = 10
+        config.timeoutIntervalForRequest = 16
+        config.timeoutIntervalForResource = 20
         let pin = PTStudioCertificatePinDelegate(expectedSHA256: credentials.leafCertificateSHA256)
         self.pinDelegate = pin
         session = URLSession(configuration: config, delegate: pin, delegateQueue: nil)
