@@ -10,6 +10,28 @@ import UIKit
 import Lottie
 
 open class PTGAnimationImageView: UIView {
+    private var lastRasterSource: String?
+    private var lastRasterTargetSize: CGSize = .zero
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        guard let source = imageSet as? String,
+              source == lastRasterSource,
+              source.isURL(),
+              let url = URL(string: source),
+              !["json", "gif", "svg", "webp", "mp4", "mov"].contains(url.pathExtension.lowercased()),
+              bounds.width > 0, bounds.height > 0 else { return }
+        let desired = bounds.size
+        // Re-request only if the layout needs materially more pixels.
+        // Prevents blurry category logos and home tiles after async layout/Duo resizing.
+        guard desired.width > lastRasterTargetSize.width * 1.15 ||
+              desired.height > lastRasterTargetSize.height * 1.15 else { return }
+        lastRasterTargetSize = desired
+        imageBG.loadImage(contentData: source,
+                          emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage,
+                          targetSize: desired)
+    }
+
     public var imageSet:Any? {
         didSet {
             if let findAny = imageSet {
@@ -45,7 +67,12 @@ open class PTGAnimationImageView: UIView {
         lottieView.stop()
         lottieView.isHidden = true
         imageBG.isHidden = false
-        imageBG.loadImage(contentData: media,emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage)
+        let target = bounds.width > 0 && bounds.height > 0 ? bounds.size : nil
+        lastRasterSource = media as? String
+        lastRasterTargetSize = target ?? .zero
+        imageBG.loadImage(contentData: media,
+                          emptyImage: PTAppBaseConfig.share.defaultPlaceholderImage,
+                          targetSize: target)
     }
     
     public override var contentMode: UIView.ContentMode {
