@@ -13,6 +13,9 @@ import OSLog
 #if DEBUG && canImport(YCSymbolTracker)
 import YCSymbolTracker
 #endif
+#if DEBUG
+import SwiftUI
+#endif
 #if canImport(InAppViewDebugger)
 import InAppViewDebugger
 #endif
@@ -570,6 +573,13 @@ final class AppMacNetworkDebugManager {
             UserDefaults.standard.set(false, forKey: automaticConnectionSetting)
             PTStudioAutoConnectionManager.shared.stop()
         }
+    }
+
+    /// Present from any existing Debug settings screen, not on normal launch.
+    func presentStudioPairing(from presenter: UIViewController) {
+        let screen = UIHostingController(rootView:
+            NavigationStack { PTStudioPairingView() })
+        presenter.present(screen, animated: true)
     }
 
     /// Pair only after the developer picks a discovered Mac and confirms the
