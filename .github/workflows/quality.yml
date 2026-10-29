@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   version-governance:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
         with:
@@ -26,8 +26,9 @@ jobs:
           name: quality-version
           path: .quality-report
 
+          include-hidden-files: true
   docs-governance:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
         with:
@@ -43,8 +44,9 @@ jobs:
           name: quality-docs
           path: .quality-report
 
+          include-hidden-files: true
   font-governance:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
         with:
@@ -60,8 +62,9 @@ jobs:
           name: quality-font
           path: .quality-report
 
+          include-hidden-files: true
   architecture-governance:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
         with:
@@ -77,8 +80,9 @@ jobs:
           name: quality-architecture
           path: .quality-report
 
+          include-hidden-files: true
   unit-tests:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
         with:
@@ -94,8 +98,9 @@ jobs:
           name: quality-tests
           path: .quality-report
 
+          include-hidden-files: true
   strict-concurrency:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
         with:
@@ -111,8 +116,9 @@ jobs:
           name: quality-concurrency
           path: .quality-report
 
+          include-hidden-files: true
   cocoapods:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
         with:
@@ -128,8 +134,9 @@ jobs:
           name: quality-pods
           path: .quality-report
 
+          include-hidden-files: true
   xcode-build:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
         with:
@@ -145,8 +152,9 @@ jobs:
           name: quality-xcode
           path: .quality-report
 
+          include-hidden-files: true
   release-metadata:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
         with:
@@ -162,6 +170,7 @@ jobs:
           name: quality-release
           path: .quality-report
 
+          include-hidden-files: true
   quality-summary:
     if: always()
     needs:
@@ -176,7 +185,7 @@ jobs:
       - cocoapods
       - xcode-build
       - release-metadata
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
         with:
@@ -188,6 +197,7 @@ jobs:
         with:
           pattern: quality-*
           path: .quality-reports
+          include-hidden-files: true
           merge-multiple: false
       - name: Final Quality Summary
         run: QUALITY_REPORT_DIR="$GITHUB_WORKSPACE/.quality-reports" bash Scripts/CI/quality_gate.sh summary
@@ -198,8 +208,9 @@ jobs:
           name: quality-final-report
           path: .quality-reports
 
+          include-hidden-files: true
   example-governance:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
         with:
@@ -215,8 +226,9 @@ jobs:
           name: quality-example
           path: .quality-report
 
+          include-hidden-files: true
   governance:
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v7
         with:
@@ -231,3 +243,5 @@ jobs:
         with:
           name: quality-governance
           path: .quality-report
+
+          include-hidden-files: true
