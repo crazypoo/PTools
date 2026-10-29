@@ -491,7 +491,7 @@ public final class PTDebugManager {
     private var plugins: [String: PTDebugPlugin] = [:]
     private var collectors: [String: PTDebugCollector] = [:]
     private var collectorOrder: [String] = []
-    private var sessionOwners = Set<String>()
+    private var sessionOwners = PTDebugSessionOwnerLedger()
 
     private init() {
         register(collector: PTConsoleCollector())
@@ -560,8 +560,7 @@ public final class PTDebugManager {
     // Español: Mantén los collectors activos hasta que la última escena visible libere su sesión de Debug.
     // 中文：只有最后一个可见场景释放 Debug 会话后，才停止所有 Collector。
     public func startSession(owner: String) {
-        guard !owner.isEmpty, sessionOwners.insert(owner).inserted else { return }
-        if sessionOwners.count == 1 {
+        if sessionOwners.acquire(owner) == .activate {
             startAll()
         }
     }
@@ -570,14 +569,13 @@ public final class PTDebugManager {
     // Español: La liberación por escena evita que una consola detenga los diagnósticos de otra escena.
     // 中文：按场景释放会话，避免一个控制台关闭时误停另一个场景的诊断能力。
     public func stopSession(owner: String) {
-        guard !owner.isEmpty, sessionOwners.remove(owner) != nil else { return }
-        if sessionOwners.isEmpty {
+        if sessionOwners.release(owner) == .deactivate {
             stopAll()
         }
     }
 
     public func stopAll() {
-        sessionOwners.removeAll()
+        sessionOwners.reset()
         plugins.values.forEach { $0.stop() }
         collectorOrder.reversed().forEach { identifier in
             PTDebugHookRegistry.shared.uninstall(identifier: Self.hookIdentifier(for: identifier))
