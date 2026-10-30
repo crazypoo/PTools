@@ -273,5 +273,3 @@ final class PTNavigationDelegateProxy: NSObject, UINavigationControllerDelegate 
         }
     }
 }
-
-@MainActor
