@@ -1,7 +1,7 @@
 {
   "report_kind": "ci-generated-evidence-map",
-  "source_revision": "be6cf4b34b62ce2c36f7639993c3eac176fd9ecb",
-  "generated_at": "2026-10-24T11:12:53.132022+00:00",
+  "source_revision": "0deb064cea510c896e78b35fab0997808e796173",
+  "generated_at": "2026-10-30T03:42:31Z",
   "rule_version": "5.69.0-duo-2026-10-24-r4",
   "source_manifest_hash": "94c1e59b766ece9262682fde24122d12c890cba2c87e2cf367c113fc1db6bb39",
   "review_registry": "Scripts/duo_geometry_review_registry.json",
@@ -21078,5 +21078,13 @@
       "review_scope": "Tests/PToolsUIFoundationTests/PTUIFoundationContractTests.swift:140",
       "reason": "candidate requires semantic review"
     }
-  ]
+  ],
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-30T03:42:31Z",
+  "repository": "crazypoo/PTools",
+  "branch": "feature/pr46-pr50-inspector-layout-governance-20261030",
+  "sourceRevision": "0deb064cea510c896e78b35fab0997808e796173",
+  "sourceVersion": "5.69.0",
+  "generatorVersion": "current-report-normalizer",
+  "sourceInputsDigest": "8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455"
 }

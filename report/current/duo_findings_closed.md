@@ -1,4 +1,15 @@
-<!-- AUTO-GENERATED: Scripts/audit_duo_uikit_coverage.py -->
+<!--
+Current report metadata.
+AUTO-GENERATED FILE.
+Repository: crazypoo/PTools
+Branch: feature/pr46-pr50-inspector-layout-governance-20261030
+Source revision: 0deb064cea510c896e78b35fab0997808e796173
+Source version: 5.69.0
+Source inputs digest: 8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455
+Generator version: 1
+Generator: current-report-normalizer
+Generated at: 2026-10-30T03:42:31Z
+-->
 Source revision: be6cf4b34b62ce2c36f7639993c3eac176fd9ecb
 Generated at: 2026-10-24T11:12:53.132022+00:00
 Audit rule version: 5.69.0-duo-2026-10-24-r4

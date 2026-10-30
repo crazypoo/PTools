@@ -2,9 +2,9 @@
   "generator": "Scripts/report_5_61_runtime_safety.sh",
   "schema_version": 1,
   "baseline": "5.61.0",
-  "source_revision": "4c508f23263c51171d48163d641a4d808069b81a",
+  "source_revision": "0deb064cea510c896e78b35fab0997808e796173",
   "source_tree_hash": "14d7dcac7921a98379a36cc5a6cc58dfaea8b527bdd231ddf6559a1ca364fa41",
-  "generated_at": "2026-10-16T23:53:38Z",
+  "generated_at": "2026-10-30T03:42:31Z",
   "checks": {
     "kakapos": {
       "count": 0,
@@ -1156,11 +1156,11 @@
     }
   },
   "schemaVersion": 1,
-  "generatedAt": "2026-10-16T23:53:38Z",
+  "generatedAt": "2026-10-30T03:42:31Z",
   "repository": "crazypoo/PTools",
-  "branch": "master",
-  "sourceRevision": "4c508f23263c51171d48163d641a4d808069b81a",
-  "sourceVersion": "5.65.6",
+  "branch": "feature/pr46-pr50-inspector-layout-governance-20261030",
+  "sourceRevision": "0deb064cea510c896e78b35fab0997808e796173",
+  "sourceVersion": "5.69.0",
   "generatorVersion": "Scripts/report_5_61_runtime_safety.sh",
-  "sourceInputsDigest": "a87b93f96939b4e60d1a69bd9a8ed165943fd5ee7941c29c3cda17d8649b691d"
+  "sourceInputsDigest": "8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455"
 }

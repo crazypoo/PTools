@@ -1,20 +1,24 @@
 <!--
+Current report metadata.
 AUTO-GENERATED FILE.
-DO NOT EDIT MANUALLY.
-
+Repository: crazypoo/PTools
+Branch: feature/pr46-pr50-inspector-layout-governance-20261030
+Source revision: 0deb064cea510c896e78b35fab0997808e796173
+Source version: 5.69.0
+Source inputs digest: 8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455
+Generator version: 1
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Source revision: 23f6f58d7b266175109501ec67df060cb2859650
-Generated at: 2026-10-19T07:40:29Z
+Generated at: 2026-10-30T03:42:31Z
 -->
 
 # CocoaPods Subspec Graph
 
 - Schema: `1`
-- Podspec: `PooTools` `5.67.2`
+- Podspec: `PooTools` `5.69.0`
 - Default subspec: `Core`
 - iOS: `17.0`
 - Swift: `6.0`
-- Subspec count: `165`
+- Subspec count: `167`
 
 ## Subspecs
 
@@ -56,7 +60,8 @@ Generated at: 2026-10-19T07:40:29Z
 | `Country` | `PooTools/Core` | — | `Country` | — | — |
 | `CustomerLabel` | `PooTools/Core` | — | `Label` | QuartzCore | — |
 | `CustomerNumberKeyboard` | `PooTools/Core` | — | `Keyboard` | — | — |
-| `DEBUG` | `PooTools/BackgroundTasks`, `PooTools/Connectivity`, `PooTools/Core`, `PooTools/DeepLink`, `PooTools/NetWork`, `PooTools/Notifications`, `PooTools/Overlay`, `PooTools/PDF`, `PooTools/RouteCore`, `PooTools/SearchBar`, `PooTools/Share`, `PooTools/Storage`, `PooTools/Symbols` | — | `DEBUGLocation`, `Debug`, `DebugCategory`, `DebugColor`, `DebugCrash`, `DebugFile`, `DebugLibs`, `DebugNetwork`, `DebugPerformance`, `DebugRuler`, `DebugUserDefault`, `DevMask`, `Inspector`, `LocalConsole`, `TouchInspector` | — | — |
+| `DEBUG` | `PooTools/BackgroundTasks`, `PooTools/Connectivity`, `PooTools/Core`, `PooTools/DeepLink`, `PooTools/NetWork`, `PooTools/Notifications`, `PooTools/Overlay`, `PooTools/PDF`, `PooTools/RouteCore`, `PooTools/SearchBar`, `PooTools/Share`, `PooTools/Storage`, `PooTools/Symbols` | — | `DEBUGLocation`, `Debug`, `DebugCategory`, `DebugColor`, `DebugCrash`, `DebugFile`, `DebugLibs`, `DebugNetwork`, `DebugPerformance`, `DebugRuler`, `DebugUserDefault`, `DevMask`, `Inspector`, `LocalConsole`, `PToolsDebugConsoleUI`, `PToolsDebugCore`, `PToolsDebugInventoryCore`, `PToolsDebugMetricsCore`, `PToolsDebugMetricsUI`, `TouchInspector` | — | — |
+| `DEBUG_StudioBridge` | `PooTools/DEBUG` | — | `DebugStudioBridge`, `PToolsDebugInspectorCore`, `PToolsDebugInspectorUI`, `PToolsStudioProtocolCore` | CryptoKit, Foundation, Security | — |
 | `DEBUG_TrackingEyes` | `PooTools/CameraPermission`, `PooTools/Core`, `PooTools/DEBUG` | — | `WhereIsMyEye` | — | — |
 | `DataEncrypt` | `PooTools/Core` | `CryptoSwift` | `AESAndDES` | — | — |
 | `Database` | `PooTools/DatabaseCore` | — | `PToolsDatabase` | Foundation | — |
@@ -174,6 +179,7 @@ Generated at: 2026-10-19T07:40:29Z
 | `TrackingPermission` | `PooTools/PToolsPermissionCore` | — | `TrackingPermission` | — | — |
 | `Transfer` | `PooTools/TransferCore` | — | `PToolsTransfer` | CryptoKit, Foundation | — |
 | `TransferCore` | — | — | `PToolsTransferCore` | Foundation | — |
+| `VariantCore` | — | — | `PToolsVariantCore` | Foundation | — |
 | `VideoCache` | `PooTools/Core` | — | — | — | — |
 | `VideoEditor` | `PooTools/Core`, `PooTools/HarbethKit`, `PooTools/Loading`, `PooTools/MediaCore`, `PooTools/ProgressBar`, `PooTools/Symbols` | — | `VideoEditor` | — | — |
 | `Vision` | `PooTools/Core` | — | `Vision` | — | — |

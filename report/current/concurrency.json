@@ -2,12 +2,12 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "23f6f58d7b266175109501ec67df060cb2859650",
-  "generated_at": "2026-10-19T07:31:19Z",
+  "source_revision": "0deb064cea510c896e78b35fab0997808e796173",
+  "generated_at": "2026-10-30T03:42:31Z",
   "counts": {
-    "main_queue_async": 26,
-    "task_detached": 30,
-    "unchecked_sendable": 53
+    "main_queue_async": 25,
+    "task_detached": 36,
+    "unchecked_sendable": 55
   },
   "locations": [
     {
@@ -199,26 +199,44 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 446,
+      "line": 459,
       "text": "let gifResult = await Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 460,
+      "line": 473,
       "text": "let image = await Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 474,
+      "line": 487,
       "text": "let image = await Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 651,
+      "line": 667,
       "text": "guard let gifResult = await Task.detached(priority: .userInitiated, operation: {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Core/PTMediaImagePreprocessor.swift",
+      "line": 96,
+      "text": "return try await Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Core/PTMediaSaveService.swift",
+      "line": 126,
+      "text": "return await Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Core/PTMediaSaveService.swift",
+      "line": 243,
+      "text": "private struct PTSystemCGImageBox: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
@@ -259,8 +277,26 @@
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 29,
+      "line": 31,
       "text": "final class PTCustomHTTPProtocol: URLProtocol, @unchecked Sendable {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift",
+      "line": 170,
+      "text": "let records = await Task.detached(priority: .utility) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift",
+      "line": 182,
+      "text": "let records = await Task.detached(priority: .utility) {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/DebugStudioBridge/PTStudioTransport.swift",
+      "line": 77,
+      "text": "final class PTStudioCertificatePinDelegate: NSObject, URLSessionDelegate, @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
@@ -285,6 +321,12 @@
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
       "line": 926,
       "text": "let resultData = try? await Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/ImagePicker/PTImagePicker.swift",
+      "line": 500,
+      "text": "let copiedURL = try await Task.detached(priority: .userInitiated) {"
     },
     {
       "rule": "main_queue_async",
@@ -540,33 +582,21 @@
     },
     {
       "rule": "unchecked_sendable",
-      "path": "PooToolsSource/PhotoPicker/PTFetchImageOperation.swift",
-      "line": 20,
-      "text": "final class PTFetchImageOperation: Operation, @unchecked Sendable {"
-    },
-    {
-      "rule": "unchecked_sendable",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
-      "line": 18,
+      "line": 19,
       "text": "private struct PTSafeMediaBox<T>: @unchecked Sendable {"
     },
     {
       "rule": "unchecked_sendable",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibManager.swift",
-      "line": 26,
+      "line": 27,
       "text": "public struct PTSendableDictionaryBox: @unchecked Sendable {"
     },
     {
       "rule": "main_queue_async",
       "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 982,
+      "line": 342,
       "text": "DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)"
-    },
-    {
-      "rule": "main_queue_async",
-      "path": "PooToolsSource/PhotoPicker/PTMediaLibViewController.swift",
-      "line": 1070,
-      "text": "DispatchQueue.main.async {"
     },
     {
       "rule": "main_queue_async",
@@ -663,6 +693,26 @@
       "path": "PooToolsSource/Vision/PTVision.swift",
       "line": 119,
       "text": "Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "task_detached",
+      "path": "PooToolsSource/Vision/PTVisionRectangleDetection.swift",
+      "line": 73,
+      "text": "return try await Task.detached(priority: .userInitiated) {"
+    },
+    {
+      "rule": "unchecked_sendable",
+      "path": "PooToolsSource/Vision/PTVisionRectangleDetection.swift",
+      "line": 175,
+      "text": "private struct PTVisionCGImageBox: @unchecked Sendable {"
     }
-  ]
+  ],
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-30T03:42:31Z",
+  "repository": "crazypoo/PTools",
+  "branch": "feature/pr46-pr50-inspector-layout-governance-20261030",
+  "sourceRevision": "0deb064cea510c896e78b35fab0997808e796173",
+  "sourceVersion": "5.69.0",
+  "generatorVersion": "Scripts/report_concurrency.rb",
+  "sourceInputsDigest": "8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455"
 }

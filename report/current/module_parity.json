@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "23f6f58d7b266175109501ec67df060cb2859650",
-  "generated_at": "2026-10-19T07:28:37Z",
+  "source_revision": "0deb064cea510c896e78b35fab0997808e796173",
+  "generated_at": "2026-10-30T03:42:31Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -43,6 +43,18 @@
     "PToolsDatabase",
     "PToolsDatabaseCore",
     "PToolsDate",
+    "PToolsDebugConsoleCore",
+    "PToolsDebugConsoleUI",
+    "PToolsDebugCore",
+    "PToolsDebugInspectorCore",
+    "PToolsDebugInspectorLegacyUI",
+    "PToolsDebugInspectorUI",
+    "PToolsDebugInventoryCore",
+    "PToolsDebugMetricsCore",
+    "PToolsDebugMetricsUI",
+    "PToolsDebugNetworkCore",
+    "PToolsDebugStorageCore",
+    "PToolsDebugStudioBridge",
     "PToolsDeepLink",
     "PToolsDevice",
     "PToolsDocuments",
@@ -75,6 +87,7 @@
     "PToolsStorage",
     "PToolsStorageCore",
     "PToolsStoreKit",
+    "PToolsStudioProtocolCore",
     "PToolsSymbols",
     "PToolsSync",
     "PToolsSyncCore",
@@ -82,6 +95,7 @@
     "PToolsTransfer",
     "PToolsTransferCore",
     "PToolsUIFoundation",
+    "PToolsVariantCore",
     "PToolsWeb",
     "PToolsWebBridge",
     "PToolsWebCore",
@@ -338,6 +352,18 @@
     "PToolsDatabase",
     "PToolsDatabaseCore",
     "PToolsDate",
+    "PToolsDebugConsoleCore",
+    "PToolsDebugConsoleUI",
+    "PToolsDebugCore",
+    "PToolsDebugInspectorCore",
+    "PToolsDebugInspectorLegacyUI",
+    "PToolsDebugInspectorUI",
+    "PToolsDebugInventoryCore",
+    "PToolsDebugMetricsCore",
+    "PToolsDebugMetricsUI",
+    "PToolsDebugNetworkCore",
+    "PToolsDebugStorageCore",
+    "PToolsDebugStudioBridge",
     "PToolsFontCatalogCore",
     "PToolsMap",
     "PToolsMapCore",
@@ -350,10 +376,12 @@
     "PToolsRealtime",
     "PToolsRealtimeCore",
     "PToolsStoreKit",
+    "PToolsStudioProtocolCore",
     "PToolsSync",
     "PToolsSyncCore",
     "PToolsTransfer",
     "PToolsTransferCore",
+    "PToolsVariantCore",
     "PToolsWeb",
     "PToolsWebBridge",
     "PToolsWebCore"
@@ -366,6 +394,7 @@
     "Auth",
     "AuthCore",
     "ConstraintLayout",
+    "DEBUG_StudioBridge",
     "Database",
     "DatabaseCore",
     "Date",
@@ -391,6 +420,7 @@
     "Tabbar",
     "Transfer",
     "TransferCore",
+    "VariantCore",
     "Web",
     "WebBridge",
     "WebCore",
@@ -463,6 +493,47 @@
         "StatusBar",
         "Switch",
         "iCloud"
+      ]
+    },
+    {
+      "module": "DEBUG",
+      "spm": [
+        "DEBUGLocation",
+        "Debug",
+        "DebugCategory",
+        "DebugColor",
+        "DebugCrash",
+        "DebugFile",
+        "DebugLibs",
+        "DebugNetwork",
+        "DebugPerformance",
+        "DebugRuler",
+        "DebugUserDefault",
+        "DevMask",
+        "LocalConsole",
+        "TouchInspector"
+      ],
+      "cocoapods": [
+        "DEBUGLocation",
+        "Debug",
+        "DebugCategory",
+        "DebugColor",
+        "DebugCrash",
+        "DebugFile",
+        "DebugLibs",
+        "DebugNetwork",
+        "DebugPerformance",
+        "DebugRuler",
+        "DebugUserDefault",
+        "DevMask",
+        "Inspector",
+        "LocalConsole",
+        "PToolsDebugConsoleUI",
+        "PToolsDebugCore",
+        "PToolsDebugInventoryCore",
+        "PToolsDebugMetricsCore",
+        "PToolsDebugMetricsUI",
+        "TouchInspector"
       ]
     },
     {
@@ -592,6 +663,48 @@
         "SnapKit"
       ],
       "cocoapods": []
+    },
+    {
+      "module": "DEBUG",
+      "field": "internal_dependencies",
+      "spm": [
+        "BackgroundTasks",
+        "Connectivity",
+        "Core",
+        "DeepLink",
+        "NetWork",
+        "Notifications",
+        "Overlay",
+        "PDF",
+        "PToolsDebugConsoleUI",
+        "PToolsDebugCore",
+        "PToolsDebugInspectorLegacyUI",
+        "PToolsDebugInventoryCore",
+        "PToolsDebugMetricsCore",
+        "PToolsDebugMetricsUI",
+        "PToolsDebugNetworkCore",
+        "PToolsDebugStorageCore",
+        "RouteCore",
+        "SearchBar",
+        "Share",
+        "Storage",
+        "Symbols"
+      ],
+      "cocoapods": [
+        "BackgroundTasks",
+        "Connectivity",
+        "Core",
+        "DeepLink",
+        "NetWork",
+        "Notifications",
+        "Overlay",
+        "PDF",
+        "RouteCore",
+        "SearchBar",
+        "Share",
+        "Storage",
+        "Symbols"
+      ]
     },
     {
       "module": "DEBUG",
@@ -911,6 +1024,7 @@
         "ImagePicker",
         "Loading",
         "MediaCore",
+        "PToolsCore",
         "PToolsUIFoundation",
         "Symbols"
       ],
@@ -1045,6 +1159,21 @@
         "SnapKit"
       ],
       "cocoapods": []
+    },
+    {
+      "module": "Search",
+      "field": "internal_dependencies",
+      "spm": [
+        "Core",
+        "PToolsCore",
+        "PToolsUIFoundation",
+        "SearchBar"
+      ],
+      "cocoapods": [
+        "Core",
+        "PToolsUIFoundation",
+        "SearchBar"
+      ]
     },
     {
       "module": "Search",
@@ -2091,5 +2220,13 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "c44ed60fdd1939025f2715ef0fb87a044bcad9530be15f4a425e61eb65d32f68"
+  "fingerprint": "4caec792bfe6308eebd9efd935abfce37c2db1ad6516fd8dfa165c0e9d8dd222",
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-30T03:42:31Z",
+  "repository": "crazypoo/PTools",
+  "branch": "feature/pr46-pr50-inspector-layout-governance-20261030",
+  "sourceRevision": "0deb064cea510c896e78b35fab0997808e796173",
+  "sourceVersion": "5.69.0",
+  "generatorVersion": "Scripts/validate_module_parity.sh",
+  "sourceInputsDigest": "8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455"
 }

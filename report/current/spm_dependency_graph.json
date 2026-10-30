@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "23f6f58d7b266175109501ec67df060cb2859650",
-  "generated_at": "2026-10-19T07:40:29Z",
+  "source_revision": "0deb064cea510c896e78b35fab0997808e796173",
+  "generated_at": "2026-10-30T03:42:31Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -458,6 +458,138 @@
       ]
     },
     {
+      "name": "PToolsDebugConsoleCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDebugConsoleCore"
+      ]
+    },
+    {
+      "name": "PToolsDebugConsoleUI",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDebugConsoleUI"
+      ]
+    },
+    {
+      "name": "PToolsDebugCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDebugCore"
+      ]
+    },
+    {
+      "name": "PToolsDebugInspectorCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDebugInspectorCore"
+      ]
+    },
+    {
+      "name": "PToolsDebugInspectorLegacyUI",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDebugInspectorLegacyUI"
+      ]
+    },
+    {
+      "name": "PToolsDebugInspectorUI",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDebugInspectorUI"
+      ]
+    },
+    {
+      "name": "PToolsDebugInventoryCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDebugInventoryCore"
+      ]
+    },
+    {
+      "name": "PToolsDebugMetricsCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDebugMetricsCore"
+      ]
+    },
+    {
+      "name": "PToolsDebugMetricsUI",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDebugMetricsUI"
+      ]
+    },
+    {
+      "name": "PToolsDebugNetworkCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDebugNetworkCore"
+      ]
+    },
+    {
+      "name": "PToolsDebugStorageCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDebugStorageCore"
+      ]
+    },
+    {
+      "name": "PToolsDebugStudioBridge",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsDebugStudioBridge"
+      ]
+    },
+    {
       "name": "PToolsDeepLink",
       "type": {
         "library": [
@@ -810,6 +942,17 @@
       ]
     },
     {
+      "name": "PToolsStudioProtocolCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsStudioProtocolCore"
+      ]
+    },
+    {
       "name": "PToolsSymbols",
       "type": {
         "library": [
@@ -884,6 +1027,17 @@
       },
       "targets": [
         "PToolsUIFoundation"
+      ]
+    },
+    {
+      "name": "PToolsVariantCore",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsVariantCore"
       ]
     },
     {
@@ -3941,6 +4095,38 @@
       ]
     },
     {
+      "name": "PToolsCodeViewTests",
+      "type": "test",
+      "path": "Tests/PToolsCodeViewTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsCodeView",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsCodeView",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsConfiguration",
       "type": "regular",
       "path": "PooToolsSource/PToolsConfiguration",
@@ -4137,6 +4323,17 @@
               null
             ]
           }
+        },
+        {
+          "name": "PToolsVariantCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsVariantCore",
+              null
+            ]
+          }
         }
       ],
       "third_party_dependencies": [],
@@ -4247,12 +4444,637 @@
       "swift_settings": []
     },
     {
-      "name": "PToolsDebugTests",
+      "name": "PToolsDebugConsoleCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsDebugCore",
+      "sources": [
+        "PTDebugEvents.swift"
+      ],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugConsoleCoreTests",
       "type": "test",
-      "path": "Tests/PToolsDebugTests",
+      "path": "Tests/PToolsDebugConsoleCoreTests",
       "sources": [],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsDebugConsoleCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugConsoleCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugConsoleUI",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsDebugConsoleUI",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsOverlay",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsOverlay",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_DEBUG"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsDebugCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsDebugConsoleCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugConsoleCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugCoreTests",
+      "type": "test",
+      "path": "Tests/PToolsDebugCoreTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsDebugCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDebugMetricsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugMetricsCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugInspectorCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsDebugInspectorCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsStudioProtocolCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsStudioProtocolCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugInspectorCoreTests",
+      "type": "test",
+      "path": "Tests/PToolsDebugInspectorCoreTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsDebugInspectorCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugInspectorCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsStudioProtocolCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsStudioProtocolCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugInspectorLegacyUI",
+      "type": "regular",
+      "path": "PooToolsSource/Inspector",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsOverlay",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsOverlay",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsSymbols",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsSymbols",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsUIFoundation",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsUIFoundation",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [
+        {
+          "name": "SnapKit",
+          "kind": "third_party",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "SnapKit",
+              null
+            ]
+          }
+        }
+      ],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_DEBUG"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugInspectorUI",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsDebugInspectorUI",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_DEBUG"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugInventoryCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsDebugInventoryCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugInventoryCoreTests",
+      "type": "test",
+      "path": "Tests/PToolsDebugInventoryCoreTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsDebugInventoryCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugInventoryCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugMetricsCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsDebugMetricsCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugMetricsUI",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsDebugMetricsUI",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_DEBUG"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugNetworkCore",
+      "type": "regular",
+      "path": "PooToolsSource",
+      "sources": [
+        "DebugNetwork/PTNetworkCaptureModels.swift",
+        "DebugNetwork/PTNetworkCaptureStore.swift",
+        "DebugNetwork/PTNetworkRedactor.swift"
+      ],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugNetworkCoreTests",
+      "type": "test",
+      "path": "Tests/PToolsDebugNetworkCoreTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsDebugNetworkCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugNetworkCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugStorageCore",
+      "type": "regular",
+      "path": "PooToolsSource/Debug",
+      "sources": [
+        "PTDebugInventory.swift"
+      ],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsDebugInventoryCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugInventoryCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugStorageCoreTests",
+      "type": "test",
+      "path": "Tests/PToolsDebugStorageCoreTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsDebugStorageCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugStorageCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugStudioBridge",
+      "type": "regular",
+      "path": "PooToolsSource/DebugStudioBridge",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsDebugInspectorCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugInspectorCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDebugInspectorUI",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugInspectorUI",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDebugNetworkCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugNetworkCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDebugStorageCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugStorageCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsStudioProtocolCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsStudioProtocolCore",
+              null
+            ]
+          }
+        },
         {
           "name": "PooToolsDEBUG",
           "kind": "internal",
@@ -4260,6 +5082,114 @@
           "declaration": {
             "byName": [
               "PooToolsDEBUG",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_DEBUG_STUDIO_BRIDGE"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugStudioBridgeTests",
+      "type": "test",
+      "path": "Tests/PToolsDebugStudioBridgeTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsDebugStudioBridge",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugStudioBridge",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsDEBUG",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsDEBUG",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsDebugTests",
+      "type": "test",
+      "path": "Tests/PToolsDebugTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsDebugConsoleUI",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugConsoleUI",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDebugMetricsUI",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugMetricsUI",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsDEBUG",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsDEBUG",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsDEBUGTrackingEyes",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsDEBUGTrackingEyes",
               null
             ]
           }
@@ -5801,6 +6731,40 @@
       ]
     },
     {
+      "name": "PToolsPhotoPickerTests",
+      "type": "test",
+      "path": "Tests/PToolsPhotoPickerTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsPhotoPicker",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsPhotoPicker",
+              null
+            ]
+          }
+        },
+        {
+          "name": "ptools",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "ptools",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
       "name": "PToolsPlatformTests",
       "type": "test",
       "path": "Tests/PToolsPlatformTests",
@@ -6005,6 +6969,29 @@
       ]
     },
     {
+      "name": "PToolsScrollBannerTests",
+      "type": "test",
+      "path": "Tests/PToolsScrollBannerTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PooToolsScrollBanner",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsScrollBanner",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
+    },
+    {
       "name": "PToolsSimulation",
       "type": "regular",
       "path": "PooToolsSource/PToolsSimulation",
@@ -6205,6 +7192,49 @@
           "tool": "swift"
         }
       ]
+    },
+    {
+      "name": "PToolsStudioProtocolCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsStudioProtocolCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
+      "name": "PToolsStudioProtocolCoreTests",
+      "type": "test",
+      "path": "Tests/PToolsStudioProtocolCoreTests",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [
+        {
+          "name": "PToolsStudioProtocolCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsStudioProtocolCore",
+              null
+            ]
+          }
+        }
+      ],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": []
     },
     {
       "name": "PToolsSymbols",
@@ -6502,6 +7532,26 @@
       "third_party_dependencies": [],
       "unknown_dependencies": [],
       "swift_settings": []
+    },
+    {
+      "name": "PToolsVariantCore",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsVariantCore",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
     },
     {
       "name": "PToolsWeb",
@@ -7359,7 +8409,6 @@
         "DebugRuler",
         "DebugUserDefault",
         "DevMask",
-        "Inspector",
         "LocalConsole",
         "TouchInspector"
       ],
@@ -7383,6 +8432,94 @@
           "declaration": {
             "byName": [
               "PToolsConnectivity",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDebugConsoleUI",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugConsoleUI",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDebugCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDebugInspectorLegacyUI",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugInspectorLegacyUI",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDebugInventoryCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugInventoryCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDebugMetricsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugMetricsCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDebugMetricsUI",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugMetricsUI",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDebugNetworkCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugNetworkCore",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PToolsDebugStorageCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsDebugStorageCore",
               null
             ]
           }
@@ -9585,6 +10722,17 @@
           }
         },
         {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsSymbols",
           "kind": "internal",
           "package": null,
@@ -10275,6 +11423,17 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsCore",
+              null
+            ]
+          }
+        },
         {
           "name": "PToolsUIFoundation",
           "kind": "internal",
@@ -11555,5 +12714,13 @@
         }
       ]
     }
-  ]
+  ],
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-30T03:42:31Z",
+  "repository": "crazypoo/PTools",
+  "branch": "feature/pr46-pr50-inspector-layout-governance-20261030",
+  "sourceRevision": "0deb064cea510c896e78b35fab0997808e796173",
+  "sourceVersion": "5.69.0",
+  "generatorVersion": "Scripts/report_spm_dependency_graph.rb",
+  "sourceInputsDigest": "8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455"
 }

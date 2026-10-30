@@ -2,11 +2,13 @@
 Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
-Source revision: be6cf4b34b62ce2c36f7639993c3eac176fd9ecb
+Branch: feature/pr46-pr50-inspector-layout-governance-20261030
+Source revision: 0deb064cea510c896e78b35fab0997808e796173
 Source version: 5.69.0
-Source manifest hash: 94c1e59b766ece9262682fde24122d12c890cba2c87e2cf367c113fc1db6bb39
+Source inputs digest: 8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455
+Generator version: 1
 Generator: manual Duo validation record maintained with the repository gates
-Verification timestamp: 2026-10-24T19:13:14+08:00
+Generated at: 2026-10-30T03:42:31Z
 -->
 
 # iPhone Duo 设备验收记录 / Aceptación de dispositivo / Device acceptance

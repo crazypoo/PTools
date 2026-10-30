@@ -1,10 +1,14 @@
 <!--
+Current report metadata.
 AUTO-GENERATED FILE.
-DO NOT EDIT MANUALLY.
-
+Repository: crazypoo/PTools
+Branch: feature/pr46-pr50-inspector-layout-governance-20261030
+Source revision: 0deb064cea510c896e78b35fab0997808e796173
+Source version: 5.69.0
+Source inputs digest: 8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455
+Generator version: 1
 Generator: Scripts/report_concurrency.rb
-Source revision: 23f6f58d7b266175109501ec67df060cb2859650
-Generated at: 2026-10-19T07:31:19Z
+Generated at: 2026-10-30T03:42:31Z
 -->
 
 # PTools 当前 Swift 6 并发扫描
@@ -13,9 +17,9 @@ Generated at: 2026-10-19T07:31:19Z
 
 | 规则 | 数量 |
 | --- | ---: |
-| main_queue_async | 26 |
-| task_detached | 30 |
-| unchecked_sendable | 53 |
+| main_queue_async | 25 |
+| task_detached | 36 |
+| unchecked_sendable | 55 |
 
 ## 约束
 
