@@ -168,6 +168,36 @@ public struct PTRetryPolicy: Sendable, Equatable {
     }
 }
 
+// English: Opt-in request identity normalization. Authentication and response-variant headers
+// are never ignored, even when an application mistakenly includes them in the configuration.
+enum PTRequestIdentityPolicy {
+    static let metadataHeader = "PT-Identity-Ignored-Headers"
+    private static let protectedHeaders: Set<String> = [
+        "authorization", "proxy-authorization", "cookie", "token", "x-api-key",
+        "x-auth-token", "language", "accept-language", "package", "sign",
+        "signature", "host"
+    ]
+
+    static func ignoredHeaderNames(in request: URLRequest) -> Set<String> {
+        let value = request.value(forHTTPHeaderField: metadataHeader) ?? ""
+        let requested = Set(value.split(separator: ",").map {
+            $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        })
+        return requested.subtracting(protectedHeaders)
+    }
+
+    static func headerIdentity(in request: URLRequest, ignoring controls: Set<String> = []) -> String {
+        let ignored = ignoredHeaderNames(in: request)
+            .union(controls)
+            .union([metadataHeader.lowercased()])
+        return (request.allHTTPHeaderFields ?? [:])
+            .filter { !ignored.contains($0.key.lowercased()) }
+            .map { key, value in "\(key.lowercased())=\(value)" }
+            .sorted()
+            .joined(separator: "\n")
+    }
+}
+
 public struct RequestKey: Hashable, Sendable {
     let url: String
     let method: String
@@ -183,10 +213,7 @@ public struct RequestKey: Hashable, Sendable {
         // 中文：Swift 的 hashValue 在不同进程中会变化；稳定的请求体和请求头快照保证请求身份确定。
         let body = request.httpBody?.sortedJSONData() ?? Data()
         self.paramsHash = body.base64EncodedString()
-        let headers = (request.allHTTPHeaderFields ?? [:])
-            .map { key, value in "\(key.lowercased())=\(value)" }
-            .sorted()
-            .joined(separator: "\n")
+        let headers = PTRequestIdentityPolicy.headerIdentity(in: request)
         self.headersHash = Data(headers.utf8).base64EncodedString()
         self.responseType = String(reflecting: responseType)
     }
@@ -210,6 +237,10 @@ public struct PTNetworkConfig: Sendable {
     public var networkCacheOption: PTNetworkCachePolicy = .cacheElseNetwork
     public var networkCacheExpiration: String = "600"
     public var networkDedupOption: PTNetworkDedupPolicy = .custom("auto")
+    /// Header names excluded from cache and in-flight request identity, not from the wire.
+    /// Keep this empty by default; the caller must opt in only for non-semantic headers
+    /// such as a request timestamp. Authentication/locale headers are always protected.
+    public var requestIdentityIgnoredHeaders: Set<String> = []
 
     public var maxDiskSize: Int64 = 100 * 1024 * 1024
     public var cleanThreshold: Double = 0.7

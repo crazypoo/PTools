@@ -484,6 +484,20 @@ public final class Network: @unchecked Sendable {
         return globalURL + original
     }
 
+    // Configure cache/dedup identity at the execution boundary, not in API headers.
+    // This also covers manually created URLRequests and applications using custom headers.
+    // The metadata is strictly local and removed before transport.
+    static func applyRequestIdentityConfiguration(_ request: inout URLRequest,
+                                                  configuration: PTNetworkConfig) {
+        let names = configuration.requestIdentityIgnoredHeaders
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
+            .filter { !$0.isEmpty }
+            .sorted()
+        // Do not trust a same-named header supplied by the caller.
+        request.setValue(names.isEmpty ? nil : names.joined(separator: ","),
+                         forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
+    }
+
     // MARK: - ================= 5. 底层核心执行引擎 =================
 
     /// 所有非上传请求共用的执行边界：插件、mock、取消、去重和错误日志
@@ -500,6 +514,7 @@ public final class Network: @unchecked Sendable {
         var request = request
         let pluginSnapshot = plugins
         let configurationSnapshot = config
+        Self.applyRequestIdentityConfiguration(&request, configuration: configurationSnapshot)
         for plugin in pluginSnapshot {
             await plugin.willSend(&request)
         }
@@ -565,9 +580,12 @@ public final class Network: @unchecked Sendable {
                                   plugins: [NetworkPlugin],
                                   configuration: PTNetworkConfig) async throws -> PTNetworkResponseSnapshot {
         let session = self.session
+        // Identity metadata affects local cache/dedup keys only. Never send it to a server.
+        var wireRequest = request
+        wireRequest.setValue(nil, forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
         let dataTask = uploadBody.map {
-            session.upload($0, with: request).serializingData()
-        } ?? session.request(request).serializingData()
+            session.upload($0, with: wireRequest).serializingData()
+        } ?? session.request(wireRequest).serializingData()
         let response = await withTaskCancellationHandler(operation: {
             await dataTask.response
         }, onCancel: {
@@ -642,6 +660,7 @@ public final class Network: @unchecked Sendable {
         var request = request
         let pluginSnapshot = plugins
         let configurationSnapshot = config
+        Self.applyRequestIdentityConfiguration(&request, configuration: configurationSnapshot)
         for plugin in pluginSnapshot {
             await plugin.willSend(&request)
         }
@@ -654,10 +673,12 @@ public final class Network: @unchecked Sendable {
         }
 
         let finalRequest = request
+        var wireRequest = finalRequest
+        wireRequest.setValue(nil, forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
         let session = self.session
         let dataTask = uploadBody.map {
-            session.upload($0, with: finalRequest).serializingData()
-        } ?? session.request(finalRequest).serializingData()
+            session.upload($0, with: wireRequest).serializingData()
+        } ?? session.request(wireRequest).serializingData()
         let response = await withTaskCancellationHandler(operation: {
             await dataTask.response
         }, onCancel: {
