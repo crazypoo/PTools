@@ -50,6 +50,12 @@ swift build --triple arm64-apple-ios17.0-simulator --target PooToolsDEBUG
 
 Never blindly accept generated report drift or mutate version baselines solely to force a green check; regenerate with the existing generator, review every difference, and rerun check mode.
 
+### Confirmed current full-governance blocker
+
+The Linux report generator first failed because `cocoapods` was not installed; its CI job now installs CocoaPods 1.16.2. The next run reached the pre-existing hard file-size rule and failed on **`PooToolsSource/Base/PTNavigationBarManager.swift` (2,499 lines, limit 2,000)**. This navigation-bar refactor is outside the Debug compatibility patch, and must not be silently waived or changed without its own iOS 26/27, transition, large-title and multi-scene regression. Because the generator aborts there, its reproducibility check is **not yet passed**, even if the Debug Core smoke checks are green.
+
+The separate Apple SDK job is currently queued; neither 300+ source Inspector compilation nor CocoaPods lint is confirmed. Keep the PR Draft until these blockers are addressed.
+
 ## 6.0 real-device acceptance
 
 Test Debug and Release on supported iPhones, multiple active UIWindowScenes and one real Mac Studio. Confirm: (1) Bonjour discovery; (2) CA/TLS pin trust; (3) explicit authorization/pairing; (4) live requests and ACK; (5) delete/reset; (6) reconnect after app/background/network change; (7) bad peer rejection. Also check Inspector hierarchy/selection/highlight/edit/Undo, Console visibility/observer cleanup, Storage/Defaults metadata privacy, 30-minute idle capture overhead, bounded memory and at least 100/500/1000 network records.
