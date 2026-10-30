@@ -172,6 +172,8 @@ jobs:
       - name: Install CocoaPods report parser
         run: |
           sudo gem install cocoapods -v 1.16.2 --no-document
+      - name: Verify report comparator reports actionable drift paths
+        run: ruby Tests/Governance/test_compare_current_reports.rb
       - name: Compare actual generator outputs against committed reports
         run: |
           bash Scripts/Governance/generate_all_current_reports.sh --check
