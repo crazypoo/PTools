@@ -3,9 +3,6 @@
 // 中文：不可变、类型化的记录构成网络观测器的公开边界。
 
 import Foundation
-#if SWIFT_PACKAGE
-import ptools
-#endif
 
 public enum PTNetworkCaptureSource: String, Codable, Sendable {
     case ptoolsNetwork
