@@ -5,6 +5,24 @@
 import UIKit
 import PooTools
 import SnapKit
+#if canImport(PToolsAccessibility)
+import PToolsAccessibility
+#endif
+#if canImport(PToolsContentState)
+import PToolsContentState
+#endif
+#if canImport(PToolsDeepLink)
+import PToolsDeepLink
+#endif
+#if canImport(PToolsStorageCore)
+import PToolsStorageCore
+#endif
+#if canImport(PToolsSimulationCore)
+import PToolsSimulationCore
+#endif
+#if canImport(PToolsRouteCore)
+import PToolsRouteCore
+#endif
 #if canImport(PToolsDate)
 import PToolsDate
 #endif
@@ -138,6 +156,14 @@ enum PTDemoRegistry {
     // Español: La lista de descriptores es la única fuente de identidad; la UI no se usa como identidad.
     // 中文：描述符列表是 Example 唯一的身份来源，UI 文本不再承担身份职责。
     static let descriptors: [PTDemoDescriptor] = [
+        make("text.filter-words-lab", "PooToolsCheckDirtyWord", "Text · Word Filter", .coreFoundation, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("data.country-codes-lab", "PooToolsCountry", "Country · Dialing Codes", .coreFoundation, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("ui.accessibility-lab", "PToolsAccessibility", "Accessibility · Audit", .themeAccessibility, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("ui.content-state-lab", "PToolsContentState", "Content State · Recovery", .uiComponents, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("navigation.deep-link-lab", "PToolsDeepLink", "Deep Link · Parser", .navigationRouting, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("storage.namespace-lab", "PToolsStorageCore", "Storage · Namespaces", .storageData, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("debug.simulation-clock-lab", "PToolsSimulationCore", "Simulation · Virtual Time", .debugDiagnostics, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("navigation.route-value-lab", "PToolsRouteCore", "Route · Typed Request", .navigationRouting, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
         make("ui.checkbox-lab", "PooToolsCheckBox", "CheckBox · State & Styles", .uiComponents, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
         make("text.pinyin-lab", "PooToolsChinesePinyin", "Pinyin · Initial Letter", .coreFoundation, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
         make("ui.half-circle-lab", "PooToolsCircle", "Half Circle · Directions", .uiComponents, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
@@ -3168,7 +3194,11 @@ final class PTMissingModuleDemoViewController: UIViewController {
         "input.searchbar-lab", "ui.pagecontrol-lab", "device.haptics-lab",
         "core.date-parser-lab", "network.connectivity-lab",
         "security.keychain-lab", "ui.symbols-lab", "debug.logging-lab",
-        "modern.web-lab"
+        "modern.web-lab",
+        "text.filter-words-lab", "data.country-codes-lab", "ui.accessibility-lab",
+        "ui.content-state-lab", "navigation.deep-link-lab",
+        "storage.namespace-lab", "debug.simulation-clock-lab",
+        "navigation.route-value-lab"
     ]
 
     private let demoID: String
@@ -3225,6 +3255,14 @@ final class PTMissingModuleDemoViewController: UIViewController {
         resultLabel.textColor = .secondaryLabel
         resultLabel.text = "Ready"
         switch demoID {
+        case "text.filter-words-lab": configureWordFilter()
+        case "data.country-codes-lab": configureCountryCodes()
+        case "ui.accessibility-lab": configureAccessibility()
+        case "ui.content-state-lab": configureContentState()
+        case "navigation.deep-link-lab": configureDeepLink()
+        case "storage.namespace-lab": configureStorageNamespace()
+        case "debug.simulation-clock-lab": configureSimulationClock()
+        case "navigation.route-value-lab": configureRouteValue()
         case "ui.checkbox-lab": configureCheckBox()
         case "text.pinyin-lab": configurePinyin()
         case "ui.half-circle-lab": configureCircle()
@@ -3283,6 +3321,130 @@ final class PTMissingModuleDemoViewController: UIViewController {
     private func addControl(_ control: UIView, height: CGFloat = 52) {
         stackView.addArrangedSubview(control)
         control.heightAnchor.constraint(equalToConstant: height).isActive = true
+    }
+
+
+    private func configureWordFilter() {
+        let source = PTCheckFWords()
+        let fileURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("ptools-example-filter-\(UUID().uuidString).txt")
+        do {
+            try "forbidden|blocked".write(to: fileURL, atomically: true, encoding: .utf8)
+            source.initFilter(filePath: fileURL.path)
+            try? FileManager.default.removeItem(at: fileURL)
+        } catch {
+            show("Unable to create local sample: \(error)")
+            return
+        }
+        let field = addField("Input text", value: "a forbidden phrase")
+        addButton("Filter with PTools") { [weak self, weak field] in
+            let original = field?.text ?? ""
+            let contains = source.haveFWord(str: original as NSString)
+            self?.show("Matched: \(contains)\nFiltered: \(source.filter(str: original as NSString))")
+        }
+    }
+
+    private func configureCountryCodes() {
+        let field = addField("Country name", value: "Singapore")
+        addButton("Find calling codes") { [weak self, weak field] in
+            let term = (field?.text ?? "").trimmingCharacters(in: .whitespaces)
+            guard !term.isEmpty else { self?.show("Enter a country name"); return }
+            let values = PTCountryCodes.share.codesModels()
+                .filter { $0.countryName.localizedCaseInsensitiveContains(term) }
+                .prefix(8)
+                .map { "\($0.countryName): \($0.countryCode)" }
+            self?.show(values.isEmpty ? "No matches" : values.joined(separator: "\n"))
+        }
+    }
+
+    private func configureAccessibility() {
+        let target = UIButton(type: .system)
+        target.setTitle("Accessible button", for: .normal)
+        target.isAccessibilityElement = true
+        target.accessibilityLabel = "Example accessibility target"
+        addControl(target, height: 48)
+        addButton("Read environment and audit target") { [weak self, weak target] in
+            guard let target else { return }
+            let environment = PTAccessibilityEnvironment.current
+            let issues = PTAccessibilityFocusCoordinator.shared.audit(target)
+            self?.show("VoiceOver: \(environment.isVoiceOverRunning)\nReduce Motion: \(environment.isReduceMotionEnabled)\nContent Size: \(environment.contentSizeCategory)\nAudit findings: \(issues.count)")
+        }
+    }
+
+    private func configureContentState() {
+        let contentView = PTContentStateView(frame: .zero)
+        addControl(contentView, height: 180)
+        contentView.onRetry = { [weak self, weak contentView] in
+            contentView?.render(.loading)
+            self?.show("Retry requested")
+        }
+        addButton("Loading") { [weak self, weak contentView] in
+            contentView?.render(.loading)
+            self?.show("Loading state")
+        }
+        addButton("Empty with recovery") { [weak self, weak contentView] in
+            contentView?.render(.empty(PTEmptyState(title: "No items", message: "Try a refresh", actionTitle: "Retry")))
+            self?.show("Empty state and retry action")
+        }
+        addButton("Retryable error") { [weak self, weak contentView] in
+            contentView?.render(.error(PTContentError(message: "Offline fixture", retryable: true)))
+            self?.show("Error state")
+        }
+    }
+
+    private func configureDeepLink() {
+        let field = addField("URL scheme", value: "ptools://product/42?source=demo")
+        addButton("Parse into route request") { [weak self, weak field] in
+            guard let url = URL(string: field?.text ?? "") else {
+                self?.show("Invalid URL")
+                return
+            }
+            do {
+                let request = try PTDeepLinkParser.request(
+                    from: url,
+                    configuration: PTDeepLinkConfiguration(schemes: ["ptools"]))
+                self?.show("Route: \(request.route.id.rawValue)\nSource: \(request.source.rawValue)\nParameters: \(request.parameters.count)")
+            } catch {
+                self?.show("Parse rejected: \(error)")
+            }
+        }
+    }
+
+    private func configureStorageNamespace() {
+        let account = addField("Account scope", value: "example-user")
+        let feature = addField("Feature", value: "favorites")
+        addButton("Generate isolated storage key") { [weak self, weak account, weak feature] in
+            let scope = PTStorageNamespace(module: "PToolsExample",
+                                           feature: feature?.text ?? "demo",
+                                           account: account?.text ?? "guest",
+                                           environment: "sandbox")
+            self?.show(scope.scopedKey("lastViewed"))
+        }
+    }
+
+    private func configureSimulationClock() {
+        let clock = PTSimulationClock(mode: .manual)
+        addButton("Advance virtual time by 5 seconds") { [weak self] in
+            self?.monitoringTask?.cancel()
+            self?.monitoringTask = Task { [weak self] in
+                await clock.advance(by: .seconds(5))
+                let now = await clock.now()
+                guard !Task.isCancelled else { return }
+                self?.show("Simulated elapsed time: \(now)")
+            }
+        }
+    }
+
+    private func configureRouteValue() {
+        let field = addField("Route identifier", value: "product.details")
+        addButton("Build typed route request") { [weak self, weak field] in
+            let name = field?.text ?? "product.details"
+            let request = PTRouteRequest(
+                route: PTRoute(id: PTRouteID(rawValue: name)),
+                parameters: ["offerId": .string("123456")],
+                source: .internalCall)
+            self?.show("Route: \(request.route.id.rawValue)\nParameters: \(request.parameters.count)\nSource: \(request.source.rawValue)")
+        }
     }
 
     private func configureCheckBox() {
