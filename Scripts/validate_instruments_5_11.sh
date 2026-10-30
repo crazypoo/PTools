@@ -151,4 +151,12 @@ if rg -n '^import (UIKit|AppKit|SwiftUI)' PooToolsSource/PToolsDebugCore/PTDebug
   exit 1
 fi
 
+require_fragment "Package.swift" 'name: "PToolsDebugInspectorLegacyUI"' "full local Inspector UIKit target"
+require_fragment "Package.swift" 'name: "PToolsDebugConsoleCore"' "Console data core target"
+require_fragment "Package.swift" 'exclude: ["PTDebugEvents.swift"]' "Debug Core compilation must not duplicate Console events"
+require_fragment "Package.swift" 'path: "PooToolsSource/Inspector"' "Inspector source ownership"
+require_fragment "PooToolsSource/Debug/PTDebugInspectorLegacyExports.swift" '@_exported import PToolsDebugInspectorLegacyUI' "Inspector 5.x import facade"
+require_fragment "PooToolsSource/PToolsDebugCore/PTDebugConsoleExports.swift" '@_exported import PToolsDebugConsoleCore' "Console 5.x import facade"
+require_fragment "PooToolsSource/Debug/PTInstrumentsUI.swift" 'PTDebugTimelineGeometry(' "Metrics UI uses independent geometry"
+require_fragment "PooToolsSource/DebugNetwork/PTNetworkWatcherViewController.swift" 'changes(bufferingNewest: 32)' "DebugNetwork UI bounded subscriber"
 printf 'PTInstruments 5.11 static contract OK\n'
