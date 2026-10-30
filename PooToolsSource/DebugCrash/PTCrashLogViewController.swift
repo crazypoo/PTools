@@ -98,7 +98,6 @@ class PTCrashLogViewController: PTBaseViewController {
             make.top.equalToSuperview()
         }
         
-        PTNSLogConsole("▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️▶️\(PTHttpDatasource.shared.httpModels)")
     
         listDataSet()
     }
