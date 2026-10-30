@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_file_size_gate.sh",
-  "source_revision": "0deb064cea510c896e78b35fab0997808e796173",
-  "generated_at": "2026-10-30T03:42:31Z",
+  "source_revision": "eadf0ed898e0dc20ab7c4186a09b5323197bd609",
+  "generated_at": "2026-10-30T03:44:41Z",
   "thresholds": {
     "warning": 1000,
     "architecture_exception": 1500,
@@ -6319,10 +6319,10 @@
   "architecture_exception_count": 12,
   "hard_limit_allowlisted_count": 5,
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T03:42:31Z",
+  "generatedAt": "2026-10-30T03:44:41Z",
   "repository": "crazypoo/PTools",
   "branch": "feature/pr46-pr50-inspector-layout-governance-20261030",
-  "sourceRevision": "0deb064cea510c896e78b35fab0997808e796173",
+  "sourceRevision": "eadf0ed898e0dc20ab7c4186a09b5323197bd609",
   "sourceVersion": "5.69.0",
   "generatorVersion": "Scripts/validate_file_size_gate.sh",
   "sourceInputsDigest": "8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455"
