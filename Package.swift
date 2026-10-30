@@ -296,7 +296,9 @@ let package = Package(
         // ==========================================
         .library(name: "PToolsDebugCore", targets: ["PToolsDebugCore"]),
         .library(name: "PToolsDebugConsoleCore", targets: ["PToolsDebugConsoleCore"]),
+        .library(name: "PToolsDebugConsoleUI", targets: ["PToolsDebugConsoleUI"]),
         .library(name: "PToolsDebugMetricsCore", targets: ["PToolsDebugMetricsCore"]),
+        .library(name: "PToolsDebugMetricsUI", targets: ["PToolsDebugMetricsUI"]),
         .library(name: "PToolsDebugInspectorCore", targets: ["PToolsDebugInspectorCore"]),
         .library(name: "PToolsDebugInspectorUI", targets: ["PToolsDebugInspectorUI"]),
         .library(name: "PToolsDebugInspectorLegacyUI", targets: ["PToolsDebugInspectorLegacyUI"]),
@@ -1172,7 +1174,7 @@ let package = Package(
         // ==========================================
         .target(
             name: "PooToolsDEBUG",
-            dependencies: ["PToolsDebugInspectorLegacyUI", "PToolsDebugNetworkCore", "PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "PToolsDebugStorageCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
+            dependencies: ["PToolsDebugInspectorLegacyUI", "PToolsDebugConsoleUI", "PToolsDebugMetricsUI", "PToolsDebugNetworkCore", "PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "PToolsDebugStorageCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
             path: "PooToolsSource",
             exclude: ["DebugNetwork/PTNetworkCaptureModels.swift", "DebugNetwork/PTNetworkCaptureStore.swift", "DebugNetwork/PTNetworkRedactor.swift", "Debug/PTDebugInventory.swift"],
             sources: [
@@ -1191,6 +1193,14 @@ let package = Package(
             sources: ["PTDebugEvents.swift"],
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
+        // Only scene-bound UIWindow presentation. Debug management remains in
+        // PooToolsDEBUG to avoid reverse dependencies/cycles.
+        .target(
+            name: "PToolsDebugConsoleUI",
+            dependencies: ["PToolsOverlay", "SnapKit"],
+            path: "PooToolsSource/PToolsDebugConsoleUI",
+            swiftSettings: [.define("POOTOOLS_DEBUG")]
+        ),
         .target(
             name: "PToolsDebugCore",
             dependencies: ["PToolsDebugConsoleCore"],
@@ -1202,6 +1212,12 @@ let package = Package(
             name: "PToolsDebugMetricsCore",
             path: "PooToolsSource/PToolsDebugMetricsCore",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        // Lightweight UIKit grid renderer; no timer, recorder or sampler.
+        .target(
+            name: "PToolsDebugMetricsUI",
+            path: "PooToolsSource/PToolsDebugMetricsUI",
+            swiftSettings: [.define("POOTOOLS_DEBUG")]
         ),
         // UIKit-free Inspector snapshot identity reused by Studio and tests.
         .target(
@@ -1440,7 +1456,7 @@ let package = Package(
         // 中文：让 DebugNetwork 合约测试紧邻观测 target，避免新增第二套抓包实现。
         .testTarget(
             name: "PToolsDebugTests",
-            dependencies: ["PooToolsDEBUG", "PooToolsDEBUGTrackingEyes"],
+            dependencies: ["PooToolsDEBUG", "PooToolsDEBUGTrackingEyes", "PToolsDebugConsoleUI", "PToolsDebugMetricsUI"],
             path: "Tests/PToolsDebugTests",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
