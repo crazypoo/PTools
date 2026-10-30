@@ -86,7 +86,7 @@ public enum PTVisionRectangleDetection {
                 }
 
                 try Task.checkCancellation()
-                let observations = (request.results as? [VNRectangleObservation] ?? [])
+                let observations = (request.results ?? [])
                     .map {
                         PTVisionRectangleObservation(boundingBox: $0.boundingBox,
                                                      topLeft: $0.topLeft,

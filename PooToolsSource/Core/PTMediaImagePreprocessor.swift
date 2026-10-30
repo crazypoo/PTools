@@ -112,7 +112,7 @@ public enum PTMediaImagePreprocessor {
     public static func prepare(image: UIImage,
                                configuration: PTMediaImagePreprocessingConfiguration = .init()) async throws -> PTPreparedMediaImage {
         let sourceData: Data?
-        if image.cgImage?.alphaInfo == .none,
+        if image.cgImage?.alphaInfo == CGImageAlphaInfo.none,
            let jpegData = image.jpegData(compressionQuality: 1) {
             sourceData = jpegData
         } else {

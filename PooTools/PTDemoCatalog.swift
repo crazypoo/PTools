@@ -3358,6 +3358,7 @@ final class PTMissingModuleDemoViewController: UIViewController {
     }
 
     private func configureAccessibility() {
+#if canImport(PToolsAccessibility)
         let target = UIButton(type: .system)
         target.setTitle("Accessible button", for: .normal)
         target.isAccessibilityElement = true
@@ -3369,9 +3370,13 @@ final class PTMissingModuleDemoViewController: UIViewController {
             let issues = PTAccessibilityFocusCoordinator.shared.audit(target)
             self?.show("VoiceOver: \(environment.isVoiceOverRunning)\nReduce Motion: \(environment.isReduceMotionEnabled)\nContent Size: \(environment.contentSizeCategory)\nAudit findings: \(issues.count)")
         }
+#else
+        show("PToolsAccessibility is not linked in this consumer")
+#endif
     }
 
     private func configureContentState() {
+#if canImport(PToolsContentState)
         let contentView = PTContentStateView(frame: .zero)
         addControl(contentView, height: 180)
         contentView.onRetry = { [weak self, weak contentView] in
@@ -3390,6 +3395,9 @@ final class PTMissingModuleDemoViewController: UIViewController {
             contentView?.render(.error(PTContentError(message: "Offline fixture", retryable: true)))
             self?.show("Error state")
         }
+#else
+        show("PToolsContentState is not linked in this consumer")
+#endif
     }
 
     private func configureDeepLink() {
@@ -3423,6 +3431,7 @@ final class PTMissingModuleDemoViewController: UIViewController {
     }
 
     private func configureSimulationClock() {
+#if canImport(PToolsSimulationCore)
         let clock = PTSimulationClock(mode: .manual)
         addButton("Advance virtual time by 5 seconds") { [weak self] in
             self?.monitoringTask?.cancel()
@@ -3433,6 +3442,9 @@ final class PTMissingModuleDemoViewController: UIViewController {
                 self?.show("Simulated elapsed time: \(now)")
             }
         }
+#else
+        show("PToolsSimulationCore is not linked in this consumer")
+#endif
     }
 
     private func configureRouteValue() {
