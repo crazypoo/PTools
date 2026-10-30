@@ -17,7 +17,10 @@ the public Inspector API, Scene windows, Metrics recorder or Debug sampler owner
 
 The previous PR41–45 `Quality` workflow already proves the Foundation Debug compile and
 source ownership smoke passed. The generator comparison failed because checked-in reports
-were stale. The PR46 workflow repairs the **source files' reports**, not the gate:
+were stale. The PR46 workflow subsequently committed refreshed generator-owned
+`report/current` artifacts as commit `9cde6ab2336179514f494a52e16b92918cbcf268`.
+That is source-derived output, **not** evidence that the complete Xcode or
+governance suite passed. The PR46 workflow repairs the **source files' reports**, not the gate:
 ```sh
 bash Scripts/Governance/generate_all_current_reports.sh --write
 bash Scripts/Governance/generate_all_current_reports.sh --check
