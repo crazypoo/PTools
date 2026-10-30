@@ -26,9 +26,11 @@ final class PTDebugNetworkCoreTests: XCTestCase {
         let duplicate = await store.insert(record(id))
         XCTAssertEqual(first.id, duplicate.id)
         XCTAssertEqual(first.sequence, duplicate.sequence)
-        XCTAssertEqual(await store.summaries().count, 1)
+        let firstCount = await store.summaries().count
+        XCTAssertEqual(firstCount, 1)
         _ = await store.insert(record())
-        XCTAssertEqual(await store.summaries().count, 2)
+        let secondCount = await store.summaries().count
+        XCTAssertEqual(secondCount, 2)
     }
 
     func testExactlyOnceFinalizeAndClear() async {
@@ -53,7 +55,7 @@ final class PTDebugNetworkCoreTests: XCTestCase {
     func testPrivacyRedactionOccursBeforeConsumerProjection() {
         let secret = record()
         let sanitized = secret.redacted()
-        XCTAssertNil(sanitized.request.headers["Authorization"])
+        XCTAssertEqual(sanitized.request.headers["Authorization"], "[REDACTED]")
         XCTAssertFalse(sanitized.request.url.absoluteString.contains("secret"))
     }
 }
