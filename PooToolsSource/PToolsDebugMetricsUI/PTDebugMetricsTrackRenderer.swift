@@ -9,16 +9,18 @@ public enum PTDebugMetricsTrackRenderer {
     public static func drawTrackGrid(titles: [String], width: CGFloat,
                                      context: CGContext?) {
         context?.setLineWidth(1)
+        // Resolve Dynamic Type font and foreground once per paint pass,
+        // not once per visible track. Do not cache across trait changes.
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.preferredFont(forTextStyle: .caption1),
+            .foregroundColor: UIColor.secondaryLabel
+        ]
         for (index, title) in titles.enumerated() {
             let y = CGFloat(index * 48) + 24
             UIColor.separator.setStroke()
             context?.move(to: CGPoint(x: 0, y: y + 16))
             context?.addLine(to: CGPoint(x: width, y: y + 16))
             context?.strokePath()
-            let attributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.preferredFont(forTextStyle: .caption1),
-                .foregroundColor: UIColor.secondaryLabel
-            ]
             title.draw(at: CGPoint(x: 8, y: y - 18), withAttributes: attributes)
         }
     }
