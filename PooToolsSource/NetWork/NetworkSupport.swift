@@ -291,11 +291,7 @@ public actor NetworkCache {
             "if-none-match",
             "if-modified-since"
         ]
-        let headers = (request.allHTTPHeaderFields ?? [:])
-            .filter { !controlHeaders.contains($0.key.lowercased()) }
-            .map { key, value in "\(key.lowercased())=\(value)" }
-            .sorted()
-            .joined(separator: "\n")
+        let headers = PTRequestIdentityPolicy.headerIdentity(in: request, ignoring: controlHeaders)
         // English: Cache-control and revalidation headers must not change the resource identity.
         // Español: Las cabeceras de control y revalidación no deben cambiar la identidad del recurso.
         // 中文：缓存控制头和重新验证头不能改变资源本身的缓存身份。
