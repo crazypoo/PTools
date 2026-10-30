@@ -474,6 +474,13 @@ public final class Network: @unchecked Sendable {
         apiHeader["cachePolicy"] = finalCachePolicy.rawValue
         apiHeader["cacheExpire"] = configurationSnapshot.networkCacheExpiration
         apiHeader["dedupPolicy"] = configurationSnapshot.networkDedupOption.getOptionName()
+        let ignoredIdentityHeaders = configurationSnapshot.requestIdentityIgnoredHeaders
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
+            .filter { !$0.isEmpty }
+            .sorted()
+        if !ignoredIdentityHeaders.isEmpty {
+            apiHeader[PTRequestIdentityPolicy.metadataHeader] = ignoredIdentityHeaders.joined(separator: ",")
+        }
         return addToken(to: apiHeader, configuration: configurationSnapshot)
     }
     
@@ -565,9 +572,12 @@ public final class Network: @unchecked Sendable {
                                   plugins: [NetworkPlugin],
                                   configuration: PTNetworkConfig) async throws -> PTNetworkResponseSnapshot {
         let session = self.session
+        // Identity metadata affects local cache/dedup keys only. Never send it to a server.
+        var wireRequest = request
+        wireRequest.setValue(nil, forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
         let dataTask = uploadBody.map {
-            session.upload($0, with: request).serializingData()
-        } ?? session.request(request).serializingData()
+            session.upload($0, with: wireRequest).serializingData()
+        } ?? session.request(wireRequest).serializingData()
         let response = await withTaskCancellationHandler(operation: {
             await dataTask.response
         }, onCancel: {
@@ -654,10 +664,12 @@ public final class Network: @unchecked Sendable {
         }
 
         let finalRequest = request
+        var wireRequest = finalRequest
+        wireRequest.setValue(nil, forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
         let session = self.session
         let dataTask = uploadBody.map {
-            session.upload($0, with: finalRequest).serializingData()
-        } ?? session.request(finalRequest).serializingData()
+            session.upload($0, with: wireRequest).serializingData()
+        } ?? session.request(wireRequest).serializingData()
         let response = await withTaskCancellationHandler(operation: {
             await dataTask.response
         }, onCancel: {
