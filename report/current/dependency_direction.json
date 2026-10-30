@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "eadf0ed898e0dc20ab7c4186a09b5323197bd609",
-  "generated_at": "2026-10-30T03:44:41Z",
+  "source_revision": "98086745a5deb64f173282d5cdfa5faaed2e2106",
+  "generated_at": "2026-10-30T03:49:02Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
     "ptools -> local target is forbidden except approved local layers, including PToolsConstraintLayout and PToolsTransferCore",
@@ -1179,10 +1179,10 @@
   "allowed_legacy_edges": [],
   "violations": [],
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T03:44:41Z",
+  "generatedAt": "2026-10-30T03:49:02Z",
   "repository": "crazypoo/PTools",
   "branch": "feature/pr46-pr50-inspector-layout-governance-20261030",
-  "sourceRevision": "eadf0ed898e0dc20ab7c4186a09b5323197bd609",
+  "sourceRevision": "98086745a5deb64f173282d5cdfa5faaed2e2106",
   "sourceVersion": "5.69.0",
   "generatorVersion": "Scripts/validate_dependency_direction.sh",
   "sourceInputsDigest": "8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455"

@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: feature/pr46-pr50-inspector-layout-governance-20261030
-Source revision: eadf0ed898e0dc20ab7c4186a09b5323197bd609
+Source revision: 98086745a5deb64f173282d5cdfa5faaed2e2106
 Source version: 5.69.0
 Source inputs digest: 8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455
 Generator version: 1
 Generator: current-report-normalizer
-Generated at: 2026-10-30T03:44:41Z
+Generated at: 2026-10-30T03:49:02Z
 -->
 <!-- Manual evidence is kept separate from generated scanner output. / La evidencia manual se mantiene separada del escáner generado. / 人工证据与扫描器生成结果分开保存。 -->
 Source revision: be6cf4b34b62ce2c36f7639993c3eac176fd9ecb
