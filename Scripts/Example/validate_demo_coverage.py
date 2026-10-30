@@ -20,7 +20,7 @@ VERSION = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
 CATALOG_SOURCE = ROOT / "PooTools/PTDemoCatalog.swift"
 # Existing runnable modules without direct demo entries when this audit was introduced.
 # This is a decreasing ratchet; do not increase it to make CI green.
-RUNNABLE_DEMO_DEBT_BASELINE = 63
+RUNNABLE_DEMO_DEBT_BASELINE = 55
 
 ALLOWED_COVERAGE = {
     "runnable",
