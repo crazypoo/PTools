@@ -300,6 +300,7 @@ let package = Package(
         .library(name: "PToolsDebugInspectorUI", targets: ["PToolsDebugInspectorUI"]),
         .library(name: "PToolsDebugNetworkCore", targets: ["PToolsDebugNetworkCore"]),
         .library(name: "PToolsDebugInventoryCore", targets: ["PToolsDebugInventoryCore"]),
+        .library(name: "PToolsDebugStorageCore", targets: ["PToolsDebugStorageCore"]),
         .library(name: "PooToolsDEBUG", targets: ["PooToolsDEBUG"]),
         // Explicit opt-in transport of redacted DebugNetwork events; omitted from PooToolsAll.
         .library(name: "PToolsStudioProtocolCore", targets: ["PToolsStudioProtocolCore"]),
@@ -1169,9 +1170,9 @@ let package = Package(
         // ==========================================
         .target(
             name: "PooToolsDEBUG",
-            dependencies: ["PToolsDebugNetworkCore", "PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
+            dependencies: ["PToolsDebugNetworkCore", "PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "PToolsDebugStorageCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
             path: "PooToolsSource",
-            exclude: ["DebugNetwork/PTNetworkCaptureModels.swift", "DebugNetwork/PTNetworkCaptureStore.swift", "DebugNetwork/PTNetworkRedactor.swift"],
+            exclude: ["DebugNetwork/PTNetworkCaptureModels.swift", "DebugNetwork/PTNetworkCaptureStore.swift", "DebugNetwork/PTNetworkRedactor.swift", "Debug/PTDebugInventory.swift"],
             sources: [
                 "Debug", "LocalConsole", "DevMask", "TouchInspector", "DEBUGLocation",
                 "Inspector", "DebugLibs", "DebugCrash", "DebugFile", "DebugColor",
@@ -1217,6 +1218,13 @@ let package = Package(
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .target(
+            name: "PToolsDebugStorageCore",
+            dependencies: ["PToolsDebugInventoryCore"],
+            path: "PooToolsSource/Debug",
+            sources: ["PTDebugInventory.swift"],
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
             name: "PToolsDebugInventoryCore",
             path: "PooToolsSource/PToolsDebugInventoryCore",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
@@ -1230,7 +1238,7 @@ let package = Package(
         ),
         .target(
             name: "PToolsDebugStudioBridge",
-            dependencies: ["PooToolsDEBUG", "PToolsStudioProtocolCore", "PToolsDebugInspectorCore", "PToolsDebugInspectorUI", "PToolsDebugNetworkCore"],
+            dependencies: ["PooToolsDEBUG", "PToolsDebugStorageCore", "PToolsStudioProtocolCore", "PToolsDebugInspectorCore", "PToolsDebugInspectorUI", "PToolsDebugNetworkCore"],
             path: "PooToolsSource/DebugStudioBridge",
             swiftSettings: [.define("POOTOOLS_DEBUG_STUDIO_BRIDGE")]
         ),
