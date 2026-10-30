@@ -1445,6 +1445,12 @@ let package = Package(
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .testTarget(
+            name: "PToolsDebugStorageCoreTests",
+            dependencies: ["PToolsDebugStorageCore"],
+            path: "Tests/PToolsDebugStorageCoreTests",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .testTarget(
             name: "PToolsDebugInventoryCoreTests",
             dependencies: ["PToolsDebugInventoryCore"],
             path: "Tests/PToolsDebugInventoryCoreTests",
