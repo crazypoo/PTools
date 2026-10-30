@@ -298,6 +298,7 @@ let package = Package(
         .library(name: "PToolsDebugMetricsCore", targets: ["PToolsDebugMetricsCore"]),
         .library(name: "PToolsDebugInspectorCore", targets: ["PToolsDebugInspectorCore"]),
         .library(name: "PToolsDebugInspectorUI", targets: ["PToolsDebugInspectorUI"]),
+        .library(name: "PToolsDebugInspectorLegacyUI", targets: ["PToolsDebugInspectorLegacyUI"]),
         .library(name: "PToolsDebugNetworkCore", targets: ["PToolsDebugNetworkCore"]),
         .library(name: "PToolsDebugInventoryCore", targets: ["PToolsDebugInventoryCore"]),
         .library(name: "PToolsDebugStorageCore", targets: ["PToolsDebugStorageCore"]),
@@ -1170,12 +1171,12 @@ let package = Package(
         // ==========================================
         .target(
             name: "PooToolsDEBUG",
-            dependencies: ["PToolsDebugNetworkCore", "PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "PToolsDebugStorageCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
+            dependencies: ["PToolsDebugInspectorLegacyUI", "PToolsDebugNetworkCore", "PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "PToolsDebugStorageCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
             path: "PooToolsSource",
             exclude: ["DebugNetwork/PTNetworkCaptureModels.swift", "DebugNetwork/PTNetworkCaptureStore.swift", "DebugNetwork/PTNetworkRedactor.swift", "Debug/PTDebugInventory.swift"],
             sources: [
                 "Debug", "LocalConsole", "DevMask", "TouchInspector", "DEBUGLocation",
-                "Inspector", "DebugLibs", "DebugCrash", "DebugFile", "DebugColor",
+                "DebugLibs", "DebugCrash", "DebugFile", "DebugColor",
                 "DebugRuler", "DebugPerformance", "DebugCategory", "DebugUserDefault", "DebugNetwork"
             ],
             swiftSettings: [.define("POOTOOLS_DEBUG"), .define("POOTOOLS_COCOAPODS")]
@@ -1202,6 +1203,14 @@ let package = Package(
         .target(
             name: "PToolsDebugInspectorUI",
             path: "PooToolsSource/PToolsDebugInspectorUI",
+            swiftSettings: [.define("POOTOOLS_DEBUG")]
+        ),
+        // The local, on-device Inspector owns all 300+ UIKit presentation
+        // sources. PooToolsDEBUG remains an import-compatibility facade.
+        .target(
+            name: "PToolsDebugInspectorLegacyUI",
+            dependencies: ["ptools", "PToolsCore", "PToolsUIFoundation", "PToolsSymbols", "PToolsOverlay", "SnapKit"],
+            path: "PooToolsSource/Inspector",
             swiftSettings: [.define("POOTOOLS_DEBUG")]
         ),
         // File/defaults Debug inventory is pure Foundation and has no UIKit dependency.
