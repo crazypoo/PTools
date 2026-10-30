@@ -94,7 +94,7 @@ extension PTNavigationBarManager {
     // English: Keep the explicit navigation controller overload private to avoid cross-stack updates.
     // Español: Mantiene privada la sobrecarga con navegación explícita para evitar actualizar otra pila.
     // 中文：显式传入导航控制器的重载保持私有，避免误更新其他导航栈。
-    private func setLeftView(_ views: [UIView], spacing: CGFloat, in nav: UINavigationController) {
+    func setLeftView(_ views: [UIView], spacing: CGFloat, in nav: UINavigationController) {
         guard let container = containerMap.object(forKey: nav) else { return }
         // English: Reuse the same pre-reparenting measurement path as PTNavBar.
         // Español: Reutiliza la misma medición previa al cambio de supervista que PTNavBar.
@@ -118,7 +118,7 @@ extension PTNavigationBarManager {
         setRightViews(views, spacing: spacing, in: nav)
     }
 
-    private func setRightViews(_ views: [UIView], spacing: CGFloat, in nav: UINavigationController) {
+    func setRightViews(_ views: [UIView], spacing: CGFloat, in nav: UINavigationController) {
         guard let container = containerMap.object(forKey: nav) else { return }
         // English: Keep right-side items on the same deterministic sizing path.
         // Español: Mantiene los elementos derechos en la misma ruta de tamaño determinista.
@@ -142,7 +142,7 @@ extension PTNavigationBarManager {
         setTitleView(view, fillSpace: fillSpace, in: nav)
     }
 
-    private func setTitleView(_ view: UIView?, fillSpace: Bool, in nav: UINavigationController) {
+    func setTitleView(_ view: UIView?, fillSpace: Bool, in nav: UINavigationController) {
         guard let container = containerMap.object(forKey: nav) else { return }
         guard let view else {
             container.clearTitleLayout()
@@ -223,7 +223,7 @@ extension PTNavigationBarManager {
     // English: Recompute a title after button, safe-area, rotation, or split-pane geometry changes.
     // Español: Recalcula el título después de cambios de botones, área segura, rotación o panel dividido.
     // 中文：按钮、安全区、旋转或分屏几何变化后重新计算标题。
-    private func refreshTitleLayout(in navigationController: UINavigationController,
+    func refreshTitleLayout(in navigationController: UINavigationController,
                                     container: PTNavigationBarContainer) {
         guard let view = container.titleLayoutView,
               let mode = container.titleLayoutMode else { return }
