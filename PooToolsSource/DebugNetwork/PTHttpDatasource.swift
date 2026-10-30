@@ -44,7 +44,7 @@ final class PTHttpDatasource {
         // 🌟 严格内存防护：容量限制策略 (上限 1000 条，超出自动移除最早一条)
         if _httpModels.count >= 1000 {
             let evicted = _httpModels.removeFirst()
-            if let evictedID = evicted.requestId, !evictedID.isEmpty {
+            if let evictedID = evicted.requestId?.trimmingCharacters(in: .whitespacesAndNewlines), !evictedID.isEmpty {
                 recordedIDs.remove(evictedID)
             }
         }
@@ -74,7 +74,7 @@ final class PTHttpDatasource {
     func remove(_ model: PTHttpModel) {
         // 🌟 终极修复：使用高效、精准的高阶函数按条件移除，彻底根除枚举遍历移除导致的错位误删 Bug
         _httpModels.removeAll { $0.requestId == model.requestId }
-        if let id = model.requestId, !id.isEmpty {
+        if let id = model.requestId?.trimmingCharacters(in: .whitespacesAndNewlines), !id.isEmpty {
             recordedIDs.remove(id)
         }
     }
