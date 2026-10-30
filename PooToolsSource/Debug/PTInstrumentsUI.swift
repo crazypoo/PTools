@@ -6,6 +6,7 @@ import UIKit
 import SnapKit
 #if SWIFT_PACKAGE
 import ptools
+import PToolsDebugMetricsCore
 #endif
 
 // English: The timeline keeps scrolling, zooming, filtering, visibility, and selection in one small adapter.
@@ -77,8 +78,12 @@ public final class PTInstrumentTimelineView: UIScrollView, UIScrollViewDelegate 
     private func refreshLayout() {
         let trackCount = max(1, visibleKinds.count)
         let duration = timelineSnapshot?.timeline.duration ?? 1
-        let contentWidth = max(bounds.width, CGFloat(duration * 120) * zoom + 40)
-        let contentHeight = CGFloat(trackCount * 48)
+        let geometry = PTDebugTimelineGeometry(viewportWidth: Double(bounds.width),
+                                               duration: duration,
+                                               zoom: Double(zoom),
+                                               visibleTrackCount: trackCount)
+        let contentWidth = CGFloat(geometry.contentWidth)
+        let contentHeight = CGFloat(geometry.contentHeight)
         canvas.frame = CGRect(x: 0, y: 0, width: contentWidth, height: contentHeight)
         contentSize = canvas.bounds.size
         canvas.setNeedsDisplay()
@@ -176,7 +181,10 @@ private final class PTInstrumentTimelineCanvas: UIView {
     }
 
     private func xPosition(for date: Date, timeline: PTInstrumentTimeline, scale: CGFloat) -> CGFloat {
-        20 + CGFloat(date.timeIntervalSince(timeline.startDate)) * scale
+        CGFloat(PTDebugTimelineGeometry.xPosition(
+            elapsed: date.timeIntervalSince(timeline.startDate),
+            contentWidth: Double(scale) * max(0.001, timeline.duration) + 40,
+            duration: timeline.duration))
     }
 }
 
