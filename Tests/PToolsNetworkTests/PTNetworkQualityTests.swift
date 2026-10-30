@@ -105,19 +105,19 @@ final class PTNetworkQualityTests: XCTestCase {
         second.setValue("1001", forHTTPHeaderField: "ts")
 
         // Default preserves full header identity; no app silently changes semantics.
-        XCTAssertNotEqual(RequestKey(request: first), RequestKey(request: second))
+        XCTAssertNotEqual(RequestKey(request: first, responseType: String.self), RequestKey(request: second, responseType: String.self))
 
         first.setValue("ts,token,language", forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
         second.setValue("ts,token,language", forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
-        XCTAssertEqual(RequestKey(request: first), RequestKey(request: second))
+        XCTAssertEqual(RequestKey(request: first, responseType: String.self), RequestKey(request: second, responseType: String.self))
 
         var otherAccount = second
         otherAccount.setValue("account-B", forHTTPHeaderField: "token")
-        XCTAssertNotEqual(RequestKey(request: first), RequestKey(request: otherAccount))
+        XCTAssertNotEqual(RequestKey(request: first, responseType: String.self), RequestKey(request: otherAccount, responseType: String.self))
 
         var otherLanguage = second
         otherLanguage.setValue("zh", forHTTPHeaderField: "language")
-        XCTAssertNotEqual(RequestKey(request: first), RequestKey(request: otherLanguage))
+        XCTAssertNotEqual(RequestKey(request: first, responseType: String.self), RequestKey(request: otherLanguage, responseType: String.self))
     }
 
     func testTimestampNormalizationAlsoMatchesCachedResponse() async throws {
