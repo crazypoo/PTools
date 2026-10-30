@@ -114,8 +114,15 @@ public final class PTDebugHookRegistryStore {
 
     @discardableResult
     public func unregister(owner: String, hookID: String) -> Entry? {
-        owners[hookID]?.remove(owner)
-        return owners[hookID]?.isEmpty == true ? nil : entry(for: hookID)
+        guard var registered = owners[hookID] else { return nil }
+        guard registered.remove(owner) != nil else { return entry(for: hookID) }
+        if registered.isEmpty {
+            owners.removeValue(forKey: hookID)
+            kinds.removeValue(forKey: hookID)
+            return nil
+        }
+        owners[hookID] = registered
+        return entry(for: hookID)
     }
 
     public func entries() -> [Entry] {
