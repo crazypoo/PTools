@@ -16,9 +16,16 @@ final class PTExtractedDebugUIKitLeafTests: XCTestCase {
     func testMetricTrackGridDrawsWithoutOwningARecorder() {
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: 160, height: 120))
         let image = renderer.image { _ in
+            let context = UIGraphicsGetCurrentContext()
             PTDebugMetricsTrackRenderer.drawTrackGrid(
                 titles: ["FPS", "CPU"], width: 160,
-                context: UIGraphicsGetCurrentContext())
+                context: context)
+            PTDebugMetricsTrackRenderer.drawSample(
+                x: 40, trackY: 24, context: context)
+            PTDebugMetricsTrackRenderer.drawEvent(
+                x: 80, trackY: 24, context: context)
+            PTDebugMetricsTrackRenderer.drawSelection(
+                startX: 30, endX: 100, height: 120, context: context)
         }
         XCTAssertNotNil(image.cgImage)
     }
