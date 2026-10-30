@@ -3259,8 +3259,11 @@ final class PTMissingModuleDemoViewController: UIViewController {
 
     private func addButton(_ title: String, handler: @escaping @MainActor () -> Void) {
         let button = UIButton(type: .system)
-        button.configuration = .borderedProminent()
         button.setTitle(title, for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 10
+        button.contentEdgeInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
         button.addAction(UIAction { _ in handler() }, for: .touchUpInside)
         stackView.addArrangedSubview(button)
     }
@@ -3397,7 +3400,7 @@ final class PTMissingModuleDemoViewController: UIViewController {
             self?.monitoringTask = Task { [weak self] in
                 let snapshot = await PTConnectivityMonitor.shared.current()
                 guard !Task.isCancelled else { return }
-                self?.show("Status: \(snapshot.status.rawValue)\nInterfaces: \(snapshot.interfaces.map(\\.rawValue).sorted().joined(separator: ", "))\nExpensive: \(snapshot.isExpensive)\nConstrained: \(snapshot.isConstrained)")
+                self?.show("Status: \(snapshot.status.rawValue)\nInterfaces: \(snapshot.interfaces.map(\.rawValue).sorted().joined(separator: ", "))\nExpensive: \(snapshot.isExpensive)\nConstrained: \(snapshot.isConstrained)")
             }
         }
     }
