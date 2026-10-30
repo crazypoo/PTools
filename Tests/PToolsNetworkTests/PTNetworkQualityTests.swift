@@ -121,14 +121,14 @@ final class PTNetworkQualityTests: XCTestCase {
     }
 
     func testTimestampNormalizationAlsoMatchesCachedResponse() async throws {
-        let url = URL(string: "https://example.com/categories/\\(UUID().uuidString)")!
+        let url = URL(string: "https://example.com/categories/\(UUID().uuidString)")!
         var original = URLRequest(url: url)
         original.httpMethod = "GET"
         original.setValue("1000", forHTTPHeaderField: "ts")
         original.setValue("account-A", forHTTPHeaderField: "token")
         original.setValue("ts", forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
 
-        let data = Data(#"{\"code\":200,\"msg\":[]}"#.utf8)
+        let data = Data(#"{"code":200,"msg":[]}"#.utf8)
         await NetworkCache.shared.save(data: data, request: original, expire: 90)
 
         var later = original
@@ -142,7 +142,8 @@ final class PTNetworkQualityTests: XCTestCase {
 
         later.setValue("account-A", forHTTPHeaderField: "token")
         later.setValue(nil, forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
-        XCTAssertNil(await NetworkCache.shared.read(request: later))
+        let excluded = await NetworkCache.shared.read(request: later)
+        XCTAssertNil(excluded)
     }
 
     func testIgnoredIdentityHeadersAreOptInViaNetworkConfiguration() {
