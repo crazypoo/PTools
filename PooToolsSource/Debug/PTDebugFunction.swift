@@ -8,6 +8,7 @@
 
 import UIKit
 #if SWIFT_PACKAGE
+import PToolsDebugInspectorLegacyUI
 import ptools
 import PToolsStorage
 import PToolsDebugCore
@@ -820,13 +821,13 @@ final class PTInspectorCollector: PTDebugCollector {
     func start() {
         guard !isRunning else { return }
         isRunning = true
-        Inspector.sharedInstance.start()
+        Inspector.start()
     }
 
     func stop() {
         guard isRunning else { return }
         isRunning = false
-        Inspector.sharedInstance.stop()
+        Inspector.stop()
     }
 }
 
