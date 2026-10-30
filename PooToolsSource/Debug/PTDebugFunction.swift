@@ -504,8 +504,11 @@ public final class PTDebugManager {
         register(collector: PTMockLocationCollector())
     }
 
+    /// A stable presentation projection, independent of collector insertion
+    /// order and unaffected by Swift Dictionary iteration order across builds.
+    /// Hook ownership still lives exclusively in PTDebugHookRegistry.
     public var menuPlugins: [PTDebugPlugin] {
-        Array(plugins.values)
+        plugins.keys.sorted().compactMap { plugins[$0] }
     }
 
     public func register(plugin: PTDebugPlugin) {
