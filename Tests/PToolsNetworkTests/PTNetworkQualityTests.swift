@@ -185,7 +185,7 @@ final class PTNetworkQualityTests: XCTestCase {
         Network.applyRequestIdentityConfiguration(&second, configuration: unset)
         XCTAssertNil(second.value(forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader))
 
-        let originalHeaders = Network.prepareRequestHeaders(header: ["X-User-Key":"custom-account"],
+        let originalHeaders = Network.prepareRequestHeaders(header: HTTPHeaders(["X-User-Key":"custom-account"]),
                                                              jsonRequest: false,
                                                              configuration: config)
         XCTAssertNil(originalHeaders.value(for: PTRequestIdentityPolicy.metadataHeader))
