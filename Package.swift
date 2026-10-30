@@ -1223,7 +1223,7 @@ let package = Package(
         ),
         .target(
             name: "PToolsDebugStudioBridge",
-            dependencies: ["PooToolsDEBUG", "PToolsStudioProtocolCore", "PToolsDebugInspectorCore"],
+            dependencies: ["PooToolsDEBUG", "PToolsStudioProtocolCore", "PToolsDebugInspectorCore", "PToolsDebugNetworkCore"],
             path: "PooToolsSource/DebugStudioBridge",
             swiftSettings: [.define("POOTOOLS_DEBUG_STUDIO_BRIDGE")]
         ),
@@ -1410,6 +1410,12 @@ let package = Package(
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]
+        ),
+        .testTarget(
+            name: "PToolsDebugNetworkCoreTests",
+            dependencies: ["PToolsDebugNetworkCore"],
+            path: "Tests/PToolsDebugNetworkCoreTests",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .testTarget(
             name: "PToolsDebugCoreTests",
