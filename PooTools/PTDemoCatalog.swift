@@ -5,6 +5,24 @@
 import UIKit
 import PooTools
 import SnapKit
+#if canImport(PToolsDate)
+import PToolsDate
+#endif
+#if canImport(PToolsConnectivity)
+import PToolsConnectivity
+#endif
+#if canImport(PToolsFeedback)
+import PToolsFeedback
+#endif
+#if canImport(PToolsSymbols)
+import PToolsSymbols
+#endif
+#if canImport(PToolsLogging)
+import PToolsLogging
+#endif
+#if canImport(PToolsWeb)
+import PToolsWeb
+#endif
 
 enum PTDemoKind: String, Codable, Hashable, Sendable {
     case interactive
@@ -120,6 +138,18 @@ enum PTDemoRegistry {
     // Español: La lista de descriptores es la única fuente de identidad; la UI no se usa como identidad.
     // 中文：描述符列表是 Example 唯一的身份来源，UI 文本不再承担身份职责。
     static let descriptors: [PTDemoDescriptor] = [
+        make("ui.checkbox-lab", "PooToolsCheckBox", "CheckBox · State & Styles", .uiComponents, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("text.pinyin-lab", "PooToolsChinesePinyin", "Pinyin · Initial Letter", .coreFoundation, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("ui.half-circle-lab", "PooToolsCircle", "Half Circle · Directions", .uiComponents, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("input.searchbar-lab", "PooToolsSearchBar", "SearchBar · Editing & Styles", .inputForm, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("ui.pagecontrol-lab", "PooToolsPageControl", "PageControl · Progress", .uiComponents, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("device.haptics-lab", "PToolsFeedback", "Feedback · Haptics", .permissionsDevice, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("core.date-parser-lab", "PToolsDate", "Date · Strict Parser", .coreFoundation, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("network.connectivity-lab", "PToolsConnectivity", "Connectivity · Snapshot", .networkConnectivity, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("security.keychain-lab", "PooToolsKeyChain", "KeyChain · Save / Read / Delete", .securityPrivacy, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("ui.symbols-lab", "PToolsSymbols", "SF Symbols · Resolver", .uiComponents, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("debug.logging-lab", "PToolsLogging", "Logging · Write Events", .debugDiagnostics, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("modern.web-lab", "PToolsWeb", "Web · Offline WebView", .modernSystem, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
         make("network.local-network", "PToolsHTTPFilePortal", "局域网传送", .networkConnectivity, .scenario, .sheet, .runnable, legacy: "局域网传送", tags: ["network", "http", "local"]),
         make("network.ptmodel-lab", "PooToolsNetwork", "PTModel + Typed Network", .networkConnectivity, .interactive, .push, .runnable, legacy: "PTModel + Typed Network", tags: ["network", "ptmodel", "nested-json", "model-path"]),
         make("media.image-review", "PooToolsMediaViewer", "图片展示", .mediaGraphics, .interactive, .fullScreen, .runnable, legacy: "图片展示", tags: ["image", "gif", "video"]),
@@ -370,6 +400,8 @@ final class PTDemoCoordinator {
             return vc
         case "security.acknowledgements-headless":
             return PTAcknowledgementsHeadlessDemoViewController()
+        case let id where PTMissingModuleDemoViewController.supportedIDs.contains(id):
+            return PTMissingModuleDemoViewController(demoID: id)
         case "infrastructure.database":
             return PTDatabaseInfrastructureDemoViewController(moduleID: descriptor.moduleID, title: descriptor.titleKey, tags: descriptor.tags)
         case "infrastructure.auth":
@@ -3120,6 +3152,311 @@ private final class PTInputStylesDemoViewController: PTBaseViewController {
     @objc private func shakeDemo(_ sender: UIButton) {
         sender.shake(direction: .horizontal) { [weak self] in
             self?.feedbackLabel.text = "UIView.shake 已完成 / Shake completed"
+        }
+    }
+}
+
+
+ 
+// English: Independent, real API exercises for modules previously absent from the Example catalog.
+// Español: Ejercicios reales de API para módulos ausentes del catálogo de Example.
+// 中文：为此前缺少 Demo 入口的模块提供独立可操作示例；不会修改库本身的行为。
+@MainActor
+final class PTMissingModuleDemoViewController: UIViewController {
+    static let supportedIDs: Set<String> = [
+        "ui.checkbox-lab", "text.pinyin-lab", "ui.half-circle-lab",
+        "input.searchbar-lab", "ui.pagecontrol-lab", "device.haptics-lab",
+        "core.date-parser-lab", "network.connectivity-lab",
+        "security.keychain-lab", "ui.symbols-lab", "debug.logging-lab",
+        "modern.web-lab"
+    ]
+
+    private let demoID: String
+    private let scrollView = UIScrollView()
+    private let stackView = UIStackView()
+    private let resultLabel = UILabel()
+    private var monitoringTask: Task<Void, Never>?
+    // Keep all demo credentials isolated from application and production KeyChain entries.
+    private let demoKeychainService = "com.ptools.example.keychain." + UUID().uuidString
+
+    init(demoID: String) {
+        self.demoID = demoID
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) is unavailable")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBackground
+        navigationItem.title = PTDemoRegistry.descriptor(for: PTDemoID(rawValue: demoID))?.titleKey ?? demoID
+
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 18
+        stackView.alignment = .fill
+        view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 24),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -24),
+            stackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: 20),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -20),
+            stackView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor, constant: -40)
+        ])
+
+        let intro = UILabel()
+        intro.numberOfLines = 0
+        intro.font = .preferredFont(forTextStyle: .subheadline)
+        intro.textColor = .secondaryLabel
+        intro.text = "This screen exercises the actual PTools public API. No backend account, production data, or external URL is required."
+        stackView.addArrangedSubview(intro)
+
+        resultLabel.numberOfLines = 0
+        resultLabel.font = .monospacedSystemFont(ofSize: 14, weight: .regular)
+        resultLabel.textColor = .secondaryLabel
+        resultLabel.text = "Ready"
+        switch demoID {
+        case "ui.checkbox-lab": configureCheckBox()
+        case "text.pinyin-lab": configurePinyin()
+        case "ui.half-circle-lab": configureCircle()
+        case "input.searchbar-lab": configureSearchBar()
+        case "ui.pagecontrol-lab": configurePageControl()
+        case "device.haptics-lab": configureHaptics()
+        case "core.date-parser-lab": configureDate()
+        case "network.connectivity-lab": configureConnectivity()
+        case "security.keychain-lab": configureKeychain()
+        case "ui.symbols-lab": configureSymbols()
+        case "debug.logging-lab": configureLogging()
+        case "modern.web-lab": configureWeb()
+        default: resultLabel.text = "Unknown demo ID"
+        }
+        stackView.addArrangedSubview(resultLabel)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        monitoringTask?.cancel()
+        monitoringTask = nil
+    }
+
+    deinit {
+        // Delete only this controller instance's temporary service, never user keys.
+        PTKeyChain.deleteAccountInfo(service: demoKeychainService as NSString, account: nil, handle: nil)
+    }
+
+    private func show(_ text: String) {
+        resultLabel.text = text
+    }
+
+    private func addButton(_ title: String, handler: @escaping @MainActor () -> Void) {
+        let button = UIButton(type: .system)
+        button.configuration = .borderedProminent()
+        button.setTitle(title, for: .normal)
+        button.addAction(UIAction { _ in handler() }, for: .touchUpInside)
+        stackView.addArrangedSubview(button)
+    }
+
+    private func addField(_ placeholder: String, value: String) -> UITextField {
+        let field = UITextField()
+        field.borderStyle = .roundedRect
+        field.placeholder = placeholder
+        field.text = value
+        field.autocorrectionType = .no
+        field.autocapitalizationType = .none
+        field.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+        stackView.addArrangedSubview(field)
+        return field
+    }
+
+    private func addControl(_ control: UIView, height: CGFloat = 52) {
+        stackView.addArrangedSubview(control)
+        control.heightAnchor.constraint(equalToConstant: height).isActive = true
+    }
+
+    private func configureCheckBox() {
+        let box = PTCheckBox(frame: .zero)
+        box.isChecked = false
+        box.checkmarkStyle = .Tick
+        box.borderStyle = .Square
+        box.valueChanged = { [weak self] checked in self?.show("isChecked: \(checked)") }
+        addControl(box, height: 44)
+        addButton("Switch square / circle border") { [weak box] in
+            guard let box else { return }
+            box.borderStyle = box.borderStyle == .Square ? .Circle : .Square
+            box.setNeedsDisplay()
+        }
+    }
+
+    private func configurePinyin() {
+        let field = addField("Chinese character", value: "中")
+        addButton("Get initial") { [weak self, weak field] in
+            guard let character = field?.text?.first else {
+                self?.show("Enter a character first")
+                return
+            }
+            self?.show("\(character) → \(PinyinHelper.pinyinFirstLetter(for: character))")
+        }
+    }
+
+    private func configureCircle() {
+        let circle = PTHalfCircleView(frame: .zero)
+        circle.backgroundColor = .secondarySystemBackground
+        circle.circleColor = .systemOrange
+        circle.diameter = 44
+        circle.circleType = .Right
+        addControl(circle, height: 65)
+        let segmented = UISegmentedControl(items: ["Left", "Right", "Up", "Down"])
+        segmented.selectedSegmentIndex = 1
+        segmented.addAction(UIAction { [weak self, weak circle, weak segmented] _ in
+            guard let circle, let selected = segmented?.selectedSegmentIndex else { return }
+            circle.circleType = [PTHalfCircleViewType.Left, .Right, .Up, .Down][selected]
+            circle.setNeedsDisplay()
+            self?.show("Direction index: \(selected)")
+        }, for: .valueChanged)
+        addControl(segmented, height: 40)
+    }
+
+    private func configureSearchBar() {
+        let search = PTSearchBar(frame: .zero)
+        search.searchPlaceholder = "Try typing and pressing Search"
+        search.visualStyle = .classic
+        search.textChangeHandler = { [weak self] query in self?.show("Changed: \(query)") }
+        search.returnHandler = { [weak self] query in
+            self?.show("Submitted: \(query)")
+            self?.view.endEditing(true)
+        }
+        addControl(search, height: 58)
+        addButton("Toggle Classic / Glass") { [weak self, weak search] in
+            guard let search else { return }
+            search.visualStyle = search.visualStyle == .classic ? .glass : .classic
+            self?.show("Visual style updated")
+        }
+    }
+
+    private func configurePageControl() {
+        let page = PTFilledPageControl(frame: .zero)
+        page.pageCount = 5
+        page.activeTint = .systemBlue
+        page.inactiveTint = .systemGray3
+        page.setProgress(0, animated: false)
+        page.addAction(UIAction { [weak self, weak page] _ in
+            self?.show("Selected page: \((page?.currentPage ?? 0) + 1) / 5")
+        }, for: .valueChanged)
+        addControl(page, height: 48)
+        let slider = UISlider()
+        slider.minimumValue = 0
+        slider.maximumValue = 4
+        slider.isContinuous = true
+        slider.addAction(UIAction { [weak self, weak page, weak slider] _ in
+            let progress = CGFloat(slider?.value ?? 0)
+            page?.setProgress(progress, animated: false)
+            self?.show(String(format: "Progress: %.2f", Double(progress)))
+        }, for: .valueChanged)
+        addControl(slider, height: 40)
+    }
+
+    private func configureHaptics() {
+        addButton("Success feedback") { [weak self] in
+            PTHapticEngine.shared.play(.success)
+            self?.show("Success event dispatched (requires haptic-capable device)")
+        }
+        addButton("Warning feedback") { [weak self] in
+            PTHapticEngine.shared.play(.warning)
+            self?.show("Warning event dispatched")
+        }
+        addButton("Selection feedback") { [weak self] in
+            PTHapticEngine.shared.play(.selectionChanged)
+            self?.show("Selection event dispatched")
+        }
+    }
+
+    private func configureDate() {
+        let field = addField("yyyy-MM-dd", value: "2026-10-30")
+        addButton("Parse with POSIX UTC") { [weak self, weak field] in
+            do {
+                let date = try PTDateParser.parse(field?.text ?? "", strategy: .pattern("yyyy-MM-dd"), context: .posixUTC)
+                self?.show(ISO8601DateFormatter().string(from: date))
+            } catch {
+                self?.show("Parse failed: \(error)")
+            }
+        }
+    }
+
+    private func configureConnectivity() {
+        addButton("Read current NWPath snapshot") { [weak self] in
+            self?.monitoringTask?.cancel()
+            self?.monitoringTask = Task { [weak self] in
+                let snapshot = await PTConnectivityMonitor.shared.current()
+                guard !Task.isCancelled else { return }
+                self?.show("Status: \(snapshot.status.rawValue)\nInterfaces: \(snapshot.interfaces.map(\\.rawValue).sorted().joined(separator: ", "))\nExpensive: \(snapshot.isExpensive)\nConstrained: \(snapshot.isConstrained)")
+            }
+        }
+    }
+
+    private func configureKeychain() {
+        let account: NSString = "demo-account"
+        let password: NSString = "example-only-secret"
+        addButton("Save temporary entry") { [weak self] in
+            guard let self else { return }
+            let saved = PTKeyChain.saveAccountInfo(service: self.demoKeychainService as NSString, account: account, password: password)
+            self.show("Save success: \(saved)")
+        }
+        addButton("Read entry (redacted)") { [weak self] in
+            guard let self else { return }
+            let stored = PTKeyChain.getPassword(service: self.demoKeychainService as NSString, account: account)
+            self.show(stored == nil ? "No entry" : "Entry found (value redacted)")
+        }
+        addButton("Delete temporary entry") { [weak self] in
+            guard let self else { return }
+            PTKeyChain.deleteAccountInfo(service: self.demoKeychainService as NSString, account: account) { [weak self] success, status in
+                self?.show("Delete: \(success) · \(status)")
+            }
+        }
+    }
+
+    private func configureSymbols() {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .systemBlue
+        imageView.image = PTSymbolResolver.image(PTSymbol(rawValue: "star.fill"), fallbacks: [PTSymbol(rawValue: "star")])
+        addControl(imageView, height: 80)
+        addButton("Resolve alternate symbol") { [weak self, weak imageView] in
+            imageView?.image = PTSymbolResolver.image(PTSymbol(rawValue: "heart.fill"), fallbacks: [PTSymbol(rawValue: "heart")])
+            self?.show("Symbol resolution with fallback executed")
+        }
+    }
+
+    private func configureLogging() {
+        addButton("Write info log") { [weak self] in
+            PTLogger.info("Example Demo Catalog: info event")
+            self?.show("PTLogger.info dispatched")
+        }
+        addButton("Write warning log") { [weak self] in
+            PTLogger.warning("Example Demo Catalog: warning event")
+            self?.show("PTLogger.warning dispatched")
+        }
+    }
+
+    private func configureWeb() {
+        addButton("Open offline PTools WebView") { [weak self] in
+            let web = PTWebViewController()
+            web.loadViewIfNeeded()
+            web.webView.loadHTMLString("<html><meta name='viewport' content='width=device-width'><body style='font:18px -apple-system;padding:24px'><h2>PTools Web</h2><p>Offline HTML fixture — no external navigation.</p></body></html>", baseURL: nil)
+            if let navigation = self?.navigationController {
+                navigation.pushViewController(web, animated: true)
+            } else {
+                self?.present(web, animated: true)
+            }
+            self?.show("WebView fixture loaded")
         }
     }
 }
