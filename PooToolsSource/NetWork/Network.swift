@@ -474,13 +474,6 @@ public final class Network: @unchecked Sendable {
         apiHeader["cachePolicy"] = finalCachePolicy.rawValue
         apiHeader["cacheExpire"] = configurationSnapshot.networkCacheExpiration
         apiHeader["dedupPolicy"] = configurationSnapshot.networkDedupOption.getOptionName()
-        let ignoredIdentityHeaders = configurationSnapshot.requestIdentityIgnoredHeaders
-            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
-            .filter { !$0.isEmpty }
-            .sorted()
-        if !ignoredIdentityHeaders.isEmpty {
-            apiHeader[PTRequestIdentityPolicy.metadataHeader] = ignoredIdentityHeaders.joined(separator: ",")
-        }
         return addToken(to: apiHeader, configuration: configurationSnapshot)
     }
     
@@ -489,6 +482,20 @@ public final class Network: @unchecked Sendable {
         if original.hasPrefix("http") { return original }
         let globalURL = needGobal ? await Network.globalURL() : ""
         return globalURL + original
+    }
+
+    // Configure cache/dedup identity at the execution boundary, not in API headers.
+    // This also covers manually created URLRequests and applications using custom headers.
+    // The metadata is strictly local and removed before transport.
+    static func applyRequestIdentityConfiguration(_ request: inout URLRequest,
+                                                  configuration: PTNetworkConfig) {
+        let names = configuration.requestIdentityIgnoredHeaders
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
+            .filter { !$0.isEmpty }
+            .sorted()
+        // Do not trust a same-named header supplied by the caller.
+        request.setValue(names.isEmpty ? nil : names.joined(separator: ","),
+                         forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
     }
 
     // MARK: - ================= 5. 底层核心执行引擎 =================
@@ -507,6 +514,7 @@ public final class Network: @unchecked Sendable {
         var request = request
         let pluginSnapshot = plugins
         let configurationSnapshot = config
+        Self.applyRequestIdentityConfiguration(&request, configuration: configurationSnapshot)
         for plugin in pluginSnapshot {
             await plugin.willSend(&request)
         }
@@ -652,6 +660,7 @@ public final class Network: @unchecked Sendable {
         var request = request
         let pluginSnapshot = plugins
         let configurationSnapshot = config
+        Self.applyRequestIdentityConfiguration(&request, configuration: configurationSnapshot)
         for plugin in pluginSnapshot {
             await plugin.willSend(&request)
         }
