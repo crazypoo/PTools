@@ -45,4 +45,15 @@ final class PTDebugCoreTests: XCTestCase {
         XCTAssertEqual(ring.orderedValues, [2])
         XCTAssertEqual(ring.latestValue, 2)
     }
+    @MainActor
+    func testConsoleEventObserversAreTokenScoped() {
+        let center = PTDebugEventCenter.shared
+        var seen: [String] = []
+        let token = center.addObserver { seen.append($0.name) }
+        center.publish(PTDebugEvent(name: "ping", source: "unit"))
+        center.removeObserver(token)
+        center.publish(PTDebugEvent(name: "ignored", source: "unit"))
+        XCTAssertEqual(seen, ["ping"])
+    }
+
 }

@@ -8,6 +8,7 @@
 
 import UIKit
 #if SWIFT_PACKAGE
+import PToolsDebugCore
 import ptools
 import PooToolsShare
 #endif

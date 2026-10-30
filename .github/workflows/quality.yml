@@ -38,8 +38,51 @@ jobs:
           for file in files:
               source = (Path("PooToolsSource") / file).read_text()
               assert "import UIKit" not in source and "import ptools" not in source, file
-          print("PASS: SwiftPM Debug capture core is unique and independent from UIKit")
+          # PR28/29: ownership remains one source per platform, while the
+          # CocoaPods DEBUG aggregates exact source files only once.
+          assert "PToolsDebugInspectorUI" in targets, "missing UIKit Inspector leaf"
+          assert "PToolsDebugStorageCore" in targets, "missing Storage facade"
+          storage = targets["PToolsDebugStorageCore"]
+          assert set(storage.get("sources", [])) == {"PTDebugInventory.swift"}
+          assert "Debug/PTDebugInventory.swift" in debug.get("exclude", [])
+          assert "PToolsDebugStorageCore" in str(debug.get("dependencies", []))
+          inspector = targets["PToolsDebugInspectorUI"]
+          assert inspector.get("path") == "PooToolsSource/PToolsDebugInspectorUI"
+          bridge = targets["PToolsDebugStudioBridge"]
+          assert "PToolsDebugInspectorUI" in str(bridge.get("dependencies", []))
+          assert "PToolsDebugStorageCore" in str(bridge.get("dependencies", []))
+          assert "PTDebugEvent" not in (
+              Path("PooToolsSource/Debug/PTDebugFunction.swift").read_text().split(
+                  "// English: PTDebugManager owns registration"
+              )[0]
+          )
+          print("PASS: unique Network, Storage, Inspector UI and Console ownership")
           PY
+
+  debug-foundation-compile:
+    name: Swift 6 Foundation Debug/Storage/Console compilation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+      - name: Compile actual Debug Core modules with Swift 6
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/ptools-debug-modules
+          swiftc -swift-version 6 -emit-module -module-name PToolsDebugCore \
+            PooToolsSource/PToolsDebugCore/*.swift \
+            -emit-module-path /tmp/ptools-debug-modules/PToolsDebugCore.swiftmodule
+          swiftc -swift-version 6 -emit-module -module-name PToolsDebugMetricsCore \
+            PooToolsSource/PToolsDebugMetricsCore/*.swift \
+            -emit-module-path /tmp/ptools-debug-modules/PToolsDebugMetricsCore.swiftmodule
+          swiftc -swift-version 6 -emit-module -module-name PToolsDebugInventoryCore \
+            PooToolsSource/PToolsDebugInventoryCore/*.swift \
+            -emit-module-path /tmp/ptools-debug-modules/PToolsDebugInventoryCore.swiftmodule
+          swiftc -swift-version 6 -D SWIFT_PACKAGE \
+            -I /tmp/ptools-debug-modules -emit-module -module-name PToolsDebugStorageCore \
+            PooToolsSource/Debug/PTDebugInventory.swift \
+            -emit-module-path /tmp/ptools-debug-modules/PToolsDebugStorageCore.swiftmodule
+          echo "PASS: Foundation Debug, Metrics, Inventory and Storage modules compile"
 
   version-governance:
     runs-on: macos-26

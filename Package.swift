@@ -297,8 +297,10 @@ let package = Package(
         .library(name: "PToolsDebugCore", targets: ["PToolsDebugCore"]),
         .library(name: "PToolsDebugMetricsCore", targets: ["PToolsDebugMetricsCore"]),
         .library(name: "PToolsDebugInspectorCore", targets: ["PToolsDebugInspectorCore"]),
+        .library(name: "PToolsDebugInspectorUI", targets: ["PToolsDebugInspectorUI"]),
         .library(name: "PToolsDebugNetworkCore", targets: ["PToolsDebugNetworkCore"]),
         .library(name: "PToolsDebugInventoryCore", targets: ["PToolsDebugInventoryCore"]),
+        .library(name: "PToolsDebugStorageCore", targets: ["PToolsDebugStorageCore"]),
         .library(name: "PooToolsDEBUG", targets: ["PooToolsDEBUG"]),
         // Explicit opt-in transport of redacted DebugNetwork events; omitted from PooToolsAll.
         .library(name: "PToolsStudioProtocolCore", targets: ["PToolsStudioProtocolCore"]),
@@ -1168,9 +1170,9 @@ let package = Package(
         // ==========================================
         .target(
             name: "PooToolsDEBUG",
-            dependencies: ["PToolsDebugNetworkCore", "PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
+            dependencies: ["PToolsDebugNetworkCore", "PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "PToolsDebugStorageCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
             path: "PooToolsSource",
-            exclude: ["DebugNetwork/PTNetworkCaptureModels.swift", "DebugNetwork/PTNetworkCaptureStore.swift", "DebugNetwork/PTNetworkRedactor.swift"],
+            exclude: ["DebugNetwork/PTNetworkCaptureModels.swift", "DebugNetwork/PTNetworkCaptureStore.swift", "DebugNetwork/PTNetworkRedactor.swift", "Debug/PTDebugInventory.swift"],
             sources: [
                 "Debug", "LocalConsole", "DevMask", "TouchInspector", "DEBUGLocation",
                 "Inspector", "DebugLibs", "DebugCrash", "DebugFile", "DebugColor",
@@ -1196,6 +1198,12 @@ let package = Package(
             path: "PooToolsSource/PToolsDebugInspectorCore",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
+        // The iOS highlight overlay is a presentation-only Inspector leaf.
+        .target(
+            name: "PToolsDebugInspectorUI",
+            path: "PooToolsSource/PToolsDebugInspectorUI",
+            swiftSettings: [.define("POOTOOLS_DEBUG")]
+        ),
         // File/defaults Debug inventory is pure Foundation and has no UIKit dependency.
         // PR23: immutable capture contract + actor storage + redaction without UIKit.
         // Legacy presentation remains in PooToolsDEBUG.
@@ -1207,6 +1215,13 @@ let package = Package(
                 "DebugNetwork/PTNetworkCaptureStore.swift",
                 "DebugNetwork/PTNetworkRedactor.swift"
             ],
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "PToolsDebugStorageCore",
+            dependencies: ["PToolsDebugInventoryCore"],
+            path: "PooToolsSource/Debug",
+            sources: ["PTDebugInventory.swift"],
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .target(
@@ -1223,7 +1238,7 @@ let package = Package(
         ),
         .target(
             name: "PToolsDebugStudioBridge",
-            dependencies: ["PooToolsDEBUG", "PToolsStudioProtocolCore", "PToolsDebugInspectorCore", "PToolsDebugNetworkCore"],
+            dependencies: ["PooToolsDEBUG", "PToolsDebugStorageCore", "PToolsStudioProtocolCore", "PToolsDebugInspectorCore", "PToolsDebugInspectorUI", "PToolsDebugNetworkCore"],
             path: "PooToolsSource/DebugStudioBridge",
             swiftSettings: [.define("POOTOOLS_DEBUG_STUDIO_BRIDGE")]
         ),
@@ -1427,6 +1442,12 @@ let package = Package(
             name: "PToolsDebugInspectorCoreTests",
             dependencies: ["PToolsDebugInspectorCore", "PToolsStudioProtocolCore"],
             path: "Tests/PToolsDebugInspectorCoreTests",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .testTarget(
+            name: "PToolsDebugStorageCoreTests",
+            dependencies: ["PToolsDebugStorageCore"],
+            path: "Tests/PToolsDebugStorageCoreTests",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .testTarget(

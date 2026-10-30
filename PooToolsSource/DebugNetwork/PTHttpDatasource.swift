@@ -18,6 +18,8 @@ final class PTHttpDatasource {
 
     // 🌟 将数据源改为私有存储，杜绝外部绕过锁机制直接操作引发数据竞争
     private var _httpModels: [PTHttpModel] = []
+    // Legacy projection index only. PTNetworkCaptureStore remains authoritative.
+    private var recordedIDs = Set<String>()
     
     private init() {}
 
@@ -34,20 +36,23 @@ final class PTHttpDatasource {
         }
 
         // 请求防重校验：根据 requestId 判断是否存在相同记录
-        guard !_httpModels.contains(where: { $0.requestId == model.requestId }) else {
+        let requestID = model.requestId?.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let requestID, !requestID.isEmpty, recordedIDs.contains(requestID) {
             return false
         }
 
         // 🌟 严格内存防护：容量限制策略 (上限 1000 条，超出自动移除最早一条)
         if _httpModels.count >= 1000 {
-            if !_httpModels.isEmpty {
-                _httpModels.removeFirst()
+            let evicted = _httpModels.removeFirst()
+            if let evictedID = evicted.requestId?.trimmingCharacters(in: .whitespacesAndNewlines), !evictedID.isEmpty {
+                recordedIDs.remove(evictedID)
             }
         }
 
         // 绑定递增顺序索引
         model.index = _httpModels.count
         _httpModels.append(model)
+        if let requestID, !requestID.isEmpty { recordedIDs.insert(requestID) }
         return true
     }
 
@@ -62,11 +67,15 @@ final class PTHttpDatasource {
     /// 清空所有数据源记录。
     func removeAll() {
         _httpModels.removeAll()
+        recordedIDs.removeAll()
     }
 
     /// 根据指定模型安全移除对应记录。
     func remove(_ model: PTHttpModel) {
         // 🌟 终极修复：使用高效、精准的高阶函数按条件移除，彻底根除枚举遍历移除导致的错位误删 Bug
         _httpModels.removeAll { $0.requestId == model.requestId }
+        if let id = model.requestId?.trimmingCharacters(in: .whitespacesAndNewlines), !id.isEmpty {
+            recordedIDs.remove(id)
+        }
     }
 }

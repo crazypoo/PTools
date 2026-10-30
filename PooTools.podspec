@@ -1053,7 +1053,7 @@ Pod::Spec.new do |s|
     # Optional diagnostics stream for PTNetwork Studio. Not included by default.
     s.subspec 'DEBUG_StudioBridge' do |subspec|
         subspec.dependency 'PooTools/DEBUG'
-        subspec.source_files = 'PooToolsSource/DebugStudioBridge/**/*.swift', 'PooToolsSource/PToolsStudioProtocolCore/**/*.swift', 'PooToolsSource/PToolsDebugInspectorCore/**/*.swift'
+        subspec.source_files = 'PooToolsSource/DebugStudioBridge/**/*.swift', 'PooToolsSource/PToolsStudioProtocolCore/**/*.swift', 'PooToolsSource/PToolsDebugInspectorCore/**/*.swift', 'PooToolsSource/PToolsDebugInspectorUI/**/*.swift'
         subspec.frameworks = 'Foundation', 'Security', 'CryptoKit'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "POOTOOLS_DEBUG_STUDIO_BRIDGE POOTOOLS_COCOAPODS"

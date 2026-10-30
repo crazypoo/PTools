@@ -131,4 +131,24 @@ for file in "${network_core_files[@]}"; do
   fi
 done
 
+# PR26–PR30: the 5.x Debug facade retains source compatibility, but it
+# must not own additional copies of Storage, Console or Inspector helpers.
+require_fragment "Package.swift" 'name: "PToolsDebugStorageCore"' "Storage facade has an independent SwiftPM target"
+require_fragment "Package.swift" 'name: "PToolsDebugInspectorUI"' "Inspector overlay has an independent UIKit target"
+require_fragment "Package.swift" '"Debug/PTDebugInventory.swift"' "Storage adapter excluded from DEBUG compilation"
+require_fragment "PooToolsSource/Debug/PTDebugStorageCoreExports.swift" '@_exported import PToolsDebugStorageCore' "legacy Storage facade import"
+require_fragment "PooToolsSource/Debug/PTDebugCoreExports.swift" '@_exported import PToolsDebugCore' "legacy Console event import"
+require_fragment "PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift" 'PTDebugInspectorHighlight.show(view)' "single Inspector overlay owner"
+require_fragment "PooTools.podspec" 'PooToolsSource/PToolsDebugInspectorUI/**/*.swift' "CocoaPods Inspector overlay parity"
+require_fragment "PooToolsSource/PToolsDebugCore/PTDebugEvents.swift" 'public final class PTDebugEventCenter' "Console event center in Foundation Core"
+require_fragment "PooToolsSource/DebugNetwork/PTNetworkDebugSupport.swift" 'import PToolsDebugNetworkCore' "presentation imports canonical Network models"
+if rg -n '^public (struct PTDebugEvent|final class PTDebugEventCenter)' PooToolsSource/Debug/PTDebugFunction.swift; then
+  printf 'FAIL: Console event declarations still duplicated in UIKit DEBUG\n' >&2
+  exit 1
+fi
+if rg -n '^import (UIKit|AppKit|SwiftUI)' PooToolsSource/PToolsDebugCore/PTDebugEvents.swift PooToolsSource/Debug/PTDebugInventory.swift; then
+  printf 'FAIL: Console/Storage core source unexpectedly depends on presentation\n' >&2
+  exit 1
+fi
+
 printf 'PTInstruments 5.11 static contract OK\n'
