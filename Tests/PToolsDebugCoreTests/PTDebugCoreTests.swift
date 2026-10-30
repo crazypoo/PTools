@@ -56,4 +56,19 @@ final class PTDebugCoreTests: XCTestCase {
         XCTAssertEqual(seen, ["ping"])
     }
 
+    func testMetricsTimelineGeometryRemainsBoundedAndPositionStable() {
+        let geometry = PTDebugTimelineGeometry(
+            viewportWidth: 300, duration: 10, zoom: 1,
+            visibleTrackCount: 3)
+        XCTAssertEqual(geometry.contentWidth, 1_240)
+        XCTAssertEqual(geometry.contentHeight, 144)
+        XCTAssertEqual(PTDebugTimelineGeometry.xPosition(
+            elapsed: 5, contentWidth: 1_240, duration: 10), 620)
+        let zero = PTDebugTimelineGeometry(
+            viewportWidth: 300, duration: 0, zoom: .nan,
+            visibleTrackCount: 0)
+        XCTAssertEqual(zero.contentWidth, 300)
+        XCTAssertEqual(zero.contentHeight, 48)
+    }
+
 }
