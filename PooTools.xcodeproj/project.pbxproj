@@ -577,6 +577,7 @@
 		55B6D7CB2C1DB47300033309 /* PTActionSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTActionSheetController.swift; sourceTree = "<group>"; };
 		55B721483056E7C0001E9020 /* PTInstruments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTInstruments.swift; sourceTree = "<group>"; };
 		55B721493056E7C0001E9020 /* PTInstrumentsUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTInstrumentsUI.swift; sourceTree = "<group>"; };
+		A38F20261030000000000001 /* PTConsoleWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "../PToolsDebugConsoleUI/PTConsoleWindow.swift"; sourceTree = "<group>"; };
 		55B8FD922CBC9163006D82AD /* ElementLibrary.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ElementLibrary.xcassets; sourceTree = "<group>"; };
 		55B8FD932CBC9163006D82AD /* Symbols.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Symbols.xcassets; sourceTree = "<group>"; };
 		55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestChatViewController.swift; sourceTree = "<group>"; };
@@ -1680,6 +1681,7 @@
 				55F8ED7D30600BEA00488EFA /* PTDebugHookRegistry.swift */,
 				55B721483056E7C0001E9020 /* PTInstruments.swift */,
 				55B721493056E7C0001E9020 /* PTInstrumentsUI.swift */,
+				A38F20261030000000000001 /* PTConsoleWindow.swift */,
 				557E3A8D2C044157002466A0 /* CwlDemangle.swift */,
 				557E3AAB2C0471BF002466A0 /* PTApplicationDirectories.swift */,
 				55024DF129F3711000244E44 /* PTBaseViewController+Debug.swift */,
