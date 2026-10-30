@@ -16,6 +16,8 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v7
+      - name: PR54 validate Studio owner, privacy and consent boundaries
+        run: python3 Scripts/validate_debug_studio_pr54.py
       - name: Validate SwiftPM manifest and split capture ownership
         run: |
           swift package dump-package > /tmp/ptools-debug-package.json

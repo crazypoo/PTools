@@ -29,4 +29,22 @@ final class PTDebugInspectorCoreTests: XCTestCase {
             PTDebugInspectorSnapshotSignature.fingerprint(entries: [before]),
             PTDebugInspectorSnapshotSignature.fingerprint(entries: [after]))
     }
+    func testReadOnlyConstraintMetadataChangesFingerprintWithoutChangingWireShape() throws {
+        let id = "view-123"
+        let oldEntry = PTStudioDiagnosticEntry(
+            id: id, kind: "UIView", name: "UILabel",
+            frame: .init(x: 10, y: 20, width: 90, height: 30),
+            attributes: ["ownActiveConstraints": "0",
+                         "translatesAutoresizingMaskIntoConstraints": "false"])
+        var changed = oldEntry
+        changed.attributes["ownActiveConstraints"] = "2"
+        let before = PTDebugInspectorSnapshotSignature.fingerprint(entries: [oldEntry])
+        let after = PTDebugInspectorSnapshotSignature.fingerprint(entries: [changed])
+        XCTAssertNotEqual(before, after)
+        let data = try JSONEncoder().encode(changed)
+        let decoded = try JSONDecoder().decode(PTStudioDiagnosticEntry.self, from: data)
+        XCTAssertEqual(decoded.id, id)
+        XCTAssertEqual(decoded.attributes["ownActiveConstraints"], "2")
+    }
+
 }

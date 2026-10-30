@@ -2,13 +2,13 @@
 Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
-Branch: feature/pr46-pr50-inspector-layout-governance-20261030
-Source revision: 98086745a5deb64f173282d5cdfa5faaed2e2106
+Branch: feature/pr51-pr55-debug-performance-rel-candidate-20261030
+Source revision: 6928fdb7d49e1a9b1353b68d24225b23a0d67eb2
 Source version: 5.69.0
-Source inputs digest: 8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455
+Source inputs digest: c0ec772e7214cf193c1b62fabd35850af82c5fef5524d529dcced405437ce7e0
 Generator version: 1
 Generator: Scripts/report_singletons.rb
-Generated at: 2026-10-30T03:49:02Z
+Generated at: 2026-10-30T04:12:21Z
 -->
 
 # PTools 当前单例范围盘点
@@ -75,7 +75,7 @@ Generated at: 2026-10-30T03:49:02Z
 | PooToolsSource/DebugRuler/PTViewRulerPlugin.swift:20 | share | D Shared mutable UI or scene state | public static let share = PTViewRulerPlugin.init() | 按 Scene 或控制器实例保存；保留兼容入口 |
 | PooToolsSource/DebugStudioBridge/PTStudioBonjourDiscovery.swift:156 | shared | C Shared mutable service | public static let shared = PTStudioAutoConnectionManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/DebugStudioBridge/PTStudioBridge.swift:51 | shared | C Shared mutable service | public static let shared = PTStudioBridge() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
-| PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift:23 | shared | C Shared mutable service | public static let shared = PTStudioDiagnosticAgent() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
+| PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift:46 | shared | C Shared mutable service | public static let shared = PTStudioDiagnosticAgent() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/HealthKit/PTHealthKit.swift:23 | share | C Shared mutable service | public static let share = PTHealthKit() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/IAP/PTIAPManager.swift:31 | shared | C Shared mutable service | public static let shared = PTIAPManager() | 提供可实例化入口，shared/share 仅作为默认兼容入口 |
 | PooToolsSource/ImageEditor/PTImageEditorConfig.swift:36 | share | D Shared mutable UI or scene state | public static let share = PTImageEditorConfig() | 按 Scene 或控制器实例保存；保留兼容入口 |

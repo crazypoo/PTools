@@ -16,6 +16,29 @@ private final class PTStudioWeakView {
     init(_ view: UIView) { self.view = view }
 }
 
+/// PR52/54: read-only Debug Inspector metadata. Keep all constraint details
+/// aggregated; no owner pointers, raw constraint descriptions or custom class
+/// member values cross the authorized diagnostics transport.
+@MainActor
+private enum PTStudioInspectorLayoutMetadata {
+    static func attributes(for view: UIView) -> [String: String] {
+        let installedConstraints = view.constraints
+        let activeCount = installedConstraints.reduce(into: 0) { count, constraint in
+            if constraint.isActive { count += 1 }
+        }
+        return [
+            "isHidden": String(view.isHidden),
+            "alpha": String(format: "%.2f", Double(view.alpha)),
+            "subviewCount": String(view.subviews.count),
+            "clipsToBounds": String(view.clipsToBounds),
+            "translatesAutoresizingMaskIntoConstraints":
+                String(view.translatesAutoresizingMaskIntoConstraints),
+            "ownActiveConstraints": String(activeCount),
+            "ownTotalConstraints": String(installedConstraints.count)
+        ]
+    }
+}
+
 /// Opt-in Debug-only diagnostics. This is independent of the established
 /// read-only Network schema-v1 Bridge. No method evaluates arbitrary code.
 @MainActor
@@ -212,7 +235,10 @@ public final class PTStudioDiagnosticAgent {
 
     private func snapshot(includePreview: Bool) -> [PTStudioDiagnosticEntry] {
         var result: [PTStudioDiagnosticEntry] = []
+        result.reserveCapacity(900)
         var live: [String: PTStudioWeakView] = [:]
+        live.reserveCapacity(900)
+        var hasPreview = false
         func append(_ view: UIView, parentID: String?, depth: Int, isWindow: Bool) {
             guard result.count < 900, depth < 20 else { return }
             let oid = ObjectIdentifier(view)
@@ -227,7 +253,7 @@ public final class PTStudioDiagnosticAgent {
             var preview: String?
             // One bounded preview per snapshot. Multiple full-window previews
             // could exceed the collector's 512 KiB reply limit.
-            if isWindow && includePreview && !result.contains(where: { $0.previewBase64 != nil })
+            if isWindow && includePreview && !hasPreview
                 && view.bounds.width > 0 && view.bounds.height > 0 {
                 let size = CGSize(width: min(460, view.bounds.width),
                                   height: min(600, view.bounds.height))
@@ -238,6 +264,7 @@ public final class PTStudioDiagnosticAgent {
                 }
                 preview = image.jpegData(compressionQuality: 0.45)?.base64EncodedString()
                 if (preview?.count ?? 0) > 120_000 { preview = nil }
+                hasPreview = preview != nil
             }
             result.append(PTStudioDiagnosticEntry(
                 id: value, parentID: parentID,
@@ -245,14 +272,7 @@ public final class PTStudioDiagnosticAgent {
                 detail: "depth \(depth) • \(view.subviews.count) subviews",
                 frame: PTStudioRect(x: Double(frame.minX), y: Double(frame.minY),
                                     width: Double(frame.width), height: Double(frame.height)),
-                attributes: ["isHidden": String(view.isHidden),
-                             "alpha": String(format: "%.2f", Double(view.alpha)),
-                             "subviewCount": String(view.subviews.count),
-                             // Read-only layout hints for Studio's advisory
-                             // geometry audit; no NSLayoutConstraint mutation.
-                             "clipsToBounds": String(view.clipsToBounds),
-                             "translatesAutoresizingMaskIntoConstraints":
-                                 String(view.translatesAutoresizingMaskIntoConstraints)],
+                attributes: PTStudioInspectorLayoutMetadata.attributes(for: view),
                 previewBase64: preview
             ))
             for child in view.subviews { append(child, parentID: value, depth: depth + 1, isWindow: false) }

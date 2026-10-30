@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "98086745a5deb64f173282d5cdfa5faaed2e2106",
-  "generated_at": "2026-10-30T03:49:02Z",
+  "source_revision": "6928fdb7d49e1a9b1353b68d24225b23a0d67eb2",
+  "generated_at": "2026-10-30T04:12:21Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -12716,11 +12716,11 @@
     }
   ],
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T03:49:02Z",
+  "generatedAt": "2026-10-30T04:12:21Z",
   "repository": "crazypoo/PTools",
-  "branch": "feature/pr46-pr50-inspector-layout-governance-20261030",
-  "sourceRevision": "98086745a5deb64f173282d5cdfa5faaed2e2106",
+  "branch": "feature/pr51-pr55-debug-performance-rel-candidate-20261030",
+  "sourceRevision": "6928fdb7d49e1a9b1353b68d24225b23a0d67eb2",
   "sourceVersion": "5.69.0",
   "generatorVersion": "Scripts/report_spm_dependency_graph.rb",
-  "sourceInputsDigest": "8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455"
+  "sourceInputsDigest": "c0ec772e7214cf193c1b62fabd35850af82c5fef5524d529dcced405437ce7e0"
 }

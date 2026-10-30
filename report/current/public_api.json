@@ -4,8 +4,8 @@
   "abi_claim": false,
   "generated_from": "PooToolsSource/**/*.swift",
   "generator": "Scripts/report_public_api.rb",
-  "source_revision": "98086745a5deb64f173282d5cdfa5faaed2e2106",
-  "generated_at": "2026-10-30T03:49:02Z",
+  "source_revision": "6928fdb7d49e1a9b1353b68d24225b23a0d67eb2",
+  "generated_at": "2026-10-30T04:12:21Z",
   "declarations": [
     {
       "key": "PooToolsSource/AESAndDES/PTDataEncryption.swift|public|enum|public enum PTEncryptionError: LocalizedError",
@@ -27266,7 +27266,7 @@
     {
       "key": "PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift|public|class|public final class PTStudioDiagnosticAgent",
       "path": "PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift",
-      "line": 22,
+      "line": 45,
       "access": "public",
       "kind": "class",
       "declaration": "public final class PTStudioDiagnosticAgent {"
@@ -27274,7 +27274,7 @@
     {
       "key": "PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift|public|func|public func startIfAuthorized() async",
       "path": "PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift",
-      "line": 41,
+      "line": 64,
       "access": "public",
       "kind": "func",
       "declaration": "public func startIfAuthorized() async {"
@@ -27282,7 +27282,7 @@
     {
       "key": "PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift|public|func|public func stop() async",
       "path": "PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift",
-      "line": 87,
+      "line": 110,
       "access": "public",
       "kind": "func",
       "declaration": "public func stop() async {"
@@ -27290,7 +27290,7 @@
     {
       "key": "PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift|public|func|public func recordLog(_ message: String)",
       "path": "PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift",
-      "line": 101,
+      "line": 124,
       "access": "public",
       "kind": "func",
       "declaration": "public func recordLog(_ message: String) {"
@@ -94673,11 +94673,11 @@
     }
   ],
   "schemaVersion": 2,
-  "generatedAt": "2026-10-30T03:49:02Z",
+  "generatedAt": "2026-10-30T04:12:21Z",
   "repository": "crazypoo/PTools",
-  "branch": "feature/pr46-pr50-inspector-layout-governance-20261030",
-  "sourceRevision": "98086745a5deb64f173282d5cdfa5faaed2e2106",
+  "branch": "feature/pr51-pr55-debug-performance-rel-candidate-20261030",
+  "sourceRevision": "6928fdb7d49e1a9b1353b68d24225b23a0d67eb2",
   "sourceVersion": "5.69.0",
   "generatorVersion": "Scripts/report_public_api.rb",
-  "sourceInputsDigest": "8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455"
+  "sourceInputsDigest": "c0ec772e7214cf193c1b62fabd35850af82c5fef5524d529dcced405437ce7e0"
 }
