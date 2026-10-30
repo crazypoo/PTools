@@ -16,6 +16,28 @@ private final class PTStudioWeakView {
     init(_ view: UIView) { self.view = view }
 }
 
+/// PR52/54: read-only Debug Inspector metadata. Keep all constraint details
+/// aggregated; no owner pointers, raw constraint descriptions or custom class
+/// member values cross the authorized diagnostics transport.
+@MainActor
+private enum PTStudioInspectorLayoutMetadata {
+    static func attributes(for view: UIView) -> [String: String] {
+        let activeCount = view.constraints.reduce(into: 0) { count, constraint in
+            if constraint.isActive { count += 1 }
+        }
+        return [
+            "isHidden": String(view.isHidden),
+            "alpha": String(format: "%.2f", Double(view.alpha)),
+            "subviewCount": String(view.subviews.count),
+            "clipsToBounds": String(view.clipsToBounds),
+            "translatesAutoresizingMaskIntoConstraints":
+                String(view.translatesAutoresizingMaskIntoConstraints),
+            "ownActiveConstraints": String(activeCount),
+            "ownTotalConstraints": String(view.constraints.count)
+        ]
+    }
+}
+
 /// Opt-in Debug-only diagnostics. This is independent of the established
 /// read-only Network schema-v1 Bridge. No method evaluates arbitrary code.
 @MainActor
@@ -245,14 +267,7 @@ public final class PTStudioDiagnosticAgent {
                 detail: "depth \(depth) • \(view.subviews.count) subviews",
                 frame: PTStudioRect(x: Double(frame.minX), y: Double(frame.minY),
                                     width: Double(frame.width), height: Double(frame.height)),
-                attributes: ["isHidden": String(view.isHidden),
-                             "alpha": String(format: "%.2f", Double(view.alpha)),
-                             "subviewCount": String(view.subviews.count),
-                             // Read-only layout hints for Studio's advisory
-                             // geometry audit; no NSLayoutConstraint mutation.
-                             "clipsToBounds": String(view.clipsToBounds),
-                             "translatesAutoresizingMaskIntoConstraints":
-                                 String(view.translatesAutoresizingMaskIntoConstraints)],
+                attributes: PTStudioInspectorLayoutMetadata.attributes(for: view),
                 previewBase64: preview
             ))
             for child in view.subviews { append(child, parentID: value, depth: depth + 1, isWindow: false) }
