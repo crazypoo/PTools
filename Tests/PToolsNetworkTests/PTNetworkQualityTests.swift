@@ -28,7 +28,8 @@ final class PTNetworkFixtureURLProtocol: URLProtocol, @unchecked Sendable {
             return
         }
         if url.path == "/identity",
-           request.value(forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader) != nil {
+           (request.value(forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader) != nil ||
+            request.value(forHTTPHeaderField: "X-Request-Nonce") != "nonce-123") {
             client?.urlProtocol(self, didFailWithError: PTNetworkFixtureError.invalidURL)
             return
         }
@@ -151,22 +152,54 @@ final class PTNetworkQualityTests: XCTestCase {
         XCTAssertNil(excluded)
     }
 
-    func testIgnoredIdentityHeadersAreOptInViaNetworkConfiguration() {
+    func testCustomURLRequestUsesConfigWithoutPToolsManagedHeaders() {
         var config = PTNetworkConfig()
-        config.requestIdentityIgnoredHeaders = ["TS", "token"]
-        let headers = Network.prepareRequestHeaders(header: nil,
-                                                     jsonRequest: false,
-                                                     configuration: config)
-        XCTAssertEqual(headers.value(for: PTRequestIdentityPolicy.metadataHeader), "token,ts")
+        config.requestIdentityIgnoredHeaders = ["X-Request-Nonce", "token"]
+        var first = URLRequest(url: URL(string: "https://example.com/categories")!)
+        first.httpMethod = "GET"
+        first.setValue("nonce-1", forHTTPHeaderField: "X-Request-Nonce")
+        first.setValue("custom-account", forHTTPHeaderField: "X-User-Key")
+        first.setValue("account-token", forHTTPHeaderField: "token")
+
+        // No PTools-specific header is required from the application.
+        let defaultKey = RequestKey(request: first, responseType: String.self)
+        Network.applyRequestIdentityConfiguration(&first, configuration: config)
+        var second = first
+        second.setValue("nonce-2", forHTTPHeaderField: "X-Request-Nonce")
+        XCTAssertEqual(RequestKey(request: first, responseType: String.self),
+                       RequestKey(request: second, responseType: String.self))
+        XCTAssertNotEqual(defaultKey, RequestKey(request: second, responseType: String.self))
+
+        second.setValue("another-account", forHTTPHeaderField: "X-User-Key")
+        XCTAssertNotEqual(RequestKey(request: first, responseType: String.self),
+                          RequestKey(request: second, responseType: String.self))
+
+        // Identity normalization never strips protected credentials.
+        second.setValue("custom-account", forHTTPHeaderField: "X-User-Key")
+        second.setValue("other-token", forHTTPHeaderField: "token")
+        XCTAssertNotEqual(RequestKey(request: first, responseType: String.self),
+                          RequestKey(request: second, responseType: String.self))
+
+        var unset = PTNetworkConfig()
+        unset.requestIdentityIgnoredHeaders = []
+        Network.applyRequestIdentityConfiguration(&second, configuration: unset)
+        XCTAssertNil(second.value(forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader))
+
+        let originalHeaders = Network.prepareRequestHeaders(header: ["X-User-Key":"custom-account"],
+                                                             jsonRequest: false,
+                                                             configuration: config)
+        XCTAssertNil(originalHeaders.value(for: PTRequestIdentityPolicy.metadataHeader))
     }
 
     func testIdentityMetadataNeverLeavesTheTransportBoundary() async throws {
-        let network = Network(configuration: PTNetworkConfig(),
+        var config = PTNetworkConfig()
+        config.requestIdentityIgnoredHeaders = ["X-Request-Nonce"]
+        let network = Network(configuration: config,
                               plugins: [],
                               protocolClasses: [PTNetworkFixtureURLProtocol.self])
         var request = URLRequest(url: URL(string: "ptfixture://identity/identity")!)
         request.httpMethod = "GET"
-        request.setValue("ts", forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
+        request.setValue("nonce-123", forHTTPHeaderField: "X-Request-Nonce")
         let response = try await network.executeRequest(url: request.url!.absoluteString,
                                                         request: request)
         XCTAssertEqual(response.metadata.statusCode, 200)
