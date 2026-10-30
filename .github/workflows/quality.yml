@@ -173,7 +173,24 @@ jobs:
       - name: Compare actual generator outputs against committed reports
         run: |
           bash Scripts/Governance/generate_all_current_reports.sh --check
-      - name: Upload reproducibility diagnostics
+      - name: Regenerate reviewable report artifact when committed reports drift
+        if: failure()
+        run: |
+          set -euo pipefail
+          bash Scripts/Governance/generate_all_current_reports.sh --write
+          mkdir -p .quality-report
+          git diff --name-only -- report/current > .quality-report/generated-report-changes.txt
+          git diff --check
+      - name: Upload generator-owned current reports and change list
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr36-pr40-regenerated-current-reports
+          path: |
+            report/current
+            .quality-report/generated-report-changes.txt
+          retention-days: 14
+      - name: Report uncommitted generator differences
         if: failure()
         run: |
           git status --short
