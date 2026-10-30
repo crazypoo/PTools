@@ -298,6 +298,7 @@ let package = Package(
         .library(name: "PToolsDebugConsoleCore", targets: ["PToolsDebugConsoleCore"]),
         .library(name: "PToolsDebugConsoleUI", targets: ["PToolsDebugConsoleUI"]),
         .library(name: "PToolsDebugMetricsCore", targets: ["PToolsDebugMetricsCore"]),
+        .library(name: "PToolsDebugMetricsUI", targets: ["PToolsDebugMetricsUI"]),
         .library(name: "PToolsDebugInspectorCore", targets: ["PToolsDebugInspectorCore"]),
         .library(name: "PToolsDebugInspectorUI", targets: ["PToolsDebugInspectorUI"]),
         .library(name: "PToolsDebugInspectorLegacyUI", targets: ["PToolsDebugInspectorLegacyUI"]),
@@ -1173,7 +1174,7 @@ let package = Package(
         // ==========================================
         .target(
             name: "PooToolsDEBUG",
-            dependencies: ["PToolsDebugInspectorLegacyUI", "PToolsDebugConsoleUI", "PToolsDebugNetworkCore", "PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "PToolsDebugStorageCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
+            dependencies: ["PToolsDebugInspectorLegacyUI", "PToolsDebugConsoleUI", "PToolsDebugMetricsUI", "PToolsDebugNetworkCore", "PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "PToolsDebugStorageCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
             path: "PooToolsSource",
             exclude: ["DebugNetwork/PTNetworkCaptureModels.swift", "DebugNetwork/PTNetworkCaptureStore.swift", "DebugNetwork/PTNetworkRedactor.swift", "Debug/PTDebugInventory.swift"],
             sources: [
@@ -1211,6 +1212,12 @@ let package = Package(
             name: "PToolsDebugMetricsCore",
             path: "PooToolsSource/PToolsDebugMetricsCore",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        // Lightweight UIKit grid renderer; no timer, recorder or sampler.
+        .target(
+            name: "PToolsDebugMetricsUI",
+            path: "PooToolsSource/PToolsDebugMetricsUI",
+            swiftSettings: [.define("POOTOOLS_DEBUG")]
         ),
         // UIKit-free Inspector snapshot identity reused by Studio and tests.
         .target(
