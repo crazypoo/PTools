@@ -1617,6 +1617,22 @@
       "owner": "debug",
       "expiration": "2027-03-31",
       "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsVariantCore",
+      "reason": "SwiftPM publishes the shared VariantCore Foundation target under its PTools-prefixed product name; CocoaPods includes identical source files in VariantCore.",
+      "owner": "packaging",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "pod_only",
+      "module": "VariantCore",
+      "reason": "CocoaPods preserves the historical VariantCore subspec and compiles the same PToolsVariantCore sources as the SwiftPM standalone target.",
+      "owner": "packaging",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
     }
   ],
   "known_drift": [
@@ -2659,6 +2675,15 @@
       "field": "internal_dependencies",
       "reason": "SwiftPM DEBUG directly depends on split Foundation DebugCore and MetricsCore targets; CocoaPods DEBUG compiles them into its aggregate subspec.",
       "owner": "debug",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "dependency",
+      "module": "Search",
+      "field": "internal_dependencies",
+      "reason": "SwiftPM declares ptools/PToolsCore and UIKit/SearchBar source dependencies explicitly; CocoaPods maps the equivalent source surfaces through Core, PToolsUIFoundation and SearchBar subspecs.",
+      "owner": "packaging",
       "expiration": "2027-03-31",
       "classification": "INTENTIONAL"
     }
