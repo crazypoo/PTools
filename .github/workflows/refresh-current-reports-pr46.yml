@@ -5,6 +5,7 @@ on:
     branches:
       - feature/pr46-pr50-inspector-layout-governance-20261030
       - feature/pr51-pr55-debug-performance-rel-candidate-20261030
+      - feature/pr56-pr60-rc-ci-security-20261030
 
 permissions:
   contents: write
