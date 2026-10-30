@@ -22,7 +22,8 @@ private final class PTStudioWeakView {
 @MainActor
 private enum PTStudioInspectorLayoutMetadata {
     static func attributes(for view: UIView) -> [String: String] {
-        let activeCount = view.constraints.reduce(into: 0) { count, constraint in
+        let installedConstraints = view.constraints
+        let activeCount = installedConstraints.reduce(into: 0) { count, constraint in
             if constraint.isActive { count += 1 }
         }
         return [
@@ -33,7 +34,7 @@ private enum PTStudioInspectorLayoutMetadata {
             "translatesAutoresizingMaskIntoConstraints":
                 String(view.translatesAutoresizingMaskIntoConstraints),
             "ownActiveConstraints": String(activeCount),
-            "ownTotalConstraints": String(view.constraints.count)
+            "ownTotalConstraints": String(installedConstraints.count)
         ]
     }
 }
@@ -234,7 +235,10 @@ public final class PTStudioDiagnosticAgent {
 
     private func snapshot(includePreview: Bool) -> [PTStudioDiagnosticEntry] {
         var result: [PTStudioDiagnosticEntry] = []
+        result.reserveCapacity(900)
         var live: [String: PTStudioWeakView] = [:]
+        live.reserveCapacity(900)
+        var hasPreview = false
         func append(_ view: UIView, parentID: String?, depth: Int, isWindow: Bool) {
             guard result.count < 900, depth < 20 else { return }
             let oid = ObjectIdentifier(view)
@@ -249,7 +253,7 @@ public final class PTStudioDiagnosticAgent {
             var preview: String?
             // One bounded preview per snapshot. Multiple full-window previews
             // could exceed the collector's 512 KiB reply limit.
-            if isWindow && includePreview && !result.contains(where: { $0.previewBase64 != nil })
+            if isWindow && includePreview && !hasPreview
                 && view.bounds.width > 0 && view.bounds.height > 0 {
                 let size = CGSize(width: min(460, view.bounds.width),
                                   height: min(600, view.bounds.height))
@@ -260,6 +264,7 @@ public final class PTStudioDiagnosticAgent {
                 }
                 preview = image.jpegData(compressionQuality: 0.45)?.base64EncodedString()
                 if (preview?.count ?? 0) > 120_000 { preview = nil }
+                hasPreview = preview != nil
             }
             result.append(PTStudioDiagnosticEntry(
                 id: value, parentID: parentID,
