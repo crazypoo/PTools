@@ -297,6 +297,7 @@ let package = Package(
         .library(name: "PToolsDebugCore", targets: ["PToolsDebugCore"]),
         .library(name: "PToolsDebugMetricsCore", targets: ["PToolsDebugMetricsCore"]),
         .library(name: "PToolsDebugInspectorCore", targets: ["PToolsDebugInspectorCore"]),
+        .library(name: "PToolsDebugInspectorUI", targets: ["PToolsDebugInspectorUI"]),
         .library(name: "PToolsDebugNetworkCore", targets: ["PToolsDebugNetworkCore"]),
         .library(name: "PToolsDebugInventoryCore", targets: ["PToolsDebugInventoryCore"]),
         .library(name: "PooToolsDEBUG", targets: ["PooToolsDEBUG"]),
@@ -1196,6 +1197,12 @@ let package = Package(
             path: "PooToolsSource/PToolsDebugInspectorCore",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
+        // The iOS highlight overlay is a presentation-only Inspector leaf.
+        .target(
+            name: "PToolsDebugInspectorUI",
+            path: "PooToolsSource/PToolsDebugInspectorUI",
+            swiftSettings: [.define("POOTOOLS_DEBUG")]
+        ),
         // File/defaults Debug inventory is pure Foundation and has no UIKit dependency.
         // PR23: immutable capture contract + actor storage + redaction without UIKit.
         // Legacy presentation remains in PooToolsDEBUG.
@@ -1223,7 +1230,7 @@ let package = Package(
         ),
         .target(
             name: "PToolsDebugStudioBridge",
-            dependencies: ["PooToolsDEBUG", "PToolsStudioProtocolCore", "PToolsDebugInspectorCore", "PToolsDebugNetworkCore"],
+            dependencies: ["PooToolsDEBUG", "PToolsStudioProtocolCore", "PToolsDebugInspectorCore", "PToolsDebugInspectorUI", "PToolsDebugNetworkCore"],
             path: "PooToolsSource/DebugStudioBridge",
             swiftSettings: [.define("POOTOOLS_DEBUG_STUDIO_BRIDGE")]
         ),
