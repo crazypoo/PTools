@@ -1,75 +1,75 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_mainactor_heavy_work.rb",
-  "source_revision": "a868c0a22374e9a4016e85a100ccc814895d9cc3",
-  "generated_at": "2026-10-18T02:39:40Z",
+  "source_revision": "98086745a5deb64f173282d5cdfa5faaed2e2106",
+  "generated_at": "2026-10-30T03:49:02Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 152,
+      "line": 129,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "guard let files = try? FileManager.default.contentsOfDirectory(at: directory,"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 170,
+      "line": 147,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "try? FileManager.default.removeItem(at: entry.url)"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 197,
+      "line": 174,
       "operation": "FileManager.default",
       "classification": "MIGRATED",
       "text": "let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 200,
+      "line": 177,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "if !FileManager.default.fileExists(atPath: dir.path) {"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 201,
+      "line": 178,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 217,
+      "line": 194,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "return FileManager.default.fileExists(atPath: url.path) ? url : nil"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 222,
+      "line": 199,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "guard FileManager.default.fileExists(atPath: localURL.path) else {"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 227,
+      "line": 204,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "if let attr = try? FileManager.default.attributesOfItem(atPath: localURL.path),"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 520,
+      "line": 509,
       "operation": "jpegData\\(",
       "classification": "MIGRATED",
       "text": "image.jpegData(compressionQuality: 0.8)"
     },
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
-      "line": 534,
+      "line": 523,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "let attributes = try? FileManager.default.attributesOfItem(atPath: url.path) {"
@@ -118,63 +118,63 @@
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 714,
+      "line": 730,
       "operation": "CGImageSourceCreate",
       "classification": "INTENTIONAL",
       "text": "guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 726,
+      "line": 742,
       "operation": "CGImageSourceCreate",
       "classification": "INTENTIONAL",
       "text": "guard let cgImage = CGImageSourceCreateImageAtIndex(source, i, options) else {"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 747,
+      "line": 763,
       "operation": "CGImageSourceCreate",
       "classification": "INTENTIONAL",
       "text": "kCGImageSourceCreateThumbnailFromImageAlways as String: true,"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 748,
+      "line": 764,
       "operation": "CGImageSourceCreate",
       "classification": "INTENTIONAL",
       "text": "kCGImageSourceCreateThumbnailWithTransform as String: true,"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 768,
+      "line": 784,
       "operation": "CGImageSourceCreate",
       "classification": "INTENTIONAL",
       "text": "guard let source = CGImageSourceCreateWithData(data as CFData, nil),"
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 769,
+      "line": 785,
       "operation": "CGImageSourceCreate",
       "classification": "INTENTIONAL",
       "text": "let cgImage = CGImageSourceCreateImageAtIndex(source, 0, ["
     },
     {
       "path": "PooToolsSource/Core/PTLoadImageFunction.swift",
-      "line": 773,
+      "line": 789,
       "operation": "UIImage\\(data:",
       "classification": "INTENTIONAL",
       "text": "return UIImage(data: data)"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 453,
+      "line": 448,
       "operation": "JSONDecoder",
       "classification": "INTENTIONAL",
       "text": "if let statusModel = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) {"
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 622,
+      "line": 617,
       "operation": "JSONDecoder",
       "classification": "INTENTIONAL",
       "text": "let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {"
@@ -251,5 +251,13 @@
     }
   ],
   "review_required_count": 0,
-  "background_or_actor_count": 11
+  "background_or_actor_count": 11,
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-30T03:49:02Z",
+  "repository": "crazypoo/PTools",
+  "branch": "feature/pr46-pr50-inspector-layout-governance-20261030",
+  "sourceRevision": "98086745a5deb64f173282d5cdfa5faaed2e2106",
+  "sourceVersion": "5.69.0",
+  "generatorVersion": "Scripts/report_mainactor_heavy_work.rb",
+  "sourceInputsDigest": "8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455"
 }

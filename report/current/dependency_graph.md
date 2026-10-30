@@ -1,21 +1,25 @@
 <!--
+Current report metadata.
 AUTO-GENERATED FILE.
-DO NOT EDIT MANUALLY.
-
+Repository: crazypoo/PTools
+Branch: feature/pr46-pr50-inspector-layout-governance-20261030
+Source revision: 98086745a5deb64f173282d5cdfa5faaed2e2106
+Source version: 5.69.0
+Source inputs digest: 8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455
+Generator version: 1
 Generator: Scripts/report_current_summaries.rb
-Source revision: a868c0a22374e9a4016e85a100ccc814895d9cc3
-Generated at: 2026-10-18T03:14:35Z
+Generated at: 2026-10-30T03:49:02Z
 -->
 
 # PTools 当前依赖图
 
 本报告合并当前 SwiftPM target 图和 CocoaPods subspec 图；详细机器数据保留在同目录的 JSON 报告。
 
-- SwiftPM target 数量：`184`
-- SwiftPM product 数量：`161`
-- CocoaPods subspec 数量：`165`
+- SwiftPM target 数量：`209`
+- SwiftPM product 数量：`175`
+- CocoaPods subspec 数量：`167`
 - CocoaPods 默认 subspec：`Core`
-- 当前 podspec 版本：`5.67.0`
+- 当前 podspec 版本：`5.69.0`
 
 ## 机器报告
 

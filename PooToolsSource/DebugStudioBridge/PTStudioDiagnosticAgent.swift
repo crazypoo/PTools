@@ -247,7 +247,12 @@ public final class PTStudioDiagnosticAgent {
                                     width: Double(frame.width), height: Double(frame.height)),
                 attributes: ["isHidden": String(view.isHidden),
                              "alpha": String(format: "%.2f", Double(view.alpha)),
-                             "subviewCount": String(view.subviews.count)],
+                             "subviewCount": String(view.subviews.count),
+                             // Read-only layout hints for Studio's advisory
+                             // geometry audit; no NSLayoutConstraint mutation.
+                             "clipsToBounds": String(view.clipsToBounds),
+                             "translatesAutoresizingMaskIntoConstraints":
+                                 String(view.translatesAutoresizingMaskIntoConstraints)],
                 previewBase64: preview
             ))
             for child in view.subviews { append(child, parentID: value, depth: depth + 1, isWindow: false) }

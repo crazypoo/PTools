@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "23f6f58d7b266175109501ec67df060cb2859650",
-  "generated_at": "2026-10-19T07:40:29Z",
+  "source_revision": "98086745a5deb64f173282d5cdfa5faaed2e2106",
+  "generated_at": "2026-10-30T03:49:02Z",
   "name": "PooTools",
-  "version": "5.67.2",
+  "version": "5.69.0",
   "platforms": {
     "ios": "17.0"
   },
@@ -12,7 +12,7 @@
     "6.0"
   ],
   "default_subspec": "Core",
-  "subspec_count": 165,
+  "subspec_count": 167,
   "subspecs": [
     {
       "name": "PooTools/Accessibility",
@@ -98,7 +98,7 @@
         "Foundation"
       ],
       "pod_target_xcconfig": {
-        "APPLICATION_EXTENSION_API_ONLY": "YES",
+        "APPLICATION_EXTENSION_API_ONLY": "NO",
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_ACTIVITIES POOTOOLS_COCOAPODS"
       }
     },
@@ -141,7 +141,7 @@
         "Foundation"
       ],
       "pod_target_xcconfig": {
-        "APPLICATION_EXTENSION_API_ONLY": "YES",
+        "APPLICATION_EXTENSION_API_ONLY": "NO",
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_APPINTENTS POOTOOLS_COCOAPODS"
       }
     },
@@ -890,6 +890,11 @@
         "PooToolsSource/DevMask/*.{h,m,swift}",
         "PooToolsSource/Inspector/*.{h,m,swift}",
         "PooToolsSource/LocalConsole/*.{h,m,swift}",
+        "PooToolsSource/PToolsDebugConsoleUI/**/*.swift",
+        "PooToolsSource/PToolsDebugCore/**/*.swift",
+        "PooToolsSource/PToolsDebugInventoryCore/**/*.swift",
+        "PooToolsSource/PToolsDebugMetricsCore/**/*.swift",
+        "PooToolsSource/PToolsDebugMetricsUI/**/*.swift",
         "PooToolsSource/TouchInspector/*.{h,m,swift}"
       ],
       "source_directories": [
@@ -907,6 +912,11 @@
         "DevMask",
         "Inspector",
         "LocalConsole",
+        "PToolsDebugConsoleUI",
+        "PToolsDebugCore",
+        "PToolsDebugInventoryCore",
+        "PToolsDebugMetricsCore",
+        "PToolsDebugMetricsUI",
         "TouchInspector"
       ],
       "resource_bundles": {},
@@ -914,6 +924,36 @@
       "frameworks": [],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DEBUG POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PooTools/DEBUG_StudioBridge",
+      "short_name": "DEBUG_StudioBridge",
+      "local_dependencies": [
+        "PooTools/DEBUG"
+      ],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/DebugStudioBridge/**/*.swift",
+        "PooToolsSource/PToolsDebugInspectorCore/**/*.swift",
+        "PooToolsSource/PToolsDebugInspectorUI/**/*.swift",
+        "PooToolsSource/PToolsStudioProtocolCore/**/*.swift"
+      ],
+      "source_directories": [
+        "DebugStudioBridge",
+        "PToolsDebugInspectorCore",
+        "PToolsDebugInspectorUI",
+        "PToolsStudioProtocolCore"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "CryptoKit",
+        "Foundation",
+        "Security"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DEBUG_STUDIO_BRIDGE POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -2406,7 +2446,7 @@
         "SnapKit"
       ],
       "source_files": [
-        "PooToolsSource/PToolsUIFoundation/*.{h,m,swift}"
+        "PooToolsSource/PToolsUIFoundation/**/*.{h,m,swift}"
       ],
       "source_directories": [
         "PToolsUIFoundation"
@@ -3416,6 +3456,26 @@
       "pod_target_xcconfig": {}
     },
     {
+      "name": "PooTools/VariantCore",
+      "short_name": "VariantCore",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsVariantCore/**/*.swift"
+      ],
+      "source_directories": [
+        "PToolsVariantCore"
+      ],
+      "resource_bundles": {},
+      "resources": [],
+      "frameworks": [
+        "Foundation"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_VARIANT_CORE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "PooTools/VideoCache",
       "short_name": "VideoCache",
       "local_dependencies": [
@@ -3603,7 +3663,7 @@
         "WidgetKit"
       ],
       "pod_target_xcconfig": {
-        "APPLICATION_EXTENSION_API_ONLY": "YES",
+        "APPLICATION_EXTENSION_API_ONLY": "NO",
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_WIDGET_CORE POOTOOLS_COCOAPODS"
       }
     },
@@ -3645,5 +3705,13 @@
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_iOS17TIPS POOTOOLS_COCOAPODS"
       }
     }
-  ]
+  ],
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-30T03:49:02Z",
+  "repository": "crazypoo/PTools",
+  "branch": "feature/pr46-pr50-inspector-layout-governance-20261030",
+  "sourceRevision": "98086745a5deb64f173282d5cdfa5faaed2e2106",
+  "sourceVersion": "5.69.0",
+  "generatorVersion": "Scripts/report_cocoapods_subspec_graph.rb",
+  "sourceInputsDigest": "8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455"
 }

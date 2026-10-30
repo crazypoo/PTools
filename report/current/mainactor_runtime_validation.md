@@ -2,18 +2,18 @@
 Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
-Branch: master
-Source revision: 4c508f23263c51171d48163d641a4d808069b81a
-Source version: 5.65.6
-Source inputs digest: a87b93f96939b4e60d1a69bd9a8ed165943fd5ee7941c29c3cda17d8649b691d
+Branch: feature/pr46-pr50-inspector-layout-governance-20261030
+Source revision: 98086745a5deb64f173282d5cdfa5faaed2e2106
+Source version: 5.69.0
+Source inputs digest: 8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455
 Generator version: 1
 Generator: current-report-normalizer
-Generated at: 2026-10-16T23:53:38Z
+Generated at: 2026-10-30T03:49:02Z
 -->
 
 # MainActor Runtime Validation
 
-Source inputs digest: `3328b8be211e3c3c9937fd29e8ab988b14731c2770401e3cb1ee65a67a41c43b`
+Source inputs digest: `b6058a77c6c21baf1810cc886b3772555c2c22ef22d51ff6618be535e54a9e73`
 
 This report intentionally does not claim runtime proof. Execute the listed flows with Instruments or on a real iOS device before the 6.0 release gate.
 

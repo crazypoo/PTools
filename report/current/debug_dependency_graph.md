@@ -1,10 +1,14 @@
 <!--
+Current report metadata.
 AUTO-GENERATED FILE.
-DO NOT EDIT MANUALLY.
-
+Repository: crazypoo/PTools
+Branch: feature/pr46-pr50-inspector-layout-governance-20261030
+Source revision: 98086745a5deb64f173282d5cdfa5faaed2e2106
+Source version: 5.69.0
+Source inputs digest: 8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455
+Generator version: 1
 Generator: Scripts/report_current_summaries.rb
-Source revision: a868c0a22374e9a4016e85a100ccc814895d9cc3
-Generated at: 2026-10-18T03:14:35Z
+Generated at: 2026-10-30T03:49:02Z
 -->
 
 # PTools 当前 Debug 依赖图
@@ -15,8 +19,27 @@ Generated at: 2026-10-18T03:14:35Z
 
 | Target | Path | Internal dependencies |
 | --- | --- | --- |
-| `PToolsDebugTests` | `Tests/PToolsDebugTests` | `PooToolsDEBUG` |
-| `PooToolsDEBUG` | `PooToolsSource` | `PToolsBackgroundTasks`, `PToolsConnectivity`, `PToolsDeepLink`, `PToolsNotifications`, `PToolsOverlay`, `PToolsRouteCore`, `PToolsStorage`, `PToolsSymbols`, `PooToolsNetWork`, `PooToolsPDF`, `PooToolsSearchBar`, `PooToolsShare`, `ptools` |
+| `PToolsDebugConsoleCore` | `PooToolsSource/PToolsDebugCore` | — |
+| `PToolsDebugConsoleCoreTests` | `Tests/PToolsDebugConsoleCoreTests` | `PToolsDebugConsoleCore` |
+| `PToolsDebugConsoleUI` | `PooToolsSource/PToolsDebugConsoleUI` | `PToolsOverlay` |
+| `PToolsDebugCore` | `PooToolsSource/PToolsDebugCore` | `PToolsDebugConsoleCore` |
+| `PToolsDebugCoreTests` | `Tests/PToolsDebugCoreTests` | `PToolsDebugCore`, `PToolsDebugMetricsCore` |
+| `PToolsDebugInspectorCore` | `PooToolsSource/PToolsDebugInspectorCore` | `PToolsStudioProtocolCore` |
+| `PToolsDebugInspectorCoreTests` | `Tests/PToolsDebugInspectorCoreTests` | `PToolsDebugInspectorCore`, `PToolsStudioProtocolCore` |
+| `PToolsDebugInspectorLegacyUI` | `PooToolsSource/Inspector` | `PToolsCore`, `PToolsOverlay`, `PToolsSymbols`, `PToolsUIFoundation`, `ptools` |
+| `PToolsDebugInspectorUI` | `PooToolsSource/PToolsDebugInspectorUI` | — |
+| `PToolsDebugInventoryCore` | `PooToolsSource/PToolsDebugInventoryCore` | — |
+| `PToolsDebugInventoryCoreTests` | `Tests/PToolsDebugInventoryCoreTests` | `PToolsDebugInventoryCore` |
+| `PToolsDebugMetricsCore` | `PooToolsSource/PToolsDebugMetricsCore` | — |
+| `PToolsDebugMetricsUI` | `PooToolsSource/PToolsDebugMetricsUI` | — |
+| `PToolsDebugNetworkCore` | `PooToolsSource` | — |
+| `PToolsDebugNetworkCoreTests` | `Tests/PToolsDebugNetworkCoreTests` | `PToolsDebugNetworkCore` |
+| `PToolsDebugStorageCore` | `PooToolsSource/Debug` | `PToolsDebugInventoryCore` |
+| `PToolsDebugStorageCoreTests` | `Tests/PToolsDebugStorageCoreTests` | `PToolsDebugStorageCore` |
+| `PToolsDebugStudioBridge` | `PooToolsSource/DebugStudioBridge` | `PToolsDebugInspectorCore`, `PToolsDebugInspectorUI`, `PToolsDebugNetworkCore`, `PToolsDebugStorageCore`, `PToolsStudioProtocolCore`, `PooToolsDEBUG` |
+| `PToolsDebugStudioBridgeTests` | `Tests/PToolsDebugStudioBridgeTests` | `PToolsDebugStudioBridge`, `PooToolsDEBUG` |
+| `PToolsDebugTests` | `Tests/PToolsDebugTests` | `PToolsDebugConsoleUI`, `PToolsDebugMetricsUI`, `PooToolsDEBUG`, `PooToolsDEBUGTrackingEyes` |
+| `PooToolsDEBUG` | `PooToolsSource` | `PToolsBackgroundTasks`, `PToolsConnectivity`, `PToolsDebugConsoleUI`, `PToolsDebugCore`, `PToolsDebugInspectorLegacyUI`, `PToolsDebugInventoryCore`, `PToolsDebugMetricsCore`, `PToolsDebugMetricsUI`, `PToolsDebugNetworkCore`, `PToolsDebugStorageCore`, `PToolsDeepLink`, `PToolsNotifications`, `PToolsOverlay`, `PToolsRouteCore`, `PToolsStorage`, `PToolsSymbols`, `PooToolsNetWork`, `PooToolsPDF`, `PooToolsSearchBar`, `PooToolsShare`, `ptools` |
 | `PooToolsDEBUGTrackingEyes` | `PooToolsSource/WhereIsMyEye` | `PTCameraPermission`, `PooToolsDEBUG`, `ptools` |
 
 ## CocoaPods
@@ -24,6 +47,7 @@ Generated at: 2026-10-18T03:14:35Z
 | Subspec | Local dependencies |
 | --- | --- |
 | `DEBUG` | `PooTools/BackgroundTasks`, `PooTools/Connectivity`, `PooTools/Core`, `PooTools/DeepLink`, `PooTools/NetWork`, `PooTools/Notifications`, `PooTools/Overlay`, `PooTools/PDF`, `PooTools/RouteCore`, `PooTools/SearchBar`, `PooTools/Share`, `PooTools/Storage`, `PooTools/Symbols` |
+| `DEBUG_StudioBridge` | `PooTools/DEBUG` |
 | `DEBUG_TrackingEyes` | `PooTools/CameraPermission`, `PooTools/Core`, `PooTools/DEBUG` |
 
 Debug 运行时是否创建窗口、采样器、sink 或 observer，仍需通过真实宿主回归确认。

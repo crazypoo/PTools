@@ -1,15 +1,15 @@
 {
   "repository": "crazypoo/PTools",
-  "branch": "master",
-  "sourceRevision": "4c508f23263c51171d48163d641a4d808069b81a",
-  "sourceVersion": "5.65.6",
+  "branch": "feature/pr46-pr50-inspector-layout-governance-20261030",
+  "sourceRevision": "98086745a5deb64f173282d5cdfa5faaed2e2106",
+  "sourceVersion": "5.69.0",
   "generatorVersion": "Scripts/governance/generate_current_reports.rb",
-  "sourceInputsDigest": "a87b93f96939b4e60d1a69bd9a8ed165943fd5ee7941c29c3cda17d8649b691d",
+  "sourceInputsDigest": "8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455",
   "generator": "Scripts/governance/generate_current_reports.rb",
   "schemaVersion": 1,
-  "generatedAt": "2026-10-16T23:53:38Z",
-  "source_revision": "4c508f23263c51171d48163d641a4d808069b81a",
-  "generated_at": "2026-10-16T23:53:38Z",
+  "generatedAt": "2026-10-30T03:49:02Z",
+  "source_revision": "98086745a5deb64f173282d5cdfa5faaed2e2106",
+  "generated_at": "2026-10-30T03:49:02Z",
   "reportDirectory": "report/current",
   "historicalDirectory": "report/baselines/<version>"
 }

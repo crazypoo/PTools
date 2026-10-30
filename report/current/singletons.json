@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "generator": "Scripts/report_singletons.rb",
-  "source_revision": "23f6f58d7b266175109501ec67df060cb2859650",
-  "generated_at": "2026-10-19T07:31:21Z",
-  "shared_call_count": 1679,
+  "source_revision": "98086745a5deb64f173282d5cdfa5faaed2e2106",
+  "generated_at": "2026-10-30T03:49:02Z",
+  "shared_call_count": 1689,
   "declarations": [
     {
       "path": "PooToolsSource/ActionsheetAndAlert/PTAlertConfig.swift",
@@ -79,7 +79,7 @@
     },
     {
       "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
-      "line": 184,
+      "line": 9,
       "declaration": "public static let shared = PTNavigationBarManager()",
       "name": "shared",
       "category": "D",
@@ -286,7 +286,7 @@
     },
     {
       "path": "PooToolsSource/Debug/PTDebugFunction.swift",
-      "line": 195,
+      "line": 197,
       "declaration": "public static let shared = PTDebugPreferences()",
       "name": "shared",
       "category": "C",
@@ -295,16 +295,7 @@
     },
     {
       "path": "PooToolsSource/Debug/PTDebugFunction.swift",
-      "line": 462,
-      "declaration": "public static let shared = PTDebugEventCenter()",
-      "name": "shared",
-      "category": "C",
-      "scope": "Shared mutable service",
-      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
-    },
-    {
-      "path": "PooToolsSource/Debug/PTDebugFunction.swift",
-      "line": 489,
+      "line": 441,
       "declaration": "public static let shared = PTDebugManager()",
       "name": "shared",
       "category": "C",
@@ -313,7 +304,7 @@
     },
     {
       "path": "PooToolsSource/Debug/PTDebugFunction.swift",
-      "line": 605,
+      "line": 558,
       "declaration": "static let shared = PTDebugPluginManager()",
       "name": "shared",
       "category": "C",
@@ -322,7 +313,7 @@
     },
     {
       "path": "PooToolsSource/Debug/PTDebugFunction.swift",
-      "line": 631,
+      "line": 584,
       "declaration": "public static let shared = PTDebugWindowCoordinator()",
       "name": "shared",
       "category": "C",
@@ -349,7 +340,7 @@
     },
     {
       "path": "PooToolsSource/Debug/PTInstruments.swift",
-      "line": 784,
+      "line": 777,
       "declaration": "static let shared = PTTraceRuntime()",
       "name": "shared",
       "category": "C",
@@ -358,7 +349,7 @@
     },
     {
       "path": "PooToolsSource/Debug/PTInstruments.swift",
-      "line": 1130,
+      "line": 1123,
       "declaration": "public static let shared = PTInstrumentRecorder()",
       "name": "shared",
       "category": "C",
@@ -412,7 +403,7 @@
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTCustomHTTPProtocol.swift",
-      "line": 244,
+      "line": 252,
       "declaration": "public static let shared = PTNetworkSpeedMonitor()",
       "name": "shared",
       "category": "C",
@@ -421,7 +412,7 @@
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTHttpDatasource.swift",
-      "line": 16,
+      "line": 17,
       "declaration": "static let shared = PTHttpDatasource()",
       "name": "shared",
       "category": "C",
@@ -430,7 +421,7 @@
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTNetworkCaptureStore.swift",
-      "line": 11,
+      "line": 8,
       "declaration": "public static let shared = PTNetworkCaptureStore()",
       "name": "shared",
       "category": "C",
@@ -439,7 +430,7 @@
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTNetworkCaptureStore.swift",
-      "line": 176,
+      "line": 187,
       "declaration": "public static let shared = PTNetworkCaptureCenter()",
       "name": "shared",
       "category": "C",
@@ -448,7 +439,7 @@
     },
     {
       "path": "PooToolsSource/DebugNetwork/PTNetworkDebugSupport.swift",
-      "line": 85,
+      "line": 86,
       "declaration": "public static let shared = PTDebugHookRegistryStore()",
       "name": "shared",
       "category": "C",
@@ -490,6 +481,33 @@
       "category": "D",
       "scope": "Shared mutable UI or scene state",
       "action": "按 Scene 或控制器实例保存；保留兼容入口"
+    },
+    {
+      "path": "PooToolsSource/DebugStudioBridge/PTStudioBonjourDiscovery.swift",
+      "line": 156,
+      "declaration": "public static let shared = PTStudioAutoConnectionManager()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/DebugStudioBridge/PTStudioBridge.swift",
+      "line": 51,
+      "declaration": "public static let shared = PTStudioBridge()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift",
+      "line": 23,
+      "declaration": "public static let shared = PTStudioDiagnosticAgent()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     },
     {
       "path": "PooToolsSource/HealthKit/PTHealthKit.swift",
@@ -619,16 +637,7 @@
     },
     {
       "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 159,
-      "declaration": "static let shared = PTConsoleWindow()",
-      "name": "shared",
-      "category": "D",
-      "scope": "Shared mutable UI or scene state",
-      "action": "按 Scene 或控制器实例保存；保留兼容入口"
-    },
-    {
-      "path": "PooToolsSource/LocalConsole/LocalConsole.swift",
-      "line": 408,
+      "line": 301,
       "declaration": "public static let shared = LocalConsole()",
       "name": "shared",
       "category": "D",
@@ -900,6 +909,24 @@
       "path": "PooToolsSource/PToolsCore/PTFeedbackCenter.swift",
       "line": 26,
       "declaration": "public static let shared = PTFeedbackCenter()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/PToolsDebugConsoleUI/PTConsoleWindow.swift",
+      "line": 15,
+      "declaration": "public static let shared = PTConsoleWindow()",
+      "name": "shared",
+      "category": "C",
+      "scope": "Shared mutable service",
+      "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
+    },
+    {
+      "path": "PooToolsSource/PToolsDebugCore/PTDebugEvents.swift",
+      "line": 31,
+      "declaration": "public static let shared = PTDebugEventCenter()",
       "name": "shared",
       "category": "C",
       "scope": "Shared mutable service",
@@ -1193,5 +1220,13 @@
       "scope": "Shared mutable service",
       "action": "提供可实例化入口，shared/share 仅作为默认兼容入口"
     }
-  ]
+  ],
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-30T03:49:02Z",
+  "repository": "crazypoo/PTools",
+  "branch": "feature/pr46-pr50-inspector-layout-governance-20261030",
+  "sourceRevision": "98086745a5deb64f173282d5cdfa5faaed2e2106",
+  "sourceVersion": "5.69.0",
+  "generatorVersion": "Scripts/report_singletons.rb",
+  "sourceInputsDigest": "8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455"
 }

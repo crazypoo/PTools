@@ -1,21 +1,25 @@
 <!--
+Current report metadata.
 AUTO-GENERATED FILE.
-DO NOT EDIT MANUALLY.
-
+Repository: crazypoo/PTools
+Branch: feature/pr46-pr50-inspector-layout-governance-20261030
+Source revision: 98086745a5deb64f173282d5cdfa5faaed2e2106
+Source version: 5.69.0
+Source inputs digest: 8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455
+Generator version: 1
 Generator: Scripts/validate_module_parity.sh
-Source revision: 23f6f58d7b266175109501ec67df060cb2859650
-Generated at: 2026-10-19T07:40:29Z
+Generated at: 2026-10-30T03:49:02Z
 -->
 
 # SwiftPM / CocoaPods Module Parity
 
 - Status: `baseline`
-- Fingerprint: `c44ed60fdd1939025f2715ef0fb87a044bcad9530be15f4a425e61eb65d32f68`
+- Fingerprint: `4caec792bfe6308eebd9efd935abfce37c2db1ad6516fd8dfa165c0e9d8dd222`
 - Matched modules: `123`
-- SwiftPM-only modules: `34`
-- CocoaPods-only modules: `36`
-- Source-directory drift: `3`
-- Dependency drift: `61`
+- SwiftPM-only modules: `48`
+- CocoaPods-only modules: `38`
+- Source-directory drift: `4`
+- Dependency drift: `63`
 - Swift setting / macro drift: `56`
 
 ## Classification
@@ -23,8 +27,8 @@ Generated at: 2026-10-19T07:40:29Z
 | Class | Modules / count |
 | --- | --- |
 | Matched | `Accessibility`, `Activities`, `AppIntents`, `Audio`, `BackgroundTasks`, `BankCard`, `Banner`, `BilogyID`, `Bluetooth`, `BluetoothPermission`, `Calendar`, `CalendarPermission`, `CameraPermission`, `CheckBox`, `CheckDirtyWord`, `CheckUpdate`, `ChinesePinyin`, `Circle`, `CodeView`, `Configuration`, `Connectivity`, `Contact`, `ContactsPermission`, `ContentState`, `Core`, `Country`, `CustomerLabel`, `CustomerNumberKeyboard`, `DEBUG`, `DEBUG_TrackingEyes`, `DataEncrypt`, `DeepLink`, `Device`, `Documents`, `FaceIDPermission`, `Feedback`, `Form`, `Guide`, `HTTPFilePortal`, `HTTPServer`, `HandSign`, `HarbethKit`, `HealthPermission`, `HeartRate`, `Hud`, `IAP`, `ImageEditor`, `ImagePicker`, `Input`, `Instructions`, `KeyChain`, `LaunchTimeProfiler`, `Layout`, `LivePhoto`, `Loading`, `Location`, `LocationPermission`, `Logging`, `MediaCore`, `MediaViewer`, `MeidaPermission`, `MessageKit`, `MicPermission`, `Model`, `ModelCore`, `Motion`, `MotionPermission`, `NetWork`, `NetworkSpeedTest`, `NotificationPermission`, `Notifications`, `OSSKitSpeech`, `Overlay`, `PDF`, `PToolsCore`, `PToolsModelCombine`, `PToolsModelUIKit`, `PToolsPermissionCore`, `PToolsPermissionUI`, `PToolsUIFoundation`, `PageControl`, `PagingControl`, `PhoneInfo`, `PhotoPicker`, `Picker`, `Ping`, `Popover`, `ProgressBar`, `RateView`, `RemindersPermission`, `RouteCore`, `Router`, `SVG`, `ScanQRCode`, `ScrollBanner`, `Search`, `SearchBar`, `Security`, `Segmented`, `Share`, `Simulation`, `SimulationCore`, `SiriPermission`, `Slider`, `SmartScreenshot`, `SocketKit`, `SpeechRecognizerPermission`, `SpeedPanel`, `SplitView`, `StepCount`, `Stepper`, `Storage`, `StorageCore`, `Symbols`, `Telephony`, `Theme`, `TipsView`, `TrackingPermission`, `VideoEditor`, `Vision`, `WhatsNewsKit`, `WidgetCore`, `iOS17Tips` |
-| SwiftPM only | `PTAcknowledgementsGenerator`, `PTModelBenchmark`, `PTModelLegacyKakaJSONFixture`, `PTModelLegacySmartCodableFixture`, `PTModelMixedLegacyFixture`, `PTModelOnlyFixture`, `PToolsAcknowledgements`, `PToolsAcknowledgementsCore`, `PToolsAppIntegrity`, `PToolsAuth`, `PToolsAuthCore`, `PToolsConstraintLayout`, `PToolsDatabase`, `PToolsDatabaseCore`, `PToolsDate`, `PToolsFontCatalogCore`, `PToolsMap`, `PToolsMapCore`, `PToolsModelLegacyKakaJSON`, `PToolsModelLegacySmartCodable`, `PToolsModelMacroPlugin`, `PToolsNetworkModelCore`, `PToolsObservability`, `PToolsObservabilityCore`, `PToolsRealtime`, `PToolsRealtimeCore`, `PToolsStoreKit`, `PToolsSync`, `PToolsSyncCore`, `PToolsTransfer`, `PToolsTransferCore`, `PToolsWeb`, `PToolsWebBridge`, `PToolsWebCore` |
-| CocoaPods only | `Acknowledgements`, `AcknowledgementsCore`, `AppIntegrity`, `Appz`, `Auth`, `AuthCore`, `ConstraintLayout`, `Database`, `DatabaseCore`, `Date`, `Flag`, `GCDWebServer`, `InputAll`, `MXMetricManagerKit`, `Map`, `MapCore`, `ModelLegacyKakaJSON`, `ModelLegacySmartCodable`, `NFCKit`, `NotificationBanner`, `Observability`, `ObservabilityCore`, `PopoverKit`, `Realtime`, `RealtimeCore`, `SecuritySuite`, `StoreKit`, `Sync`, `SyncCore`, `Tabbar`, `Transfer`, `TransferCore`, `Web`, `WebBridge`, `WebCore`, `ZipArchive` |
+| SwiftPM only | `PTAcknowledgementsGenerator`, `PTModelBenchmark`, `PTModelLegacyKakaJSONFixture`, `PTModelLegacySmartCodableFixture`, `PTModelMixedLegacyFixture`, `PTModelOnlyFixture`, `PToolsAcknowledgements`, `PToolsAcknowledgementsCore`, `PToolsAppIntegrity`, `PToolsAuth`, `PToolsAuthCore`, `PToolsConstraintLayout`, `PToolsDatabase`, `PToolsDatabaseCore`, `PToolsDate`, `PToolsDebugConsoleCore`, `PToolsDebugConsoleUI`, `PToolsDebugCore`, `PToolsDebugInspectorCore`, `PToolsDebugInspectorLegacyUI`, `PToolsDebugInspectorUI`, `PToolsDebugInventoryCore`, `PToolsDebugMetricsCore`, `PToolsDebugMetricsUI`, `PToolsDebugNetworkCore`, `PToolsDebugStorageCore`, `PToolsDebugStudioBridge`, `PToolsFontCatalogCore`, `PToolsMap`, `PToolsMapCore`, `PToolsModelLegacyKakaJSON`, `PToolsModelLegacySmartCodable`, `PToolsModelMacroPlugin`, `PToolsNetworkModelCore`, `PToolsObservability`, `PToolsObservabilityCore`, `PToolsRealtime`, `PToolsRealtimeCore`, `PToolsStoreKit`, `PToolsStudioProtocolCore`, `PToolsSync`, `PToolsSyncCore`, `PToolsTransfer`, `PToolsTransferCore`, `PToolsVariantCore`, `PToolsWeb`, `PToolsWebBridge`, `PToolsWebCore` |
+| CocoaPods only | `Acknowledgements`, `AcknowledgementsCore`, `AppIntegrity`, `Appz`, `Auth`, `AuthCore`, `ConstraintLayout`, `DEBUG_StudioBridge`, `Database`, `DatabaseCore`, `Date`, `Flag`, `GCDWebServer`, `InputAll`, `MXMetricManagerKit`, `Map`, `MapCore`, `ModelLegacyKakaJSON`, `ModelLegacySmartCodable`, `NFCKit`, `NotificationBanner`, `Observability`, `ObservabilityCore`, `PopoverKit`, `Realtime`, `RealtimeCore`, `SecuritySuite`, `StoreKit`, `Sync`, `SyncCore`, `Tabbar`, `Transfer`, `TransferCore`, `VariantCore`, `Web`, `WebBridge`, `WebCore`, `ZipArchive` |
 
 ## Compatibility products
 
@@ -43,6 +47,7 @@ The baseline records existing differences as explicit review items. A later mani
 ### Source directories
 
 - `Core`: SPM=["ActionsheetAndAlert", "Animation", "AppDelegate", "AppStore", "ApplicationFunction", "Badge", "Base", "BlackMagic", "Blur", "Button", "Category", "Colors", "Core", "DarkMode", "FloatPanel", "Font/PTFont.swift", "Font/PTFontDescriptor.swift", "Font/PTFontRuntime.swift", "Foundation", "Language", "Line", "Log", "PermissionCore", "PhotoLibraryPermission", "Protocol", "Rotation", "SideMenuControl", "StatusBar", "Switch", "iCloud"]; CocoaPods=["ActionsheetAndAlert", "Animation", "AppDelegate", "AppStore", "ApplicationFunction", "Badge", "Base", "BlackMagic", "Blur", "Button", "Category", "Colors", "Core", "DarkMode", "FloatPanel", "Font", "Foundation", "Language", "Line", "Log", "PToolsFontCore", "PToolsPermissionCore", "PToolsTransferCore", "PermissionCore", "PhotoLibraryPermission", "Protocol", "Rotation", "SideMenuControl", "StatusBar", "Switch", "iCloud"]
+- `DEBUG`: SPM=["DEBUGLocation", "Debug", "DebugCategory", "DebugColor", "DebugCrash", "DebugFile", "DebugLibs", "DebugNetwork", "DebugPerformance", "DebugRuler", "DebugUserDefault", "DevMask", "LocalConsole", "TouchInspector"]; CocoaPods=["DEBUGLocation", "Debug", "DebugCategory", "DebugColor", "DebugCrash", "DebugFile", "DebugLibs", "DebugNetwork", "DebugPerformance", "DebugRuler", "DebugUserDefault", "DevMask", "Inspector", "LocalConsole", "PToolsDebugConsoleUI", "PToolsDebugCore", "PToolsDebugInventoryCore", "PToolsDebugMetricsCore", "PToolsDebugMetricsUI", "TouchInspector"]
 - `MeidaPermission`: SPM=["MeidaLibraryPermission"]; CocoaPods=[]
 - `NetWork`: SPM=["NetWork"]; CocoaPods=["NetWork", "NetWorkModelCore"]
 
@@ -57,6 +62,7 @@ The baseline records existing differences as explicit review items. A later mani
 - `Core` / `third_party_dependencies`: SPM=["IQKeyboardManager", "Kingfisher", "SnapKit", "lottie-ios"]; CocoaPods=["IQKeyboardManagerSwift", "IQKeyboardToolbarManager", "Kingfisher", "SnapKit", "lottie-ios"]
 - `CustomerLabel` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `CustomerNumberKeyboard` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
+- `DEBUG` / `internal_dependencies`: SPM=["BackgroundTasks", "Connectivity", "Core", "DeepLink", "NetWork", "Notifications", "Overlay", "PDF", "PToolsDebugConsoleUI", "PToolsDebugCore", "PToolsDebugInspectorLegacyUI", "PToolsDebugInventoryCore", "PToolsDebugMetricsCore", "PToolsDebugMetricsUI", "PToolsDebugNetworkCore", "PToolsDebugStorageCore", "RouteCore", "SearchBar", "Share", "Storage", "Symbols"]; CocoaPods=["BackgroundTasks", "Connectivity", "Core", "DeepLink", "NetWork", "Notifications", "Overlay", "PDF", "RouteCore", "SearchBar", "Share", "Storage", "Symbols"]
 - `DEBUG` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `Documents` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `Form` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
@@ -85,7 +91,7 @@ The baseline records existing differences as explicit review items. A later mani
 - `PDF` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `PageControl` / `internal_dependencies`: SPM=["Core", "PToolsCore"]; CocoaPods=["Core"]
 - `PagingControl` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
-- `PhotoPicker` / `internal_dependencies`: SPM=["CameraPermission", "Core", "ImagePicker", "Loading", "MediaCore", "PToolsUIFoundation", "Symbols"]; CocoaPods=["Core", "ImagePicker", "Loading", "MediaCore", "Symbols"]
+- `PhotoPicker` / `internal_dependencies`: SPM=["CameraPermission", "Core", "ImagePicker", "Loading", "MediaCore", "PToolsCore", "PToolsUIFoundation", "Symbols"]; CocoaPods=["Core", "ImagePicker", "Loading", "MediaCore", "Symbols"]
 - `PhotoPicker` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `Picker` / `internal_dependencies`: SPM=["Core", "PToolsCore"]; CocoaPods=["Core"]
 - `Picker` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
@@ -98,6 +104,7 @@ The baseline records existing differences as explicit review items. A later mani
 - `ScanQRCode` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `ScrollBanner` / `internal_dependencies`: SPM=["Core", "PToolsUIFoundation", "PageControl"]; CocoaPods=["Core", "PageControl"]
 - `ScrollBanner` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
+- `Search` / `internal_dependencies`: SPM=["Core", "PToolsCore", "PToolsUIFoundation", "SearchBar"]; CocoaPods=["Core", "PToolsUIFoundation", "SearchBar"]
 - `Search` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `Segmented` / `third_party_dependencies`: SPM=["SnapKit"]; CocoaPods=[]
 - `Slider` / `internal_dependencies`: SPM=[]; CocoaPods=["PToolsUIFoundation"]
