@@ -62,3 +62,15 @@ bash Scripts/CI/verify_studio_native_targets.sh
 gate is failed, missing, queued or has unreviewed physical evidence. Only
 a complete evidence record and separate deliberate version/tag action can
 authorize 6.0 GA.
+
+## PR56 generator reconciliation
+
+The canonical report workflow has committed its 43 regenerated
+`report/current` files to the feature branch as
+`c2e8baded3de1d0767c0cf124fe867bbde886c5e`.
+The earlier `Quality` check ran against an older pull-request merge ref,
+and therefore reported the previous stale files; that run is **not**
+evidence about the later regenerated tree. A fresh PR-head workflow
+must validate this regenerated commit without source changes. The
+comparison fixture already passed 3 cases / 11 assertions on the
+prior job, independently of the stale report failure.
