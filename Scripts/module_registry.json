@@ -1569,6 +1569,22 @@
       "owner": "debug",
       "expiration": "2027-03-31",
       "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsDebugInspectorUI",
+      "reason": "Opt-in UIKit Inspector highlight overlay is a separately buildable SwiftPM target; the CocoaPods DEBUG_StudioBridge subspec embeds its source once.",
+      "owner": "debug",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsDebugStorageCore",
+      "reason": "Foundation-only Storage/Defaults inventory compatibility adapter is a separately buildable SwiftPM target; the CocoaPods DEBUG subspec embeds its source once.",
+      "owner": "debug",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
     }
   ],
   "known_drift": [
