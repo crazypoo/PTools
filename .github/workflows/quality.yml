@@ -95,6 +95,14 @@ jobs:
           assert "PTInstrumentRecorder" not in metrics_source
           assert "PooToolsSource/PToolsDebugConsoleUI/**/*.swift" in pod
           assert "PooToolsSource/PToolsDebugMetricsUI/**/*.swift" in pod
+          # swiftc parser verifies source-level syntax even when Linux has no UIKit SDK.
+          import subprocess
+          result = subprocess.run([
+              "swiftc", "-frontend", "-parse",
+              *[str(path) for path in navigation_sources]
+          ], capture_output=True, text=True)
+          assert result.returncode == 0, result.stderr
+          print("PASS: PR36 three-file navigation Swift syntax parses on Linux")
           print("PASS: PR38/39 Console and Metrics UIKit leaves have unique source owners")
           print("PASS: PR36 NavigationBar split is below file limit; sources are registered")
           print("PASS: unique Network, Storage, Inspector UI and Console ownership")
@@ -141,10 +149,12 @@ jobs:
           xcodebuild -version
           xcodebuild -showsdks
           swift --version
-      - name: Typecheck extracted UIKit Inspector module
+      - name: Typecheck extracted UIKit Inspector, Console and Metrics leaves
         run: |
           swift package dump-package >/dev/null
           swift build --triple arm64-apple-ios17.0-simulator --target PToolsDebugInspectorLegacyUI
+          swift build --triple arm64-apple-ios17.0-simulator --target PToolsDebugConsoleUI
+          swift build --triple arm64-apple-ios17.0-simulator --target PToolsDebugMetricsUI
       - name: Compile original Debug umbrella compatibility
         run: |
           swift build --triple arm64-apple-ios17.0-simulator --target PooToolsDEBUG
