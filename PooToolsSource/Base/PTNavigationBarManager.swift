@@ -3,6 +3,7 @@
 import UIKit
 import SnapKit
 
+@MainActor
 public final class PTNavigationBarManager:NSObject {
     
     public static let shared = PTNavigationBarManager()
