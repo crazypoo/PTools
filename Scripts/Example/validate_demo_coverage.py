@@ -18,6 +18,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
 CATALOG_SOURCE = ROOT / "PooTools/PTDemoCatalog.swift"
+# Existing runnable modules without direct demo entries when this audit was introduced.
+# This is a decreasing ratchet; do not increase it to make CI green.
+RUNNABLE_DEMO_DEBT_BASELINE = 63
+
 ALLOWED_COVERAGE = {
     "runnable",
     "scenario",
@@ -113,6 +117,17 @@ def factory_contract_failures() -> list[str]:
     ]
 
 
+def uncovered_runnable_modules(entries: list[dict[str, object]]) -> list[str]:
+    """Only a linked, catalog-routable demo counts as runnable coverage."""
+    return sorted(
+        entry["module_id"]
+        for entry in entries
+        if entry.get("coverage") == "runnable"
+        and not entry.get("demos")
+        and isinstance(entry.get("module_id"), str)
+    )
+
+
 def validate() -> tuple[list[dict[str, object]], list[str]]:
     modules = module_ids()
     entries = demo_entries()
@@ -155,6 +170,12 @@ def validate() -> tuple[list[dict[str, object]], list[str]]:
     unregistered_descriptors = sorted(descriptors - seen_demos)
     failures.extend(f"Example descriptor is missing from demo registry: {demo}" for demo in unregistered_descriptors)
     failures.extend(factory_contract_failures())
+    uncovered = uncovered_runnable_modules(entries)
+    if len(uncovered) > RUNNABLE_DEMO_DEBT_BASELINE:
+        failures.append(
+            f"runnable modules without a Demo increased: {len(uncovered)} "
+            f"(baseline {RUNNABLE_DEMO_DEBT_BASELINE}); add a real demo before raising the baseline"
+        )
     return entries, failures
 
 
@@ -163,6 +184,7 @@ def write_report(entries: list[dict[str, object]], failures: list[str]) -> None:
     for entry in entries:
         coverage = str(entry.get("coverage", "invalid"))
         counts[coverage] = counts.get(coverage, 0) + 1
+    uncovered = uncovered_runnable_modules(entries)
     payload = {
         "generator": "Scripts/Example/validate_demo_coverage.py",
         "source_revision": git("rev-parse", "HEAD") or "working-tree",
@@ -170,6 +192,9 @@ def write_report(entries: list[dict[str, object]], failures: list[str]) -> None:
         "version": VERSION,
         "schemaVersion": 1,
         "moduleCount": len(entries),
+        "runnableWithoutDemoCount": len(uncovered),
+        "runnableWithoutDemo": uncovered,
+        "runnableWithoutDemoBaseline": RUNNABLE_DEMO_DEBT_BASELINE,
         "factoryCoverage": {
             "policy": "main_actor_registry_or_compatibility_host",
             "descriptorCount": len(descriptor_ids()),
@@ -191,6 +216,7 @@ def write_report(entries: list[dict[str, object]], failures: list[str]) -> None:
         "",
         f"- Version: `{VERSION}`",
         f"- Modules: `{len(entries)}`",
+        f"- Runnable modules without direct demos: `{len(uncovered)}` (ratchet baseline: `{RUNNABLE_DEMO_DEBT_BASELINE}`)",
         "- Factory: `@MainActor registry + compatibility detail host fallback`",
         "",
         "| Coverage | Count |",
@@ -198,6 +224,9 @@ def write_report(entries: list[dict[str, object]], failures: list[str]) -> None:
     ]
     lines.extend(f"| `{key}` | {value} |" for key, value in sorted(counts.items()))
     lines.extend(["", f"- Failures: `{len(failures)}`"])
+    if uncovered:
+        lines.extend(["", "## Remaining runnable modules without a direct demo", ""])
+        lines.extend(f"- `{module}`" for module in uncovered)
     if failures:
         lines.extend(["", "## Failures", "", *[f"- {failure}" for failure in failures]])
     (report_dir / "DEMO_COVERAGE.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -217,7 +246,10 @@ def main() -> int:
         print("FAIL [DEMO_COVERAGE]")
         print("\n".join(f"- {failure}" for failure in failures))
         return 1
-    print(f"PASS: Demo Coverage ({len(entries)} modules, 0 missing); Factory Gate (registry + compatibility fallback)")
+    print(
+        f"PASS: Demo registry ({len(entries)} modules, {len(uncovered_runnable_modules(entries))} "
+        "runnable modules still without a direct demo); Factory Gate (registry + compatibility fallback)"
+    )
     return 0
 
 
