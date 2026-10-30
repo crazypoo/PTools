@@ -142,6 +142,7 @@ run_named_gate() {
           PToolsNetworkTests
           PToolsFontTests
           PToolsDebugCoreTests
+          PToolsDebugConsoleCoreTests
           PToolsDebugInventoryCoreTests
           PToolsDebugStorageCoreTests
           PToolsDebugInspectorCoreTests
