@@ -45,7 +45,7 @@ Run from repository root on macOS:
 
 ```sh
 python3 Scripts/Example/validate_demo_coverage.py --check
-xcodebuild -project PooTools.xcodeproj -scheme PooTools_Example -configuration Debug -sdk iphonesimulator CODE_SIGNING_ALLOWED=NO build
+xcodebuild -workspace PooTools.xcworkspace -scheme PooTools-Example -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
 ```
 
 The Swift Example build requires Xcode and installed project dependencies. This change has not been claimed as device- or simulator-build verified in the GitHub connector environment.
