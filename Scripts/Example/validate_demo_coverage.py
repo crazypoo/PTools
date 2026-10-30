@@ -110,11 +110,37 @@ def factory_contract_failures() -> list[str]:
         "factory lookup": "func makeViewController(for descriptor: PTDemoDescriptor)",
         "compatibility host fallback": "return PTFuncDetailViewController(descriptor: descriptor)",
     }
-    return [
+    failures = [
         f"missing Demo Factory contract ({label})"
         for label, snippet in required_snippets.items()
         if snippet not in source
     ]
+
+    # New interactive labs must have a registered route AND a real case handler;
+    # a metadata-only PTFuncDetailViewController fallback is not sufficient.
+    lab_descriptors = set(re.findall(
+        r'^\\s*make\\("([^"]+)".*tags: \\["missing-module"',
+        source,
+        re.MULTILINE,
+    ))
+    match = re.search(
+        r'static let supportedIDs: Set<String> = \\[(.*?)\\]',
+        source,
+        re.DOTALL,
+    )
+    lab_routes = set(re.findall(r'"([^"]+)"', match.group(1))) if match else set()
+    lab_handlers = set(re.findall(
+        r'^\\s*case "([^"]+)": configure[A-Za-z0-9_]+\\(\\)',
+        source,
+        re.MULTILINE,
+    ))
+    for demo_id in sorted(lab_descriptors - lab_routes):
+        failures.append(f"interactive lab has no coordinator route: {demo_id}")
+    for demo_id in sorted(lab_descriptors - lab_handlers):
+        failures.append(f"interactive lab has no executable case handler: {demo_id}")
+    for demo_id in sorted(lab_routes - lab_descriptors):
+        failures.append(f"unregistered interactive lab route: {demo_id}")
+    return failures
 
 
 def uncovered_runnable_modules(entries: list[dict[str, object]]) -> list[str]:
