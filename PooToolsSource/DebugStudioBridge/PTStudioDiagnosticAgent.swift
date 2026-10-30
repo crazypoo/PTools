@@ -6,6 +6,7 @@ import Darwin
 import PToolsStudioProtocolCore
 import PToolsDebugInspectorCore
 import PToolsDebugInspectorUI
+import PToolsDebugStorageCore
 import PooToolsDEBUG
 #endif
 
