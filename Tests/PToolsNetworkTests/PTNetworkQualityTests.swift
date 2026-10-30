@@ -191,6 +191,32 @@ final class PTNetworkQualityTests: XCTestCase {
         XCTAssertNil(originalHeaders.value(for: PTRequestIdentityPolicy.metadataHeader))
     }
 
+    func testCustomURLRequestCacheKeysRespectOptInAndTenantIdentity() async throws {
+        var config = PTNetworkConfig()
+        config.requestIdentityIgnoredHeaders = ["X-Request-Nonce"]
+        let url = URL(string: "https://example.com/custom-category/\(UUID().uuidString)")!
+        var original = URLRequest(url: url)
+        original.httpMethod = "GET"
+        original.setValue("nonce-1", forHTTPHeaderField: "X-Request-Nonce")
+        original.setValue("tenant-a", forHTTPHeaderField: "X-Tenant-Key")
+        Network.applyRequestIdentityConfiguration(&original, configuration: config)
+
+        let body = Data(#"{"code":200,"items":[1,2,3]}"#.utf8)
+        await NetworkCache.shared.save(data: body, request: original, expire: 90)
+
+        var newer = URLRequest(url: url)
+        newer.httpMethod = "GET"
+        newer.setValue("nonce-2", forHTTPHeaderField: "X-Request-Nonce")
+        newer.setValue("tenant-a", forHTTPHeaderField: "X-Tenant-Key")
+        Network.applyRequestIdentityConfiguration(&newer, configuration: config)
+        let hit = await NetworkCache.shared.read(request: newer)
+        XCTAssertEqual(hit, body)
+
+        newer.setValue("tenant-b", forHTTPHeaderField: "X-Tenant-Key")
+        let crossTenant = await NetworkCache.shared.read(request: newer)
+        XCTAssertNil(crossTenant)
+    }
+
     func testIdentityMetadataNeverLeavesTheTransportBoundary() async throws {
         var config = PTNetworkConfig()
         config.requestIdentityIgnoredHeaders = ["X-Request-Nonce"]
