@@ -133,26 +133,23 @@ private final class PTInstrumentTimelineCanvas: UIView {
             for sample in track.samples {
                 let x = xPosition(for: sample.timestamp, timeline: timeline, scale: scale)
                 guard x >= 0, x <= bounds.width else { continue }
-                let sampleRect = CGRect(x: x, y: y + 4, width: 2, height: 10)
-                UIColor.systemBlue.setFill()
-                context?.fill(sampleRect)
+                PTDebugMetricsTrackRenderer.drawSample(x: x, trackY: y, context: context)
             }
 
             for event in track.events {
                 guard query.isEmpty || event.name.lowercased().contains(query) || event.metadata.values.contains(where: { $0.lowercased().contains(query) }) else { continue }
                 let x = xPosition(for: event.timestamp, timeline: timeline, scale: scale)
                 guard x >= 0, x <= bounds.width else { continue }
-                let eventRect = CGRect(x: x - 3, y: y - 2, width: 6, height: 6)
-                UIColor.systemOrange.setFill()
-                context?.fillEllipse(in: eventRect)
+                PTDebugMetricsTrackRenderer.drawEvent(x: x, trackY: y, context: context)
             }
         }
 
         if let selectedRange {
             let startX = xPosition(for: selectedRange.start, timeline: timeline, scale: scale)
             let endX = xPosition(for: selectedRange.end, timeline: timeline, scale: scale)
-            UIColor.systemBlue.withAlphaComponent(0.12).setFill()
-            context?.fill(CGRect(x: startX, y: 0, width: max(0, endX - startX), height: bounds.height))
+            PTDebugMetricsTrackRenderer.drawSelection(
+                startX: startX, endX: endX,
+                height: bounds.height, context: context)
         }
     }
 
