@@ -49,8 +49,31 @@ extension Network {
     
     // MARK: - ================= 6. 🌟 强类型解析层：Codable/PTModel 统一接口 =================
     
+    // English: HTML error pages are not JSON, even when a proxy advertises application/json.
+    // Español: Las páginas HTML de error no son JSON, aunque el proxy declare application/json.
+    // 中文：代理即使误报 application/json，也必须优先识别 HTML 错误页并保留原文。
+    internal static func rejectHTMLResponse(_ snapshot: PTNetworkResponseSnapshot) throws {
+        guard let data = snapshot.data, !data.isEmpty else { return }
+        let prefix = String(decoding: data.prefix(1024), as: UTF8.self)
+            .trimmingCharacters(in: .whitespacesAndNewlines.union(CharacterSet(charactersIn: "\u{FEFF}")))
+            .lowercased()
+        let isHTMLDocument = prefix.hasPrefix("<!doctype html")
+            || prefix.hasPrefix("<html")
+            || prefix.hasPrefix("<head")
+            || prefix.hasPrefix("<body")
+        let declaredHTML = snapshot.metadata.headers.contains { key, value in
+            key.caseInsensitiveCompare("Content-Type") == .orderedSame
+                && value.lowercased().contains("text/html")
+        }
+        guard isHTMLDocument || (declaredHTML && prefix.hasPrefix("<")) else { return }
+        let html = String(data: data, encoding: .utf8)
+            ?? String(decoding: data, as: UTF8.self)
+        throw PTNetworkError.htmlResponse(html)
+    }
+
     internal static func parseCodableResponse<T: Codable & Sendable>(_ snapshot: PTNetworkResponseSnapshot,
                                                                       modelType: T.Type?) throws -> PTBaseStructModel<T> {
+        try rejectHTMLResponse(snapshot)
         var (result, jsonString) = try validateAndPreprocessResponse(snapshot) as (PTBaseStructModel<T>, String)
         if !jsonString.isEmpty, let modelType = modelType {
             do {
@@ -153,6 +176,7 @@ extension Network {
                                                      cachePolicy: cachePolicy,
                                                      encoder: encoder,
                                                      jsonRequest: jsonRequest)
+        try rejectHTMLResponse(snapshot)
         let payload = PTNetworkResponsePayload(snapshot: snapshot)
         let model = try PTNetworkResponseDecoder<T>.ptModel(modelType,
                                                              at: modelPath,
