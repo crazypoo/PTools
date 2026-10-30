@@ -3301,7 +3301,6 @@ final class PTMissingModuleDemoViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
-        button.contentEdgeInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
         button.addAction(UIAction { _ in handler() }, for: .touchUpInside)
         stackView.addArrangedSubview(button)
     }
