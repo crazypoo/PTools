@@ -1561,6 +1561,14 @@
       "owner": "debug",
       "expiration": "2027-03-31",
       "classification": "INTENTIONAL"
+    },
+    {
+      "kind": "spm_only",
+      "module": "PToolsDebugNetworkCore",
+      "reason": "SwiftPM has a standalone Foundation capture schema, Actor Store and privacy engine; CocoaPods DEBUG intentionally compiles the same files once into its legacy subspec to preserve import compatibility.",
+      "owner": "debug",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
     }
   ],
   "known_drift": [

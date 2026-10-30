@@ -1,6 +1,7 @@
 // The last privacy boundary before serialization or any transport.
 import Foundation
 #if SWIFT_PACKAGE
+import PToolsDebugNetworkCore
 import PooToolsDEBUG
 #endif
 

@@ -1,6 +1,7 @@
 // One explicit, scene-independent consumer of the existing PTNetworkCaptureStore.
 import Foundation
 #if SWIFT_PACKAGE
+import PToolsDebugNetworkCore
 import PooToolsDEBUG
 #endif
 

@@ -144,6 +144,7 @@ run_named_gate() {
           PToolsDebugCoreTests
           PToolsDebugInventoryCoreTests
           PToolsDebugInspectorCoreTests
+          PToolsDebugNetworkCoreTests
           PToolsStudioProtocolCoreTests
         )
         for test_product in "${foundation_test_products[@]}"; do

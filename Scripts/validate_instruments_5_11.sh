@@ -110,4 +110,25 @@ if rg -n '^import (UIKit|AppKit|SwiftUI)' "$inspector_core"; then
 fi
 require_fragment "PooTools.podspec" 'PooToolsSource/PToolsDebugInventoryCore/**/*.swift' "CocoaPods inventory parity"
 
+# PR23–PR25: Network capture's canonical types, Actor Store and privacy
+# live outside the UIKit Debug target in SwiftPM. CocoaPods DEBUG intentionally
+# aggregates those same source files once to preserve the existing Pod API.
+network_core_files=(
+  PooToolsSource/DebugNetwork/PTNetworkCaptureModels.swift
+  PooToolsSource/DebugNetwork/PTNetworkCaptureStore.swift
+  PooToolsSource/DebugNetwork/PTNetworkRedactor.swift
+)
+require_fragment "Package.swift" 'name: "PToolsDebugNetworkCore"' "standalone SwiftPM capture core"
+require_fragment "Package.swift" 'exclude: ["DebugNetwork/PTNetworkCaptureModels.swift", "DebugNetwork/PTNetworkCaptureStore.swift", "DebugNetwork/PTNetworkRedactor.swift"]' "no duplicated SwiftPM capture sources"
+require_fragment "Package.swift" '"PToolsDebugNetworkCore", "PToolsDebugCore"' "Debug facade consumes capture core"
+require_fragment "PooToolsSource/DebugNetwork/PTNetworkCaptureCoreExport.swift" '@_exported import PToolsDebugNetworkCore' "legacy import surface preserved"
+require_fragment "PooToolsSource/DebugStudioBridge/PTStudioBridge.swift" 'import PToolsDebugNetworkCore' "Studio bridge uses canonical capture data types"
+require_fragment "PooTools.podspec" 'PooToolsSource/DebugNetwork/*.{h,m,swift}' "CocoaPods aggregated capture and DebugNetwork UI"
+for file in "${network_core_files[@]}"; do
+  if rg -n '^import (UIKit|AppKit|SwiftUI|ptools)' "$file"; then
+    printf 'FAIL: Network capture core must not depend on UI or app Core: %s\n' "$file" >&2
+    exit 1
+  fi
+done
+
 printf 'PTInstruments 5.11 static contract OK\n'

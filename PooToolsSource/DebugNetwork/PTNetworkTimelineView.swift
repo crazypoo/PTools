@@ -5,6 +5,7 @@
 import UIKit
 import SnapKit
 #if SWIFT_PACKAGE
+import PToolsDebugNetworkCore
 import ptools
 #endif
 
