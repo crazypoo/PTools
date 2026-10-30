@@ -48,3 +48,51 @@ Review actual generator diffs and public-API changes before committing generated
 7. SwiftPM and CocoaPods: release/debug simulator builds, strict concurrency, public API/source compatibility
 
 Each acceptance case requires a test environment, run logs, outcomes, and measured timing/memory for any claimed performance improvement. Do not publish PTools 6.0 from a merged PR or Linux-only validation.
+
+## PR41–PR45 follow-on: candidate, not 6.0 release approval
+
+| Stage | Actual incremental work | Remaining acceptance |
+| --- | --- | --- |
+| PR41 | `quality-summary` now depends on independent Swift 6 Debug Foundation build, iOS 17+ Inspector/Console/Metrics target compile and generator reproducibility. Its final step fails when any required upstream gate fails, including skipped/cancelled gates. | Compare artifacts, generated current reports and Xcode/CocoaPods outcomes on an Apple runner |
+| PR42 | The existing Metrics Core tests now exercise bounded ring/geometry scenarios with 100, 500 and 1000 entries, recording median and p95 wall-clock timings in test logs. | Match against baseline on a fixed device; this is not a Mac Studio UI/FPS benchmark |
+| PR43 | Metrics UIKit track renderer now resolves Dynamic Type font/color once per draw pass, rather than once per track, retaining trait-change responsiveness. | Visually compare captions and grid on iOS 17/26/27 and Dynamic Type settings |
+| PR44 | Keeps Console UIWindow and Metrics grid as separate presentation leaf targets. Further full Debug-menu/dashboard extraction remains blocked by existing Debug-controller dependencies; no duplicate session, recorder or facade is introduced. | Review source ownership and run old `PooToolsDEBUG` entry-point compatibility |
+| PR45 | Release verification carries the real-device and security acceptance requirements below, with no waiver for native builds. | 7/7 Mac–iPhone scenarios, two paired iPhones, 30-minute idle profile and report digests |
+
+### Mandatory PR41 checks
+
+```sh
+bash Scripts/Governance/generate_all_current_reports.sh --check
+bash Scripts/CI/quality_gate.sh architecture
+bash Scripts/CI/quality_gate.sh governance
+bash Scripts/CI/quality_gate.sh tests
+bash Scripts/CI/quality_gate.sh concurrency
+bash Scripts/CI/quality_gate.sh pods
+bash Scripts/CI/quality_gate.sh xcode
+swift build --triple arm64-apple-ios17.0-simulator --target PToolsDebugInspectorLegacyUI
+swift build --triple arm64-apple-ios17.0-simulator --target PToolsDebugConsoleUI
+swift build --triple arm64-apple-ios17.0-simulator --target PToolsDebugMetricsUI
+swift build --triple arm64-apple-ios17.0-simulator --target PooToolsDEBUG
+swift test --filter PTDebugCoreTests
+```
+
+Do not mistake a Linux Swift syntax parse for a real Apple SDK typecheck.
+Do not edit generated reports by hand or add exceptions to the 2000-line gate.
+Generated report changes must come from the canonical generator and be reviewed.
+
+### PR45 acceptance record
+
+| # | Check | Actual | Evidence |
+| --- | --- | --- | --- |
+| 1 | Bonjour auto discovery, identity and reconnect | NOT RUN | — |
+| 2 | TLS CA/pin trust and invalid leaf rejection | NOT RUN | — |
+| 3 | Explicit pairing, revocation and token refusal | NOT RUN | — |
+| 4 | Request capture, 100/500/1000 records, batching and ACK | NOT RUN | — |
+| 5 | Delete and reset with no stale resurrection | NOT RUN | — |
+| 6 | Background/foreground, Scene disconnect, multi-window UI | NOT RUN | — |
+| 7 | Two iPhones, forged wrong-session response, replay refusal | NOT RUN | — |
+
+Additional blocking checks: Inspector hierarchy/highlight/edit/Undo, Console scene teardown,
+Metrics export, iOS 26/27 navigation regression and 30-minute Mac CPU/memory idle measurement.
+
+**Status: awaiting Apple CI and physical-device evidence; not approved for release.**
