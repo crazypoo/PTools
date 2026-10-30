@@ -82,6 +82,20 @@ jobs:
           assert "PooToolsSource/Base/*.{h,m,swift}" in pod
           project = Path("PooTools.xcodeproj/project.pbxproj").read_text()
           assert all(path.name in project for path in navigation_sources)
+          for name in ("PToolsDebugConsoleUI", "PToolsDebugMetricsUI"):
+              assert name in targets, f"missing UI leaf target {name}"
+              assert name in str(debug.get("dependencies", []))
+          console_source = Path("PooToolsSource/PToolsDebugConsoleUI/PTConsoleWindow.swift").read_text()
+          metrics_source = Path("PooToolsSource/PToolsDebugMetricsUI/PTDebugMetricsTrackRenderer.swift").read_text()
+          legacy_console = Path("PooToolsSource/LocalConsole/LocalConsole.swift").read_text()
+          assert "class PTConsoleWindow" in console_source
+          assert "class PTConsoleWindow" not in legacy_console
+          assert "PTConsoleWindow.onSceneDisconnect" in legacy_console
+          assert "PTDebugMetricsTrackRenderer.drawTrackGrid" in Path("PooToolsSource/Debug/PTInstrumentsUI.swift").read_text()
+          assert "PTInstrumentRecorder" not in metrics_source
+          assert "PooToolsSource/PToolsDebugConsoleUI/**/*.swift" in pod
+          assert "PooToolsSource/PToolsDebugMetricsUI/**/*.swift" in pod
+          print("PASS: PR38/39 Console and Metrics UIKit leaves have unique source owners")
           print("PASS: PR36 NavigationBar split is below file limit; sources are registered")
           print("PASS: unique Network, Storage, Inspector UI and Console ownership")
           PY
