@@ -410,7 +410,8 @@ modules:
   module_id: "poo-tools-check-dirty-word"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "text.filter-words-lab"
 -
   module_id: "poo-tools-check-update"
   coverage: "runnable"
@@ -444,7 +445,8 @@ modules:
   module_id: "poo-tools-country"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "data.country-codes-lab"
 -
   module_id: "poo-tools-customer-label"
   coverage: "runnable"
@@ -862,7 +864,8 @@ modules:
   module_id: "ptools-accessibility"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "ui.accessibility-lab"
 -
   module_id: "ptools-activities"
   coverage: "extension_required"
@@ -905,7 +908,8 @@ modules:
   module_id: "ptools-content-state"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "ui.content-state-lab"
 -
   module_id: "ptools-core"
   coverage: "runnable"
@@ -923,7 +927,8 @@ modules:
   module_id: "ptools-deep-link"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "navigation.deep-link-lab"
 -
   module_id: "ptools-device"
   coverage: "physical_device_required"
@@ -1035,7 +1040,8 @@ modules:
   module_id: "ptools-route-core"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "navigation.route-value-lab"
 -
   module_id: "ptools-simulation"
   coverage: "runnable"
@@ -1045,7 +1051,8 @@ modules:
   module_id: "ptools-simulation-core"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "debug.simulation-clock-lab"
 -
   module_id: "ptools-storage"
   coverage: "runnable"
@@ -1056,7 +1063,8 @@ modules:
   module_id: "ptools-storage-core"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "storage.namespace-lab"
 -
   module_id: "ptools-symbols"
   coverage: "runnable"
