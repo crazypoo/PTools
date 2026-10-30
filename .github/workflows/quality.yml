@@ -151,15 +151,10 @@ jobs:
           xcodebuild -version
           xcodebuild -showsdks
           swift --version
-      - name: Typecheck extracted UIKit Inspector, Console and Metrics leaves
+      - name: Compile modular Studio and legacy Inspector against Apple iOS SDK
         run: |
-          swift package dump-package >/dev/null
+          bash Scripts/CI/verify_studio_native_targets.sh
           swift build --triple arm64-apple-ios17.0-simulator --target PToolsDebugInspectorLegacyUI
-          swift build --triple arm64-apple-ios17.0-simulator --target PToolsDebugConsoleUI
-          swift build --triple arm64-apple-ios17.0-simulator --target PToolsDebugMetricsUI
-      - name: Compile original Debug umbrella compatibility
-        run: |
-          swift build --triple arm64-apple-ios17.0-simulator --target PooToolsDEBUG
 
   debug-governance-repro:
     name: Generator-owned reports reproducibility (Linux diagnostics)
@@ -172,6 +167,8 @@ jobs:
       - name: Install CocoaPods report parser
         run: |
           sudo gem install cocoapods -v 1.16.2 --no-document
+      - name: Verify report comparator reports actionable drift paths
+        run: ruby Tests/Governance/test_compare_current_reports.rb
       - name: Compare actual generator outputs against committed reports
         run: |
           bash Scripts/Governance/generate_all_current_reports.sh --check

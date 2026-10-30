@@ -2,9 +2,9 @@
   "generator": "Scripts/report_5_61_runtime_safety.sh",
   "schema_version": 1,
   "baseline": "5.61.0",
-  "source_revision": "6928fdb7d49e1a9b1353b68d24225b23a0d67eb2",
+  "source_revision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
   "source_tree_hash": "14d7dcac7921a98379a36cc5a6cc58dfaea8b527bdd231ddf6559a1ca364fa41",
-  "generated_at": "2026-10-30T04:12:21Z",
+  "generated_at": "2026-10-30T04:32:51Z",
   "checks": {
     "kakapos": {
       "count": 0,
@@ -1156,11 +1156,11 @@
     }
   },
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T04:12:21Z",
+  "generatedAt": "2026-10-30T04:32:51Z",
   "repository": "crazypoo/PTools",
-  "branch": "feature/pr51-pr55-debug-performance-rel-candidate-20261030",
-  "sourceRevision": "6928fdb7d49e1a9b1353b68d24225b23a0d67eb2",
+  "branch": "feature/pr56-pr60-rc-ci-security-20261030",
+  "sourceRevision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
   "sourceVersion": "5.69.0",
   "generatorVersion": "Scripts/report_5_61_runtime_safety.sh",
-  "sourceInputsDigest": "c0ec772e7214cf193c1b62fabd35850af82c5fef5524d529dcced405437ce7e0"
+  "sourceInputsDigest": "d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb"
 }

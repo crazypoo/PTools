@@ -2,13 +2,13 @@
 Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
-Branch: feature/pr51-pr55-debug-performance-rel-candidate-20261030
-Source revision: 6928fdb7d49e1a9b1353b68d24225b23a0d67eb2
+Branch: feature/pr56-pr60-rc-ci-security-20261030
+Source revision: 1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1
 Source version: 5.69.0
-Source inputs digest: c0ec772e7214cf193c1b62fabd35850af82c5fef5524d529dcced405437ce7e0
+Source inputs digest: d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb
 Generator version: 1
 Generator: Scripts/report_singletons.rb
-Generated at: 2026-10-30T04:12:21Z
+Generated at: 2026-10-30T04:32:51Z
 -->
 
 # PTools 当前单例范围盘点
