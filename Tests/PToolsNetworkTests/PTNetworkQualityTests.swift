@@ -95,6 +95,65 @@ final class PTNetworkQualityTests: XCTestCase {
         XCTAssertEqual(firstKey.hashValue, secondKey.hashValue)
     }
 
+    func testVolatileHeaderIdentityIsExplicitAndKeepsAccountAndLanguageIsolation() {
+        var first = URLRequest(url: URL(string: "https://example.com/categories")!)
+        first.httpMethod = "GET"
+        first.setValue("1000", forHTTPHeaderField: "ts")
+        first.setValue("account-A", forHTTPHeaderField: "token")
+        first.setValue("en", forHTTPHeaderField: "language")
+        var second = first
+        second.setValue("1001", forHTTPHeaderField: "ts")
+
+        // Default preserves full header identity; no app silently changes semantics.
+        XCTAssertNotEqual(RequestKey(request: first), RequestKey(request: second))
+
+        first.setValue("ts,token,language", forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
+        second.setValue("ts,token,language", forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
+        XCTAssertEqual(RequestKey(request: first), RequestKey(request: second))
+
+        var otherAccount = second
+        otherAccount.setValue("account-B", forHTTPHeaderField: "token")
+        XCTAssertNotEqual(RequestKey(request: first), RequestKey(request: otherAccount))
+
+        var otherLanguage = second
+        otherLanguage.setValue("zh", forHTTPHeaderField: "language")
+        XCTAssertNotEqual(RequestKey(request: first), RequestKey(request: otherLanguage))
+    }
+
+    func testTimestampNormalizationAlsoMatchesCachedResponse() async throws {
+        let url = URL(string: "https://example.com/categories/\\(UUID().uuidString)")!
+        var original = URLRequest(url: url)
+        original.httpMethod = "GET"
+        original.setValue("1000", forHTTPHeaderField: "ts")
+        original.setValue("account-A", forHTTPHeaderField: "token")
+        original.setValue("ts", forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
+
+        let data = Data(#"{\"code\":200,\"msg\":[]}"#.utf8)
+        await NetworkCache.shared.save(data: data, request: original, expire: 90)
+
+        var later = original
+        later.setValue("1001", forHTTPHeaderField: "ts")
+        let cached = await NetworkCache.shared.read(request: later)
+        XCTAssertEqual(cached, data)
+
+        later.setValue("account-B", forHTTPHeaderField: "token")
+        let separated = await NetworkCache.shared.read(request: later)
+        XCTAssertNil(separated)
+
+        later.setValue("account-A", forHTTPHeaderField: "token")
+        later.setValue(nil, forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
+        XCTAssertNil(await NetworkCache.shared.read(request: later))
+    }
+
+    func testIgnoredIdentityHeadersAreOptInViaNetworkConfiguration() {
+        var config = PTNetworkConfig()
+        config.requestIdentityIgnoredHeaders = ["TS", "token"]
+        let headers = Network.prepareRequestHeaders(header: nil,
+                                                     jsonRequest: false,
+                                                     configuration: config)
+        XCTAssertEqual(headers.value(for: PTRequestIdentityPolicy.metadataHeader), "token,ts")
+    }
+
     func testOneHundredConcurrentIdenticalRequestsShareOneOperation() async throws {
         guard let request = makeRequest(body: "{\"value\":1}") else {
             XCTFail("无法创建测试请求")
