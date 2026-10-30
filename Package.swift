@@ -1412,12 +1412,6 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "PToolsDebugNetworkCoreTests",
-            dependencies: ["PToolsDebugNetworkCore"],
-            path: "Tests/PToolsDebugNetworkCoreTests",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
-        ),
-        .testTarget(
             name: "PToolsDebugCoreTests",
             dependencies: ["PToolsDebugCore", "PToolsDebugMetricsCore"],
             path: "Tests/PToolsDebugCoreTests",
