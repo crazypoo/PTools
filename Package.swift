@@ -296,6 +296,7 @@ let package = Package(
         // ==========================================
         .library(name: "PToolsDebugCore", targets: ["PToolsDebugCore"]),
         .library(name: "PToolsDebugConsoleCore", targets: ["PToolsDebugConsoleCore"]),
+        .library(name: "PToolsDebugConsoleUI", targets: ["PToolsDebugConsoleUI"]),
         .library(name: "PToolsDebugMetricsCore", targets: ["PToolsDebugMetricsCore"]),
         .library(name: "PToolsDebugInspectorCore", targets: ["PToolsDebugInspectorCore"]),
         .library(name: "PToolsDebugInspectorUI", targets: ["PToolsDebugInspectorUI"]),
@@ -1172,7 +1173,7 @@ let package = Package(
         // ==========================================
         .target(
             name: "PooToolsDEBUG",
-            dependencies: ["PToolsDebugInspectorLegacyUI", "PToolsDebugNetworkCore", "PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "PToolsDebugStorageCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
+            dependencies: ["PToolsDebugInspectorLegacyUI", "PToolsDebugConsoleUI", "PToolsDebugNetworkCore", "PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "PToolsDebugStorageCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
             path: "PooToolsSource",
             exclude: ["DebugNetwork/PTNetworkCaptureModels.swift", "DebugNetwork/PTNetworkCaptureStore.swift", "DebugNetwork/PTNetworkRedactor.swift", "Debug/PTDebugInventory.swift"],
             sources: [
@@ -1190,6 +1191,14 @@ let package = Package(
             path: "PooToolsSource/PToolsDebugCore",
             sources: ["PTDebugEvents.swift"],
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        // Only scene-bound UIWindow presentation. Debug management remains in
+        // PooToolsDEBUG to avoid reverse dependencies/cycles.
+        .target(
+            name: "PToolsDebugConsoleUI",
+            dependencies: ["PToolsOverlay", "SnapKit"],
+            path: "PooToolsSource/PToolsDebugConsoleUI",
+            swiftSettings: [.define("POOTOOLS_DEBUG")]
         ),
         .target(
             name: "PToolsDebugCore",
