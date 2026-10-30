@@ -126,6 +126,9 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+      - name: Install CocoaPods report parser
+        run: |
+          sudo gem install cocoapods -v 1.16.2 --no-document
       - name: Compare actual generator outputs against committed reports
         run: |
           bash Scripts/Governance/generate_all_current_reports.sh --check
