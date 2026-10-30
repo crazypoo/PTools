@@ -5,6 +5,7 @@ import Darwin
 #if SWIFT_PACKAGE
 import PToolsStudioProtocolCore
 import PToolsDebugInspectorCore
+import PToolsDebugInspectorUI
 import PooToolsDEBUG
 #endif
 
@@ -265,18 +266,7 @@ public final class PTStudioDiagnosticAgent {
     }
 
     private func highlight(_ view: UIView) {
-        guard let window = view.window else { return }
-        let frame = view.convert(view.bounds, to: window)
-        let layer = CAShapeLayer()
-        layer.frame = frame
-        layer.borderColor = UIColor.systemOrange.cgColor
-        layer.borderWidth = 3
-        layer.backgroundColor = UIColor.systemOrange.withAlphaComponent(0.1).cgColor
-        window.layer.addSublayer(layer)
-        Task {
-            try? await Task.sleep(for: .seconds(2))
-            layer.removeFromSuperlayer()
-        }
+        PTDebugInspectorHighlight.show(view)
     }
 
     private func performanceInventory() async -> [PTStudioDiagnosticEntry] {
