@@ -297,6 +297,7 @@ let package = Package(
         .library(name: "PToolsDebugCore", targets: ["PToolsDebugCore"]),
         .library(name: "PToolsDebugMetricsCore", targets: ["PToolsDebugMetricsCore"]),
         .library(name: "PToolsDebugInspectorCore", targets: ["PToolsDebugInspectorCore"]),
+        .library(name: "PToolsDebugNetworkCore", targets: ["PToolsDebugNetworkCore"]),
         .library(name: "PToolsDebugInventoryCore", targets: ["PToolsDebugInventoryCore"]),
         .library(name: "PooToolsDEBUG", targets: ["PooToolsDEBUG"]),
         // Explicit opt-in transport of redacted DebugNetwork events; omitted from PooToolsAll.
@@ -1167,8 +1168,9 @@ let package = Package(
         // ==========================================
         .target(
             name: "PooToolsDEBUG",
-            dependencies: ["PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
+            dependencies: ["PToolsDebugNetworkCore", "PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInventoryCore", "ptools", "PooToolsNetWork", "PooToolsShare", "PooToolsSearchBar", "PooToolsPDF", "PToolsSymbols", "PToolsOverlay", "PToolsConnectivity", "PToolsStorage", "PToolsRouteCore", "PToolsDeepLink", "PToolsNotifications", "PToolsBackgroundTasks", "SnapKit"],
             path: "PooToolsSource",
+            exclude: ["DebugNetwork/PTNetworkCaptureModels.swift", "DebugNetwork/PTNetworkCaptureStore.swift", "DebugNetwork/PTNetworkRedactor.swift"],
             sources: [
                 "Debug", "LocalConsole", "DevMask", "TouchInspector", "DEBUGLocation",
                 "Inspector", "DebugLibs", "DebugCrash", "DebugFile", "DebugColor",
@@ -1195,6 +1197,18 @@ let package = Package(
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         // File/defaults Debug inventory is pure Foundation and has no UIKit dependency.
+        // PR23: immutable capture contract + actor storage + redaction without UIKit.
+        // Legacy presentation remains in PooToolsDEBUG.
+        .target(
+            name: "PToolsDebugNetworkCore",
+            path: "PooToolsSource",
+            sources: [
+                "DebugNetwork/PTNetworkCaptureModels.swift",
+                "DebugNetwork/PTNetworkCaptureStore.swift",
+                "DebugNetwork/PTNetworkRedactor.swift"
+            ],
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
         .target(
             name: "PToolsDebugInventoryCore",
             path: "PooToolsSource/PToolsDebugInventoryCore",
@@ -1401,6 +1415,12 @@ let package = Package(
             name: "PToolsDebugCoreTests",
             dependencies: ["PToolsDebugCore", "PToolsDebugMetricsCore"],
             path: "Tests/PToolsDebugCoreTests",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .testTarget(
+            name: "PToolsDebugNetworkCoreTests",
+            dependencies: ["PToolsDebugNetworkCore"],
+            path: "Tests/PToolsDebugNetworkCoreTests",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .testTarget(
