@@ -361,6 +361,9 @@ jobs:
   quality-summary:
     if: always()
     needs:
+      - debug-foundation-compile
+      - inspector-ios-compat
+      - debug-governance-repro
       - version-governance
       - docs-governance
       - example-governance
@@ -388,6 +391,25 @@ jobs:
           merge-multiple: false
       - name: Final Quality Summary
         run: QUALITY_REPORT_DIR="$GITHUB_WORKSPACE/.quality-reports" bash Scripts/CI/quality_gate.sh summary
+      - name: Require successful PR41 Debug module and existing quality jobs
+        if: always()
+        env:
+          REQUIRED_GATE_RESULTS: ${{ toJSON(needs) }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import sys
+          upstream = json.loads(os.environ["REQUIRED_GATE_RESULTS"])
+          failures = sorted((name, job.get("result", "unknown"))
+                            for name, job in upstream.items()
+                            if job.get("result") != "success")
+          for name, result in failures:
+              print(f"FAIL: required upstream job {name} => {result}")
+          if failures:
+              sys.exit(1)
+          print(f"PASS: {len(upstream)} mandatory quality jobs succeeded")
+          PY
       - name: Upload Quality report
         if: always()
         uses: actions/upload-artifact@v4
