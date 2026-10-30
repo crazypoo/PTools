@@ -90,7 +90,7 @@ public final class PTConsoleWindow: UIWindow {
         frame = scene.coordinateSpace.bounds
     }
         
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         guard let rootView = rootViewController?.view else { return nil }
 
         let hitView = super.hitTest(point, with: event)
