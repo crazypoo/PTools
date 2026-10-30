@@ -1,3 +1,4 @@
+import Dispatch
 import XCTest
 import PToolsDebugCore
 import PToolsDebugMetricsCore
@@ -69,6 +70,32 @@ final class PTDebugCoreTests: XCTestCase {
             visibleTrackCount: 0)
         XCTAssertEqual(zero.contentWidth, 300)
         XCTAssertEqual(zero.contentHeight, 48)
+    }
+
+    // PR42: a non-gating, reproducible 100/500/1000 ring/geometry
+    // microbenchmark. It is not an on-device FPS or Mac Studio UI result.
+    func testDebugMetricsBoundedWorkloadMatrix() {
+        for capacity in [100, 500, 1_000] {
+            var elapsedMS: [Double] = []
+            for _ in 0..<5 {
+                let start = DispatchTime.now().uptimeNanoseconds
+                var ring = PTDebugRingBuffer<Int>(capacity: capacity)
+                for value in 0..<(capacity + 64) { ring.append(value) }
+                let geometry = PTDebugTimelineGeometry(
+                    viewportWidth: 320,
+                    duration: TimeInterval(capacity) / 10,
+                    zoom: 1,
+                    visibleTrackCount: 3)
+                XCTAssertEqual(ring.count, capacity)
+                XCTAssertEqual(ring.latestValue, capacity + 63)
+                XCTAssertEqual(ring.orderedValues.first, 64)
+                XCTAssertEqual(geometry.contentHeight, 144)
+                let end = DispatchTime.now().uptimeNanoseconds
+                elapsedMS.append(Double(end - start) / 1_000_000)
+            }
+            let ordered = elapsedMS.sorted()
+            print("PR42_METRICS_CORE capacity=\(capacity) medianMS=\(ordered[2]) p95MS=\(ordered[4])")
+        }
     }
 
 }
