@@ -54,7 +54,8 @@ for token in (
 ):
     assert token in agent, f"Missing Debug-only consent/capability guard: {token}"
 
-assert "view.constraints.reduce(into: 0)" in agent
+assert "let installedConstraints = view.constraints" in agent
+assert "installedConstraints.reduce(into: 0)" in agent
 assert "String(constraint)" not in agent, "Raw constraint descriptions must not leave iOS"
 assert 'view.addConstraint(' not in agent and 'view.removeConstraint(' not in agent
 
