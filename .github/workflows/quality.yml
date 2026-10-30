@@ -4,11 +4,43 @@ on:
   push:
     branches: [master]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
+  debug-core-manifest:
+    name: Debug Core dependency and source ownership smoke
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+      - name: Validate SwiftPM manifest and split capture ownership
+        run: |
+          swift package dump-package > /tmp/ptools-debug-package.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          package = json.loads(Path("/tmp/ptools-debug-package.json").read_text())
+          targets = {entry["name"]: entry for entry in package["targets"]}
+          needed = ("PToolsDebugCore", "PToolsDebugMetricsCore", "PToolsDebugInspectorCore",
+                    "PToolsDebugInventoryCore", "PToolsStudioProtocolCore", "PToolsDebugNetworkCore")
+          for name in needed:
+              assert name in targets, f"missing split target {name}"
+          owner = targets["PToolsDebugNetworkCore"]
+          files = {"DebugNetwork/PTNetworkCaptureModels.swift",
+                   "DebugNetwork/PTNetworkCaptureStore.swift",
+                   "DebugNetwork/PTNetworkRedactor.swift"}
+          assert files == set(owner.get("sources", [])), "capture core source contract drift"
+          debug = targets["PooToolsDEBUG"]
+          assert files <= set(debug.get("exclude", [])), "duplicate canonical capture sources in DEBUG"
+          for file in files:
+              source = (Path("PooToolsSource") / file).read_text()
+              assert "import UIKit" not in source and "import ptools" not in source, file
+          print("PASS: SwiftPM Debug capture core is unique and independent from UIKit")
+          PY
+
   version-governance:
     runs-on: macos-26
     steps:
