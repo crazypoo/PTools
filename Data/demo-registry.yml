@@ -404,7 +404,8 @@ modules:
   module_id: "poo-tools-check-box"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "ui.checkbox-lab"
 -
   module_id: "poo-tools-check-dirty-word"
   coverage: "runnable"
@@ -420,12 +421,14 @@ modules:
   module_id: "poo-tools-chinese-pinyin"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "text.pinyin-lab"
 -
   module_id: "poo-tools-circle"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "ui.half-circle-lab"
 -
   module_id: "poo-tools-code-view"
   coverage: "runnable"
@@ -522,7 +525,8 @@ modules:
   module_id: "poo-tools-key-chain"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "security.keychain-lab"
 -
   module_id: "poo-tools-keyboard"
   coverage: "runnable"
@@ -606,7 +610,8 @@ modules:
   module_id: "poo-tools-page-control"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "ui.pagecontrol-lab"
 -
   module_id: "poo-tools-paging-control"
   coverage: "runnable"
@@ -687,7 +692,8 @@ modules:
   module_id: "poo-tools-search-bar"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "input.searchbar-lab"
 -
   module_id: "poo-tools-security"
   coverage: "runnable"
@@ -893,7 +899,8 @@ modules:
   module_id: "ptools-connectivity"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "network.connectivity-lab"
 -
   module_id: "ptools-content-state"
   coverage: "runnable"
@@ -910,7 +917,8 @@ modules:
   module_id: "ptools-date"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "core.date-parser-lab"
 -
   module_id: "ptools-deep-link"
   coverage: "runnable"
@@ -932,7 +940,8 @@ modules:
   module_id: "ptools-feedback"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "device.haptics-lab"
 -
   module_id: "ptools-form"
   coverage: "runnable"
@@ -958,7 +967,8 @@ modules:
   module_id: "ptools-logging"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "debug.logging-lab"
 -
   module_id: "ptools-model"
   coverage: "documentation"
@@ -1051,7 +1061,8 @@ modules:
   module_id: "ptools-symbols"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "ui.symbols-lab"
 -
   module_id: "ptools-theme"
   coverage: "runnable"
@@ -1345,7 +1356,8 @@ modules:
   module_id: "ptools-web"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "modern.web-lab"
 -
   module_id: "ptools-map-core"
   coverage: "documentation"
