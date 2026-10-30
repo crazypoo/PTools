@@ -2,13 +2,13 @@
 Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
-Branch: feature/pr46-pr50-inspector-layout-governance-20261030
-Source revision: 98086745a5deb64f173282d5cdfa5faaed2e2106
+Branch: feature/pr51-pr55-debug-performance-rel-candidate-20261030
+Source revision: 6928fdb7d49e1a9b1353b68d24225b23a0d67eb2
 Source version: 5.69.0
-Source inputs digest: 8c745967288dcd0493111e7ec716d9f601938762a8f52bae2525c7d3591bb455
+Source inputs digest: c0ec772e7214cf193c1b62fabd35850af82c5fef5524d529dcced405437ce7e0
 Generator version: 1
 Generator: Scripts/report_public_api.rb
-Generated at: 2026-10-30T03:49:02Z
+Generated at: 2026-10-30T04:12:21Z
 -->
 
 # PTools 当前公开 API 清单
@@ -3424,10 +3424,10 @@ Generated at: 2026-10-30T03:49:02Z
 | PooToolsSource/DebugStudioBridge/PTStudioBridge.swift:82 | func | public | public func status() -> PTStudioBridgeStatus { |
 | PooToolsSource/DebugStudioBridge/PTStudioBridge.swift:102 | func | public | public func start(using transport: any PTStudioTransport, configuration: PTStudioBridgeConfiguration) async throws { |
 | PooToolsSource/DebugStudioBridge/PTStudioBridge.swift:147 | func | public | public func stop() async { |
-| PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift:22 | class | public | public final class PTStudioDiagnosticAgent { |
-| PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift:41 | func | public | public func startIfAuthorized() async { |
-| PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift:87 | func | public | public func stop() async { |
-| PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift:101 | func | public | public func recordLog(_ message: String) { |
+| PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift:45 | class | public | public final class PTStudioDiagnosticAgent { |
+| PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift:64 | func | public | public func startIfAuthorized() async { |
+| PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift:110 | func | public | public func stop() async { |
+| PooToolsSource/DebugStudioBridge/PTStudioDiagnosticAgent.swift:124 | func | public | public func recordLog(_ message: String) { |
 | PooToolsSource/DebugStudioBridge/PTStudioPairingView.swift:8 | struct | public | public struct PTStudioPairingView: View { |
 | PooToolsSource/DebugStudioBridge/PTStudioPairingView.swift:21 | init | public | public init() {} |
 | PooToolsSource/DebugStudioBridge/PTStudioPairingView.swift:23 | var | public | public var body: some View { |
