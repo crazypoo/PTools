@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: feature/pr56-pr60-rc-ci-security-20261030
-Source revision: 8a75bdb201afe39c980966a9bd8ff2e3b6f5b92b
+Source revision: 1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1
 Source version: 5.69.0
 Source inputs digest: d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb
 Generator version: 1
 Generator: Scripts/report_current_summaries.rb
-Generated at: 2026-10-30T04:27:22Z
+Generated at: 2026-10-30T04:32:51Z
 -->
 
 # PTools 当前回归状态
@@ -17,7 +17,7 @@ Generated at: 2026-10-30T04:27:22Z
 
 - 当前 podspec 版本：`5.69.0`
 - 最新正式 Git tag：`5.67.3`
-- 当前提交：`8a75bdb201afe39c980966a9bd8ff2e3b6f5b92b`
+- 当前提交：`1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1`
 - 当前状态：`static_and_build_evidence_required`
 
 ## 发布前仍需人工确认

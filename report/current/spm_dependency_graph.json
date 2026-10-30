@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "8a75bdb201afe39c980966a9bd8ff2e3b6f5b92b",
-  "generated_at": "2026-10-30T04:27:22Z",
+  "source_revision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
+  "generated_at": "2026-10-30T04:32:51Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -12716,10 +12716,10 @@
     }
   ],
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T04:27:22Z",
+  "generatedAt": "2026-10-30T04:32:51Z",
   "repository": "crazypoo/PTools",
   "branch": "feature/pr56-pr60-rc-ci-security-20261030",
-  "sourceRevision": "8a75bdb201afe39c980966a9bd8ff2e3b6f5b92b",
+  "sourceRevision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
   "sourceVersion": "5.69.0",
   "generatorVersion": "Scripts/report_spm_dependency_graph.rb",
   "sourceInputsDigest": "d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb"

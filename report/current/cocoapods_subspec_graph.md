@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: feature/pr56-pr60-rc-ci-security-20261030
-Source revision: 8a75bdb201afe39c980966a9bd8ff2e3b6f5b92b
+Source revision: 1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1
 Source version: 5.69.0
 Source inputs digest: d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb
 Generator version: 1
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Generated at: 2026-10-30T04:27:22Z
+Generated at: 2026-10-30T04:32:51Z
 -->
 
 # CocoaPods Subspec Graph
