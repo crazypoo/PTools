@@ -99,6 +99,25 @@ jobs:
             -emit-module-path /tmp/ptools-debug-modules/PToolsDebugStorageCore.swiftmodule
           echo "PASS: Foundation Debug, Metrics, Inventory and Storage modules compile"
 
+  inspector-ios-compat:
+    name: iOS 17+ Inspector physical-target compile (Xcode compatibility)
+    runs-on: macos-15
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v7
+      - name: Print Apple SDK and Swift toolchain versions
+        run: |
+          xcodebuild -version
+          xcodebuild -showsdks
+          swift --version
+      - name: Typecheck extracted UIKit Inspector module
+        run: |
+          swift package dump-package >/dev/null
+          swift build --triple arm64-apple-ios17.0-simulator --target PToolsDebugInspectorLegacyUI
+      - name: Compile original Debug umbrella compatibility
+        run: |
+          swift build --triple arm64-apple-ios17.0-simulator --target PooToolsDEBUG
+
   version-governance:
     runs-on: macos-26
     steps:
