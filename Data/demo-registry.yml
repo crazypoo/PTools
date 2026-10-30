@@ -377,7 +377,8 @@ modules:
   module_id: "poo-tools-all"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "security.acknowledgements"
 -
   module_id: "poo-tools-bank-card"
   coverage: "runnable"
@@ -404,12 +405,14 @@ modules:
   module_id: "poo-tools-check-box"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "ui.checkbox-lab"
 -
   module_id: "poo-tools-check-dirty-word"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "text.filter-words-lab"
 -
   module_id: "poo-tools-check-update"
   coverage: "runnable"
@@ -420,12 +423,14 @@ modules:
   module_id: "poo-tools-chinese-pinyin"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "text.pinyin-lab"
 -
   module_id: "poo-tools-circle"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "ui.half-circle-lab"
 -
   module_id: "poo-tools-code-view"
   coverage: "runnable"
@@ -441,7 +446,8 @@ modules:
   module_id: "poo-tools-country"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "data.country-codes-lab"
 -
   module_id: "poo-tools-customer-label"
   coverage: "runnable"
@@ -512,7 +518,8 @@ modules:
   module_id: "poo-tools-input"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "input.all-styles"
 -
   module_id: "poo-tools-instructions"
   coverage: "runnable"
@@ -522,7 +529,8 @@ modules:
   module_id: "poo-tools-key-chain"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "security.keychain-lab"
 -
   module_id: "poo-tools-keyboard"
   coverage: "runnable"
@@ -537,7 +545,17 @@ modules:
   module_id: "poo-tools-layout"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "ui.layout.snapkit-compatibility"
+    - "ui.layout.missing-superview-no-crash"
+    - "ui.layout.size-only-without-parent"
+    - "ui.layout.cross-tree-error"
+    - "ui.layout.safe-remake"
+    - "ui.layout.update-mismatch"
+    - "ui.layout.safe-area-keyboard-rtl"
+    - "ui.layout.profile-compare"
+    - "ui.layout.duo-adaptation"
+    - "ui.layout.lifecycle-reuse"
 -
   module_id: "poo-tools-live-photo"
   coverage: "runnable"
@@ -606,7 +624,8 @@ modules:
   module_id: "poo-tools-page-control"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "ui.pagecontrol-lab"
 -
   module_id: "poo-tools-paging-control"
   coverage: "runnable"
@@ -687,7 +706,8 @@ modules:
   module_id: "poo-tools-search-bar"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "input.searchbar-lab"
 -
   module_id: "poo-tools-security"
   coverage: "runnable"
@@ -851,12 +871,14 @@ modules:
   module_id: "ptools"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "security.acknowledgements-headless"
 -
   module_id: "ptools-accessibility"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "ui.accessibility-lab"
 -
   module_id: "ptools-activities"
   coverage: "extension_required"
@@ -893,12 +915,14 @@ modules:
   module_id: "ptools-connectivity"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "network.connectivity-lab"
 -
   module_id: "ptools-content-state"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "ui.content-state-lab"
 -
   module_id: "ptools-core"
   coverage: "runnable"
@@ -906,16 +930,19 @@ modules:
   demos:
     - "theme.language"
     - "ui.control-menu"
+    - "media.image-clarity"
 -
   module_id: "ptools-date"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "core.date-parser-lab"
 -
   module_id: "ptools-deep-link"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "navigation.deep-link-lab"
 -
   module_id: "ptools-device"
   coverage: "physical_device_required"
@@ -932,7 +959,8 @@ modules:
   module_id: "ptools-feedback"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "device.haptics-lab"
 -
   module_id: "ptools-form"
   coverage: "runnable"
@@ -958,7 +986,8 @@ modules:
   module_id: "ptools-logging"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "debug.logging-lab"
 -
   module_id: "ptools-model"
   coverage: "documentation"
@@ -1025,7 +1054,8 @@ modules:
   module_id: "ptools-route-core"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "navigation.route-value-lab"
 -
   module_id: "ptools-simulation"
   coverage: "runnable"
@@ -1035,7 +1065,8 @@ modules:
   module_id: "ptools-simulation-core"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "debug.simulation-clock-lab"
 -
   module_id: "ptools-storage"
   coverage: "runnable"
@@ -1046,12 +1077,14 @@ modules:
   module_id: "ptools-storage-core"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "storage.namespace-lab"
 -
   module_id: "ptools-symbols"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "ui.symbols-lab"
 -
   module_id: "ptools-theme"
   coverage: "runnable"
@@ -1089,6 +1122,9 @@ modules:
     - "duo.alert-action-sheet"
     - "duo.collection-all-layouts"
     - "duo.rtl-dynamic-type"
+    - "ui.rich-text-attachment-multiline"
+    - "ui.rich-text-fragment-line-limit"
+    - "ui.collection-skeleton-lab"
 -
   module_id: "ptools-widget-core"
   coverage: "extension_required"
@@ -1345,7 +1381,8 @@ modules:
   module_id: "ptools-web"
   coverage: "runnable"
   canonical_module_id: null
-  demos: []
+  demos:
+    - "modern.web-lab"
 -
   module_id: "ptools-map-core"
   coverage: "documentation"
