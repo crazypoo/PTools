@@ -8,6 +8,7 @@
 
 import UIKit
 #if SWIFT_PACKAGE
+import PToolsDebugNetworkCore
 import ptools
 import PooToolsSearchBar
 #endif
