@@ -18,6 +18,7 @@ final class PTLegacyHTTPProjectionTests: XCTestCase {
         XCTAssertTrue(store.addHttpRequest(model("same")))
         XCTAssertFalse(store.addHttpRequest(model("same")))
         XCTAssertEqual(store.httpModels.count, 1)
+        XCTAssertFalse(store.addHttpRequest(model(" same ")))
         XCTAssertTrue(store.addHttpRequest(model(nil)))
         XCTAssertTrue(store.addHttpRequest(model(nil)))
         XCTAssertEqual(store.httpModels.count, 3)
