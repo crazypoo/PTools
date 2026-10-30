@@ -139,6 +139,8 @@
 		23898D852543FAD7004DDE1A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		23898D872543FAEB004DDE1A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Photos.framework; sourceTree = DEVELOPER_DIR; };
 		25DA4BFA187E46B2BDCC596B /* PTNavigationBarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNavigationBarManager.swift; sourceTree = "<group>"; };
+		A36F20261030000000000001 /* PTNavigationBarManagerSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNavigationBarManagerSupport.swift; sourceTree = "<group>"; };
+		A36F20261030000000000002 /* PTNavigationBarManager+Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTNavigationBarManager+Components.swift"; sourceTree = "<group>"; };
 		550026872FBD44B400E3B347 /* PTRangeSeekSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRangeSeekSlider.swift; sourceTree = "<group>"; };
 		55024DDC29F2831500244E44 /* PTFaceEye.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFaceEye.swift; sourceTree = "<group>"; };
 		55024DDF29F2855300244E44 /* PTEyeTrackingSessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEyeTrackingSessionManager.swift; sourceTree = "<group>"; };
@@ -2973,6 +2975,8 @@
 				55AA10F52C00000100000001 /* PTBaseTabBarViewController+SystemTabs.swift */,
 				55D59C6B28F538B600B4FF76 /* PTBaseViewController.swift */,
 				25DA4BFA187E46B2BDCC596B /* PTNavigationBarManager.swift */,
+				A36F20261030000000000001 /* PTNavigationBarManagerSupport.swift */,
+				A36F20261030000000000002 /* PTNavigationBarManager+Components.swift */,
 				A57F00000000000000000002 /* PTListViewController.swift */,
 				55D6FC5F2C9EA8BF006683F4 /* PTBaseWebViewController.swift */,
 				552F57502ADB86A500E0EB7C /* PTCollectionView.swift */,
