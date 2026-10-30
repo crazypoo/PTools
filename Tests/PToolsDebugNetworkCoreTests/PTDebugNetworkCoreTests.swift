@@ -58,4 +58,21 @@ final class PTDebugNetworkCoreTests: XCTestCase {
         XCTAssertEqual(sanitized.request.headers["Authorization"], "[REDACTED]")
         XCTAssertFalse(sanitized.request.url.absoluteString.contains("secret"))
     }
+    func testBoundedUIStreamDropsStaleEventsButKeepsLatestSnapshot() async {
+        let store = PTNetworkCaptureStore(maxRecords: 32)
+        let changes = await store.changes(bufferingNewest: 4)
+        let subscribers = await store.activeChangeSubscriberCount()
+        XCTAssertEqual(subscribers, 1)
+        let ids = (0..<10).map { _ in UUID() }
+        for id in ids { _ = await store.insert(record(id)) }
+
+        // A slow UI has four notifications, never ten queued snapshots.
+        var iterator = changes.makeAsyncIterator()
+        let first = await iterator.next()
+        XCTAssertEqual(first, .inserted(ids[6]))
+        let latest = await store.summaries()
+        XCTAssertEqual(latest.count, 10)
+        XCTAssertEqual(latest.last?.id, ids[9])
+    }
+
 }
