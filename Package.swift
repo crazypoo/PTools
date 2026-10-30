@@ -1456,7 +1456,7 @@ let package = Package(
         // 中文：让 DebugNetwork 合约测试紧邻观测 target，避免新增第二套抓包实现。
         .testTarget(
             name: "PToolsDebugTests",
-            dependencies: ["PooToolsDEBUG", "PooToolsDEBUGTrackingEyes"],
+            dependencies: ["PooToolsDEBUG", "PooToolsDEBUGTrackingEyes", "PToolsDebugConsoleUI", "PToolsDebugMetricsUI"],
             path: "Tests/PToolsDebugTests",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
