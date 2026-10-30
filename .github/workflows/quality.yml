@@ -66,6 +66,23 @@ jobs:
           assert "PToolsDebugConsoleCore" in str(targets["PToolsDebugCore"].get("dependencies", []))
           assert "PTDebugTimelineGeometry.swift" in Path(
               "PooToolsSource/PToolsDebugMetricsCore/PTDebugTimelineGeometry.swift").name
+          # PR36: NavigationBarManager implementation is physically split,
+          # with exact SwiftPM and CocoaPods source parity and no rule waiver.
+          navigation_sources = [
+              Path("PooToolsSource/Base/PTNavigationBarManager.swift"),
+              Path("PooToolsSource/Base/PTNavigationBarManagerSupport.swift"),
+              Path("PooToolsSource/Base/PTNavigationBarManager+Components.swift")
+          ]
+          assert all(path.exists() for path in navigation_sources)
+          assert max(len(path.read_text().splitlines()) for path in navigation_sources) < 2000
+          assert "extension PTNavigationBarManager: UINavigationControllerDelegate" in navigation_sources[0].read_text()
+          assert "class PTNavigationDelegateProxy" in navigation_sources[1].read_text()
+          assert "func startDisplayLink()" in navigation_sources[2].read_text()
+          pod = Path("PooTools.podspec").read_text()
+          assert "PooToolsSource/Base/*.{h,m,swift}" in pod
+          project = Path("PooTools.xcodeproj/project.pbxproj").read_text()
+          assert all(path.name in project for path in navigation_sources)
+          print("PASS: PR36 NavigationBar split is below file limit; sources are registered")
           print("PASS: unique Network, Storage, Inspector UI and Console ownership")
           PY
 
