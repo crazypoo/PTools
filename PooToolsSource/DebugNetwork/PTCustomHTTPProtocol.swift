@@ -4,6 +4,7 @@
 
 import Foundation
 #if SWIFT_PACKAGE
+import PToolsDebugCore
 import PToolsDebugNetworkCore
 import ptools
 #endif
