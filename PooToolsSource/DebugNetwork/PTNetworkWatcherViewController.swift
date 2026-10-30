@@ -237,7 +237,10 @@ class PTNetworkWatcherViewController: PTBaseViewController {
     
     func observers() {
         captureChangeTask = Task { @MainActor [weak self] in
-            let changes = await PTNetworkCaptureStore.shared.changes()
+            // The list always reloads the authoritative Actor snapshot; it
+            // never requires every individual update. Bound the AsyncStream
+            // to prevent a suspended/slow scene retaining an unbounded backlog.
+            let changes = await PTNetworkCaptureStore.shared.changes(bufferingNewest: 32)
             for await _ in changes {
                 guard !Task.isCancelled else { return }
                 // English: Coalesce bursts before touching the diffable collection.

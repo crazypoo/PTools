@@ -56,6 +56,16 @@ jobs:
                   "// English: PTDebugManager owns registration"
               )[0]
           )
+          assert "PToolsDebugInspectorLegacyUI" in targets
+          assert targets["PToolsDebugInspectorLegacyUI"]["path"] == "PooToolsSource/Inspector"
+          assert "Inspector" not in debug.get("sources", [])
+          assert "PToolsDebugInspectorLegacyUI" in str(debug.get("dependencies", []))
+          assert "PToolsDebugConsoleCore" in targets
+          assert set(targets["PToolsDebugConsoleCore"].get("sources", [])) == {"PTDebugEvents.swift"}
+          assert "PTDebugEvents.swift" in targets["PToolsDebugCore"].get("exclude", [])
+          assert "PToolsDebugConsoleCore" in str(targets["PToolsDebugCore"].get("dependencies", []))
+          assert "PTDebugTimelineGeometry.swift" in Path(
+              "PooToolsSource/PToolsDebugMetricsCore/PTDebugTimelineGeometry.swift").name
           print("PASS: unique Network, Storage, Inspector UI and Console ownership")
           PY
 
@@ -69,8 +79,13 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p /tmp/ptools-debug-modules
-          swiftc -swift-version 6 -emit-module -module-name PToolsDebugCore \
-            PooToolsSource/PToolsDebugCore/*.swift \
+          swiftc -swift-version 6 -emit-module -module-name PToolsDebugConsoleCore \
+            PooToolsSource/PToolsDebugCore/PTDebugEvents.swift \
+            -emit-module-path /tmp/ptools-debug-modules/PToolsDebugConsoleCore.swiftmodule
+          swiftc -swift-version 6 -D SWIFT_PACKAGE \
+            -I /tmp/ptools-debug-modules -emit-module -module-name PToolsDebugCore \
+            PooToolsSource/PToolsDebugCore/PTDebugSessionOwnerLedger.swift \
+            PooToolsSource/PToolsDebugCore/PTDebugConsoleExports.swift \
             -emit-module-path /tmp/ptools-debug-modules/PToolsDebugCore.swiftmodule
           swiftc -swift-version 6 -emit-module -module-name PToolsDebugMetricsCore \
             PooToolsSource/PToolsDebugMetricsCore/*.swift \
@@ -83,6 +98,45 @@ jobs:
             PooToolsSource/Debug/PTDebugInventory.swift \
             -emit-module-path /tmp/ptools-debug-modules/PToolsDebugStorageCore.swiftmodule
           echo "PASS: Foundation Debug, Metrics, Inventory and Storage modules compile"
+
+  inspector-ios-compat:
+    name: iOS 17+ Inspector physical-target compile (Xcode compatibility)
+    runs-on: macos-15
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v7
+      - name: Print Apple SDK and Swift toolchain versions
+        run: |
+          xcodebuild -version
+          xcodebuild -showsdks
+          swift --version
+      - name: Typecheck extracted UIKit Inspector module
+        run: |
+          swift package dump-package >/dev/null
+          swift build --triple arm64-apple-ios17.0-simulator --target PToolsDebugInspectorLegacyUI
+      - name: Compile original Debug umbrella compatibility
+        run: |
+          swift build --triple arm64-apple-ios17.0-simulator --target PooToolsDEBUG
+
+  debug-governance-repro:
+    name: Generator-owned reports reproducibility (Linux diagnostics)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Install CocoaPods report parser
+        run: |
+          sudo gem install cocoapods -v 1.16.2 --no-document
+      - name: Compare actual generator outputs against committed reports
+        run: |
+          bash Scripts/Governance/generate_all_current_reports.sh --check
+      - name: Upload reproducibility diagnostics
+        if: failure()
+        run: |
+          git status --short
+          git diff --check
 
   version-governance:
     runs-on: macos-26

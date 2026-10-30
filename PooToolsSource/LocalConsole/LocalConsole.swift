@@ -8,6 +8,7 @@
 
 import UIKit
 #if SWIFT_PACKAGE
+import PToolsDebugInspectorLegacyUI
 import PToolsDebugCore
 import ptools
 import PooToolsShare
@@ -1356,7 +1357,7 @@ extension LocalConsole {
         
         // 2.2 常规工具操作集合
         var normalActions: [UIAction] = [
-            UIAction(title: "Inspectors", image: UIImage.InspectorImage) { _ in Task { Inspector.sharedInstance.present(animated: true) } },
+            UIAction(title: "Inspectors", image: UIImage.InspectorImage) { _ in Task { Inspector.present(animated: true) } },
             UIAction(title: .log, image: UIImage.logFile) { [weak self] _ in self?.logFileOpen() },
             UIAction(title: .mockLocation, image: UIImage.mockLocationImage) { [weak self] _ in self?.mockLocationOpen() },
             UIAction(title: .network, image: UIImage.networkImage) { [weak self] _ in self?.networkWatcherOpen() },
