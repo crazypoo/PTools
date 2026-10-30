@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "2441530327017e893373eea63d9c87cd4c164ebe",
-  "generated_at": "2026-10-30T04:24:44Z",
+  "source_revision": "8a75bdb201afe39c980966a9bd8ff2e3b6f5b92b",
+  "generated_at": "2026-10-30T04:27:22Z",
   "name": "PooTools",
   "version": "5.69.0",
   "platforms": {
@@ -3707,10 +3707,10 @@
     }
   ],
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T04:24:44Z",
+  "generatedAt": "2026-10-30T04:27:22Z",
   "repository": "crazypoo/PTools",
   "branch": "feature/pr56-pr60-rc-ci-security-20261030",
-  "sourceRevision": "2441530327017e893373eea63d9c87cd4c164ebe",
+  "sourceRevision": "8a75bdb201afe39c980966a9bd8ff2e3b6f5b92b",
   "sourceVersion": "5.69.0",
   "generatorVersion": "Scripts/report_cocoapods_subspec_graph.rb",
   "sourceInputsDigest": "d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb"

@@ -3,12 +3,12 @@ Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
 Branch: feature/pr56-pr60-rc-ci-security-20261030
-Source revision: 2441530327017e893373eea63d9c87cd4c164ebe
+Source revision: 8a75bdb201afe39c980966a9bd8ff2e3b6f5b92b
 Source version: 5.69.0
 Source inputs digest: d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb
 Generator version: 1
 Generator: Scripts/validate_dependency_direction.sh
-Generated at: 2026-10-30T04:24:44Z
+Generated at: 2026-10-30T04:27:22Z
 -->
 
 # Dependency Direction Gate
