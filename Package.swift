@@ -295,6 +295,7 @@ let package = Package(
         // 调试工具模块 (DEBUG)
         // ==========================================
         .library(name: "PToolsDebugCore", targets: ["PToolsDebugCore"]),
+        .library(name: "PToolsDebugConsoleCore", targets: ["PToolsDebugConsoleCore"]),
         .library(name: "PToolsDebugMetricsCore", targets: ["PToolsDebugMetricsCore"]),
         .library(name: "PToolsDebugInspectorCore", targets: ["PToolsDebugInspectorCore"]),
         .library(name: "PToolsDebugInspectorUI", targets: ["PToolsDebugInspectorUI"]),
@@ -1182,9 +1183,19 @@ let package = Package(
             swiftSettings: [.define("POOTOOLS_DEBUG"), .define("POOTOOLS_COCOAPODS")]
         ),
         // Runtime-neutral ownership and bounded metrics: independently buildable.
+        // Console event delivery is a standalone Foundation-only target.
+        // The original DebugCore continues to re-export its 5.x event API.
+        .target(
+            name: "PToolsDebugConsoleCore",
+            path: "PooToolsSource/PToolsDebugCore",
+            sources: ["PTDebugEvents.swift"],
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
         .target(
             name: "PToolsDebugCore",
+            dependencies: ["PToolsDebugConsoleCore"],
             path: "PooToolsSource/PToolsDebugCore",
+            exclude: ["PTDebugEvents.swift"],
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .target(
@@ -1434,6 +1445,12 @@ let package = Package(
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency")
             ]
+        ),
+        .testTarget(
+            name: "PToolsDebugConsoleCoreTests",
+            dependencies: ["PToolsDebugConsoleCore"],
+            path: "Tests/PToolsDebugConsoleCoreTests",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .testTarget(
             name: "PToolsDebugCoreTests",
