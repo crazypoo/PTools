@@ -27,6 +27,11 @@ final class PTNetworkFixtureURLProtocol: URLProtocol, @unchecked Sendable {
             client?.urlProtocol(self, didFailWithError: PTNetworkFixtureError.invalidURL)
             return
         }
+        if url.path == "/identity",
+           request.value(forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader) != nil {
+            client?.urlProtocol(self, didFailWithError: PTNetworkFixtureError.invalidURL)
+            return
+        }
         let response = HTTPURLResponse(url: url,
                                        statusCode: 200,
                                        httpVersion: nil,
@@ -153,6 +158,18 @@ final class PTNetworkQualityTests: XCTestCase {
                                                      jsonRequest: false,
                                                      configuration: config)
         XCTAssertEqual(headers.value(for: PTRequestIdentityPolicy.metadataHeader), "token,ts")
+    }
+
+    func testIdentityMetadataNeverLeavesTheTransportBoundary() async throws {
+        let network = Network(configuration: PTNetworkConfig(),
+                              plugins: [],
+                              protocolClasses: [PTNetworkFixtureURLProtocol.self])
+        var request = URLRequest(url: URL(string: "ptfixture://identity/identity")!)
+        request.httpMethod = "GET"
+        request.setValue("ts", forHTTPHeaderField: PTRequestIdentityPolicy.metadataHeader)
+        let response = try await network.executeRequest(url: request.url!.absoluteString,
+                                                        request: request)
+        XCTAssertEqual(response.metadata.statusCode, 200)
     }
 
     func testOneHundredConcurrentIdenticalRequestsShareOneOperation() async throws {
