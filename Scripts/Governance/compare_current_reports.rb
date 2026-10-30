@@ -70,7 +70,10 @@ begin
   unless same_reports
     missing = (left_files - right_files).map { |path| "missing generated report: #{path}" }
     extra = (right_files - left_files).map { |path| "unexpected generated report: #{path}" }
-    changed = left_files & right_files
+    # Parentheses matter: without them Ruby filters the right-hand file
+    # names before intersecting with left_files, so real content drift prints
+    # only the generic failure header and hides every changed path.
+    changed = (left_files & right_files)
       .reject { |path| File.binread(File.join(left_canonical, path)) == File.binread(File.join(right_canonical, path)) }
       .map { |path| "changed report: #{path}" }
     abort "FAIL [CURRENT_REPORT_DRIFT]\n#{(missing + extra + changed).join("\n")}"
