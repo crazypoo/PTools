@@ -87,6 +87,26 @@ final class PTNetworkQualityTests: XCTestCase {
         return request
     }
 
+    func testTypedUploadCancellationTerminatesUnderlyingUploadStream() async {
+        let consumerStarted = expectation(description: "typed upload consumer is awaiting an event")
+        let sourceTerminated = expectation(description: "source upload stream terminated")
+        let source = AsyncThrowingStream<PTNetworkUploadEvent, Error> { continuation in
+            continuation.onTermination = { @Sendable _ in
+                sourceTerminated.fulfill()
+            }
+        }
+        let typed = Network.codableUploadStream(source: source, modelType: Int.self)
+        let consumer = Task {
+            var iterator = typed.makeAsyncIterator()
+            consumerStarted.fulfill()
+            _ = try? await iterator.next()
+        }
+        await fulfillment(of: [consumerStarted], timeout: 2)
+        consumer.cancel()
+        await fulfillment(of: [sourceTerminated], timeout: 3)
+        await consumer.value
+    }
+
     func testRequestKeyUsesStableJSONBodyIdentity() {
         guard let first = makeRequest(body: "{\"b\":2,\"a\":1}"),
               let second = makeRequest(body: "{\"a\":1,\"b\":2}") else {
