@@ -434,6 +434,67 @@ public final class PTFormActionButtonRenderer: PTFormRendererBase {
     }
 }
 
+// Form action, detail and status rows are displayed without mutating form values.
+// Selection is handled by PTFormView, which emits a typed action ID.
+@MainActor
+public final class PTFormSettingsRowRenderer: PTFormRendererBase {
+    public init(kind: PTFormFieldKind) { super.init(kind: kind) }
+
+    public override var focusBehavior: PTFormFocusBehavior { .notFocusable }
+
+    public override func makeView(for field: PTFormField,
+                                  onChange: @escaping @MainActor @Sendable (PTFormValue) -> Void) -> UIView {
+        let container = UIView()
+        let row = UIStackView()
+        row.axis = .horizontal
+        row.alignment = .center
+        row.spacing = 10
+        row.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(row)
+        NSLayoutConstraint.activate([
+            row.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            row.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            row.topAnchor.constraint(equalTo: container.topAnchor, constant: 6),
+            row.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -6),
+            container.heightAnchor.constraint(greaterThanOrEqualToConstant: 40)
+        ])
+        let label = UILabel()
+        label.font = themeAdapter.bodyFont()
+        label.adjustsFontForContentSizeCategory = true
+        label.textColor = field.isDestructive ? .systemRed : themeAdapter.primaryTextColor()
+        label.text = field.title
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        row.addArrangedSubview(label)
+        row.addArrangedSubview(UIView())
+        if let text = field.detailText, !text.isEmpty {
+            let detailLabel = UILabel()
+            detailLabel.text = text
+            detailLabel.textColor = themeAdapter.secondaryTextColor()
+            detailLabel.font = .preferredFont(forTextStyle: .subheadline)
+            detailLabel.adjustsFontForContentSizeCategory = true
+            detailLabel.numberOfLines = 2
+            detailLabel.textAlignment = .right
+            row.addArrangedSubview(detailLabel)
+        }
+        if field.isLoading {
+            let spinner = UIActivityIndicatorView(style: .medium)
+            spinner.startAnimating()
+            row.addArrangedSubview(spinner)
+        } else if field.kind == .action || (field.kind == .detail && field.actionID != nil) {
+            let accessory = UIImageView(image: UIImage(systemName: "chevron.right"))
+            accessory.tintColor = themeAdapter.secondaryTextColor()
+            accessory.setContentHuggingPriority(.required, for: .horizontal)
+            row.addArrangedSubview(accessory)
+        }
+        container.isAccessibilityElement = true
+        container.accessibilityLabel = [field.title, field.detailText].compactMap { $0 }.joined(separator: ", ")
+        container.accessibilityTraits = field.actionID == nil ? .staticText : .button
+        container.accessibilityValue = field.isLoading ? "Loading" : field.detailText
+        container.alpha = field.isEnabled ? 1 : 0.5
+        return container
+    }
+}
+
 @MainActor
 public final class PTFormMissingRendererView: UILabel {
     public init(kind: PTFormFieldKind) {
@@ -472,6 +533,7 @@ enum PTFormRendererFactory {
         case .stepper: return PTFormStepperRenderer()
         case .date: return PTFormDateRenderer()
         case .picker: return PTFormPickerRenderer()
+        case .action, .detail, .status: return PTFormSettingsRowRenderer(kind: kind)
         case .custom: return PTFormMissingRenderer(kind: kind)
         }
     }
