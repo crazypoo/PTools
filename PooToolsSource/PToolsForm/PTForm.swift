@@ -785,7 +785,10 @@ public final class PTFormFieldRendererRegistry {
             PTFormTextFieldRenderer(), PTFormSecureTextFieldRenderer(), PTFormMultilineRenderer(),
             PTFormNumberRenderer(), PTFormPhoneRenderer(), PTFormBankCardRenderer(), PTFormToggleRenderer(),
             PTFormCheckboxRenderer(), PTFormSliderRenderer(), PTFormStepperRenderer(), PTFormDateRenderer(),
-            PTFormPickerRenderer()
+            PTFormPickerRenderer(),
+            PTFormSettingsRowRenderer(kind: .action),
+            PTFormSettingsRowRenderer(kind: .detail),
+            PTFormSettingsRowRenderer(kind: .status)
         ]
         defaults.forEach(register)
     }
