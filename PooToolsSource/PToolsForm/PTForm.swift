@@ -380,8 +380,20 @@ public actor PTFormEngine {
         guard let index = sections.firstIndex(where: { $0.id == section.id }) else {
             throw PTFormError.missingSection(section.id)
         }
+        try validateSectionMembership(section, excluding: section.id)
         sections[index] = section
         revision &+= 1
+    }
+
+    private func validateSectionMembership(_ section: PTFormSection, excluding excludedID: String?) throws {
+        var seen = Set<PTFormFieldID>()
+        for id in section.fieldIDs {
+            guard fields[id] != nil else { throw PTFormError.missingField(id) }
+            guard seen.insert(id).inserted else { throw PTFormError.duplicateField(id) }
+            guard !sections.contains(where: { $0.id != excludedID && $0.fieldIDs.contains(id) }) else {
+                throw PTFormError.duplicateField(id)
+            }
+        }
     }
 
     public func setSectionVisible(_ visible: Bool, for id: String) throws {
@@ -433,6 +445,7 @@ public actor PTFormEngine {
         guard !sections.contains(where: { $0.id == section.id }) else {
             throw PTFormError.duplicateSection(section.id)
         }
+        try validateSectionMembership(section, excluding: nil)
         let location = min(max(0, index ?? sections.count), sections.count)
         sections.insert(section, at: location)
         revision &+= 1
@@ -475,8 +488,14 @@ public actor PTFormEngine {
                 guard availableFields.contains(id) else { throw PTFormError.missingField(id) }
             case .updateSection(let section):
                 guard membership[section.id] != nil else { throw PTFormError.missingSection(section.id) }
-                for id in section.fieldIDs where !availableFields.contains(id) {
-                    throw PTFormError.missingField(id)
+                for id in section.fieldIDs {
+                    guard availableFields.contains(id) else { throw PTFormError.missingField(id) }
+                    guard !membership.contains(where: { $0.key != section.id && $0.value.contains(id) }) else {
+                        throw PTFormError.duplicateField(id)
+                    }
+                }
+                guard Set(section.fieldIDs).count == section.fieldIDs.count else {
+                    throw PTFormError.duplicateField(section.fieldIDs[0])
                 }
                 membership[section.id] = Set(section.fieldIDs)
             case .setSectionVisible(_, let id):
@@ -490,8 +509,14 @@ public actor PTFormEngine {
                 }
             case .insertSection(let section, _):
                 guard membership[section.id] == nil else { throw PTFormError.duplicateSection(section.id) }
-                for id in section.fieldIDs where !availableFields.contains(id) {
-                    throw PTFormError.missingField(id)
+                for id in section.fieldIDs {
+                    guard availableFields.contains(id) else { throw PTFormError.missingField(id) }
+                    guard !membership.values.contains(where: { $0.contains(id) }) else {
+                        throw PTFormError.duplicateField(id)
+                    }
+                }
+                guard Set(section.fieldIDs).count == section.fieldIDs.count else {
+                    throw PTFormError.duplicateField(section.fieldIDs[0])
                 }
                 membership[section.id] = Set(section.fieldIDs)
             case .insertField(let field, let sectionID, _):
@@ -503,11 +528,11 @@ public actor PTFormEngine {
                 membership[destination, default: []].insert(field.id)
             case .removeField(let id):
                 guard availableFields.remove(id) != nil else { throw PTFormError.missingField(id) }
-                for key in membership.keys { membership[key]?.remove(id) }
+                for key in Array(membership.keys) { membership[key]?.remove(id) }
             case .moveField(let id, let sectionID, _):
                 guard availableFields.contains(id) else { throw PTFormError.missingField(id) }
                 guard membership[sectionID] != nil else { throw PTFormError.missingSection(sectionID) }
-                for key in membership.keys { membership[key]?.remove(id) }
+                for key in Array(membership.keys) { membership[key]?.remove(id) }
                 membership[sectionID, default: []].insert(id)
             }
         }
