@@ -31,7 +31,7 @@ public struct PTFormFieldID: RawRepresentable, Codable, Hashable, Sendable, Expr
 }
 
 public enum PTFormFieldKind: String, Codable, Sendable, Hashable {
-    case text, secureText, multilineText, number, phone, bankCard, toggle, checkbox, slider, stepper, date, picker, custom
+    case text, secureText, multilineText, number, phone, bankCard, toggle, checkbox, slider, stepper, date, picker, custom, action, detail, status
 }
 
 public enum PTFormValue: Codable, Hashable, Sendable {
@@ -118,6 +118,10 @@ public struct PTFormField: Sendable {
     public var visibility: PTFormVisibilityRule?
     public var accessibility: PTFormAccessibilityConfiguration?
     public var rendererIdentifier: String?
+    public var actionID: PTFormActionID?
+    public var detailText: String?
+    public var isLoading: Bool
+    public var isDestructive: Bool
 
     public init(id: PTFormFieldID,
                 kind: PTFormFieldKind,
@@ -134,7 +138,11 @@ public struct PTFormField: Sendable {
                 configuration: PTFormFieldConfiguration? = nil,
                 visibility: PTFormVisibilityRule? = nil,
                 accessibility: PTFormAccessibilityConfiguration? = nil,
-                rendererIdentifier: String? = nil) {
+                rendererIdentifier: String? = nil,
+                actionID: PTFormActionID? = nil,
+                detailText: String? = nil,
+                isLoading: Bool = false,
+                isDestructive: Bool = false) {
         self.id = id
         self.kind = kind
         self.title = title
@@ -152,6 +160,10 @@ public struct PTFormField: Sendable {
         self.visibility = visibility
         self.accessibility = accessibility
         self.rendererIdentifier = rendererIdentifier
+        self.actionID = actionID
+        self.detailText = detailText
+        self.isLoading = isLoading
+        self.isDestructive = isDestructive
     }
 
     public init(id: PTFormFieldID,
@@ -169,7 +181,11 @@ public struct PTFormField: Sendable {
                 configuration: PTFormFieldConfiguration? = nil,
                 visibility: PTFormVisibilityRule? = nil,
                 accessibility: PTFormAccessibilityConfiguration? = nil,
-                rendererIdentifier: String? = nil) {
+                rendererIdentifier: String? = nil,
+                actionID: PTFormActionID? = nil,
+                detailText: String? = nil,
+                isLoading: Bool = false,
+                isDestructive: Bool = false) {
         self.id = id
         self.kind = kind
         self.title = title
@@ -187,6 +203,10 @@ public struct PTFormField: Sendable {
         self.visibility = visibility
         self.accessibility = accessibility
         self.rendererIdentifier = rendererIdentifier
+        self.actionID = actionID
+        self.detailText = detailText
+        self.isLoading = isLoading
+        self.isDestructive = isDestructive
     }
 }
 
@@ -256,6 +276,8 @@ public enum PTFormError: Error, Sendable, Equatable {
     case missingSection(String)
     case invalid(PTFormValidationResult)
     case cancelled
+    case duplicateField(PTFormFieldID)
+    case duplicateSection(String)
 }
 
 public actor PTFormEngine {
@@ -368,14 +390,126 @@ public actor PTFormEngine {
         revision &+= 1
     }
 
+    public func setFieldLoading(_ loading: Bool, for id: PTFormFieldID) throws {
+        guard var field = fields[id] else { throw PTFormError.missingField(id) }
+        guard field.isLoading != loading else { return }
+        field.isLoading = loading
+        try updateField(field)
+    }
+
+    public func insertField(_ field: PTFormField, in sectionID: String? = nil, at index: Int? = nil) throws {
+        guard fields[field.id] == nil else { throw PTFormError.duplicateField(field.id) }
+        let destinationID = sectionID ?? "__pt_form_implicit_section__"
+        if !sections.contains(where: { $0.id == destinationID }) {
+            guard sectionID == nil else { throw PTFormError.missingSection(destinationID) }
+            sections.append(PTFormSection(id: destinationID, fieldIDs: []))
+        }
+        guard let sectionIndex = sections.firstIndex(where: { $0.id == destinationID }) else {
+            throw PTFormError.missingSection(destinationID)
+        }
+        fields[field.id] = field
+        initialValues[field.id] = field.value
+        order.append(field.id)
+        let insertIndex = min(max(0, index ?? sections[sectionIndex].fieldIDs.count),
+                              sections[sectionIndex].fieldIDs.count)
+        sections[sectionIndex].fieldIDs.insert(field.id, at: insertIndex)
+        revision &+= 1
+    }
+
+    public func removeField(_ id: PTFormFieldID) throws {
+        guard fields.removeValue(forKey: id) != nil else { throw PTFormError.missingField(id) }
+        order.removeAll { $0 == id }
+        initialValues.removeValue(forKey: id)
+        generations.removeValue(forKey: id)
+        validationTasks[id]?.cancel()
+        validationTasks.removeValue(forKey: id)
+        for index in sections.indices {
+            sections[index].fieldIDs.removeAll { $0 == id }
+        }
+        revision &+= 1
+    }
+
+    public func insertSection(_ section: PTFormSection, at index: Int? = nil) throws {
+        guard !sections.contains(where: { $0.id == section.id }) else {
+            throw PTFormError.duplicateSection(section.id)
+        }
+        let location = min(max(0, index ?? sections.count), sections.count)
+        sections.insert(section, at: location)
+        revision &+= 1
+    }
+
+    public func removeSection(_ id: String) throws {
+        guard let index = sections.firstIndex(where: { $0.id == id }) else {
+            throw PTFormError.missingSection(id)
+        }
+        let removed = sections.remove(at: index)
+        sectionVisibilityOverrides.removeValue(forKey: id)
+        for fieldID in removed.fieldIDs where !sections.contains(where: { $0.fieldIDs.contains(fieldID) }) {
+            try removeField(fieldID)
+        }
+        revision &+= 1
+    }
+
+    public func moveField(_ id: PTFormFieldID, to sectionID: String, at index: Int? = nil) throws {
+        guard fields[id] != nil else { throw PTFormError.missingField(id) }
+        guard let sectionIndex = sections.firstIndex(where: { $0.id == sectionID }) else {
+            throw PTFormError.missingSection(sectionID)
+        }
+        for i in sections.indices { sections[i].fieldIDs.removeAll { $0 == id } }
+        let destination = min(max(0, index ?? sections[sectionIndex].fieldIDs.count),
+                              sections[sectionIndex].fieldIDs.count)
+        sections[sectionIndex].fieldIDs.insert(id, at: destination)
+        revision &+= 1
+    }
+
+    // Preflight the entire batch before changing actor state. A missing or duplicate
+    // ID never leaves a partially updated form snapshot.
     public func performUpdates(_ mutations: [PTFormMutation]) throws {
+        var availableFields = Set(fields.keys)
+        var availableSections = Set(sections.map(\.id))
         for mutation in mutations {
             switch mutation {
-            case .setValue(let value, let fieldID): try setValue(value, for: fieldID)
-            case .setFieldEnabled(let enabled, let fieldID): try setFieldEnabled(enabled, for: fieldID)
-            case .setFieldReadOnly(let readOnly, let fieldID): try setFieldReadOnly(readOnly, for: fieldID)
+            case .setValue(_, let id), .setFieldEnabled(_, let id),
+                 .setFieldReadOnly(_, let id), .setFieldLoading(_, let id):
+                guard availableFields.contains(id) else { throw PTFormError.missingField(id) }
+            case .updateSection(let section):
+                guard availableSections.contains(section.id) else { throw PTFormError.missingSection(section.id) }
+            case .setSectionVisible(_, let id), .removeSection(let id):
+                guard availableSections.contains(id) else { throw PTFormError.missingSection(id) }
+                if case .removeSection = mutation { availableSections.remove(id) }
+            case .insertSection(let section, _):
+                guard availableSections.insert(section.id).inserted else {
+                    throw PTFormError.duplicateSection(section.id)
+                }
+            case .insertField(let field, let sectionID, _):
+                guard availableFields.insert(field.id).inserted else { throw PTFormError.duplicateField(field.id) }
+                if let sectionID {
+                    guard availableSections.contains(sectionID) else { throw PTFormError.missingSection(sectionID) }
+                } else {
+                    availableSections.insert("__pt_form_implicit_section__")
+                }
+            case .removeField(let id):
+                guard availableFields.remove(id) != nil else { throw PTFormError.missingField(id) }
+            case .moveField(let id, let sectionID, _):
+                guard availableFields.contains(id) else { throw PTFormError.missingField(id) }
+                guard availableSections.contains(sectionID) else { throw PTFormError.missingSection(sectionID) }
+            }
+        }
+        for mutation in mutations {
+            switch mutation {
+            case .setValue(let value, let id): try setValue(value, for: id)
+            case .setFieldEnabled(let enabled, let id): try setFieldEnabled(enabled, for: id)
+            case .setFieldReadOnly(let readOnly, let id): try setFieldReadOnly(readOnly, for: id)
+            case .setFieldLoading(let loading, let id): try setFieldLoading(loading, for: id)
             case .updateSection(let section): try updateSection(section)
-            case .setSectionVisible(let visible, let sectionID): try setSectionVisible(visible, for: sectionID)
+            case .setSectionVisible(let visible, let id): try setSectionVisible(visible, for: id)
+            case .insertField(let field, let sectionID, let index):
+                try insertField(field, in: sectionID, at: index)
+            case .removeField(let id): try removeField(id)
+            case .insertSection(let section, let index): try insertSection(section, at: index)
+            case .removeSection(let id): try removeSection(id)
+            case .moveField(let id, let sectionID, let index):
+                try moveField(id, to: sectionID, at: index)
             }
         }
     }
