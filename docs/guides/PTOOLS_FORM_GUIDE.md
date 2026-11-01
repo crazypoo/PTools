@@ -1,3 +1,5 @@
+> Form 3 embedding and settings migration: [PTOOLS_FORM3_EMBEDDED_MIGRATION.md](PTOOLS_FORM3_EMBEDDED_MIGRATION.md). The historical Form 2.0 constructors remain source-compatible.
+
 # PTools Form 2.0 / 表单 2.0 / Formulario 2.0
 
 > Version: 5.57.0 · iOS 17+ · Swift 6+
