@@ -466,33 +466,49 @@ public actor PTFormEngine {
     // ID never leaves a partially updated form snapshot.
     public func performUpdates(_ mutations: [PTFormMutation]) throws {
         var availableFields = Set(fields.keys)
-        var availableSections = Set(sections.map(\.id))
+        var membership = Dictionary(uniqueKeysWithValues:
+            sections.map { ($0.id, Set($0.fieldIDs)) })
         for mutation in mutations {
             switch mutation {
             case .setValue(_, let id), .setFieldEnabled(_, let id),
                  .setFieldReadOnly(_, let id), .setFieldLoading(_, let id):
                 guard availableFields.contains(id) else { throw PTFormError.missingField(id) }
             case .updateSection(let section):
-                guard availableSections.contains(section.id) else { throw PTFormError.missingSection(section.id) }
-            case .setSectionVisible(_, let id), .removeSection(let id):
-                guard availableSections.contains(id) else { throw PTFormError.missingSection(id) }
-                if case .removeSection = mutation { availableSections.remove(id) }
-            case .insertSection(let section, _):
-                guard availableSections.insert(section.id).inserted else {
-                    throw PTFormError.duplicateSection(section.id)
+                guard membership[section.id] != nil else { throw PTFormError.missingSection(section.id) }
+                for id in section.fieldIDs where !availableFields.contains(id) {
+                    throw PTFormError.missingField(id)
                 }
+                membership[section.id] = Set(section.fieldIDs)
+            case .setSectionVisible(_, let id):
+                guard membership[id] != nil else { throw PTFormError.missingSection(id) }
+            case .removeSection(let id):
+                guard let removed = membership.removeValue(forKey: id) else {
+                    throw PTFormError.missingSection(id)
+                }
+                for fieldID in removed where !membership.values.contains(where: { $0.contains(fieldID) }) {
+                    availableFields.remove(fieldID)
+                }
+            case .insertSection(let section, _):
+                guard membership[section.id] == nil else { throw PTFormError.duplicateSection(section.id) }
+                for id in section.fieldIDs where !availableFields.contains(id) {
+                    throw PTFormError.missingField(id)
+                }
+                membership[section.id] = Set(section.fieldIDs)
             case .insertField(let field, let sectionID, _):
                 guard availableFields.insert(field.id).inserted else { throw PTFormError.duplicateField(field.id) }
-                if let sectionID {
-                    guard availableSections.contains(sectionID) else { throw PTFormError.missingSection(sectionID) }
-                } else {
-                    availableSections.insert("__pt_form_implicit_section__")
+                let destination = sectionID ?? "__pt_form_implicit_section__"
+                if sectionID != nil && membership[destination] == nil {
+                    throw PTFormError.missingSection(destination)
                 }
+                membership[destination, default: []].insert(field.id)
             case .removeField(let id):
                 guard availableFields.remove(id) != nil else { throw PTFormError.missingField(id) }
+                for key in membership.keys { membership[key]?.remove(id) }
             case .moveField(let id, let sectionID, _):
                 guard availableFields.contains(id) else { throw PTFormError.missingField(id) }
-                guard availableSections.contains(sectionID) else { throw PTFormError.missingSection(sectionID) }
+                guard membership[sectionID] != nil else { throw PTFormError.missingSection(sectionID) }
+                for key in membership.keys { membership[key]?.remove(id) }
+                membership[sectionID, default: []].insert(id)
             }
         }
         for mutation in mutations {
@@ -855,7 +871,7 @@ final class PTFormFieldCell: UICollectionViewCell {
     private let leadingStack = UIStackView()
     private var renderedView: UIView?
     private var activeFieldID: PTFormFieldID?
-    private var currentTitlePlacement: PTFormTitlePlacement = .top
+    private var currentTitlePlacement: PTFormTitlePlacement?
     private var onReturn: (@MainActor @Sendable () -> Void)?
 
     override init(frame: CGRect) {
@@ -898,7 +914,7 @@ final class PTFormFieldCell: UICollectionViewCell {
         renderedView?.removeFromSuperview()
         renderedView = nil
         activeFieldID = nil
-        currentTitlePlacement = .top
+        currentTitlePlacement = nil
         onReturn = nil
         subtitleLabel.text = nil
         issueLabel.text = nil
