@@ -854,6 +854,8 @@ final class PTFormFieldCell: UICollectionViewCell {
     private let titleStack = UIStackView()
     private let leadingStack = UIStackView()
     private var renderedView: UIView?
+    private var activeFieldID: PTFormFieldID?
+    private var currentTitlePlacement: PTFormTitlePlacement = .top
     private var onReturn: (@MainActor @Sendable () -> Void)?
 
     override init(frame: CGRect) {
@@ -895,6 +897,8 @@ final class PTFormFieldCell: UICollectionViewCell {
         super.prepareForReuse()
         renderedView?.removeFromSuperview()
         renderedView = nil
+        activeFieldID = nil
+        currentTitlePlacement = .top
         onReturn = nil
         subtitleLabel.text = nil
         issueLabel.text = nil
@@ -913,18 +917,27 @@ final class PTFormFieldCell: UICollectionViewCell {
                    onPrevious: @escaping @MainActor @Sendable () -> Void,
                    onNext: @escaping @MainActor @Sendable () -> Void,
                    onDone: @escaping @MainActor @Sendable () -> Void) {
-        renderedView?.removeFromSuperview()
+        // Keep the active text editor attached during diffable reconfiguration.
+        // Recreating a focused UITextField/UITextView would dismiss the keyboard.
+        let isEditing = activeFieldID == field.id && (renderedView?.isFirstResponder ?? false)
         renderer.apply(theme: themeAdapter)
-        let context = PTFormFieldRenderContext(field: field,
-                                               sectionID: sectionID,
-                                               theme: themeAdapter,
-                                               validationIssue: issue.map { PTFormValidationIssue(fieldID: field.id, message: $0) },
-                                               environment: environment)
-        let view = renderer.makeView(context: context, onChange: onChange)
-        renderedView = view
-        fieldContainer.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        let view: UIView
+        if isEditing, let current = renderedView {
+            view = current
+        } else {
+            renderedView?.removeFromSuperview()
+            let context = PTFormFieldRenderContext(field: field,
+                                                   sectionID: sectionID,
+                                                   theme: themeAdapter,
+                                                   validationIssue: issue.map { PTFormValidationIssue(fieldID: field.id, message: $0) },
+                                                   environment: environment)
+            view = renderer.makeView(context: context, onChange: onChange)
+            renderedView = view
+            activeFieldID = field.id
+            fieldContainer.addSubview(view)
+            view.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
         }
         titleLabel.text = field.title
         subtitleLabel.text = field.subtitle
@@ -939,24 +952,28 @@ final class PTFormFieldCell: UICollectionViewCell {
                                          value: PTFormViewController.display(field.value),
                                          issue: issue,
                                          to: self)
-        clearArrangedSubviews(from: rootStack)
-        clearArrangedSubviews(from: leadingStack)
-        switch field.configuration?.titlePlacement ?? .top {
-        case .top:
-            rootStack.addArrangedSubview(titleStack)
-            rootStack.addArrangedSubview(fieldContainer)
-            rootStack.addArrangedSubview(issueLabel)
-        case .hidden:
-            rootStack.addArrangedSubview(fieldContainer)
-            rootStack.addArrangedSubview(issueLabel)
-        case .leading:
-            leadingStack.addArrangedSubview(titleStack)
-            leadingStack.addArrangedSubview(fieldContainer)
-            rootStack.addArrangedSubview(leadingStack)
-            rootStack.addArrangedSubview(issueLabel)
+        let placement = field.configuration?.titlePlacement ?? .top
+        if placement != currentTitlePlacement {
+            clearArrangedSubviews(from: rootStack)
+            clearArrangedSubviews(from: leadingStack)
+            switch placement {
+            case .top:
+                rootStack.addArrangedSubview(titleStack)
+                rootStack.addArrangedSubview(fieldContainer)
+                rootStack.addArrangedSubview(issueLabel)
+            case .hidden:
+                rootStack.addArrangedSubview(fieldContainer)
+                rootStack.addArrangedSubview(issueLabel)
+            case .leading:
+                leadingStack.addArrangedSubview(titleStack)
+                leadingStack.addArrangedSubview(fieldContainer)
+                rootStack.addArrangedSubview(leadingStack)
+                rootStack.addArrangedSubview(issueLabel)
+            }
+            currentTitlePlacement = placement
         }
         self.onReturn = hasNext ? onNext : onDone
-        if let textField = view as? UITextField {
+        if let textField = view as? UITextField, !isEditing {
             textField.returnKeyType = hasNext ? .next : .done
             textField.addAction(UIAction { [weak self] _ in self?.onReturn?() }, for: .editingDidEndOnExit)
             keyboardCoordinator.attach(to: textField,
@@ -965,7 +982,7 @@ final class PTFormFieldCell: UICollectionViewCell {
                                        done: onDone,
                                        hasPrevious: hasPrevious,
                                        hasNext: hasNext)
-        } else if let textView = view as? UITextView {
+        } else if let textView = view as? UITextView, !isEditing {
             keyboardCoordinator.attach(to: textView,
                                        previous: onPrevious,
                                        next: onNext,
