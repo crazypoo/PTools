@@ -94,23 +94,37 @@ extension Network {
         return progress
     }
 
-    private static func codableUploadStream<T: Codable & Sendable>(
+    // Internal for the cancellation contract tests; not a public API.
+    // The typed stream must own its forwarding task so downstream cancellation
+    // reaches the source stream's onTermination (and its UploadRequest.cancel()).
+    static func codableUploadStream<T: Codable & Sendable>(
         source: AsyncThrowingStream<PTNetworkUploadEvent, Error>,
         modelType: T.Type?
     ) -> AsyncThrowingStream<(progress: Progress, response: PTBaseStructModel<T>?), Error> {
         AsyncThrowingStream { continuation in
-            Task {
+            let forwardingTask = Task {
                 do {
                     for try await event in source {
+                        try Task.checkCancellation()
                         let response = try event.response.map {
                             try parseCodableResponse($0, modelType: modelType)
                         }
-                        continuation.yield((progressValue(from: event.progress), response))
+                        try Task.checkCancellation()
+                        if case .terminated = continuation.yield((progressValue(from: event.progress), response)) {
+                            break
+                        }
                     }
-                    continuation.finish()
+                    if Task.isCancelled {
+                        continuation.finish(throwing: CancellationError())
+                    } else {
+                        continuation.finish()
+                    }
                 } catch {
                     continuation.finish(throwing: error)
                 }
+            }
+            continuation.onTermination = { @Sendable _ in
+                forwardingTask.cancel()
             }
         }
     }
