@@ -132,7 +132,7 @@ run_named_gate() {
     tests)
       run_gate TESTS bash -c '
         set -euo pipefail
-        # English: XCTest targets are not standalone --test-product artifacts; use SwiftPM's supported test filter.
+        # English: XCTest targets are not standalone --test-product artifacts; use the supported SwiftPM test filter.
         # Español: Los targets XCTest no son productos --test-product; selecciónalos con --filter.
         # 中文：XCTest target 并非可直接 --test-product 选择的产品，使用 SwiftPM 支持的 --filter。
         foundation_test_products=(
