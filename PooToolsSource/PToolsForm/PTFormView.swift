@@ -21,6 +21,10 @@ public final class PTFormView: UIView {
     public let configuration: PTFormConfiguration
     public var onEvent: (@MainActor @Sendable (PTFormEvent) -> Void)?
     public var showsValidationSummary = false
+    /// Approve or reject editable field changes, e.g. biometric authentication before a toggle commits.
+    public var onValueChangeRequest: (@MainActor (PTFormFieldID, PTFormValue) async throws -> PTFormValue)?
+    /// Optional async business action. The action row stays busy until this completes.
+    public var onActionRequest: (@MainActor (PTFormActionID) async throws -> Void)?
 
     private let keyboardCoordinator = PTFormKeyboardCoordinator()
     private let collectionAdapter: PTFormCollectionAdapter
@@ -29,6 +33,8 @@ public final class PTFormView: UIView {
     private var validationIssues: [PTFormFieldID: String] = [:]
     private var announcedIssueIDs: Set<PTFormFieldID> = []
     private var refreshTask: Task<Void, Never>?
+    private var refreshTicket: UInt64 = 0
+    private var pendingFieldIDs: Set<PTFormFieldID> = []
 
     public init(form: PTFormEngine,
                 configuration: PTFormConfiguration = .grouped,
@@ -72,6 +78,12 @@ public final class PTFormView: UIView {
         addSubview(listView)
         listView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        switch configuration.safeAreaPolicy {
+        case .automatic:
+            listView.contentCollectionView.contentInsetAdjustmentBehavior = .automatic
+        case .respectContentInsets, .ignore:
+            listView.contentCollectionView.contentInsetAdjustmentBehavior = .never
         }
         listView.viewConfig.sectionEdges = NSDirectionalEdgeInsets(top: configuration.contentInsets.top,
                                                                      leading: configuration.contentInsets.leading,
@@ -132,13 +144,20 @@ public final class PTFormView: UIView {
                            onDone: { [weak self] in self?.endEditing(true) })
             return cell
         }
+        listView.collectionDidSelect = { [weak self] _, section, indexPath in
+            guard let field = (section.rows?[safe: indexPath.item]?.dataModel as? PTFormFieldBox)?.field else { return }
+            self?.dispatchAction(for: field)
+        }
         refreshTask = Task { @MainActor [weak self] in
             await self?.refresh()
         }
     }
 
     public func refresh() async {
+        refreshTicket &+= 1
+        let ticket = refreshTicket
         let snapshot = await form.makeSnapshot()
+        guard ticket == refreshTicket else { return }
         latestLocations = collectionAdapter.locations(for: snapshot)
         cachedFields = Dictionary(uniqueKeysWithValues: snapshot.fields.map { ($0.id, $0) })
         let sections = collectionAdapter.makeSections(from: snapshot,
@@ -148,12 +167,65 @@ public final class PTFormView: UIView {
         listView.showCollectionDetail(collectionData: sections, animated: false)
     }
 
+    private func dispatchAction(for field: PTFormField) {
+        guard field.isEnabled, !field.isReadOnly, !field.isLoading,
+              !pendingFieldIDs.contains(field.id), let actionID = field.actionID else { return }
+        onEvent?(.action(actionID))
+        guard let operation = onActionRequest else { return }
+        Task { @MainActor [weak self] in
+            do {
+                try await self?.performAction(for: field.id) { try await operation(actionID) }
+            } catch {
+                PTFeedbackCenter.shared.emit(.error)
+            }
+        }
+    }
+
+    /// Execute an async row action without changing the field value or dirty state.
+    public func performAction(for id: PTFormFieldID,
+                              operation: @escaping @MainActor () async throws -> Void) async throws {
+        guard !pendingFieldIDs.contains(id) else { return }
+        pendingFieldIDs.insert(id)
+        defer { pendingFieldIDs.remove(id) }
+        try await form.setFieldLoading(true, for: id)
+        await refresh()
+        do {
+            try await operation()
+        } catch {
+            try? await form.setFieldLoading(false, for: id)
+            await refresh()
+            throw error
+        }
+        try? await form.setFieldLoading(false, for: id)
+        await refresh()
+    }
+
+    /// Host changes can be batched through the engine and rendered as one snapshot.
+    public func performUpdates(_ mutations: [PTFormMutation]) async throws {
+        try await form.performUpdates(mutations)
+        await refresh()
+    }
+
     private func setValue(_ value: PTFormValue, for id: PTFormFieldID) {
+        if let field = cachedFields[id], field.actionID != nil {
+            dispatchAction(for: field)
+            return
+        }
         Task { @MainActor [weak self] in
             guard let self else { return }
+            let needsApproval = onValueChangeRequest != nil
+            if needsApproval {
+                guard !pendingFieldIDs.contains(id) else { return }
+                pendingFieldIDs.insert(id)
+            }
             do {
-                try await form.setValue(value, for: id)
-                onEvent?(.valueChanged(id, value))
+                if needsApproval {
+                    try await form.setFieldLoading(true, for: id)
+                    await refresh()
+                }
+                let committed = try await onValueChangeRequest?(id, value) ?? value
+                try await form.setValue(committed, for: id)
+                onEvent?(.valueChanged(id, committed))
                 if configuration.validationPolicy.trigger == .onChange {
                     let result = await form.validateField(id)
                     applyValidation(result, for: id)
@@ -161,10 +233,15 @@ public final class PTFormView: UIView {
                 } else {
                     validationIssues[id] = nil
                 }
-                await refresh()
             } catch {
+                // Never commit a rejected switch value; a refresh restores the displayed value.
                 PTFeedbackCenter.shared.emit(.error)
             }
+            if needsApproval {
+                try? await form.setFieldLoading(false, for: id)
+                pendingFieldIDs.remove(id)
+            }
+            await refresh()
         }
     }
 
