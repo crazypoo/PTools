@@ -325,6 +325,9 @@ public final class PTFormView: UIView {
         if result.configuration == nil {
             result.configuration = configuration.defaultFieldConfiguration
         }
+        if field.kind == .action || field.kind == .detail || field.kind == .status {
+            result.configuration?.titlePlacement = .hidden
+        }
         switch configuration.interactionMode {
         case .editable:
             break
