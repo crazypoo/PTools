@@ -170,11 +170,16 @@ public final class PTFormView: UIView {
     private func dispatchAction(for field: PTFormField) {
         guard field.isEnabled, !field.isReadOnly, !field.isLoading,
               !pendingFieldIDs.contains(field.id), let actionID = field.actionID else { return }
+        guard let operation = onActionRequest else {
+            onEvent?(.action(actionID))
+            return
+        }
+        // Reserve synchronously so two taps cannot queue overlapping async operations.
+        pendingFieldIDs.insert(field.id)
         onEvent?(.action(actionID))
-        guard let operation = onActionRequest else { return }
         Task { @MainActor [weak self] in
             do {
-                try await self?.performAction(for: field.id) { try await operation(actionID) }
+                try await self?.executeAction(for: field.id) { try await operation(actionID) }
             } catch {
                 PTFeedbackCenter.shared.emit(.error)
             }
@@ -186,6 +191,11 @@ public final class PTFormView: UIView {
                               operation: @escaping @MainActor () async throws -> Void) async throws {
         guard !pendingFieldIDs.contains(id) else { return }
         pendingFieldIDs.insert(id)
+        try await executeAction(for: id, operation: operation)
+    }
+
+    private func executeAction(for id: PTFormFieldID,
+                               operation: @escaping @MainActor () async throws -> Void) async throws {
         defer { pendingFieldIDs.remove(id) }
         try await form.setFieldLoading(true, for: id)
         await refresh()
@@ -211,13 +221,13 @@ public final class PTFormView: UIView {
             dispatchAction(for: field)
             return
         }
+        let needsApproval = onValueChangeRequest != nil
+        if needsApproval {
+            guard !pendingFieldIDs.contains(id) else { return }
+            pendingFieldIDs.insert(id)
+        }
         Task { @MainActor [weak self] in
             guard let self else { return }
-            let needsApproval = onValueChangeRequest != nil
-            if needsApproval {
-                guard !pendingFieldIDs.contains(id) else { return }
-                pendingFieldIDs.insert(id)
-            }
             do {
                 if needsApproval {
                     try await form.setFieldLoading(true, for: id)
