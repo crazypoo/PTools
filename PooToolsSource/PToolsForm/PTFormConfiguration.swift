@@ -285,7 +285,7 @@ public struct PTFormConfiguration: Sendable, Hashable {
         sectionSpacing: 16,
         defaultSectionConfiguration: .init(rowSpacing: 0,
             appearance: .init(backgroundStyle: .grouped, cornerRadius: 12, separatorStyle: .inset)),
-        defaultFieldConfiguration: .init(titlePlacement: .hidden, minimumHeight: 48,
+        defaultFieldConfiguration: .init(titlePlacement: .leading, minimumHeight: 48,
                                          preferredHeight: .estimated(52)),
         sectionPresentation: .grouped)
 
