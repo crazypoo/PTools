@@ -280,6 +280,15 @@ public struct PTFormConfiguration: Sendable, Hashable {
             rowSpacing: 8,
             appearance: .init(backgroundStyle: .grouped,
                               separatorStyle: .inset)))
+    public static let settings = PTFormConfiguration(
+        contentInsets: .init(top: 12, leading: 16, bottom: 20, trailing: 16),
+        sectionSpacing: 16,
+        defaultSectionConfiguration: .init(rowSpacing: 0,
+            appearance: .init(backgroundStyle: .grouped, cornerRadius: 12, separatorStyle: .inset)),
+        defaultFieldConfiguration: .init(titlePlacement: .leading, minimumHeight: 48,
+                                         preferredHeight: .estimated(52)),
+        sectionPresentation: .grouped)
+
     public static let card = PTFormConfiguration(
         defaultSectionConfiguration: .init(
             contentInsets: .init(top: 12, leading: 16, bottom: 12, trailing: 16),
@@ -422,6 +431,12 @@ public enum PTFormUnsectionedFieldPolicy: Sendable, Hashable {
 }
 
 public enum PTFormMutation: Sendable {
+    case insertField(PTFormField, sectionID: String?, index: Int?)
+    case removeField(PTFormFieldID)
+    case insertSection(PTFormSection, index: Int?)
+    case removeSection(String)
+    case moveField(PTFormFieldID, toSection: String, index: Int?)
+    case setFieldLoading(Bool, fieldID: PTFormFieldID)
     case setValue(PTFormValue, fieldID: PTFormFieldID)
     case setFieldEnabled(Bool, fieldID: PTFormFieldID)
     case setFieldReadOnly(Bool, fieldID: PTFormFieldID)

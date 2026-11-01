@@ -8,6 +8,9 @@ import SnapKit
 #if canImport(PToolsAccessibility)
 import PToolsAccessibility
 #endif
+#if canImport(PToolsForm)
+import PToolsForm
+#endif
 #if canImport(PToolsContentState)
 import PToolsContentState
 #endif
@@ -168,6 +171,8 @@ enum PTDemoRegistry {
         make("text.pinyin-lab", "PooToolsChinesePinyin", "Pinyin · Initial Letter", .coreFoundation, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
         make("ui.half-circle-lab", "PooToolsCircle", "Half Circle · Directions", .uiComponents, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
         make("input.searchbar-lab", "PooToolsSearchBar", "SearchBar · Editing & Styles", .inputForm, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
+        make("input.form3-embedded-settings", "PToolsForm", "Form 3 · Embedded Settings / Async Actions", .inputForm, .interactive, .push, .runnable, tags: ["form", "embedded", "settings", "action", "async", "diffable"]),
+        make("input.form3-controller", "PToolsForm", "Form 3 · Full Controller", .inputForm, .interactive, .push, .runnable, tags: ["form", "controller", "validation", "keyboard"]),
         make("ui.pagecontrol-lab", "PooToolsPageControl", "PageControl · Progress", .uiComponents, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
         make("device.haptics-lab", "PToolsFeedback", "Feedback · Haptics", .permissionsDevice, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
         make("core.date-parser-lab", "PToolsDate", "Date · Strict Parser", .coreFoundation, .interactive, .push, .runnable, tags: ["missing-module", "coverage", "interactive"]),
@@ -753,6 +758,30 @@ private final class PTDuoRegressionDemoViewController: PTBaseViewController {
         case "duo.form-keyboard-search":
             let controller = PTDuoFormKeyboardSearchDemoViewController()
             navigationController?.pushViewController(controller, animated: true)
+        case "input.form3-embedded-settings":
+#if canImport(PToolsForm)
+            navigationController?.pushViewController(PTForm3SettingsDemoViewController(), animated: true)
+#else
+            statusLabel.text = "PToolsForm is not linked in this Demo host."
+#endif
+        case "input.form3-controller":
+#if canImport(PToolsForm)
+            let fields = [
+                PTFormField(id: "email", kind: .text, title: "Email", rules: [.email]),
+                PTFormField(id: "name", kind: .text, title: "Name"),
+                PTFormField(id: "notifications", kind: .toggle, title: "Notifications",
+                            value: .boolean(true))
+            ]
+            let engine = PTFormEngine(fields: fields, sections: [
+                PTFormSection(id: "account", title: "Account", fieldIDs: ["email", "name"]),
+                PTFormSection(id: "preferences", title: "Preferences", fieldIDs: ["notifications"])
+            ])
+            let controller = PTFormViewController(form: engine, configuration: .insetGrouped)
+            controller.pt_Title = "Form · Controller"
+            navigationController?.pushViewController(controller, animated: true)
+#else
+            statusLabel.text = "PToolsForm is not linked in this Demo host."
+#endif
         case "duo.collection-all-layouts":
             navigationController?.pushViewController(PTCollectionLayoutSwitchLabViewController(), animated: true)
         case "duo.split-page-container":
@@ -775,6 +804,75 @@ private final class PTDuoRegressionDemoViewController: PTBaseViewController {
         }
     }
 }
+
+#if canImport(PToolsForm)
+// Host is a regular PTBaseViewController: Form controls its own PTCollectionView
+// without requiring the host to inherit from PTFormViewController.
+@MainActor
+private final class PTForm3SettingsDemoViewController: PTBaseViewController {
+    private let engine = PTFormEngine(fields: [
+        PTFormField(id: "language", kind: .detail, title: "Language",
+                    actionID: "language", detailText: "English"),
+        PTFormField(id: "biometric", kind: .toggle, title: "Biometric approval",
+                    value: .boolean(false)),
+        PTFormField(id: "cache", kind: .action, title: "Clear cache",
+                    actionID: "clear-cache", detailText: "12 MB"),
+        PTFormField(id: "logout", kind: .action, title: "Log out",
+                    actionID: "logout", isDestructive: true)
+    ], sections: [
+        PTFormSection(id: "preferences", title: "Preferences",
+                      fieldIDs: ["language", "biometric", "cache"]),
+        PTFormSection(id: "account", title: "Account", fieldIDs: ["logout"])
+    ])
+    private lazy var embeddedForm = PTFormView(form: engine, configuration: .settings)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        pt_Title = "Embedded Form Settings"
+        let addRow = UIButton(type: .system)
+        addRow.setTitle("Insert dynamic row", for: .normal)
+        addRow.addAction(UIAction { [weak self] _ in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                try? await self.embeddedForm.performUpdates([
+                    .insertField(PTFormField(id: "extra", kind: .status,
+                                             title: "Runtime field", detailText: "Inserted"),
+                                 sectionID: "preferences", index: 2)
+                ])
+            }
+        }, for: .touchUpInside)
+
+        view.addSubview(addRow)
+        view.addSubview(embeddedForm)
+        addRow.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(8)
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
+            make.height.equalTo(48)
+        }
+        embeddedForm.snp.makeConstraints { make in
+            make.top.equalTo(addRow.snp.bottom).offset(8)
+            make.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        embeddedForm.onValueChangeRequest = { id, proposed in
+            if id == "biometric" && proposed == .boolean(true) {
+                // Fake an asynchronous approval. The real host owns authentication.
+                try await Task.sleep(for: .milliseconds(250))
+            }
+            return proposed
+        }
+        embeddedForm.onActionRequest = { [weak self] action in
+            guard let self else { return }
+            if action == "clear-cache" {
+                try await Task.sleep(for: .milliseconds(250))
+                if var field = await self.engine.makeSnapshot().fields.first(where: { $0.id == "cache" }) {
+                    field.detailText = "0 MB"
+                    try await self.engine.updateField(field)
+                }
+            }
+        }
+    }
+}
+#endif
 
 // English: Keep the form regression demo self-contained so keyboard and search behavior can be exercised from the catalog.
 // Español: Mantiene autónomo el demo de formulario para probar teclado y búsqueda desde el catálogo.

@@ -121,4 +121,90 @@ final class PTFormDocumentsFeedbackTests: XCTestCase {
         XCTAssertEqual(snapshot.fields.count, 1_000)
         XCTAssertEqual(snapshot.sections.first?.section.id, "__pt_form_implicit_section__")
     }
+    func testForm3SettingsRenderersAndEmbeddedView() async {
+        let action = PTFormField(id: "clear-cache", kind: .action, title: "Clear Cache",
+                                 actionID: "clear-cache", detailText: "12 MB")
+        let toggle = PTFormField(id: "biometrics", kind: .toggle, title: "Biometrics",
+                                 value: .boolean(false))
+        let engine = PTFormEngine(fields: [action, toggle],
+                                  sections: [PTFormSection(id: "settings", fieldIDs: ["clear-cache", "biometrics"])])
+        let view = PTFormView(form: engine, configuration: .settings)
+        XCTAssertTrue(view.listView.superview === view)
+        let controller = PTFormViewController(form: engine, configuration: .settings)
+        controller.loadViewIfNeeded()
+        XCTAssertTrue(controller.formView.superview === controller.view)
+        XCTAssertTrue(controller.listView === controller.formView.listView)
+        let renderer = view.rendererRegistry.renderer(for: .action)
+        let actionRow = renderer.makeView(for: action) { _ in
+            XCTFail("Action rendering must not commit a form value")
+        }
+        XCTAssertTrue(actionRow.accessibilityTraits.contains(.button))
+        await view.refresh()
+        let actual = await engine.makeSnapshot()
+        XCTAssertEqual(actual.sections.first?.fields.map(\.id), ["clear-cache", "biometrics"])
+    }
+
+    func testForm3AsyncBusyDoesNotChangeValueOrDirtyState() async throws {
+        let engine = PTFormEngine(fields: [
+            PTFormField(id: "biometric", kind: .toggle, title: "Biometric", value: .boolean(false))
+        ])
+        try await engine.setFieldLoading(true, for: "biometric")
+        let busy = await engine.makeSnapshot()
+        XCTAssertTrue(busy.fields.first?.isLoading == true)
+        XCTAssertEqual(busy.fields.first?.value, .boolean(false))
+        let dirty = await engine.isDirty
+        XCTAssertFalse(dirty)
+        try await engine.setFieldLoading(false, for: "biometric")
+        let restored = await engine.makeSnapshot()
+        XCTAssertFalse(restored.fields.first?.isLoading ?? true)
+    }
+
+    func testForm3AtomicMutationsAndDynamicSections() async throws {
+        let engine = PTFormEngine(fields: [
+            PTFormField(id: "language", kind: .detail, title: "Language", detailText: "English")
+        ], sections: [PTFormSection(id: "general", fieldIDs: ["language"])])
+        try await engine.performUpdates([
+            .insertSection(PTFormSection(id: "account", fieldIDs: []), index: 0),
+            .insertField(PTFormField(id: "logout", kind: .action, title: "Log out",
+                                     actionID: "logout", isDestructive: true),
+                         sectionID: "account", index: 0),
+            .moveField("language", toSection: "account", index: 0)
+        ])
+        let changed = await engine.makeSnapshot()
+        XCTAssertEqual(changed.sections.map { $0.section.id }, ["account"])
+        XCTAssertEqual(changed.fields.map(\.id), ["language", "logout"])
+
+        do {
+            try await engine.performUpdates([
+                .insertField(PTFormField(id: "temporary", kind: .text, title: "Temporary"),
+                             sectionID: "account", index: nil),
+                .moveField("nonexistent", toSection: "account", index: nil)
+            ])
+            XCTFail("Invalid transaction must throw")
+        } catch {
+            let after = await engine.makeSnapshot()
+            XCTAssertEqual(after.fields.map(\.id), ["language", "logout"])
+        }
+        try await engine.performUpdates([.removeField("logout")])
+        let remaining = await engine.makeSnapshot()
+        XCTAssertEqual(remaining.fields.map(\.id), ["language"])
+    }
+
+    func testForm3PresentationChangesInvalidateDiffHash() async throws {
+        let field = PTFormField(id: "status", kind: .status, title: "Binding", detailText: "Not bound")
+        let engine = PTFormEngine(fields: [field])
+        let adapter = PTFormCollectionAdapter()
+        let theme = PTFormThemeAdapter()
+        let previous = await engine.makeSnapshot()
+        let before = adapter.makeSections(from: previous, configuration: .settings,
+                                          themeAdapter: theme).first?.rows?.first?.diffHash
+        var edited = field
+        edited.detailText = "Bound"
+        try await engine.updateField(edited)
+        let next = await engine.makeSnapshot()
+        let after = adapter.makeSections(from: next, configuration: .settings,
+                                         themeAdapter: theme).first?.rows?.first?.diffHash
+        XCTAssertNotEqual(before, after)
+    }
+
 }

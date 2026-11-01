@@ -31,7 +31,7 @@ public struct PTFormFieldID: RawRepresentable, Codable, Hashable, Sendable, Expr
 }
 
 public enum PTFormFieldKind: String, Codable, Sendable, Hashable {
-    case text, secureText, multilineText, number, phone, bankCard, toggle, checkbox, slider, stepper, date, picker, custom
+    case text, secureText, multilineText, number, phone, bankCard, toggle, checkbox, slider, stepper, date, picker, custom, action, detail, status
 }
 
 public enum PTFormValue: Codable, Hashable, Sendable {
@@ -118,6 +118,10 @@ public struct PTFormField: Sendable {
     public var visibility: PTFormVisibilityRule?
     public var accessibility: PTFormAccessibilityConfiguration?
     public var rendererIdentifier: String?
+    public var actionID: PTFormActionID?
+    public var detailText: String?
+    public var isLoading: Bool
+    public var isDestructive: Bool
 
     public init(id: PTFormFieldID,
                 kind: PTFormFieldKind,
@@ -134,7 +138,11 @@ public struct PTFormField: Sendable {
                 configuration: PTFormFieldConfiguration? = nil,
                 visibility: PTFormVisibilityRule? = nil,
                 accessibility: PTFormAccessibilityConfiguration? = nil,
-                rendererIdentifier: String? = nil) {
+                rendererIdentifier: String? = nil,
+                actionID: PTFormActionID? = nil,
+                detailText: String? = nil,
+                isLoading: Bool = false,
+                isDestructive: Bool = false) {
         self.id = id
         self.kind = kind
         self.title = title
@@ -152,6 +160,10 @@ public struct PTFormField: Sendable {
         self.visibility = visibility
         self.accessibility = accessibility
         self.rendererIdentifier = rendererIdentifier
+        self.actionID = actionID
+        self.detailText = detailText
+        self.isLoading = isLoading
+        self.isDestructive = isDestructive
     }
 
     public init(id: PTFormFieldID,
@@ -169,7 +181,11 @@ public struct PTFormField: Sendable {
                 configuration: PTFormFieldConfiguration? = nil,
                 visibility: PTFormVisibilityRule? = nil,
                 accessibility: PTFormAccessibilityConfiguration? = nil,
-                rendererIdentifier: String? = nil) {
+                rendererIdentifier: String? = nil,
+                actionID: PTFormActionID? = nil,
+                detailText: String? = nil,
+                isLoading: Bool = false,
+                isDestructive: Bool = false) {
         self.id = id
         self.kind = kind
         self.title = title
@@ -187,6 +203,10 @@ public struct PTFormField: Sendable {
         self.visibility = visibility
         self.accessibility = accessibility
         self.rendererIdentifier = rendererIdentifier
+        self.actionID = actionID
+        self.detailText = detailText
+        self.isLoading = isLoading
+        self.isDestructive = isDestructive
     }
 }
 
@@ -256,6 +276,8 @@ public enum PTFormError: Error, Sendable, Equatable {
     case missingSection(String)
     case invalid(PTFormValidationResult)
     case cancelled
+    case duplicateField(PTFormFieldID)
+    case duplicateSection(String)
 }
 
 public actor PTFormEngine {
@@ -358,8 +380,20 @@ public actor PTFormEngine {
         guard let index = sections.firstIndex(where: { $0.id == section.id }) else {
             throw PTFormError.missingSection(section.id)
         }
+        try validateSectionMembership(section, excluding: section.id)
         sections[index] = section
         revision &+= 1
+    }
+
+    private func validateSectionMembership(_ section: PTFormSection, excluding excludedID: String?) throws {
+        var seen = Set<PTFormFieldID>()
+        for id in section.fieldIDs {
+            guard fields[id] != nil else { throw PTFormError.missingField(id) }
+            guard seen.insert(id).inserted else { throw PTFormError.duplicateField(id) }
+            guard !sections.contains(where: { $0.id != excludedID && $0.fieldIDs.contains(id) }) else {
+                throw PTFormError.duplicateField(id)
+            }
+        }
     }
 
     public func setSectionVisible(_ visible: Bool, for id: String) throws {
@@ -368,14 +402,155 @@ public actor PTFormEngine {
         revision &+= 1
     }
 
+    public func setFieldLoading(_ loading: Bool, for id: PTFormFieldID) throws {
+        guard var field = fields[id] else { throw PTFormError.missingField(id) }
+        guard field.isLoading != loading else { return }
+        field.isLoading = loading
+        try updateField(field)
+    }
+
+    public func insertField(_ field: PTFormField, in sectionID: String? = nil, at index: Int? = nil) throws {
+        guard fields[field.id] == nil else { throw PTFormError.duplicateField(field.id) }
+        let destinationID = sectionID ?? "__pt_form_implicit_section__"
+        if !sections.contains(where: { $0.id == destinationID }) {
+            guard sectionID == nil else { throw PTFormError.missingSection(destinationID) }
+            sections.append(PTFormSection(id: destinationID, fieldIDs: []))
+        }
+        guard let sectionIndex = sections.firstIndex(where: { $0.id == destinationID }) else {
+            throw PTFormError.missingSection(destinationID)
+        }
+        fields[field.id] = field
+        initialValues[field.id] = field.value
+        order.append(field.id)
+        let insertIndex = min(max(0, index ?? sections[sectionIndex].fieldIDs.count),
+                              sections[sectionIndex].fieldIDs.count)
+        sections[sectionIndex].fieldIDs.insert(field.id, at: insertIndex)
+        revision &+= 1
+    }
+
+    public func removeField(_ id: PTFormFieldID) throws {
+        guard fields.removeValue(forKey: id) != nil else { throw PTFormError.missingField(id) }
+        order.removeAll { $0 == id }
+        initialValues.removeValue(forKey: id)
+        generations.removeValue(forKey: id)
+        validationTasks[id]?.cancel()
+        validationTasks.removeValue(forKey: id)
+        for index in sections.indices {
+            sections[index].fieldIDs.removeAll { $0 == id }
+        }
+        revision &+= 1
+    }
+
+    public func insertSection(_ section: PTFormSection, at index: Int? = nil) throws {
+        guard !sections.contains(where: { $0.id == section.id }) else {
+            throw PTFormError.duplicateSection(section.id)
+        }
+        try validateSectionMembership(section, excluding: nil)
+        let location = min(max(0, index ?? sections.count), sections.count)
+        sections.insert(section, at: location)
+        revision &+= 1
+    }
+
+    public func removeSection(_ id: String) throws {
+        guard let index = sections.firstIndex(where: { $0.id == id }) else {
+            throw PTFormError.missingSection(id)
+        }
+        let removed = sections.remove(at: index)
+        sectionVisibilityOverrides.removeValue(forKey: id)
+        for fieldID in removed.fieldIDs where !sections.contains(where: { $0.fieldIDs.contains(fieldID) }) {
+            try removeField(fieldID)
+        }
+        revision &+= 1
+    }
+
+    public func moveField(_ id: PTFormFieldID, to sectionID: String, at index: Int? = nil) throws {
+        guard fields[id] != nil else { throw PTFormError.missingField(id) }
+        guard let sectionIndex = sections.firstIndex(where: { $0.id == sectionID }) else {
+            throw PTFormError.missingSection(sectionID)
+        }
+        for i in sections.indices { sections[i].fieldIDs.removeAll { $0 == id } }
+        let destination = min(max(0, index ?? sections[sectionIndex].fieldIDs.count),
+                              sections[sectionIndex].fieldIDs.count)
+        sections[sectionIndex].fieldIDs.insert(id, at: destination)
+        revision &+= 1
+    }
+
+    // Preflight the entire batch before changing actor state. A missing or duplicate
+    // ID never leaves a partially updated form snapshot.
     public func performUpdates(_ mutations: [PTFormMutation]) throws {
+        var availableFields = Set(fields.keys)
+        var membership = Dictionary(uniqueKeysWithValues:
+            sections.map { ($0.id, Set($0.fieldIDs)) })
         for mutation in mutations {
             switch mutation {
-            case .setValue(let value, let fieldID): try setValue(value, for: fieldID)
-            case .setFieldEnabled(let enabled, let fieldID): try setFieldEnabled(enabled, for: fieldID)
-            case .setFieldReadOnly(let readOnly, let fieldID): try setFieldReadOnly(readOnly, for: fieldID)
+            case .setValue(_, let id), .setFieldEnabled(_, let id),
+                 .setFieldReadOnly(_, let id), .setFieldLoading(_, let id):
+                guard availableFields.contains(id) else { throw PTFormError.missingField(id) }
+            case .updateSection(let section):
+                guard membership[section.id] != nil else { throw PTFormError.missingSection(section.id) }
+                for id in section.fieldIDs {
+                    guard availableFields.contains(id) else { throw PTFormError.missingField(id) }
+                    guard !membership.contains(where: { $0.key != section.id && $0.value.contains(id) }) else {
+                        throw PTFormError.duplicateField(id)
+                    }
+                }
+                guard Set(section.fieldIDs).count == section.fieldIDs.count else {
+                    throw PTFormError.duplicateField(section.fieldIDs[0])
+                }
+                membership[section.id] = Set(section.fieldIDs)
+            case .setSectionVisible(_, let id):
+                guard membership[id] != nil else { throw PTFormError.missingSection(id) }
+            case .removeSection(let id):
+                guard let removed = membership.removeValue(forKey: id) else {
+                    throw PTFormError.missingSection(id)
+                }
+                for fieldID in removed where !membership.values.contains(where: { $0.contains(fieldID) }) {
+                    availableFields.remove(fieldID)
+                }
+            case .insertSection(let section, _):
+                guard membership[section.id] == nil else { throw PTFormError.duplicateSection(section.id) }
+                for id in section.fieldIDs {
+                    guard availableFields.contains(id) else { throw PTFormError.missingField(id) }
+                    guard !membership.values.contains(where: { $0.contains(id) }) else {
+                        throw PTFormError.duplicateField(id)
+                    }
+                }
+                guard Set(section.fieldIDs).count == section.fieldIDs.count else {
+                    throw PTFormError.duplicateField(section.fieldIDs[0])
+                }
+                membership[section.id] = Set(section.fieldIDs)
+            case .insertField(let field, let sectionID, _):
+                guard availableFields.insert(field.id).inserted else { throw PTFormError.duplicateField(field.id) }
+                let destination = sectionID ?? "__pt_form_implicit_section__"
+                if sectionID != nil && membership[destination] == nil {
+                    throw PTFormError.missingSection(destination)
+                }
+                membership[destination, default: []].insert(field.id)
+            case .removeField(let id):
+                guard availableFields.remove(id) != nil else { throw PTFormError.missingField(id) }
+                for key in Array(membership.keys) { membership[key]?.remove(id) }
+            case .moveField(let id, let sectionID, _):
+                guard availableFields.contains(id) else { throw PTFormError.missingField(id) }
+                guard membership[sectionID] != nil else { throw PTFormError.missingSection(sectionID) }
+                for key in Array(membership.keys) { membership[key]?.remove(id) }
+                membership[sectionID, default: []].insert(id)
+            }
+        }
+        for mutation in mutations {
+            switch mutation {
+            case .setValue(let value, let id): try setValue(value, for: id)
+            case .setFieldEnabled(let enabled, let id): try setFieldEnabled(enabled, for: id)
+            case .setFieldReadOnly(let readOnly, let id): try setFieldReadOnly(readOnly, for: id)
+            case .setFieldLoading(let loading, let id): try setFieldLoading(loading, for: id)
             case .updateSection(let section): try updateSection(section)
-            case .setSectionVisible(let visible, let sectionID): try setSectionVisible(visible, for: sectionID)
+            case .setSectionVisible(let visible, let id): try setSectionVisible(visible, for: id)
+            case .insertField(let field, let sectionID, let index):
+                try insertField(field, in: sectionID, at: index)
+            case .removeField(let id): try removeField(id)
+            case .insertSection(let section, let index): try insertSection(section, at: index)
+            case .removeSection(let id): try removeSection(id)
+            case .moveField(let id, let sectionID, let index):
+                try moveField(id, to: sectionID, at: index)
             }
         }
     }
@@ -651,7 +826,10 @@ public final class PTFormFieldRendererRegistry {
             PTFormTextFieldRenderer(), PTFormSecureTextFieldRenderer(), PTFormMultilineRenderer(),
             PTFormNumberRenderer(), PTFormPhoneRenderer(), PTFormBankCardRenderer(), PTFormToggleRenderer(),
             PTFormCheckboxRenderer(), PTFormSliderRenderer(), PTFormStepperRenderer(), PTFormDateRenderer(),
-            PTFormPickerRenderer()
+            PTFormPickerRenderer(),
+            PTFormSettingsRowRenderer(kind: .action),
+            PTFormSettingsRowRenderer(kind: .detail),
+            PTFormSettingsRowRenderer(kind: .status)
         ]
         defaults.forEach(register)
     }
@@ -717,6 +895,8 @@ final class PTFormFieldCell: UICollectionViewCell {
     private let titleStack = UIStackView()
     private let leadingStack = UIStackView()
     private var renderedView: UIView?
+    private var activeFieldID: PTFormFieldID?
+    private var currentTitlePlacement: PTFormTitlePlacement?
     private var onReturn: (@MainActor @Sendable () -> Void)?
 
     override init(frame: CGRect) {
@@ -758,6 +938,8 @@ final class PTFormFieldCell: UICollectionViewCell {
         super.prepareForReuse()
         renderedView?.removeFromSuperview()
         renderedView = nil
+        activeFieldID = nil
+        currentTitlePlacement = nil
         onReturn = nil
         subtitleLabel.text = nil
         issueLabel.text = nil
@@ -776,18 +958,27 @@ final class PTFormFieldCell: UICollectionViewCell {
                    onPrevious: @escaping @MainActor @Sendable () -> Void,
                    onNext: @escaping @MainActor @Sendable () -> Void,
                    onDone: @escaping @MainActor @Sendable () -> Void) {
-        renderedView?.removeFromSuperview()
+        // Keep the active text editor attached during diffable reconfiguration.
+        // Recreating a focused UITextField/UITextView would dismiss the keyboard.
+        let isEditing = activeFieldID == field.id && (renderedView?.isFirstResponder ?? false)
         renderer.apply(theme: themeAdapter)
-        let context = PTFormFieldRenderContext(field: field,
-                                               sectionID: sectionID,
-                                               theme: themeAdapter,
-                                               validationIssue: issue.map { PTFormValidationIssue(fieldID: field.id, message: $0) },
-                                               environment: environment)
-        let view = renderer.makeView(context: context, onChange: onChange)
-        renderedView = view
-        fieldContainer.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        let view: UIView
+        if isEditing, let current = renderedView {
+            view = current
+        } else {
+            renderedView?.removeFromSuperview()
+            let context = PTFormFieldRenderContext(field: field,
+                                                   sectionID: sectionID,
+                                                   theme: themeAdapter,
+                                                   validationIssue: issue.map { PTFormValidationIssue(fieldID: field.id, message: $0) },
+                                                   environment: environment)
+            view = renderer.makeView(context: context, onChange: onChange)
+            renderedView = view
+            activeFieldID = field.id
+            fieldContainer.addSubview(view)
+            view.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
         }
         titleLabel.text = field.title
         subtitleLabel.text = field.subtitle
@@ -802,24 +993,28 @@ final class PTFormFieldCell: UICollectionViewCell {
                                          value: PTFormViewController.display(field.value),
                                          issue: issue,
                                          to: self)
-        clearArrangedSubviews(from: rootStack)
-        clearArrangedSubviews(from: leadingStack)
-        switch field.configuration?.titlePlacement ?? .top {
-        case .top:
-            rootStack.addArrangedSubview(titleStack)
-            rootStack.addArrangedSubview(fieldContainer)
-            rootStack.addArrangedSubview(issueLabel)
-        case .hidden:
-            rootStack.addArrangedSubview(fieldContainer)
-            rootStack.addArrangedSubview(issueLabel)
-        case .leading:
-            leadingStack.addArrangedSubview(titleStack)
-            leadingStack.addArrangedSubview(fieldContainer)
-            rootStack.addArrangedSubview(leadingStack)
-            rootStack.addArrangedSubview(issueLabel)
+        let placement = field.configuration?.titlePlacement ?? .top
+        if placement != currentTitlePlacement {
+            clearArrangedSubviews(from: rootStack)
+            clearArrangedSubviews(from: leadingStack)
+            switch placement {
+            case .top:
+                rootStack.addArrangedSubview(titleStack)
+                rootStack.addArrangedSubview(fieldContainer)
+                rootStack.addArrangedSubview(issueLabel)
+            case .hidden:
+                rootStack.addArrangedSubview(fieldContainer)
+                rootStack.addArrangedSubview(issueLabel)
+            case .leading:
+                leadingStack.addArrangedSubview(titleStack)
+                leadingStack.addArrangedSubview(fieldContainer)
+                rootStack.addArrangedSubview(leadingStack)
+                rootStack.addArrangedSubview(issueLabel)
+            }
+            currentTitlePlacement = placement
         }
         self.onReturn = hasNext ? onNext : onDone
-        if let textField = view as? UITextField {
+        if let textField = view as? UITextField, !isEditing {
             textField.returnKeyType = hasNext ? .next : .done
             textField.addAction(UIAction { [weak self] _ in self?.onReturn?() }, for: .editingDidEndOnExit)
             keyboardCoordinator.attach(to: textField,
@@ -828,7 +1023,7 @@ final class PTFormFieldCell: UICollectionViewCell {
                                        done: onDone,
                                        hasPrevious: hasPrevious,
                                        hasNext: hasNext)
-        } else if let textView = view as? UITextView {
+        } else if let textView = view as? UITextView, !isEditing {
             keyboardCoordinator.attach(to: textView,
                                        previous: onPrevious,
                                        next: onNext,
@@ -856,34 +1051,24 @@ final class PTFormFieldCell: UICollectionViewCell {
 
 @MainActor
 public final class PTFormViewController: PTBaseViewController {
-    public let form: PTFormEngine
-    public let listView: PTCollectionView
-    public let rendererRegistry: PTFormFieldRendererRegistry
-    public let sectionRendererRegistry: PTFormSectionRendererRegistry
-    public let formTheme: PTFormThemeAdapter
-    public let configuration: PTFormConfiguration
-    public var onEvent: (@MainActor @Sendable (PTFormEvent) -> Void)?
-    public var showsValidationSummary = false
+    public let formView: PTFormView
+    public var form: PTFormEngine { formView.form }
+    public var listView: PTCollectionView { formView.listView }
+    public var rendererRegistry: PTFormFieldRendererRegistry { formView.rendererRegistry }
+    public var sectionRendererRegistry: PTFormSectionRendererRegistry { formView.sectionRendererRegistry }
+    public var formTheme: PTFormThemeAdapter { formView.formTheme }
+    public var configuration: PTFormConfiguration { formView.configuration }
+    public var onEvent: (@MainActor @Sendable (PTFormEvent) -> Void)? {
+        get { formView.onEvent }
+        set { formView.onEvent = newValue }
+    }
+    public var showsValidationSummary: Bool {
+        get { formView.showsValidationSummary }
+        set { formView.showsValidationSummary = newValue }
+    }
 
-    private let keyboardCoordinator = PTFormKeyboardCoordinator()
-    private let collectionAdapter: PTFormCollectionAdapter
-    private var cachedFields: [PTFormFieldID: PTFormField] = [:]
-    private var latestLocations: [PTFormFieldLocation] = []
-    private var validationIssues: [PTFormFieldID: String] = [:]
-    private var announcedIssueIDs: Set<PTFormFieldID> = []
-    private var refreshTask: Task<Void, Never>?
-
-    // English: Preserve the original controller initializer for existing callers.
-    // Español: Conserva el inicializador original del controlador para los consumidores existentes.
-    // 中文：保留原有控制器初始化方法，避免破坏现有调用方。
     public init(form: PTFormEngine) {
-        self.form = form
-        self.configuration = .grouped
-        self.rendererRegistry = PTFormFieldRendererRegistry()
-        self.sectionRendererRegistry = PTFormSectionRendererRegistry()
-        self.formTheme = rendererRegistry.themeAdapter
-        self.listView = PTCollectionView(viewConfig: PTCollectionViewConfig())
-        self.collectionAdapter = PTFormCollectionAdapter()
+        formView = PTFormView(form: form)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -892,27 +1077,16 @@ public final class PTFormViewController: PTBaseViewController {
                 rendererRegistry: PTFormFieldRendererRegistry = .init(),
                 sectionRendererRegistry: PTFormSectionRendererRegistry = .init(),
                 themeAdapter: PTFormThemeAdapter? = nil) {
-        self.form = form
-        self.configuration = configuration
-        self.rendererRegistry = rendererRegistry
-        self.sectionRendererRegistry = sectionRendererRegistry
-        self.formTheme = themeAdapter ?? rendererRegistry.themeAdapter
-        self.listView = PTCollectionView(viewConfig: PTCollectionViewConfig())
-        self.collectionAdapter = PTFormCollectionAdapter()
-        self.rendererRegistry.themeAdapter = self.formTheme
+        formView = PTFormView(form: form, configuration: configuration,
+                              rendererRegistry: rendererRegistry,
+                              sectionRendererRegistry: sectionRendererRegistry,
+                              themeAdapter: themeAdapter)
         super.init(nibName: nil, bundle: nil)
     }
 
     @available(*, deprecated, message: "Use init(form:configuration:rendererRegistry:sectionRendererRegistry:themeAdapter:).")
-    public init(form: PTFormEngine,
-                rendererRegistry: PTFormFieldRendererRegistry) {
-        self.form = form
-        self.configuration = .grouped
-        self.rendererRegistry = rendererRegistry
-        self.sectionRendererRegistry = PTFormSectionRendererRegistry()
-        self.formTheme = rendererRegistry.themeAdapter
-        self.listView = PTCollectionView(viewConfig: PTCollectionViewConfig())
-        self.collectionAdapter = PTFormCollectionAdapter()
+    public init(form: PTFormEngine, rendererRegistry: PTFormFieldRendererRegistry) {
+        formView = PTFormView(form: form, rendererRegistry: rendererRegistry)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -920,247 +1094,32 @@ public final class PTFormViewController: PTBaseViewController {
     public init(form: PTFormEngine,
                 rendererRegistry: PTFormFieldRendererRegistry,
                 themeAdapter: PTFormThemeAdapter) {
-        self.form = form
-        self.configuration = .grouped
-        self.rendererRegistry = rendererRegistry
-        self.sectionRendererRegistry = PTFormSectionRendererRegistry()
-        self.formTheme = themeAdapter
-        self.rendererRegistry.themeAdapter = themeAdapter
-        self.listView = PTCollectionView(viewConfig: PTCollectionViewConfig())
-        self.collectionAdapter = PTFormCollectionAdapter()
+        formView = PTFormView(form: form, rendererRegistry: rendererRegistry, themeAdapter: themeAdapter)
         super.init(nibName: nil, bundle: nil)
     }
 
     public required init?(coder: NSCoder) {
-        form = PTFormEngine(fields: [])
-        configuration = .grouped
-        rendererRegistry = PTFormFieldRendererRegistry()
-        sectionRendererRegistry = PTFormSectionRendererRegistry()
-        formTheme = rendererRegistry.themeAdapter
-        listView = PTCollectionView(viewConfig: PTCollectionViewConfig())
-        collectionAdapter = PTFormCollectionAdapter()
+        formView = PTFormView(form: PTFormEngine(fields: []))
         super.init(coder: coder)
-    }
-
-    deinit {
-        refreshTask?.cancel()
     }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-        registerForTraitChanges([UITraitUserInterfaceStyle.self, UITraitAccessibilityContrast.self]) { [weak self] (_: PTFormViewController, _: UITraitCollection) in
-            guard let self else { return }
-            self.rendererRegistry.themeAdapter = self.formTheme
-            self.listView.contentCollectionView.reloadData()
-        }
-        view.addSubview(listView)
-        listView.snp.makeConstraints { make in
+        view.addSubview(formView)
+        formView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        listView.viewConfig.sectionEdges = NSDirectionalEdgeInsets(top: configuration.contentInsets.top,
-                                                                     leading: configuration.contentInsets.leading,
-                                                                     bottom: configuration.contentInsets.bottom,
-                                                                     trailing: configuration.contentInsets.trailing)
-        listView.registerClassCells(classs: [PTFormFieldCell.reuseID: PTFormFieldCell.self])
-        listView.registerSupplementaryView(classs: [PTFormDefaultSectionHeader.reuseID: PTFormDefaultSectionHeader.self],
-                                            kind: UICollectionView.elementKindSectionHeader)
-        listView.registerSupplementaryView(classs: [PTFormDefaultSectionFooter.reuseID: PTFormDefaultSectionFooter.self],
-                                            kind: UICollectionView.elementKindSectionFooter)
-
-        listView.headerInCollection = { [weak self] kind, collectionView, section, indexPath in
-            guard let self,
-                  let box = section.headerDataModel as? PTFormSupplementaryBox else { return nil }
-            let context = PTFormSectionRenderContext(sectionID: box.sectionID,
-                                                     theme: self.formTheme,
-                                                     environment: self.formEnvironment())
-            return self.sectionRendererRegistry.dequeueView(content: box.content,
-                                                             context: context,
-                                                             kind: kind,
-                                                             collectionView: collectionView,
-                                                             indexPath: indexPath)
-        }
-        listView.footerInCollection = { [weak self] kind, collectionView, section, indexPath in
-            guard let self,
-                  let box = section.footerDataModel as? PTFormSupplementaryBox else { return nil }
-            let context = PTFormSectionRenderContext(sectionID: box.sectionID,
-                                                     theme: self.formTheme,
-                                                     environment: self.formEnvironment())
-            return self.sectionRendererRegistry.dequeueView(content: box.content,
-                                                             context: context,
-                                                             kind: kind,
-                                                             collectionView: collectionView,
-                                                             indexPath: indexPath)
-        }
-        listView.cellInCollection = { [weak self] collectionView, section, indexPath in
-            guard let self,
-                  let row = section.rows?[safe: indexPath.item],
-                  let box = row.dataModel as? PTFormFieldBox,
-                  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PTFormFieldCell.reuseID,
-                                                                 for: indexPath) as? PTFormFieldCell else { return nil }
-            let field = self.renderField(box.field)
-            cell.configure(field: field,
-                           sectionID: section.identifier,
-                           renderer: self.rendererRegistry.renderer(for: field.rendererIdentifier,
-                                                                     kind: field.kind),
-                           issue: self.validationIssues[box.field.id],
-                           themeAdapter: self.formTheme,
-                           environment: self.formEnvironment(),
-                           keyboardCoordinator: self.keyboardCoordinator,
-                           hasPrevious: self.focusableLocation(for: field.id, step: -1) != nil,
-                           hasNext: self.focusableLocation(for: field.id, step: 1) != nil,
-                           onChange: { [weak self] value in
-                self?.setValue(value, for: box.field.id)
-           },
-                           onPrevious: { [weak self] in self?.focusPrevious(after: field.id) },
-                           onNext: { [weak self] in self?.focusNext(after: field.id) },
-                           onDone: { [weak self] in self?.view.endEditing(true) })
-            return cell
-        }
-        refreshTask = Task { @MainActor [weak self] in
-            await self?.refresh()
-        }
     }
 
-    public func refresh() async {
-        let snapshot = await form.makeSnapshot()
-        latestLocations = collectionAdapter.locations(for: snapshot)
-        cachedFields = Dictionary(uniqueKeysWithValues: snapshot.fields.map { ($0.id, $0) })
-        let sections = collectionAdapter.makeSections(from: snapshot,
-                                                       configuration: configuration,
-                                                       themeAdapter: formTheme,
-                                                       validationIssues: validationIssues)
-        listView.showCollectionDetail(collectionData: sections, animated: false)
-    }
-
-    private func setValue(_ value: PTFormValue, for id: PTFormFieldID) {
-        Task { @MainActor [weak self] in
-            guard let self else { return }
-            do {
-                try await form.setValue(value, for: id)
-                onEvent?(.valueChanged(id, value))
-                if configuration.validationPolicy.trigger == .onChange {
-                    let result = await form.validateField(id)
-                    applyValidation(result, for: id)
-                    onEvent?(.validationChanged(id))
-                } else {
-                    validationIssues[id] = nil
-                }
-                await refresh()
-            } catch {
-                PTFeedbackCenter.shared.emit(.error)
-            }
-        }
-    }
-
-    public func validate() async -> PTFormValidationResult {
-        let result = await form.validateAll()
-        validationIssues = Dictionary(result.issues.map { ($0.fieldID, $0.message) }, uniquingKeysWith: { _, last in last })
-        if let issue = result.issues.first {
-            PTFormAccessibilityAdapter.announceValidationFailure(issue)
-            PTFeedbackCenter.shared.emit(.validationFailure)
-            if configuration.validationPolicy.focusesFirstInvalidField {
-                focusField(issue.fieldID)
-            }
-        }
-        if let issue = result.issues.first {
-            onEvent?(.validationChanged(issue.fieldID))
-        }
-        await refresh()
-        return result
-    }
-
+    public func refresh() async { await formView.refresh() }
+    public func validate() async -> PTFormValidationResult { await formView.validate() }
     public func submit(_ operation: @escaping @Sendable ([PTFormFieldID: PTFormValue]) async throws -> Void) async throws {
-        let result = await validate()
-        guard result.isValid else { throw PTFormError.invalid(result) }
-        do {
-            try await form.submit(operation)
-            PTFeedbackCenter.shared.emit(.success)
-            onEvent?(.submissionChanged(.succeeded))
-        } catch {
-            PTFeedbackCenter.shared.emit(.error)
-            throw error
-        }
+        try await formView.submit(operation)
     }
-
-    private func focusNext(after id: PTFormFieldID) {
-        guard let location = focusableLocation(for: id, step: 1) else {
-            view.endEditing(true)
-            return
-        }
-        focus(location: location)
-    }
-
-    private func focusPrevious(after id: PTFormFieldID) {
-        guard let location = focusableLocation(for: id, step: -1) else { return }
-        focus(location: location)
-    }
-
-    public func focusField(_ id: PTFormFieldID) {
-        guard let location = latestLocations.first(where: { $0.fieldID == id }) else { return }
-        focus(location: location)
-    }
-
+    public func focusField(_ id: PTFormFieldID) { formView.focusField(id) }
     public func scrollToField(_ id: PTFormFieldID, animated: Bool = true) {
-        guard let location = latestLocations.first(where: { $0.fieldID == id }) else { return }
-        listView.contentCollectionView.scrollToItem(at: IndexPath(item: location.itemIndex,
-                                                                  section: location.sectionIndex),
-                                                    at: .centeredVertically,
-                                                    animated: animated)
+        formView.scrollToField(id, animated: animated)
     }
-
-    private func focus(location: PTFormFieldLocation) {
-        let indexPath = IndexPath(item: location.itemIndex, section: location.sectionIndex)
-        listView.contentCollectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
-        Task { @MainActor [weak self] in
-            await Task.yield()
-            (self?.listView.contentCollectionView.cellForItem(at: indexPath) as? PTFormFieldCell)?.focusField()
-        }
-    }
-
-    private func focusableLocation(for id: PTFormFieldID, step: Int) -> PTFormFieldLocation? {
-        let locations = latestLocations.filter { location in
-            guard let field = cachedFields[location.fieldID], field.isEnabled, !field.isReadOnly else { return false }
-            return rendererRegistry.renderer(for: field.rendererIdentifier, kind: field.kind).focusBehavior != .notFocusable
-        }
-        guard let start = locations.firstIndex(where: { $0.fieldID == id }) else { return nil }
-        let index = start + step
-        return locations.indices.contains(index) ? locations[index] : nil
-    }
-
-    private func renderField(_ field: PTFormField) -> PTFormField {
-        var result = field
-        if result.configuration == nil {
-            result.configuration = configuration.defaultFieldConfiguration
-        }
-        switch configuration.interactionMode {
-        case .editable:
-            break
-        case .readOnly:
-            result.isReadOnly = true
-        case .disabled:
-            result.isEnabled = false
-        }
-        return result
-    }
-
-    private func formEnvironment() -> PTFormEnvironment {
-        PTFormEnvironment(isReduceMotionEnabled: UIAccessibility.isReduceMotionEnabled,
-                          isHighContrastEnabled: traitCollection.accessibilityContrast == .high,
-                          layoutDirection: view.effectiveUserInterfaceLayoutDirection == .rightToLeft ? .rightToLeft : .leftToRight)
-    }
-
-    private func applyValidation(_ result: PTFormValidationResult, for id: PTFormFieldID) {
-        validationIssues[id] = result.issues.first?.message
-        if let issue = result.issues.first, announcedIssueIDs.insert(id).inserted {
-            PTFormAccessibilityAdapter.announceValidationFailure(issue)
-            PTFeedbackCenter.shared.emit(.validationFailure)
-        } else if result.issues.isEmpty {
-            announcedIssueIDs.remove(id)
-        }
-    }
-
-    static func display(_ value: PTFormValue) -> String {
-        switch value { case .empty: ""; case .string(let v): v; case .number(let v): String(v); case .boolean(let v): v ? "On" : "Off"; case .date(let v): v.formatted(); case .data: "Data" }
-    }
+    public static func display(_ value: PTFormValue) -> String { PTFormView.display(value) }
 }
 #endif

@@ -80,14 +80,18 @@ public enum PTFormAccessibilityAdapter {
                              to view: UIView) {
         view.isAccessibilityElement = true
         view.accessibilityLabel = field.title
-        view.accessibilityValue = value.isEmpty ? nil : value
+        view.accessibilityValue = field.detailText ?? (value.isEmpty ? nil : value)
+        // VoiceOver must discover settings navigation rows as actions, not text inputs.
+        view.accessibilityTraits.remove([.button, .notEnabled, .staticText])
+        if field.actionID != nil { view.accessibilityTraits.insert(.button) }
         var hints: [String] = []
         if field.rules.contains(.required) { hints.append("Required") }
         if field.isReadOnly { hints.append("Read only") }
         if let issue, !issue.isEmpty { hints.append(issue) }
-        view.accessibilityHint = hints.isEmpty ? nil : hints.joined(separator: ", ")
-        if !field.isEnabled { view.accessibilityTraits.insert(.notEnabled) }
+        if !field.isEnabled || field.isLoading { view.accessibilityTraits.insert(.notEnabled) }
+        if field.isLoading { hints.append("Loading") }
         if field.isReadOnly { view.accessibilityTraits.insert(.staticText) }
+        view.accessibilityHint = hints.isEmpty ? nil : hints.joined(separator: ", ")
     }
 
     public static func announceValidationFailure(_ issue: PTFormValidationIssue) {
