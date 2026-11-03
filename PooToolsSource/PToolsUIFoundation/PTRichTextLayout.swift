@@ -280,9 +280,18 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
             container.lineBreakMode = label.lineBreakMode
             textPoint = CGPoint(x: point.x - textRect.minX, y: point.y - textRect.minY)
         } else if let textView {
-            container = textView.textContainer
-            textPoint = CGPoint(x: point.x - textView.textContainerInset.left,
-                                y: point.y - textView.textContainerInset.top)
+            // UITextView already owns its text container/layout manager. Reparenting
+            // it into a temporary NSLayoutManager corrupts live text layout.
+            let liveManager = textView.layoutManager
+            let liveContainer = textView.textContainer
+            liveManager.ensureLayout(for: liveContainer)
+            let textPoint = CGPoint(x: point.x + textView.contentOffset.x - textView.textContainerInset.left,
+                                    y: point.y + textView.contentOffset.y - textView.textContainerInset.top)
+            var fraction: CGFloat = 0
+            let index = liveManager.characterIndex(for: textPoint,
+                                                    in: liveContainer,
+                                                    fractionOfDistanceBetweenInsertionPoints: &fraction)
+            return index < attributedText.length ? index : nil
         } else {
             return nil
         }
