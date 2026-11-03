@@ -146,19 +146,97 @@ enum PTRichTextRoundedBackgroundRenderer {
         return found
     }
 
+    // Kerning at the boundaries provides a real layout gap without inserting
+    // whitespace/attachment characters (which would change Action UTF-16 ranges).
+    // Added leading/trailing distance is measured outside the painted background:
+    // reserve the requested margin plus the corresponding background inset.
+    static func textWithExternalSpacing(_ text: NSAttributedString) -> NSAttributedString {
+        guard text.length > 0 else { return text }
+        let full = NSRange(location: 0, length: text.length)
+        let source = text.string as NSString
+        var adjustments: [Int: (range: NSRange, value: CGFloat)] = [:]
+        var processed: [NSRange] = []
+
+        text.enumerateAttribute(PTRichText.roundedBackgroundAttributeKey,
+                                in: full,
+                                options: []) { rawStyle, range, _ in
+            guard let style = PTTextRoundedBackgroundSpec.decode(rawStyle),
+                  style.hasExternalSpacing,
+                  text.attribute(PTRichText.externalSpacingAppliedAttributeKey,
+                                 at: range.location,
+                                 effectiveRange: nil) as? Bool != true else { return }
+            processed.append(range)
+            // Logical leading/trailing follows string order; RTL text layout
+            // still uses UIKit's own writing direction and line breaking.
+            if let before = Self.previousCharacterRange(before: range.location, in: source),
+               (style.leadingSpacing ?? 0) > 0 {
+                let addition = CGFloat((style.leadingSpacing ?? 0) + style.left)
+                let key = before.location
+                let previous = adjustments[key]?.value ?? 0
+                adjustments[key] = (before, previous + addition)
+            }
+            if let after = Self.lastCharacterRange(before: NSMaxRange(range), in: source),
+               NSMaxRange(range) < source.length,
+               !Self.isHardBreak(at: NSMaxRange(range), in: source),
+               (style.trailingSpacing ?? 0) > 0 {
+                let addition = CGFloat((style.trailingSpacing ?? 0) + style.right)
+                let key = after.location
+                let previous = adjustments[key]?.value ?? 0
+                adjustments[key] = (after, previous + addition)
+            }
+        }
+        guard !processed.isEmpty else { return text }
+        let spaced = NSMutableAttributedString(attributedString: text)
+        for (_, entry) in adjustments {
+            let existing = (text.attribute(.kern, at: entry.range.location,
+                                            effectiveRange: nil) as? NSNumber)?.doubleValue ?? 0
+            spaced.addAttribute(.kern,
+                                value: existing + Double(entry.value),
+                                range: entry.range)
+        }
+        for range in processed {
+            spaced.addAttribute(PTRichText.externalSpacingAppliedAttributeKey,
+                                value: true,
+                                range: range)
+        }
+        return spaced
+    }
+
+    private static func previousCharacterRange(before index: Int,
+                                               in string: NSString) -> NSRange? {
+        guard index > 0, index <= string.length else { return nil }
+        let range = string.rangeOfComposedCharacterSequence(at: index - 1)
+        guard NSMaxRange(range) == index,
+              !isHardBreak(at: range.location, in: string),
+              string.substring(with: range) != "\u{FFFC}" else { return nil }
+        return range
+    }
+
+    private static func lastCharacterRange(before index: Int,
+                                           in string: NSString) -> NSRange? {
+        previousCharacterRange(before: index, in: string)
+    }
+
+    private static func isHardBreak(at index: Int, in string: NSString) -> Bool {
+        guard index >= 0, index < string.length else { return true }
+        let character = string.character(at: index)
+        return character == 10 || character == 13 || character == 0x2028 || character == 0x2029
+    }
+
     // UILabel and UITextView otherwise paint NSAttributedString.backgroundColor as a square.
     static func textForDecoratedHost(_ text: NSAttributedString) -> NSAttributedString {
         guard text.length > 0 else { return text }
+        let spacedText = textWithExternalSpacing(text)
         var ranges: [NSRange] = []
-        text.enumerateAttribute(PTRichText.roundedBackgroundAttributeKey,
-                                in: NSRange(location: 0, length: text.length),
+        spacedText.enumerateAttribute(PTRichText.roundedBackgroundAttributeKey,
+                                in: NSRange(location: 0, length: spacedText.length),
                                 options: []) { value, range, _ in
             if PTTextRoundedBackgroundSpec.decode(value) != nil {
                 ranges.append(range)
             }
         }
-        guard !ranges.isEmpty else { return text }
-        let result = NSMutableAttributedString(attributedString: text)
+        guard !ranges.isEmpty else { return spacedText }
+        let result = NSMutableAttributedString(attributedString: spacedText)
         for range in ranges {
             result.removeAttribute(.backgroundColor, range: range)
         }
