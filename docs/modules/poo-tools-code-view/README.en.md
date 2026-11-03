@@ -62,6 +62,14 @@ The module depends on the PTools Core boundary only. It does not download or dec
 
 Use `PTCodeView(numberOfCodes:numberOfLines:changeTimes:)` for local generation; `changeTimes` is the automatic refresh interval in seconds and `0` disables it. Use `setCode(_:)` for external text, `setCodeImage(_:)` for an image, and `requestRefresh()` for a programmatic refresh. External refreshes arrive through `onRefreshRequested`; local refreshes arrive through `codeBlock`.
 
+For local CAPTCHA generation, `characterType` supports `.numeric` (0–9), `.alphabetic` (A–Z and a–z), and `.alphanumeric` (default). You can set it during initialization or later; changing it while in local mode immediately regenerates the code and calls `codeBlock`. Text set with `setCode(_:)` and images set with `setCodeImage(_:)` are unaffected.
+
+```swift
+let localCodeView = PTCodeView(numberOfCodes: 6, numberOfLines: 3, changeTimes: 0, characterType: .numeric)
+localCodeView.characterType = .alphabetic
+localCodeView.characterType = .alphanumeric // The default for existing initializers.
+```
+
 ```swift
 let codeView = PTCodeView(numberOfCodes: 4, numberOfLines: 3, changeTimes: 0)
 codeView.setCode("SERVER-001")
