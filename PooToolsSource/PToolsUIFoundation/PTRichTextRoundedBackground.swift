@@ -260,29 +260,37 @@ enum PTRichTextRoundedBackgroundRenderer {
 
         let segments = segments(in: text, layout: layout)
         var candidates: [(index: Int, distance: CGFloat)] = []
-        for segment in segments {
-            guard segment.characterRange.length > 0,
-                  text.attribute(PTRichText.actionAttributeKey,
-                                 at: segment.characterRange.location,
-                                 effectiveRange: nil) as? String != nil else { continue }
-            let expanded = segment.rect.inset(by: UIEdgeInsets(
-                top: -segment.style.hitInsets.top,
-                left: -segment.style.hitInsets.left,
-                bottom: -segment.style.hitInsets.bottom,
-                right: -segment.style.hitInsets.right))
-            guard expanded.contains(local) else { continue }
-            // A single decorated run may contain multiple independent action
-            // spans. Choose the nearest character when it belongs to the span.
-            let candidateIndex = NSLocationInRange(index, segment.characterRange) ? index : segment.characterRange.location
-            guard text.attribute(PTRichText.actionAttributeKey,
-                                 at: candidateIndex,
-                                 effectiveRange: nil) as? String != nil else { continue }
-            // Resolve overlapping enlarged targets by visual proximity,
-            // not by incidental attribute-run enumeration order.
-            let center = CGPoint(x: segment.rect.midX, y: segment.rect.midY)
-            let dx = local.x - center.x
-            let dy = local.y - center.y
-            candidates.append((candidateIndex, dx * dx + dy * dy))
+        for segment in segments where segment.characterRange.length > 0 {
+            // A decoration can span multiple Action IDs (or nonaction text).
+            // Split hit regions by Action runs without altering painted layout.
+            text.enumerateAttribute(PTRichText.actionAttributeKey,
+                                    in: segment.characterRange,
+                                    options: []) { action, characters, _ in
+                guard action as? String != nil else { return }
+                let glyphs = layout.manager.glyphRange(forCharacterRange: characters,
+                                                       actualCharacterRange: nil)
+                let visible = NSIntersectionRange(glyphs, layout.visible)
+                guard visible.length > 0 else { return }
+                let glyphRect = layout.manager.boundingRect(forGlyphRange: visible,
+                                                             in: layout.container)
+                guard glyphRect.width > 0, glyphRect.height > 0 else { return }
+                let style = segment.style
+                let painted = CGRect(x: glyphRect.minX - CGFloat(style.left),
+                                     y: glyphRect.minY - CGFloat(style.top),
+                                     width: glyphRect.width + CGFloat(style.left + style.right),
+                                     height: glyphRect.height + CGFloat(style.top + style.bottom))
+                let expanded = painted.inset(by: UIEdgeInsets(
+                    top: -style.hitInsets.top,
+                    left: -style.hitInsets.left,
+                    bottom: -style.hitInsets.bottom,
+                    right: -style.hitInsets.right))
+                guard expanded.contains(local) else { return }
+                // Nearby overlapping targets use visual proximity, never
+                // attribute enumeration order. The source action range survives.
+                let dx = local.x - painted.midX
+                let dy = local.y - painted.midY
+                candidates.append((characters.location, dx * dx + dy * dy))
+            }
         }
         return candidates.min(by: { $0.distance < $1.distance })?.index
     }
