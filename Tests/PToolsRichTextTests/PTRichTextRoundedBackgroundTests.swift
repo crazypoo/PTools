@@ -341,9 +341,9 @@ final class PTRichTextRoundedBackgroundTests: XCTestCase {
 
         XCTAssertEqual(spaced.string, "我很喜欢你。")
         XCTAssertEqual(spaced.length, source.length)
-        XCTAssertEqual((spaced.attribute(.kern, at: 1, effectiveRange: nil) as? NSNumber)?.doubleValue,
+        XCTAssertEqual((spaced.attribute(.kern, at: 1, effectiveRange: nil) as? NSNumber)?.doubleValue ?? -1,
                        11, accuracy: 0.001)
-        XCTAssertEqual((spaced.attribute(.kern, at: 3, effectiveRange: nil) as? NSNumber)?.doubleValue,
+        XCTAssertEqual((spaced.attribute(.kern, at: 3, effectiveRange: nil) as? NSNumber)?.doubleValue ?? -1,
                        15, accuracy: 0.001)
         XCTAssertNil(spaced.attribute(.kern, at: 0, effectiveRange: nil))
         XCTAssertNil(source.attribute(.kern, at: 1, effectiveRange: nil))
@@ -385,12 +385,12 @@ final class PTRichTextRoundedBackgroundTests: XCTestCase {
                                                 trailingSpacing: 3))
             + PTRichText("后")
         let spaced = PTRichTextRoundedBackgroundRenderer.textWithExternalSpacing(value.value)
-        XCTAssertEqual((spaced.attribute(.kern, at: 0, effectiveRange: nil) as? NSNumber)?.doubleValue,
+        XCTAssertEqual((spaced.attribute(.kern, at: 0, effectiveRange: nil) as? NSNumber)?.doubleValue ?? -1,
                        6, accuracy: 0.001)
         // Boundary 甲 -> 乙 carries both 甲 trailing and 乙 leading distance.
-        XCTAssertEqual((spaced.attribute(.kern, at: 1, effectiveRange: nil) as? NSNumber)?.doubleValue,
+        XCTAssertEqual((spaced.attribute(.kern, at: 1, effectiveRange: nil) as? NSNumber)?.doubleValue ?? -1,
                        13, accuracy: 0.001)
-        XCTAssertEqual((spaced.attribute(.kern, at: 2, effectiveRange: nil) as? NSNumber)?.doubleValue,
+        XCTAssertEqual((spaced.attribute(.kern, at: 2, effectiveRange: nil) as? NSNumber)?.doubleValue ?? -1,
                        3, accuracy: 0.001)
     }
 
@@ -454,9 +454,9 @@ final class PTRichTextRoundedBackgroundTests: XCTestCase {
         let substring = (result.renderedText.string as NSString).range(of: "喜欢")
         XCTAssertEqual(result.sourceRange(for: substring),
                        (base.plainText as NSString).range(of: "喜欢"))
-        XCTAssertEqual((result.renderedText.attribute(.kern, at: 0, effectiveRange: nil) as? NSNumber)?.doubleValue,
+        XCTAssertEqual((result.renderedText.attribute(.kern, at: 0, effectiveRange: nil) as? NSNumber)?.doubleValue ?? -1,
                        5, accuracy: 0.001)
-        XCTAssertEqual((result.renderedText.attribute(.kern, at: 2, effectiveRange: nil) as? NSNumber)?.doubleValue,
+        XCTAssertEqual((result.renderedText.attribute(.kern, at: 2, effectiveRange: nil) as? NSNumber)?.doubleValue ?? -1,
                        8, accuracy: 0.001)
     }
 
@@ -471,7 +471,7 @@ final class PTRichTextRoundedBackgroundTests: XCTestCase {
         XCTAssertEqual(emoji.length, (value.plainText as NSString).range(of: "喜欢").location)
         XCTAssertEqual((spaced.attribute(.kern,
                                         at: emoji.location,
-                                        effectiveRange: nil) as? NSNumber)?.doubleValue,
+                                        effectiveRange: nil) as? NSNumber)?.doubleValue ?? -1,
                        7, accuracy: 0.001)
         XCTAssertEqual(spaced.string, value.plainText)
     }
