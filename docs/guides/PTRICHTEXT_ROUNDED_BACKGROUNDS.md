@@ -2,7 +2,7 @@
 
 ## 范围
 
-`PTTextAttribute.roundedBackground(color:cornerRadius:insets:borderColor:borderWidth:hitTestInsets:leadingSpacing:trailingSpacing:)`
+`PTTextAttribute.roundedBackground(color:cornerRadius:cornerMode:insets:borderColor:borderWidth:hitTestInsets:leadingSpacing:trailingSpacing:)`
 可为单个富文本片段配置背景颜色、圆角、绘制扩展区域以及可选描边。
 样式存入 Foundation `AttributedString` 的类型化属性，桥接到 `NSAttributedString` 时保留；
 与其他 `PTRichText` 片段拼接、按范围设置属性及重新构造后不会丢失。
@@ -16,6 +16,7 @@ let text = PTRichText {
                .foreground(.black),
                .roundedBackground(color: .systemYellow,
                                   cornerRadius: 6,
+                                  cornerMode: .capsule,
                                   insets: UIEdgeInsets(top: 2, left: 4, bottom: 2, right: 4),
                                   borderColor: .orange,
                                   borderWidth: 1,
@@ -46,9 +47,11 @@ label.pt_apply(richText: text)
 ## 几何说明
 
 - 渲染层对行布局逐行绘制 `UIBezierPath`；换行时每一行分别拥有圆角。
+- `cornerMode: .fixed`（默认）遵守 `cornerRadius` 的绝对点数：例如 `cornerRadius: 2` 始终只有 **2pt** 圆角，上下 `insets: 3` 使背景更高时，看起来可能接近直角。若需要明显的胶囊形标签，设置 `cornerMode: .capsule`，自动使用**实际可见背景高度的一半**作为圆角半径（受宽度上限约束），无需随字号与 insets 手动计算。旧版样式解码仍按 `.fixed` 处理。
+- 旧绘制路径先按原背景矩形做圆角，再裁剪到 Label 的 `bounds`。当 `insets.top/bottom` 使圆角顶点处于视图外时，剩余部分可能变成直边。现在先求背景与宿主的**可见交集**，再为可见矩形绘制圆角，避免紧凑高度下圆角完全消失。若宿主高度不足，扩展背景仍不可能绘制到自身 bounds 外，建议为 Label 增加适量高度。
 - 片段的颜色在创建时采样浅色/深色变体，显示时按 `traitCollection` 选择。
 - `insets` 仅向外扩张**背景绘制范围**，不改变文字的字形本身。
-- `leadingSpacing`、`trailingSpacing` 分别设置当前背景外沿与**前一个**、**后一个**文本片段之间的额外排版距离（正常中文 LTR 情况下对应左、右）。它们默认都为 `0`，不改变旧代码。非零时会把对应的背景边距 `insets.left/right` 也计入字符间距，避免外侧背景与相邻文字重叠。
+- `leadingSpacing`、`trailingSpacing` **不会直接改变圆角半径**，分别设置当前背景外沿与**前一个**、**后一个**文本片段之间的额外排版距离（正常中文 LTR 情况下对应左、右）。它们默认都为 `0`，不改变旧代码。非零时会把对应的背景边距 `insets.left/right` 也计入字符间距，避免外侧背景与相邻文字重叠。
 - 外部间距通过 UIKit 渲染副本的 `.kern` 字距实现，不插入空格或附件，因此原始 `plainText`、UTF-16 长度、Action 的 `event.range` 和 `event.text` 不变；已有 `.kern` 值会相加，后续渲染不会重复叠加。
 - 对自动换行的行首、行末以及 RTL 书写方向，字距按 **逻辑字符顺序** 参与 TextKit 排版，不提供相对于物理屏幕左/右的固定绝对定位；显式换行符及字符串边界不会强加间距。需要严格的固定列对齐时应使用独立视图/布局。
 - 文字的链接、Action、媒体附件仍由既有富文本交互及布局链路处理；不把文字换成图片。
@@ -72,6 +75,7 @@ label.pt_apply(richText: text)
 覆盖属性往返、范围变更、普通宿主兼容、专用宿主背景移除、跨行与截断、
 异常参数规整，以及 `hitTestInsets`、真实字形优先、无 Action 不触发、FlowLabel
 映射、TextView 滚动偏移后的点击与长按语义。新增测试还覆盖 `leadingSpacing/trailingSpacing`，
-混合 `kern`、相邻装饰片段、硬换行、Emoji 组合字符、旧版 Codable 样式与 FlowLabel 的 Action 源 Range。请在 Xcode 的 iOS Simulator 上运行 `PToolsRichTextTests`；
+混合 `kern`、相邻装饰片段、硬换行、Emoji 组合字符、旧版 Codable 样式与 FlowLabel 的 Action 源 Range。
+新 PR 另补充 Label 裁剪情况下圆角可见性、固定 2pt 半径不被自动更改、胶囊半径随可见高度调整、全裁剪跳过以及旧样式兼容的测试。请在 Xcode 的 iOS Simulator 上运行 `PToolsRichTextTests`；
 深色模式、Dynamic Type、混合 Emoji、RTL、多行带 Action 和 UITextView
 滚动时的实际绘制，仍建议在设备上进行视觉验收。

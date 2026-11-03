@@ -51,11 +51,20 @@ struct PTTextBackgroundColorPair: Codable, Hashable, Sendable {
     }
 }
 
+/// Controls whether the requested radius is fixed in points or follows the
+/// actual painted pill size. The fixed default preserves existing call sites.
+public enum PTTextRoundedBackgroundCornerMode: String, Codable, Hashable, Sendable {
+    case fixed
+    case capsule
+}
+
 // English: Primitive-only value survives Foundation.AttributedString copying and Swift 6 isolation.
 public struct PTTextRoundedBackgroundSpec: Codable, Hashable, Sendable {
     let fill: PTTextBackgroundColorPair
     let stroke: PTTextBackgroundColorPair?
     let radius: Double
+    // Nil decodes styles emitted before the capsule option was introduced.
+    let cornerMode: PTTextRoundedBackgroundCornerMode?
     let top: Double
     let left: Double
     let bottom: Double
@@ -72,6 +81,7 @@ public struct PTTextRoundedBackgroundSpec: Codable, Hashable, Sendable {
 
     init(color: UIColor,
          cornerRadius: CGFloat,
+         cornerMode: PTTextRoundedBackgroundCornerMode = .fixed,
          insets: UIEdgeInsets,
          borderColor: UIColor?,
          borderWidth: CGFloat,
@@ -81,6 +91,7 @@ public struct PTTextRoundedBackgroundSpec: Codable, Hashable, Sendable {
         fill = PTTextBackgroundColorPair(color)
         stroke = borderColor.map(PTTextBackgroundColorPair.init)
         radius = Double(max(0, cornerRadius.isFinite ? cornerRadius : 0))
+        self.cornerMode = cornerMode
         top = Double(max(0, insets.top.isFinite ? insets.top : 0))
         left = Double(max(0, insets.left.isFinite ? insets.left : 0))
         bottom = Double(max(0, insets.bottom.isFinite ? insets.bottom : 0))
@@ -511,6 +522,31 @@ enum PTRichTextRoundedBackgroundRenderer {
         return pieces
     }
 
+    // A background can protrude beyond a tightly constrained UILabel (for
+    // instance its intrinsic height equals the text height plus no padding).
+    // Clipping the original rounded path produces straight edges when its
+    // rounded corners fall entirely outside the host bounds. Construct the
+    // visible shape first, then round that shape so corners remain visible.
+    // This is a best-effort display fallback: it cannot manufacture layout
+    // space beyond UIView.bounds.
+    static func paintedGeometry(for rawRect: CGRect,
+                                clipping: CGRect,
+                                style: PTTextRoundedBackgroundSpec) -> (rect: CGRect, radius: CGFloat)? {
+        guard rawRect.width > 0, rawRect.height > 0,
+              clipping.width > 0, clipping.height > 0,
+              !rawRect.isNull, !clipping.isNull else { return nil }
+        let visible = rawRect.intersection(clipping)
+        guard !visible.isNull, visible.width > 0, visible.height > 0 else { return nil }
+        let maxRadius = min(visible.width, visible.height) / 2
+        let radius: CGFloat
+        if style.cornerMode == .capsule {
+            radius = maxRadius
+        } else {
+            radius = min(CGFloat(style.radius), maxRadius)
+        }
+        return (visible, radius)
+    }
+
     private static func paint(_ segments: [PTTextRoundedBackgroundSegment],
                               origin: CGPoint,
                               clipping: CGRect,
@@ -520,8 +556,12 @@ enum PTRichTextRoundedBackgroundRenderer {
         context.clip(to: clipping)
         for segment in segments {
             let style = segment.style
-            let rect = segment.rect.offsetBy(dx: origin.x, dy: origin.y)
-            let radius = min(CGFloat(style.radius), min(rect.width / 2, rect.height / 2))
+            let original = segment.rect.offsetBy(dx: origin.x, dy: origin.y)
+            guard let geometry = paintedGeometry(for: original,
+                                                  clipping: clipping,
+                                                  style: style) else { continue }
+            let rect = geometry.rect
+            let radius = geometry.radius
             let path = UIBezierPath(roundedRect: rect, cornerRadius: radius)
             style.fill.resolve(for: traitCollection).setFill()
             path.fill()

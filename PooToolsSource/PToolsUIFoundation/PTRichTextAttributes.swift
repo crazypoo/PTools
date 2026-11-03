@@ -190,8 +190,11 @@ public struct PTTextAttribute {
     /// touches from neighboring glyphs or unrelated actions.
     /// Use a PTRichTextStyledLabel, PTRichTextFlowLabel or PTRichTextStyledTextView for rounded rendering.
     /// Standard UILabel/UITextView preserve the rectangular background fallback.
+    /// Use cornerMode: .capsule for a pill background. In .fixed mode, 2pt is
+    /// a 2pt corner, even if the background is expanded by large insets.
     public static func roundedBackground(color: UIColor,
                                          cornerRadius: CGFloat = 6,
+                                         cornerMode: PTTextRoundedBackgroundCornerMode = .fixed,
                                          insets: UIEdgeInsets = .zero,
                                          borderColor: UIColor? = nil,
                                          borderWidth: CGFloat = 0,
@@ -200,6 +203,7 @@ public struct PTTextAttribute {
                                          trailingSpacing: CGFloat = 0) -> Self {
         let style = PTTextRoundedBackgroundSpec(color: color,
                                                 cornerRadius: cornerRadius,
+                                                cornerMode: cornerMode,
                                                 insets: insets,
                                                 borderColor: borderColor,
                                                 borderWidth: borderWidth,
