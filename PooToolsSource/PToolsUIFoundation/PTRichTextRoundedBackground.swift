@@ -61,12 +61,18 @@ public struct PTTextRoundedBackgroundSpec: Codable, Hashable, Sendable {
     let bottom: Double
     let right: Double
     let strokeWidth: Double
+    // Optional for backward-compatible decoding of values created by PR #40.
+    let hitTop: Double?
+    let hitLeft: Double?
+    let hitBottom: Double?
+    let hitRight: Double?
 
     init(color: UIColor,
          cornerRadius: CGFloat,
          insets: UIEdgeInsets,
          borderColor: UIColor?,
-         borderWidth: CGFloat) {
+         borderWidth: CGFloat,
+         hitTestInsets: UIEdgeInsets = .zero) {
         fill = PTTextBackgroundColorPair(color)
         stroke = borderColor.map(PTTextBackgroundColorPair.init)
         radius = Double(max(0, cornerRadius.isFinite ? cornerRadius : 0))
@@ -75,6 +81,17 @@ public struct PTTextRoundedBackgroundSpec: Codable, Hashable, Sendable {
         bottom = Double(max(0, insets.bottom.isFinite ? insets.bottom : 0))
         right = Double(max(0, insets.right.isFinite ? insets.right : 0))
         strokeWidth = Double(max(0, borderWidth.isFinite ? borderWidth : 0))
+        hitTop = Double(max(0, hitTestInsets.top.isFinite ? hitTestInsets.top : 0))
+        hitLeft = Double(max(0, hitTestInsets.left.isFinite ? hitTestInsets.left : 0))
+        hitBottom = Double(max(0, hitTestInsets.bottom.isFinite ? hitTestInsets.bottom : 0))
+        hitRight = Double(max(0, hitTestInsets.right.isFinite ? hitTestInsets.right : 0))
+    }
+
+    var hitInsets: UIEdgeInsets {
+        UIEdgeInsets(top: CGFloat(hitTop ?? 0),
+                     left: CGFloat(hitLeft ?? 0),
+                     bottom: CGFloat(hitBottom ?? 0),
+                     right: CGFloat(hitRight ?? 0))
     }
 
     var encoded: Data {
