@@ -2,14 +2,15 @@
 //  PTPermissionCore.swift
 //  PToolsPermissionCore
 //
-//  Foundation-only permission contracts and exactly-once request bridging.
-//  Contratos de permisos basados solo en Foundation y puente de solicitud exactly-once.
-//  仅依赖 Foundation 的权限契约与只完成一次的请求桥接。
+//  Foundation-first permission contracts and exactly-once request bridging.
+//  Contratos de permisos con base Foundation y puente de solicitud exactly-once.
+//  Foundation 优先的权限契约与只完成一次的请求桥接。
 //
 
-// English: Compile this Foundation-only contract once in SwiftPM or in the merged CocoaPods target.
-// Español: Compila este contrato basado solo en Foundation una vez en SwiftPM o en el target combinado de CocoaPods.
-// 中文：这份仅依赖 Foundation 的契约在 SwiftPM 或 CocoaPods 聚合 target 中只编译一份。
+// English: Compile the shared permission contracts once. UIKit is imported only on iOS
+// for the app settings fallback; other platform builds keep the Foundation-only path.
+// Español: Compila los contratos una sola vez; UIKit solo se usa para ajustes en iOS.
+// 中文：共享权限契约仅编译一次；UIKit 只在 iOS 设置页回退路径使用，其他平台保持 Foundation-only。
 import Foundation
 import os.lock
 #if canImport(UIKit) && os(iOS)
@@ -174,6 +175,7 @@ public enum PTPermissionSettingsRouter {
 
     /// Convert the legacy Foundation-only app-settings value to the official UIKit URL.
     /// Custom URLs remain unchanged for permission subclasses that override settingsURL.
+    @available(iOSApplicationExtension, unavailable)
     public static func resolvedURL(_ url: URL?) -> URL? {
 #if canImport(UIKit) && os(iOS)
         guard let url else { return nil }
