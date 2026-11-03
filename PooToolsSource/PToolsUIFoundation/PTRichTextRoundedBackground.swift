@@ -170,14 +170,15 @@ enum PTRichTextRoundedBackgroundRenderer {
 
     static func draw(on textView: UITextView) {
         guard let text = textView.attributedText, hasRoundedBackground(in: text) else { return }
-        let textOrigin = CGPoint(x: textView.textContainerInset.left,
-                                 y: textView.textContainerInset.top)
+        let textOrigin = CGPoint(x: textView.textContainerInset.left - textView.contentOffset.x,
+                                 y: textView.textContainerInset.top - textView.contentOffset.y)
         let segments = layoutSegments(in: text,
                                       size: textView.textContainer.size,
                                       font: textView.font,
                                       alignment: textView.textAlignment,
-                                      numberOfLines: 0,
-                                      lineBreakMode: .byWordWrapping)
+                                      numberOfLines: textView.textContainer.maximumNumberOfLines,
+                                      lineBreakMode: textView.textContainer.lineBreakMode,
+                                      lineFragmentPadding: textView.textContainer.lineFragmentPadding)
         paint(segments, origin: textOrigin, clipping: textView.bounds, traitCollection: textView.traitCollection)
     }
 
@@ -209,8 +210,9 @@ enum PTRichTextRoundedBackgroundRenderer {
                                            y: textView.textContainerInset.top - textView.contentOffset.y),
                            font: textView.font,
                            alignment: textView.textAlignment,
-                           numberOfLines: 0,
-                           lineBreakMode: .byWordWrapping)
+                           numberOfLines: textView.textContainer.maximumNumberOfLines,
+                           lineBreakMode: textView.textContainer.lineBreakMode,
+                           lineFragmentPadding: textView.textContainer.lineFragmentPadding)
     }
 
     private static func actionIndex(at point: CGPoint,
@@ -220,13 +222,15 @@ enum PTRichTextRoundedBackgroundRenderer {
                                     font: UIFont?,
                                     alignment: NSTextAlignment,
                                     numberOfLines: Int,
-                                    lineBreakMode: NSLineBreakMode) -> Int? {
+                                    lineBreakMode: NSLineBreakMode,
+                                    lineFragmentPadding: CGFloat = 0) -> Int? {
         guard let layout = makeLayout(for: text,
                                       size: size,
                                       font: font,
                                       alignment: alignment,
                                       numberOfLines: numberOfLines,
-                                      lineBreakMode: lineBreakMode) else { return nil }
+                                      lineBreakMode: lineBreakMode,
+                                      lineFragmentPadding: lineFragmentPadding) else { return nil }
         let local = CGPoint(x: point.x - origin.x, y: point.y - origin.y)
 
         // Glyphs (including neighboring plain text, links and attachments)
@@ -295,13 +299,15 @@ enum PTRichTextRoundedBackgroundRenderer {
                                font: UIFont?,
                                alignment: NSTextAlignment,
                                numberOfLines: Int,
-                               lineBreakMode: NSLineBreakMode) -> [PTTextRoundedBackgroundSegment] {
+                               lineBreakMode: NSLineBreakMode,
+                               lineFragmentPadding: CGFloat = 0) -> [PTTextRoundedBackgroundSegment] {
         guard let layout = makeLayout(for: text,
                                       size: size,
                                       font: font,
                                       alignment: alignment,
                                       numberOfLines: numberOfLines,
-                                      lineBreakMode: lineBreakMode) else { return [] }
+                                      lineBreakMode: lineBreakMode,
+                                      lineFragmentPadding: lineFragmentPadding) else { return [] }
         return segments(in: text, layout: layout)
     }
 
@@ -310,7 +316,8 @@ enum PTRichTextRoundedBackgroundRenderer {
                                    font: UIFont?,
                                    alignment: NSTextAlignment,
                                    numberOfLines: Int,
-                                   lineBreakMode: NSLineBreakMode) -> TextLayout? {
+                                   lineBreakMode: NSLineBreakMode,
+                                   lineFragmentPadding: CGFloat) -> TextLayout? {
         guard text.length > 0, size.width > 0, size.height > 0 else { return nil }
         let storage = NSTextStorage(attributedString: text)
         let full = NSRange(location: 0, length: storage.length)
@@ -335,7 +342,7 @@ enum PTRichTextRoundedBackgroundRenderer {
 
         let manager = NSLayoutManager()
         let container = NSTextContainer(size: size)
-        container.lineFragmentPadding = 0
+        container.lineFragmentPadding = lineFragmentPadding
         container.maximumNumberOfLines = max(0, numberOfLines)
         container.lineBreakMode = lineBreakMode
         manager.addTextContainer(container)
