@@ -33,11 +33,13 @@ public struct PTTextAttributes: AttributeScope {
     public let actionID: PTTextActionAttribute
     public let attachmentID: PTTextAttachmentAttribute
     public let fragmentLayout: PTTextFragmentLayoutAttribute
+    public let roundedBackground: PTTextRoundedBackgroundAttribute
 
     public init() {
         actionID = PTTextActionAttribute()
         attachmentID = PTTextAttachmentAttribute()
         fragmentLayout = PTTextFragmentLayoutAttribute()
+        roundedBackground = PTTextRoundedBackgroundAttribute()
     }
 }
 
@@ -168,6 +170,23 @@ public struct PTTextAttribute {
 
     public static func background(_ color: UIColor) -> Self {
         Self(values: [.backgroundColor: color])
+    }
+
+    /// Insets expand only the painted background; glyph spacing is unchanged.
+    /// Use a PTRichTextStyledLabel, PTRichTextFlowLabel or PTRichTextStyledTextView for rounded rendering.
+    /// Standard UILabel/UITextView preserve the rectangular background fallback.
+    public static func roundedBackground(color: UIColor,
+                                         cornerRadius: CGFloat = 6,
+                                         insets: UIEdgeInsets = .zero,
+                                         borderColor: UIColor? = nil,
+                                         borderWidth: CGFloat = 0) -> Self {
+        let style = PTTextRoundedBackgroundSpec(color: color,
+                                                cornerRadius: cornerRadius,
+                                                insets: insets,
+                                                borderColor: borderColor,
+                                                borderWidth: borderWidth)
+        return Self(values: [PTRichText.roundedBackgroundAttributeKey: style.encoded,
+                             .backgroundColor: color])
     }
 
     public static func baselineOffset(_ offset: CGFloat) -> Self {
