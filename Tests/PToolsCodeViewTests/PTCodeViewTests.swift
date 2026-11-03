@@ -87,7 +87,8 @@ final class PTCodeViewTests: XCTestCase {
 
         codeView.characterType = .numeric
         XCTAssertEqual(generatedCodes.count, 1)
-        XCTAssertTrue(generatedCodes[0].allSatisfy { $0.isASCII && $0.isNumber })
+        let allowedDigits = Set("0123456789")
+        XCTAssertTrue(generatedCodes[0].allSatisfy { allowedDigits.contains($0) })
 
         codeView.characterType = .numeric
         XCTAssertEqual(generatedCodes.count, 1)
