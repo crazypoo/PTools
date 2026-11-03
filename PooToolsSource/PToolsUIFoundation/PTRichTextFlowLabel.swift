@@ -21,6 +21,11 @@ public final class PTRichTextFlowLabel: UILabel {
         updateFlowLayoutIfNeeded()
     }
 
+    public override func drawText(in rect: CGRect) {
+        PTRichTextRoundedBackgroundRenderer.draw(on: self, in: rect)
+        super.drawText(in: rect)
+    }
+
     public override func sizeThatFits(_ size: CGSize) -> CGSize {
         guard let richText, richText.containsFragmentLayout else {
             return super.sizeThatFits(size)
@@ -67,7 +72,8 @@ public final class PTRichTextFlowLabel: UILabel {
                 flowInteractionController = nil
             }
         } else {
-            super.attributedText = PTRichTextLabelRendering.prepare(richText.value)
+            super.attributedText = PTRichTextRoundedBackgroundRenderer.textForDecoratedHost(
+                PTRichTextLabelRendering.prepare(richText.value))
             flowInteractionController?.detach()
             flowInteractionController = nil
         }
@@ -168,7 +174,8 @@ public final class PTRichTextFlowLabel: UILabel {
                                                        width: width,
                                                        hostNumberOfLines: numberOfLines)
         flowLayoutResult = result
-        super.attributedText = PTRichTextLabelRendering.prepare(result.renderedText)
+        super.attributedText = PTRichTextRoundedBackgroundRenderer.textForDecoratedHost(
+            PTRichTextLabelRendering.prepare(result.renderedText))
         lastFlowWidth = width
         lastFlowText = richText
     }
