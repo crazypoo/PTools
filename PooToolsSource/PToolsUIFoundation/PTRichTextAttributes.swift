@@ -29,17 +29,28 @@ public struct PTTextFragmentLayoutAttribute: CodableAttributedStringKey {
     public init() {}
 }
 
+/// Internal display-only tracking prevents applying adjacent-run kerning twice
+/// when a rendered NSAttributedString is reconstructed as PTRichText.
+public struct PTTextExternalSpacingAppliedAttribute: CodableAttributedStringKey {
+    public typealias Value = Bool
+    public static let name = "PTools.externalSpacingApplied"
+
+    public init() {}
+}
+
 public struct PTTextAttributes: AttributeScope {
     public let actionID: PTTextActionAttribute
     public let attachmentID: PTTextAttachmentAttribute
     public let fragmentLayout: PTTextFragmentLayoutAttribute
     public let roundedBackground: PTTextRoundedBackgroundAttribute
+    public let externalSpacingApplied: PTTextExternalSpacingAppliedAttribute
 
     public init() {
         actionID = PTTextActionAttribute()
         attachmentID = PTTextAttachmentAttribute()
         fragmentLayout = PTTextFragmentLayoutAttribute()
         roundedBackground = PTTextRoundedBackgroundAttribute()
+        externalSpacingApplied = PTTextExternalSpacingAppliedAttribute()
     }
 }
 
