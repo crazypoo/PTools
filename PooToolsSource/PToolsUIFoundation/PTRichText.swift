@@ -63,6 +63,7 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
     static let attachmentAttributeKey = NSAttributedString.Key("PTools.attachmentID")
     static let fragmentLayoutAttributeKey = NSAttributedString.Key("PTools.fragmentLayout")
     static let roundedBackgroundAttributeKey = NSAttributedString.Key("PTools.roundedBackgroundStyle")
+    static let externalSpacingAppliedAttributeKey = NSAttributedString.Key("PTools.externalSpacingApplied")
 
     public init(_ text: String) {
         storage = Foundation.AttributedString(text)
@@ -816,6 +817,16 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
             storage.replaceSubrange(storageRange, with: slice)
         }
 
+        value.enumerateAttribute(externalSpacingAppliedAttributeKey,
+                                 in: fullRange,
+                                 options: []) { rawValue, range, _ in
+            guard let applied = rawValue as? Bool, applied,
+                  let storageRange = Range(range, in: storage) else { return }
+            var slice = storage[storageRange]
+            slice[PTTextExternalSpacingAppliedAttribute.self] = true
+            storage.replaceSubrange(storageRange, with: slice)
+        }
+
         return storage
     }
 
@@ -861,6 +872,9 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
             }
             if let style = run[PTTextRoundedBackgroundAttribute.self] {
                 value.addAttribute(roundedBackgroundAttributeKey, value: style.encoded, range: range)
+            }
+            if run[PTTextExternalSpacingAppliedAttribute.self] == true {
+                value.addAttribute(externalSpacingAppliedAttributeKey, value: true, range: range)
             }
         }
 
