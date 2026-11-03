@@ -103,6 +103,20 @@ struct PTTextRoundedBackgroundSegment {
 
 @MainActor
 enum PTRichTextRoundedBackgroundRenderer {
+    private static func hasRoundedBackground(in text: NSAttributedString) -> Bool {
+        guard text.length > 0 else { return false }
+        var found = false
+        text.enumerateAttribute(PTRichText.roundedBackgroundAttributeKey,
+                                in: NSRange(location: 0, length: text.length),
+                                options: []) { value, _, stop in
+            if PTTextRoundedBackgroundSpec.decode(value) != nil {
+                found = true
+                stop.pointee = true
+            }
+        }
+        return found
+    }
+
     // UILabel and UITextView otherwise paint NSAttributedString.backgroundColor as a square.
     static func textForDecoratedHost(_ text: NSAttributedString) -> NSAttributedString {
         guard text.length > 0 else { return text }
@@ -123,7 +137,7 @@ enum PTRichTextRoundedBackgroundRenderer {
     }
 
     static func draw(on label: UILabel, in rect: CGRect) {
-        guard let text = label.attributedText, text.length > 0 else { return }
+        guard let text = label.attributedText, hasRoundedBackground(in: text) else { return }
         let textRect = label.textRect(forBounds: rect,
                                       limitedToNumberOfLines: label.numberOfLines)
         guard textRect.width > 0, textRect.height > 0 else { return }
@@ -133,11 +147,11 @@ enum PTRichTextRoundedBackgroundRenderer {
                                       alignment: label.textAlignment,
                                       numberOfLines: label.numberOfLines,
                                       lineBreakMode: label.lineBreakMode)
-        paint(segments, origin: textRect.origin, clipping: textRect, traitCollection: label.traitCollection)
+        paint(segments, origin: textRect.origin, clipping: label.bounds, traitCollection: label.traitCollection)
     }
 
     static func draw(on textView: UITextView) {
-        guard let text = textView.attributedText, text.length > 0 else { return }
+        guard let text = textView.attributedText, hasRoundedBackground(in: text) else { return }
         let textOrigin = CGPoint(x: textView.textContainerInset.left,
                                  y: textView.textContainerInset.top)
         let segments = layoutSegments(in: text,
