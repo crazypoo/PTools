@@ -2,7 +2,7 @@
 
 ## 范围
 
-`PTTextAttribute.roundedBackground(color:cornerRadius:insets:borderColor:borderWidth:)`
+`PTTextAttribute.roundedBackground(color:cornerRadius:insets:borderColor:borderWidth:hitTestInsets:leadingSpacing:trailingSpacing:)`
 可为单个富文本片段配置背景颜色、圆角、绘制扩展区域以及可选描边。
 样式存入 Foundation `AttributedString` 的类型化属性，桥接到 `NSAttributedString` 时保留；
 与其他 `PTRichText` 片段拼接、按范围设置属性及重新构造后不会丢失。
@@ -20,7 +20,9 @@ let text = PTRichText {
                                   borderColor: .orange,
                                   borderWidth: 1,
                                   hitTestInsets: UIEdgeInsets(top: 6, left: 8,
-                                                               bottom: 6, right: 8)))
+                                                               bottom: 6, right: 8),
+                                  leadingSpacing: 8,
+                                  trailingSpacing: 12))
     PTRichText("你。")
 }
 
@@ -45,8 +47,10 @@ label.pt_apply(richText: text)
 
 - 渲染层对行布局逐行绘制 `UIBezierPath`；换行时每一行分别拥有圆角。
 - 片段的颜色在创建时采样浅色/深色变体，显示时按 `traitCollection` 选择。
-- `insets` 仅向外扩张**绘制区域**，**不增加文字排版宽度**。如需真正的布局间距，
-  请在片段附近增加间隔字符或另用附件/独立视图，避免和临近文字重叠。
+- `insets` 仅向外扩张**背景绘制范围**，不改变文字的字形本身。
+- `leadingSpacing`、`trailingSpacing` 分别设置当前背景外沿与**前一个**、**后一个**文本片段之间的额外排版距离（正常中文 LTR 情况下对应左、右）。它们默认都为 `0`，不改变旧代码。非零时会把对应的背景边距 `insets.left/right` 也计入字符间距，避免外侧背景与相邻文字重叠。
+- 外部间距通过 UIKit 渲染副本的 `.kern` 字距实现，不插入空格或附件，因此原始 `plainText`、UTF-16 长度、Action 的 `event.range` 和 `event.text` 不变；已有 `.kern` 值会相加，后续渲染不会重复叠加。
+- 对自动换行的行首、行末以及 RTL 书写方向，字距按 **逻辑字符顺序** 参与 TextKit 排版，不提供相对于物理屏幕左/右的固定绝对定位；显式换行符及字符串边界不会强加间距。需要严格的固定列对齐时应使用独立视图/布局。
 - 文字的链接、Action、媒体附件仍由既有富文本交互及布局链路处理；不把文字换成图片。
 - 根据宿主的 `numberOfLines` 和 `lineBreakMode` 控制可绘制范围，
   不对被截断的字符绘制背景。
@@ -67,6 +71,7 @@ label.pt_apply(richText: text)
 `Tests/PToolsRichTextTests/PTRichTextRoundedBackgroundTests.swift`
 覆盖属性往返、范围变更、普通宿主兼容、专用宿主背景移除、跨行与截断、
 异常参数规整，以及 `hitTestInsets`、真实字形优先、无 Action 不触发、FlowLabel
-映射、TextView 滚动偏移后的点击与长按语义。请在 Xcode 的 iOS Simulator 上运行 `PToolsRichTextTests`；
+映射、TextView 滚动偏移后的点击与长按语义。新增测试还覆盖 `leadingSpacing/trailingSpacing`，
+混合 `kern`、相邻装饰片段、硬换行、Emoji 组合字符、旧版 Codable 样式与 FlowLabel 的 Action 源 Range。请在 Xcode 的 iOS Simulator 上运行 `PToolsRichTextTests`；
 深色模式、Dynamic Type、混合 Emoji、RTL、多行带 Action 和 UITextView
 滚动时的实际绘制，仍建议在设备上进行视觉验收。
