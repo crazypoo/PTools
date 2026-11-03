@@ -62,6 +62,7 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
     static let actionAttributeKey = NSAttributedString.Key("PTools.actionID")
     static let attachmentAttributeKey = NSAttributedString.Key("PTools.attachmentID")
     static let fragmentLayoutAttributeKey = NSAttributedString.Key("PTools.fragmentLayout")
+    static let roundedBackgroundAttributeKey = NSAttributedString.Key("PTools.roundedBackgroundStyle")
 
     public init(_ text: String) {
         storage = Foundation.AttributedString(text)
@@ -805,6 +806,16 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
             storage.replaceSubrange(storageRange, with: slice)
         }
 
+        value.enumerateAttribute(roundedBackgroundAttributeKey,
+                                 in: fullRange,
+                                 options: []) { rawValue, range, _ in
+            guard let style = PTTextRoundedBackgroundSpec.decode(rawValue),
+                  let storageRange = Range(range, in: storage) else { return }
+            var slice = storage[storageRange]
+            slice[PTTextRoundedBackgroundAttribute.self] = style
+            storage.replaceSubrange(storageRange, with: slice)
+        }
+
         return storage
     }
 
@@ -847,6 +858,9 @@ public struct PTRichText: Sendable, Equatable, CustomStringConvertible,
             }
             if let attachmentID = run[PTTextAttachmentAttribute.self] {
                 value.addAttribute(attachmentAttributeKey, value: attachmentID, range: range)
+            }
+            if let style = run[PTTextRoundedBackgroundAttribute.self] {
+                value.addAttribute(roundedBackgroundAttributeKey, value: style.encoded, range: range)
             }
         }
 
