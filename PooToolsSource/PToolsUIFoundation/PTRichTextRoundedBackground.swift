@@ -156,8 +156,9 @@ enum PTRichTextRoundedBackgroundRenderer {
 
     static func draw(on label: UILabel, in rect: CGRect) {
         guard let text = label.attributedText, hasRoundedBackground(in: text) else { return }
-        let textRect = label.textRect(forBounds: rect,
-                                      limitedToNumberOfLines: label.numberOfLines)
+        // UILabel already passes its text drawing rect into drawText(in:).
+        // Re-centering that rect would shift decoration away from rendered glyphs.
+        let textRect = rect
         guard textRect.width > 0, textRect.height > 0 else { return }
         let segments = layoutSegments(in: text,
                                       size: textRect.size,
