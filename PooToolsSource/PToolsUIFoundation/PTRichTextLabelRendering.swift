@@ -50,11 +50,19 @@ internal enum PTRichTextLabelRendering {
     }
 
     static func apply(_ attributedText: NSAttributedString, to label: UILabel) {
-        label.attributedText = prepare(attributedText)
+        let prepared = prepare(attributedText)
+        if label is PTRichTextStyledLabel || label is PTRichTextFlowLabel {
+            label.attributedText = PTRichTextRoundedBackgroundRenderer.textForDecoratedHost(prepared)
+        } else {
+            label.attributedText = prepared
+        }
     }
 
     static func apply(_ attributedText: NSAttributedString, to textView: UITextView) {
-        textView.attributedText = prepare(attributedText)
+        let prepared = prepare(attributedText)
+        textView.attributedText = textView is PTRichTextStyledTextView
+            ? PTRichTextRoundedBackgroundRenderer.textForDecoratedHost(prepared)
+            : prepared
     }
 
     #if DEBUG
