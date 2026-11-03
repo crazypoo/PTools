@@ -46,7 +46,9 @@ final class PTRichTextFlowInteractionController: NSObject, UIGestureRecognizerDe
               gesture.state == .ended,
               let label,
               let point = gesture.view.map({ gesture.location(in: $0) }) else { return }
-        if let interaction = label.flowInteraction(at: point) {
+        // A rounded touch extension is an Action, never a nearby media/link hit.
+        if PTRichTextRoundedBackgroundRenderer.actionIndex(at: point, on: label) == nil,
+           let interaction = label.flowInteraction(at: point) {
             onInteraction?(interaction)
             if case .media = interaction { return }
         }
