@@ -175,7 +175,8 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
         guard interactionMode != .selectionAndLinks,
               gesture.state == .ended,
               let point = gesture.view.map({ gesture.location(in: $0) }) else { return }
-        if let interaction = interaction(at: point) {
+        // Expanded decoration targets are actions, not neighboring links or media.
+        if roundedActionIndex(at: point) == nil, let interaction = interaction(at: point) {
             onInteraction?(interaction)
             if case .media = interaction { return }
         }
@@ -217,10 +218,17 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
                                  interaction: interaction)
     }
 
+    private func roundedActionIndex(at point: CGPoint) -> Int? {
+        if let label { return PTRichTextRoundedBackgroundRenderer.actionIndex(at: point, on: label) }
+        if let textView { return PTRichTextRoundedBackgroundRenderer.actionIndex(at: point, on: textView) }
+        return nil
+    }
+
     private func hit(at point: CGPoint) -> (id: PTTextActionID, range: NSRange, text: String)? {
         let attributedText = displayedAttributedText
         guard attributedText.length > 0,
-              let index = characterIndex(at: point, attributedText: attributedText),
+              let index = roundedActionIndex(at: point)
+                          ?? characterIndex(at: point, attributedText: attributedText),
               let rawID = attributedText.attribute(PTRichText.actionAttributeKey,
                                                     at: index,
                                                     effectiveRange: nil) as? String else {
