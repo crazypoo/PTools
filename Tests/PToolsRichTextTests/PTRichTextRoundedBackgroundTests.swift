@@ -354,6 +354,39 @@ final class PTRichTextRoundedBackgroundTests: XCTestCase {
         XCTAssertNil(decorated.attribute(.backgroundColor, at: 2, effectiveRange: nil))
     }
 
+    func testStyledUIKitHostsConsumeSpacingWhilePlainLabelKeepsLegacyFallback() {
+        let styled = PTRichText("前", .font(.systemFont(ofSize: 18)))
+            + PTRichText("喜欢",
+                         .font(.systemFont(ofSize: 18)),
+                         .roundedBackground(color: .yellow,
+                                            leadingSpacing: 6,
+                                            trailingSpacing: 8))
+            + PTRichText("后", .font(.systemFont(ofSize: 18)))
+        let label = PTRichTextStyledLabel()
+        label.pt_apply(richText: styled)
+        XCTAssertEqual((label.attributedText?.attribute(.kern,
+                                                       at: 0,
+                                                       effectiveRange: nil) as? NSNumber)?.doubleValue ?? -1,
+                       6, accuracy: 0.001)
+        XCTAssertEqual((label.attributedText?.attribute(.kern,
+                                                       at: 2,
+                                                       effectiveRange: nil) as? NSNumber)?.doubleValue ?? -1,
+                       8, accuracy: 0.001)
+
+        let textView = PTRichTextStyledTextView()
+        textView.pt_apply(richText: styled)
+        XCTAssertEqual((textView.attributedText.attribute(.kern,
+                                                         at: 0,
+                                                         effectiveRange: nil) as? NSNumber)?.doubleValue ?? -1,
+                       6, accuracy: 0.001)
+
+        let plain = UILabel()
+        plain.pt_apply(richText: styled)
+        XCTAssertNil(plain.attributedText?.attribute(.kern, at: 0, effectiveRange: nil))
+        XCTAssertNotNil(plain.attributedText?.attribute(.backgroundColor,
+                                                       at: 1, effectiveRange: nil))
+    }
+
     func testExternalSpacingIsIdempotentAcrossUIKitFoundationBridges() {
         let value = PTRichText("前")
             + PTRichText("喜欢",
