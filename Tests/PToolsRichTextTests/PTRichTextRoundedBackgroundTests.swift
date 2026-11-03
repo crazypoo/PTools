@@ -280,6 +280,49 @@ final class PTRichTextRoundedBackgroundTests: XCTestCase {
         }
     }
 
+
+    func testTextViewExpandedActionUsesTextContainerPaddingAndScrollOffset() {
+        let font = UIFont.systemFont(ofSize: 20)
+        let content = PTRichText(String(repeating: "上一个段落\n", count: 7),
+                                 .font(font))
+            + PTRichText("  ", .font(font))
+            + PTRichText("喜欢",
+                         .font(font),
+                         .action(PTTextActionID("textView")),
+                         .roundedBackground(color: .yellow,
+                                            cornerRadius: 5,
+                                            insets: .init(top: 2, left: 4, bottom: 2, right: 4),
+                                            hitTestInsets: .init(top: 4, left: 6, bottom: 4, right: 6)))
+            + PTRichText("  完成", .font(font))
+        let view = PTRichTextStyledTextView(frame: CGRect(x: 0, y: 0, width: 240, height: 90))
+        view.font = font
+        view.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        view.pt_apply(richText: content, interactionMode: .actionsOnly)
+        view.layoutIfNeeded()
+        let segments = PTRichTextRoundedBackgroundRenderer.layoutSegments(
+            in: view.attributedText, size: view.textContainer.size,
+            font: view.font, alignment: view.textAlignment,
+            numberOfLines: view.textContainer.maximumNumberOfLines,
+            lineBreakMode: view.textContainer.lineBreakMode,
+            lineFragmentPadding: view.textContainer.lineFragmentPadding)
+        guard let target = segments.first else {
+            return XCTFail("Missing TextView target geometry")
+        }
+        // Scroll the action near the center of the viewport and hit painted
+        // padding rather than the glyph's original bounds.
+        view.setContentOffset(CGPoint(x: 0, y: max(0, target.rect.midY - 35)), animated: false)
+        let touch = CGPoint(x: view.textContainerInset.left - view.contentOffset.x + target.rect.minX - 2,
+                            y: view.textContainerInset.top - view.contentOffset.y + target.rect.midY)
+        XCTAssertTrue(view.bounds.contains(touch))
+        let controller = PTRichTextInteractionController(richText: content,
+                                                         textView: view,
+                                                         interactionMode: .actionsOnly)
+        XCTAssertEqual(controller.actionEvent(at: touch, interaction: .tap)?.actionID,
+                       PTTextActionID("textView"))
+        XCTAssertEqual(controller.actionEvent(at: touch, interaction: .longPress)?.text,
+                       "喜欢")
+    }
+
     private func segments(in label: UILabel) -> [PTTextRoundedBackgroundSegment] {
         guard let text = label.attributedText else { return [] }
         let rect = label.textRect(forBounds: label.bounds,
