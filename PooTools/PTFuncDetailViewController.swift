@@ -214,6 +214,19 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             }
 
             let localCodeView = PTCodeView(numberOfCodes: 4, numberOfLines: 3, changeTimes: 3)
+            let localTypePicker = UISegmentedControl(items: ["纯数字", "纯字母", "字母数字"])
+            localTypePicker.selectedSegmentIndex = 2
+            localTypePicker.addAction(UIAction { [weak localCodeView, weak localTypePicker] _ in
+                let selection = localTypePicker?.selectedSegmentIndex ?? 2
+                switch selection {
+                case 0:
+                    localCodeView?.characterType = .numeric
+                case 1:
+                    localCodeView?.characterType = .alphabetic
+                default:
+                    localCodeView?.characterType = .alphanumeric
+                }
+            }, for: .valueChanged)
             let externalCodeView = PTCodeView(numberOfCodes: 4, numberOfLines: 0, changeTimes: 0)
             let imageCodeView = PTCodeView(numberOfCodes: 4, numberOfLines: 0, changeTimes: 0)
             let input = UITextField()
@@ -229,7 +242,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             input.text = "SERVER-001"
             setTextButton.setTitle("设置外部文本并刷新", for: .normal)
             replaceImageButton.setTitle("替换外部图片", for: .normal)
-            localTitle.text = "本地生成（点击或定时刷新）"
+            localTitle.text = "本地生成（可选择字符类型，点击或定时刷新）"
             externalTextTitle.text = "外部文本（由宿主回调后设置）"
             externalImageTitle.text = "外部图片（由宿主回调后替换）"
             eventLabel.numberOfLines = 0
@@ -264,7 +277,7 @@ private final class PTLegacyDemoDetailViewController: PTBaseViewController {
             }, for: .touchUpInside)
 
             [
-                localTitle, localCodeView,
+                localTitle, localTypePicker, localCodeView,
                 externalTextTitle, externalCodeView,
                 input, setTextButton,
                 externalImageTitle, imageCodeView,
