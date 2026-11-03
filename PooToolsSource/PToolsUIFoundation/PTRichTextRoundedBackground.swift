@@ -66,13 +66,18 @@ public struct PTTextRoundedBackgroundSpec: Codable, Hashable, Sendable {
     let hitLeft: Double?
     let hitBottom: Double?
     let hitRight: Double?
+    // Optional so previously encoded rounded backgrounds remain readable.
+    let leadingSpacing: Double?
+    let trailingSpacing: Double?
 
     init(color: UIColor,
          cornerRadius: CGFloat,
          insets: UIEdgeInsets,
          borderColor: UIColor?,
          borderWidth: CGFloat,
-         hitTestInsets: UIEdgeInsets = .zero) {
+         hitTestInsets: UIEdgeInsets = .zero,
+         leadingSpacing: CGFloat = 0,
+         trailingSpacing: CGFloat = 0) {
         fill = PTTextBackgroundColorPair(color)
         stroke = borderColor.map(PTTextBackgroundColorPair.init)
         radius = Double(max(0, cornerRadius.isFinite ? cornerRadius : 0))
@@ -85,6 +90,12 @@ public struct PTTextRoundedBackgroundSpec: Codable, Hashable, Sendable {
         hitLeft = Double(max(0, hitTestInsets.left.isFinite ? hitTestInsets.left : 0))
         hitBottom = Double(max(0, hitTestInsets.bottom.isFinite ? hitTestInsets.bottom : 0))
         hitRight = Double(max(0, hitTestInsets.right.isFinite ? hitTestInsets.right : 0))
+        self.leadingSpacing = Double(max(0, leadingSpacing.isFinite ? leadingSpacing : 0))
+        self.trailingSpacing = Double(max(0, trailingSpacing.isFinite ? trailingSpacing : 0))
+    }
+
+    var hasExternalSpacing: Bool {
+        (leadingSpacing ?? 0) > 0 || (trailingSpacing ?? 0) > 0
     }
 
     var hitInsets: UIEdgeInsets {
