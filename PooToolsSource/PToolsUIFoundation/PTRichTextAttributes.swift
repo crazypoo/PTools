@@ -173,18 +173,23 @@ public struct PTTextAttribute {
     }
 
     /// Insets expand only the painted background; glyph spacing is unchanged.
+    /// The background itself is tappable when .action is present. hitTestInsets adds a
+    /// further nonnegative touch expansion beyond the painted area, without stealing
+    /// touches from neighboring glyphs or unrelated actions.
     /// Use a PTRichTextStyledLabel, PTRichTextFlowLabel or PTRichTextStyledTextView for rounded rendering.
     /// Standard UILabel/UITextView preserve the rectangular background fallback.
     public static func roundedBackground(color: UIColor,
                                          cornerRadius: CGFloat = 6,
                                          insets: UIEdgeInsets = .zero,
                                          borderColor: UIColor? = nil,
-                                         borderWidth: CGFloat = 0) -> Self {
+                                         borderWidth: CGFloat = 0,
+                                         hitTestInsets: UIEdgeInsets = .zero) -> Self {
         let style = PTTextRoundedBackgroundSpec(color: color,
                                                 cornerRadius: cornerRadius,
                                                 insets: insets,
                                                 borderColor: borderColor,
-                                                borderWidth: borderWidth)
+                                                borderWidth: borderWidth,
+                                                hitTestInsets: hitTestInsets)
         return Self(values: [PTRichText.roundedBackgroundAttributeKey: style.encoded,
                              .backgroundColor: color])
     }
