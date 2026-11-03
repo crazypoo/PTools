@@ -49,10 +49,18 @@ import PToolsUIFoundation
 // 中文：设置页展示由 UIKit 负责，权限 Core 仍可用于无 UI 进程和测试。
 @MainActor
 public enum PTPermissionUISettingsBridge {
+    @available(iOSApplicationExtension, unavailable)
     public static func installDefaultSettingsHandler() {
         PTPermissionSettingsRouter.install { url in
-            guard let url else { return }
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            guard let targetURL = PTPermissionSettingsRouter.resolvedURL(url) else {
+                NSLog("[PTPermission] Could not construct the app settings URL.")
+                return
+            }
+            UIApplication.shared.open(targetURL, options: [:]) { didOpen in
+                if !didOpen {
+                    NSLog("[PTPermission] Failed to open settings: %@", targetURL.absoluteString)
+                }
+            }
         }
     }
 

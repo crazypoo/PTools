@@ -2,16 +2,20 @@
 //  PTPermissionCore.swift
 //  PToolsPermissionCore
 //
-//  Foundation-only permission contracts and exactly-once request bridging.
-//  Contratos de permisos basados solo en Foundation y puente de solicitud exactly-once.
-//  仅依赖 Foundation 的权限契约与只完成一次的请求桥接。
+//  Foundation-first permission contracts and exactly-once request bridging.
+//  Contratos de permisos con base Foundation y puente de solicitud exactly-once.
+//  Foundation 优先的权限契约与只完成一次的请求桥接。
 //
 
-// English: Compile this Foundation-only contract once in SwiftPM or in the merged CocoaPods target.
-// Español: Compila este contrato basado solo en Foundation una vez en SwiftPM o en el target combinado de CocoaPods.
-// 中文：这份仅依赖 Foundation 的契约在 SwiftPM 或 CocoaPods 聚合 target 中只编译一份。
+// English: Compile the shared permission contracts once. UIKit is imported only on iOS
+// for the app settings fallback; other platform builds keep the Foundation-only path.
+// Español: Compila los contratos una sola vez; UIKit solo se usa para ajustes en iOS.
+// 中文：共享权限契约仅编译一次；UIKit 只在 iOS 设置页回退路径使用，其他平台保持 Foundation-only。
 import Foundation
 import os.lock
+#if canImport(UIKit) && os(iOS)
+import UIKit
+#endif
 
 // English: Keep the legacy callback shape available to standalone system-service targets.
 // Español: Mantiene disponible la forma de callback heredada para los targets independientes de servicios del sistema.
@@ -152,9 +156,10 @@ public enum PTPermissionSettings {
     public static let applicationURL = URL(string: "app-settings:")
 }
 
-// English: Install the UI opener only from a UI-capable integration; the core never imports UIApplication.
-// Español: Instala el abridor UI solo desde una integración compatible con UI; el núcleo nunca importa UIApplication.
-// 中文：仅由具备 UI 能力的集成安装设置页打开器，Core 不直接导入 UIApplication。
+// English: Allow hosts to override settings presentation. iOS apps get a native fallback
+// without requiring an explicit installation; non-UIKit clients keep the optional bridge.
+// Español: Permite personalizar la presentación; las apps iOS tienen una ruta nativa predeterminada.
+// 中文：支持宿主自定义设置页跳转；iOS App 无需手动注册即可使用系统默认跳转。
 @MainActor
 public enum PTPermissionSettingsRouter {
     private static var handler: (@MainActor @Sendable (URL?) -> Void)?
@@ -163,8 +168,44 @@ public enum PTPermissionSettingsRouter {
         self.handler = handler
     }
 
+    /// Remove a custom handler and restore the system fallback on supported iOS apps.
+    public static func uninstall() {
+        handler = nil
+    }
+
+    /// Convert the legacy Foundation-only app-settings value to the official UIKit URL.
+    /// Custom URLs remain unchanged for permission subclasses that override settingsURL.
+    @available(iOSApplicationExtension, unavailable)
+    public static func resolvedURL(_ url: URL?) -> URL? {
+#if canImport(UIKit) && os(iOS)
+        guard let url else { return nil }
+        if url == PTPermissionSettings.applicationURL {
+            return URL(string: UIApplication.openSettingsURLString)
+        }
+#endif
+        return url
+    }
+
+    @available(iOSApplicationExtension, unavailable)
     public static func open(_ url: URL? = PTPermissionSettings.applicationURL) {
-        handler?(url)
+        if let handler {
+            handler(url)
+            return
+        }
+
+#if canImport(UIKit) && os(iOS)
+        guard let targetURL = resolvedURL(url) else {
+            NSLog("[PTPermission] Could not construct the app settings URL.")
+            return
+        }
+        UIApplication.shared.open(targetURL, options: [:]) { didOpen in
+            if !didOpen {
+                NSLog("[PTPermission] Failed to open settings: %@", targetURL.absoluteString)
+            }
+        }
+#else
+        NSLog("[PTPermission] No settings handler installed for this platform.")
+#endif
     }
 }
 

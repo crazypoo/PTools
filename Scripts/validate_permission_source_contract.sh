@@ -89,9 +89,18 @@ if rg -n '^import (ptools|Kingfisher|Lottie|Alamofire|SnapKit)' \
 fi
 printf 'PASS: standalone permission sources do not import the ptools/UI/network umbrella\n'
 
-if rg -n '^import (UIKit|Kingfisher|Lottie|Alamofire|Photos|AVFoundation)' PooToolsSource/PToolsPermissionCore; then
-  printf 'FAIL: PToolsPermissionCore imports a UI, network, or system feature framework\n' >&2
+# Keep the permission contracts feature-free. The sole UIKit exception is the
+# iOS-guarded, app-only settings opener in PTPermissionCore.swift.
+if rg -n '^import (Kingfisher|Lottie|Alamofire|Photos|AVFoundation)' PooToolsSource/PToolsPermissionCore; then
+  printf 'FAIL: PToolsPermissionCore imports a feature framework\n' >&2
   exit 1
 fi
 
-printf 'PASS: PToolsPermissionCore remains Foundation-only\n'
+if rg -n '^import UIKit' PooToolsSource/PToolsPermissionCore --glob '!PTPermissionCore.swift'; then
+  printf 'FAIL: unexpected UIKit dependency in PToolsPermissionCore\n' >&2
+  exit 1
+fi
+
+require_pattern "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift" '#if canImport(UIKit) && os(iOS)' 'native settings fallback is gated to iOS UIKit'
+require_pattern "PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift" 'UIApplication.openSettingsURLString' 'settings fallback uses the public API'
+printf 'PASS: PToolsPermissionCore has only its guarded iOS settings-opener UIKit exception\n'

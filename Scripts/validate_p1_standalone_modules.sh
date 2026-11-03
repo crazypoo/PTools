@@ -14,10 +14,27 @@ for path in PooToolsSource/PToolsCore PooToolsSource/PToolsPermissionCore PooToo
   [[ -d "$path" ]] || { printf 'FAIL: missing standalone source path %s\n' "$path" >&2; exit 1; }
 done
 
+# The permission core contains one narrowly gated iOS app-settings launcher.
+# Other Foundation cores and all other permission-core sources remain UI-free.
 if rg -n '^import (UIKit|Photos|AVFoundation|Kingfisher|SnapKit|Alamofire)' \
-  PooToolsSource/PToolsCore PooToolsSource/PToolsPermissionCore PooToolsSource/PToolsMediaCore; then
+  PooToolsSource/PToolsCore PooToolsSource/PToolsMediaCore; then
   printf 'FAIL: standalone foundation target imports a feature or UI framework\n' >&2
   exit 1
 fi
 
-printf 'PASS: standalone foundation module contract\n'
+if rg -n '^import (Photos|AVFoundation|Kingfisher|SnapKit|Alamofire)' PooToolsSource/PToolsPermissionCore; then
+  printf 'FAIL: standalone permission contract imports a feature framework\n' >&2
+  exit 1
+fi
+
+if rg -n '^import UIKit' PooToolsSource/PToolsPermissionCore --glob '!PTPermissionCore.swift'; then
+  printf 'FAIL: unexpected UIKit dependency in standalone permission contract\n' >&2
+  exit 1
+fi
+
+if ! rg -q --fixed-strings '#if canImport(UIKit) && os(iOS)' PooToolsSource/PToolsPermissionCore/PTPermissionCore.swift; then
+  printf 'FAIL: native permission settings opener is missing the iOS guard\n' >&2
+  exit 1
+fi
+
+printf 'PASS: standalone foundation contract (iOS app-settings launcher excepted)\n'

@@ -1414,7 +1414,7 @@ let package = Package(
         ),
         .testTarget(
             name: "PToolsPermissionTests",
-            dependencies: ["ptools"],
+            dependencies: ["ptools", "PToolsPermissionCore"],
             path: "Tests/PToolsPermissionTests"
         ),
         .testTarget(
