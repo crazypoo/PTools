@@ -29,15 +29,28 @@ public struct PTTextFragmentLayoutAttribute: CodableAttributedStringKey {
     public init() {}
 }
 
+/// Internal display-only tracking prevents applying adjacent-run kerning twice
+/// when a rendered NSAttributedString is reconstructed as PTRichText.
+public struct PTTextExternalSpacingAppliedAttribute: CodableAttributedStringKey {
+    public typealias Value = Bool
+    public static let name = "PTools.externalSpacingApplied"
+
+    public init() {}
+}
+
 public struct PTTextAttributes: AttributeScope {
     public let actionID: PTTextActionAttribute
     public let attachmentID: PTTextAttachmentAttribute
     public let fragmentLayout: PTTextFragmentLayoutAttribute
+    public let roundedBackground: PTTextRoundedBackgroundAttribute
+    public let externalSpacingApplied: PTTextExternalSpacingAppliedAttribute
 
     public init() {
         actionID = PTTextActionAttribute()
         attachmentID = PTTextAttachmentAttribute()
         fragmentLayout = PTTextFragmentLayoutAttribute()
+        roundedBackground = PTTextRoundedBackgroundAttribute()
+        externalSpacingApplied = PTTextExternalSpacingAppliedAttribute()
     }
 }
 
@@ -168,6 +181,33 @@ public struct PTTextAttribute {
 
     public static func background(_ color: UIColor) -> Self {
         Self(values: [.backgroundColor: color])
+    }
+
+    /// Insets expand only the painted background; leading/trailingSpacing
+    /// additionally reserve real layout distance from adjacent text.
+    /// The background itself is tappable when .action is present. hitTestInsets adds a
+    /// further nonnegative touch expansion beyond the painted area, without stealing
+    /// touches from neighboring glyphs or unrelated actions.
+    /// Use a PTRichTextStyledLabel, PTRichTextFlowLabel or PTRichTextStyledTextView for rounded rendering.
+    /// Standard UILabel/UITextView preserve the rectangular background fallback.
+    public static func roundedBackground(color: UIColor,
+                                         cornerRadius: CGFloat = 6,
+                                         insets: UIEdgeInsets = .zero,
+                                         borderColor: UIColor? = nil,
+                                         borderWidth: CGFloat = 0,
+                                         hitTestInsets: UIEdgeInsets = .zero,
+                                         leadingSpacing: CGFloat = 0,
+                                         trailingSpacing: CGFloat = 0) -> Self {
+        let style = PTTextRoundedBackgroundSpec(color: color,
+                                                cornerRadius: cornerRadius,
+                                                insets: insets,
+                                                borderColor: borderColor,
+                                                borderWidth: borderWidth,
+                                                hitTestInsets: hitTestInsets,
+                                                leadingSpacing: leadingSpacing,
+                                                trailingSpacing: trailingSpacing)
+        return Self(values: [PTRichText.roundedBackgroundAttributeKey: style.encoded,
+                             .backgroundColor: color])
     }
 
     public static func baselineOffset(_ offset: CGFloat) -> Self {

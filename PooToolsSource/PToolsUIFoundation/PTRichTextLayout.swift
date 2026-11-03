@@ -175,7 +175,8 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
         guard interactionMode != .selectionAndLinks,
               gesture.state == .ended,
               let point = gesture.view.map({ gesture.location(in: $0) }) else { return }
-        if let interaction = interaction(at: point) {
+        // Expanded decoration targets are actions, not neighboring links or media.
+        if roundedActionIndex(at: point) == nil, let interaction = interaction(at: point) {
             onInteraction?(interaction)
             if case .media = interaction { return }
         }
@@ -217,10 +218,17 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
                                  interaction: interaction)
     }
 
+    private func roundedActionIndex(at point: CGPoint) -> Int? {
+        if let label { return PTRichTextRoundedBackgroundRenderer.actionIndex(at: point, on: label) }
+        if let textView { return PTRichTextRoundedBackgroundRenderer.actionIndex(at: point, on: textView) }
+        return nil
+    }
+
     private func hit(at point: CGPoint) -> (id: PTTextActionID, range: NSRange, text: String)? {
         let attributedText = displayedAttributedText
         guard attributedText.length > 0,
-              let index = characterIndex(at: point, attributedText: attributedText),
+              let index = roundedActionIndex(at: point)
+                          ?? characterIndex(at: point, attributedText: attributedText),
               let rawID = attributedText.attribute(PTRichText.actionAttributeKey,
                                                     at: index,
                                                     effectiveRange: nil) as? String else {
@@ -272,9 +280,18 @@ public final class PTRichTextInteractionController: NSObject, UIGestureRecognize
             container.lineBreakMode = label.lineBreakMode
             textPoint = CGPoint(x: point.x - textRect.minX, y: point.y - textRect.minY)
         } else if let textView {
-            container = textView.textContainer
-            textPoint = CGPoint(x: point.x - textView.textContainerInset.left,
-                                y: point.y - textView.textContainerInset.top)
+            // UITextView already owns its text container/layout manager. Reparenting
+            // it into a temporary NSLayoutManager corrupts live text layout.
+            let liveManager = textView.layoutManager
+            let liveContainer = textView.textContainer
+            liveManager.ensureLayout(for: liveContainer)
+            let textPoint = CGPoint(x: point.x + textView.contentOffset.x - textView.textContainerInset.left,
+                                    y: point.y + textView.contentOffset.y - textView.textContainerInset.top)
+            var fraction: CGFloat = 0
+            let index = liveManager.characterIndex(for: textPoint,
+                                                    in: liveContainer,
+                                                    fractionOfDistanceBetweenInsertionPoints: &fraction)
+            return index < attributedText.length ? index : nil
         } else {
             return nil
         }

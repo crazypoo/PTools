@@ -21,6 +21,11 @@ public final class PTRichTextFlowLabel: UILabel {
         updateFlowLayoutIfNeeded()
     }
 
+    public override func drawText(in rect: CGRect) {
+        PTRichTextRoundedBackgroundRenderer.draw(on: self, in: rect)
+        super.drawText(in: rect)
+    }
+
     public override func sizeThatFits(_ size: CGSize) -> CGSize {
         guard let richText, richText.containsFragmentLayout else {
             return super.sizeThatFits(size)
@@ -56,19 +61,19 @@ public final class PTRichTextFlowLabel: UILabel {
         flowLayoutResult = nil
         if richText.containsFragmentLayout {
             updateFlowLayoutIfNeeded(force: true)
-            flowInteractionController?.detach()
-            if actionRegistry != nil || onInteraction != nil {
-                flowInteractionController = PTRichTextFlowInteractionController(richText: richText,
-                                                                                  label: self,
-                                                                                  registry: actionRegistry,
-                                                                                  interactionMode: interactionMode,
-                                                                                  onInteraction: onInteraction)
-            } else {
-                flowInteractionController = nil
-            }
         } else {
-            super.attributedText = PTRichTextLabelRendering.prepare(richText.value)
-            flowInteractionController?.detach()
+            super.attributedText = PTRichTextRoundedBackgroundRenderer.textForDecoratedHost(
+                PTRichTextLabelRendering.prepare(richText.value))
+        }
+        // FlowLabel must retain actions whether or not fragment limits are used.
+        flowInteractionController?.detach()
+        if actionRegistry != nil || onInteraction != nil {
+            flowInteractionController = PTRichTextFlowInteractionController(richText: richText,
+                                                                              label: self,
+                                                                              registry: actionRegistry,
+                                                                              interactionMode: interactionMode,
+                                                                              onInteraction: onInteraction)
+        } else {
             flowInteractionController = nil
         }
         setNeedsLayout()
@@ -89,7 +94,8 @@ public final class PTRichTextFlowLabel: UILabel {
         guard let richText,
               let displayed = attributedText,
               displayed.length > 0,
-              let index = characterIndex(at: point, attributedText: displayed),
+              let index = PTRichTextRoundedBackgroundRenderer.actionIndex(at: point, on: self)
+                          ?? characterIndex(at: point, attributedText: displayed),
               let rawID = displayed.attribute(PTRichText.actionAttributeKey,
                                               at: index,
                                               effectiveRange: nil) as? String else {
@@ -99,9 +105,14 @@ public final class PTRichTextFlowLabel: UILabel {
         _ = displayed.attribute(PTRichText.actionAttributeKey,
                                 at: index,
                                 effectiveRange: &displayedRange)
-        guard displayedRange.length > 0,
-              let sourceRange = flowLayoutResult?.sourceRange(for: displayedRange) else {
-            return nil
+        guard displayedRange.length > 0 else { return nil }
+        // Without fragment layout, FlowLabel renders the original source unchanged.
+        let sourceRange: NSRange
+        if richText.containsFragmentLayout {
+            guard let mapped = flowLayoutResult?.sourceRange(for: displayedRange) else { return nil }
+            sourceRange = mapped
+        } else {
+            sourceRange = displayedRange
         }
         var fullActionRange = sourceRange
         if let sourceIndex = richText.value.attribute(PTRichText.actionAttributeKey,
@@ -118,8 +129,17 @@ public final class PTRichTextFlowLabel: UILabel {
         guard let richText,
               let displayed = attributedText,
               let index = characterIndex(at: point, attributedText: displayed),
-              let sourceRange = flowLayoutResult?.sourceRange(for: NSRange(location: index, length: 1)) else {
+              index < displayed.length else {
             return nil
+        }
+        let sourceRange: NSRange
+        if richText.containsFragmentLayout {
+            guard let mapped = flowLayoutResult?.sourceRange(for: NSRange(location: index, length: 1)) else {
+                return nil
+            }
+            sourceRange = mapped
+        } else {
+            sourceRange = NSRange(location: index, length: 1)
         }
         if let attachment = richText.value.attribute(.attachment,
                                                       at: sourceRange.location,
@@ -168,7 +188,8 @@ public final class PTRichTextFlowLabel: UILabel {
                                                        width: width,
                                                        hostNumberOfLines: numberOfLines)
         flowLayoutResult = result
-        super.attributedText = PTRichTextLabelRendering.prepare(result.renderedText)
+        super.attributedText = PTRichTextRoundedBackgroundRenderer.textForDecoratedHost(
+            PTRichTextLabelRendering.prepare(result.renderedText))
         lastFlowWidth = width
         lastFlowText = richText
     }
