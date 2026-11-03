@@ -509,6 +509,105 @@ final class PTRichTextRoundedBackgroundTests: XCTestCase {
         XCTAssertEqual(spaced.string, value.plainText)
     }
 
+    func testBackgroundCornersRemainVisibleWhenVerticalInsetsExceedLabelBounds() {
+        // The old painter rounded (-3...23) and then clipped to (0...20),
+        // making both corner arcs disappear and leaving straight edges.
+        let style = PTTextRoundedBackgroundSpec(color: .white,
+                                                cornerRadius: 6,
+                                                insets: UIEdgeInsets(top: 3, left: 4, bottom: 3, right: 4),
+                                                borderColor: nil,
+                                                borderWidth: 0)
+        let labelBounds = CGRect(x: 0, y: 0, width: 130, height: 20)
+        let expanded = CGRect(x: 35, y: -3, width: 48, height: 26)
+        let geometry = PTRichTextRoundedBackgroundRenderer.paintedGeometry(
+            for: expanded, clipping: labelBounds, style: style)
+        XCTAssertEqual(geometry?.rect, CGRect(x: 35, y: 0, width: 48, height: 20))
+        XCTAssertEqual(geometry?.radius, 6)
+    }
+
+    func testFixedTwoPointRadiusIsNotSilentlyChangedByInsetsOrExternalSpacing() {
+        let style = PTTextRoundedBackgroundSpec(color: .white,
+                                                cornerRadius: 2,
+                                                insets: UIEdgeInsets(top: 3, left: 4, bottom: 3, right: 4),
+                                                borderColor: nil,
+                                                borderWidth: 0,
+                                                leadingSpacing: 8,
+                                                trailingSpacing: 12)
+        let geometry = PTRichTextRoundedBackgroundRenderer.paintedGeometry(
+            for: CGRect(x: -4, y: -3, width: 80, height: 26),
+            clipping: CGRect(x: 0, y: 0, width: 100, height: 20),
+            style: style)
+        XCTAssertEqual(geometry?.radius, 2)
+        XCTAssertEqual(geometry?.rect, CGRect(x: 0, y: 0, width: 76, height: 20))
+        XCTAssertEqual(style.leadingSpacing, 8)
+        XCTAssertEqual(style.trailingSpacing, 12)
+    }
+
+    func testCapsuleModeUsesHalfOfVisibleBadgeHeight() {
+        let style = PTTextRoundedBackgroundSpec(color: .white,
+                                                cornerRadius: 2,
+                                                cornerMode: .capsule,
+                                                insets: UIEdgeInsets(top: 3, left: 4, bottom: 3, right: 4),
+                                                borderColor: nil,
+                                                borderWidth: 0)
+        let normal = PTRichTextRoundedBackgroundRenderer.paintedGeometry(
+            for: CGRect(x: 10, y: 4, width: 60, height: 30),
+            clipping: CGRect(x: 0, y: 0, width: 90, height: 40),
+            style: style)
+        XCTAssertEqual(normal?.radius, 15)
+
+        let clipped = PTRichTextRoundedBackgroundRenderer.paintedGeometry(
+            for: CGRect(x: 10, y: -3, width: 60, height: 30),
+            clipping: CGRect(x: 0, y: 0, width: 90, height: 20),
+            style: style)
+        XCTAssertEqual(clipped?.radius, 10)
+    }
+
+    func testFullyClippedBackgroundDoesNotDraw() {
+        let style = PTTextRoundedBackgroundSpec(color: .white,
+                                                cornerRadius: 6,
+                                                insets: .zero,
+                                                borderColor: nil,
+                                                borderWidth: 0)
+        XCTAssertNil(PTRichTextRoundedBackgroundRenderer.paintedGeometry(
+            for: CGRect(x: 200, y: 200, width: 50, height: 20),
+            clipping: CGRect(x: 0, y: 0, width: 100, height: 20),
+            style: style))
+    }
+
+    func testCapsuleModeSurvivesBridgeAndLegacyStyleDecoding() {
+        let text = PTRichText("去开启",
+                              .roundedBackground(color: .white,
+                                                 cornerRadius: 2,
+                                                 cornerMode: .capsule,
+                                                 insets: UIEdgeInsets(top: 3, left: 4,
+                                                                      bottom: 3, right: 4),
+                                                 leadingSpacing: 8))
+        let style = PTTextRoundedBackgroundSpec.decode(
+            text.value.attribute(PTRichText.roundedBackgroundAttributeKey,
+                                 at: 0, effectiveRange: nil))
+        XCTAssertEqual(style?.cornerMode, .capsule)
+        XCTAssertEqual(style?.cornerMode, PTTextRoundedBackgroundSpec.decode(
+            PTRichText(text.value).value.attribute(
+                PTRichText.roundedBackgroundAttributeKey, at: 0, effectiveRange: nil))?.cornerMode)
+
+        guard let data = text.value.attribute(PTRichText.roundedBackgroundAttributeKey,
+                                               at: 0, effectiveRange: nil) as? Data,
+              var raw = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
+            return XCTFail("Style should be Codable")
+        }
+        raw.removeValue(forKey: "cornerMode")
+        guard let oldData = try? JSONSerialization.data(withJSONObject: raw),
+              let oldStyle = PTTextRoundedBackgroundSpec.decode(oldData) else {
+            return XCTFail("Legacy rounded backgrounds must still decode")
+        }
+        XCTAssertNil(oldStyle.cornerMode)
+        XCTAssertEqual(PTRichTextRoundedBackgroundRenderer.paintedGeometry(
+            for: CGRect(x: 0, y: 0, width: 70, height: 20),
+            clipping: CGRect(x: 0, y: 0, width: 70, height: 20),
+            style: oldStyle)?.radius, 2)
+    }
+
     private func segments(in label: UILabel) -> [PTTextRoundedBackgroundSegment] {
         guard let text = label.attributedText else { return [] }
         let rect = label.textRect(forBounds: label.bounds,
