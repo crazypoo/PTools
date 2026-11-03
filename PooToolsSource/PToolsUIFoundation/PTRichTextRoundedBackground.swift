@@ -159,18 +159,23 @@ enum PTRichTextRoundedBackgroundRenderer {
         guard text.length > 0, size.width > 0, size.height > 0 else { return [] }
         let storage = NSTextStorage(attributedString: text)
         let full = NSRange(location: 0, length: storage.length)
-        storage.enumerateAttribute(.font, in: full, options: []) { value, range, _ in
-            if value == nil {
-                storage.addAttribute(.font, value: font ?? UIFont.systemFont(ofSize: 17), range: range)
-            }
+        // Collect missing runs first: mutating NSTextStorage during its enumeration is unsafe.
+        var missingFonts: [NSRange] = []
+        var missingParagraphs: [NSRange] = []
+        text.enumerateAttribute(.font, in: full, options: []) { value, range, _ in
+            if value == nil { missingFonts.append(range) }
         }
-        storage.enumerateAttribute(.paragraphStyle, in: full, options: []) { value, range, _ in
-            if value == nil {
-                let paragraph = NSMutableParagraphStyle()
-                paragraph.alignment = alignment
-                paragraph.lineBreakMode = lineBreakMode
-                storage.addAttribute(.paragraphStyle, value: paragraph, range: range)
-            }
+        text.enumerateAttribute(.paragraphStyle, in: full, options: []) { value, range, _ in
+            if value == nil { missingParagraphs.append(range) }
+        }
+        for range in missingFonts {
+            storage.addAttribute(.font, value: font ?? UIFont.systemFont(ofSize: 17), range: range)
+        }
+        for range in missingParagraphs {
+            let paragraph = NSMutableParagraphStyle()
+            paragraph.alignment = alignment
+            paragraph.lineBreakMode = lineBreakMode
+            storage.addAttribute(.paragraphStyle, value: paragraph, range: range)
         }
 
         let manager = NSLayoutManager()
