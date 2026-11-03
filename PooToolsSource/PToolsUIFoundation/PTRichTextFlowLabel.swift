@@ -61,20 +61,19 @@ public final class PTRichTextFlowLabel: UILabel {
         flowLayoutResult = nil
         if richText.containsFragmentLayout {
             updateFlowLayoutIfNeeded(force: true)
-            flowInteractionController?.detach()
-            if actionRegistry != nil || onInteraction != nil {
-                flowInteractionController = PTRichTextFlowInteractionController(richText: richText,
-                                                                                  label: self,
-                                                                                  registry: actionRegistry,
-                                                                                  interactionMode: interactionMode,
-                                                                                  onInteraction: onInteraction)
-            } else {
-                flowInteractionController = nil
-            }
         } else {
             super.attributedText = PTRichTextRoundedBackgroundRenderer.textForDecoratedHost(
                 PTRichTextLabelRendering.prepare(richText.value))
-            flowInteractionController?.detach()
+        }
+        // FlowLabel must retain actions whether or not fragment limits are used.
+        flowInteractionController?.detach()
+        if actionRegistry != nil || onInteraction != nil {
+            flowInteractionController = PTRichTextFlowInteractionController(richText: richText,
+                                                                              label: self,
+                                                                              registry: actionRegistry,
+                                                                              interactionMode: interactionMode,
+                                                                              onInteraction: onInteraction)
+        } else {
             flowInteractionController = nil
         }
         setNeedsLayout()
