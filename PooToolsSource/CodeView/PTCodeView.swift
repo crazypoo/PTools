@@ -21,6 +21,15 @@ public enum PTCodeRefreshReason: Equatable, Sendable {
     case programmatic
 }
 
+// English: Restricts only locally generated CAPTCHA characters; externally supplied content is unchanged.
+// Español: Restringe solo los caracteres generados localmente; el contenido externo no cambia.
+// 中文：仅限制本地生成的验证码字符，不影响外部提供的文本或图片。
+@objc public enum PTCodeCharacterType: Int, Sendable {
+    case numeric
+    case alphabetic
+    case alphanumeric
+}
+
 @MainActor
 @objcMembers
 public class PTCodeView: UIView {
@@ -73,6 +82,18 @@ public class PTCodeView: UIView {
 
     public var allowsTapToRefresh = true
 
+    // English: Updating the local character type regenerates the code immediately.
+    // Español: Cambiar el tipo de caracteres local regenera el código inmediatamente.
+    // 中文：切换本地验证码字符类型时立即重新生成；外部验证码不受影响。
+    public var characterType: PTCodeCharacterType = .alphanumeric {
+        didSet {
+            guard characterType != oldValue else { return }
+            if case .generated = displaySource {
+                generateLocalCode(notify: true)
+            }
+        }
+    }
+
     public var captchaImageContentMode: UIView.ContentMode = .scaleAspectFit {
         didSet {
             imageView.contentMode = captchaImageContentMode
@@ -96,6 +117,17 @@ public class PTCodeView: UIView {
         configureView()
         backgroundColor = UIColor.randomColor
         generateLocalCode(notify: false)
+    }
+
+    // English: Preserves the existing initializer while allowing an explicit local character type.
+    // Español: Conserva el inicializador anterior y permite definir el tipo de caracteres local.
+    // 中文：保留原初始化方法，同时允许指定本地验证码的字符类型。
+    public convenience init(numberOfCodes: Int = 4,
+                            numberOfLines: Int = 4,
+                            changeTimes: TimeInterval,
+                            characterType: PTCodeCharacterType) {
+        self.init(numberOfCodes: numberOfCodes, numberOfLines: numberOfLines, changeTimes: changeTimes)
+        self.characterType = characterType
     }
 
     required init?(coder: NSCoder) {
@@ -247,9 +279,21 @@ public class PTCodeView: UIView {
         }
     }
 
+    private var localCharacterPool: ArraySlice<String> {
+        switch characterType {
+        case .numeric:
+            return dataSource.prefix(10)
+        case .alphabetic:
+            return dataSource.dropFirst(10)
+        case .alphanumeric:
+            return dataSource[...]
+        }
+    }
+
     private func generateLocalCode(notify: Bool) {
         displaySource = .generated
-        let generated = (0..<numberOfCode).compactMap { _ in dataSource.randomElement() }.joined()
+        let characters = localCharacterPool
+        let generated = (0..<numberOfCode).compactMap { _ in characters.randomElement() }.joined()
         changeString = generated
         rebuildRenderDescriptors()
         imageView.image = nil
