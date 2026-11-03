@@ -259,12 +259,18 @@ enum PTRichTextRoundedBackgroundRenderer {
                 bottom: -segment.style.hitInsets.bottom,
                 right: -segment.style.hitInsets.right))
             guard expanded.contains(local) else { continue }
-            // Resolve two overlapping expanded targets by visual proximity,
+            // A single decorated run may contain multiple independent action
+            // spans. Choose the nearest character when it belongs to the span.
+            let candidateIndex = NSLocationInRange(index, segment.characterRange) ? index : segment.characterRange.location
+            guard text.attribute(PTRichText.actionAttributeKey,
+                                 at: candidateIndex,
+                                 effectiveRange: nil) as? String != nil else { continue }
+            // Resolve overlapping enlarged targets by visual proximity,
             // not by incidental attribute-run enumeration order.
             let center = CGPoint(x: segment.rect.midX, y: segment.rect.midY)
             let dx = local.x - center.x
             let dy = local.y - center.y
-            candidates.append((segment.characterRange.location, dx * dx + dy * dy))
+            candidates.append((candidateIndex, dx * dx + dy * dy))
         }
         return candidates.min(by: { $0.distance < $1.distance })?.index
     }
