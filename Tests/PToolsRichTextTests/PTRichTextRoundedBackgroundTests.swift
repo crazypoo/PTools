@@ -323,6 +323,159 @@ final class PTRichTextRoundedBackgroundTests: XCTestCase {
                        "喜欢")
     }
 
+    func testExternalSpacingAddsRealKerningWithoutChangingTextOrActionRange() {
+        let action = PTTextActionID("spaced")
+        let richText = PTRichText("我很", .font(.systemFont(ofSize: 20)))
+            + PTRichText("喜欢",
+                         .font(.systemFont(ofSize: 20)),
+                         .roundedBackground(color: .yellow,
+                                            cornerRadius: 6,
+                                            insets: .init(top: 2, left: 3, bottom: 2, right: 4),
+                                            leadingSpacing: 8,
+                                            trailingSpacing: 11),
+                         .action(action))
+            + PTRichText("你。", .font(.systemFont(ofSize: 20)))
+        let source = richText.value
+        let spaced = PTRichTextRoundedBackgroundRenderer.textWithExternalSpacing(source)
+        let decorated = PTRichTextRoundedBackgroundRenderer.textForDecoratedHost(source)
+
+        XCTAssertEqual(spaced.string, "我很喜欢你。")
+        XCTAssertEqual(spaced.length, source.length)
+        XCTAssertEqual((spaced.attribute(.kern, at: 1, effectiveRange: nil) as? NSNumber)?.doubleValue,
+                       11, accuracy: 0.001)
+        XCTAssertEqual((spaced.attribute(.kern, at: 3, effectiveRange: nil) as? NSNumber)?.doubleValue,
+                       15, accuracy: 0.001)
+        XCTAssertNil(spaced.attribute(.kern, at: 0, effectiveRange: nil))
+        XCTAssertNil(source.attribute(.kern, at: 1, effectiveRange: nil))
+        XCTAssertNil(source.attribute(.kern, at: 3, effectiveRange: nil))
+        XCTAssertEqual(spaced.attribute(PTRichText.actionAttributeKey, at: 2, effectiveRange: nil) as? String,
+                       action.rawValue)
+        XCTAssertEqual(decorated.string, source.string)
+        XCTAssertNil(decorated.attribute(.backgroundColor, at: 2, effectiveRange: nil))
+    }
+
+    func testExternalSpacingIsIdempotentAcrossUIKitFoundationBridges() {
+        let value = PTRichText("前")
+            + PTRichText("喜欢",
+                         .roundedBackground(color: .yellow, leadingSpacing: 7, trailingSpacing: 9))
+            + PTRichText("后")
+        let once = PTRichTextRoundedBackgroundRenderer.textWithExternalSpacing(value.value)
+        let twice = PTRichTextRoundedBackgroundRenderer.textWithExternalSpacing(once)
+        XCTAssertEqual(once.string, twice.string)
+        XCTAssertEqual(once.attribute(.kern, at: 0, effectiveRange: nil) as? NSNumber,
+                       twice.attribute(.kern, at: 0, effectiveRange: nil) as? NSNumber)
+        XCTAssertEqual(once.attribute(.kern, at: 2, effectiveRange: nil) as? NSNumber,
+                       twice.attribute(.kern, at: 2, effectiveRange: nil) as? NSNumber)
+
+        let restored = PTRichText(once).value
+        let third = PTRichTextRoundedBackgroundRenderer.textWithExternalSpacing(restored)
+        XCTAssertEqual(third.attribute(.kern, at: 0, effectiveRange: nil) as? NSNumber,
+                       once.attribute(.kern, at: 0, effectiveRange: nil) as? NSNumber)
+        XCTAssertEqual(third.attribute(.kern, at: 2, effectiveRange: nil) as? NSNumber,
+                       once.attribute(.kern, at: 2, effectiveRange: nil) as? NSNumber)
+    }
+
+    func testSpacingCombinesWithExistingKernAndAdjacentDecoratedRuns() {
+        let value = PTRichText("前", .kern(2))
+            + PTRichText("甲", .roundedBackground(color: .yellow,
+                                                leadingSpacing: 4,
+                                                trailingSpacing: 7))
+            + PTRichText("乙", .roundedBackground(color: .green,
+                                                leadingSpacing: 6,
+                                                trailingSpacing: 3))
+            + PTRichText("后")
+        let spaced = PTRichTextRoundedBackgroundRenderer.textWithExternalSpacing(value.value)
+        XCTAssertEqual((spaced.attribute(.kern, at: 0, effectiveRange: nil) as? NSNumber)?.doubleValue,
+                       6, accuracy: 0.001)
+        // Boundary 甲 -> 乙 carries both 甲 trailing and 乙 leading distance.
+        XCTAssertEqual((spaced.attribute(.kern, at: 1, effectiveRange: nil) as? NSNumber)?.doubleValue,
+                       13, accuracy: 0.001)
+        XCTAssertEqual((spaced.attribute(.kern, at: 2, effectiveRange: nil) as? NSNumber)?.doubleValue,
+                       3, accuracy: 0.001)
+    }
+
+    func testSpacingIsNotInsertedAcrossHardLineBreaksOrAtParagraphEdges() {
+        let value = PTRichText("首行\n")
+            + PTRichText("喜欢",
+                         .roundedBackground(color: .yellow,
+                                            leadingSpacing: 7,
+                                            trailingSpacing: 8))
+            + PTRichText("\n下一行")
+        let source = value.value
+        let spaced = PTRichTextRoundedBackgroundRenderer.textWithExternalSpacing(source)
+        XCTAssertEqual(spaced.string, source.string)
+        let range = (source.string as NSString).range(of: "喜欢")
+        XCTAssertNil(spaced.attribute(.kern, at: range.location - 1, effectiveRange: nil))
+        XCTAssertNil(spaced.attribute(.kern, at: NSMaxRange(range) - 1, effectiveRange: nil))
+    }
+
+    func testExternalSpacingNormalizesInvalidNumbersAndDecodesPriorStyles() {
+        let text = PTRichText("喜欢",
+                              .roundedBackground(color: .yellow,
+                                                 leadingSpacing: -.infinity,
+                                                 trailingSpacing: .nan))
+        let style = PTTextRoundedBackgroundSpec.decode(
+            text.value.attribute(PTRichText.roundedBackgroundAttributeKey,
+                                 at: 0, effectiveRange: nil))
+        XCTAssertEqual(style?.leadingSpacing, 0)
+        XCTAssertEqual(style?.trailingSpacing, 0)
+
+        let prior = PTRichText("旧",
+                               .roundedBackground(color: .yellow))
+        guard let data = prior.value.attribute(PTRichText.roundedBackgroundAttributeKey,
+                                               at: 0,
+                                               effectiveRange: nil) as? Data,
+              var object = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
+            return XCTFail("Expected Codable rounded-background style")
+        }
+        object.removeValue(forKey: "leadingSpacing")
+        object.removeValue(forKey: "trailingSpacing")
+        guard let legacyData = try? JSONSerialization.data(withJSONObject: object),
+              let legacy = PTTextRoundedBackgroundSpec.decode(legacyData) else {
+            return XCTFail("Previous rounded style must remain decodable")
+        }
+        XCTAssertNil(legacy.leadingSpacing)
+        XCTAssertNil(legacy.trailingSpacing)
+    }
+
+    func testFlowLayoutUsesSpacingButPreservesSourceMapping() {
+        let base = PTRichText("前", .font(.systemFont(ofSize: 20)))
+            + PTRichText("喜欢",
+                         .font(.systemFont(ofSize: 20)),
+                         .roundedBackground(color: .yellow,
+                                            leadingSpacing: 5,
+                                            trailingSpacing: 8),
+                         .numberOfLines(0),
+                         .action(PTTextActionID("flowSpaced")))
+            + PTRichText("后", .font(.systemFont(ofSize: 20)))
+        let result = PTRichTextFlowLayoutEngine.layout(base, width: 160)
+        XCTAssertEqual(result.renderedText.string, base.plainText)
+        XCTAssertEqual(result.sourceMap.count, result.renderedText.length)
+        let substring = (result.renderedText.string as NSString).range(of: "喜欢")
+        XCTAssertEqual(result.sourceRange(for: substring),
+                       (base.plainText as NSString).range(of: "喜欢"))
+        XCTAssertEqual((result.renderedText.attribute(.kern, at: 0, effectiveRange: nil) as? NSNumber)?.doubleValue,
+                       5, accuracy: 0.001)
+        XCTAssertEqual((result.renderedText.attribute(.kern, at: 2, effectiveRange: nil) as? NSNumber)?.doubleValue,
+                       8, accuracy: 0.001)
+    }
+
+    func testEmojiPrecedingStyledTextRemainsComposedCharacter() {
+        let value = PTRichText("👨‍👩‍👧‍👦")
+            + PTRichText("喜欢",
+                         .roundedBackground(color: .yellow,
+                                            leadingSpacing: 7))
+            + PTRichText("你")
+        let spaced = PTRichTextRoundedBackgroundRenderer.textWithExternalSpacing(value.value)
+        let emoji = (spaced.string as NSString).rangeOfComposedCharacterSequence(at: 0)
+        XCTAssertEqual(emoji.length, (value.plainText as NSString).range(of: "喜欢").location)
+        XCTAssertEqual((spaced.attribute(.kern,
+                                        at: emoji.location,
+                                        effectiveRange: nil) as? NSNumber)?.doubleValue,
+                       7, accuracy: 0.001)
+        XCTAssertEqual(spaced.string, value.plainText)
+    }
+
     private func segments(in label: UILabel) -> [PTTextRoundedBackgroundSegment] {
         guard let text = label.attributedText else { return [] }
         let rect = label.textRect(forBounds: label.bounds,
