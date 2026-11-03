@@ -260,12 +260,12 @@ enum PTRichTextRoundedBackgroundRenderer {
         for segment in segments {
             let style = segment.style
             let rect = segment.rect.offsetBy(dx: origin.x, dy: origin.y)
-            let radius = min(CGFloat(style.radius), rect.width / 2, rect.height / 2)
+            let radius = min(CGFloat(style.radius), min(rect.width / 2, rect.height / 2))
             let path = UIBezierPath(roundedRect: rect, cornerRadius: radius)
             style.fill.resolve(for: traitCollection).setFill()
             path.fill()
             if let stroke = style.stroke, style.strokeWidth > 0 {
-                let width = min(CGFloat(style.strokeWidth), rect.width, rect.height)
+                let width = min(CGFloat(style.strokeWidth), min(rect.width, rect.height))
                 let strokeRect = rect.insetBy(dx: width / 2, dy: width / 2)
                 let strokePath = UIBezierPath(roundedRect: strokeRect,
                                                cornerRadius: max(0, radius - width / 2))
