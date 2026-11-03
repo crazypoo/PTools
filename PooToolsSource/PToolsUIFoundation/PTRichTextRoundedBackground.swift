@@ -242,7 +242,14 @@ enum PTRichTextRoundedBackgroundRenderer {
             if visibleGlyphs.length > 0 {
                 let rect = layout.manager.boundingRect(forGlyphRange: visibleGlyphs,
                                                         in: layout.container)
-                if rect.contains(local) { return nil }
+                if rect.contains(local) {
+                    // Spaces are often intentionally covered by painted padding.
+                    // Non-whitespace text, links and attachments must retain priority.
+                    let character = (text.string as NSString).substring(with: NSRange(location: index, length: 1))
+                    if !character.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        return nil
+                    }
+                }
             }
         }
 
