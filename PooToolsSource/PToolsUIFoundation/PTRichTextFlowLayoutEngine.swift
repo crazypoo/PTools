@@ -58,16 +58,18 @@ public enum PTRichTextFlowLayoutEngine {
                               width: CGFloat,
                               hostNumberOfLines: Int = 0) -> PTTextFlowLayoutResult {
         let safeWidth = width.isFinite ? max(0, width) : 0
-        guard safeWidth > 0, richText.value.length > 0 else {
-            return PTTextFlowLayoutResult(renderedText: richText.value,
-                                          sourceMap: Array(repeating: nil, count: richText.value.length),
+        // Apply decoration spacing before the flow engine measures and truncates
+        // fragments. No characters are inserted, so source maps remain stable.
+        let source = PTRichTextRoundedBackgroundRenderer.textWithExternalSpacing(richText.value)
+        guard safeWidth > 0, source.length > 0 else {
+            return PTTextFlowLayoutResult(renderedText: source,
+                                          sourceMap: Array(repeating: nil, count: source.length),
                                           truncatedFragmentRanges: [],
                                           lineCount: 0,
                                           constrainedWidth: safeWidth)
         }
 
         let builder = PTTextFlowDisplayBuilder(width: safeWidth)
-        let source = richText.value
         let fragments = richText.textFragmentRuns.sorted { lhs, rhs in
             lhs.location == rhs.location ? lhs.length < rhs.length : lhs.location < rhs.location
         }
