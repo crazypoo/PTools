@@ -115,6 +115,7 @@ public struct PTTextRoundedBackgroundAttribute: CodableAttributedStringKey {
 @MainActor
 struct PTTextRoundedBackgroundSegment {
     let rect: CGRect
+    let characterRange: NSRange
     let style: PTTextRoundedBackgroundSpec
 }
 
@@ -180,14 +181,124 @@ enum PTRichTextRoundedBackgroundRenderer {
         paint(segments, origin: textOrigin, clipping: textView.bounds, traitCollection: textView.traitCollection)
     }
 
-    // Shared line-fragment geometry; ranges split at wraps and excludes truncated glyphs.
+    // Shared geometry for painting and action hit testing.
+    // A painted background with .action is tappable, and hitTestInsets can
+    // extend the target beyond the painted rect without increasing text layout.
+    static func actionIndex(at point: CGPoint, on label: UILabel) -> Int? {
+        guard label is PTRichTextStyledLabel || label is PTRichTextFlowLabel,
+              let text = label.attributedText, hasRoundedBackground(in: text) else { return nil }
+        let rect = label.textRect(forBounds: label.bounds,
+                                  limitedToNumberOfLines: label.numberOfLines)
+        return actionIndex(at: point,
+                           in: text,
+                           size: rect.size,
+                           origin: rect.origin,
+                           font: label.font,
+                           alignment: label.textAlignment,
+                           numberOfLines: label.numberOfLines,
+                           lineBreakMode: label.lineBreakMode)
+    }
+
+    static func actionIndex(at point: CGPoint, on textView: UITextView) -> Int? {
+        guard textView is PTRichTextStyledTextView,
+              let text = textView.attributedText, hasRoundedBackground(in: text) else { return nil }
+        return actionIndex(at: point,
+                           in: text,
+                           size: textView.textContainer.size,
+                           origin: CGPoint(x: textView.textContainerInset.left - textView.contentOffset.x,
+                                           y: textView.textContainerInset.top - textView.contentOffset.y),
+                           font: textView.font,
+                           alignment: textView.textAlignment,
+                           numberOfLines: 0,
+                           lineBreakMode: .byWordWrapping)
+    }
+
+    private static func actionIndex(at point: CGPoint,
+                                    in text: NSAttributedString,
+                                    size: CGSize,
+                                    origin: CGPoint,
+                                    font: UIFont?,
+                                    alignment: NSTextAlignment,
+                                    numberOfLines: Int,
+                                    lineBreakMode: NSLineBreakMode) -> Int? {
+        guard let layout = makeLayout(for: text,
+                                      size: size,
+                                      font: font,
+                                      alignment: alignment,
+                                      numberOfLines: numberOfLines,
+                                      lineBreakMode: lineBreakMode) else { return nil }
+        let local = CGPoint(x: point.x - origin.x, y: point.y - origin.y)
+
+        // Glyphs (including neighboring plain text, links and attachments)
+        // win before any enlarged rounded-background target.
+        var fraction: CGFloat = 0
+        let index = layout.manager.characterIndex(for: local,
+                                                   in: layout.container,
+                                                   fractionOfDistanceBetweenInsertionPoints: &fraction)
+        if index < text.length {
+            let glyphs = layout.manager.glyphRange(forCharacterRange: NSRange(location: index, length: 1),
+                                                    actualCharacterRange: nil)
+            let visibleGlyphs = NSIntersectionRange(glyphs, layout.visible)
+            if visibleGlyphs.length > 0 {
+                let rect = layout.manager.boundingRect(forGlyphRange: visibleGlyphs,
+                                                        in: layout.container)
+                if rect.contains(local) { return nil }
+            }
+        }
+
+        let segments = segments(in: text, layout: layout)
+        var candidates: [(index: Int, distance: CGFloat)] = []
+        for segment in segments {
+            guard segment.characterRange.length > 0,
+                  text.attribute(PTRichText.actionAttributeKey,
+                                 at: segment.characterRange.location,
+                                 effectiveRange: nil) as? String != nil else { continue }
+            let expanded = segment.rect.inset(by: UIEdgeInsets(
+                top: -segment.style.hitInsets.top,
+                left: -segment.style.hitInsets.left,
+                bottom: -segment.style.hitInsets.bottom,
+                right: -segment.style.hitInsets.right))
+            guard expanded.contains(local) else { continue }
+            // Resolve two overlapping expanded targets by visual proximity,
+            // not by incidental attribute-run enumeration order.
+            let center = CGPoint(x: segment.rect.midX, y: segment.rect.midY)
+            let dx = local.x - center.x
+            let dy = local.y - center.y
+            candidates.append((segment.characterRange.location, dx * dx + dy * dy))
+        }
+        return candidates.min(by: { $0.distance < $1.distance })?.index
+    }
+
+    private struct TextLayout {
+        let storage: NSTextStorage
+        let manager: NSLayoutManager
+        let container: NSTextContainer
+        let visible: NSRange
+    }
+
+    // Shared line-fragment geometry; ranges split at wraps and exclude truncated glyphs.
     static func layoutSegments(in text: NSAttributedString,
                                size: CGSize,
                                font: UIFont?,
                                alignment: NSTextAlignment,
                                numberOfLines: Int,
                                lineBreakMode: NSLineBreakMode) -> [PTTextRoundedBackgroundSegment] {
-        guard text.length > 0, size.width > 0, size.height > 0 else { return [] }
+        guard let layout = makeLayout(for: text,
+                                      size: size,
+                                      font: font,
+                                      alignment: alignment,
+                                      numberOfLines: numberOfLines,
+                                      lineBreakMode: lineBreakMode) else { return [] }
+        return segments(in: text, layout: layout)
+    }
+
+    private static func makeLayout(for text: NSAttributedString,
+                                   size: CGSize,
+                                   font: UIFont?,
+                                   alignment: NSTextAlignment,
+                                   numberOfLines: Int,
+                                   lineBreakMode: NSLineBreakMode) -> TextLayout? {
+        guard text.length > 0, size.width > 0, size.height > 0 else { return nil }
         let storage = NSTextStorage(attributedString: text)
         let full = NSRange(location: 0, length: storage.length)
         // Collect missing runs first: mutating NSTextStorage during its enumeration is unsafe.
@@ -218,8 +329,17 @@ enum PTRichTextRoundedBackgroundRenderer {
         storage.addLayoutManager(manager)
         manager.ensureLayout(for: container)
         let visible = manager.glyphRange(for: container)
-        guard visible.length > 0 else { return [] }
+        guard visible.length > 0 else { return nil }
+        return TextLayout(storage: storage, manager: manager, container: container, visible: visible)
+    }
 
+    private static func segments(in text: NSAttributedString,
+                                 layout: TextLayout) -> [PTTextRoundedBackgroundSegment] {
+        let storage = layout.storage
+        let manager = layout.manager
+        let container = layout.container
+        let visible = layout.visible
+        let full = NSRange(location: 0, length: storage.length)
         var segments: [PTTextRoundedBackgroundSegment] = []
         storage.enumerateAttribute(PTRichText.roundedBackgroundAttributeKey, in: full, options: []) { value, charRange, _ in
             guard let style = PTTextRoundedBackgroundSpec.decode(value) else { return }
@@ -245,7 +365,13 @@ enum PTRichTextRoundedBackgroundRenderer {
                                         y: glyphRect.minY - CGFloat(style.top),
                                         width: glyphRect.width + CGFloat(style.left + style.right),
                                         height: glyphRect.height + CGFloat(style.top + style.bottom))
-                    segments.append(PTTextRoundedBackgroundSegment(rect: padded, style: style))
+                    let characters = manager.characterRange(forGlyphRange: piece,
+                                                             actualGlyphRange: nil)
+                    let styledCharacters = NSIntersectionRange(characters, charRange)
+                    guard styledCharacters.length > 0 else { continue }
+                    segments.append(PTTextRoundedBackgroundSegment(rect: padded,
+                                                                    characterRange: styledCharacters,
+                                                                    style: style))
                 }
             }
         }
