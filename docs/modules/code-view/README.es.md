@@ -62,6 +62,14 @@ El módulo solo depende de la frontera Core de PTools. No descarga ni decodifica
 
 Usa `PTCodeView(numberOfCodes:numberOfLines:changeTimes:)` para generar localmente; `changeTimes` es el intervalo automático en segundos y `0` lo desactiva. Usa `setCode(_:)` para texto externo, `setCodeImage(_:)` para una imagen y `requestRefresh()` para actualizar de forma programática. Las actualizaciones externas llegan por `onRefreshRequested`; las locales por `codeBlock`.
 
+Para códigos generados localmente, `characterType` admite `.numeric` (0–9), `.alphabetic` (A–Z y a–z) y `.alphanumeric` (predeterminado). Puedes configurarlo al inicializar o después; al cambiarlo en modo local se genera un nuevo código y se invoca `codeBlock`. El texto de `setCode(_:)` y las imágenes de `setCodeImage(_:)` no se modifican.
+
+```swift
+let localCodeView = PTCodeView(numberOfCodes: 6, numberOfLines: 3, changeTimes: 0, characterType: .numeric)
+localCodeView.characterType = .alphabetic
+localCodeView.characterType = .alphanumeric // Valor predeterminado del inicializador existente.
+```
+
 ```swift
 let codeView = PTCodeView(numberOfCodes: 4, numberOfLines: 3, changeTimes: 0)
 codeView.setCode("SERVER-001")
