@@ -27,6 +27,96 @@ final class PTCodeViewTests: XCTestCase {
         XCTAssertEqual(codes.first?.count, 4)
     }
 
+    func testDefaultLocalCharacterTypeIsAlphanumeric() {
+        let codeView = PTCodeView(numberOfCodes: 16, numberOfLines: 0, changeTimes: 0)
+        XCTAssertEqual(codeView.characterType, .alphanumeric)
+
+        let allowed = Set("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+        var receivedCodes = [String]()
+        codeView.codeBlock = { _, code in receivedCodes.append(code) }
+
+        for _ in 0..<30 {
+            codeView.requestRefresh()
+        }
+
+        XCTAssertEqual(receivedCodes.count, 30)
+        XCTAssertTrue(receivedCodes.allSatisfy { code in
+            code.count == 16 && code.allSatisfy { allowed.contains($0) }
+        })
+    }
+
+    func testNumericLocalCodeContainsOnlyDigits() {
+        let codeView = PTCodeView(numberOfCodes: 12, numberOfLines: 0, changeTimes: 0, characterType: .numeric)
+        let allowed = Set("0123456789")
+        var receivedCodes = [String]()
+        codeView.codeBlock = { _, code in receivedCodes.append(code) }
+
+        for _ in 0..<30 {
+            codeView.requestRefresh()
+        }
+
+        XCTAssertEqual(codeView.characterType, .numeric)
+        XCTAssertEqual(receivedCodes.count, 30)
+        XCTAssertTrue(receivedCodes.allSatisfy { code in
+            code.count == 12 && code.allSatisfy { allowed.contains($0) }
+        })
+    }
+
+    func testAlphabeticLocalCodeContainsOnlyLetters() {
+        let codeView = PTCodeView(numberOfCodes: 12, numberOfLines: 0, changeTimes: 0, characterType: .alphabetic)
+        let allowed = Set("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+        var receivedCodes = [String]()
+        codeView.codeBlock = { _, code in receivedCodes.append(code) }
+
+        for _ in 0..<30 {
+            codeView.requestRefresh()
+        }
+
+        XCTAssertEqual(receivedCodes.count, 30)
+        XCTAssertTrue(receivedCodes.allSatisfy { code in
+            code.count == 12 && code.allSatisfy { allowed.contains($0) }
+        })
+    }
+
+    func testChangingTypeRegeneratesOnlyLocalContent() {
+        let codeView = PTCodeView(numberOfCodes: 8, numberOfLines: 0, changeTimes: 0)
+        var generatedCodes = [String]()
+        var requestedReasons = [PTCodeRefreshReason]()
+        codeView.codeBlock = { _, code in generatedCodes.append(code) }
+        codeView.onRefreshRequested = { _, reason in requestedReasons.append(reason) }
+
+        codeView.characterType = .numeric
+        XCTAssertEqual(generatedCodes.count, 1)
+        XCTAssertTrue(generatedCodes[0].allSatisfy { $0.isASCII && $0.isNumber })
+
+        codeView.characterType = .numeric
+        XCTAssertEqual(generatedCodes.count, 1)
+
+        codeView.setCode("SERVER-ABC123")
+        codeView.characterType = .alphabetic
+        XCTAssertEqual(generatedCodes.count, 1)
+        codeView.requestRefresh()
+        XCTAssertEqual(requestedReasons, [.programmatic])
+
+        codeView.useLocalGeneratedCode()
+        XCTAssertEqual(generatedCodes.count, 2)
+        let allowedLetters = Set("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+        XCTAssertTrue(generatedCodes[1].allSatisfy { allowedLetters.contains($0) })
+        XCTAssertEqual(requestedReasons, [.programmatic])
+    }
+
+    func testCharacterTypeDoesNotReplaceExternallySuppliedImage() {
+        let codeView = PTCodeView(numberOfCodes: 4, numberOfLines: 0, changeTimes: 0)
+        let image = UIGraphicsImageRenderer(size: CGSize(width: 6, height: 6)).image { _ in }
+        codeView.setCodeImage(image)
+        let imageView = codeView.subviews.compactMap { $0 as? UIImageView }.first
+
+        codeView.characterType = .numeric
+
+        XCTAssertIdentical(imageView?.image, image)
+        XCTAssertFalse(imageView?.isHidden ?? true)
+    }
+
     func testExternalTextDoesNotCallbackUntilRefresh() {
         let codeView = PTCodeView(numberOfCodes: 4, numberOfLines: 2, changeTimes: 0)
         var reasons = [PTCodeRefreshReason]()
