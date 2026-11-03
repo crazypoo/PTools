@@ -62,6 +62,14 @@ SwiftPM 使用 `PooToolsCodeView`，CocoaPods 使用 `PooTools/CodeView`。模�
 
 本地生成使用 `PTCodeView(numberOfCodes:numberOfLines:changeTimes:)`；`changeTimes` 是以秒为单位的自动刷新间隔，传入 `0` 可关闭自动刷新。外部文本使用 `setCode(_:)`，图片使用 `setCodeImage(_:)`，程序化刷新使用 `requestRefresh()`。外部刷新通过 `onRefreshRequested` 回调，本地刷新通过 `codeBlock` 回调。
 
+本地验证码可通过 `characterType` 指定字符类型：`.numeric`（仅数字 0–9）、`.alphabetic`（仅英文字母 A–Z、a–z）、`.alphanumeric`（字母数字混合，默认值）。可以在初始化时指定，也可以随后修改；在本地模式下切换类型会立即重新生成验证码并触发 `codeBlock`。通过 `setCode(_:)` 或 `setCodeImage(_:)` 设置的外部内容不受此配置影响。
+
+```swift
+let localCodeView = PTCodeView(numberOfCodes: 6, numberOfLines: 3, changeTimes: 0, characterType: .numeric)
+localCodeView.characterType = .alphabetic
+localCodeView.characterType = .alphanumeric // 原初始化方式的默认类型
+```
+
 ```swift
 let codeView = PTCodeView(numberOfCodes: 4, numberOfLines: 3, changeTimes: 0)
 codeView.setCode("SERVER-001")
