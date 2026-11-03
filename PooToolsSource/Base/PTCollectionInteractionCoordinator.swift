@@ -25,14 +25,21 @@ extension PTCollectionView:UICollectionViewDelegate,UIScrollViewDelegate {
         // 中文：无限投影期间旧回调继续收到物理下标，新回调负责传递逻辑下标。
         let legacyIndexPath = presentationAdapter.isActive ? indexPath : logicalIndexPath
         collectionDidSelect?(collectionView,itemSec,legacyIndexPath)
-        if presentationAdapter.isActive,
-           let physicalID = diffableDataSource.itemIdentifier(for: indexPath),
-           let logicalIndex = presentationAdapter.logicalIndex(for: physicalID) {
-            onLogicalItemSelected?(PTCollectionLogicalSelectionContext(
-                rowID: presentationAdapter.logicalID(for: physicalID),
-                logicalIndexPath: IndexPath(item: logicalIndex, section: logicalIndexPath.section)
-            ))
+        guard let selectedID = diffableDataSource.itemIdentifier(for: indexPath) else { return }
+        // English: Logical selection also applies to finite paging and ordinary collections.
+        // 中文：普通列表和单张 Banner 的有限分页也必须发送逻辑选中事件。
+        let logicalID: PTRowIdentifier
+        if presentationAdapter.isActive {
+            // Do not expose a physical projection index if the infinite mapping is stale.
+            guard presentationAdapter.logicalIndex(for: selectedID) != nil else { return }
+            logicalID = presentationAdapter.logicalID(for: selectedID)
+        } else {
+            logicalID = selectedID
         }
+        onLogicalItemSelected?(PTCollectionLogicalSelectionContext(
+            rowID: logicalID,
+            logicalIndexPath: logicalIndexPath
+        ))
     }
     
     public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
