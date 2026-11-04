@@ -296,6 +296,12 @@ public class PTMediaBrowserController: PTBaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MediaBrowser owns its standalone PTMediaBrowserNav instead of
+    // the navigation bar managed by PTNavigationBarManager.
+    public override func allowControlNavBar() -> Bool {
+        false
+    }
+
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = true
@@ -304,7 +310,6 @@ public class PTMediaBrowserController: PTBaseViewController {
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.becomeFirstResponder()
-        self.view.window?.makeKeyAndVisible()
         
         // MARK: -  动画包裹 StatusBar 变更，防止闪烁
         PTGCDManager.shared.delayOnMain(time: 0.35, block: {
@@ -343,7 +348,10 @@ public class PTMediaBrowserController: PTBaseViewController {
         
         navControl.snp.makeConstraints { make in
             make.left.right.top.equalToSuperview()
-            make.height.equalTo(CGFloat.kNavBarHeight_Total)
+            // Use this browser's safe area instead of a navigation bar that
+            // might belong to the underlying Sheet or its presenting page.
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
+                .offset(CGFloat.kNavBarHeight)
         }
         
         let pageControlHeight = viewConfig.pageControlShow ? (PageControlBottomSpace + PageControlHeight + BottomItemSpacing) : 0
@@ -507,9 +515,41 @@ public class PTMediaBrowserController: PTBaseViewController {
         }
     }
         
-    public func mediasShow() {
-        self.modalPresentationStyle = .fullScreen
-        PTUtils.getCurrentVC()?.pt_present(self)
+    // Resolve the Sheet's visible content controller for modal presentation.
+    // PTUtils normally unwraps Sheet content, but older host integrations may
+    // return PTSheetViewController itself.
+    static func mediaPresentationContext(from current: UIViewController) -> (presenter: UIViewController, isSheetHosted: Bool) {
+        let presenter: UIViewController
+        if let sheet = current as? PTSheetViewController {
+            presenter = PTUtils.getCurrentVC(from: sheet.childViewController)
+        } else {
+            presenter = current
+        }
+
+        var ancestor: UIViewController? = presenter
+        while let controller = ancestor {
+            if controller is PTSheetViewController {
+                return (presenter, true)
+            }
+            ancestor = controller.parent
+        }
+        return (presenter, current is PTSheetViewController)
+    }
+
+    /// Present over Sheet content without tearing down the underlying Sheet.
+    /// The completion runs after UIKit finishes presenting the browser.
+    public func mediasShow(completion: PTActionTask? = nil) {
+        guard let current = PTUtils.getCurrentVC() else { return }
+        let context = Self.mediaPresentationContext(from: current)
+        let presenter = context.presenter
+        guard presenter !== self,
+              !presenter.isBeingDismissed,
+              presenter.presentedViewController == nil,
+              self.presentingViewController == nil,
+              self.parent == nil else { return }
+
+        modalPresentationStyle = context.isSheetHosted ? .overFullScreen : .fullScreen
+        presenter.pt_present(self, completion: completion)
     }
     
     public func reloadConfig(mediaData:[PTMediaBrowserModel]) {
