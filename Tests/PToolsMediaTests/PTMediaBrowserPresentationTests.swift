@@ -41,7 +41,7 @@ final class PTMediaBrowserPresentationTests: XCTestCase {
         XCTAssertFalse(browser.allowControlNavBar())
 
         // Compile-time compatibility of the completion-bearing instance method.
-        let show: (PTActionTask?) -> Void = browser.mediasShow(completion:)
+        let show = browser.mediasShow(completion:)
         _ = show
     }
 }
