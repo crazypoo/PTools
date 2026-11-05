@@ -197,6 +197,11 @@ public class PTBannerView: UIView {
         config.viewType = .Normal
         config.contentTopSpace = 0
         config.contentBottomSpace = 0
+        // A banner is an embedded, edge-to-edge viewport. UIKit's default
+        // automatic inset can subtract the hosting navigation/status bar from
+        // the compositional layout's available height (e.g. 390 -> 289 pt),
+        // even though PTBannerView itself still occupies the full 390 pt.
+        config.contentInsetAdjustmentBehavior = .never
         config.customReuseViews = false
         // English: Preserve the legacy banner interaction contract: one viewport per page and no scroll indicators.
         // Español: Conserva el contrato de interacción heredado del banner: un viewport por página y sin indicadores.
