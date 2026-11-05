@@ -124,6 +124,68 @@ final class PTBannerCollectionAdapterTests: XCTestCase {
         }
     }
 
+    func testMultiPageBannerFillsViewportAndResizesInsideNavigationHost() async {
+        let host = UIViewController()
+        let navigation = UINavigationController(rootViewController: host)
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
+        window.rootViewController = navigation
+        window.makeKeyAndVisible()
+        defer {
+            window.isHidden = true
+            window.rootViewController = nil
+        }
+        navigation.view.layoutIfNeeded()
+
+        let configuration = PTBannerConfiguration()
+        configuration.autoScroll = false
+        configuration.infiniteLoop = true
+        let banner = PTBannerView(viewConfig: configuration)
+        banner.frame = CGRect(x: 0, y: 0, width: 390, height: 390)
+        host.view.addSubview(banner)
+
+        let first = PTBannerModel()
+        first.media = UIImage()
+        let second = PTBannerModel()
+        second.media = UIImage()
+        banner.bannerModel = [first, second]
+
+        guard let collectionView = findCollectionView(in: banner) else {
+            XCTFail("Banner should embed a UICollectionView")
+            return
+        }
+
+        func awaitLayout(expectedHeight: CGFloat) async -> CGFloat? {
+            for _ in 0..<100 {
+                host.view.layoutIfNeeded()
+                banner.layoutIfNeeded()
+                collectionView.collectionViewLayout.invalidateLayout()
+                collectionView.layoutIfNeeded()
+                if collectionView.numberOfItems(inSection: 0) > 1,
+                   let attributes = collectionView.layoutAttributesForItem(
+                       at: IndexPath(item: 0, section: 0)),
+                   abs(attributes.frame.height - expectedHeight) < 0.5 {
+                    return attributes.frame.height
+                }
+                try? await Task.sleep(nanoseconds: 10_000_000)
+            }
+            return collectionView.layoutAttributesForItem(
+                at: IndexPath(item: 0, section: 0))?.frame.height
+        }
+
+        XCTAssertEqual(collectionView.contentInsetAdjustmentBehavior, .never)
+        XCTAssertEqual(collectionView.bounds.height, 390, accuracy: 0.5)
+        let originalHeight = await awaitLayout(expectedHeight: 390)
+        XCTAssertNotNil(originalHeight)
+        if let originalHeight { XCTAssertEqual(originalHeight, 390, accuracy: 0.5) }
+
+        // A width/height update must invalidate the pager instead of keeping
+        // the initial geometry or subtracting the navigation bar again.
+        banner.frame.size.height = 336
+        let resizedHeight = await awaitLayout(expectedHeight: 336)
+        XCTAssertNotNil(resizedHeight)
+        if let resizedHeight { XCTAssertEqual(resizedHeight, 336, accuracy: 0.5) }
+    }
+
     private func findCollectionView(in view: UIView) -> UICollectionView? {
         if let collectionView = view as? UICollectionView { return collectionView }
         for subview in view.subviews {
