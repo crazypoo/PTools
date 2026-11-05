@@ -173,8 +173,8 @@ final class PTBannerCollectionAdapterTests: XCTestCase {
         }
 
         XCTAssertEqual(collectionView.contentInsetAdjustmentBehavior, .never)
-        XCTAssertEqual(collectionView.bounds.height, 390, accuracy: 0.5)
         let originalHeight = await awaitLayout(expectedHeight: 390)
+        XCTAssertEqual(collectionView.bounds.height, 390, accuracy: 0.5)
         XCTAssertNotNil(originalHeight)
         if let originalHeight { XCTAssertEqual(originalHeight, 390, accuracy: 0.5) }
 
