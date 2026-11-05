@@ -161,11 +161,11 @@ final class PTRichTextUIKitLayoutTests: XCTestCase {
             guard let style = value.attribute(.paragraphStyle,
                                               at: 0,
                                               effectiveRange: nil) as? NSParagraphStyle else {
-                XCTFail("Missing paragraph style after bridge at variant \\(index)")
+                XCTFail("Missing paragraph style after bridge at variant \(index)")
                 continue
             }
-            XCTAssertEqual(style.alignment, .center, "variant \\(index)")
-            XCTAssertEqual(style.lineSpacing, 2, accuracy: 0.001, "variant \\(index)")
+            XCTAssertEqual(style.alignment, .center, "variant \(index)")
+            XCTAssertEqual(style.lineSpacing, 2, accuracy: 0.001, "variant \(index)")
         }
     }
 
@@ -209,7 +209,7 @@ final class PTRichTextUIKitLayoutTests: XCTestCase {
                       let style = displayed.attribute(.paragraphStyle,
                                                       at: 0,
                                                       effectiveRange: nil) as? NSParagraphStyle else {
-                    XCTFail("Missing displayed paragraph style in \\(name)")
+                    XCTFail("Missing displayed paragraph style in \(name)")
                     continue
                 }
                 XCTAssertEqual(style.lineSpacing, 8, accuracy: 0.001, name)
