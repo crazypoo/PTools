@@ -89,6 +89,40 @@ internal enum PTRichTextLabelRendering {
             let baseline = (attributes[.baselineOffset] as? NSNumber)?.doubleValue ?? 0
             lines.append("run=\(NSStringFromRange(range)) font=\(font?.fontName ?? "nil")/\(font?.pointSize ?? 0) paragraph=\(paragraph?.lineBreakMode.rawValue ?? -1)/\(paragraph?.lineSpacing ?? 0) baseline=\(baseline) attachment=\(attachment.map { NSCoder.string(for: $0.bounds) } ?? "nil") action=\(action)")
         }
+        // English: Reveal actual unlimited-line wrapping to distinguish lost attributes
+        // from a one-line label or an externally constrained cell height.
+        // 中文：显示完整内容的实际换行数，便于区分段落样式丢失与宿主高度/行数限制。
+        if displayed.length > 0, label.bounds.width > 0 {
+            let width = label.bounds.width
+            let unlimitedSize = label.sizeThatFits(
+                CGSize(width: width, height: .greatestFiniteMagnitude)
+            )
+            lines.append("sizeThatFitsUnlimitedHeight=\(NSCoder.string(for: unlimitedSize))")
+
+            let storage = NSTextStorage(attributedString: displayed)
+            let manager = NSLayoutManager()
+            let container = NSTextContainer(
+                size: CGSize(width: width, height: .greatestFiniteMagnitude)
+            )
+            container.lineFragmentPadding = 0
+            container.maximumNumberOfLines = 0
+            container.lineBreakMode = label.lineBreakMode
+            manager.addTextContainer(container)
+            storage.addLayoutManager(manager)
+            manager.ensureLayout(for: container)
+
+            var lineCount = 0
+            var glyphIndex = 0
+            while glyphIndex < manager.numberOfGlyphs {
+                var lineRange = NSRange(location: 0, length: 0)
+                _ = manager.lineFragmentUsedRect(forGlyphAt: glyphIndex,
+                                                 effectiveRange: &lineRange)
+                guard lineRange.length > 0 else { break }
+                lineCount += 1
+                glyphIndex = NSMaxRange(lineRange)
+            }
+            lines.append("unlimitedLineCount=\(lineCount)")
+        }
         return lines.joined(separator: "\n")
     }
     #endif
