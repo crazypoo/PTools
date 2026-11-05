@@ -142,6 +142,91 @@ final class PTRichTextUIKitLayoutTests: XCTestCase {
         XCTAssertNil(prepared.attribute(.baselineOffset, at: 0, effectiveRange: nil))
     }
 
+    // 中文：覆盖用户侧 paragraph(.alignment(.center), .lineSpacing(2)) 的原始用法与双向桥接。
+    func testParagraphLineSpacingSurvivesFoundationUIKitRoundTrip() {
+        let original = PTRichText(
+            "富文本段落第一行和第二行的间隔",
+            .foreground(.label),
+            .font(.systemFont(ofSize: 13)),
+            .paragraph(.alignment(.center), .lineSpacing(2))
+        )
+        let variants = [
+            original,
+            PTRichText(original.value),
+            PTRichText(original.attributedString),
+            PTRichText(wrap: .embedding(original), .foreground(.label))
+        ]
+        for (index, variant) in variants.enumerated() {
+            let value = variant.value
+            guard let style = value.attribute(.paragraphStyle,
+                                              at: 0,
+                                              effectiveRange: nil) as? NSParagraphStyle else {
+                XCTFail("Missing paragraph style after bridge at variant \\(index)")
+                continue
+            }
+            XCTAssertEqual(style.alignment, .center, "variant \\(index)")
+            XCTAssertEqual(style.lineSpacing, 2, accuracy: 0.001, "variant \\(index)")
+        }
+    }
+
+    // 中文：反复绑定 cell 时，新段落样式不能被上一次的 attributedText 覆盖。
+    func testPtApplyPreservesSpacingWhenReusingLabel() {
+        withLabel(width: 140, height: 240) { label in
+            label.pt_apply(richText: paragraphText(lineSpacing: 0),
+                           actionRegistry: PTTextActionRegistry())
+            label.pt_apply(richText: paragraphText(lineSpacing: 2),
+                           actionRegistry: PTTextActionRegistry())
+            guard let displayed = label.attributedText,
+                  let style = displayed.attribute(.paragraphStyle,
+                                                  at: 0,
+                                                  effectiveRange: nil) as? NSParagraphStyle else {
+                return XCTFail("UILabel lost paragraph style after pt_apply")
+            }
+            XCTAssertEqual(style.alignment, .center)
+            XCTAssertEqual(style.lineSpacing, 2, accuracy: 0.001)
+            XCTAssertGreaterThanOrEqual(lineCount(for: label), 3)
+        }
+    }
+
+    // 中文：只检查属性存在不够，必须验证实际换行布局的高度随 lineSpacing 增长。
+    func testLineSpacingChangesMeasuredHeightOnAllLabelHosts() {
+        let factories: [(String, () -> UILabel)] = [
+            ("UILabel", { UILabel() }),
+            ("PTRichTextStyledLabel", { PTRichTextStyledLabel() }),
+            ("PTRichTextFlowLabel", { PTRichTextFlowLabel() })
+        ]
+        for (name, factory) in factories {
+            withLabel(width: 140, height: 320, labelFactory: factory) { label in
+                label.pt_apply(richText: paragraphText(lineSpacing: 0))
+                let baseline = label.sizeThatFits(CGSize(width: 140,
+                                                         height: .greatestFiniteMagnitude)).height
+                label.pt_apply(richText: paragraphText(lineSpacing: 8))
+                let spaced = label.sizeThatFits(CGSize(width: 140,
+                                                       height: .greatestFiniteMagnitude)).height
+                XCTAssertGreaterThanOrEqual(lineCount(for: label), 3, name)
+                XCTAssertGreaterThan(spaced, baseline + 2, name)
+                guard let displayed = label.attributedText,
+                      let style = displayed.attribute(.paragraphStyle,
+                                                      at: 0,
+                                                      effectiveRange: nil) as? NSParagraphStyle else {
+                    XCTFail("Missing displayed paragraph style in \\(name)")
+                    continue
+                }
+                XCTAssertEqual(style.lineSpacing, 8, accuracy: 0.001, name)
+            }
+        }
+    }
+
+    private func paragraphText(lineSpacing: CGFloat) -> PTRichText {
+        let text = String(repeating: "这是一段用于验证富文本自动换行和行距计算是否生效的中文内容。", count: 3)
+        return PTRichText(text,
+                          .foreground(.label),
+                          .font(.systemFont(ofSize: 13)),
+                          .paragraph(.alignment(.center),
+                                     .lineSpacing(lineSpacing),
+                                     .lineBreakMode(.byWordWrapping)))
+    }
+
     private func makeRichText(offset: CGFloat, includesAction: Bool = false) -> PTRichText {
         let image = PTTextAttribute.image(makeImage(),
                                           .custom(size: CGSize(width: 24, height: 24)),
@@ -169,12 +254,14 @@ final class PTRichTextUIKitLayoutTests: XCTestCase {
 
     private func withLabel(width: CGFloat,
                            height: CGFloat,
+                           labelFactory: () -> UILabel = { UILabel() },
                            _ body: (UILabel) -> Void) {
         let window = UIWindow(frame: CGRect(x: 0, y: 0, width: width, height: height))
         let controller = UIViewController()
         window.rootViewController = controller
         window.isHidden = false
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: height))
+        let label = labelFactory()
+        label.frame = CGRect(x: 0, y: 0, width: width, height: height)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         controller.view.addSubview(label)
