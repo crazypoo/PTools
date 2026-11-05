@@ -1338,21 +1338,39 @@ extension PTCollectionView {
         if viewConfig.scrollConfiguration.style != .normal && !usesItemSnap {
             let style = viewConfig.scrollConfiguration.style
             let horizontal = style.isHorizontal
-            let pageWidth = max(1, environment.container.contentSize.width)
-            let pageHeight = max(1, environment.container.contentSize.height > 0
-                                 ? environment.container.contentSize.height
-                                 : viewConfig.itemHeight)
+            // Edge-to-edge pagers (including PTBannerView) own their whole
+            // viewport. The default compositional safe-area reference can
+            // otherwise shrink a 390 pt banner cell to 336 pt under a nav bar,
+            // even when UIScrollView automatic inset adjustment is disabled.
+            let fullViewport = collectionView.contentInsetAdjustmentBehavior == .never
+            let viewport = collectionView.bounds.size
+            let pageWidth = max(1, fullViewport && viewport.width > 0
+                                ? viewport.width
+                                : environment.container.contentSize.width)
+            let pageHeight = max(1, fullViewport && viewport.height > 0
+                                 ? viewport.height
+                                 : (environment.container.contentSize.height > 0
+                                    ? environment.container.contentSize.height
+                                    : viewConfig.itemHeight))
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                   heightDimension: horizontal ? .fractionalHeight(1) : .fractionalHeight(1))
+                                                   heightDimension: .fractionalHeight(1))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            let groupSize = NSCollectionLayoutSize(widthDimension: horizontal ? .absolute(pageWidth) : .fractionalWidth(1),
-                                                   heightDimension: horizontal ? .fractionalHeight(1) : .absolute(pageHeight))
+            // An absolute viewport height avoids resolving fractionalHeight
+            // against the layout environment's safe-area-reduced content size.
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: horizontal ? .absolute(pageWidth) : .fractionalWidth(1),
+                heightDimension: fullViewport || !horizontal ? .absolute(pageHeight) : .fractionalHeight(1))
             let group: NSCollectionLayoutGroup = horizontal
                 ? NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 : NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
             let pageSection = NSCollectionLayoutSection(group: group)
             pageSection.interGroupSpacing = 0
             pageSection.contentInsets = .zero
+            if fullViewport {
+                // The default is .automatic, which inherits .safeArea from
+                // UICollectionViewCompositionalLayoutConfiguration.
+                pageSection.contentInsetsReference = .none
+            }
             pageSection.orthogonalScrollingBehavior = .none
             return pageSection
         }
