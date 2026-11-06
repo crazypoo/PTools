@@ -77,6 +77,62 @@ final class PTNavigationRendererReconciliationTests: XCTestCase {
         XCTAssertEqual(decision, .noOp)
     }
 
+    // Changing the text width of an existing custom navigation button must
+    // invalidate the item layout without changing view identity or host geometry.
+    @MainActor
+    func testSameNavigationButtonResizesWithoutRendererChange() {
+        let button = UIView(frame: CGRect(x: 0, y: 0, width: 68, height: 32))
+        let item = PTNavBarItem()
+        item.rightViews = [button]
+        item.rightItemSpacing = 8
+        let initial = PTNavigationItemLayoutSignature(item: item)
+
+        button.bounds.size.width = 104
+        let resized = PTNavigationItemLayoutSignature(item: item)
+        XCTAssertNotEqual(initial, resized)
+        XCTAssertEqual(initial.right[0].identity, resized.right[0].identity)
+
+        let decision = PTNavigationRendererReconciliationPlanner.decision(for: .init(
+            currentMode: .customHorizontal,
+            targetMode: .customHorizontal,
+            itemAttached: true,
+            geometryChanged: false,
+            transitionActive: false,
+            itemLayoutChanged: initial != resized
+        ))
+        XCTAssertEqual(decision, .reconcile)
+
+        let stable = PTNavigationRendererReconciliationPlanner.decision(for: .init(
+            currentMode: .customHorizontal,
+            targetMode: .customHorizontal,
+            itemAttached: true,
+            geometryChanged: false,
+            transitionActive: false,
+            itemLayoutChanged: resized != PTNavigationItemLayoutSignature(item: item)
+        ))
+        XCTAssertEqual(stable, .noOp)
+    }
+
+    @MainActor
+    func testNavigationItemSpacingChangeAndTransitionDeferral() {
+        let item = PTNavBarItem()
+        item.rightViews = [UIView(frame: CGRect(x: 0, y: 0, width: 48, height: 32))]
+        item.rightItemSpacing = 4
+        let original = PTNavigationItemLayoutSignature(item: item)
+        item.rightItemSpacing = 12
+        XCTAssertNotEqual(original, PTNavigationItemLayoutSignature(item: item))
+
+        let decision = PTNavigationRendererReconciliationPlanner.decision(for: .init(
+            currentMode: .systemVertical,
+            targetMode: .systemVertical,
+            itemAttached: true,
+            geometryChanged: false,
+            transitionActive: true,
+            itemLayoutChanged: true
+        ))
+        XCTAssertEqual(decision, .deferUntilTransitionCompletes)
+    }
+
     func testDetachedItemReconcilesWithoutRendererChange() {
         let decision = PTNavigationRendererReconciliationPlanner.decision(for: .init(
             currentMode: .customHorizontal,
