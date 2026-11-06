@@ -61,6 +61,25 @@ enum PTNavigationGlassCompatibility {
     }
 }
 
+// English: Opt in to a stable desired navigation item size independently of Auto Layout's
+// currently rendered bounds. Dynamic titles may shrink while old width constraints remain.
+// 中文：动态导航项通过期望尺寸参与布局，不依赖可能仍被旧约束固定的 bounds。
+@MainActor
+public protocol PTNavigationItemSizeProviding: AnyObject {
+    var ptPreferredNavigationItemSize: CGSize { get }
+}
+
+@MainActor
+extension UIView {
+    var ptExplicitNavigationItemSize: CGSize? {
+        guard let provider = self as? PTNavigationItemSizeProviding else { return nil }
+        let size = provider.ptPreferredNavigationItemSize
+        guard size.width.isFinite, size.height.isFinite,
+              size.width > 0, size.height > 0 else { return nil }
+        return size
+    }
+}
+
 // English: Give UIKit-native bar-button custom views a stable intrinsic size.
 // Español: Proporciona un tamaño intrínseco estable a las vistas personalizadas de los botones nativos de UIKit.
 // 中文：为 UIKit 原生导航按钮的自定义视图提供稳定的固有尺寸。
@@ -71,10 +90,11 @@ final class PTNativeNavigationItemView: UIView {
 
     init(contentView: UIView) {
         self.contentView = contentView
+        let explicitSize = contentView.ptExplicitNavigationItemSize
         let boundsSize = contentView.bounds.size
         let intrinsicSize = contentView.intrinsicContentSize
-        let width = boundsSize.width > 0 ? boundsSize.width : intrinsicSize.width
-        let height = boundsSize.height > 0 ? boundsSize.height : intrinsicSize.height
+        let width = explicitSize?.width ?? (boundsSize.width > 0 ? boundsSize.width : intrinsicSize.width)
+        let height = explicitSize?.height ?? (boundsSize.height > 0 ? boundsSize.height : intrinsicSize.height)
         self.preferredSize = CGSize(
             width: width > 0 && width.isFinite ? width : PTAppBaseConfig.share.navBarButtonSize,
             height: height > 0 && height.isFinite ? height : PTAppBaseConfig.share.navBarButtonSize
@@ -134,7 +154,7 @@ struct PTNavigationItemLayoutSignature: Equatable {
         @MainActor
         init(_ view: UIView) {
             identity = ObjectIdentifier(view)
-            size = view.bounds.size
+            size = view.ptExplicitNavigationItemSize ?? view.bounds.size
         }
     }
 
