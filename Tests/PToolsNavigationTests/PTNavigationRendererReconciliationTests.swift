@@ -40,6 +40,18 @@ private struct FakeNavigationRendererOwner {
     }
 }
 
+@MainActor
+private final class RequestedSizeNavigationButton: UIView, PTNavigationItemSizeProviding {
+    var ptPreferredNavigationItemSize: CGSize
+
+    init(width: CGFloat) {
+        ptPreferredNavigationItemSize = CGSize(width: width, height: 32)
+        super.init(frame: CGRect(x: 0, y: 0, width: width, height: 32))
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+}
+
 final class PTNavigationRendererReconciliationTests: XCTestCase {
     func testCustomToSystemReconciles() {
         let decision = PTNavigationRendererReconciliationPlanner.decision(for: .init(
@@ -75,6 +87,32 @@ final class PTNavigationRendererReconciliationTests: XCTestCase {
         ))
 
         XCTAssertEqual(decision, .noOp)
+    }
+
+    @MainActor
+    func testExplicitItemWidthOverridesStaleStackConstraintAndNativeWrapper() {
+        let button = RequestedSizeNavigationButton(width: 100)
+        let item = PTNavBarItem()
+        item.rightViews = [button]
+        let container = PTNavigationBarContainer(frame: CGRect(x: 0, y: 0, width: 390, height: 54))
+
+        let initialWidth = container.configureNavigationBarItems(
+            [button], in: container.rightContainer, spacing: 8)
+        XCTAssertEqual(initialWidth, 100, accuracy: 0.01)
+
+        // The previous stack width remains 100 until the navigation layout is reapplied.
+        button.ptPreferredNavigationItemSize = CGSize(width: 50, height: 32)
+        XCTAssertEqual(button.bounds.width, 100, accuracy: 0.01)
+        let changed = PTNavigationItemLayoutSignature(item: item)
+        XCTAssertEqual(changed.right[0].size.width, 50, accuracy: 0.01)
+
+        let updatedWidth = container.configureNavigationBarItems(
+            [button], in: container.rightContainer, spacing: 8)
+        XCTAssertEqual(updatedWidth, 50, accuracy: 0.01)
+
+        // Duo's UIKit-managed bar item must use the same requested size.
+        let native = PTNativeNavigationItemView(contentView: button)
+        XCTAssertEqual(native.intrinsicContentSize.width, 50, accuracy: 0.01)
     }
 
     // Changing the text width of an existing custom navigation button must
