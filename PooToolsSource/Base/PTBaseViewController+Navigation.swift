@@ -470,6 +470,12 @@ extension PTNavigationBarContainer {
     // 中文：在把自定义按钮重新加入导航栏层级前，先快照它们的尺寸。
     func navigationBarItemSize(for view: UIView) -> CGSize {
         let cacheKey = ObjectIdentifier(view)
+        // Explicit requested size wins over the last laid-out bounds. A previous
+        // SnapKit width constraint can otherwise undo a language button shrink.
+        if let explicitSize = view.ptExplicitNavigationItemSize {
+            preferredItemSizes[cacheKey] = explicitSize
+            return explicitSize
+        }
         let cachedSize = preferredItemSizes[cacheKey]
         let boundsSize = view.bounds.size
         let frameSize = view.frame.size
