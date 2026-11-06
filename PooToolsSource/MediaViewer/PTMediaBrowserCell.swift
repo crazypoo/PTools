@@ -171,18 +171,22 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         }
         contentScrolView.addSubviews([imageView,livePhoto])
         
+        // The overlays are siblings of the scroll view. Anchor them once to its
+        // center; Auto Layout then follows every viewport change automatically.
+        // Rebuilding these constraints during layout/dismissal can conflict with
+        // reloadButton's explicit width/height constraints.
         playBtn.snp.makeConstraints {
-            $0.center.equalToSuperview()
+            $0.center.equalTo(contentScrolView)
             $0.size.equalTo(viewConfig.playButtonImageSize)
         }
 
         loading.snp.makeConstraints {
-            $0.center.equalToSuperview()
+            $0.center.equalTo(contentScrolView)
             $0.size.equalTo(50)
         }
 
         reloadButton.snp.makeConstraints {
-            $0.center.equalToSuperview()
+            $0.center.equalTo(contentScrolView)
         }
 
         livePhoto.isHidden = true
@@ -224,20 +228,12 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         }
         lastAdaptiveViewportSignature = signature
 
-        contentScrolView.snp.remakeConstraints { make in
+        // Update only the viewport's existing edge constraints. Its sibling
+        // controls already track its center without being detached/reinstalled.
+        contentScrolView.snp.updateConstraints { make in
             make.left.equalToSuperview().offset(visibleRect.minX)
             make.right.equalToSuperview().inset(max(0, contentView.bounds.width - visibleRect.maxX))
             make.top.bottom.equalToSuperview()
-        }
-        [playBtn, loading, reloadButton].forEach { view in
-            view.snp.remakeConstraints { make in
-                make.center.equalTo(contentScrolView)
-                if view === playBtn {
-                    make.size.equalTo(viewConfig.playButtonImageSize)
-                } else if view === loading {
-                    make.size.equalTo(50)
-                }
-            }
         }
 
         contentView.layoutIfNeeded()
