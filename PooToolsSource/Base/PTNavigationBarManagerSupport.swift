@@ -124,6 +124,33 @@ public final class PTNavBarItem {
     public var barColorStyle:PTNavigationBarStyle = .transparent
 }
 
+// English: Track the actual custom item geometry independently of renderer and host bounds.
+// 中文：独立记录按钮实例、尺寸及间距；同一按钮宽度变化也必须触发布局。
+@MainActor
+struct PTNavigationItemLayoutSignature: Equatable {
+    struct Item: Equatable {
+        let identity: ObjectIdentifier
+        let size: CGSize
+
+        init(_ view: UIView) {
+            identity = ObjectIdentifier(view)
+            size = view.bounds.size
+        }
+    }
+
+    let left: [Item]
+    let right: [Item]
+    let leftSpacing: CGFloat
+    let rightSpacing: CGFloat
+
+    init(item: PTNavBarItem) {
+        left = item.leftView.map(Item.init)
+        right = item.rightViews.map(Item.init)
+        leftSpacing = item.leftItemSpacing
+        rightSpacing = item.rightItemSpacing
+    }
+}
+
 // English: Keep renderer ownership decisions as pure values so lifecycle branches can be tested without UIKit.
 // Español: Mantiene las decisiones de propiedad del renderizador como valores puros para probar el ciclo de vida sin UIKit.
 // 中文：将渲染器所有权决策保持为纯值，便于脱离 UIKit 测试生命周期分支。
@@ -142,6 +169,7 @@ struct PTNavigationRendererReconciliationInput: Equatable, Sendable {
     let itemAttached: Bool
     let geometryChanged: Bool
     let transitionActive: Bool
+    var itemLayoutChanged: Bool = false
 }
 
 enum PTNavigationRendererReconciliationDecision: Equatable, Sendable {
@@ -155,7 +183,8 @@ enum PTNavigationRendererReconciliationPlanner {
         if input.transitionActive {
             return .deferUntilTransitionCompletes
         }
-        if input.currentMode != input.targetMode || !input.itemAttached || input.geometryChanged {
+        if input.currentMode != input.targetMode || !input.itemAttached ||
+            input.geometryChanged || input.itemLayoutChanged {
             return .reconcile
         }
         return .noOp
