@@ -1340,11 +1340,12 @@ public final class PTNavigationBarManager:NSObject {
         item.isConfigured = true
         itemCache.setObject(item, forKey: vc)
         
-        // 如果当前正在显示，立即刷新
-        if vc === currentVC {
-            if let nav = vc.navigationController {
-                _ = reconcileNavigationBar(in: nav, reason: .itemUpdate)
-            }
+        // Update the navigation stack that owns this controller, not a global
+        // currentVC which may point to a language sheet in another stack.
+        // A pushed controller is intentionally left for navigation restoration.
+        if let nav = vc.navigationController,
+           nav.visibleViewController === vc {
+            _ = reconcileNavigationBar(in: nav, reason: .itemUpdate)
         }
     }
     
