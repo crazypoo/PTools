@@ -124,6 +124,7 @@ public final class PTNavigationBarManager:NSObject {
         var pendingReason: PTNavigationReconciliationReason?
         var generation: UInt64 = 0
         var lastGeometrySignature: String?
+        var lastItemLayoutSignature: PTNavigationItemLayoutSignature?
         var lastDiagnosticSignature: String?
         var pendingReconciliationScheduled = false
     }
@@ -1102,6 +1103,10 @@ public final class PTNavigationBarManager:NSObject {
         let existingContainer = containerMap.object(forKey: nav)
         let geometrySignature = navigationGeometrySignature(for: nav, container: existingContainer)
         let geometryChanged = state.lastGeometrySignature != geometrySignature
+        // A reused UIView may have new explicit bounds (for example, localized button text)
+        // without changing the navigation host geometry or the arranged view identity.
+        let itemLayoutSignature = PTNavigationItemLayoutSignature(item: item)
+        let itemLayoutChanged = state.lastItemLayoutSignature != itemLayoutSignature
         let itemAttached = useSystemRenderer
             ? isNativeItemAttached(item, navigationController: nav, viewController: viewController)
             : (existingContainer.map {
@@ -1112,7 +1117,8 @@ public final class PTNavigationBarManager:NSObject {
             targetMode: targetMode,
             itemAttached: itemAttached,
             geometryChanged: geometryChanged,
-            transitionActive: false
+            transitionActive: false,
+            itemLayoutChanged: itemLayoutChanged
         ))
         guard decision == .reconcile else {
             if state.pendingReason == reason { state.pendingReason = nil }
@@ -1159,6 +1165,7 @@ public final class PTNavigationBarManager:NSObject {
         }
         state.lastGeometrySignature = navigationGeometrySignature(for: nav,
                                                                    container: containerMap.object(forKey: nav))
+        state.lastItemLayoutSignature = PTNavigationItemLayoutSignature(item: item)
         if state.pendingReason == reason { state.pendingReason = nil }
         rememberCurrent(nav, viewController: viewController)
         StatusBarManager.shared.update(with: item.barColorStyle)
