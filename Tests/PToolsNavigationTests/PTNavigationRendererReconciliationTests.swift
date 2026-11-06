@@ -8,6 +8,7 @@
 //
 
 import XCTest
+import UIKit
 @testable import ptools
 
 // English: Model the minimum renderer owner state needed to exercise repeated lifecycle signals.
