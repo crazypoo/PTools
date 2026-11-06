@@ -126,12 +126,12 @@ public final class PTNavBarItem {
 
 // English: Track the actual custom item geometry independently of renderer and host bounds.
 // 中文：独立记录按钮实例、尺寸及间距；同一按钮宽度变化也必须触发布局。
-@MainActor
 struct PTNavigationItemLayoutSignature: Equatable {
     struct Item: Equatable {
         let identity: ObjectIdentifier
         let size: CGSize
 
+        @MainActor
         init(_ view: UIView) {
             identity = ObjectIdentifier(view)
             size = view.bounds.size
@@ -143,6 +143,7 @@ struct PTNavigationItemLayoutSignature: Equatable {
     let leftSpacing: CGFloat
     let rightSpacing: CGFloat
 
+    @MainActor
     init(item: PTNavBarItem) {
         left = item.leftView.map(Item.init)
         right = item.rightViews.map(Item.init)
