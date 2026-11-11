@@ -1106,8 +1106,10 @@ extension PTStickerEngine: PTStickerViewDelegate {
         
         let ashbinView = context.engineAshbinView
         ashbinView.layer.removeAllAnimations()
-        ashbinView.isHidden = false
-        
+        let isDragging = sticker.panGes.state == .began || sticker.panGes.state == .changed
+        ashbinView.isHidden = !isDragging
+        guard isDragging else { return }
+
         var frame = ashbinView.frame
         let diff = context.engineMainView.frame.height - frame.minY
         frame.origin.y += diff
@@ -1126,10 +1128,15 @@ extension PTStickerEngine: PTStickerViewDelegate {
 
     public func stickerOnOperation(_ sticker: PTBaseStickerView, panGes: UIPanGestureRecognizer) {
         guard let context = context else { return }
-        let point = panGes.location(in: context.engineMainView)
         let ashbinView = context.engineAshbinView
         let ashbinImgView = context.engineAshbinImgView
-        
+        guard panGes.state == .changed else {
+            ashbinImgView.isHighlighted = false
+            sticker.alpha = 1
+            return
+        }
+        let point = panGes.location(in: context.engineMainView)
+
         if ashbinView.frame.contains(point) {
             ashbinView.backgroundColor = .gray
             ashbinImgView.isHighlighted = true
@@ -1159,18 +1166,25 @@ extension PTStickerEngine: PTStickerViewDelegate {
         var endState: PTBaseStickertState? = sticker.state
         let point = panGes.location(in: context.engineMainView)
         
-        if ashbinView.frame.contains(point) {
+        if panGes.state == .ended && ashbinView.frame.contains(point) {
             sticker.moveToAshbin()
             endState = nil
+            if currentSelectedSticker === sticker { currentSelectedSticker = nil }
         }
         
-        // 🌟 智能区分：存入对应类型的撤销栈记录
-        if sticker is PTTextStickerView {
-            context.engineEditorManager.storeAction(.sticker(oldState: preStickerState, newState: endState))
-        } else {
-            context.engineEditorManager.storeAction(.imageSticker(oldState: preStickerState, newState: endState))
-        }
+        let oldState = preStickerState
         preStickerState = nil
+        if let old = oldState, let new = endState,
+           old.originFrame == new.originFrame,
+           old.gesScale == new.gesScale,
+           old.gesRotation == new.gesRotation,
+           old.totalTranslationPoint == new.totalTranslationPoint {
+            // An unchanged gesture must not create an Undo entry.
+        } else if sticker is PTTextStickerView {
+            context.engineEditorManager.storeAction(.sticker(oldState: oldState, newState: endState))
+        } else {
+            context.engineEditorManager.storeAction(.imageSticker(oldState: oldState, newState: endState))
+        }
         
         stickersContainer.subviews.forEach { view in
             (view as? PTStickerViewAdditional)?.gesIsEnabled = true
@@ -1188,33 +1202,48 @@ extension PTStickerEngine: PTStickerViewDelegate {
     }
     
     public func sticker(_ textSticker: PTTextStickerView, editText text: String) {
-        showInputTextVC(text, textColor: textSticker.textColor, font: textSticker.font, style: textSticker.style) { [weak self] text, textColor, font, image, style in
-            guard let self = self, let image = image, !text.isEmpty else {
+        showInputTextVC(text, textColor: textSticker.textColor, font: textSticker.font, style: textSticker.style) { [weak self, weak textSticker] text, textColor, font, image, style in
+            guard let self, let textSticker, let context = self.context,
+                  textSticker.superview != nil else { return }
+            let oldState = textSticker.state
+            if text.isEmpty || image == nil {
                 textSticker.moveToAshbin()
+                if self.currentSelectedSticker === textSticker { self.currentSelectedSticker = nil }
+                context.engineEditorManager.storeAction(.sticker(oldState: oldState, newState: nil))
                 return
             }
-            textSticker.startTimer()
-            guard textSticker.text != text || textSticker.textColor != textColor || textSticker.style != style else { return }
-            guard let context = self.context else { return }
-            
+            guard let image else { return }
+            guard textSticker.text != text
+                    || textSticker.textColor != textColor
+                    || textSticker.style != style
+                    || textSticker.font?.fontName != font.fontName
+                    || textSticker.font?.pointSize != font.pointSize else {
+                textSticker.startTimer()
+                return
+            }
+
             let maxWidth = context.engineMainView.bounds.width
-            let maxLimitSize = CGSize(width: maxWidth * 0.5, height: context.engineMainView.bounds.height * 0.5)
-            
+            let maxLimitSize = CGSize(width: maxWidth * 0.5,
+                                      height: context.engineMainView.bounds.height * 0.5)
             textSticker.text = text
             textSticker.textColor = textColor
             textSticker.font = font
             textSticker.style = style
             textSticker.image = image
             textSticker.changeSize(to: PTTextStickerView.calculateSize(image: image, maxLimitSize: maxLimitSize))
+            textSticker.startTimer()
+            context.engineEditorManager.storeAction(.sticker(oldState: oldState, newState: textSticker.state))
         }
     }
-    
+
     public func sticker(_ imageSticker: PTImageStickerView, editImage currentImage: UIImage) {
         onRequestImageSelection? { [weak self, weak imageSticker] newImage in
             guard let self = self,
                   let context = self.context,
                   let imageSticker = imageSticker,
                   let newImage = newImage else { return }
+            guard imageSticker.superview != nil, imageSticker.image !== newImage else { return }
+            let oldState = imageSticker.state
             imageSticker.startTimer()
             imageSticker.image = newImage
             
@@ -1235,6 +1264,7 @@ extension PTStickerEngine: PTStickerViewDelegate {
                     imageSticker.center.y += (safeTopMargin - visualTopY)
                 }
             }
+            context.engineEditorManager.storeAction(.imageSticker(oldState: oldState, newState: imageSticker.state))
         }
     }
 }

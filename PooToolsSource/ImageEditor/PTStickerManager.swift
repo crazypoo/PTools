@@ -580,7 +580,6 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         } else if ges.state == .ended || ges.state == .cancelled {
             totalTranslationPoint.x += point.x
             totalTranslationPoint.y += point.y
-            setOperation(false)
             let direction = direction(for: originAngle)
             if direction == .right {
                 originTransform = originTransform.translatedBy(x: gesTranslationPoint.y, y: -gesTranslationPoint.x)
@@ -592,6 +591,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
                 originTransform = originTransform.translatedBy(x: gesTranslationPoint.x, y: gesTranslationPoint.y)
             }
             gesTranslationPoint = .zero
+            setOperation(false)
         }
     }
     
@@ -745,7 +745,6 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
                   startDistance.isFinite, startDistance > 0 else {
                 gesTranslationPoint = .zero
                 setOperation(false)
-                startTimer()
                 return
             }
             // 6. 拖拽结束时，将临时补偿位移固化到基础矩阵中
@@ -757,7 +756,6 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
             guard actualScaleRatio.isFinite, deltaCX.isFinite, deltaCY.isFinite else {
                 gesTranslationPoint = .zero
                 setOperation(false)
-                startTimer()
                 return
             }
             
@@ -777,7 +775,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
             totalTranslationPoint.y += deltaCY
             
             gesTranslationPoint = .zero
-            startTimer()
+            setOperation(false)
         }
     }
     
@@ -799,11 +797,12 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
         } else if ges.state == .changed {
             // 计算当前手势偏离初始手势的角度差，并累加到初始旋转角上
             let currentAngle = atan2(point.y - center.y, point.x - center.x)
-            gesRotation = startGesRotation + (currentAngle - startAngle)
+            let delta = currentAngle - startAngle
+            gesRotation = startGesRotation + atan2(sin(delta), cos(delta))
             updateTransform()
             
-        } else if ges.state == .ended || ges.state == .cancelled {
-            startTimer()
+        } else if ges.state == .ended || ges.state == .cancelled || ges.state == .failed {
+            setOperation(false)
         }
     }
     
