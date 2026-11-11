@@ -70,9 +70,9 @@ class PTImageCutRatioCell: PTBaseNormalCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard let ratio = ratio, let image = image else {
-            return
-        }
+        guard let ratio = ratio, let image = image,
+              image.size.width.isFinite, image.size.height.isFinite,
+              image.size.width > 0, image.size.height > 0 else { return }
         
         var w: CGFloat = 0, h: CGFloat = 0
         let imageMaxW = min(max(1, bounds.width - 15), max(1, bounds.height - 28))

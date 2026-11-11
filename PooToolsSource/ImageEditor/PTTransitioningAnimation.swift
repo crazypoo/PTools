@@ -10,7 +10,7 @@ import UIKit
 
 class PTTransitioningAnimation: NSObject, UIViewControllerAnimatedTransitioning {
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        0.25
+        0.3
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -22,13 +22,23 @@ class PTTransitioningAnimation: NSObject, UIViewControllerAnimatedTransitioning 
         let containerView = transitionContext.containerView
         containerView.addSubview(toVC.view)
         
+        guard let image = fromVC.dismissAnimateImage,
+              fromVC.dismissAnimateFromRect.width > 0,
+              fromVC.dismissAnimateFromRect.height > 0,
+              toVC.originalFrame.width > 0,
+              toVC.originalFrame.height > 0 else {
+            toVC.finishClipDismissAnimate()
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+            return
+        }
+
         let imageView = UIImageView(frame: fromVC.dismissAnimateFromRect)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = fromVC.dismissAnimateImage
+        imageView.image = image
         containerView.addSubview(imageView)
         
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
             imageView.frame = toVC.originalFrame
         }) { _ in
             toVC.finishClipDismissAnimate()

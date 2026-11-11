@@ -405,6 +405,8 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
             }
             
         } else if pan.state == .changed {
+            // A failed/invalid start must never extend the previous committed stroke.
+            guard hasActiveStroke else { return }
             if isEraserMode {
                 let transform = context.calculateEraserTransform(viewTransform: drawingImageView.transform, viewSize: drawingImageView.frame.size)
                 context.engineEraserCircleView.center = point.applying(transform)
@@ -417,6 +419,7 @@ public class PTDrawEngine: NSObject, PTEditImageToolEngine {
         } else if pan.state == .cancelled || pan.state == .ended {
             onInteractStateChanged?(false)
             context.engineEraserCircleView.isHidden = true
+            guard hasActiveStroke else { return }
             guard let path = drawPaths.last else {
                 committedDrawingImage = nil
                 hasActiveStroke = false
@@ -592,6 +595,7 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
             }
             
         } else if pan.state == .changed {
+            guard hasActiveStroke else { return }
             if isEraserMode {
                 let transform = context.calculateEraserTransform(viewTransform: mosaicContainerView.transform, viewSize: mosaicContainerView.frame.size)
                 context.engineEraserCircleView.center = point.applying(transform)
@@ -604,6 +608,7 @@ public class PTMosaicEngine: NSObject, PTEditImageToolEngine {
         } else if pan.state == .cancelled || pan.state == .ended {
             onInteractStateChanged?(false)
             context.engineEraserCircleView.isHidden = true
+            guard hasActiveStroke else { return }
             guard let path = mosaicPaths.last else {
                 committedMaskImage = nil
                 hasActiveStroke = false
