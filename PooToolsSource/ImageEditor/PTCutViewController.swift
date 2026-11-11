@@ -556,7 +556,7 @@ class PTCutViewController: PTBaseViewController {
         }
         
         mainScrollView.minimumZoomScale = originalScale
-        mainScrollView.maximumZoomScale = 10
+        mainScrollView.maximumZoomScale = max(10, originalScale, clipRectZoomScale * originalScale)
         // 设置当前zoom scale
         let zoomScale = clipRectZoomScale * originalScale
         let contentSize = CGSize(width: editImage.size.width * zoomScale,
@@ -603,8 +603,8 @@ class PTCutViewController: PTBaseViewController {
         
         let scale = max(newFrame.height / editImage.size.height, newFrame.width / editImage.size.width)
         guard scale.isFinite, scale > 0 else { return }
+        mainScrollView.maximumZoomScale = max(mainScrollView.maximumZoomScale, scale)
         mainScrollView.minimumZoomScale = scale
-        mainScrollView.zoomScale = mainScrollView.zoomScale
     }
     
     @objc private func cancelBtnClick() {
@@ -738,58 +738,50 @@ class PTCutViewController: PTBaseViewController {
     }
     
     private func moveClipContentToCenter() {
-        let maxClipRect = maxClipFrame
-        var clipRect = clipBoxFrame
-        
-        guard maxClipRect.width.isFinite, maxClipRect.height.isFinite,
-              maxClipRect.width > 0, maxClipRect.height > 0,
-              clipRect.width.isFinite, clipRect.height.isFinite,
-              clipRect.width >= CGFloat.ulpOfOne, clipRect.height >= CGFloat.ulpOfOne else {
-            return
-        }
-        
-        let scale = min(maxClipRect.width / clipRect.width, maxClipRect.height / clipRect.height)
-        guard scale.isFinite, scale > 0 else { return }
-        
-        let focusPoint = CGPoint(x: clipRect.midX, y: clipRect.midY)
-        let midPoint = CGPoint(x: maxClipRect.midX, y: maxClipRect.midY)
-        
-        clipRect.size.width = ceil(clipRect.width * scale)
-        clipRect.size.height = ceil(clipRect.height * scale)
-        guard clipRect.width.isFinite, clipRect.height.isFinite,
-              clipRect.width > 0, clipRect.height > 0 else { return }
-        clipRect.origin.x = maxClipRect.minX + ceil((maxClipRect.width - clipRect.width) / 2)
-        clipRect.origin.y = maxClipRect.minY + ceil((maxClipRect.height - clipRect.height) / 2)
-        
-        var contentTargetPoint = CGPoint.zero
-        contentTargetPoint.x = (focusPoint.x + mainScrollView.contentOffset.x) * scale
-        contentTargetPoint.y = (focusPoint.y + mainScrollView.contentOffset.y) * scale
-        guard contentTargetPoint.x.isFinite, contentTargetPoint.y.isFinite else { return }
-        
-        var offset = CGPoint(x: contentTargetPoint.x - midPoint.x, y: contentTargetPoint.y - midPoint.y)
-        guard offset.x.isFinite, offset.y.isFinite else { return }
-        offset.x = max(-clipRect.minX, offset.x)
-        offset.y = max(-clipRect.minY, offset.y)
-        UIView.animate(withDuration: 0.3) {
-            if scale < 1 - CGFloat.ulpOfOne || scale > 1 + CGFloat.ulpOfOne {
-                self.mainScrollView.zoomScale *= scale
-                self.mainScrollView.zoomScale = min(self.mainScrollView.maximumZoomScale, self.mainScrollView.zoomScale)
-            }
+        let available = maxClipFrame
+        let current = clipBoxFrame
+        guard available.width.isFinite, available.height.isFinite,
+              available.width > 0, available.height > 0,
+              current.width.isFinite, current.height.isFinite,
+              current.width > 0, current.height > 0,
+              mainScrollView.zoomScale.isFinite, mainScrollView.zoomScale > 0 else { return }
 
-            if self.mainScrollView.zoomScale < self.mainScrollView.maximumZoomScale - CGFloat.ulpOfOne {
-                offset.x = min(max(0, self.mainScrollView.contentSize.width - clipRect.maxX), offset.x)
-                offset.y = min(max(0, self.mainScrollView.contentSize.height - clipRect.maxY), offset.y)
-                self.mainScrollView.contentOffset = offset
-            }
+        let requestedScale = min(available.width / current.width, available.height / current.height)
+        let oldZoom = mainScrollView.zoomScale
+        let zoomLimit = max(oldZoom, mainScrollView.maximumZoomScale)
+        let scale = min(requestedScale, zoomLimit / oldZoom)
+        guard scale.isFinite, scale > 0 else { return }
+
+        let destination = CGRect(
+            x: available.midX - current.width * scale / 2,
+            y: available.midY - current.height * scale / 2,
+            width: current.width * scale,
+            height: current.height * scale
+        )
+        let oldOffset = mainScrollView.contentOffset
+        let focus = CGPoint(x: current.midX, y: current.midY)
+
+        UIView.animate(withDuration: 0.3) {
+            // 先同步裁剪框及 inset，再计算新的 zoom 和 offset，避免旧 inset 导致跳变。
+            self.changeClipBoxFrame(newFrame: destination)
+            let targetZoom = min(self.mainScrollView.maximumZoomScale, max(self.mainScrollView.minimumZoomScale, oldZoom * scale))
+            self.mainScrollView.zoomScale = targetZoom
+            self.mainScrollView.contentOffset = PTClipEngine.centeredContentOffset(
+                focusInViewport: focus,
+                oldContentOffset: oldOffset,
+                oldZoomScale: oldZoom,
+                newZoomScale: targetZoom,
+                newClipFrame: destination,
+                contentSize: self.mainScrollView.contentSize
+            )
             self.rotateBtn.alpha = 1
             self.ratioCollectionView.alpha = 1
             if !self.dimClippedAreaDuringAdjustments {
                 self.shadowView.alpha = 1
             }
-            self.changeClipBoxFrame(newFrame: clipRect)
         }
     }
-    
+
     private func clipImage() -> (clipImage: UIImage, editRect: CGRect) {
         let frame = convertClipRectToEditImageRect()
         let clipImage = editImage.pt.clipImage(angle: 0, editRect: frame, isCircle: selectedRatio.isCircle)
@@ -839,15 +831,7 @@ extension PTCutViewController {
         guard gestureRecognizer == gridPanGes else {
             return true
         }
-        let point = gestureRecognizer.location(in: view)
-        let frame = overlayView.frame
-        let innerFrame = frame.insetBy(dx: 22, dy: 22)
-        let outerFrame = frame.insetBy(dx: -22, dy: -22)
-        
-        if innerFrame.contains(point) || !outerFrame.contains(point) {
-            return false
-        }
-        return true
+        return !isRotating && clipEngine.canBeginPan(at: gestureRecognizer.location(in: view))
     }
 }
 

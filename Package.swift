@@ -1401,7 +1401,7 @@ let package = Package(
         ),
         .testTarget(
             name: "PToolsMediaTests",
-            dependencies: ["ptools", "PooToolsMediaViewer"],
+            dependencies: ["ptools", "PooToolsMediaViewer", "PooToolsImageEditor"],
             path: "Tests/PToolsMediaTests"
         ),
         // English: Keep PhotoPicker selection-policy tests next to the iOS PhotoKit target.
