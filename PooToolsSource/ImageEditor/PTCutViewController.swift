@@ -39,8 +39,9 @@ class PTCutViewController: PTBaseViewController {
     
     private lazy var mainScrollView: UIScrollView = {
         let view = UIScrollView()
-        view.alwaysBounceVertical = true
-        view.alwaysBounceHorizontal = true
+        view.alwaysBounceVertical = false
+        view.alwaysBounceHorizontal = false
+        view.bounces = false
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
         view.contentInsetAdjustmentBehavior = .never
@@ -252,6 +253,7 @@ class PTCutViewController: PTBaseViewController {
         
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        cleanTimer()
         changeStatusBar(type: .Auto)
     }
 
@@ -453,14 +455,13 @@ class PTCutViewController: PTBaseViewController {
     
     /// 计算最大裁剪范围
     private func calculateMaxClipFrame() -> CGRect {
-        var insets = view.safeAreaInsets
-        insets.top += 20
-        var rect = CGRect.zero
-        rect.origin.x = 15
-        rect.origin.y = insets.top
-        rect.size.width = max(0, view.bounds.width - 15 * 2)
-        rect.size.height = max(0, view.bounds.height - insets.top - 90 - PTCutViewController.clipRatioItemSize.height - 25)
-        return rect
+        let top = view.safeAreaInsets.top + 20
+        let ratioTop = ratioCollectionView.frame.minY
+        let fallbackTop = view.bounds.maxY - view.safeAreaInsets.bottom - 54 - Self.cutRatioHeight
+        let bottom = (ratioTop > top ? ratioTop : fallbackTop) - 24
+        return CGRect(x: 15, y: top,
+                      width: max(0, view.bounds.width - 30),
+                      height: max(0, bottom - top))
     }
     
     private func calculateClipRect() {
@@ -630,6 +631,8 @@ class PTCutViewController: PTBaseViewController {
     }
     
     @objc private func doneBtnClick() {
+        guard !isRotating else { return }
+        cleanTimer()
         let image = clipImage()
         dismissAnimateFromRect = clipBoxFrame
         dismissAnimateImage = image.clipImage

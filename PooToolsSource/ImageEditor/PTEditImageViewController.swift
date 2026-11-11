@@ -46,6 +46,7 @@ public class PTEditImageViewController: PTBaseViewController {
     private var lastContainerScrollSize = CGSize.zero
     private var lastContainerEditRect = CGRect.null
     private var lastContainerAngle: CGFloat = .nan
+    private var lastContainerIsCircle = false
 
     private lazy var thumbnailImage: UIImage? = {
         let fixLength: CGFloat = 200
@@ -118,34 +119,23 @@ public class PTEditImageViewController: PTBaseViewController {
             }
             return nil
         }
-        view.collectionDidSelect = { collection,sectionModel,indexPath in
-            // 找出之前被选中的那个 Model 的索引 (假设你记录了，或者遍历找一下)
-            guard let oldSelectedIndex = self.toolsModel.firstIndex(where: { $0.isSelected }) else {
-                self.toolsModel[indexPath.row].isSelected = true
-                self.selectedTool(indexPath: indexPath)
-                return
+        view.collectionDidSelect = { [weak self] _, _, indexPath in
+            guard let self, self.toolsModel.indices.contains(indexPath.row) else { return }
+            let previous = self.toolsModel.firstIndex(where: { $0.isSelected })
+            let shouldSelect = !self.toolsModel[indexPath.row].isSelected
+            for index in self.toolsModel.indices {
+                self.toolsModel[index].isSelected = shouldSelect && index == indexPath.row
             }
-            let oldIndexPath = IndexPath(row: oldSelectedIndex, section: indexPath.section)
-            
-            // 只有当点击的不是同一个才执行
-            if oldSelectedIndex != indexPath.row {
-                // 修改本地数据源状态
-                self.toolsModel[oldSelectedIndex].isSelected = false
-                self.toolsModel[indexPath.row].isSelected = true
-                
-                // 取出这两个位置对应的底层 PTRows 模型
-                if let oldRowModel = self.toolCollectionView.getRow(at: oldIndexPath),
-                   let newRowModel = self.toolCollectionView.getRow(at: indexPath) {
-                    
-                    // 🌟 关键：只把这两个 Row 传进去刷新！
-                    // 因为没有清空整个 Layout 缓存，滚动条绝对不会跳动，且性能极高！
-                    self.toolCollectionView.reloadRows([oldRowModel, newRowModel], in: indexPath.section)
-                }
-                self.selectedTool(indexPath: indexPath)
-            } else {
-                self.toolsModel[indexPath.row].isSelected = false
-                self.selectedTool(indexPath: indexPath)
+
+            // First selection and deselection need the same row refresh as switching tools.
+            let indices = Set([previous, indexPath.row].compactMap { $0 })
+            let rows = indices.compactMap {
+                self.toolCollectionView.getRow(at: IndexPath(row: $0, section: indexPath.section))
             }
+            if !rows.isEmpty {
+                self.toolCollectionView.reloadRows(rows, in: indexPath.section)
+            }
+            self.selectedTool(indexPath: indexPath)
         }
         return view
     }()
@@ -320,6 +310,7 @@ public class PTEditImageViewController: PTBaseViewController {
             if self.drawEngine.drawPaths.isEmpty,
                self.currentClipStatus.editRect.size == self.imageSize,
                self.currentClipStatus.angle == 0,
+               self.currentClipStatus.ratio?.isCircle != true,
                self.mosaicEngine.mosaicPaths.isEmpty,
                stickerStates.isEmpty,
                self.adjustEngine.currentAdjustStatus.allValueIsZero,
@@ -711,7 +702,7 @@ public class PTEditImageViewController: PTBaseViewController {
 
         view.backgroundColor = .black
         
-        redoButton.isEnabled = (editorManager.actions.count != editorManager.redoActions.count)
+        redoButton.isEnabled = editorManager.actions.count < editorManager.redoActions.count
         undoButton.isEnabled = !editorManager.actions.isEmpty
 
         adjustEngine.adjustSlider.isHidden = true
@@ -790,11 +781,13 @@ public class PTEditImageViewController: PTBaseViewController {
             || lastContainerScrollSize != scrollViewSize
             || lastContainerEditRect != editRect
             || lastContainerAngle != currentClipStatus.angle
+            || lastContainerIsCircle != (currentClipStatus.ratio?.isCircle == true)
         guard needsLayout else { return }
 
         lastContainerScrollSize = scrollViewSize
         lastContainerEditRect = editRect
         lastContainerAngle = currentClipStatus.angle
+        lastContainerIsCircle = currentClipStatus.ratio?.isCircle == true
         let shouldResetContentOffset = needsLayout
         shouldLayout = false
         let shouldResetZoom = isFirstSetContainerFrame
@@ -1089,7 +1082,8 @@ extension PTEditImageViewController {
 //MARK: Cut
 extension PTEditImageViewController {
     func showClipAction() {
-        
+        activeEngine?.toolDidDeactivate()
+        activeEngine = nil
         preClipStatus = currentClipStatus
         
         let currentEditImage = buildImage()
@@ -1138,6 +1132,7 @@ extension PTEditImageViewController {
         
         currentClipStatus.editRect = status.editRect
         currentClipStatus.ratio = status.ratio
+        shouldLayout = true
         resetContainerViewFrame()
     }
 
@@ -1476,16 +1471,19 @@ extension PTEditImageViewController: @MainActor PTMediaEditorManagerDelegate {
         filterEngine.changeFilter(filter) // 引擎会处理并触发 rebuildRenderPipeline
         let filters = PTImageEditorConfig.share.filters
         
-        guard let index = filters.firstIndex(where: { $0.name == filter.name }) else {
-            return
+        guard filterCollectionView.superview != nil else { return }
+        let rows = filters.indices.compactMap {
+            filterCollectionView.getRow(at: IndexPath(row: $0, section: 0))
         }
-        
-        let indexPath = IndexPath(row: index, section: 0)
-        
-        filterCollectionView.contentCollectionView.selectItem(at: indexPath, animated: false, scrollPosition: .centeredHorizontally)
-        filterCollectionView.contentCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        if let row = filterCollectionView.getRow(at: indexPath) {
-            filterCollectionView.reloadRows([row], in: 0)
+        if !rows.isEmpty {
+            filterCollectionView.reloadRows(rows, in: 0)
+        }
+        if let index = filters.firstIndex(where: { $0.name == filter.name }),
+           filterCollectionView.contentCollectionView.numberOfItems(inSection: 0) > index {
+            filterCollectionView.contentCollectionView.scrollToItem(
+                at: IndexPath(row: index, section: 0),
+                at: .centeredHorizontally, animated: true
+            )
         }
     }
     
@@ -1510,11 +1508,18 @@ extension PTEditImageViewController: @MainActor PTMediaEditorManagerDelegate {
             return
         }
         
+        guard adjustCollectionView.superview != nil else { return }
         let indexPath = IndexPath(row: index, section: 0)
-        adjustCollectionView.contentCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-        adjustCollectionView.contentCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        if let row = adjustCollectionView.getRow(at: indexPath) {
-            adjustCollectionView.reloadRows([row], in: 0)
+        if adjustCollectionView.contentCollectionView.numberOfItems(inSection: 0) > index {
+            adjustCollectionView.contentCollectionView.scrollToItem(
+                at: indexPath, at: .centeredHorizontally, animated: true
+            )
+        }
+        let rows = adjustTools.indices.compactMap {
+            adjustCollectionView.getRow(at: IndexPath(row: $0, section: 0))
+        }
+        if !rows.isEmpty {
+            adjustCollectionView.reloadRows(rows, in: 0)
         }
     }
 }

@@ -43,15 +43,19 @@ class PTImageCutRatioCell: PTBaseNormalCell {
     var image: UIImage?
     
     var ratio: PTImageClipRatio?
+    private var previewWidthConstraint: Constraint?
+    private var previewHeightConstraint: Constraint?
+    private var lastPreviewSize = CGSize.zero
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         contentView.addSubviews([imageView,titleLabel])
         imageView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(7.5)
-            make.top.equalToSuperview().inset(5)
-            make.height.equalTo(imageView.snp.width)
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(-14)
+            previewWidthConstraint = make.width.equalTo(65).constraint
+            previewHeightConstraint = make.height.equalTo(65).constraint
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -70,10 +74,8 @@ class PTImageCutRatioCell: PTBaseNormalCell {
             return
         }
         
-        let center = imageView.center
         var w: CGFloat = 0, h: CGFloat = 0
-        
-        let imageMaxW = bounds.width - 10
+        let imageMaxW = min(max(1, bounds.width - 15), max(1, bounds.height - 28))
         if ratio.whRatio == 0 {
             let maxSide = max(image.size.width, image.size.height)
             w = imageMaxW * image.size.width / maxSide
@@ -87,12 +89,14 @@ class PTImageCutRatioCell: PTBaseNormalCell {
                 w = h * ratio.whRatio
             }
         }
-        if ratio.isCircle {
-            imageView.layer.cornerRadius = w / 2
-        } else {
-            imageView.layer.cornerRadius = 3
+        guard w.isFinite, h.isFinite, w > 0, h > 0 else { return }
+        imageView.layer.cornerRadius = ratio.isCircle ? min(w, h) / 2 : 3
+        let size = CGSize(width: w, height: h)
+        if size != lastPreviewSize {
+            lastPreviewSize = size
+            previewWidthConstraint?.update(offset: w)
+            previewHeightConstraint?.update(offset: h)
         }
-        imageView.frame = CGRect(x: center.x - w / 2, y: center.y - h / 2, width: w, height: h)
     }
         
     func configureCell(image: UIImage, ratio: PTImageClipRatio) {

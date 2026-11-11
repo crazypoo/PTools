@@ -64,7 +64,7 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
     private lazy var textView: UITextView = {
         let textView = UITextView()
         textView.keyboardAppearance = .dark
-        textView.returnKeyType = .done
+        textView.returnKeyType = .default
         textView.delegate = self
         textView.backgroundColor = .clear
         textView.tintColor = .white
@@ -172,6 +172,7 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
     }
 
     deinit {
+        drawBgTask?.cancel()
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -196,15 +197,17 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
         view.backgroundColor = .black
         
         let bgImageView = UIImageView(image: image?.pt.blurImage(level: 4))
-        bgImageView.frame = view.bounds
+        bgImageView.translatesAutoresizingMaskIntoConstraints = false
         bgImageView.contentMode = .scaleAspectFit
         view.addSubview(bgImageView)
-        
-        let coverView = UIView(frame: bgImageView.bounds)
+        bgImageView.snp.makeConstraints { $0.edges.equalToSuperview() }
+
+        let coverView = UIView()
         coverView.backgroundColor = .black
         coverView.alpha = 0.4
         bgImageView.addSubview(coverView)
-        
+        coverView.snp.makeConstraints { $0.edges.equalToSuperview() }
+
         view.addSubviews([textView,toolView,formatScrollView])
         
         textView.snp.makeConstraints { make in
@@ -411,7 +414,7 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
     // 中文：优先使用当前控制器安全区，仅在 UIKit 尚未完成布局时回退到旧 inset。
     private var defaultBottomInset: CGFloat {
         let safeInset = view.safeAreaInsets.bottom
-        return safeInset.isFinite && safeInset > 0 ? safeInset : CGFloat.kTabbarSaveAreaHeight
+        return safeInset.isFinite ? max(0, safeInset) : 0
     }
 
     // English: Update the stored constraints instead of fighting Auto Layout with frame mutations.
@@ -424,7 +427,8 @@ public class PTEditInputViewController: PTBaseViewController,PTTextEditorConfigu
         let targetToolMinY = view.bounds.maxY - safeInset - Self.toolViewHeight
         let targetTextHeight = max(1, targetToolMinY - textTop - 20)
 
-        toolViewBottomConstraint?.update(offset: -safeInset)
+        // Constraint is already relative to the safe-area bottom.
+        toolViewBottomConstraint?.update(offset: -max(0, safeInset - view.safeAreaInsets.bottom))
         textViewHeightConstraint?.update(offset: targetTextHeight)
         UIView.animate(withDuration: max(duration.isFinite ? duration : 0.25, 0.25)) {
             self.view.layoutIfNeeded()
@@ -509,13 +513,12 @@ extension PTEditInputViewController {
     
     @MainActor
     private func drawTextBackground() {
+        // Cancel queued rendering even when disabling the background style.
+        drawBgTask?.cancel()
         guard textStyle.bgStyle == .bg, !textView.text.isEmpty else {
             textLayer.removeFromSuperlayer()
             return
         }
-        
-        // 取消上一次的任务（防手抖节流）
-        drawBgTask?.cancel()
         
         // 开启 Swift 6 原生主线程 Task 进行节流
         drawBgTask = Task { @MainActor [weak self] in
@@ -530,7 +533,7 @@ extension PTEditInputViewController {
             }
             
             // 再次校验任务状态
-            guard !Task.isCancelled else { return }
+            guard !Task.isCancelled, self.textStyle.bgStyle == .bg else { return }
             // 获取原生排版矩形 (全部在安全的 MainActor 下执行)
             let rawRects = textView.getRawTextRects()
             guard !rawRects.isEmpty else { return }
@@ -635,16 +638,16 @@ extension PTEditInputViewController: UITextViewDelegate {
         
         let text = textView.text ?? ""
         if text.count > maxTextCount {
-            let endIndex = text.index(text.startIndex, offsetBy: maxTextCount)
-            textView.text = String(text[..<endIndex])
+            let cursor = textView.selectedRange.location
+            textView.text = String(text.prefix(maxTextCount))
+            textView.selectedRange = NSRange(location: min(cursor, (textView.text as NSString).length), length: 0)
+            updateTextAttributes()
         }
+        drawTextBackground()
     }
     
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == String.newline {
-            doneBtnClick()
-            return false
-        }
+        // UITextView supports multiple lines. Confirmation is handled by the Done button.
         return true
     }
 }
