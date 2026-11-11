@@ -1549,10 +1549,10 @@ public class PTClipEngine: NSObject {
 
     /// 使用与手势开始时相同的规则命中边缘，避免整张图片的拖动被裁剪框手势抢占。
     @MainActor public func canBeginPan(at point: CGPoint) -> Bool {
-        panEdge(at: point) != .none
+        hitTestPanEdge(at: point) != .none
     }
 
-    private func panEdge(at point: CGPoint) -> PTClipPanEdge {
+    private func hitTestPanEdge(at point: CGPoint) -> PTClipPanEdge {
         let frame = clipBoxFrame
         guard frame.width.isFinite, frame.height.isFinite,
               frame.width > 0, frame.height > 0,
@@ -1586,7 +1586,7 @@ public class PTClipEngine: NSObject {
 
         switch pan.state {
         case .began:
-            panEdge = panEdge(at: point)
+            panEdge = hitTestPanEdge(at: point)
             guard panEdge != .none else { return }
             beginPanPoint = point
             clipOriginFrame = clipBoxFrame

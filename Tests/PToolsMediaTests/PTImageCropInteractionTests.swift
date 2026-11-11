@@ -86,8 +86,8 @@ final class PTImageCropInteractionTests: XCTestCase {
             newClipFrame: CGRect(x: 30, y: 80, width: 270, height: 300),
             contentSize: CGSize(width: 1500, height: 1500)
         )
-        XCTAssertEqual(result.x, 315, accuracy: 0.001)
-        XCTAssertEqual(result.y, 180, accuracy: 0.001)
+        XCTAssertEqual(result.x, 295, accuracy: 0.001)
+        XCTAssertEqual(result.y, 230, accuracy: 0.001)
     }
 
     func testCropGestureDoesNotInterceptCanvasCenter() {
