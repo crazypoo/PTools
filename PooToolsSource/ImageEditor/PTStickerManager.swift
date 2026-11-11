@@ -656,8 +656,25 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     }
     
     // MARK: UIGestureRecognizerDelegate
+    /// Handle gestures own the resize/rotate operation and must not simultaneously move
+    /// the sticker through its parent pan recognizer.
+    var handleGestures: [UIGestureRecognizer] {
+        [tlHandle, trHandle, blHandle, brHandle, rotateHandle]
+            .flatMap { $0.gestureRecognizers ?? [] }
+    }
+
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard gesIsEnabled else { return false }
+        guard gestureRecognizer === panGes else { return true }
+        let point = gestureRecognizer.location(in: self)
+        return ![tlHandle, trHandle, blHandle, brHandle, rotateHandle].contains {
+            !$0.isHidden && $0.frame.insetBy(dx: -4, dy: -4).contains(point)
+        }
+    }
+
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        true
+        let handles = handleGestures
+        return !handles.contains(where: { $0 === gestureRecognizer || $0 === otherGestureRecognizer })
     }
         
     private func createCornerHandle() -> UIView {

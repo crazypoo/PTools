@@ -738,6 +738,9 @@ public class PTStickerEngine: NSObject, PTEditImageToolEngine {
         // 解决手势冲突
         context.engineScrollView.pinchGestureRecognizer?.require(toFail: sticker.pinchGes)
         context.engineScrollView.panGestureRecognizer.require(toFail: sticker.panGes)
+        sticker.handleGestures.forEach {
+            context.engineScrollView.panGestureRecognizer.require(toFail: $0)
+        }
         
         currentSelectedSticker = sticker
         onStickerAdded?(sticker)
