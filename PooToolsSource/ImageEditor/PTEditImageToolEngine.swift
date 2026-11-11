@@ -1264,14 +1264,9 @@ extension PTStickerEngine: PTStickerViewDelegate {
             let newSize = PTImageStickerView.calculateSize(image: newImage, maxLimitSize: maxLimitSize)
             imageSticker.changeSize(to: newSize)
             
-            // 安全回弹
-            let visualTopY = imageSticker.center.y - (newSize.height * imageSticker.gesScale) / 2
-            let safeTopMargin: CGFloat = 90
-            if visualTopY < safeTopMargin {
-                UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
-                    imageSticker.center.y += (safeTopMargin - visualTopY)
-                }
-            }
+            // Preserve the sticker's position across replacement. A forced offset in
+            // container coordinates was not represented in its undoable state and
+            // caused a visible jump (and a different position after Redo).
             context.engineEditorManager.storeAction(.imageSticker(oldState: oldState, newState: imageSticker.state))
         }
     }

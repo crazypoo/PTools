@@ -24,6 +24,7 @@ Scope: PooToolsSource/ImageEditor (19 Swift source files). Source inspected on m
 | Sticker trash | Trash UI/delete hit-testing used the parent pan even while resizing or rotating | Show/delete only for an actual drag ending in the trash |
 | Sticker history | No-op gesture completion created Undo steps | Compare before/after geometry |
 | Sticker text/image | Edit, replacement, and empty-text deletion lacked undoable state snapshots | Store old/new states in the action history |
+| Sticker image replacement | Replacing a tall image could unexpectedly push the sticker to an arbitrary canvas y-coordinate, which Undo could not reproduce | Keep the original sticker center instead of applying a non-persisted hardcoded 90pt offset |
 | Text editor | Keyboard height was subtracted twice from the safe-area-aligned toolbar | Apply only the overlap beyond existing safe-area inset |
 | Text editor | Enter dismissed the text editor rather than inserting a newline | Support multiline editing; use the navigation confirmation action |
 | Text editor | Queued text background rendering could restore an already-disabled style; bounds were not adaptive | Cancel/recheck background tasks; pin backdrop to the controller bounds |
