@@ -663,7 +663,7 @@ public class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
             .flatMap { $0.gestureRecognizers ?? [] }
     }
 
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    public override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard gesIsEnabled else { return false }
         guard gestureRecognizer === panGes else { return true }
         let point = gestureRecognizer.location(in: self)
