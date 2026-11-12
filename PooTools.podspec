@@ -1012,11 +1012,14 @@ Pod::Spec.new do |s|
         }
     end
     
-    s.subspec 'Appz' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'Appz'
+    s.subspec 'ApplicationLinks' do |subspec|
+        # English: Use the native PTools application-link implementation with no third-party runtime.
+        # Español: Usa la implementación nativa de enlaces de PTools sin runtime de terceros.
+        # 中文：使用 PTools 原生应用链接实现，不引入任何第三方运行时。
+        subspec.source_files = 'PooToolsSource/PToolsAppz/**/*.{h,m,swift}'
+        subspec.frameworks = 'Foundation'
         subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_APPZ POOTOOLS_COCOAPODS"
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_APPLICATION_LINKS POOTOOLS_COCOAPODS"
         }
     end
     
@@ -1606,7 +1609,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Configuration'
         subspec.dependency 'PooTools/Feedback'
         subspec.dependency 'PooTools/Audio'
-        subspec.dependency 'PooTools/Appz'
+        subspec.dependency 'PooTools/ApplicationLinks'
         subspec.dependency 'PooTools/LaunchTimeProfiler'
         subspec.dependency 'PooTools/HarbethKit'
         subspec.dependency 'PooTools/PopoverKit'

@@ -1,9 +1,9 @@
 # PTools SwiftPM 全仓审计基线
 
-- 生成 SHA：`23f6f58d7b266175109501ec67df060cb2859650`
-- target 数量：184
-- product 数量：161
-- Swift 源文件归属数量：1256
+- 生成 SHA：`3f9f7d5b604877bdb4a48d32a53944734c9c5072`
+- target 数量：210
+- product 数量：176
+- Swift 源文件归属数量：1510
 - 归属异常数量：0
 - 依赖环数量：0
 

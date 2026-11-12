@@ -305,6 +305,18 @@
       "status": "not_run"
     },
     {
+      "product": "PToolsApplicationLinks",
+      "targets": [
+        "PToolsApplicationLinks"
+      ],
+      "modules": [
+        "PToolsApplicationLinks"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsApplicationLinks",
+      "status": "not_run"
+    },
+    {
       "product": "PToolsAudio",
       "targets": [
         "PToolsAudio"
@@ -458,6 +470,150 @@
       ],
       "kind": "library",
       "targetName": "SPMConsumer_PToolsDate",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsDebugConsoleCore",
+      "targets": [
+        "PToolsDebugConsoleCore"
+      ],
+      "modules": [
+        "PToolsDebugConsoleCore"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsDebugConsoleCore",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsDebugConsoleUI",
+      "targets": [
+        "PToolsDebugConsoleUI"
+      ],
+      "modules": [
+        "PToolsDebugConsoleUI"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsDebugConsoleUI",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsDebugCore",
+      "targets": [
+        "PToolsDebugCore"
+      ],
+      "modules": [
+        "PToolsDebugCore"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsDebugCore",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsDebugInspectorCore",
+      "targets": [
+        "PToolsDebugInspectorCore"
+      ],
+      "modules": [
+        "PToolsDebugInspectorCore"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsDebugInspectorCore",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsDebugInspectorLegacyUI",
+      "targets": [
+        "PToolsDebugInspectorLegacyUI"
+      ],
+      "modules": [
+        "PToolsDebugInspectorLegacyUI"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsDebugInspectorLegacyUI",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsDebugInspectorUI",
+      "targets": [
+        "PToolsDebugInspectorUI"
+      ],
+      "modules": [
+        "PToolsDebugInspectorUI"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsDebugInspectorUI",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsDebugInventoryCore",
+      "targets": [
+        "PToolsDebugInventoryCore"
+      ],
+      "modules": [
+        "PToolsDebugInventoryCore"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsDebugInventoryCore",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsDebugMetricsCore",
+      "targets": [
+        "PToolsDebugMetricsCore"
+      ],
+      "modules": [
+        "PToolsDebugMetricsCore"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsDebugMetricsCore",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsDebugMetricsUI",
+      "targets": [
+        "PToolsDebugMetricsUI"
+      ],
+      "modules": [
+        "PToolsDebugMetricsUI"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsDebugMetricsUI",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsDebugNetworkCore",
+      "targets": [
+        "PToolsDebugNetworkCore"
+      ],
+      "modules": [
+        "PToolsDebugNetworkCore"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsDebugNetworkCore",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsDebugStorageCore",
+      "targets": [
+        "PToolsDebugStorageCore"
+      ],
+      "modules": [
+        "PToolsDebugStorageCore"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsDebugStorageCore",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsDebugStudioBridge",
+      "targets": [
+        "PToolsDebugStudioBridge"
+      ],
+      "modules": [
+        "PToolsDebugStudioBridge"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsDebugStudioBridge",
       "status": "not_run"
     },
     {
@@ -845,6 +1001,18 @@
       "status": "not_run"
     },
     {
+      "product": "PToolsStudioProtocolCore",
+      "targets": [
+        "PToolsStudioProtocolCore"
+      ],
+      "modules": [
+        "PToolsStudioProtocolCore"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsStudioProtocolCore",
+      "status": "not_run"
+    },
+    {
       "product": "PToolsSymbols",
       "targets": [
         "PToolsSymbols"
@@ -926,6 +1094,18 @@
       ],
       "kind": "library",
       "targetName": "SPMConsumer_PToolsUIFoundation",
+      "status": "not_run"
+    },
+    {
+      "product": "PToolsVariantCore",
+      "targets": [
+        "PToolsVariantCore"
+      ],
+      "modules": [
+        "PToolsVariantCore"
+      ],
+      "kind": "library",
+      "targetName": "SPMConsumer_PToolsVariantCore",
       "status": "not_run"
     },
     {

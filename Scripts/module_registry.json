@@ -42,6 +42,23 @@
       "category": "ui-foundation"
     },
     {
+      "name": "ApplicationLinks",
+      "module_id": "application-links",
+      "canonical_slug": "application-links",
+      "aliases": [],
+      "spm_product": "PToolsApplicationLinks",
+      "spm_target": "PToolsApplicationLinks",
+      "pod_subspec": "ApplicationLinks",
+      "source_path": "PooToolsSource/PToolsAppz",
+      "dependencies": [],
+      "compile_flags": [
+        "POOTOOLS_APPLICATION_LINKS",
+        "StrictConcurrency"
+      ],
+      "resources": [],
+      "category": "application-integration"
+    },
+    {
       "name": "PToolsModelCombine",
       "module_id": "ptools-model-combine",
       "canonical_slug": "ptools-model-combine",
@@ -1060,14 +1077,6 @@
     },
     {
       "kind": "pod_only",
-      "module": "Appz",
-      "reason": "CocoaPods aggregate subspec without a standalone SwiftPM target.",
-      "owner": "packaging",
-      "expiration": "2026-12-31",
-      "classification": "INTENTIONAL"
-    },
-    {
-      "kind": "pod_only",
       "module": "Flag",
       "reason": "Legacy compatibility subspec retained for old Podfiles; FlagKit is host-owned and is no longer installed by PTools.",
       "owner": "packaging",
@@ -1636,6 +1645,14 @@
     }
   ],
   "known_drift": [
+    {
+      "kind": "settings",
+      "module": "ApplicationLinks",
+      "reason": "SwiftPM enables StrictConcurrency on the Foundation-first target; CocoaPods uses the podspec Swift 6 baseline without a per-subspec upcoming-feature flag.",
+      "owner": "application-integration",
+      "expiration": "2027-03-31",
+      "classification": "INTENTIONAL"
+    },
     {
       "kind": "settings",
       "module": "PToolsModelCombine",

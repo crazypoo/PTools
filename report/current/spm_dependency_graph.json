@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_spm_dependency_graph.rb",
-  "source_revision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
-  "generated_at": "2026-10-30T04:32:51Z",
+  "source_revision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
+  "generated_at": "2026-11-12T03:02:04Z",
   "package": "ptools",
   "tools_version": {
     "_version": "6.0.0"
@@ -312,6 +312,17 @@
       },
       "targets": [
         "PToolsAppIntents"
+      ]
+    },
+    {
+      "name": "PToolsApplicationLinks",
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      },
+      "targets": [
+        "PToolsApplicationLinks"
       ]
     },
     {
@@ -3926,6 +3937,34 @@
       ]
     },
     {
+      "name": "PToolsApplicationLinks",
+      "type": "regular",
+      "path": "PooToolsSource/PToolsAppz",
+      "sources": [],
+      "resources": [],
+      "internal_dependencies": [],
+      "third_party_dependencies": [],
+      "unknown_dependencies": [],
+      "swift_settings": [
+        {
+          "kind": {
+            "define": {
+              "_0": "POOTOOLS_APPLICATION_LINKS"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "StrictConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ]
+    },
+    {
       "name": "PToolsAudio",
       "type": "regular",
       "path": "PooToolsSource/PToolsAudio",
@@ -5807,6 +5846,28 @@
       "resources": [],
       "internal_dependencies": [
         {
+          "name": "PooToolsImageEditor",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsImageEditor",
+              null
+            ]
+          }
+        },
+        {
+          "name": "PooToolsMediaViewer",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PooToolsMediaViewer",
+              null
+            ]
+          }
+        },
+        {
           "name": "ptools",
           "kind": "internal",
           "package": null,
@@ -6671,6 +6732,17 @@
       "sources": [],
       "resources": [],
       "internal_dependencies": [
+        {
+          "name": "PToolsPermissionCore",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsPermissionCore",
+              null
+            ]
+          }
+        },
         {
           "name": "ptools",
           "kind": "internal",
@@ -12470,6 +12542,17 @@
       ],
       "internal_dependencies": [
         {
+          "name": "PToolsApplicationLinks",
+          "kind": "internal",
+          "package": null,
+          "declaration": {
+            "byName": [
+              "PToolsApplicationLinks",
+              null
+            ]
+          }
+        },
+        {
           "name": "PToolsConstraintLayout",
           "kind": "internal",
           "package": null,
@@ -12635,7 +12718,7 @@
         {
           "kind": {
             "define": {
-              "_0": "POOTOOLS_APPZ"
+              "_0": "POOTOOLS_APPLICATION_LINKS"
             }
           },
           "tool": "swift"
@@ -12714,13 +12797,5 @@
         }
       ]
     }
-  ],
-  "schemaVersion": 1,
-  "generatedAt": "2026-10-30T04:32:51Z",
-  "repository": "crazypoo/PTools",
-  "branch": "feature/pr56-pr60-rc-ci-security-20261030",
-  "sourceRevision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
-  "sourceVersion": "5.69.0",
-  "generatorVersion": "Scripts/report_spm_dependency_graph.rb",
-  "sourceInputsDigest": "d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb"
+  ]
 }

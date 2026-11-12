@@ -6,6 +6,8 @@
 
 - PTLayout 5.67.1 专项记录：已撤销的全仓 SnapKit → PTLayout 迁移不重新执行；本轮只修复引擎语义、增加运行时 XCTest 和严格门禁，生产模块继续保留 `.snp` 兼容路径。
 - 后续变更记录继续写入新的正式版本章节。
+- 吸收第三方 Appz 的应用链接能力为 Foundation-first 的 `ApplicationLinks` 原生模块，新增 `PToolsApplicationLinks` / `PooTools/ApplicationLinks` 入口，并完全移除旧的 `PooTools/Appz` subspec 与外部依赖。
+- 补齐上游目录中的 172 个应用描述器和对应的类型化 Action；新增 `PTApplicationCatalog.all` 统一枚举与 `descriptor(identifier:)` 查找入口。
 - 自定义导航栏内容行改为区分 UIKit 实测与宿主局部回退证据，转场/零尺寸阶段不缓存无效几何；系统垂直导航栏与自定义横向容器按导航栈原子切换所有权。
 - 移除对 UIKit 私有 `UIBarBackground` 子视图的清理，背景仅通过公开 `UINavigationBarAppearance` 配置；补充 `navigation.duo-custom-nav-alignment-regression` Demo 和左右/标题对齐回归覆盖。
 - 修复 Large Title 展开时缓存 1–2pt 中间内容行的问题：内容行现在按控件所需高度、宿主/安全区和状态排斥区校验，侧边保留区不再切断纵向行；宿主尺寸变化会使紧凑行缓存失效。

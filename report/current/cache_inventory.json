@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cache_inventory.rb",
-  "source_revision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
-  "generated_at": "2026-10-30T04:32:51Z",
+  "source_revision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
+  "generated_at": "2026-11-12T02:17:28Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTAudioCache.swift",
@@ -90,31 +90,31 @@
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1598,
+      "line": 1616,
       "kind": "disk or custom cache",
       "text": "if let cache = layoutCache.get(forKey: key) {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1599,
+      "line": 1617,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1709,
+      "line": 1727,
       "kind": "disk or custom cache",
       "text": "if let cache = waterfallCache[key] {"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 1710,
+      "line": 1728,
       "kind": "disk or custom cache",
       "text": "return (cache.items, cache.contentHeight)"
     },
     {
       "path": "PooToolsSource/Base/PTCollectionView.swift",
-      "line": 2436,
+      "line": 2454,
       "kind": "disk or custom cache",
       "text": "// English: Invalidate only the geometry cache for the requested rows."
     },
@@ -174,13 +174,13 @@
     },
     {
       "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
-      "line": 552,
+      "line": 553,
       "kind": "disk or custom cache",
       "text": "// English: Do not cache a zero frame while UIKit is between layout states."
     },
     {
       "path": "PooToolsSource/Base/PTNavigationBarManager.swift",
-      "line": 888,
+      "line": 889,
       "kind": "disk or custom cache",
       "text": "// English: Use only a geometry-validated compact row, then test measured fallbacks before caching."
     },
@@ -618,37 +618,37 @@
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1417,
+      "line": 1450,
       "kind": "disk or custom cache",
       "text": "// English: Filter previews use an explicit bounded cache policy."
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1423,
+      "line": 1456,
       "kind": "NSCache",
       "text": "private lazy var filterCache: NSCache<NSString, UIImage> = {"
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1424,
+      "line": 1457,
       "kind": "NSCache",
       "text": "let cache = NSCache<NSString, UIImage>()"
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1425,
+      "line": 1458,
       "kind": "disk or custom cache",
       "text": "cache.countLimit = filterCachePolicy.countLimit"
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1426,
+      "line": 1459,
       "kind": "disk or custom cache",
       "text": "cache.totalCostLimit = filterCachePolicy.costLimit"
     },
     {
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 1427,
+      "line": 1460,
       "kind": "disk or custom cache",
       "text": "return cache"
     },
@@ -684,9 +684,21 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 508,
+      "line": 487,
+      "kind": "disk or custom cache",
+      "text": "// Configure cache/dedup identity at the execution boundary, not in API headers."
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 523,
       "kind": "disk or custom cache",
       "text": "throw PTNetworkError.cache(\"cacheOnly 没有可用缓存 / cacheOnly has no usable entry / cacheOnly no tiene una entrada utilizable\")"
+    },
+    {
+      "path": "PooToolsSource/NetWork/Network.swift",
+      "line": 583,
+      "kind": "disk or custom cache",
+      "text": "// Identity metadata affects local cache/dedup keys only. Never send it to a server."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
@@ -720,81 +732,87 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 299,
+      "line": 295,
       "kind": "disk or custom cache",
       "text": "// English: Cache-control and revalidation headers must not change the resource identity."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 392,
+      "line": 388,
       "kind": "disk or custom cache",
       "text": "// English: Accept a caller-owned configuration so cache maintenance does not read Network.share."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 439,
+      "line": 435,
       "kind": "disk or custom cache",
       "text": "// English: Keep JSON and file operations off the cache actor while the actor owns only cache state."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 448,
+      "line": 444,
       "kind": "disk or custom cache",
       "text": "// English: Decode cache metadata on a utility executor before updating actor-owned memory state."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 457,
+      "line": 453,
       "kind": "disk or custom cache",
       "text": "// English: Read cache files without occupying the actor executor with synchronous file I/O."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 466,
+      "line": 462,
       "kind": "disk or custom cache",
       "text": "// English: Persist cache data on a background executor and keep the actor responsive."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 501,
+      "line": 497,
       "kind": "disk or custom cache",
       "text": "get { value(forHTTPHeaderField: \"PT-Cache-Miss\") == \"true\" }"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 502,
+      "line": 498,
       "kind": "disk or custom cache",
       "text": "set { setValue(newValue ? \"true\" : \"false\", forHTTPHeaderField: \"PT-Cache-Miss\") }"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 523,
+      "line": 519,
       "kind": "disk or custom cache",
       "text": "// English: Expose the default cache adapter so the public Network initializer can use it safely."
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 549,
+      "line": 545,
       "kind": "disk or custom cache",
       "text": "if request.cachePolicyType == .networkElseCache, let cache = await NetworkCache.shared.read(request: request) {"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 550,
+      "line": 546,
       "kind": "disk or custom cache",
       "text": "NotificationCenter.default.post(name: NSNotification.Name(\"PTNetworkCacheFallback\"), object: cache)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 556,
+      "line": 552,
       "kind": "disk or custom cache",
       "text": "if response?.value(forHTTPHeaderField: \"Cache-Control\")?.lowercased().contains(\"no-store\") == true { return }"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 582,
+      "line": 578,
       "kind": "disk or custom cache",
       "text": "guard let cacheControl = response?.value(forHTTPHeaderField: \"Cache-Control\") else { return fallback }"
+    },
+    {
+      "path": "PooToolsSource/NetWork/NetworkTypes.swift",
+      "line": 240,
+      "kind": "disk or custom cache",
+      "text": "/// Header names excluded from cache and in-flight request identity, not from the wire."
     },
     {
       "path": "PooToolsSource/PDF/UIImage+PTpdfEX.swift",
@@ -1129,11 +1147,11 @@
   ],
   "bounded_memory_caches": 25,
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T04:32:51Z",
+  "generatedAt": "2026-11-12T02:17:28Z",
   "repository": "crazypoo/PTools",
-  "branch": "feature/pr56-pr60-rc-ci-security-20261030",
-  "sourceRevision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
+  "branch": "master",
+  "sourceRevision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
   "sourceVersion": "5.69.0",
   "generatorVersion": "Scripts/report_cache_inventory.rb",
-  "sourceInputsDigest": "d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb"
+  "sourceInputsDigest": "ed60290a1fc9bcf9c6196aef2f4a5f386a8a93a84f766fa6d58cfb4cb854f084"
 }

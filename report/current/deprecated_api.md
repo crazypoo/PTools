@@ -2,13 +2,13 @@
 Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
-Branch: feature/pr56-pr60-rc-ci-security-20261030
-Source revision: 1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1
+Branch: master
+Source revision: 3f9f7d5b604877bdb4a48d32a53944734c9c5072
 Source version: 5.69.0
-Source inputs digest: d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb
+Source inputs digest: ed60290a1fc9bcf9c6196aef2f4a5f386a8a93a84f766fa6d58cfb4cb854f084
 Generator version: 1
 Generator: Scripts/report_current_summaries.rb
-Generated at: 2026-10-30T04:32:51Z
+Generated at: 2026-11-12T02:17:28Z
 -->
 
 # PTools 当前弃用入口清单
@@ -407,18 +407,18 @@ Generated at: 2026-10-30T04:32:51Z
 | `PooToolsSource/NetWork/NetworkTypes.swift:74` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/NetWork/NetworkTypes.swift:77` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/NetWork/NetworkTypes.swift:80` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/NetWork/NetworkTypes.swift:222` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/NetWork/NetworkTypes.swift:223` | `netRequsetTime` | `requestTimeout` |
-| `PooToolsSource/NetWork/NetworkTypes.swift:228` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/NetWork/NetworkTypes.swift:234` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/NetWork/NetworkTypes.swift:240` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/NetWork/NetworkTypes.swift:246` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/NetWork/NetworkTypes.swift:253` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/NetWork/NetworkTypes.swift:254` | `netRequsetTime` | `requestTimeout` |
+| `PooToolsSource/NetWork/NetworkTypes.swift:259` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/NetWork/NetworkTypes.swift:265` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/NetWork/NetworkTypes.swift:271` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/NetWork/NetworkTypes.swift:277` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:307` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:314` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/NetworkSpeedTest/PTNetworkSpeedTestFunction.swift:321` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/PToolsCore/PTCoreValueTypes.swift:180` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/PToolsForm/PTForm.swift:906` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
-| `PooToolsSource/PToolsForm/PTForm.swift:919` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/PToolsForm/PTForm.swift:1087` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
+| `PooToolsSource/PToolsForm/PTForm.swift:1093` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/PToolsModelCore/PTModelSemantics.swift:242` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/PToolsNotifications/PTNotifications.swift:370` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |
 | `PooToolsSource/PhotoPicker/PTMediaLibListModel.swift:512` | `@available deprecated` | `兼容入口，迁移到 MIGRATION_6.md` |

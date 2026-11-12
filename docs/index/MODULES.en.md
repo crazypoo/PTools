@@ -11,7 +11,7 @@ Every listed SwiftPM product and CocoaPods subspec has a generated tri-lingual u
 
 | Module | SwiftPM | CocoaPods |
 | --- | --- | --- |
-| [Appz](../modules/appz/README.en.md) | `—` | `Appz` |
+| [ApplicationLinks](../modules/application-links/README.en.md) | `PToolsApplicationLinks` | `ApplicationLinks` |
 | [BackgroundTasks](../modules/background-tasks/README.en.md) | `—` | `BackgroundTasks` |
 | [BankCard](../modules/bank-card/README.en.md) | `—` | `BankCard` |
 | [BilogyID](../modules/bilogy-id/README.en.md) | `—` | `BilogyID` |

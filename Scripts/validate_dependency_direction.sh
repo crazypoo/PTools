@@ -52,10 +52,10 @@ edges.each do |edge|
   forbidden = false
   rule = nil
 
-  # English: The Foundation-only font catalog is a local Core layer, so the umbrella target may depend on it.
-  # Español: El catálogo de fuentes basado solo en Foundation es una capa Core local permitida para el target paraguas.
-  # 中文：Foundation-only 字体目录属于允许的本地 Core 层，因此总 Core target 可以依赖它。
-  if source == "ptools" && !%w[PToolsCore PToolsDate PToolsUIFoundation PToolsPermissionCore PToolsLogging PToolsSymbols PToolsDevice PToolsFontCatalogCore PToolsConstraintLayout PToolsTransferCore].include?(destination)
+  # English: Foundation-only catalogs and application links are local Core layers, so the umbrella target may depend on them.
+  # Español: Los catálogos y enlaces de aplicaciones basados solo en Foundation son capas Core locales permitidas para el target paraguas.
+  # 中文：Foundation-only 目录和应用链接属于允许的本地 Core 层，因此总 Core target 可以依赖它们。
+  if source == "ptools" && !%w[PToolsCore PToolsDate PToolsUIFoundation PToolsPermissionCore PToolsLogging PToolsSymbols PToolsDevice PToolsFontCatalogCore PToolsApplicationLinks PToolsConstraintLayout PToolsTransferCore].include?(destination)
     forbidden = true
     rule = "Core target may depend only on approved local layers, including standalone PToolsConstraintLayout and Foundation-only PToolsTransferCore products"
   elsif source.match?(/^PT.*Permission$/) && !%w[ptools PToolsPermissionCore].include?(destination)
@@ -85,7 +85,7 @@ result = {
   "generated_at" => Time.now.utc.iso8601,
   "status" => violations.empty? ? "pass_with_legacy_allowlist" : "fail",
   "rules" => [
-    "ptools -> local target is forbidden except approved local layers, including PToolsConstraintLayout and PToolsTransferCore",
+    "ptools -> local target is forbidden except approved local layers, including PToolsApplicationLinks, PToolsConstraintLayout and PToolsTransferCore",
     "PT*Permission -> non-ptools target is forbidden except PToolsPermissionCore",
     "MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires",
     "Navigation/Router -> PhotoPicker is forbidden"

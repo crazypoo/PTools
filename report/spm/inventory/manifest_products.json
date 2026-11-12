@@ -276,6 +276,17 @@
     }
   },
   {
+    "name": "PToolsApplicationLinks",
+    "targets": [
+      "PToolsApplicationLinks"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
     "name": "PToolsAudio",
     "targets": [
       "PToolsAudio"
@@ -411,6 +422,138 @@
     "name": "PToolsDate",
     "targets": [
       "PToolsDate"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDebugConsoleCore",
+    "targets": [
+      "PToolsDebugConsoleCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDebugConsoleUI",
+    "targets": [
+      "PToolsDebugConsoleUI"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDebugCore",
+    "targets": [
+      "PToolsDebugCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDebugInspectorCore",
+    "targets": [
+      "PToolsDebugInspectorCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDebugInspectorLegacyUI",
+    "targets": [
+      "PToolsDebugInspectorLegacyUI"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDebugInspectorUI",
+    "targets": [
+      "PToolsDebugInspectorUI"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDebugInventoryCore",
+    "targets": [
+      "PToolsDebugInventoryCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDebugMetricsCore",
+    "targets": [
+      "PToolsDebugMetricsCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDebugMetricsUI",
+    "targets": [
+      "PToolsDebugMetricsUI"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDebugNetworkCore",
+    "targets": [
+      "PToolsDebugNetworkCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDebugStorageCore",
+    "targets": [
+      "PToolsDebugStorageCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsDebugStudioBridge",
+    "targets": [
+      "PToolsDebugStudioBridge"
     ],
     "type": {
       "library": [
@@ -771,6 +914,17 @@
     }
   },
   {
+    "name": "PToolsStudioProtocolCore",
+    "targets": [
+      "PToolsStudioProtocolCore"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
     "name": "PToolsSymbols",
     "targets": [
       "PToolsSymbols"
@@ -840,6 +994,17 @@
     "name": "PToolsUIFoundation",
     "targets": [
       "PToolsUIFoundation"
+    ],
+    "type": {
+      "library": [
+        "automatic"
+      ]
+    }
+  },
+  {
+    "name": "PToolsVariantCore",
+    "targets": [
+      "PToolsVariantCore"
     ],
     "type": {
       "library": [

@@ -1,19 +1,8 @@
-<!--
-Current report metadata.
-AUTO-GENERATED FILE.
-Repository: crazypoo/PTools
-Branch: feature/pr56-pr60-rc-ci-security-20261030
-Source revision: 1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1
-Source version: 5.69.0
-Source inputs digest: d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb
-Generator version: 1
-Generator: current-report-normalizer
-Generated at: 2026-10-30T04:32:51Z
--->
+<!-- AUTO-GENERATED: do not edit manually. -->
 
 # MainActor Runtime Validation
 
-Source inputs digest: `be49301643b6a2a5bce655f92ca8b930fa1c9b9bedc3f191dcc21a85be55d45d`
+Source inputs digest: `33148b1053777015819206f9b4c8fe8afdfe73537055a36f10f3acf666d498f4`
 
 This report intentionally does not claim runtime proof. Execute the listed flows with Instruments or on a real iOS device before the 6.0 release gate.
 

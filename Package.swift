@@ -28,6 +28,10 @@ let package = Package(
         // Español: Publica las capas basadas solo en Foundation para que los clientes dependan del módulo mínimo estable.
         // 中文：公开仅依赖 Foundation 的分层模块，让调用方按需依赖最小稳定模块。
         .library(name: "PToolsCore", targets: ["PToolsCore"]),
+        // English: Publish the native application-link module without the former Appz dependency.
+        // Español: Publica el módulo nativo de enlaces de aplicaciones sin la antigua dependencia Appz.
+        // 中文：公开不再依赖旧 Appz 的原生应用链接模块。
+        .library(name: "PToolsApplicationLinks", targets: ["PToolsApplicationLinks"]),
         // English: Publish the pure SKU/variant engine without UIKit or commerce-specific models.
         // Español: Publica el motor puro de SKU/variantes sin UIKit ni modelos comerciales específicos.
         // 中文：公开不依赖 UIKit 和商城业务模型的纯 SKU/规格引擎。
@@ -398,6 +402,17 @@ let package = Package(
             name: "PToolsCore",
             path: "PooToolsSource/PToolsCore",
             swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ]
+        ),
+        // English: Keep application-link contracts Foundation-first and platform adapters conditional.
+        // Español: Mantiene los contratos de enlaces basados en Foundation y los adaptadores condicionados por plataforma.
+        // 中文：应用链接契约以 Foundation 为基础，平台适配器按条件编译。
+        .target(
+            name: "PToolsApplicationLinks",
+            path: "PooToolsSource/PToolsAppz",
+            swiftSettings: [
+                .define("POOTOOLS_APPLICATION_LINKS"),
                 .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
@@ -995,6 +1010,7 @@ let package = Package(
             dependencies: [
                 "PToolsLogging",
                 "PToolsCore",
+                "PToolsApplicationLinks",
                 "PToolsTransferCore",
                 "PToolsConstraintLayout",
                 "PToolsDate",
@@ -1026,7 +1042,7 @@ let package = Package(
                 .define("POOTOOLS_COCOAPODS"),
                 .define("POOTOOLS_TABBAR"),
                 .define("POOTOOLS_PICKER"),
-                .define("POOTOOLS_APPZ"),
+                .define("POOTOOLS_APPLICATION_LINKS"),
                 .define("POOTOOLS_LAUNCHTIMEPROFILER"),
                 .define("POOTOOLS_VIDEOCACHE"),
                 .define("POOTOOLS_SPLIT_CORE"),

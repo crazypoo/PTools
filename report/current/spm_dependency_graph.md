@@ -1,14 +1,10 @@
 <!--
-Current report metadata.
 AUTO-GENERATED FILE.
-Repository: crazypoo/PTools
-Branch: feature/pr56-pr60-rc-ci-security-20261030
-Source revision: 1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1
-Source version: 5.69.0
-Source inputs digest: d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb
-Generator version: 1
+DO NOT EDIT MANUALLY.
+
 Generator: Scripts/report_spm_dependency_graph.rb
-Generated at: 2026-10-30T04:32:51Z
+Source revision: 3f9f7d5b604877bdb4a48d32a53944734c9c5072
+Generated at: 2026-11-12T03:02:04Z
 -->
 
 # SwiftPM Dependency Graph
@@ -17,7 +13,7 @@ Generated at: 2026-10-30T04:32:51Z
 - Package: `ptools`
 - Swift tools: `6.0.0`
 - Swift language versions: `6`
-- Target count: `209`
+- Target count: `210`
 - Core direct third-party dependencies: `4` (baseline `18`)
 
 ## Products
@@ -50,6 +46,7 @@ Generated at: 2026-10-30T04:32:51Z
 | `PToolsActivities` | `PToolsActivities` |
 | `PToolsAppIntegrity` | `PToolsAppIntegrity` |
 | `PToolsAppIntents` | `PToolsAppIntents` |
+| `PToolsApplicationLinks` | `PToolsApplicationLinks` |
 | `PToolsAudio` | `PToolsAudio` |
 | `PToolsAuth` | `PToolsAuth` |
 | `PToolsAuthCore` | `PToolsAuthCore` |
@@ -234,6 +231,7 @@ Generated at: 2026-10-30T04:32:51Z
 | `PToolsAppIntegrity` | `PooToolsSource/PToolsAppIntegrity` | — | — | 0 source entries / 0 resources |
 | `PToolsAppIntents` | `PooToolsSource/PToolsAppIntents` | PToolsRouteCore | — | 0 source entries / 0 resources |
 | `PToolsApplicationInfrastructureTests` | `Tests/PToolsApplicationInfrastructureTests` | PToolsAppIntegrity, PToolsAuth, PToolsAuthCore, PToolsConfiguration, PToolsDatabase, PToolsMap, PToolsMapCore, PToolsObservability, PToolsObservabilityCore, PToolsRealtimeCore, PToolsStoreKit, PToolsSync, PToolsSyncCore, PToolsTransfer, PToolsTransferCore, PToolsWebBridge, PToolsWebCore | — | 0 source entries / 0 resources |
+| `PToolsApplicationLinks` | `PooToolsSource/PToolsAppz` | — | — | 0 source entries / 0 resources |
 | `PToolsAudio` | `PooToolsSource/PToolsAudio` | PTMicPermission | — | 0 source entries / 0 resources |
 | `PToolsAuth` | `PooToolsSource/PToolsAuth` | PToolsAuthCore, PToolsStorage, PToolsStorageCore | — | 0 source entries / 0 resources |
 | `PToolsAuthCore` | `PooToolsSource/PToolsAuthCore` | — | — | 0 source entries / 0 resources |
@@ -288,7 +286,7 @@ Generated at: 2026-10-30T04:32:51Z
 | `PToolsLoggingTests` | `Tests/PToolsLoggingTests` | PToolsLogging | — | 0 source entries / 0 resources |
 | `PToolsMap` | `PooToolsSource/PToolsMap` | PToolsMapCore | — | 0 source entries / 0 resources |
 | `PToolsMapCore` | `PooToolsSource/PToolsMapCore` | — | — | 0 source entries / 0 resources |
-| `PToolsMediaTests` | `Tests/PToolsMediaTests` | ptools | — | 0 source entries / 0 resources |
+| `PToolsMediaTests` | `Tests/PToolsMediaTests` | PooToolsImageEditor, PooToolsMediaViewer, ptools | — | 0 source entries / 0 resources |
 | `PToolsModel` | `PooToolsSource/PToolsModel` | PToolsModelCore, PToolsModelMacroPlugin | — | 0 source entries / 0 resources |
 | `PToolsModelCombine` | `PooToolsSource/PToolsModelCombine` | — | — | 0 source entries / 0 resources |
 | `PToolsModelCore` | `PooToolsSource/PToolsModelCore` | — | — | 0 source entries / 0 resources |
@@ -307,7 +305,7 @@ Generated at: 2026-10-30T04:32:51Z
 | `PToolsOverlay` | `PooToolsSource/Overlay` | PToolsCore, PToolsLogging, PToolsUIFoundation | — | 0 source entries / 0 resources |
 | `PToolsP2Tests` | `Tests/PToolsP2Tests` | PToolsActivities, PToolsAppIntents, PToolsAudio, PToolsConfiguration, PToolsCore, PToolsDocuments, PToolsFeedback, PToolsForm, PToolsRouteCore, PToolsWidgetCore, ptools | — | 0 source entries / 0 resources |
 | `PToolsPermissionCore` | `PooToolsSource/PToolsPermissionCore` | — | — | 0 source entries / 0 resources |
-| `PToolsPermissionTests` | `Tests/PToolsPermissionTests` | ptools | — | 0 source entries / 0 resources |
+| `PToolsPermissionTests` | `Tests/PToolsPermissionTests` | PToolsPermissionCore, ptools | — | 0 source entries / 0 resources |
 | `PToolsPermissionUI` | `PooToolsSource/PToolsPermissionUI` | PToolsPermissionCore, PToolsUIFoundation | — | 0 source entries / 0 resources |
 | `PToolsPhotoPickerTests` | `Tests/PToolsPhotoPickerTests` | PooToolsPhotoPicker, ptools | — | 0 source entries / 0 resources |
 | `PToolsPlatformTests` | `Tests/PToolsPlatformTests` | PToolsBackgroundTasks, PToolsConnectivity, PToolsDeepLink, PToolsNotifications, PToolsRouteCore, PToolsStorage, PToolsStorageCore | — | 0 source entries / 0 resources |
@@ -412,7 +410,7 @@ Generated at: 2026-10-30T04:32:51Z
 | `PooToolsWebKit` | `PooToolsSource/WebKit` | ptools | — | 0 source entries / 0 resources |
 | `PooToolsWhatsNewsKit` | `PooToolsSource/WhatsNewsKit` | PToolsUIFoundation, ptools | SnapKit | 0 source entries / 0 resources |
 | `PooToolsiOS17Tips` | `PooToolsSource/iOS17Tips` | ptools | SnapKit | 0 source entries / 0 resources |
-| `ptools` | `PooToolsSource` | PToolsConstraintLayout, PToolsCore, PToolsDate, PToolsDevice, PToolsFontCatalogCore, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsTransferCore, PToolsUIFoundation | IQKeyboardManagerSwift, Kingfisher, Lottie, SnapKit | 30 source entries / 1 resources |
+| `ptools` | `PooToolsSource` | PToolsApplicationLinks, PToolsConstraintLayout, PToolsCore, PToolsDate, PToolsDevice, PToolsFontCatalogCore, PToolsLogging, PToolsPermissionCore, PToolsSymbols, PToolsTransferCore, PToolsUIFoundation | IQKeyboardManagerSwift, Kingfisher, Lottie, SnapKit | 30 source entries / 1 resources |
 
 ## Notes
 

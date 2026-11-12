@@ -52,7 +52,10 @@ def target_sources(root: Path, manifest_target: dict[str, Any], described: dict[
         paths = [path for entry in entries for path in expand_source_entry(root, target_root, entry)]
         if not entries and target_root.exists():
             paths = sorted(target_root.rglob("*.swift"))
-    excluded = {str(target_root / entry).resolve() for entry in manifest_target.get("exclude", [])}
+    # English: Resolve excluded entries before converting them to stable strings.
+    # Español: Resuelve las entradas excluidas antes de convertirlas en cadenas estables.
+    # 中文：先解析排除项路径，再转换为稳定字符串。
+    excluded = {(target_root / entry).resolve() for entry in manifest_target.get("exclude", [])}
     result = []
     for path in paths:
         resolved = path.resolve()

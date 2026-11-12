@@ -2,8 +2,8 @@
   "schema_version": 1,
   "baseline": "current working-tree scan",
   "generator": "Scripts/report_concurrency.rb",
-  "source_revision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
-  "generated_at": "2026-10-30T04:32:51Z",
+  "source_revision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
+  "generated_at": "2026-11-12T02:17:28Z",
   "counts": {
     "main_queue_async": 25,
     "task_detached": 36,
@@ -319,7 +319,7 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/ImageEditor/PTEditImageToolEngine.swift",
-      "line": 926,
+      "line": 934,
       "text": "let resultData = try? await Task.detached(priority: .userInitiated) {"
     },
     {
@@ -463,31 +463,31 @@
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 402,
+      "line": 398,
       "text": "Task.detached(priority: .background) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 443,
+      "line": 439,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 452,
+      "line": 448,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 461,
+      "line": 457,
       "text": "await Task.detached(priority: .utility) {"
     },
     {
       "rule": "task_detached",
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 470,
+      "line": 466,
       "text": "Task.detached(priority: .background) {"
     },
     {
@@ -708,11 +708,11 @@
     }
   ],
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T04:32:51Z",
+  "generatedAt": "2026-11-12T02:17:28Z",
   "repository": "crazypoo/PTools",
-  "branch": "feature/pr56-pr60-rc-ci-security-20261030",
-  "sourceRevision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
+  "branch": "master",
+  "sourceRevision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
   "sourceVersion": "5.69.0",
   "generatorVersion": "Scripts/report_concurrency.rb",
-  "sourceInputsDigest": "d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb"
+  "sourceInputsDigest": "ed60290a1fc9bcf9c6196aef2f4a5f386a8a93a84f766fa6d58cfb4cb854f084"
 }

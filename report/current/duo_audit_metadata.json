@@ -1,8 +1,8 @@
 {
   "report_kind": "ci-generated",
   "snapshot_of": "be6cf4b34b62ce2c36f7639993c3eac176fd9ecb",
-  "source_revision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
-  "generated_at": "2026-10-30T04:32:51Z",
+  "source_revision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
+  "generated_at": "2026-11-12T02:17:28Z",
   "rule_version": "5.69.0-duo-2026-10-24-r4",
   "tool_version": "5.69.0-duo-2026-10-24-r4",
   "source_manifest_hash": "94c1e59b766ece9262682fde24122d12c890cba2c87e2cf367c113fc1db6bb39",
@@ -150,11 +150,11 @@
     }
   },
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T04:32:51Z",
+  "generatedAt": "2026-11-12T02:17:28Z",
   "repository": "crazypoo/PTools",
-  "branch": "feature/pr56-pr60-rc-ci-security-20261030",
-  "sourceRevision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
+  "branch": "master",
+  "sourceRevision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
   "sourceVersion": "5.69.0",
   "generatorVersion": "current-report-normalizer",
-  "sourceInputsDigest": "d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb"
+  "sourceInputsDigest": "ed60290a1fc9bcf9c6196aef2f4a5f386a8a93a84f766fa6d58cfb4cb854f084"
 }

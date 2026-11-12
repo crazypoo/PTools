@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_cocoapods_subspec_graph.rb",
-  "source_revision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
-  "generated_at": "2026-10-30T04:32:51Z",
+  "source_revision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
+  "generated_at": "2026-11-12T03:02:03Z",
   "name": "PooTools",
   "version": "5.69.0",
   "platforms": {
@@ -146,21 +146,23 @@
       }
     },
     {
-      "name": "PooTools/Appz",
-      "short_name": "Appz",
-      "local_dependencies": [
-        "PooTools/Core"
+      "name": "PooTools/ApplicationLinks",
+      "short_name": "ApplicationLinks",
+      "local_dependencies": [],
+      "third_party_dependencies": [],
+      "source_files": [
+        "PooToolsSource/PToolsAppz/**/*.{h,m,swift}"
       ],
-      "third_party_dependencies": [
-        "Appz"
+      "source_directories": [
+        "PToolsAppz"
       ],
-      "source_files": [],
-      "source_directories": [],
       "resource_bundles": {},
       "resources": [],
-      "frameworks": [],
+      "frameworks": [
+        "Foundation"
+      ],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_APPZ POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_APPLICATION_LINKS POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -1503,7 +1505,7 @@
       "name": "PooTools/InputAll",
       "short_name": "InputAll",
       "local_dependencies": [
-        "PooTools/Appz",
+        "PooTools/ApplicationLinks",
         "PooTools/Audio",
         "PooTools/BankCard",
         "PooTools/Banner",
@@ -3705,13 +3707,5 @@
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_iOS17TIPS POOTOOLS_COCOAPODS"
       }
     }
-  ],
-  "schemaVersion": 1,
-  "generatedAt": "2026-10-30T04:32:51Z",
-  "repository": "crazypoo/PTools",
-  "branch": "feature/pr56-pr60-rc-ci-security-20261030",
-  "sourceRevision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
-  "sourceVersion": "5.69.0",
-  "generatorVersion": "Scripts/report_cocoapods_subspec_graph.rb",
-  "sourceInputsDigest": "d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb"
+  ]
 }

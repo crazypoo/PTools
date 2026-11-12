@@ -4,7 +4,7 @@
 schema_version: 1
 modules:
 -
-  module_id: "appz"
+  module_id: "application-links"
   coverage: "documentation"
   canonical_module_id: null
   demos: []

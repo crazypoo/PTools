@@ -1,0 +1,44 @@
+// English: Native PTools application descriptor adapted from the MIT-licensed upstream catalog.
+// Español: Descriptor nativo de aplicación PTools adaptado del catálogo original bajo licencia MIT.
+// 中文：从 MIT 许可的上游目录适配而来的 PTools 原生应用描述器。
+
+import Foundation
+
+public extension Applications {
+    
+    struct OMT: PTExternalApplication {
+        
+        public typealias ActionType = Applications.OMT.Action
+        
+        public let scheme = "onemorething:"
+        public let fallbackURL = "http://www.onemorething.nl"
+        public let appStoreId = "483523981"
+        
+        public init() {}
+    }
+}
+
+
+public extension Applications.OMT {
+    
+    enum Action: Sendable {
+        case open
+    }
+}
+
+extension Applications.OMT.Action: PTExternalApplicationAction {
+    
+    public var paths: PTApplicationActionPaths {
+        
+        switch self {
+        case .open:
+            return PTApplicationActionPaths(
+                app: PTApplicationPath(
+                    pathComponents: ["app"],
+                    queryParameters: [:]
+                ),
+                web: PTApplicationPath()
+            )
+        }
+    }
+}

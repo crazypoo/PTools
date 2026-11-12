@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_accessibility.rb",
-  "source_revision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
-  "generated_at": "2026-10-30T04:32:51Z",
+  "source_revision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
+  "generated_at": "2026-11-12T02:17:28Z",
   "counts": {
     "reduce_motion": 68,
-    "accessibility": 297,
+    "accessibility": 302,
     "reduce_transparency": 14,
-    "dynamic_type": 22
+    "dynamic_type": 24
   },
   "locations": [
     {
@@ -663,37 +663,37 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/CodeView/PTCodeView.swift",
-      "line": 198
+      "line": 230
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/CodeView/PTCodeView.swift",
-      "line": 199
+      "line": 231
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/CodeView/PTCodeView.swift",
-      "line": 200
+      "line": 232
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/CodeView/PTCodeView.swift",
-      "line": 201
+      "line": 233
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/CodeView/PTCodeView.swift",
-      "line": 275
+      "line": 319
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/CodeView/PTCodeView.swift",
-      "line": 277
+      "line": 321
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/CodeView/PTCodeView.swift",
-      "line": 408
+      "line": 452
     },
     {
       "rule": "reduce_transparency",
@@ -1303,62 +1303,52 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "line": 136
+      "line": 140
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "line": 153
+      "line": 161
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "line": 171
+      "line": 183
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "line": 188
+      "line": 204
     },
     {
       "rule": "dynamic_type",
       "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "line": 745
+      "line": 925
     },
     {
       "rule": "dynamic_type",
       "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "line": 747
+      "line": 927
     },
     {
       "rule": "dynamic_type",
       "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "line": 750
-    },
-    {
-      "rule": "reduce_motion",
-      "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "line": 1147
-    },
-    {
-      "rule": "accessibility",
-      "path": "PooToolsSource/PToolsForm/PTForm.swift",
-      "line": 1148
+      "line": 930
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/PToolsForm/PTFormConfiguration.swift",
-      "line": 387
+      "line": 396
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/PToolsForm/PTFormConfiguration.swift",
-      "line": 391
+      "line": 400
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/PToolsForm/PTFormConfiguration.swift",
-      "line": 394
+      "line": 403
     },
     {
       "rule": "dynamic_type",
@@ -1369,6 +1359,31 @@
       "rule": "dynamic_type",
       "path": "PooToolsSource/PToolsForm/PTFormRenderers.swift",
       "line": 177
+    },
+    {
+      "rule": "dynamic_type",
+      "path": "PooToolsSource/PToolsForm/PTFormRenderers.swift",
+      "line": 463
+    },
+    {
+      "rule": "dynamic_type",
+      "path": "PooToolsSource/PToolsForm/PTFormRenderers.swift",
+      "line": 474
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsForm/PTFormRenderers.swift",
+      "line": 490
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsForm/PTFormRenderers.swift",
+      "line": 491
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsForm/PTFormRenderers.swift",
+      "line": 492
     },
     {
       "rule": "dynamic_type",
@@ -1413,17 +1428,37 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsForm/PTFormSupport.swift",
-      "line": 88
+      "line": 85
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsForm/PTFormSupport.swift",
-      "line": 89
+      "line": 86
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsForm/PTFormSupport.swift",
-      "line": 90
+      "line": 91
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsForm/PTFormSupport.swift",
+      "line": 93
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsForm/PTFormSupport.swift",
+      "line": 94
+    },
+    {
+      "rule": "reduce_motion",
+      "path": "PooToolsSource/PToolsForm/PTFormView.swift",
+      "line": 354
+    },
+    {
+      "rule": "accessibility",
+      "path": "PooToolsSource/PToolsForm/PTFormView.swift",
+      "line": 355
     },
     {
       "rule": "accessibility",
@@ -1438,12 +1473,12 @@
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextAttributes.swift",
-      "line": 288
+      "line": 332
     },
     {
       "rule": "accessibility",
       "path": "PooToolsSource/PToolsUIFoundation/PTRichTextAttributes.swift",
-      "line": 347
+      "line": 391
     },
     {
       "rule": "accessibility",
@@ -1643,27 +1678,22 @@
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 380
+      "line": 385
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 506
+      "line": 511
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 645
+      "line": 650
     },
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 764
-    },
-    {
-      "rule": "reduce_motion",
-      "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 840
+      "line": 769
     },
     {
       "rule": "reduce_motion",
@@ -1673,7 +1703,12 @@
     {
       "rule": "reduce_motion",
       "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
-      "line": 1045
+      "line": 850
+    },
+    {
+      "rule": "reduce_motion",
+      "path": "PooToolsSource/ScrollBanner/PTBannerView.swift",
+      "line": 1050
     },
     {
       "rule": "accessibility",
@@ -2017,11 +2052,11 @@
     }
   ],
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T04:32:51Z",
+  "generatedAt": "2026-11-12T02:17:28Z",
   "repository": "crazypoo/PTools",
-  "branch": "feature/pr56-pr60-rc-ci-security-20261030",
-  "sourceRevision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
+  "branch": "master",
+  "sourceRevision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
   "sourceVersion": "5.69.0",
   "generatorVersion": "Scripts/report_accessibility.rb",
-  "sourceInputsDigest": "d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb"
+  "sourceInputsDigest": "ed60290a1fc9bcf9c6196aef2f4a5f386a8a93a84f766fa6d58cfb4cb854f084"
 }

@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_dependency_direction.sh",
-  "source_revision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
-  "generated_at": "2026-10-30T04:32:51Z",
+  "source_revision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
+  "generated_at": "2026-11-12T03:02:04Z",
   "status": "pass_with_legacy_allowlist",
   "rules": [
-    "ptools -> local target is forbidden except approved local layers, including PToolsConstraintLayout and PToolsTransferCore",
+    "ptools -> local target is forbidden except approved local layers, including PToolsApplicationLinks, PToolsConstraintLayout and PToolsTransferCore",
     "PT*Permission -> non-ptools target is forbidden except PToolsPermissionCore",
     "MediaViewer/PhotoPicker -> PooToolsNetWork is forbidden after its temporary allowlist expires",
     "Navigation/Router -> PhotoPicker is forbidden"
@@ -1137,6 +1137,10 @@
     },
     {
       "source": "ptools",
+      "destination": "PToolsApplicationLinks"
+    },
+    {
+      "source": "ptools",
       "destination": "PToolsConstraintLayout"
     },
     {
@@ -1177,13 +1181,5 @@
     }
   ],
   "allowed_legacy_edges": [],
-  "violations": [],
-  "schemaVersion": 1,
-  "generatedAt": "2026-10-30T04:32:51Z",
-  "repository": "crazypoo/PTools",
-  "branch": "feature/pr56-pr60-rc-ci-security-20261030",
-  "sourceRevision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
-  "sourceVersion": "5.69.0",
-  "generatorVersion": "Scripts/validate_dependency_direction.sh",
-  "sourceInputsDigest": "d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb"
+  "violations": []
 }

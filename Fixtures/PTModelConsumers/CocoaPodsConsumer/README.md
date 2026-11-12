@@ -37,6 +37,6 @@ bash Scripts/PTModel/validate_f1_f3.sh
 ```
 
 It verifies this consumer contract, PooTools-Example Swift 6 / iOS 17 settings,
-Appz Swift 5 compatibility, Debug/Release Simulator builds, installation and
+ApplicationLinks native Swift 6 compatibility, Debug/Release Simulator builds, installation and
 launch. `ModelLegacySmartCodable` and `ModelLegacyKakaJSON` remain explicit
 opt-in subspecs and are not part of this consumer.

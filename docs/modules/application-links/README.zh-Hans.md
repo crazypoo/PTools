@@ -1,14 +1,14 @@
 ---
-module: "Appz"
-module_id: "appz"
+module: "ApplicationLinks"
+module_id: "application-links"
 language: "zh-Hans"
-status: "compatibility"
+status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
-swiftpm_product: "null"
-cocoapods_subspec: "Appz"
-source: "manifest-only"
-category: "compatibility"
+swiftpm_product: "PToolsApplicationLinks"
+cocoapods_subspec: "ApplicationLinks"
+source: "PooToolsSource/PToolsAppz"
+category: "application-integration"
 last_reviewed: "2026-09-28"
 canonical: false
 canonical_source: "README.en.md"
@@ -16,50 +16,52 @@ product_version_source: "repository:VERSION"
 document_schema_version: 1
 ---
 
-# Appz
+# ApplicationLinks
 
 ## 1. 概览
 
-Appz 是 PTools 的 compatibility 模块。本指南由 canonical 模块 registry 生成，说明 iOS 17+ 与 Swift 6+ 下的稳定使用边界。
+ApplicationLinks 是 PTools 原生应用链接模块，替代原第三方 Appz 运行时，说明 iOS 17+ 与 Swift 6+ 下的稳定使用边界。
 
 ## 2. 要求
 
 - 平台：iOS 17.0+
 - Swift：6+
-- 分类：`compatibility`
-- 状态：`compatibility`
+- 分类：`application-integration`
+- 状态：`stable`
 
 ## 3. 安装
 
 Swift Package Manager：
 
 ```swift
-// This entry is CocoaPods-only; import the module exposed by the selected subspec.
+import PToolsApplicationLinks
 ```
 
 CocoaPods：
 
 ```ruby
-pod 'PooTools/Appz'
+pod 'PooTools/ApplicationLinks'
 ```
 
 ## 4. 导入
 
 ```swift
-// This entry is CocoaPods-only; import the module exposed by the selected subspec.
+import PooTools
 ```
 
 ## 5. 快速开始
 
-优先选择最小的 product 或 subspec。registry 中的名称是 `Appz`，不要猜测没有发布的 product 或依赖。
+SwiftPM 使用 `PToolsApplicationLinks`，CocoaPods 使用 `PooTools/ApplicationLinks`。实现以 Foundation 为基础，UIKit 和 AppKit 调用方按平台条件编译。
 
 ## 6. 核心概念
 
-公开边界优先使用值类型。registry 记录的直接依赖：None declared by the registry.。
+公开边界优先使用值类型和 `Sendable`，模块不再有第三方运行时依赖。
+
+内置目录已经吸收上游目录中的全部 172 个应用描述器。可使用 `PTApplicationCatalog.all` 枚举，或使用 `PTApplicationCatalog.descriptor(identifier:)` 查找；具体的类型化深链 Action 通过对应的 `Applications.<Name>.Action` 提供。
 
 ## 7. 主要 API
 
-只使用源码中稳定的公开符号。完整符号数据属于自动生成的 API 报告，不在手写指南中重复维护。
+使用 `PTApplicationPath`、`PTApplicationLinkRequest`、`PTApplicationLinkRouter` 和 `Applications` 下的类型化描述器。`ApplicationCaller` 仅作为新 PTools 模块内部的源码别名保留；旧的 `PooTools/Appz` subspec 和第三方模块均不再提供。
 
 ## 8. 常见场景
 
@@ -106,6 +108,8 @@ UI 集成必须保留 Dynamic Type、VoiceOver、Reduce Motion、Reduce Transpar
 优先复用已有 PTools canonical service 和 adapter，不要再创建并行缓存、路由、权限或调度器。
 
 ## 19. 迁移
+
+旧的 `PooTools/Appz` subspec 已移除。新代码应选择 `PooTools/ApplicationLinks` 或 `PToolsApplicationLinks`，并使用当前模块注册表记录的唯一入口。
 
 5.x 期间保留兼容包装器；新代码应使用当前 registry 文档中的 canonical 入口。
 

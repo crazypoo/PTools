@@ -75,7 +75,8 @@ ALIASES = {
   "PToolsAppIntents" => "AppIntents",
   "PToolsWidgetCore" => "WidgetCore",
   "PToolsActivities" => "Activities",
-  "SmartScreenshot" => "SmartScreenshot"
+  "SmartScreenshot" => "SmartScreenshot",
+  "PToolsApplicationLinks" => "ApplicationLinks"
 }.freeze
 
 def canonical_name(name)

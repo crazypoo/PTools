@@ -2,13 +2,13 @@
 Current report metadata.
 AUTO-GENERATED FILE.
 Repository: crazypoo/PTools
-Branch: feature/pr56-pr60-rc-ci-security-20261030
-Source revision: 1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1
+Branch: master
+Source revision: 3f9f7d5b604877bdb4a48d32a53944734c9c5072
 Source version: 5.69.0
-Source inputs digest: d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb
+Source inputs digest: ed60290a1fc9bcf9c6196aef2f4a5f386a8a93a84f766fa6d58cfb4cb854f084
 Generator version: 1
 Generator: Scripts/report_mainactor_heavy_work.rb
-Generated at: 2026-10-30T04:32:51Z
+Generated at: 2026-11-12T02:17:28Z
 -->
 
 # MainActor 重活盘点
@@ -45,14 +45,14 @@ Generated at: 2026-10-30T04:32:51Z
 | `PooToolsSource/Core/PTLoadImageFunction.swift` | 785 | `CGImageSourceCreate` | INTENTIONAL | `let cgImage = CGImageSourceCreateImageAtIndex(source, 0, [` |
 | `PooToolsSource/Core/PTLoadImageFunction.swift` | 789 | `UIImage\(data:` | INTENTIONAL | `return UIImage(data: data)` |
 | `PooToolsSource/NetWork/Network.swift` | 448 | `JSONDecoder` | INTENTIONAL | `if let statusModel = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) {` |
-| `PooToolsSource/NetWork/Network.swift` | 617 | `JSONDecoder` | INTENTIONAL | `let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {` |
+| `PooToolsSource/NetWork/Network.swift` | 635 | `JSONDecoder` | INTENTIONAL | `let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {` |
 | `PooToolsSource/NetWork/NetworkSupport.swift` | 266 | `FileManager.default` | MIGRATED | `?? FileManager.default.temporaryDirectory.path` |
 | `PooToolsSource/NetWork/NetworkSupport.swift` | 268 | `FileManager.default` | MIGRATED | `try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 374 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.removeItem(atPath: path)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 381 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.removeItem(atPath: diskPath)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 382 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 412 | `FileManager.default` | MIGRATED | `let fm = FileManager.default` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 444 | `JSONEncoder` | MIGRATED | `try? JSONEncoder().encode(object)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 453 | `JSONDecoder` | MIGRATED | `try? JSONDecoder().decode(CacheObject.self, from: data)` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 462 | `Data\(contentsOf:` | MIGRATED | `try? Data(contentsOf: URL(fileURLWithPath: path))` |
-| `PooToolsSource/NetWork/NetworkSupport.swift` | 472 | `FileManager.default` | MIGRATED | `try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 370 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.removeItem(atPath: path)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 377 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.removeItem(atPath: diskPath)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 378 | `FileManager.default` | INTENTIONAL | `try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 408 | `FileManager.default` | MIGRATED | `let fm = FileManager.default` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 440 | `JSONEncoder` | MIGRATED | `try? JSONEncoder().encode(object)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 449 | `JSONDecoder` | MIGRATED | `try? JSONDecoder().decode(CacheObject.self, from: data)` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 458 | `Data\(contentsOf:` | MIGRATED | `try? Data(contentsOf: URL(fileURLWithPath: path))` |
+| `PooToolsSource/NetWork/NetworkSupport.swift` | 468 | `FileManager.default` | MIGRATED | `try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)` |

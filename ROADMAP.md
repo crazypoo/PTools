@@ -589,7 +589,7 @@ PTools 面向 iOS 17+ / Swift 6+。5.x 的主要治理范围是 `PooTools.podspe
 - ✅ SearchBar 增加可取消防抖、异步搜索 generation、加载状态、清空入口和不覆盖自定义文字的语言刷新。
 - ✅ Loading/HUD/TipsView 收敛场景窗口、重复展示、空配置、Timer、DisplayLink、动画和离屏生命周期。
 - ✅ Picker、Alert、Scene、MainActor 和 WebKit 的 canonical contract 纳入 5.17 静态门禁；WebKit 增加旧导航回调隔离、外部 scheme 取消和内容进程恢复。
-- ✅ ZipArchive、GCDWebServer、Instructions、Appz、Flag、PopoverKit 和 NotificationBanner 作为外部适配器登记边界，不修改第三方源码。
+- ✅ ZipArchive、GCDWebServer、Instructions、Flag、PopoverKit 和 NotificationBanner 作为外部适配器登记边界；ApplicationLinks 已吸收原 Appz 能力为 PTools 原生实现，不再依赖第三方源码。
 - ✅ 质量门禁接入 `Scripts/validate_517_ui.sh`，保持 iOS 17+、Swift 6+、公开 API 和三套入口兼容。
 - [ ] 在真实宿主和设备完成键盘、Stage Manager、VoiceOver、Dynamic Type、Dark Mode、WebKit 进程恢复、外部服务、轮播/分页和所有 42 个模块的视觉回归。
 

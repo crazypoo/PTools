@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/report_mainactor_heavy_work.rb",
-  "source_revision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
-  "generated_at": "2026-10-30T04:32:51Z",
+  "source_revision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
+  "generated_at": "2026-11-12T02:17:28Z",
   "entries": [
     {
       "path": "PooToolsSource/Base/PTVideoCoverCache.swift",
@@ -174,7 +174,7 @@
     },
     {
       "path": "PooToolsSource/NetWork/Network.swift",
-      "line": 617,
+      "line": 635,
       "operation": "JSONDecoder",
       "classification": "INTENTIONAL",
       "text": "let status = try? JSONDecoder().decode(PTNetworkStatusModel.self, from: data) else {"
@@ -195,56 +195,56 @@
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 374,
+      "line": 370,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "try? FileManager.default.removeItem(atPath: path)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 381,
+      "line": 377,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "try? FileManager.default.removeItem(atPath: diskPath)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 382,
+      "line": 378,
       "operation": "FileManager.default",
       "classification": "INTENTIONAL",
       "text": "try? FileManager.default.createDirectory(atPath: diskPath, withIntermediateDirectories: true)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 412,
+      "line": 408,
       "operation": "FileManager.default",
       "classification": "MIGRATED",
       "text": "let fm = FileManager.default"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 444,
+      "line": 440,
       "operation": "JSONEncoder",
       "classification": "MIGRATED",
       "text": "try? JSONEncoder().encode(object)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 453,
+      "line": 449,
       "operation": "JSONDecoder",
       "classification": "MIGRATED",
       "text": "try? JSONDecoder().decode(CacheObject.self, from: data)"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 462,
+      "line": 458,
       "operation": "Data\\(contentsOf:",
       "classification": "MIGRATED",
       "text": "try? Data(contentsOf: URL(fileURLWithPath: path))"
     },
     {
       "path": "PooToolsSource/NetWork/NetworkSupport.swift",
-      "line": 472,
+      "line": 468,
       "operation": "FileManager.default",
       "classification": "MIGRATED",
       "text": "try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)"
@@ -253,11 +253,11 @@
   "review_required_count": 0,
   "background_or_actor_count": 11,
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T04:32:51Z",
+  "generatedAt": "2026-11-12T02:17:28Z",
   "repository": "crazypoo/PTools",
-  "branch": "feature/pr56-pr60-rc-ci-security-20261030",
-  "sourceRevision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
+  "branch": "master",
+  "sourceRevision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
   "sourceVersion": "5.69.0",
   "generatorVersion": "Scripts/report_mainactor_heavy_work.rb",
-  "sourceInputsDigest": "d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb"
+  "sourceInputsDigest": "ed60290a1fc9bcf9c6196aef2f4a5f386a8a93a84f766fa6d58cfb4cb854f084"
 }

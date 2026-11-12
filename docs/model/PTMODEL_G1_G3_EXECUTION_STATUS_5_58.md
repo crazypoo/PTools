@@ -50,7 +50,7 @@ G1 的外部 SmartCodable/KakaJSON parity 没有宣称完成；那属于 G4。
 - ✅ PTModel-only consumer build + run。
 - ✅ CocoaPods `pod install --no-repo-update`，且工作区跟踪输入未被修改。
 - ✅ `PooTools-Example` 的 Swift 6 / iOS 17 配置检查。
-- ✅ `Appz` legacy compatibility target 的 Swift 5 配置检查。
+- ✅ ApplicationLinks 原生模块不再依赖第三方 Swift 5 target。
 - ✅ `PooTools-Example` 真实 CocoaPods workspace Debug Simulator build。
 - ✅ `PooTools-Example` 真实 CocoaPods workspace Release Simulator build。
 - ✅ 可用 iOS Simulator 的显式 build、install、launch、terminate。

@@ -117,17 +117,6 @@ grep -Fqx '    IPHONEOS_DEPLOYMENT_TARGET = 17.0' <<<"$example_settings" || {
   exit 1
 }
 
-legacy_settings="$(xcodebuild -workspace PooTools.xcworkspace \
-  -scheme Appz \
-  -configuration Debug \
-  -sdk iphonesimulator \
-  -destination 'generic/platform=iOS Simulator' \
-  -showBuildSettings 2>/dev/null)"
-grep -Fqx '    SWIFT_VERSION = 5.0' <<<"$legacy_settings" || {
-  printf 'FAIL: Appz legacy compatibility target is not using Swift 5\n' >&2
-  exit 1
-}
-
 # English: Build both configurations through the real CocoaPods iOS workspace.
 # Español: Construye ambas configuraciones mediante el workspace iOS real de CocoaPods.
 # 中文：通过真实 CocoaPods iOS workspace 构建 Debug 和 Release 两种配置。

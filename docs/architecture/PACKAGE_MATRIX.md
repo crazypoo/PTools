@@ -140,7 +140,7 @@ A = CocoaPods + SwiftPM, B = CocoaPods only, C = SwiftPM only, D = deprecated co
 | `Acknowledgements` | B | `PooTools/Acknowledgements` | — | Parity decision before 6.0 |
 | `AcknowledgementsCore` | B | `PooTools/AcknowledgementsCore` | — | Parity decision before 6.0 |
 | `AppIntegrity` | B | `PooTools/AppIntegrity` | — | Parity decision before 6.0 |
-| `Appz` | B | `PooTools/Appz` | — | Parity decision before 6.0 |
+| `ApplicationLinks` | A | `PToolsApplicationLinks` | `PooTools/ApplicationLinks` | Native PTools implementation |
 | `Auth` | B | `PooTools/Auth` | — | Parity decision before 6.0 |
 | `AuthCore` | B | `PooTools/AuthCore` | — | Parity decision before 6.0 |
 | `ConstraintLayout` | B | `PooTools/ConstraintLayout` | — | Parity decision before 6.0 |

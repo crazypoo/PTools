@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generator": "Scripts/validate_module_parity.sh",
-  "source_revision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
-  "generated_at": "2026-10-30T04:32:51Z",
+  "source_revision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
+  "generated_at": "2026-11-12T02:17:28Z",
   "spm_products": [
     "PTBluetoothPermission",
     "PTCalendarPermission",
@@ -30,6 +30,7 @@
     "PToolsActivities",
     "PToolsAppIntegrity",
     "PToolsAppIntents",
+    "PToolsApplicationLinks",
     "PToolsAudio",
     "PToolsAuth",
     "PToolsAuthCore",
@@ -215,6 +216,7 @@
     "Accessibility",
     "Activities",
     "AppIntents",
+    "ApplicationLinks",
     "Audio",
     "BackgroundTasks",
     "BankCard",
@@ -390,7 +392,6 @@
     "Acknowledgements",
     "AcknowledgementsCore",
     "AppIntegrity",
-    "Appz",
     "Auth",
     "AuthCore",
     "ConstraintLayout",
@@ -609,6 +610,7 @@
       "module": "Core",
       "field": "internal_dependencies",
       "spm": [
+        "ApplicationLinks",
         "Device",
         "Logging",
         "PToolsConstraintLayout",
@@ -1338,6 +1340,24 @@
       }
     },
     {
+      "module": "ApplicationLinks",
+      "spm": {
+        "defines": [
+          "POOTOOLS_APPLICATION_LINKS"
+        ],
+        "upcoming_features": [
+          "StrictConcurrency"
+        ]
+      },
+      "cocoapods": {
+        "defines": [
+          "POOTOOLS_APPLICATION_LINKS",
+          "POOTOOLS_COCOAPODS"
+        ],
+        "upcoming_features": []
+      }
+    },
+    {
       "module": "Audio",
       "spm": {
         "defines": [],
@@ -1530,7 +1550,7 @@
       "module": "Core",
       "spm": {
         "defines": [
-          "POOTOOLS_APPZ",
+          "POOTOOLS_APPLICATION_LINKS",
           "POOTOOLS_COCOAPODS",
           "POOTOOLS_LAUNCHTIMEPROFILER",
           "POOTOOLS_PICKER",
@@ -2220,13 +2240,13 @@
     }
   ],
   "status": "baseline",
-  "fingerprint": "4caec792bfe6308eebd9efd935abfce37c2db1ad6516fd8dfa165c0e9d8dd222",
+  "fingerprint": "f876f685792dc5941260c794131bd7082c526cbee2c99d762181927281be793e",
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T04:32:51Z",
+  "generatedAt": "2026-11-12T02:17:28Z",
   "repository": "crazypoo/PTools",
-  "branch": "feature/pr56-pr60-rc-ci-security-20261030",
-  "sourceRevision": "1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1",
+  "branch": "master",
+  "sourceRevision": "3f9f7d5b604877bdb4a48d32a53944734c9c5072",
   "sourceVersion": "5.69.0",
   "generatorVersion": "Scripts/validate_module_parity.sh",
-  "sourceInputsDigest": "d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb"
+  "sourceInputsDigest": "ed60290a1fc9bcf9c6196aef2f4a5f386a8a93a84f766fa6d58cfb4cb854f084"
 }

@@ -11,7 +11,7 @@ generated: true
 
 | 模块 | SwiftPM | CocoaPods |
 | --- | --- | --- |
-| [Appz](../modules/appz/README.zh-Hans.md) | `—` | `Appz` |
+| [ApplicationLinks](../modules/application-links/README.zh-Hans.md) | `PToolsApplicationLinks` | `ApplicationLinks` |
 | [BackgroundTasks](../modules/background-tasks/README.zh-Hans.md) | `—` | `BackgroundTasks` |
 | [BankCard](../modules/bank-card/README.zh-Hans.md) | `—` | `BankCard` |
 | [BilogyID](../modules/bilogy-id/README.zh-Hans.md) | `—` | `BilogyID` |

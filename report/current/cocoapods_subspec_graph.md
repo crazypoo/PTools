@@ -1,14 +1,10 @@
 <!--
-Current report metadata.
 AUTO-GENERATED FILE.
-Repository: crazypoo/PTools
-Branch: feature/pr56-pr60-rc-ci-security-20261030
-Source revision: 1fb15b13c3f41fcaabd7a2ad5f537deb0a599df1
-Source version: 5.69.0
-Source inputs digest: d55d40519638e28785124558612fcb09551665299151a4effe0a7b983163cfcb
-Generator version: 1
+DO NOT EDIT MANUALLY.
+
 Generator: Scripts/report_cocoapods_subspec_graph.rb
-Generated at: 2026-10-30T04:32:51Z
+Source revision: 3f9f7d5b604877bdb4a48d32a53944734c9c5072
+Generated at: 2026-11-12T03:02:03Z
 -->
 
 # CocoaPods Subspec Graph
@@ -30,7 +26,7 @@ Generated at: 2026-10-30T04:32:51Z
 | `Activities` | — | — | `PToolsActivities` | ActivityKit, Foundation | — |
 | `AppIntegrity` | — | — | `PToolsAppIntegrity` | DeviceCheck, Foundation | — |
 | `AppIntents` | `PooTools/RouteCore` | — | `PToolsAppIntents` | AppIntents, Foundation | — |
-| `Appz` | `PooTools/Core` | `Appz` | — | — | — |
+| `ApplicationLinks` | — | — | `PToolsAppz` | Foundation | — |
 | `Audio` | `PooTools/MicPermission` | — | `PToolsAudio` | AVFoundation, AudioToolbox, Foundation | — |
 | `Auth` | `PooTools/AuthCore`, `PooTools/Storage` | — | `PToolsAuth` | Foundation | — |
 | `AuthCore` | — | — | `PToolsAuthCore` | Foundation | — |
@@ -88,7 +84,7 @@ Generated at: 2026-10-30T04:32:51Z
 | `ImageEditor` | `PooTools/Core`, `PooTools/HarbethKit`, `PooTools/MediaCore`, `PooTools/PhotoPicker`, `PooTools/Symbols` | — | `ImageEditor` | — | — |
 | `ImagePicker` | `PooTools/CameraPermission`, `PooTools/Core` | — | `ImagePicker` | — | — |
 | `Input` | `PooTools/Core`, `PooTools/PToolsUIFoundation` | `PhoneNumberKit`, `SnapKit` | `Input` | — | — |
-| `InputAll` | `PooTools/Appz`, `PooTools/Audio`, `PooTools/BankCard`, `PooTools/Banner`, `PooTools/BilogyID`, `PooTools/Calendar`, `PooTools/CheckBox`, `PooTools/CheckDirtyWord`, `PooTools/CheckUpdate`, `PooTools/ChinesePinyin`, `PooTools/Circle`, `PooTools/CodeView`, `PooTools/Configuration`, `PooTools/Core`, `PooTools/Country`, `PooTools/CustomerLabel`, `PooTools/CustomerNumberKeyboard`, `PooTools/DEBUG`, `PooTools/DEBUG_TrackingEyes`, `PooTools/DataEncrypt`, `PooTools/Feedback`, `PooTools/Flag`, `PooTools/Guide`, `PooTools/HTTPFilePortal`, `PooTools/HarbethKit`, `PooTools/HeartRate`, `PooTools/Hud`, `PooTools/IAP`, `PooTools/ImageEditor`, `PooTools/Input`, `PooTools/Instructions`, `PooTools/KeyChain`, `PooTools/LaunchTimeProfiler`, `PooTools/Layout`, `PooTools/LivePhoto`, `PooTools/Loading`, `PooTools/Location`, `PooTools/MediaViewer`, `PooTools/MessageKit`, `PooTools/Motion`, `PooTools/NetWork`, `PooTools/OSSKitSpeech`, `PooTools/PDF`, `PooTools/PageControl`, `PooTools/PagingControl`, `PooTools/PhoneInfo`, `PooTools/PhotoPicker`, `PooTools/Picker`, `PooTools/Ping`, `PooTools/PopoverKit`, `PooTools/ProgressBar`, `PooTools/RateView`, `PooTools/Router`, `PooTools/SVG`, `PooTools/ScanQRCode`, `PooTools/ScrollBanner`, `PooTools/Search`, `PooTools/SearchBar`, `PooTools/Security`, `PooTools/SecuritySuite`, `PooTools/Segmented`, `PooTools/Share`, `PooTools/Slider`, `PooTools/SmartScreenshot`, `PooTools/SocketKit`, `PooTools/SplitView`, `PooTools/Stepper`, `PooTools/Tabbar`, `PooTools/Telephony`, `PooTools/VideoEditor`, `PooTools/Vision`, `PooTools/WhatsNewsKit`, `PooTools/ZipArchive`, `PooTools/iOS17Tips` | — | — | — | — |
+| `InputAll` | `PooTools/ApplicationLinks`, `PooTools/Audio`, `PooTools/BankCard`, `PooTools/Banner`, `PooTools/BilogyID`, `PooTools/Calendar`, `PooTools/CheckBox`, `PooTools/CheckDirtyWord`, `PooTools/CheckUpdate`, `PooTools/ChinesePinyin`, `PooTools/Circle`, `PooTools/CodeView`, `PooTools/Configuration`, `PooTools/Core`, `PooTools/Country`, `PooTools/CustomerLabel`, `PooTools/CustomerNumberKeyboard`, `PooTools/DEBUG`, `PooTools/DEBUG_TrackingEyes`, `PooTools/DataEncrypt`, `PooTools/Feedback`, `PooTools/Flag`, `PooTools/Guide`, `PooTools/HTTPFilePortal`, `PooTools/HarbethKit`, `PooTools/HeartRate`, `PooTools/Hud`, `PooTools/IAP`, `PooTools/ImageEditor`, `PooTools/Input`, `PooTools/Instructions`, `PooTools/KeyChain`, `PooTools/LaunchTimeProfiler`, `PooTools/Layout`, `PooTools/LivePhoto`, `PooTools/Loading`, `PooTools/Location`, `PooTools/MediaViewer`, `PooTools/MessageKit`, `PooTools/Motion`, `PooTools/NetWork`, `PooTools/OSSKitSpeech`, `PooTools/PDF`, `PooTools/PageControl`, `PooTools/PagingControl`, `PooTools/PhoneInfo`, `PooTools/PhotoPicker`, `PooTools/Picker`, `PooTools/Ping`, `PooTools/PopoverKit`, `PooTools/ProgressBar`, `PooTools/RateView`, `PooTools/Router`, `PooTools/SVG`, `PooTools/ScanQRCode`, `PooTools/ScrollBanner`, `PooTools/Search`, `PooTools/SearchBar`, `PooTools/Security`, `PooTools/SecuritySuite`, `PooTools/Segmented`, `PooTools/Share`, `PooTools/Slider`, `PooTools/SmartScreenshot`, `PooTools/SocketKit`, `PooTools/SplitView`, `PooTools/Stepper`, `PooTools/Tabbar`, `PooTools/Telephony`, `PooTools/VideoEditor`, `PooTools/Vision`, `PooTools/WhatsNewsKit`, `PooTools/ZipArchive`, `PooTools/iOS17Tips` | — | — | — | — |
 | `Instructions` | `PooTools/Core`, `PooTools/Overlay` | — | `Instructions` | — | — |
 | `KeyChain` | — | — | `KeyChain` | — | — |
 | `LaunchTimeProfiler` | `PooTools/Core` | — | `LaunchTimeProfiler` | — | — |

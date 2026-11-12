@@ -11,7 +11,7 @@ Cada producto SwiftPM y subspec de CocoaPods registrado tiene una guía triling�
 
 | Módulo | SwiftPM | CocoaPods |
 | --- | --- | --- |
-| [Appz](../modules/appz/README.es.md) | `—` | `Appz` |
+| [ApplicationLinks](../modules/application-links/README.es.md) | `PToolsApplicationLinks` | `ApplicationLinks` |
 | [BackgroundTasks](../modules/background-tasks/README.es.md) | `—` | `BackgroundTasks` |
 | [BankCard](../modules/bank-card/README.es.md) | `—` | `BankCard` |
 | [BilogyID](../modules/bilogy-id/README.es.md) | `—` | `BilogyID` |

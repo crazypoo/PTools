@@ -1,6 +1,5 @@
 PODS:
   - Alamofire (5.12.2)
-  - Appz (3.2.0)
   - BlueCryptor (1.0.32)
   - BlueECC (1.2.201)
   - BlueRSA (1.0.203)
@@ -53,7 +52,7 @@ PODS:
   - IQTextView (1.0.5):
     - IQKeyboardToolbar/Placeholderable
   - KakaJSON (1.1.2)
-  - Kingfisher (8.13.0)
+  - Kingfisher (8.14.0)
   - KituraContracts (1.2.1):
     - LoggerAPI (~> 1.7)
   - KTVHTTPCache (3.1.0):
@@ -78,9 +77,7 @@ PODS:
     - PooTools/Search
   - PooTools/AcknowledgementsCore (5.69.0)
   - PooTools/AppIntegrity (5.69.0)
-  - PooTools/Appz (5.69.0):
-    - Appz
-    - PooTools/Core
+  - PooTools/ApplicationLinks (5.69.0)
   - PooTools/Audio (5.69.0):
     - PooTools/MicPermission
   - PooTools/Auth (5.69.0):
@@ -216,7 +213,7 @@ PODS:
     - PooTools/PToolsUIFoundation
     - SnapKit
   - PooTools/InputAll (5.69.0):
-    - PooTools/Appz
+    - PooTools/ApplicationLinks
     - PooTools/Audio
     - PooTools/BankCard
     - PooTools/Banner
@@ -548,7 +545,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
-    - Appz
     - BlueCryptor
     - BlueECC
     - BlueRSA
@@ -593,7 +589,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: c5f37d8f438dc1d7fd3ff767f2f80fd01ca381d7
-  Appz: 9afca8060886b75002092f4b5b5c238a0ab19bf0
   BlueCryptor: b0aee3d9b8f367b49b30de11cda90e1735571c24
   BlueECC: c9662360a702839aa4d324f9f4cc8b899f6f7dd6
   BlueRSA: 893ae5412de48a508a487067564dbcf9cd49df71
@@ -614,7 +609,7 @@ SPEC CHECKSUMS:
   IQTextInputViewNotification: 3b9fb27a16e7ee8958cc9092cfb07a1a9e1fd559
   IQTextView: ae13b4922f22e6f027f62c557d9f4f236b19d5c7
   KakaJSON: cc5ff50a8c1cfbb09413db8496cb709a209e6137
-  Kingfisher: 260f690679115e70aac534e18cf1f3cd70814d5c
+  Kingfisher: 0bc3e46cbca95dcfb48dedfe8607bdd76ae216d9
   KituraContracts: e845e60dc8627ad0a76fa55ef20a45451d8f830b
   KTVHTTPCache: a1f3c9c217be5af6985b240d660db262a0cbc18a
   LoggerAPI: ad9c4a6f1e32f518fdb43a1347ac14d765ab5e3d
@@ -623,7 +618,7 @@ SPEC CHECKSUMS:
   lottie-ios: 6467ca7035120c5b0e0acee58bb679cf15875686
   PhoneNumberKit: d8a400a22cea696c20028ebfdf75560dc31144e1
   PocketSVG: ca3bc53ea8d68336ba830c47b2e547790507b901
-  PooTools: 07961ca6d001dcd22632862009f23ea8b7df912b
+  PooTools: 9c3335114a86a5e784e2f767fed60acd030c669e
   Protobuf: d7f7c8329edf5eb8af65547a8ba3e9c1cee927d5
   SmartCodable: db7f9dc94eb9022ede18adf5052772432c5286c7
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
@@ -633,6 +628,6 @@ SPEC CHECKSUMS:
   SwiftLint: 7d51ad56923e88694cee5ca806dbbab30f85eaaa
   Swinject: a827d508c6270da03ec74e558e728917a888fa9b
 
-PODFILE CHECKSUM: d6b3c07db4128f3e7d95ed8381169de3077d015b
+PODFILE CHECKSUM: 6b36975e7d18cffa66109dbda8c43cdfe6142088
 
 COCOAPODS: 1.16.2

@@ -1,7 +1,7 @@
 platform :ios, '17.0'
 use_frameworks!
 
-legacy_swift5_targets = %w[Appz KituraContracts]
+legacy_swift5_targets = %w[KituraContracts]
 
 post_install do |installer|
     installer.pods_project.targets.each do |target|

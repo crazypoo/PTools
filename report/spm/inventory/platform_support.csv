@@ -25,6 +25,7 @@ PToolsAcknowledgementsCore,PToolsAcknowledgementsCore,"{""library"": [""automati
 PToolsActivities,PToolsActivities,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsAppIntegrity,PToolsAppIntegrity,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsAppIntents,PToolsAppIntents,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsApplicationLinks,PToolsApplicationLinks,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsAudio,PToolsAudio,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsAuth,PToolsAuth,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsAuthCore,PToolsAuthCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
@@ -38,6 +39,18 @@ PToolsCore,PToolsCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;vi
 PToolsDatabase,PToolsDatabase,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsDatabaseCore,PToolsDatabaseCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsDate,PToolsDate,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsDebugConsoleCore,PToolsDebugConsoleCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsDebugConsoleUI,PToolsDebugConsoleUI,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsDebugCore,PToolsDebugCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsDebugInspectorCore,PToolsDebugInspectorCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsDebugInspectorLegacyUI,PToolsDebugInspectorLegacyUI,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsDebugInspectorUI,PToolsDebugInspectorUI,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsDebugInventoryCore,PToolsDebugInventoryCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsDebugMetricsCore,PToolsDebugMetricsCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsDebugMetricsUI,PToolsDebugMetricsUI,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsDebugNetworkCore,PToolsDebugNetworkCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsDebugStorageCore,PToolsDebugStorageCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsDebugStudioBridge,PToolsDebugStudioBridge,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsDeepLink,PToolsDeepLink,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsDevice,PToolsDevice,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsDocuments,PToolsDocuments,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
@@ -70,6 +83,7 @@ PToolsSimulationCore,PToolsSimulationCore,"{""library"": [""automatic""]}",ios;m
 PToolsStorage,PToolsStorage,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsStorageCore,PToolsStorageCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsStoreKit,PToolsStoreKit,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsStudioProtocolCore,PToolsStudioProtocolCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsSymbols,PToolsSymbols,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsSync,PToolsSync,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsSyncCore,PToolsSyncCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
@@ -77,6 +91,7 @@ PToolsTheme,PToolsTheme,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;
 PToolsTransfer,PToolsTransfer,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsTransferCore,PToolsTransferCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsUIFoundation,PToolsUIFoundation,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
+PToolsVariantCore,PToolsVariantCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsWeb,PToolsWeb,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsWebBridge,PToolsWebBridge,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes
 PToolsWebCore,PToolsWebCore,"{""library"": [""automatic""]}",ios;macos;tvos;watchos;visionos,yes

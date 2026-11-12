@@ -1,14 +1,14 @@
 ---
-module: "Appz"
-module_id: "appz"
+module: "ApplicationLinks"
+module_id: "application-links"
 language: "en"
-status: "compatibility"
+status: "stable"
 minimum_ios: "17.0"
 swift: "6+"
-swiftpm_product: "null"
-cocoapods_subspec: "Appz"
-source: "manifest-only"
-category: "compatibility"
+swiftpm_product: "PToolsApplicationLinks"
+cocoapods_subspec: "ApplicationLinks"
+source: "PooToolsSource/PToolsAppz"
+category: "application-integration"
 last_reviewed: "2026-09-28"
 canonical: true
 canonical_source: "self"
@@ -16,50 +16,52 @@ product_version_source: "repository:VERSION"
 document_schema_version: 1
 ---
 
-# Appz
+# ApplicationLinks
 
 ## 1. Overview
 
-Appz is a PTools compatibility module. This guide is generated from the canonical module registry and documents the supported boundary for iOS 17+ and Swift 6+.
+ApplicationLinks is the native PTools application-link module. It replaces the former third-party Appz runtime and documents the supported boundary for iOS 17+ and Swift 6+.
 
 ## 2. Requirements
 
 - Platform: iOS 17.0+
 - Swift: 6+
-- Category: `compatibility`
-- Status: `compatibility`
+- Category: `application-integration`
+- Status: `stable`
 
 ## 3. Installation
 
 Swift Package Manager:
 
 ```swift
-// This entry is CocoaPods-only; import the module exposed by the selected subspec.
+import PToolsApplicationLinks
 ```
 
 CocoaPods:
 
 ```ruby
-pod 'PooTools/Appz'
+pod 'PooTools/ApplicationLinks'
 ```
 
 ## 4. Import
 
 ```swift
-// This entry is CocoaPods-only; import the module exposed by the selected subspec.
+import PooTools
 ```
 
 ## 5. Quick Start
 
-Use the smallest published product or subspec. The registry name is `Appz`; do not infer an unpublished product or dependency.
+Use `PToolsApplicationLinks` in SwiftPM or `PooTools/ApplicationLinks` in CocoaPods. The implementation is Foundation-first; UIKit and AppKit callers are conditional platform adapters.
 
 ## 6. Core Concepts
 
-The public boundary is value-first where possible. Direct dependencies recorded by the registry: None declared by the registry..
+The public boundary is value-first and `Sendable` where possible. The module has no third-party runtime dependency.
+
+The built-in catalog contains all 172 application descriptors absorbed from the upstream directory. Use `PTApplicationCatalog.all` for enumeration or `PTApplicationCatalog.descriptor(identifier:)` for lookup; use the corresponding `Applications.<Name>.Action` type for typed deep-link actions.
 
 ## 7. Main APIs
 
-Use only stable public symbols documented by the module source. Complete symbol data belongs to generated API reports, not hand-maintained prose.
+Use `PTApplicationPath`, `PTApplicationLinkRequest`, `PTApplicationLinkRouter`, and the typed `Applications` descriptors. The old `ApplicationCaller` spelling is only a source-level alias inside this new PTools module; the old `PooTools/Appz` subspec and third-party module are not provided.
 
 ## 8. Common Use Cases
 
@@ -107,7 +109,7 @@ Prefer the existing PTools canonical services and adapters instead of creating a
 
 ## 19. Migration
 
-Compatibility wrappers remain available during 5.x. New code should use the canonical entry documented by the current registry.
+The old `PooTools/Appz` subspec is removed. New code should select `PooTools/ApplicationLinks` or `PToolsApplicationLinks` and use the canonical entry documented by the current registry.
 
 ## 20. Troubleshooting
 
