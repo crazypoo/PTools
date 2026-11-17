@@ -1,0 +1,265 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "crazypoo/YD1688",
+    "ref": "main",
+    "path": "Podfile",
+    "podfile_blob_sha": "9787ae30b13f6adac90dc980a382a890dbe6767d",
+    "note": "Snapshot only; pass --reference-podfile to checker to compare local consumer changes"
+  },
+  "package_repository": "crazypoo/PTools",
+  "entries": [
+    {
+      "pod_subspec": "Core",
+      "spm_product": "ptools",
+      "spm_target": "ptools",
+      "import_module": "ptools"
+    },
+    {
+      "pod_subspec": "ScanQRCode",
+      "spm_product": "PooToolsScanQRCode",
+      "spm_target": "PooToolsScanQRCode",
+      "import_module": "PooToolsScanQRCode"
+    },
+    {
+      "pod_subspec": "NetWork",
+      "spm_product": "PooToolsNetWork",
+      "spm_target": "PooToolsNetWork",
+      "import_module": "PooToolsNetWork"
+    },
+    {
+      "pod_subspec": "Acknowledgements",
+      "spm_product": "PToolsAcknowledgements",
+      "spm_target": "PToolsAcknowledgements",
+      "import_module": "PToolsAcknowledgements"
+    },
+    {
+      "pod_subspec": "Date",
+      "spm_product": "PToolsDate",
+      "spm_target": "PToolsDate",
+      "import_module": "PToolsDate"
+    },
+    {
+      "pod_subspec": "WebBridge",
+      "spm_product": "PToolsWebBridge",
+      "spm_target": "PToolsWebBridge",
+      "import_module": "PToolsWebBridge"
+    },
+    {
+      "pod_subspec": "PagingControl",
+      "spm_product": "PooToolsPagingControl",
+      "spm_target": "PooToolsPagingControl",
+      "import_module": "PooToolsPagingControl"
+    },
+    {
+      "pod_subspec": "ScrollBanner",
+      "spm_product": "PooToolsScrollBanner",
+      "spm_target": "PooToolsScrollBanner",
+      "import_module": "PooToolsScrollBanner"
+    },
+    {
+      "pod_subspec": "RateView",
+      "spm_product": "PooToolsRateView",
+      "spm_target": "PooToolsRateView",
+      "import_module": "PooToolsRateView"
+    },
+    {
+      "pod_subspec": "Stepper",
+      "spm_product": "PooToolsStepper",
+      "spm_target": "PooToolsStepper",
+      "import_module": "PooToolsStepper"
+    },
+    {
+      "pod_subspec": "Input",
+      "spm_product": "PooToolsInput",
+      "spm_target": "PooToolsInput",
+      "import_module": "PooToolsInput"
+    },
+    {
+      "pod_subspec": "Picker",
+      "spm_product": "PooToolsPicker",
+      "spm_target": "PooToolsPicker",
+      "import_module": "PooToolsPicker"
+    },
+    {
+      "pod_subspec": "PhotoPicker",
+      "spm_product": "PooToolsPhotoPicker",
+      "spm_target": "PooToolsPhotoPicker",
+      "import_module": "PooToolsPhotoPicker"
+    },
+    {
+      "pod_subspec": "CustomerLabel",
+      "spm_product": "PooToolsCustomerLabel",
+      "spm_target": "PooToolsCustomerLabel",
+      "import_module": "PooToolsCustomerLabel"
+    },
+    {
+      "pod_subspec": "Tabbar",
+      "spm_product": "PooToolsTabbar",
+      "spm_target": "ptools",
+      "import_module": "ptools"
+    },
+    {
+      "pod_subspec": "Loading",
+      "spm_product": "PooToolsLoading",
+      "spm_target": "PooToolsLoading",
+      "import_module": "PooToolsLoading"
+    },
+    {
+      "pod_subspec": "WhatsNewsKit",
+      "spm_product": "PooToolsWhatsNewsKit",
+      "spm_target": "PooToolsWhatsNewsKit",
+      "import_module": "PooToolsWhatsNewsKit"
+    },
+    {
+      "pod_subspec": "MediaViewer",
+      "spm_product": "PooToolsMediaViewer",
+      "spm_target": "PooToolsMediaViewer",
+      "import_module": "PooToolsMediaViewer"
+    },
+    {
+      "pod_subspec": "ProgressBar",
+      "spm_product": "PooToolsProgressBar",
+      "spm_target": "PooToolsProgressBar",
+      "import_module": "PooToolsProgressBar"
+    },
+    {
+      "pod_subspec": "MessageKit",
+      "spm_product": "PooToolsMessageKit",
+      "spm_target": "PooToolsMessageKit",
+      "import_module": "PooToolsMessageKit"
+    },
+    {
+      "pod_subspec": "SocketKit",
+      "spm_product": "PooToolsSocketKit",
+      "spm_target": "PooToolsSocketKit",
+      "import_module": "PooToolsSocketKit"
+    },
+    {
+      "pod_subspec": "NotificationPermission",
+      "spm_product": "PTNotificationPermission",
+      "spm_target": "PTNotificationPermission",
+      "import_module": "PTNotificationPermission"
+    },
+    {
+      "pod_subspec": "CameraPermission",
+      "spm_product": "PTCameraPermission",
+      "spm_target": "PTCameraPermission",
+      "import_module": "PTCameraPermission"
+    },
+    {
+      "pod_subspec": "LocationPermission",
+      "spm_product": "PTLocationPermission",
+      "spm_target": "PTLocationPermission",
+      "import_module": "PTLocationPermission"
+    },
+    {
+      "pod_subspec": "Circle",
+      "spm_product": "PooToolsCircle",
+      "spm_target": "PooToolsCircle",
+      "import_module": "PooToolsCircle"
+    },
+    {
+      "pod_subspec": "NotificationBanner",
+      "spm_product": "PooToolsNotificationBanner",
+      "spm_target": "PooToolsBanner",
+      "import_module": "PooToolsBanner"
+    },
+    {
+      "pod_subspec": "CodeView",
+      "spm_product": "PooToolsCodeView",
+      "spm_target": "PooToolsCodeView",
+      "import_module": "PooToolsCodeView"
+    },
+    {
+      "pod_subspec": "BilogyID",
+      "spm_product": "PooToolsBioID",
+      "spm_target": "PooToolsBioID",
+      "import_module": "PooToolsBioID"
+    },
+    {
+      "pod_subspec": "SmartScreenshot",
+      "spm_product": "PooToolsSmartScreenshot",
+      "spm_target": "PooToolsSmartScreenshot",
+      "import_module": "PooToolsSmartScreenshot"
+    },
+    {
+      "pod_subspec": "Flag",
+      "spm_product": "PooToolsFlag",
+      "spm_target": "ptools",
+      "import_module": "ptools"
+    },
+    {
+      "pod_subspec": "Router",
+      "spm_product": "PooToolsRouter",
+      "spm_target": "PooToolsRouter",
+      "import_module": "PooToolsRouter"
+    },
+    {
+      "pod_subspec": "Share",
+      "spm_product": "PooToolsShare",
+      "spm_target": "PooToolsShare",
+      "import_module": "PooToolsShare"
+    },
+    {
+      "pod_subspec": "DataEncrypt",
+      "spm_product": "PooToolsDataEncrypt",
+      "spm_target": "PooToolsDataEncrypt",
+      "import_module": "PooToolsDataEncrypt"
+    },
+    {
+      "pod_subspec": "WebKit",
+      "spm_product": "PooToolsWebKit",
+      "spm_target": "PooToolsWebKit",
+      "import_module": "PooToolsWebKit"
+    },
+    {
+      "pod_subspec": "OSSKitSpeech",
+      "spm_product": "PooToolsOSSKitSpeech",
+      "spm_target": "PooToolsOSSKitSpeech",
+      "import_module": "PooToolsOSSKitSpeech"
+    },
+    {
+      "pod_subspec": "ImageEditor",
+      "spm_product": "PooToolsImageEditor",
+      "spm_target": "PooToolsImageEditor",
+      "import_module": "PooToolsImageEditor"
+    },
+    {
+      "pod_subspec": "VideoEditor",
+      "spm_product": "PooToolsVideoEditor",
+      "spm_target": "PooToolsVideoEditor",
+      "import_module": "PooToolsVideoEditor"
+    },
+    {
+      "pod_subspec": "VideoCache",
+      "spm_product": "PooToolsVideoCache",
+      "spm_target": "ptools",
+      "import_module": "ptools"
+    },
+    {
+      "pod_subspec": "Hud",
+      "spm_product": "PooToolsHud",
+      "spm_target": "PooToolsHud",
+      "import_module": "PooToolsHud"
+    },
+    {
+      "pod_subspec": "FilterCamera",
+      "spm_product": "PooToolsFilterCamera",
+      "spm_target": "PooToolsFilterCamera",
+      "import_module": "PooToolsFilterCamera"
+    },
+    {
+      "pod_subspec": "Popover",
+      "spm_product": "PooToolsPopover",
+      "spm_target": "PooToolsPopover",
+      "import_module": "PooToolsPopover"
+    },
+    {
+      "pod_subspec": "AppIntents",
+      "spm_product": "PToolsAppIntents",
+      "spm_target": "PToolsAppIntents",
+      "import_module": "PToolsAppIntents"
+    }
+  ]
+}
