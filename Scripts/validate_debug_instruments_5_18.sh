@@ -42,6 +42,8 @@ require_fragment "$manager_file" "PTDebugHookRegistry.shared.uninstall(identifie
 # The console window is a separate SwiftPM target; CocoaPods compiles both sources together.
 # Guard the import + public cross-target window-level API against regression.
 require_fragment "$manager_file" "import PToolsDebugConsoleUI" "SwiftPM Debug imports ConsoleUI window type"
+require_fragment "$manager_file" "import PToolsOverlay" "SwiftPM Debug imports public overlay z-order"
+require_fragment "$manager_file" "window.windowLevel = PTOverlayZOrder.windowLevel(for: .debug)" "Debug coordinator uses shared public overlay z-order"
 require_fragment "PooToolsSource/PToolsDebugConsoleUI/PTConsoleWindow.swift" "public static let debugWindowLevel:" "cross-target console z-order is public"
 require_fragment "Package.swift" 'name: "PooToolsDEBUG",' "Debug aggregate target remains declared"
 require_fragment "Package.swift" 'dependencies: ["PToolsDebugInspectorLegacyUI", "PToolsDebugConsoleUI"' "Debug aggregate links ConsoleUI target"
