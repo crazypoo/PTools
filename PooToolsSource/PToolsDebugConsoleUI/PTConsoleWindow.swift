@@ -22,7 +22,7 @@ public final class PTConsoleWindow: UIWindow {
     // English: Reuse the shared overlay z-order so debug windows stay above feature overlays.
     // Español: Reutiliza el orden Z compartido para que las ventanas de depuración queden sobre los overlays.
     // 中文：复用统一浮层层级，确保调试窗口始终位于功能浮层之上。
-    static let debugWindowLevel: UIWindow.Level = PTOverlayZOrder.windowLevel(for: .debug)
+    public static let debugWindowLevel: UIWindow.Level = PTOverlayZOrder.windowLevel(for: .debug)
     
     private weak var debugView: UIView?
 
