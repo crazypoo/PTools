@@ -1078,7 +1078,7 @@
     {
       "kind": "pod_only",
       "module": "Flag",
-      "reason": "Legacy compatibility subspec retained for old Podfiles; FlagKit is host-owned and is no longer installed by PTools.",
+      "reason": "Historical dependency-only CocoaPods compatibility entry; SwiftPM PooToolsFlag product reuses ptools. FlagKit remains an explicit host-owned dependency.",
       "owner": "packaging",
       "expiration": "2027-03-31",
       "classification": "LEGACY"
@@ -1118,7 +1118,7 @@
     {
       "kind": "pod_only",
       "module": "NotificationBanner",
-      "reason": "CocoaPods dependency-only subspec controlled by Core flags.",
+      "reason": "Historical CocoaPods alias of Banner; SwiftPM PooToolsNotificationBanner product reuses the existing PooToolsBanner target without introducing a second module.",
       "owner": "packaging",
       "expiration": "2026-12-31",
       "classification": "INTENTIONAL"
@@ -1142,7 +1142,7 @@
     {
       "kind": "pod_only",
       "module": "Tabbar",
-      "reason": "CocoaPods dependency-only subspec controlled by Core flags.",
+      "reason": "CocoaPods dependency-only subspec; SwiftPM PooToolsTabbar product reuses the ptools target and POOTOOLS_TABBAR flag without duplicating TabBar source files.",
       "owner": "packaging",
       "expiration": "2026-12-31",
       "classification": "INTENTIONAL"
