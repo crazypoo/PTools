@@ -1,6 +1,6 @@
 # PTools Swift Package Manager 兼容与 YD1688 迁移修复方案
 
-> 状态：**静态扫描完成；实现 / 编译 / 真机验收未开始**。方案落点：`crazypoo/PTools@master`；参考使用方：`crazypoo/YD1688@main`。本文件是当前有效的待办与验收清单，不是迁移完成证明。
+> 状态：**PTools SPM 兼容 Product 已开始落地，42/42 静态映射通过；PTools 全量 iOS 编译 / 真机验收未开始**。方案落点：`crazypoo/PTools@master`；参考使用方：`crazypoo/YD1688@main`。本文件是当前有效的待办与验收清单，不是迁移完成证明。
 
 ## 目标与边界
 
@@ -16,17 +16,17 @@
 |---|---|
 | `YD1688/Podfile` | 42 个不同的 `PooTools/...` 引用 |
 | `PTools/PooTools.podspec` | 168 个 subspec 声明（包含部分兼容 alias） |
-| `PTools/Package.swift` | 170 个 `.library` 声明（可能含同一 target 的多个 product alias）；**声明不等于实际编译可用** |
-| 直接或已明确重命名的候选 SPM 产品 | 39 / 42 |
-| 无同名 SPM product、需按实际语义审计 | 3 / 42：`Tabbar`、`NotificationBanner`、`Flag` |
+| `PTools/Package.swift` | 173 个 `.library` 声明（可能含同一 target 的多个 product alias）；**声明不等于实际编译可用** |
+| 直接或已明确重命名的候选 SPM 产品 | 42 / 42（含 3 个新增兼容 Product） |
+| 兼容别名 Product 已补齐 | 3 / 42：`Tabbar`、`NotificationBanner`、`Flag`（编译/业务等价性待验收） |
 | YD1688 当前锁定 PTools Git commit | `3f9f7d5b604877bdb4a48d32a53944734c9c5072`（Podfile.lock）；它与 PTools master 的当前源码版本未必一致，须比较 API/行为 |
-| 验收现状 | **仅完成远端源码静态盘点**。未执行 `swift package resolve`、`swift build`、`xcodebuild`、真机或 App Archive |
+| 验收现状 | 已完成远端静态声明校验与独立 SwiftPM alias 示例构建；尚未运行真实 PTools `swift package resolve` / 42 项 iOS 构建 / 真机或 App Archive |
 
 ### 三个缺少同名 product 的特殊项（P0）
 
-1. **`PooTools/Tabbar`**：podspec 仅依赖 `PooTools/Core`，额外设置 `POOTOOLS_TABBAR`；未声明独立 `source_files`。SPM 没有 `PooToolsTabbar` product。先搜索 Tabbar 公开 API / 条件编译是否已包含在 `ptools` target；若已包含，应建立并验证 `PooTools/Tabbar` → `ptools` 的映射，必要时添加轻量兼容 product，而不是复制源码。若遗漏条件编译，补等价 `swiftSettings` 并测试。
-2. **`PooTools/NotificationBanner`**：podspec 本身是指向 `PooTools/Banner` 的**兼容别名**，没有独立源码；SPM 已声明 `PooToolsBanner`。优先映射到 `PooToolsBanner`，核对旧接口和 UI 行为。仅在确有旧入口需要维持时追加兼容 product/adapter。
-3. **`PooTools/Flag`**：podspec 仅依赖 `PooTools/Core`，不含独立源码；SPM 无 `PooToolsFlag` product。先扫描 YD1688 是否实际使用 PTools Flag API、是否来自独立 `FlagKit`，防止重复引入或错误归属；若只是 Core 兼容占位则映射 `ptools`，否则补明确的可用 product 和实现/依赖。
+1. **`PooTools/Tabbar`**：podspec 仅依赖 `PooTools/Core`，额外设置 `POOTOOLS_TABBAR`；未声明独立 `source_files`。现已添加 `PooToolsTabbar` product，复用 `ptools` target。先搜索 Tabbar 公开 API / 条件编译是否已包含在 `ptools` target；若已包含，应建立并验证 `PooTools/Tabbar` → `ptools` 的映射，必要时添加轻量兼容 product，而不是复制源码。若遗漏条件编译，补等价 `swiftSettings` 并测试。
+2. **`PooTools/NotificationBanner`**：podspec 本身是指向 `PooTools/Banner` 的**兼容别名**，没有独立源码；SPM 已声明 `PooToolsBanner`，现追加 `PooToolsNotificationBanner` product alias。优先映射到 `PooToolsBanner`，核对旧接口和 UI 行为。仅在确有旧入口需要维持时追加兼容 product/adapter。
+3. **`PooTools/Flag`**：podspec 仅依赖 `PooTools/Core`，不含独立源码；现已添加 `PooToolsFlag` product，复用 `ptools` target；不将 `FlagKit` 偷偷并入。先扫描 YD1688 是否实际使用 PTools Flag API、是否来自独立 `FlagKit`，防止重复引入或错误归属；若只是 Core 兼容占位则映射 `ptools`，否则补明确的可用 product 和实现/依赖。
 
 > **特别注意**：`PooTools/Core` 对应综合 `ptools`（不是只有 Foundation 功能的 `PToolsCore`）。`PooTools/VideoCache` 的 SPM 产品已作为 `ptools` target alias；`BilogyID` 对应 `PooToolsBioID`，`NetWork` 对应 `PooToolsNetWork`。这些要验证旧公开 API，不能只比较字符串名称。
 
@@ -50,7 +50,7 @@
 | Picker | `PooToolsPicker` | 候选 |
 | PhotoPicker | `PooToolsPhotoPicker` | 候选 |
 | CustomerLabel | `PooToolsCustomerLabel` | 候选 |
-| Tabbar | `ptools`（暂拟） | **需核验**；podspec 空源码 + `POOTOOLS_TABBAR` |
+| Tabbar | `PooToolsTabbar`（module: `ptools`） | 已声明兼容 Product；真实构建待验收 |
 | Loading | `PooToolsLoading` | 候选 |
 | WhatsNewsKit | `PooToolsWhatsNewsKit` | 候选 |
 | MediaViewer | `PooToolsMediaViewer` | 候选 |
@@ -61,11 +61,11 @@
 | CameraPermission | `PTCameraPermission` | 候选 |
 | LocationPermission | `PTLocationPermission` | 候选 |
 | Circle | `PooToolsCircle` | 候选 |
-| NotificationBanner | `PooToolsBanner` | **需核验**；podspec 显式兼容别名 |
+| NotificationBanner | `PooToolsNotificationBanner`（module: `PooToolsBanner`） | 已声明兼容 Product；真实构建待验收 |
 | CodeView | `PooToolsCodeView` | 候选 |
 | BilogyID | `PooToolsBioID` | 候选；保留错拼兼容行为 |
 | SmartScreenshot | `PooToolsSmartScreenshot` | 候选 |
-| Flag | `ptools`（暂拟） | **需核验**；podspec 空源码；与 `FlagKit` 区分 |
+| Flag | `PooToolsFlag`（module: `ptools`） | 已声明兼容 Product；`FlagKit` 仍宿主负责 |
 | Router | `PooToolsRouter` | 候选 |
 | Share | `PooToolsShare` | 候选 |
 | DataEncrypt | `PooToolsDataEncrypt` | 候选 |
@@ -85,6 +85,31 @@
 
 - [ ] **SPM-001**：增加可维护的 `Pod subspec → SPM product → target → module/import → source files` 映射真值表；扫描 YD1688 的 import/API 用量，细化三个 alias 的实际归属；确保 42/42 无缺项、不出现重复编译。
 - [ ] **SPM-002**：修复 Tabbar、NotificationBanner、Flag 的**实际** SPM 覆盖差异。不得仅为凑齐数量创建空壳 target；别名应复用已有实现，并为旧 API 配独立编译验收。
+
+#### 已落地的最小开发子闭环（Q 仍待真人）
+
+- [x] **SPM-001/AU-a：** 以 `YD1688/main/Podfile` 作为快照建立 `Scripts/CI/yd1688_spm_products.json`，明确全部 42 个 subspec 的 SPM Product / Target / 实际 import module；静态对照 42/42，无缺失。
+- [ ] **SPM-001/AU-b：** 真实 YD1688 调用点的旧 API 符号和完整源码归属仍需独立 iOS 编译核验；静态表不等于业务等价性。
+- [x] **SPM-002/AU-a：** 在 `Package.swift` 增加 `PooToolsTabbar → ptools`、`PooToolsFlag → ptools`、`PooToolsNotificationBanner → PooToolsBanner` 三个兼容 Product，均复用旧 Target，无重复源码。
+- [x] **SPM-002/AU-b：** 隔离 SwiftPM 示例验证三个 Product alias 使用相同 Target 的 manifest 解析与构建均通过（Linux Swift 工具链；不替代真实 PTools/iOS 编译）。
+- [ ] **SPM-002/AU-c：** 在 macOS iOS SDK 下实际编译、链接和调用 Tabbar/Banner/Flag 公开 API；未执行。
+- [x] **SPM-007/AU-a：** 已添加 `Scripts/CI/check_yd1688_spm_products.py` 静态校验器及 `Tests/Fixtures/YD1688SPMProbe` 42 Product / 39 Module 消费者夹具；远端独立静态交叉核对无缺项。
+- [ ] **SPM-007/AU-b：** 在 PTools macOS 克隆中执行校验脚本并编译整个消费端 fixture（Debug/Release）；未执行，保留待验。
+- [ ] **Q：** 用户真人真机验证；未进行。
+
+验证命令（在 PTools 仓库根目录执行）：
+
+```bash
+python3 Scripts/CI/check_yd1688_spm_products.py
+# 可选：与本地只读 YD1688 Podfile 实时比对，不修改 YD1688。
+python3 Scripts/CI/check_yd1688_spm_products.py --reference-podfile ../YD1688/Podfile
+swift package dump-package >/dev/null
+bash Scripts/validate_module_parity.sh --check
+cd Tests/Fixtures/YD1688SPMProbe
+swift package resolve
+# 使用安装有 Xcode iOS SDK 的 macOS 对该 library target 执行 iOS Debug/Release 编译。
+```
+
 - [ ] **SPM-003**：逐 target 核对 CocoaPods `subspec.dependency` 与 SPM `dependencies`，审核网络、扫码、消息、相册、权限、媒体编辑、弹层等链条；禁止循环依赖、重复符号、隐式全家桶兜底。
 - [ ] **SPM-004**：审核 `POOTOOLS_*` 条件编译宏在 Pod 与 SPM 之间是否等价，特别是 `POOTOOLS_TABBAR`、`POOTOOLS_COCOAPODS`（在 SPM target 中亦存在）、permission split/embed、FilterCamera、VideoCache；定义并测试仅 Pod/仅 SPM 分支。
 
@@ -111,7 +136,7 @@
 
 | 指标 | 目标 | 当前 |
 |---|---|---|
-| 42 项 Pod 对应项的静态候选覆盖 | 42/42 | 42/42（含 3 项待确认的语义别名） |
+| 42 项 Pod 对应项的静态候选覆盖 | 42/42 | **42/42（静态对照通过）** |
 | 有确定且功能等价的 SPM 映射 | 42/42 | **未验收** |
 | 每个产品可独立解析、编译、import | 42/42 | **未执行** |
 | 42 项组合集成 Debug / Release | 通过 | **未执行** |
@@ -123,4 +148,4 @@
 
 **SPM-001 → SPM-002 → SPM-003/004 → SPM-005/006 → SPM-007/008 → SPM-009 → SPM-010/011**。
 
-现阶段只建立迁移方案，不直接改动 `Package.swift`、podspec 或 YD1688 工作代码。实施后按最小闭环随改随更新状态，避免“Package.swift 有同名声明”被误当作“SPM 已可用”。
+目前只在 PTools 上实施 SPM 产品别名、映射和消费端验证夹具；**YD1688 代码、Podfile、项目设置均未修改**。实际产品构建/真机验收通过前不得声称迁移已完成。
