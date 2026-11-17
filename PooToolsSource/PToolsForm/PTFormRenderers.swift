@@ -438,7 +438,7 @@ public final class PTFormActionButtonRenderer: PTFormRendererBase {
 // Selection is handled by PTFormView, which emits a typed action ID.
 @MainActor
 public final class PTFormSettingsRowRenderer: PTFormRendererBase {
-    public init(kind: PTFormFieldKind) { super.init(kind: kind) }
+    public override init(kind: PTFormFieldKind) { super.init(kind: kind) }
 
     public override var focusBehavior: PTFormFocusBehavior { .notFocusable }
 
