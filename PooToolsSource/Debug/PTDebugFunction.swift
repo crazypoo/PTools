@@ -10,6 +10,7 @@ import UIKit
 #if SWIFT_PACKAGE
 import PToolsDebugInspectorLegacyUI
 import PToolsDebugConsoleUI
+import PToolsOverlay
 import ptools
 import PToolsStorage
 import PToolsDebugCore
@@ -599,7 +600,7 @@ public final class PTDebugWindowCoordinator {
             .compactMap { $0 as? PTConsoleWindow }
             .forEach { window in
                 guard window.rootViewController != nil else { return }
-                window.windowLevel = PTConsoleWindow.debugWindowLevel
+                window.windowLevel = PTOverlayZOrder.windowLevel(for: .debug)
                 window.isHidden = false
             }
     }
