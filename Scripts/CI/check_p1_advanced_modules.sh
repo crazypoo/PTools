@@ -45,6 +45,7 @@ require_pattern PooToolsSource/PToolsForm/PTForm.swift 'public struct PTFormFiel
 require_pattern PooToolsSource/PToolsForm/PTForm.swift 'public func validateField' 'form supports cancellable field validation'
 require_pattern PooToolsSource/PToolsForm/PTFormSnapshot.swift 'public final class PTFormCollectionAdapter' 'form has a multi-section collection adapter'
 require_pattern PooToolsSource/PToolsForm/PTForm.swift 'public func makeSnapshot() -> PTFormSnapshot' 'form exposes a typed snapshot boundary'
+require_pattern PooToolsSource/PToolsForm/PTFormRenderers.swift 'public override init(kind: PTFormFieldKind) { super.init(kind: kind) }' 'settings row renderer correctly overrides superclass initializer'
 require_pattern PooToolsSource/PToolsForm/PTFormSectionRenderer.swift 'public func dequeueView' 'form supplementary views are dequeued safely'
 require_pattern docs/guides/PTOOLS_FORM_GUIDE.md '## 3. Multiple sections' 'Form 2.0 guide covers multiple sections'
 require_pattern docs/migrations/5.57_FORM_2.md 'PTFormEngine(fields:sections:)' 'Form 2.0 migration guide exists'
