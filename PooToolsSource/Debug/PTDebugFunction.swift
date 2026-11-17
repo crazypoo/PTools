@@ -9,6 +9,7 @@
 import UIKit
 #if SWIFT_PACKAGE
 import PToolsDebugInspectorLegacyUI
+import PToolsDebugConsoleUI
 import ptools
 import PToolsStorage
 import PToolsDebugCore
