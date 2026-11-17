@@ -1,6 +1,6 @@
 # PTools Swift Package Manager 兼容与 YD1688 迁移修复方案
 
-> 状态：**PTools SPM 兼容 Product 已开始落地，42/42 静态映射通过；PTools 全量 iOS 编译 / 真机验收未开始**。方案落点：`crazypoo/PTools@master`；参考使用方：`crazypoo/YD1688@main`。本文件是当前有效的待办与验收清单，不是迁移完成证明。
+> 状态：**42/42 静态映射通过；用户报告 PTools 在 SPM 下构建成功（构建目标和配置未明确）；42 产品完整矩阵 / 真机验收待验证**。方案落点：`crazypoo/PTools@master`；参考使用方：`crazypoo/YD1688@main`。本文件是当前有效的待办与验收清单，不是迁移完成证明。
 
 ## 目标与边界
 
@@ -20,7 +20,7 @@
 | 直接或已明确重命名的候选 SPM 产品 | 42 / 42（含 3 个新增兼容 Product） |
 | 兼容别名 Product 已补齐 | 3 / 42：`Tabbar`、`NotificationBanner`、`Flag`（编译/业务等价性待验收） |
 | YD1688 当前锁定 PTools Git commit | `3f9f7d5b604877bdb4a48d32a53944734c9c5072`（Podfile.lock）；它与 PTools master 的当前源码版本未必一致，须比较 API/行为 |
-| 验收现状 | 已完成远端静态声明校验与独立 SwiftPM alias 示例构建；尚未运行真实 PTools `swift package resolve` / 42 项 iOS 构建 / 真机或 App Archive |
+| 验收现状 | 已完成远端静态声明校验与隔离 SwiftPM alias 示例构建；用户确认 PTools 使用 SPM 构建成功，但没有构建日志和具体 Product/配置清单；42 产品独立矩阵、Archive、真机 Q 仍待验证 |
 
 ### 三个缺少同名 product 的特殊项（P0）
 
@@ -128,7 +128,8 @@ swift package resolve
 
 ### P2 — 使用方迁移与真实验收
 
-- [ ] **SPM-008**：从干净克隆运行 `swift package dump-package`、`swift package resolve` 与可用平台下的 `xcodebuild`/fixture；逐个独立产品和 42 项组合测试 Debug / Release，Swift 6 严格并发，iOS Simulator + device archive，排除 duplicate symbols / missing module / bundle lookup。**本项尚无真实测试证据**。
+- [x] **SPM-008/用户构建反馈：** 用户确认 PTools 通过 SPM 构建成功（由用户本地执行；未附日志，构建 Product、平台、Debug/Release 范围未明确）。此条仅确认**至少一次 SPM 构建成功**，不是 42 Product 完整矩阵/真机 Q 通过。
+- [ ] **SPM-008**：从干净克隆运行 `swift package dump-package`、`swift package resolve` 与可用平台下的 `xcodebuild`/fixture；逐个独立产品和 42 项组合测试 Debug / Release，Swift 6 严格并发，iOS Simulator + device archive，排除 duplicate symbols / missing module / bundle lookup。**用户反馈 PTools 的 SPM 构建已成功；未提供目标、Debug/Release、模拟器/真机及日志，故本整项仍待验证**。
 - [ ] **SPM-009**：PTools 通过验证后，在 YD1688 独立 PR 按模块迁移为 SPM；先固定 PTools Git revision 以消除 master 漂移，再用明确的语义版本 tag；先保留其他独立 Pod，并检测 Pod + SPM 混用是否重复链接。最终去除不再需要的 `post_install` 补丁、PTools Pod 引用，重建 lock/resolved 与许可证清单。
 - [ ] **SPM-010**：真人真机 Q 验收：扫码和权限、图片选择与编辑、视频编辑与缓存、网络/debug 协议隔离、登录/输入/键盘、消息/Socket、页面弹层/HUD/Tabbar、Banner、地区旗帜、路由/AppIntents、Acknowledgements。与 Pods 基准录屏/功能结果比较，失败回写待修清单，不能自动勾 Q。
 - [ ] **SPM-011**：输出 PTools 安装文档（Xcode → Add Package Dependencies、URL、版本策略、应选择的 Products、各 product 的 `import`）及兼容性矩阵；不要在文档中声称 SPM 已支持而没有构建证据。
@@ -145,8 +146,8 @@ swift package resolve
 |---|---|---|
 | 42 项 Pod 对应项的静态候选覆盖 | 42/42 | **42/42（静态对照通过）** |
 | 有确定且功能等价的 SPM 映射 | 42/42 | **未验收** |
-| 每个产品可独立解析、编译、import | 42/42 | **未执行** |
-| 42 项组合集成 Debug / Release | 通过 | **未执行** |
+| 每个产品可独立解析、编译、import | 42/42 | **已收到一次 PTools SPM 构建成功反馈；尚不能推断 42/42 均独立通过** |
+| 42 项组合集成 Debug / Release | 通过 | **待验证；已报告的 SPM 构建尚未明确是否覆盖 42 Product 和双配置** |
 | 无资源缺失、重复链接及 Pods 专有补丁 | 通过 | **未执行** |
 | YD1688 主工程 SPM 编译 / Archive | 通过 | **未执行** |
 | 真人 Q 全部功能验证 | 通过 | **未执行** |
