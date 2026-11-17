@@ -95,6 +95,8 @@
 - [ ] **SPM-002/AU-c：** 在 macOS iOS SDK 下实际编译、链接和调用 Tabbar/Banner/Flag 公开 API；未执行。
 - [x] **SPM-007/AU-a：** 已添加 `Scripts/CI/check_yd1688_spm_products.py` 静态校验器及 `Tests/Fixtures/YD1688SPMProbe` 42 Product / 39 Module 消费者夹具；远端独立静态交叉核对无缺项。
 - [x] **SPM-DEBUG-001/AU-a：** 修复 `PooToolsSource/Debug/PTDebugFunction.swift` 跨 target 缺少 `import PToolsDebugConsoleUI` 引发的 `Cannot find type 'PTConsoleWindow' in scope`；`PTConsoleWindow.debugWindowLevel` 改为 `public` 以供 `PooToolsDEBUG` 使用，CocoaPods 源文件归属不变。通过 9 项静态引用/target/访问级别核对；`Scripts/validate_debug_instruments_5_18.sh` 已补回归断言。
+- [x] **SPM-DEBUG-002/AU-a：** 修复 `PTDebugWindowCoordinator` 跨 SPM target 访问 `PTConsoleWindow.debugWindowLevel` 报 `internal`：直接调用 `PToolsOverlay` 已公开的 `PTOverlayZOrder.windowLevel(for: .debug)`，并补 `import PToolsOverlay`；保持相同 z-order，不依赖 ConsoleUI 内部常量。10 项跨源码、manifest、podspec 静态核对通过，并新增回归断言。
+- [ ] **SPM-DEBUG-002/AU-b / Q：** macOS Xcode iOS SDK 编译与真机控制台显示/恢复验收尚未执行。
 - [ ] **SPM-DEBUG-001/AU-b：** 在 macOS Xcode iOS SDK 中独立编译 `PToolsDebugConsoleUI`、`PooToolsDEBUG` 并执行 Debug 测试；**本次未运行**。
 - [ ] **SPM-DEBUG-001/Q：** 用户真人真机调试控制台展示、隐藏、Scene 切换验收，待复检。
 - [x] **SPM-FORM-001/AU-a：** 修复 `PTFormSettingsRowRenderer.init(kind:)` 重写基类 `PTFormRendererBase.init(kind:)` 时缺少 `override` 的 Swift 编译错误；`Scripts/CI/check_p1_advanced_modules.sh` 已添加回归断言，4 项静态核对通过。
