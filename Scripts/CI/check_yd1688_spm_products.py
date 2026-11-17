@@ -124,13 +124,35 @@ def check(
     if any("FlagKit" in str(dep) for dep in manifest.get("dependencies", [])):
         fail(errors, "FlagKit must remain a host-owned dependency")
 
+    # The fixture is an independent SwiftPM downstream client; keep both
+    # the explicit product dependencies and unique import modules in sync.
+    fixture_root = root / "Tests/Fixtures/YD1688SPMProbe"
+    fixture_manifest = fixture_root / "Package.swift"
+    fixture_source = fixture_root / "Sources/YD1688SPMProbe/Probe.swift"
+    if not fixture_manifest.is_file() or not fixture_source.is_file():
+        fail(errors, "YD1688 SwiftPM consumer fixture is missing")
+    else:
+        dependency_names = re.findall(
+            r"""\\.product\\(name:\\s*"([^"]+)",\\s*package:\\s*"ptools"\\)""",
+            fixture_manifest.read_text(encoding="utf-8"),
+        )
+        if Counter(dependency_names) != Counter(mapped_products):
+            fail(errors, "Consumer fixture 42-product dependencies drift from mapping")
+        import_names = set(re.findall(
+            r"(?m)^import\\s+([A-Za-z_][A-Za-z_0-9]*)\\s*$",
+            fixture_source.read_text(encoding="utf-8"),
+        )) - {"Foundation"}
+        expected_modules = {row.get("import_module") for row in entries}
+        if import_names != expected_modules:
+            fail(errors, f"Consumer fixture imports mismatch: {sorted(import_names ^ expected_modules)}")
+
     if reference_podfile is not None:
         if not reference_podfile.is_file():
             fail(errors, f"Consumer Podfile missing: {reference_podfile}")
         else:
             actual = POD_RE.findall(reference_podfile.read_text(encoding="utf-8"))
             if Counter(actual) != Counter(subspecs):
-                fail(errors, f"Consumer Podfile snapshot drift: missing={sorted(set(actual) - set(subspecs))}, removed={sorted(set(subspecs) - set(actual))}")
+                fail(errors, f"Consumer Podfile snapshot drift: added_in_consumer={sorted(set(actual) - set(subspecs))}, removed_from_consumer={sorted(set(subspecs) - set(actual))}")
     return errors
 
 
