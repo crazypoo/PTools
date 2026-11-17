@@ -133,13 +133,13 @@ def check(
         fail(errors, "YD1688 SwiftPM consumer fixture is missing")
     else:
         dependency_names = re.findall(
-            r"""\\.product\\(name:\\s*"([^"]+)",\\s*package:\\s*"ptools"\\)""",
+            r"""\.product\(name:\s*"([^"]+)",\s*package:\s*"ptools"\)""",
             fixture_manifest.read_text(encoding="utf-8"),
         )
         if Counter(dependency_names) != Counter(mapped_products):
             fail(errors, "Consumer fixture 42-product dependencies drift from mapping")
         import_names = set(re.findall(
-            r"(?m)^import\\s+([A-Za-z_][A-Za-z_0-9]*)\\s*$",
+            r"(?m)^import\s+([A-Za-z_][A-Za-z_0-9]*)\s*$",
             fixture_source.read_text(encoding="utf-8"),
         )) - {"Foundation"}
         expected_modules = {row.get("import_module") for row in entries}
