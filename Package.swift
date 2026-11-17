@@ -20,6 +20,11 @@ let package = Package(
         // 核心基座
         // ==========================================
         .library(name: "ptools", targets: ["ptools"]),
+        // Historical dependency-only CocoaPods subspecs expose Core-owned APIs.
+        // Reuse the existing target; product aliases do not create duplicate Swift modules.
+        .library(name: "PooToolsTabbar", targets: ["ptools"]),
+        // FlagKit remains an explicit host dependency, not a PTools runtime dependency.
+        .library(name: "PooToolsFlag", targets: ["ptools"]),
         // English: Publish the Foundation and OSLog-ready logging contract independently.
         // Español: Publica de forma independiente el contrato de logging basado en Foundation y preparado para OSLog.
         // 中文：独立公开基于 Foundation、可逐步接入 OSLog 的日志契约。
@@ -134,6 +139,8 @@ let package = Package(
         // 中文：独立公开与 Banner 内容解耦的多 Scene 浮层基础设施。
         .library(name: "PToolsOverlay", targets: ["PToolsOverlay"]),
         .library(name: "PooToolsBanner", targets: ["PooToolsBanner"]),
+        // CocoaPods PooTools/NotificationBanner is a compatibility alias of Banner.
+        .library(name: "PooToolsNotificationBanner", targets: ["PooToolsBanner"]),
         // English: Publish the native UIKit popover product on top of OverlayCore.
         // Español: Publica el producto popover nativo de UIKit sobre OverlayCore.
         // 中文：在 OverlayCore 之上公开 UIKit 原生 Popover 产品层。
